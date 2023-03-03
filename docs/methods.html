@@ -361,7 +361,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Methods</h1>
 <h4 class="author">Tina Lasisi</h4>
-<h4 class="date">2023-03-02 21:58:28</h4>
+<h4 class="date">2023-03-02 23:29:36</h4>
 
 </div>
 
@@ -369,7 +369,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -380,8 +380,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -394,9 +394,9 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 5
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 2
 </p>
 <p>
 <strong>Knit directory:</strong> <code>POPFORGE/</code> <span
@@ -419,18 +419,21 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
@@ -506,30 +509,64 @@ run.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongabsolute">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>File paths:</strong> absolute </a>
 </p>
 </div>
-<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div id="strongFilepathsstrongabsolute" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great job! Using relative paths to the files within your workflowr
-project makes it easier to run your code on other machines.</p>
+<p>
+Using absolute paths to the files within your workflowr project makes it
+difficult for you and others to run your code on a different machine.
+Change the absolute path(s) below to the suggested relative path(s) to
+make your code more reproducible.
+</p>
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th style="text-align:left;">
+absolute
+</th>
+<th style="text-align:left;">
+relative
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+/Users/tinalasisi-usc/GitHub/POPFORGE/data/
+</td>
+<td style="text-align:left;">
+data
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+/Users/tinalasisi-usc/GitHub/POPFORGE/output/
+</td>
+<td style="text-align:left;">
+output
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPOPFORGEtreec9130d5e7bf0085f4fd6269628f455f21bbfbc65targetblankc9130d5a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPOPFORGEtreef02bc38a894a24323df5f6dadaf096826a830b88targetblankf02bc38a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/tinalasisi/POPFORGE/tree/c9130d5e7bf0085f4fd6269628f455f21bbfbc65" target="_blank">c9130d5</a>
+<a href="https://github.com/tinalasisi/POPFORGE/tree/f02bc38a894a24323df5f6dadaf096826a830b88" target="_blank">f02bc38</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPOPFORGEtreec9130d5e7bf0085f4fd6269628f455f21bbfbc65targetblankc9130d5a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPOPFORGEtreef02bc38a894a24323df5f6dadaf096826a830b88targetblankf02bc38a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -539,7 +576,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/tinalasisi/POPFORGE/tree/c9130d5e7bf0085f4fd6269628f455f21bbfbc65" target="_blank">c9130d5</a>.
+<a href="https://github.com/tinalasisi/POPFORGE/tree/f02bc38a894a24323df5f6dadaf096826a830b88" target="_blank">f02bc38</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -556,7 +593,20 @@ were generated:
 Ignored files:
     Ignored:    .DS_Store
     Ignored:    .Rproj.user/
+    Ignored:    analysis/figure/
     Ignored:    data/.DS_Store
+
+Untracked files:
+    Untracked:  Genealogical_cousins.pdf
+    Untracked:  output/First_cousin_overlap.pdf
+    Untracked:  output/Third_cousin_overlap_1.pdf
+    Untracked:  output/Third_cousin_overlap_2.pdf
+
+Unstaged changes:
+    Modified:   analysis/methods.Rmd
+    Modified:   output/E_genetic_cousin_detected.pdf
+    Modified:   output/Genealogical_cousins.pdf
+    Modified:   output/Prob_cousin_detected.pdf
 
 </code></pre>
 <p>
@@ -602,6 +652,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tinalasisi/POPFORGE/f02bc38a894a24323df5f6dadaf096826a830b88/docs/methods.html" target="_blank">f02bc38</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2023-03-02
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -741,7 +808,83 @@ database and the population size. They then uses the Poisson
 distribution to estimate the probability of finding at least one
 relative of a given degree of relatedness in a database of a certain
 size.</p>
-<p>The original code can be found here</p>
+<p>The original code can be found <a
+href="https://github.com/tinalasisi/POPFORGE/blob/master/data/Coop_cousins_vs_database_size.R">here</a>.</p>
+<p>Below is an adaptation of the code for demonstration purposes with
+annotations for clarification.</p>
+<pre class="r"><code># Load necessary packages
+library(wesanderson) # for color palettes
+
+# Set path to the data file
+path &lt;- &quot;/Users/tinalasisi-usc/GitHub/POPFORGE/data/&quot;
+savepath &lt;- &quot;/Users/tinalasisi-usc/GitHub/POPFORGE/output/&quot;
+
+# Set up vector for cousin degree
+p &lt;- c(1:8) 
+
+# Set up initial population size
+N &lt;- 76e6 
+
+# Read in data on US population sizes by year
+US_pop &lt;- read.csv(paste(path, &quot;US_popsize.csv&quot;, sep = &quot;&quot;))
+
+# Calculate number of grandparents by generation
+p_grandpar_gen &lt;- 1950 - 30 * (p + 1)
+
+# Determine which years match the grandparents&#39; generation
+these.years &lt;- match(p_grandpar_gen, US_pop$year)
+
+# Get population sizes by year for grandparents&#39; generation
+US_Ns &lt;- US_pop$Population[these.years]
+
+# Scale population size down by 50% to account for sex and age
+N &lt;- US_Ns
+N &lt;- N * 0.5 * 0.9 
+
+# Set minimum population size for small populations
+N[US_Ns &lt; 1e6] &lt;- 1e6 
+
+# Set up vector of database sizes to test
+DB.sizes &lt;- c(1e6, 5e6, 10e6)
+
+# Set color palette for graphs
+my.cols &lt;- wes_palette(&quot;Darjeeling1&quot;)
+
+
+# Plot probability of having at least one p-th cousin in database
+plot(c(1, 8), c(0, 1), type = &quot;n&quot;, ylab = &quot;Probability of at least one p-th cousin in database&quot;, xlab = &quot;p (degree of cousin)&quot;)
+sapply(1:length(DB.sizes), function(i) {
+  DB.size &lt;- DB.sizes[i]
+  prob.no.rellys &lt;- exp(-2^(2*p - 2) * DB.size / N)
+  points(p, 1 - prob.no.rellys, type = &quot;b&quot;, col = my.cols[i], pch = 19, lwd = 1.5)
+})</code></pre>
+<pre><code>[[1]]
+NULL
+
+[[2]]
+NULL
+
+[[3]]
+NULL</code></pre>
+<pre class="r"><code>legend(x = &quot;bottomright&quot;, legend = c(&quot;Database size (Millions) =&quot;, format(DB.sizes / 1e6, dig = 1)), col = c(NA, my.cols), pch = 19)</code></pre>
+<p><img src="figure/methods.Rmd/unnamed-chunk-1-1.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Plot of expected number of p-th cousins in sample
+plot(c(1,8),c(0,1000),type=&quot;n&quot;,ylab=&quot;Expected number of p-th cousins in database&quot;,xlab=&quot;p (degree of cousin)&quot;)
+sapply(1:length(DB.sizes),function(i){
+
+    num.cousins&lt;-4^(p)*DB.sizes[i]/(N/2)
+    points(p,num.cousins,type=&quot;b&quot;,col=my.cols[i],lwd=1.5,pch=19)
+   # points(p,4^(p),type=&quot;b&quot;,col=&quot;black&quot;)
+})</code></pre>
+<p><img src="figure/methods.Rmd/unnamed-chunk-1-2.png" width="768" style="display: block; margin: auto;" /></p>
+<pre><code>[[1]]
+NULL
+
+[[2]]
+NULL
+
+[[3]]
+NULL</code></pre>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -766,20 +909,20 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] workflowr_1.7.0
+[1] wesanderson_0.3.6 workflowr_1.7.0  
 
 loaded via a namespace (and not attached):
- [1] Rcpp_1.0.9       compiler_4.2.2   pillar_1.8.1     bslib_0.4.1     
- [5] later_1.3.0      git2r_0.30.1     jquerylib_0.1.4  tools_4.2.2     
- [9] getPass_0.2-2    digest_0.6.30    jsonlite_1.8.3   evaluate_0.18   
-[13] lifecycle_1.0.3  tibble_3.1.8     pkgconfig_2.0.3  rlang_1.0.6     
-[17] cli_3.4.1        rstudioapi_0.14  yaml_2.3.6       xfun_0.35       
-[21] fastmap_1.1.0    httr_1.4.4       stringr_1.5.0    knitr_1.41      
-[25] fs_1.5.2         vctrs_0.5.1      sass_0.4.4       rprojroot_2.0.3 
-[29] glue_1.6.2       R6_2.5.1         processx_3.8.0   fansi_1.0.3     
-[33] rmarkdown_2.18   callr_3.7.3      magrittr_2.0.3   whisker_0.4     
-[37] ps_1.7.2         promises_1.2.0.1 htmltools_0.5.3  httpuv_1.6.6    
-[41] utf8_1.2.2       stringi_1.7.8    cachem_1.0.6    </code></pre>
+ [1] Rcpp_1.0.9       highr_0.9        compiler_4.2.2   pillar_1.8.1    
+ [5] bslib_0.4.1      later_1.3.0      git2r_0.30.1     jquerylib_0.1.4 
+ [9] tools_4.2.2      getPass_0.2-2    digest_0.6.30    jsonlite_1.8.3  
+[13] evaluate_0.18    lifecycle_1.0.3  tibble_3.1.8     pkgconfig_2.0.3 
+[17] rlang_1.0.6      cli_3.4.1        rstudioapi_0.14  yaml_2.3.6      
+[21] xfun_0.35        fastmap_1.1.0    httr_1.4.4       stringr_1.5.0   
+[25] knitr_1.41       fs_1.5.2         vctrs_0.5.1      sass_0.4.4      
+[29] rprojroot_2.0.3  glue_1.6.2       R6_2.5.1         processx_3.8.0  
+[33] fansi_1.0.3      rmarkdown_2.18   callr_3.7.3      magrittr_2.0.3  
+[37] whisker_0.4      ps_1.7.2         promises_1.2.0.1 htmltools_0.5.3 
+[41] httpuv_1.6.6     utf8_1.2.2       stringi_1.7.8    cachem_1.0.6    </code></pre>
 </div>
 </div>
 
