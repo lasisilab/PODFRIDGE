@@ -1,5 +1,5 @@
 ---
-title: "Home"
+title: "POPFORGE"
 site: workflowr::wflow_site
 output:
   workflowr::wflow_html:
@@ -8,4 +8,20 @@ editor_options:
   chunk_output_type: console
 ---
 
-Welcome to my research website.
+
+The use of genetic data to identify individuals has become increasingly prevalent with the rise of consumer genomics databases and forensic genetic genealogy. Recent studies have shown that long-range familial searches can implicate the majority of US individuals of European descent (see [Ehrlich et al 2018](https://www.science.org/doi/10.1126/science.aau4832) and [Coop & Edge 2019](https://www.biorxiv.org/content/10.1101/531384v1)). These findings have motivated us to carry out further investigations into the disparities between populations in the likelihood of identifying individuals through genetic relatives. 
+
+African-Americans are overrepresented in forensic databases (see [Murphy and Tong, 2019](https://californialawreview.org/print/racial-composition-forensic-dna-databases/)
+), but what we know about direct-to-consumer databases suggests that Europeans are highly represented there. 
+
+Our study aims to examine the impact of the varying degrees of representation across different types of genetic databases on the potential consequences for different populations, as well as the impact of different types of genetic data such as SNP genotyping and STR markers.
+
+The POPFORGE (**Pop**ulation Differences in **For**ensic Identification of **Ge**netic Relatives) project aims to address this question by using mathematical estimations of genetic relatedness based on previous methods, as well as simulating pedigrees and genomes for two populations based on input parameters. Additionally, demographic data from the US Census microdata will be used to obtain population size information on European and African Americans.
+
+Our study aims to provide insight into the implications of these techniques for different populations and contribute to the ongoing discussions around genetic privacy and ethics.
+
+
+
+
+
+

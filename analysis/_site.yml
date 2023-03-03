@@ -9,8 +9,6 @@ navbar:
     href: about.html
   - text: License
     href: license.html
-  - text: Background
-    href: background.html
   - text: Demographic Data
     href: demo-data.html
   - text: Analyses
