@@ -116,7 +116,7 @@ prob.g.e.3.blocks <- 1 - sapply(E.num.blocks, function(expected.num) {sum(dpois(
 
 ```
 
-```{r plt-genetic-blocks, fig.cap="Probabilities of detecting a genetic cousin in a database based on shared genomic blocks. Solid lines represent cousins with at least one genomic block, while dotted and dashed lines represent cousins with at least two and three genomic blocks, respectively. The legend specifies the type of cousin being represented by each line."}
+```{r plt-genetic-blocks, fig.cap="Probabilities of detecting a genetic cousin in a database based on shared genomic blocks. Blue lines represent cousins with at least one genomic block, orange dotted and red lines represent cousins with at least two and three genomic blocks, respectively. The legend specifies the type of cousin being represented by each line."}
 
 ## Plot for number of shared blocks with p-th degree cousins
 # Set layout of plot
