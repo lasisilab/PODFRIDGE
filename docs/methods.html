@@ -361,7 +361,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Methods</h1>
 <h4 class="author">Tina Lasisi</h4>
-<h4 class="date">2023-03-04 20:00:50</h4>
+<h4 class="date">2023-03-04 20:56:32</h4>
 
 </div>
 
@@ -521,15 +521,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtreed8748aa57fc64e442e3bfd4dbd480abd67ce1d5dtargetblankd8748aaa">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtreeea3444ea181e5acc74785bcf8102b65cda3d05datargetblankea3444ea">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/tinalasisi/PODFRIDGE/tree/d8748aa57fc64e442e3bfd4dbd480abd67ce1d5d" target="_blank">d8748aa</a>
+<a href="https://github.com/tinalasisi/PODFRIDGE/tree/ea3444ea181e5acc74785bcf8102b65cda3d05da" target="_blank">ea3444e</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtreed8748aa57fc64e442e3bfd4dbd480abd67ce1d5dtargetblankd8748aaa"
+id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtreeea3444ea181e5acc74785bcf8102b65cda3d05datargetblankea3444ea"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -539,7 +539,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/tinalasisi/PODFRIDGE/tree/d8748aa57fc64e442e3bfd4dbd480abd67ce1d5d" target="_blank">d8748aa</a>.
+<a href="https://github.com/tinalasisi/PODFRIDGE/tree/ea3444ea181e5acc74785bcf8102b65cda3d05da" target="_blank">ea3444e</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -557,6 +557,9 @@ Ignored files:
     Ignored:    .DS_Store
     Ignored:    .Rproj.user/
     Ignored:    data/.DS_Store
+
+Unstaged changes:
+    Modified:   output/Prob_cousin_detected.pdf
 
 </code></pre>
 <p>
@@ -602,6 +605,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/ea3444ea181e5acc74785bcf8102b65cda3d05da/analysis/methods.Rmd" target="_blank">ea3444e</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2023-03-04
+</td>
+<td>
+update methods
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tinalasisi/PODFRIDGE/2b161f2abfe670baa9826c8a1f4857f376c768ab/docs/methods.html" target="_blank">2b161f2</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2023-03-04
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -830,23 +867,35 @@ Publishing POPFORGE
 </div>
 </div>
 </div>
-<div id="introduction" class="section level2">
-<h2>Introduction</h2>
-<p>Coop &amp; Edge (2019) use a population genetics approach to estimate
-the likelihood of finding a genetic relative in a database. They assumes
-that two individuals are related if they share a certain number of
-genetic blocks, which is determined by the degree of relatedness
-(e.g. first cousin, second cousin, etc.). Using this assumption, they
-calculates the expected number of blocks shared between two individuals
-of a given degree of relatedness based on the size of the genetic
-database and the population size. They then uses the Poisson
-distribution to estimate the probability of finding at least one
-relative of a given degree of relatedness in a database of a certain
-size.</p>
+<div id="coop-edge" class="section level1">
+<h1>Coop &amp; Edge</h1>
+<p>Coop &amp; Edge (<a
+href="https://www.biorxiv.org/content/10.1101/531384v1.full">2019</a>)
+use a population genetics approach to estimate the likelihood of finding
+a genetic relative in a database. They assumes that two individuals are
+related if they share a certain number of genetic blocks, which is
+determined by the degree of relatedness (e.g. first cousin, second
+cousin, etc.). Using this assumption, they calculates the expected
+number of blocks shared between two individuals of a given degree of
+relatedness based on the size of the genetic database and the population
+size. They then uses the Poisson distribution to estimate the
+probability of finding at least one relative of a given degree of
+relatedness in a database of a certain size.</p>
 <p>The original code can be found <a
 href="https://github.com/tinalasisi/POPFORGE/blob/master/data/Coop_cousins_vs_database_size.R">here</a>.</p>
 <p>Below is an adaptation of the code for demonstration purposes with
 annotations for clarification.</p>
+<div id="population-and-database-size-estimation"
+class="section level2">
+<h2>Population and Database Size Estimation</h2>
+<p>In the code chunk below, we first read in data on US population sizes
+by year and calculate the number of grandparents by generation based on
+the cousin degree. We then determine which years match the grandparents’
+generation and get the population sizes by year for this generation. The
+population size is then scaled down by 50% to account for sex and age.
+For small populations (less than 1 million), the minimum population size
+is set to 1 million. We also set up a vector of database sizes to
+test.</p>
 <pre class="r"><code># Load necessary packages
 library(wesanderson) # for color palettes
 
@@ -883,8 +932,21 @@ N[US_Ns &lt; 1e6] &lt;- 1e6
 DB.sizes &lt;- c(1e6, 5e6, 10e6)
 
 # Set color palette for graphs
-my.cols &lt;- wes_palette(&quot;Darjeeling1&quot;)
-
+my.cols &lt;- wes_palette(&quot;Darjeeling1&quot;)</code></pre>
+</div>
+<div
+id="probability-of-p-th-degree-cousin-and-number-of-p-th-degree-cousins"
+class="section level2">
+<h2>Probability of p-th degree cousin and number of p-th degree
+cousins</h2>
+<p>The code below calculates the probability of having at least one p-th
+cousin in the database and the expected number of p-th cousins in the
+sample for different database sizes. The first plot shows the
+probability of having at least one p-th cousin in the database based on
+the degree of relatedness and the size of the database. The second plot
+shows the expected number of p-th cousins in the sample for different
+database sizes.</p>
+<pre class="r"><code>layout(t(1:2))
 
 # Plot probability of having at least one p-th cousin in database
 plot(c(1, 8), c(0, 1), type = &quot;n&quot;, ylab = &quot;Probability of at least one p-th cousin in database&quot;, xlab = &quot;p (degree of cousin)&quot;)
@@ -901,46 +963,9 @@ NULL
 
 [[3]]
 NULL</code></pre>
-<pre class="r"><code>legend(x = &quot;bottomright&quot;, legend = c(&quot;Database size (Millions) =&quot;, format(DB.sizes / 1e6, dig = 1)), col = c(NA, my.cols), pch = 19)</code></pre>
-<p><img src="figure/methods.Rmd/figures-1.png" width="768" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-figures-1">
-Past versions of figures-1.png
-</button>
-</p>
-<div id="fig-figures-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/c3948af0114e77dacaf5bd4221c6b4639c120655/docs/figure/methods.Rmd/figures-1.png" target="_blank">c3948af</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-03-04
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre class="r"><code># Plot of expected number of p-th cousins in sample
+<pre class="r"><code>legend(x = &quot;bottomright&quot;, legend = c(&quot;Database size (Millions) =&quot;, format(DB.sizes / 1e6, dig = 1)), col = c(NA, my.cols), pch = 19)
+
+# Plot of expected number of p-th cousins in sample
 plot(c(1,8),c(0,1000),type=&quot;n&quot;,ylab=&quot;Expected number of p-th cousins in database&quot;,xlab=&quot;p.(degree of cousin)&quot;)
 sapply(1:length(DB.sizes),function(i){
 
@@ -948,43 +973,16 @@ sapply(1:length(DB.sizes),function(i){
     points(p,num.cousins,type=&quot;b&quot;,col=my.cols[i],lwd=1.5,pch=19)
    # points(p,4^(p),type=&quot;b&quot;,col=&quot;black&quot;)
 })</code></pre>
-<p><img src="figure/methods.Rmd/figures-2.png" width="768" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-figures-2">
-Past versions of figures-2.png
-</button>
+<div class="figure" style="text-align: center">
+<img src="figure/methods.Rmd/plt-cousins-1.png" alt="The plot above displays the probability of having at least one p-th cousin in a genetic database and the expected number of p-th cousins in a database. The left plot shows the probability of finding at least one p-th cousin in a database of a given size, and the right plot shows the expected number of p-th cousins in a database of a given size based on the number of genetic blocks shared." width="768" />
+<p class="caption">
+The plot above displays the probability of having at least one p-th
+cousin in a genetic database and the expected number of p-th cousins in
+a database. The left plot shows the probability of finding at least one
+p-th cousin in a database of a given size, and the right plot shows the
+expected number of p-th cousins in a database of a given size based on
+the number of genetic blocks shared.
 </p>
-<div id="fig-figures-2" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/c3948af0114e77dacaf5bd4221c6b4639c120655/docs/figure/methods.Rmd/figures-2.png" target="_blank">c3948af</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-03-04
-</td>
-</tr>
-</tbody>
-</table>
-</div>
 </div>
 <pre><code>[[1]]
 NULL
@@ -994,6 +992,96 @@ NULL
 
 [[3]]
 NULL</code></pre>
+</div>
+<div id="probability-of-a-genetically-detectable-cousin"
+class="section level2">
+<h2>Probability of a genetically detectable cousin</h2>
+<p>Below, we calculate the expected number of shared blocks of genetic
+material between cousins of varying degrees of relatedness. This is
+important because the probability of detecting genetic material that is
+shared between two individuals decreases as the degree of relatedness
+between them decreases. The code uses a Poisson distribution assumption
+to estimate the probability of two cousins sharing at least one, two, or
+three blocks of genetic material, based on the expected number of shared
+blocks of genetic material calculated from previous research.</p>
+<pre class="r"><code># The variable &#39;meiosis&#39; represents the number of meiosis events between cousins, where &#39;p&#39; is the degree of relatedness (i.e. p = 1 for first cousins, p = 2 for second cousins, etc.)
+meiosis &lt;- p + 1
+
+## Expected number of blocks shared between cousins
+# &#39;E.num.blocks&#39; is the expected number of blocks of shared genetic material between cousins based on the degree of relatedness and the number of meiosis events between them. This value is calculated based on previous research and is not calculated in this code.
+E.num.blocks &lt;- 2 * (33.8 * (2 * meiosis) + 22) / (2^(2 * meiosis - 1))
+
+## Use Poisson assumption
+# &#39;Prob.genetic&#39; is the probability of two cousins sharing at least one block of genetic material based on the expected number of shared blocks calculated in the previous step. The calculation uses a Poisson distribution assumption.
+Prob.genetic &lt;- 1 - exp(-E.num.blocks)
+
+# &#39;prob.g.e.2.blocks&#39; is the probability of two cousins sharing at least two blocks of genetic material based on the expected number of shared blocks calculated in the previous step. The calculation uses a Poisson distribution assumption.
+prob.g.e.2.blocks &lt;- 1 - sapply(E.num.blocks, function(expected.num) {sum(dpois(0:1, expected.num))})
+
+# &#39;prob.g.e.3.blocks&#39; is the probability of two cousins sharing at least three blocks of genetic material based on the expected number of shared blocks calculated in the previous step. The calculation uses a Poisson distribution assumption.
+prob.g.e.3.blocks &lt;- 1 - sapply(E.num.blocks, function(expected.num) {sum(dpois(0:2, expected.num))})</code></pre>
+<pre class="r"><code>## Plot for number of shared blocks with p-th degree cousins
+# Set layout of plot
+layout(t(1))
+
+# Set color palette for plot
+my.cols2&lt;-wes_palette(&quot;FantasticFox1&quot;)[3:5]
+
+# Create a blank plot with labeled axes
+plot(c(1,8),c(0,1),type=&quot;n&quot;,ylab=&quot;Probability p-th cousin \&quot;detectable\&quot;&quot;,xlab=&quot;p.(degree of cousin)&quot;)
+
+# Add points for probability of detecting pth cousin with genomic blocks using colors from my.cols2
+points(p,Prob.genetic,col=my.cols2[1],pch=19,type=&quot;b&quot;,lwd=2)
+points(p,prob.g.e.2.blocks,col=my.cols2[2],pch=19,type=&quot;b&quot;,lwd=2)
+points(p,prob.g.e.3.blocks,col=my.cols2[3],pch=19,type=&quot;b&quot;,lwd=2)
+
+# Add a legend to the plot
+legend(x=&quot;topright&quot;,legend=c(&quot;Cousins (w. &gt;0 genomic blocks)&quot;,&quot;Cousins (w. &gt;1 genomic blocks)&quot;,&quot;Cousins (w. &gt;2 genomic blocks)&quot;),col=my.cols2[1:3],lty=1)</code></pre>
+<div class="figure" style="text-align: center">
+<img src="figure/methods.Rmd/plt-genetic-blocks-1.png" alt="Probabilities of detecting a genetic cousin in a database based on shared genomic blocks. Solid lines represent cousins with at least one genomic block, while dotted and dashed lines represent cousins with at least two and three genomic blocks, respectively. The legend specifies the type of cousin being represented by each line." width="672" />
+<p class="caption">
+Probabilities of detecting a genetic cousin in a database based on
+shared genomic blocks. Solid lines represent cousins with at least one
+genomic block, while dotted and dashed lines represent cousins with at
+least two and three genomic blocks, respectively. The legend specifies
+the type of cousin being represented by each line.
+</p>
+</div>
+<pre class="r"><code>## Plot for expected number of p-th degree cousins in a given database
+
+# Set the layout of the plot
+layout(t(1))
+
+# Create a plot with the y-axis ranging from 0 to 350 and the x-axis ranging from 1 to 8, labeled as &quot;Expected number of genetic p-th cousins in database&quot; and &quot;p. (degree of cousin)&quot;, respectively
+plot(c(1,8),c(0,350),type=&quot;n&quot;,ylab=&quot;Expected number of genetic p-th cousins in database&quot;,xlab=&quot;p. (degree of cousin)&quot;)
+
+# For each database size, calculate the expected number of genetic cousins based on the size of the database, the total number of individuals in the population, and the expected number of blocks of shared genetic material between cousins. Multiply the number of expected genetic cousins by the probability of sharing at least three blocks of genetic material with a cousin, and plot the result as a line on the plot. Repeat this for each database size.
+sapply(1:length(DB.sizes),function(i){
+
+    num.cousins&lt;-4^(p)*DB.sizes[i]/(N/2)
+    points(p,num.cousins*prob.g.e.3.blocks,type=&quot;b&quot;,lty=1,col=my.cols[i])
+
+})</code></pre>
+<pre><code>[[1]]
+NULL
+
+[[2]]
+NULL
+
+[[3]]
+NULL</code></pre>
+<pre class="r"><code># Create a legend for the plot that explains what each line represents, including the legend for the database size
+my.leg &lt;- c(c(&quot;Genetic Cousins&quot;, &quot;&gt;2 blocks&quot;), c(&quot;Database size (Millions)=&quot;, format(DB.sizes/1e6, dig=1)))
+legend(x=&quot;topright&quot;,legend=my.leg,col=c(NA,rep(&quot;black&quot;,1),NA,my.cols),lty=c(NA,1:2,rep(NA,3)),pch=c(rep(NA,3),rep(19,3)))</code></pre>
+<div class="figure" style="text-align: center">
+<img src="figure/methods.Rmd/plt-num-cousins-1.png" alt="This figure shows the expected number of genetic relatives of degree p in a database of a given size. The x-axis represents the degree of relatedness, while the y-axis represents the expected number of genetic relatives. Each line represents a different database size." width="672" />
+<p class="caption">
+This figure shows the expected number of genetic relatives of degree p
+in a database of a given size. The x-axis represents the degree of
+relatedness, while the y-axis represents the expected number of genetic
+relatives. Each line represents a different database size.
+</p>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1032,6 +1120,7 @@ loaded via a namespace (and not attached):
 [33] fansi_1.0.3      rmarkdown_2.18   callr_3.7.3      magrittr_2.0.3  
 [37] whisker_0.4      ps_1.7.2         promises_1.2.0.1 htmltools_0.5.3 
 [41] httpuv_1.6.6     utf8_1.2.2       stringi_1.7.8    cachem_1.0.6    </code></pre>
+</div>
 </div>
 </div>
 
