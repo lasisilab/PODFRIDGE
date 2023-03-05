@@ -20,8 +20,8 @@ Below is an adaptation of the code for demonstration purposes with annotations f
 library(wesanderson) # for color palettes
 
 # Set path to the data file
-path <- "/Users/tinalasisi-usc/GitHub/PODFRIDGE/data/"
-savepath <- "/Users/tinalasisi-usc/GitHub/PODFRIDGE/output/"
+path <- "./data/"
+savepath <- "./output/"
 
 # Set up vector for cousin degree
 p <- c(1:8) 
