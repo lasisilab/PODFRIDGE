@@ -15,13 +15,13 @@ The original code can be found [here](https://github.com/tinalasisi/POPFORGE/blo
 
 Below is an adaptation of the code for demonstration purposes with annotations for clarification.
 
-```{r fig.height=6, fig.width=8}
+```{r figures, fig.height=6, fig.width=8}
 # Load necessary packages
 library(wesanderson) # for color palettes
 
 # Set path to the data file
-path <- "/Users/tinalasisi-usc/GitHub/POPFORGE/data/"
-savepath <- "/Users/tinalasisi-usc/GitHub/POPFORGE/output/"
+path <- "/Users/tinalasisi-usc/GitHub/PODFRIDGE/data/"
+savepath <- "/Users/tinalasisi-usc/GitHub/PODFRIDGE/output/"
 
 # Set up vector for cousin degree
 p <- c(1:8) 
@@ -65,7 +65,7 @@ sapply(1:length(DB.sizes), function(i) {
 legend(x = "bottomright", legend = c("Database size (Millions) =", format(DB.sizes / 1e6, dig = 1)), col = c(NA, my.cols), pch = 19)
 
 # Plot of expected number of p-th cousins in sample
-plot(c(1,8),c(0,1000),type="n",ylab="Expected number of p-th cousins in database",xlab="p (degree of cousin)")
+plot(c(1,8),c(0,1000),type="n",ylab="Expected number of p-th cousins in database",xlab="p.(degree of cousin)")
 sapply(1:length(DB.sizes),function(i){
 
     num.cousins<-4^(p)*DB.sizes[i]/(N/2)
