@@ -1,5 +1,5 @@
 ---
-title: "POPFORGE"
+title: "PODFRIDGE"
 site: workflowr::wflow_site
 output:
   workflowr::wflow_html:
@@ -16,7 +16,7 @@ African-Americans are overrepresented in forensic databases (see [Murphy and Ton
 
 Our study aims to examine the impact of the varying degrees of representation across different types of genetic databases on the potential consequences for different populations, as well as the impact of different types of genetic data such as SNP genotyping and STR markers.
 
-The POPFORGE (**Pop**ulation Differences in **For**ensic Identification of **Ge**netic Relatives) project aims to address this question by using mathematical estimations of genetic relatedness based on previous methods, as well as simulating pedigrees and genomes for two populations based on input parameters. Additionally, demographic data from the US Census microdata will be used to obtain population size information on European and African Americans.
+The PODFRIDGE (**Po**pulation **D**ifferences in **F**orensic **R**elative **Id**entification via **Ge**netic Genealogy) project aims to address this question by using mathematical estimations of genetic relatedness based on previous methods, as well as simulating pedigrees and genomes for two populations based on input parameters. Additionally, demographic data from the US Census microdata will be used to obtain population size information on European and African Americans.
 
 Our study aims to provide insight into the implications of these techniques for different populations and contribute to the ongoing discussions around genetic privacy and ethics.
 
