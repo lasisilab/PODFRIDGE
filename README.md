@@ -1,4 +1,4 @@
-# POPFORGE
+# PODFRIDGE
 
 A [workflowr][] project.
 

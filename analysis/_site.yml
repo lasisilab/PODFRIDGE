@@ -1,7 +1,7 @@
-name: "POPFORGE"
+name: PODFRIDGE
 output_dir: ../docs
 navbar:
-  title: "POPFORGE"
+  title: PODFRIDGE
   left:
   - text: Home
     href: index.html
