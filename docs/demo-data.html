@@ -361,7 +361,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Demographic Data</h1>
 <h4 class="author">Tina Lasisi</h4>
-<h4 class="date">2023-03-04 19:57:06</h4>
+<h4 class="date">2023-03-05 23:44:08</h4>
 
 </div>
 
@@ -390,7 +390,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2023-03-04
+<strong>Last updated:</strong> 2023-03-05
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -521,15 +521,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtreece722bc8d9c60115d8a82c053a644774647ba6f7targetblankce722bca">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtree5106bab699da8d30b6da1642cbac39cdc20c2c55targetblank5106baba">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/tinalasisi/PODFRIDGE/tree/ce722bc8d9c60115d8a82c053a644774647ba6f7" target="_blank">ce722bc</a>
+<a href="https://github.com/tinalasisi/PODFRIDGE/tree/5106bab699da8d30b6da1642cbac39cdc20c2c55" target="_blank">5106bab</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtreece722bc8d9c60115d8a82c053a644774647ba6f7targetblankce722bca"
+id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtree5106bab699da8d30b6da1642cbac39cdc20c2c55targetblank5106baba"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -539,7 +539,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/tinalasisi/PODFRIDGE/tree/ce722bc8d9c60115d8a82c053a644774647ba6f7" target="_blank">ce722bc</a>.
+<a href="https://github.com/tinalasisi/PODFRIDGE/tree/5106bab699da8d30b6da1642cbac39cdc20c2c55" target="_blank">5106bab</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -602,6 +602,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/5106bab699da8d30b6da1642cbac39cdc20c2c55/analysis/demo-data.Rmd" target="_blank">5106bab</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2023-03-05
+</td>
+<td>
+add analyses
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tinalasisi/PODFRIDGE/c3948af0114e77dacaf5bd4221c6b4639c120655/docs/demo-data.html" target="_blank">c3948af</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2023-03-04
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -728,8 +762,66 @@ Publishing POPFORGE
 </div>
 </div>
 </div>
-<div id="introduction" class="section level2">
-<h2>Introduction</h2>
+<div id="population-size" class="section level2">
+<h2>Population size</h2>
+<p>The demographic data that the analyses will rely on for now is based
+on a combination of <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7716878/">Hacker et
+al 2020</a>, <a
+href="https://sda.usa.ipums.org/sdaweb/analysis/?dataset=all_usa_samples">US
+Census</a> and Graham Coop’s inputs for <a
+href="https://www.biorxiv.org/content/10.1101/531384v1.full">Edge &amp;
+Coop 2019</a>.</p>
+<p>This GitHub Repo contains an .xls file with multiple sheets that
+contain the different inputs (<a
+href="https://github.com/tinalasisi/PODFRIDGE/blob/master/data/us-pop-detailed-multisheet.xls">here</a>).
+Below is the final file that was uploaded and used in the analyses:</p>
+<pre class="r"><code>library(readr)
+est_pop_combo &lt;- read_csv(&quot;data/est-pop-combo.csv&quot;)</code></pre>
+<pre><code>Rows: 39 Columns: 4
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: &quot;,&quot;
+dbl (4): Year, Total, White, Black
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>est_pop_combo</code></pre>
+<pre><code># A tibble: 39 × 4
+    Year  Total  White Black
+   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+ 1  1610    350    350     0
+ 2  1620   2302   2282    20
+ 3  1630   4646   4587    59
+ 4  1640  26634  26049   585
+ 5  1650  50368  48800  1568
+ 6  1660  75058  72196  2862
+ 7  1670 111935 107491  4444
+ 8  1680 151507 144675  6832
+ 9  1690 210372 193978 16394
+10  1700 250888 223082 27806
+# … with 29 more rows</code></pre>
+</div>
+<div id="database-size" class="section level2">
+<h2>Database size</h2>
+<p>What are realistic database sizes for US European- and African
+American populations? From 23andMe publications it seems that 80% of
+their customers identify as White (non-Hispanic) and that around 3% of
+their customers identify as African American or Black (see <a
+href="https://www.cell.com/ajhg/fulltext/S0002-9297(14)00476-5#secsectitle0135">here</a>
+where they say that their sample represents their customer database and
+the US population). This broadly agrees with data seen in a 23andme
+poster presented in 2011 (see <a
+href="https://blog23andme.wpengine.com/wp-content/uploads/2011/10/ASHG2011poster-JYT.pdf">here</a>)</p>
+<p>For now, the analyses will use an estimate of 80% for White Americans
+and 5% for Black Americans in the DTC databases.</p>
+</div>
+<div id="detailed-demographic-data" class="section level2">
+<h2>Detailed demographic data</h2>
+<p>The website <a
+href="https://tinalasisi.github.io/USC-QCB-IPUMS/exploratory.html">here</a>
+has some figures from an exploratory analysis of birth rate-related data
+from IPUMS. We will revisit this when we simulate populations and need
+to draw from this data for the parameters.</p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -754,20 +846,22 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] workflowr_1.7.0
+[1] readr_2.1.3     workflowr_1.7.0
 
 loaded via a namespace (and not attached):
  [1] Rcpp_1.0.9       compiler_4.2.2   pillar_1.8.1     bslib_0.4.1     
  [5] later_1.3.0      git2r_0.30.1     jquerylib_0.1.4  tools_4.2.2     
- [9] getPass_0.2-2    digest_0.6.30    jsonlite_1.8.3   evaluate_0.18   
-[13] lifecycle_1.0.3  tibble_3.1.8     pkgconfig_2.0.3  rlang_1.0.6     
-[17] cli_3.4.1        rstudioapi_0.14  yaml_2.3.6       xfun_0.35       
-[21] fastmap_1.1.0    httr_1.4.4       stringr_1.5.0    knitr_1.41      
-[25] fs_1.5.2         vctrs_0.5.1      sass_0.4.4       rprojroot_2.0.3 
-[29] glue_1.6.2       R6_2.5.1         processx_3.8.0   fansi_1.0.3     
-[33] rmarkdown_2.18   callr_3.7.3      magrittr_2.0.3   whisker_0.4     
-[37] ps_1.7.2         promises_1.2.0.1 htmltools_0.5.3  httpuv_1.6.6    
-[41] utf8_1.2.2       stringi_1.7.8    cachem_1.0.6    </code></pre>
+ [9] getPass_0.2-2    bit_4.0.5        digest_0.6.30    jsonlite_1.8.3  
+[13] evaluate_0.18    lifecycle_1.0.3  tibble_3.1.8     pkgconfig_2.0.3 
+[17] rlang_1.0.6      cli_3.4.1        rstudioapi_0.14  parallel_4.2.2  
+[21] yaml_2.3.6       xfun_0.35        fastmap_1.1.0    httr_1.4.4      
+[25] stringr_1.5.0    knitr_1.41       hms_1.1.2        fs_1.5.2        
+[29] vctrs_0.5.1      sass_0.4.4       tidyselect_1.2.0 bit64_4.0.5     
+[33] rprojroot_2.0.3  glue_1.6.2       R6_2.5.1         processx_3.8.0  
+[37] fansi_1.0.3      vroom_1.6.0      rmarkdown_2.18   tzdb_0.3.0      
+[41] callr_3.7.3      magrittr_2.0.3   whisker_0.4      ellipsis_0.3.2  
+[45] ps_1.7.2         promises_1.2.0.1 htmltools_0.5.3  httpuv_1.6.6    
+[49] utf8_1.2.2       stringi_1.7.8    cachem_1.0.6     crayon_1.5.2    </code></pre>
 </div>
 </div>
 
