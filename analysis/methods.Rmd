@@ -17,7 +17,9 @@ Below is an adaptation of the code for demonstration purposes with annotations f
 
 ## Population and Database Size Estimation
 
-In the code chunk below, we first read in data on US population sizes by year and calculate the number of grandparents by generation based on the cousin degree. We then determine which years match the grandparents' generation and get the population sizes by year for this generation. The population size is then scaled down by 50% to account for sex and age. For small populations (less than 1 million), the minimum population size is set to 1 million. We also set up a vector of database sizes to test.
+In the code chunk below, we make several assumptions about the population size of possible ancestors based on data from the US census. The assumptions used in the analysis include an average time of 30 years between generations, and a population size for the relevant time period calculated as the size of the population in 1950, adjusted for the number of generations separating the individuals in question. 
+
+Additionally, it is assumed that about half of individuals in the population are potentially parents, and 90% of those individuals have children. The minimum population size is set to 1 million for populations smaller than that, and a vector of database sizes is created to test the expected number of cousins in a database of various sizes.
 
 ```{r setup, fig.height=6, fig.width=8}
 # Load necessary packages
@@ -45,7 +47,7 @@ these.years <- match(p_grandpar_gen, US_pop$year)
 # Get population sizes by year for grandparents' generation
 US_Ns <- US_pop$Population[these.years]
 
-# Scale population size down by 50% to account for sex and age
+# Scale population size down by 50% (assumed number of potential parents) and 90% of those have children 
 N <- US_Ns
 N <- N * 0.5 * 0.9 
 
