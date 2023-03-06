@@ -7,9 +7,29 @@ editor_options:
   chunk_output_type: console
 ---
 
-## Introduction
+
+## Population size
+
+The demographic data that the analyses will rely on for now is based on a combination of [Hacker et al 2020](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7716878/), [US Census](https://sda.usa.ipums.org/sdaweb/analysis/?dataset=all_usa_samples) and Graham Coop's inputs for [Edge & Coop 2019](https://www.biorxiv.org/content/10.1101/531384v1.full). 
+
+This GitHub Repo contains an .xls file with multiple sheets that contain the different inputs ([here](https://github.com/tinalasisi/PODFRIDGE/blob/master/data/us-pop-detailed-multisheet.xls)). Below is the final file that was uploaded and used in the analyses:
 
 ```{r}
 
+library(readr)
+est_pop_combo <- read_csv("data/est-pop-combo.csv")
+est_pop_combo
+
 ```
 
+
+## Database size
+
+What are realistic database sizes for US European- and African American populations? From 23andMe publications it seems that 80% of their customers identify as White (non-Hispanic) and that around 3% of their customers identify as African American or Black (see [here](https://www.cell.com/ajhg/fulltext/S0002-9297(14)00476-5#secsectitle0135) where they say that their sample represents their customer database and the US population). This broadly agrees with data seen in a 23andme poster presented in 2011 (see [here](https://blog23andme.wpengine.com/wp-content/uploads/2011/10/ASHG2011poster-JYT.pdf))
+
+For now, the analyses will use an estimate of 80% for White Americans and 5% for Black Americans in the DTC databases.
+
+
+## Detailed demographic data
+
+The website [here](https://tinalasisi.github.io/USC-QCB-IPUMS/exploratory.html) has some figures from an exploratory analysis of birth rate-related data from IPUMS. We will revisit this when we simulate populations and need to draw from this data for the parameters.

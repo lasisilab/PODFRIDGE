@@ -9,7 +9,182 @@ editor_options:
 
 ## Introduction
 
-```{r}
+```{r setup}
+# Load necessary packages
+library(wesanderson) # for color palettes
+library(tidyverse) #data wrangling etc
+
+# Set path to the data file
+path <- "./data/"
+savepath <- "./output/"
+
+# Set up vector for cousin degree
+p <- c(1:8) 
+
+# Set up initial population size
+N <- 76e6 
+
+# Read in data on US population sizes by year
+US_pop <- read.csv(paste(path, "est-pop-combo.csv", sep = ""))
+
+# Calculate number of grandparents by generation
+p_grandpar_gen <- 1950 - 30 * (p + 1)
+
+# Get population sizes by year for grandparents' generation
+
+US_Ns <- US_pop %>% 
+  filter(Year %in% p_grandpar_gen)
+
+# Scale population size down by 50% (assumed number of potential parents) and 90% of those have children + set minimum for populations
+
+# US_Ns %>% 
+#   mutate(across(!Year, ~ . * 0.5 * 0.9))
+
+N <- US_Ns %>% 
+  mutate(across(!Year, ~ case_when(. * 0.5 * 0.9 < 1e6 ~ 1e6,
+                                   TRUE ~ . * 0.5 * 0.9)))
+
+# Set up vector of database sizes to test
+DB.sizes <- c(1e6, 5e6, 10e6)
+
+DB.sizes.EUR <- DB.sizes*0.8
+DB.sizes.AFR <- DB.sizes*0.05
+
+# Set color palette for graphs
+my.cols <- wes_palette("Darjeeling1")
+```
+
+
+## Probability of p-th degree cousin 
+
+```{r plt-cousins, fig.height=6, fig.width=12, fig.cap="The plot above displays the probability of having at least one p-th cousin in a genetic database and the expected number of p-th cousins in a database. The plot shows the probability of finding at least one p-th cousin in a database of a given size for White Americans (left) and Black Americans (right)"}
+
+plot_prob_DB_size <- function(p, DB.sizes, N, my.cols) {
+  plot(c(1, 8), c(0, 1), type = "n", ylab = "Probability of at least one p-th cousin in database", xlab = "p (degree of cousin)")
+  sapply(1:length(DB.sizes), function(i) {
+    DB.size <- DB.sizes[i]
+    prob.no.rellys <- exp(-2^(2*p - 2) * DB.size / N)
+    points(p, 1 - prob.no.rellys, type = "b", col = my.cols[i], pch = 19, lwd = 1.5)
+  })
+  legend(x = "bottomright", legend = c("Database size (Millions) =", format(DB.sizes / 1e6, dig = 1)), col = c(NA, my.cols), pch = 19)
+}
+
+layout(t(1:2))
+
+plot_prob_DB_size(p, DB.sizes.EUR, N$White,  my.cols)
+plot_prob_DB_size(p, DB.sizes.AFR, N$Black,  my.cols)
+
 
 ```
+
+## Number of p-th degree cousins
+
+```{r plt-num-cousins, fig.cap="This figure the expected number of cousins for White Americans (left) and Black Americans (right) based on database sizes of 1 million, 5 million, and 10 million individuals. The expected number of cousins increases with increasing database size and degree of relatedness"}
+
+# Plot of expected number of p-th cousins in sample
+expected_cousins <- function(p, DB.sizes, N, my.cols) {
+  plot(c(1,8), c(0,1000), type = "n", ylab = "Expected number of p-th cousins in database", xlab = "p.(degree of cousin)")
+  sapply(1:length(DB.sizes), function(i){
+    num_cousins <- 4^(p) * DB.sizes[i] / (N / 2)
+    points(p, num_cousins, type = "b", col = my.cols[i], lwd = 1.5, pch = 19)
+  })
+}
+
+
+layout(t(1:2))
+
+expected_cousins(p, DB.sizes.EUR, N$White,  my.cols)
+expected_cousins(p, DB.sizes.AFR, N$Black,  my.cols)
+
+
+
+```
+
+
+## Probability of a genetically detectable cousin
+
+Below, we calculate the expected number of shared blocks of genetic material between cousins of varying degrees of relatedness. This is important because the probability of detecting genetic material that is shared between two individuals decreases as the degree of relatedness between them decreases. The code uses a Poisson distribution assumption to estimate the probability of two cousins sharing at least one, two, or three blocks of genetic material, based on the expected number of shared blocks of genetic material calculated from previous research.
+
+
+```{r genetic-blocks}
+
+# The variable 'meiosis' represents the number of meiosis events between cousins, where 'p' is the degree of relatedness (i.e. p = 1 for first cousins, p = 2 for second cousins, etc.)
+meiosis <- p + 1
+
+## Expected number of blocks shared between cousins
+# 'E.num.blocks' is the expected number of blocks of shared genetic material between cousins based on the degree of relatedness and the number of meiosis events between them. This value is calculated based on previous research and is not calculated in this code.
+E.num.blocks <- 2 * (33.8 * (2 * meiosis) + 22) / (2^(2 * meiosis - 1))
+
+## Use Poisson assumption
+# 'Prob.genetic' is the probability of two cousins sharing at least one block of genetic material based on the expected number of shared blocks calculated in the previous step. The calculation uses a Poisson distribution assumption.
+Prob.genetic <- 1 - exp(-E.num.blocks)
+
+# 'prob.g.e.2.blocks' is the probability of two cousins sharing at least two blocks of genetic material based on the expected number of shared blocks calculated in the previous step. The calculation uses a Poisson distribution assumption.
+prob.g.e.2.blocks <- 1 - sapply(E.num.blocks, function(expected.num) {sum(dpois(0:1, expected.num))})
+
+# 'prob.g.e.3.blocks' is the probability of two cousins sharing at least three blocks of genetic material based on the expected number of shared blocks calculated in the previous step. The calculation uses a Poisson distribution assumption.
+prob.g.e.3.blocks <- 1 - sapply(E.num.blocks, function(expected.num) {sum(dpois(0:2, expected.num))})
+
+
+```
+
+### General
+
+```{r plt-genetic-blocks, fig.cap="Probabilities of detecting a genetic cousin in a database based on shared genomic blocks. Blue lines represent cousins with at least one genomic block, orange dotted and red lines represent cousins with at least two and three genomic blocks, respectively. The legend specifies the type of cousin being represented by each line."}
+
+## Plot for number of shared blocks with p-th degree cousins
+# Set layout of plot
+layout(t(1))
+
+# Set color palette for plot
+my.cols2<-wes_palette("FantasticFox1")[3:5]
+
+# Create a blank plot with labeled axes
+plot(c(1,8),c(0,1),type="n",ylab="Probability p-th cousin \"detectable\"",xlab="p.(degree of cousin)")
+
+# Add points for probability of detecting pth cousin with genomic blocks using colors from my.cols2
+points(p,Prob.genetic,col=my.cols2[1],pch=19,type="b",lwd=2)
+points(p,prob.g.e.2.blocks,col=my.cols2[2],pch=19,type="b",lwd=2)
+points(p,prob.g.e.3.blocks,col=my.cols2[3],pch=19,type="b",lwd=2)
+
+# Add a legend to the plot
+legend(x="topright",legend=c("Cousins (w. >0 genomic blocks)","Cousins (w. >1 genomic blocks)","Cousins (w. >2 genomic blocks)"),col=my.cols2[1:3],lty=1)
+
+```
+
+
+### Relative to database size
+
+```{r plt-num-cousins-db, fig.cap="This figure shows the expected number of genetic relatives of degree p in a database of a given size. The x-axis represents the degree of relatedness", fig.height=6, fig.width=12}
+
+
+plt_cousins_database <- function(p, DB.sizes, N, prob.g.e.3.blocks, my.cols) {
+
+  # Create plot
+  plot(c(1, 8), c(0, 500), type = "n", ylab = "Expected number of genetic p-th cousins in database", xlab = "p. (degree of cousin)")
+
+  # Calculate and plot expected number of genetic cousins for each database size
+  sapply(1:length(DB.sizes), function(i) {
+    num.cousins <- 4^(p) * DB.sizes[i] / (N / 2)
+    points(p, num.cousins * prob.g.e.3.blocks, type = "b", lty = 1, col = my.cols[i])
+  })
+
+  # Create legend for plot
+  my.leg <- c(c("Genetic Cousins", ">2 blocks"), c("Database size (Millions) =", format(DB.sizes / 1e6, dig = 1)))
+  legend(x = "topright", legend = my.leg, col = c(NA, rep("black", 1), NA, my.cols), lty = c(NA, 1:2, rep(NA, 3)), pch = c(rep(NA, 3), rep(19, 3)))
+}
+
+
+layout(t(1:2))
+
+# plt_cousins_database(p, DB.sizes, N$White, prob.g.e.3.blocks,  my.cols)
+plt_cousins_database(p, DB.sizes.EUR, N$White, prob.g.e.3.blocks,  my.cols)
+plt_cousins_database(p, DB.sizes.AFR, N$Black, prob.g.e.3.blocks,  my.cols)
+
+
+```
+
+
+
+
 
