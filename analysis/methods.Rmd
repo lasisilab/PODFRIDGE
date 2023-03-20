@@ -7,7 +7,10 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Coop & Edge
+
+# Long-Range Familial Searching
+
+## Coop & Edge 2019
 
 Coop & Edge ([2019](https://www.biorxiv.org/content/10.1101/531384v1.full)) use a population genetics approach to estimate the likelihood of finding a genetic relative in a database. They assumes that two individuals are related if they share a certain number of genetic blocks, which is determined by the degree of relatedness (e.g. first cousin, second cousin, etc.). Using this assumption, they calculates the expected number of blocks shared between two individuals of a given degree of relatedness based on the size of the genetic database and the population size. They then uses the Poisson distribution to estimate the probability of finding at least one relative of a given degree of relatedness in a database of a certain size.
 
@@ -15,7 +18,7 @@ The original code can be found [here](https://github.com/tinalasisi/POPFORGE/blo
 
 Below is an adaptation of the code for demonstration purposes with annotations for clarification.
 
-## Population and Database Size Estimation
+### Population and Database Size Estimation
 
 In the code chunk below, we make several assumptions about the population size of possible ancestors based on data from the US census. The assumptions used in the analysis include an average time of 30 years between generations, and a population size for the relevant time period calculated as the size of the population in 1950, adjusted for the number of generations separating the individuals in question. 
 
@@ -62,7 +65,7 @@ my.cols <- wes_palette("Darjeeling1")
 ```
 
 
-## Probability of p-th degree cousin and number of p-th degree cousins
+### Probability of p-th degree cousin and number of p-th degree cousins
 
 The code below calculates the probability of having at least one p-th cousin in the database and the expected number of p-th cousins in the sample for different database sizes. The first plot shows the probability of having at least one p-th cousin in the database based on the degree of relatedness and the size of the database. The second plot shows the expected number of p-th cousins in the sample for different database sizes.
 
@@ -91,7 +94,7 @@ sapply(1:length(DB.sizes),function(i){
 
 ```
 
-## Probability of a genetically detectable cousin
+### Probability of a genetically detectable cousin
 
 Below, we calculate the expected number of shared blocks of genetic material between cousins of varying degrees of relatedness. This is important because the probability of detecting genetic material that is shared between two individuals decreases as the degree of relatedness between them decreases. The code uses a Poisson distribution assumption to estimate the probability of two cousins sharing at least one, two, or three blocks of genetic material, based on the expected number of shared blocks of genetic material calculated from previous research.
 
@@ -165,5 +168,15 @@ legend(x="topright",legend=my.leg,col=c(NA,rep("black",1),NA,my.cols),lty=c(NA,1
 
 
 ```
+
+
+## Ehrlich et al 2018
+
+```{r}
+
+```
+
+
+# Short-Range Familial Searching
 
 

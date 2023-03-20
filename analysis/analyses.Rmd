@@ -7,7 +7,6 @@ editor_options:
   chunk_output_type: console
 ---
 
-## Introduction
 
 ```{r setup}
 # Load necessary packages
@@ -28,7 +27,7 @@ N <- 76e6
 US_pop <- read.csv(paste(path, "est-pop-combo.csv", sep = ""))
 
 # Calculate number of grandparents by generation
-p_grandpar_gen <- 1950 - 30 * (p + 1)
+p_grandpar_gen <- 1990 - 30 * (p + 1)
 
 # Get population sizes by year for grandparents' generation
 
@@ -54,6 +53,11 @@ DB.sizes.AFR <- DB.sizes*0.05
 my.cols <- wes_palette("Darjeeling1")
 ```
 
+```{r}
+N
+```
+
+
 
 ## Probability of p-th degree cousin 
 
@@ -71,8 +75,12 @@ plot_prob_DB_size <- function(p, DB.sizes, N, my.cols) {
 
 layout(t(1:2))
 
+# plot_prob_DB_size(p, DB.sizes.EUR, N$Total,  my.cols)
 plot_prob_DB_size(p, DB.sizes.EUR, N$White,  my.cols)
+# plot_prob_DB_size(p, DB.sizes.EUR, N$White,  my.cols)
+# plot_prob_DB_size(p, DB.sizes.EUR, N$Total,  my.cols)
 plot_prob_DB_size(p, DB.sizes.AFR, N$Black,  my.cols)
+# plot_prob_DB_size(p, DB.sizes.AFR, N$Total,  my.cols)
 
 
 ```
