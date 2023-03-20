@@ -361,7 +361,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Analyses</h1>
 <h4 class="author">Tina Lasisi</h4>
-<h4 class="date">2023-03-05 23:44:05</h4>
+<h4 class="date">2023-03-06 11:51:46</h4>
 
 </div>
 
@@ -369,7 +369,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -380,8 +380,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -390,13 +390,13 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2023-03-05
+<strong>Last updated:</strong> 2023-03-06
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>PODFRIDGE/</code> <span
@@ -419,18 +419,21 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
@@ -521,15 +524,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtree5106bab699da8d30b6da1642cbac39cdc20c2c55targetblank5106baba">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtree5f805fe9b5638c72575d8adca031aa08ee3e9a31targetblank5f805fea">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/tinalasisi/PODFRIDGE/tree/5106bab699da8d30b6da1642cbac39cdc20c2c55" target="_blank">5106bab</a>
+<a href="https://github.com/tinalasisi/PODFRIDGE/tree/5f805fe9b5638c72575d8adca031aa08ee3e9a31" target="_blank">5f805fe</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtree5106bab699da8d30b6da1642cbac39cdc20c2c55targetblank5106baba"
+id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtree5f805fe9b5638c72575d8adca031aa08ee3e9a31targetblank5f805fea"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -539,7 +542,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/tinalasisi/PODFRIDGE/tree/5106bab699da8d30b6da1642cbac39cdc20c2c55" target="_blank">5106bab</a>.
+<a href="https://github.com/tinalasisi/PODFRIDGE/tree/5f805fe9b5638c72575d8adca031aa08ee3e9a31" target="_blank">5f805fe</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -557,6 +560,11 @@ Ignored files:
     Ignored:    .DS_Store
     Ignored:    .Rproj.user/
     Ignored:    data/.DS_Store
+
+Unstaged changes:
+    Modified:   analysis/analyses.Rmd
+    Modified:   analysis/methods.Rmd
+    Modified:   data/us-pop-detailed-multisheet.xls
 
 </code></pre>
 <p>
@@ -602,6 +610,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tinalasisi/PODFRIDGE/5f805fe9b5638c72575d8adca031aa08ee3e9a31/docs/analyses.html" target="_blank">5f805fe</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2023-03-05
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -762,8 +787,6 @@ Publishing POPFORGE
 </div>
 </div>
 </div>
-<div id="introduction" class="section level2">
-<h2>Introduction</h2>
 <pre class="r"><code># Load necessary packages
 library(wesanderson) # for color palettes
 library(tidyverse) #data wrangling etc</code></pre>
@@ -789,7 +812,7 @@ N &lt;- 76e6
 US_pop &lt;- read.csv(paste(path, &quot;est-pop-combo.csv&quot;, sep = &quot;&quot;))
 
 # Calculate number of grandparents by generation
-p_grandpar_gen &lt;- 1950 - 30 * (p + 1)
+p_grandpar_gen &lt;- 1990 - 30 * (p + 1)
 
 # Get population sizes by year for grandparents&#39; generation
 
@@ -813,7 +836,16 @@ DB.sizes.AFR &lt;- DB.sizes*0.05
 
 # Set color palette for graphs
 my.cols &lt;- wes_palette(&quot;Darjeeling1&quot;)</code></pre>
-</div>
+<pre class="r"><code>N</code></pre>
+<pre><code>  Year    Total    White   Black
+1 1720  1000000  1000000 1000000
+2 1750  1000000  1000000 1000000
+3 1780  1251166  1000000 1000000
+4 1810  3257946  2637933 1000000
+5 1840  7678509  6385367 1293142
+6 1870 17351267 15115220 2196004
+7 1900 34197559 30064138 3975297
+8 1930 55248771 49629033 5351014</code></pre>
 <div id="probability-of-p-th-degree-cousin" class="section level2">
 <h2>Probability of p-th degree cousin</h2>
 <pre class="r"><code>plot_prob_DB_size &lt;- function(p, DB.sizes, N, my.cols) {
@@ -828,7 +860,10 @@ my.cols &lt;- wes_palette(&quot;Darjeeling1&quot;)</code></pre>
 
 layout(t(1:2))
 
+# plot_prob_DB_size(p, DB.sizes.EUR, N$Total,  my.cols)
 plot_prob_DB_size(p, DB.sizes.EUR, N$White,  my.cols)
+# plot_prob_DB_size(p, DB.sizes.EUR, N$White,  my.cols)
+# plot_prob_DB_size(p, DB.sizes.EUR, N$Total,  my.cols)
 plot_prob_DB_size(p, DB.sizes.AFR, N$Black,  my.cols)</code></pre>
 <div class="figure" style="text-align: center">
 <img src="figure/analyses.Rmd/plt-cousins-1.png" alt="The plot above displays the probability of having at least one p-th cousin in a genetic database and the expected number of p-th cousins in a database. The plot shows the probability of finding at least one p-th cousin in a database of a given size for White Americans (left) and Black Americans (right)" width="1152" />
@@ -840,6 +875,44 @@ cousin in a database of a given size for White Americans (left) and
 Black Americans (right)
 </p>
 </div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-cousins-1">
+Past versions of plt-cousins-1.png
+</button>
+</p>
+<div id="fig-plt-cousins-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/5f805fe9b5638c72575d8adca031aa08ee3e9a31/docs/figure/analyses.Rmd/plt-cousins-1.png" target="_blank">5f805fe</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2023-03-05
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre class="r"><code># plot_prob_DB_size(p, DB.sizes.AFR, N$Total,  my.cols)</code></pre>
 </div>
 <div id="number-of-p-th-degree-cousins" class="section level2">
 <h2>Number of p-th degree cousins</h2>
@@ -873,6 +946,43 @@ and Black Americans (right) based on database sizes of 1 million, 5
 million, and 10 million individuals. The expected number of cousins
 increases with increasing database size and degree of relatedness
 </p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-num-cousins-1">
+Past versions of plt-num-cousins-1.png
+</button>
+</p>
+<div id="fig-plt-num-cousins-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/5f805fe9b5638c72575d8adca031aa08ee3e9a31/docs/figure/analyses.Rmd/plt-num-cousins-1.png" target="_blank">5f805fe</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2023-03-05
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <pre><code>[[1]]
 NULL
@@ -939,6 +1049,43 @@ least two and three genomic blocks, respectively. The legend specifies
 the type of cousin being represented by each line.
 </p>
 </div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-genetic-blocks-1">
+Past versions of plt-genetic-blocks-1.png
+</button>
+</p>
+<div id="fig-plt-genetic-blocks-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/5f805fe9b5638c72575d8adca031aa08ee3e9a31/docs/figure/analyses.Rmd/plt-genetic-blocks-1.png" target="_blank">5f805fe</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2023-03-05
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="relative-to-database-size" class="section level3">
 <h3>Relative to database size</h3>
@@ -971,6 +1118,43 @@ This figure shows the expected number of genetic relatives of degree p
 in a database of a given size. The x-axis represents the degree of
 relatedness
 </p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-num-cousins-db-1">
+Past versions of plt-num-cousins-db-1.png
+</button>
+</p>
+<div id="fig-plt-num-cousins-db-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/5f805fe9b5638c72575d8adca031aa08ee3e9a31/docs/figure/analyses.Rmd/plt-num-cousins-db-1.png" target="_blank">5f805fe</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2023-03-05
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <br>
 <p>
