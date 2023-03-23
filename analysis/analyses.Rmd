@@ -14,19 +14,29 @@ library(wesanderson) # for color palettes
 library(tidyverse) #data wrangling etc
 
 # Set path to the data file
-path <- "./data/"
-savepath <- "./output/"
+path <- file.path(".", "data")
+savepath <- file.path(".", "output")
 
 # Set up vector for cousin degree
 p <- c(1:8) 
 
 # Set up initial population size
-N <- 76e6 
+N <- 76e6
 
+# Set up vector of database sizes to test
+DB.sizes <- c(1e6, 5e6, 10e6)
+
+# Set color palette for graphs
+my.cols <- wes_palette("Darjeeling1")
+```
+
+
+```{r}
 # Read in data on US population sizes by year
-US_pop <- read.csv(paste(path, "est-pop-combo.csv", sep = ""))
+US_pop <- read.csv(file.path(path,"est-pop-combo.csv"))
 
 # Calculate number of grandparents by generation
+# p_grandpar_gen <- 1950 - 30 * (p + 1)
 p_grandpar_gen <- 1990 - 30 * (p + 1)
 
 # Get population sizes by year for grandparents' generation
@@ -35,76 +45,249 @@ US_Ns <- US_pop %>%
   filter(Year %in% p_grandpar_gen)
 
 # Scale population size down by 50% (assumed number of potential parents) and 90% of those have children + set minimum for populations
-
-# US_Ns %>% 
+# 
+# N <- US_Ns %>%
 #   mutate(across(!Year, ~ . * 0.5 * 0.9))
 
-N <- US_Ns %>% 
+N <- US_Ns %>%
   mutate(across(!Year, ~ case_when(. * 0.5 * 0.9 < 1e6 ~ 1e6,
                                    TRUE ~ . * 0.5 * 0.9)))
 
 # Set up vector of database sizes to test
 DB.sizes <- c(1e6, 5e6, 10e6)
 
-DB.sizes.EUR <- DB.sizes*0.8
-DB.sizes.AFR <- DB.sizes*0.05
-
 # Set color palette for graphs
 my.cols <- wes_palette("Darjeeling1")
+
 ```
 
+
+```{r func-calc-N}
+
+# Calculate number of grandparents by generation
+calc_grandparent_gen <- function(year, p = c(1:8)) {
+  grandparent_gen <- year - 30 * (p + 1)
+  return(grandparent_gen)
+}
+
+# Define a function to calculate final population sizes based on input data file and generation of grandparents
+calc_final_N <- function(file_path, p_grandpar_gen) {
+
+  # Read in data on US population sizes by year
+  US_pop <- read.csv(file_path)
+  
+  names(US_pop)[1] <- "Year"
+
+  # Get population sizes by year for grandparents' generation
+  US_Ns <- US_pop %>% 
+    filter(Year %in% p_grandpar_gen)
+
+  # Scale population size down by 50% (assumed number of potential parents) and 90% of those have children + set minimum for populations
+  N <- US_Ns %>%
+    mutate(across(!Year, ~ case_when(. * 0.5 * 0.9 < 1e6 ~ 1e6,
+                                     TRUE ~ . * 0.5 * 0.9)))
+
+  return(N)
+}
+
+# get file
+US_pop_fp <- file.path(path, "est-pop-combo.csv")
+US_pop_coop_fp <- file.path(path, "US_popsize.csv")
+
+
+```
+
+
 ```{r}
-N
+
+p_grandpar_gen <- calc_grandparent_gen(1990)
+
+N <- calc_final_N(US_pop_fp, p_grandpar_gen)
+
+```
+
+```{r pop-size}
+
+# Define the population sizes and names
+populations <- N %>% 
+  pivot_longer(-Year, names_to = "Population", values_to = "N")
+
+# Create a ggplot object to visualize population sizes
+pop_size_plot <- ggplot(populations, aes(x = Population, y = N)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  labs(x = "Population", y = "Population size") +
+  theme_minimal() +
+  facet_wrap(~Year)
+
+# Display the plot
+print(pop_size_plot)
+
 ```
 
 
 
 ## Probability of p-th degree cousin 
 
-```{r plt-cousins, fig.height=6, fig.width=12, fig.cap="The plot above displays the probability of having at least one p-th cousin in a genetic database and the expected number of p-th cousins in a database. The plot shows the probability of finding at least one p-th cousin in a database of a given size for White Americans (left) and Black Americans (right)"}
 
-plot_prob_DB_size <- function(p, DB.sizes, N, my.cols) {
-  plot(c(1, 8), c(0, 1), type = "n", ylab = "Probability of at least one p-th cousin in database", xlab = "p (degree of cousin)")
-  sapply(1:length(DB.sizes), function(i) {
-    DB.size <- DB.sizes[i]
-    prob.no.rellys <- exp(-2^(2*p - 2) * DB.size / N)
-    points(p, 1 - prob.no.rellys, type = "b", col = my.cols[i], pch = 19, lwd = 1.5)
-  })
-  legend(x = "bottomright", legend = c("Database size (Millions) =", format(DB.sizes / 1e6, dig = 1)), col = c(NA, my.cols), pch = 19)
+```{r plt-cousins-new}
+
+library(wesanderson)
+library(ggplot2)
+
+# Function to calculate probabilities for finding a p-th degree cousin
+calc_prob <- function(p, DB.size, N) {
+  prob.no.rellys <- exp(-2^(2*p - 2) * DB.size / N)
+  return(1 - prob.no.rellys)
 }
 
-layout(t(1:2))
+# Function to calculate probabilities for different database fractions
+calc_prob_db_frac <- function(p, DB.sizes, db.frac, N) {
+  data <- data.frame(p = integer(), Population = character(), DB.size = double(), Probability = double(), Fraction = double())
 
-# plot_prob_DB_size(p, DB.sizes.EUR, N$Total,  my.cols)
-plot_prob_DB_size(p, DB.sizes.EUR, N$White,  my.cols)
-# plot_prob_DB_size(p, DB.sizes.EUR, N$White,  my.cols)
-# plot_prob_DB_size(p, DB.sizes.EUR, N$Total,  my.cols)
-plot_prob_DB_size(p, DB.sizes.AFR, N$Black,  my.cols)
-# plot_prob_DB_size(p, DB.sizes.AFR, N$Total,  my.cols)
+  for (pop_name in names(N)) {
+    for (i in 1:length(db.frac)) {
+      for (j in 1:length(DB.sizes)) {
+        DB.size <- DB.sizes[j] * db.frac[i]
+        prob <- calc_prob(p, DB.size, N[[pop_name]])
+        data <- rbind(data, data.frame(p = p, Population = rep(pop_name, length(p)), DB.size = rep(DB.sizes[j], length(p)), Probability = prob, Fraction = rep(db.frac[i], length(p))))
+      }
+    }
+  }
 
+  return(data)
+}
+
+
+# Function to generate ggplot object
+ggplot_prob <- function(data, my.cols) {
+  plot <- ggplot(data, aes(x = p, y = Probability, color = factor(DB.size), group = factor(DB.size))) +
+    geom_point() +
+    geom_line() +
+    scale_color_manual(values = my.cols, name = "Database size (Millions)", 
+                       labels = format(unique(data$DB.size) / 1e6, dig = 1)) +
+    labs(x = "p (degree of cousin)", y = "Probability of at least one p-th cousin in database") +
+    theme_minimal() +
+    facet_grid(Fraction ~ Population, labeller = labeller(Fraction = function(x) sprintf("%.0f%%", as.numeric(x) * 100)))
+
+  return(plot)
+}
+
+# Set color palette for graphs
+my.cols <- wes_palette("Darjeeling1")
+
+# Define the population sizes and names
+populations <- list(
+  "European American" = N$White,
+  "African American" = N$Black,
+  "Total US" = N$Total
+)
+
+# Define the database sizes and fractions
+DB.sizes <- c(1e6, 5e6, 10e6)
+db.frac <- c(0.05, 0.8, 1)
+
+# Calculate the probabilities for each population and database fraction
+prob_data <- calc_prob_db_frac(p, DB.sizes, db.frac, populations)
+
+# Create and display the ggplot object
+prob_plot <- ggplot_prob(prob_data, my.cols)
+print(prob_plot)
+
+# Print the table of final probabilities
+# print(prob_data)
 
 ```
 
-## Number of p-th degree cousins
 
-```{r plt-num-cousins, fig.cap="This figure the expected number of cousins for White Americans (left) and Black Americans (right) based on database sizes of 1 million, 5 million, and 10 million individuals. The expected number of cousins increases with increasing database size and degree of relatedness"}
 
-# Plot of expected number of p-th cousins in sample
-expected_cousins <- function(p, DB.sizes, N, my.cols) {
-  plot(c(1,8), c(0,1000), type = "n", ylab = "Expected number of p-th cousins in database", xlab = "p.(degree of cousin)")
-  sapply(1:length(DB.sizes), function(i){
-    num_cousins <- 4^(p) * DB.sizes[i] / (N / 2)
-    points(p, num_cousins, type = "b", col = my.cols[i], lwd = 1.5, pch = 19)
-  })
+```{r plt-diffs}
+# Function to generate ggplot object with populations in different colors
+ggplot_prob_combined <- function(data, my.cols) {
+  plot <- ggplot(data, aes(x = p, y = Probability, color = Population, group = interaction(Population, factor(DB.size)))) +
+    geom_point() +
+    geom_line() +
+    scale_color_manual(values = my.cols, name = "Population") +
+    labs(x = "p (degree of cousin)", y = "Probability of at least one p-th cousin in database") +
+    theme_minimal() +
+    facet_grid(Fraction ~ factor(DB.size), 
+               labeller = labeller(Fraction = function(x) sprintf("%.0f%%", as.numeric(x) * 100),
+                                                               DB.size = function(x) sprintf("%gM", x / 1e6)))
+  
+  function(x) formatC(x / 1e6, format = "f", digits = 0, big.mark = ",")
+  
+
+  return(plot)
 }
 
+# Set color palette for graphs
+my.cols <- wes_palette("Darjeeling1", n = 3, type = "continuous")
 
-layout(t(1:2))
+# Create and display the ggplot object with populations in different colors
+prob_combined_plot <- ggplot_prob_combined(prob_data, my.cols)
+print(prob_combined_plot)
 
-expected_cousins(p, DB.sizes.EUR, N$White,  my.cols)
-expected_cousins(p, DB.sizes.AFR, N$Black,  my.cols)
+```
 
 
+
+## Number of p-th degree cousins
+
+```{r num-cousins}
+# Function to calculate the number of p-th degree cousins
+calc_cousins <- function(p, DB.size, N) {
+  num_cousins <- 4^(p) * DB.size / (N / 2)
+  return(num_cousins)
+}
+
+# Function to calculate the number of p-th degree cousins for different database fractions
+calc_cousins_db_frac <- function(p, DB.sizes, db.frac, N) {
+  data <- data.frame(p = integer(), Population = as.character(), DB.size = double(), Cousins = double(), Fraction = double())
+
+  for (pop_name in names(N)) {
+    for (i in 1:length(db.frac)) {
+      for (j in 1:length(DB.sizes)) {
+        DB.size <- DB.sizes[j] * db.frac[i]
+        cousins <- calc_cousins(p, DB.size, N[[pop_name]])
+        data <- rbind(data, data.frame(p = p, Population = rep(pop_name, length(p)), DB.size = rep(DB.sizes[j], length(p)), Cousins = cousins, Fraction = rep(db.frac[i], length(p))))
+      }
+    }
+  }
+
+  return(data)
+}
+
+# Function to generate ggplot object
+ggplot_cousins <- function(data, my.cols) {
+  plot <- ggplot(data, aes(x = p, y = Cousins, color = factor(DB.size), group = factor(DB.size))) +
+    geom_point() +
+    geom_line() +
+    scale_color_manual(values = my.cols, name = "Database size (Millions)", labels = c("1", "5", "10")) +
+    labs(x = "p (degree of cousin)", y = "Number of p-th degree cousins in database") +
+    theme_minimal() +
+    facet_grid(Fraction ~ Population, labeller = labeller(Fraction = function(x) sprintf("%.0f%%", as.numeric(x) * 100), Population = c("European American" = "European American", "African American" = "African American", "Total US" = "Total US")))
+
+  return(plot)
+}
+
+# Set up vector of database sizes to test
+DB.sizes <- c(1e6, 5e6, 10e6)
+
+# Define the database fractions
+db.frac <- c(0.05, 0.8, 1)
+
+# Define the population sizes and names
+populations <- list(
+  "European American" = N$White,
+  "African American" = N$Black,
+  "Total US" = N$Total
+)
+
+# Calculate the number of cousins for each population and database fraction
+cousins_data <- calc_cousins_db_frac(p, DB.sizes, db.frac, populations)
+
+# Create and display the ggplot object
+cousins_plot <- ggplot_cousins(cousins_data, my.cols)
+print(cousins_plot)
 
 ```
 
@@ -163,35 +346,53 @@ legend(x="topright",legend=c("Cousins (w. >0 genomic blocks)","Cousins (w. >1 ge
 
 ### Relative to database size
 
-```{r plt-num-cousins-db, fig.cap="This figure shows the expected number of genetic relatives of degree p in a database of a given size. The x-axis represents the degree of relatedness", fig.height=6, fig.width=12}
-
-
-plt_cousins_database <- function(p, DB.sizes, N, prob.g.e.3.blocks, my.cols) {
-
-  # Create plot
-  plot(c(1, 8), c(0, 500), type = "n", ylab = "Expected number of genetic p-th cousins in database", xlab = "p. (degree of cousin)")
-
-  # Calculate and plot expected number of genetic cousins for each database size
-  sapply(1:length(DB.sizes), function(i) {
-    num.cousins <- 4^(p) * DB.sizes[i] / (N / 2)
-    points(p, num.cousins * prob.g.e.3.blocks, type = "b", lty = 1, col = my.cols[i])
-  })
-
-  # Create legend for plot
-  my.leg <- c(c("Genetic Cousins", ">2 blocks"), c("Database size (Millions) =", format(DB.sizes / 1e6, dig = 1)))
-  legend(x = "topright", legend = my.leg, col = c(NA, rep("black", 1), NA, my.cols), lty = c(NA, 1:2, rep(NA, 3)), pch = c(rep(NA, 3), rep(19, 3)))
+```{r plt-num-cousins-db}
+# Function to calculate expected number of p-th degree cousins based on shared genetic blocks
+calc_gen_cousins <- function(p, DB.size, N, prob) {
+  num.cousins <- 4^(p) * DB.size / (N / 2)
+  return(num.cousins * prob)
 }
 
+# Function to calculate expected number of p-th degree cousins based on shared genetic blocks for different database fractions
+calc_gen_cousins_db_frac <- function(p, DB.sizes, db.frac, N, prob) {
+  data <- data.frame(p = integer(), Population = character(), DB.size = double(), Gen_Cousins = double(), Fraction = double())
 
-layout(t(1:2))
+  for (pop_name in names(N)) {
+    for (i in 1:length(db.frac)) {
+      for (j in 1:length(DB.sizes)) {
+        DB.size <- DB.sizes[j] * db.frac[i]
+        num_cousins <- calc_gen_cousins(p, DB.size, N[[pop_name]], prob)
+        data <- rbind(data, data.frame(p = p, Population = rep(pop_name, length(p)), DB.size = rep(DB.sizes[j], length(p)), Gen_Cousins = num_cousins, Fraction = rep(db.frac[i], length(p))))
+      }
+    }
+  }
 
-# plt_cousins_database(p, DB.sizes, N$White, prob.g.e.3.blocks,  my.cols)
-plt_cousins_database(p, DB.sizes.EUR, N$White, prob.g.e.3.blocks,  my.cols)
-plt_cousins_database(p, DB.sizes.AFR, N$Black, prob.g.e.3.blocks,  my.cols)
+  return(data)
+}
 
+# Function to generate ggplot object for expected number of p-th degree cousins based on shared genetic blocks
+ggplot_gen_cousins <- function(data, my.cols) {
+  plot <- ggplot(data, aes(x = p, y = Gen_Cousins, color = factor(DB.size), group = factor(DB.size))) +
+    geom_point() +
+    geom_line() +
+    scale_color_manual(values = my.cols, name = "Database size (Millions)", 
+                       labels = format(unique(data$DB.size) / 1e6, nsmall = 0)) +
+    labs(x = "p (degree of cousin)", y = "Expected number of genetic p-th cousins in database") +
+    theme_minimal() +
+    # facet_grid(Fraction ~ Population, labeller = label_parsed)
+  facet_grid(Fraction ~ Population, labeller = labeller(Fraction = function(x) sprintf("%.0f%%", as.numeric(x) * 100), Population = c("European American" = "European American", "African American" = "African American", "Total US" = "Total US")))
+
+  return(plot)
+}
+
+# Calculate the expected number of p-th degree cousins based on shared genetic blocks for each population and database fraction
+gen_cousins_data <- calc_gen_cousins_db_frac(p, DB.sizes, db.frac, populations, prob.g.e.3.blocks)
+
+# Create and display the ggplot object
+gen_cousins_plot <- ggplot_gen_cousins(gen_cousins_data, my.cols)
+print(gen_cousins_plot)
 
 ```
-
 
 
 
