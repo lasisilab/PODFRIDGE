@@ -31,37 +31,6 @@ my.cols <- wes_palette("Darjeeling1")
 ```
 
 
-```{r}
-# Read in data on US population sizes by year
-US_pop <- read.csv(file.path(path,"est-pop-combo.csv"))
-
-# Calculate number of grandparents by generation
-# p_grandpar_gen <- 1950 - 30 * (p + 1)
-p_grandpar_gen <- 1990 - 30 * (p + 1)
-
-# Get population sizes by year for grandparents' generation
-
-US_Ns <- US_pop %>% 
-  filter(Year %in% p_grandpar_gen)
-
-# Scale population size down by 50% (assumed number of potential parents) and 90% of those have children + set minimum for populations
-# 
-# N <- US_Ns %>%
-#   mutate(across(!Year, ~ . * 0.5 * 0.9))
-
-N <- US_Ns %>%
-  mutate(across(!Year, ~ case_when(. * 0.5 * 0.9 < 1e6 ~ 1e6,
-                                   TRUE ~ . * 0.5 * 0.9)))
-
-# Set up vector of database sizes to test
-DB.sizes <- c(1e6, 5e6, 10e6)
-
-# Set color palette for graphs
-my.cols <- wes_palette("Darjeeling1")
-
-```
-
-
 ```{r func-calc-N}
 
 # Calculate number of grandparents by generation
@@ -90,40 +59,41 @@ calc_final_N <- function(file_path, p_grandpar_gen) {
   return(N)
 }
 
-# get file
-US_pop_fp <- file.path(path, "est-pop-combo.csv")
-US_pop_coop_fp <- file.path(path, "US_popsize.csv")
-
 
 ```
 
 
 ```{r}
 
-p_grandpar_gen <- calc_grandparent_gen(1990)
+# get file
+US_pop_fp <- file.path(path, "est-pop-combo.csv")
+US_pop_coop_fp <- file.path(path, "US_popsize.csv")
+
+p_grandpar_gen <- calc_grandparent_gen(1950)
 
 N <- calc_final_N(US_pop_fp, p_grandpar_gen)
+# N <- calc_final_N(US_pop_coop_fp, p_grandpar_gen)
+
+
+N_coop <- calc_final_N(US_pop_coop_fp, p_grandpar_gen)
 
 ```
 
 ```{r pop-size}
+population_size_plot <- function(N) {
+  populations <- N %>% 
+    pivot_longer(-Year, names_to = "Population", values_to = "N")
+  
+  ggplot(populations, aes(x = Population, y = N)) +
+    geom_bar(stat = "identity", fill = "steelblue") +
+    labs(x = "Population", y = "Population size") +
+    theme_minimal() +
+    facet_wrap(~Year)
+}
 
-# Define the population sizes and names
-populations <- N %>% 
-  pivot_longer(-Year, names_to = "Population", values_to = "N")
-
-# Create a ggplot object to visualize population sizes
-pop_size_plot <- ggplot(populations, aes(x = Population, y = N)) +
-  geom_bar(stat = "identity", fill = "steelblue") +
-  labs(x = "Population", y = "Population size") +
-  theme_minimal() +
-  facet_wrap(~Year)
-
-# Display the plot
-print(pop_size_plot)
-
+population_size_plot(N)
+population_size_plot(N_coop)
 ```
-
 
 
 ## Probability of p-th degree cousin 
@@ -131,6 +101,62 @@ print(pop_size_plot)
 
 ```{r plt-cousins-new}
 
+# Function to calculate the probability of having at least one p-th degree cousin
+calc_prob <- function(p, DB.size, N) {
+  prob.no.rellys <- unlist(sapply(DB.size, function(db_size) {
+    exp(-2^(2*p - 2) * db_size / N)
+  }))
+  return(1 - prob.no.rellys)
+}
+
+# Function to calculate the number of p-th degree cousins for different database sizes
+calc_cousins_db_sizes <- function(p, DB.sizes, populations_df) {
+  data <- data.frame(p = integer(), Population = as.character(), DB.size = double(), Cousins = double())
+
+  for (pop_name in unique(populations_df$Population)) {
+    N <- populations_df$N[populations_df$Population == pop_name]
+    for (j in 1:length(DB.sizes)) {
+      DB.size <- DB.sizes[j]
+      cousins <- calc_cousins(p, DB.size, N)
+      temp_df <- data.frame(p = p, Population = rep(pop_name, length(p)), DB.size = rep(DB.size, length(p)), Cousins = cousins)
+      data <- rbind(data, temp_df)
+    }
+  }
+
+  return(data)
+}
+
+
+# Function to generate ggplot object
+ggplot_cousins <- function(data, my.cols) {
+  plot <- ggplot(data, aes(x = p, y = Cousins, color = factor(DB.size), group = factor(DB.size))) +
+    geom_point() +
+    geom_line() +
+    scale_color_manual(values = my.cols, name = "Database size (Millions)", labels = c("1", "5", "10")) +
+    labs(x = "p (degree of cousin)", y = "Number of p-th degree cousins in database") +
+    theme_minimal() +
+    facet_wrap(~ Population)
+
+  return(plot)
+}
+
+
+
+```
+
+```{r}
+# Calculate the number of cousins for each population and database size
+cousins_data <- calc_cousins_db_sizes(p, DB.sizes, N)
+
+# Create and display the ggplot object
+cousins_plot <- ggplot_cousins(cousins_data, my.cols)
+print(cousins_plot)
+
+
+```
+
+
+```{r plt-cousins-new}
 library(wesanderson)
 library(ggplot2)
 
