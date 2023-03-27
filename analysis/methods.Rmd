@@ -45,7 +45,7 @@ US_pop <- read.csv(paste(path, "US_popsize.csv", sep = ""))
 p_grandpar_gen <- 1950 - 30 * (p + 1)
 
 # Determine which years match the grandparents' generation
-these.years <- match(p_grandpar_gen, US_pop$year)
+these.years <- match(p_grandpar_gen, US_pop$Year)
 
 # Get population sizes by year for grandparents' generation
 US_Ns <- US_pop$Population[these.years]
@@ -55,7 +55,7 @@ N <- US_Ns
 N <- N * 0.5 * 0.9 
 
 # Set minimum population size for small populations
-N[US_Ns < 1e6] <- 1e6 
+N[US_Ns < 1e6] <- 1e6 # is this in the correct order? 
 
 # Set up vector of database sizes to test
 DB.sizes <- c(1e6, 5e6, 10e6)
