@@ -151,7 +151,7 @@ plt_df <- calc_prob(p, DB.sizes, N) %>%
 ```
 
 
-```{r plt-cousinsprob}
+```{r plt-cousinsprob, fig.cap="Probability of finding at least one p-th degree cousin in a database of varying sizes for different populations. Each panel represents a population, and the lines within each panel correspond to different database sizes"}
 
 ggplot_prob <- function(data, my.cols=my.cols) {
   # Group data by Population and DB.size
@@ -181,7 +181,7 @@ ggplot_prob(plt_df, my.cols)
 
 
 
-```{r plt-diffs}
+```{r plt-diffs, fig.cap="Differences between populations in the probability of finding at least one p-th degree cousin in a database of varying sizes. Each panel represents a population, and the lines within each panel correspond to different database sizes"}
 
 # generate ggplot object with populations in different colors
 
@@ -213,7 +213,7 @@ ggplot_prob_combined(plt_df)
 
 ## Number of p-th degree cousins
 
-```{r df-numcousins}
+```{r df-numcousins, fig.cap="Expected number of p-th degree cousins in databases of varying sizes for different populations. Each panel represents a population, and the lines within each panel correspond to different database sizes"}
 calc_cousins <- function(p, DB.sizes, N) {
   pop_columns <- N[, -1, drop = FALSE]
 
@@ -295,8 +295,8 @@ prob.g.e.3.blocks <- 1 - sapply(E.num.blocks, function(expected.num) {sum(dpois(
 
 ### General
 
-```{r plt-genetic-blocks, fig.cap="Probabilities of detecting a genetic cousin in a database based on shared genomic blocks. Blue lines represent cousins with at least one genomic block, orange dotted and red lines represent cousins with at least two and three genomic blocks, respectively. The legend specifies the type of cousin being represented by each line."}
-library(ggplot2)
+```{r plt-genetic-blocks, fig.cap="Probabilities of detecting a genetic cousin in a database based on shared genomic blocks."}
+
 
 # Create a data frame for the plot
 genetic_blocks_df <- data.frame(p = p,
@@ -358,7 +358,7 @@ plt_numgen_cousins_df <- calc_numgen_cousins_df(p, DB.sizes, N, prob.g.e.3.block
                              levels = c("Black", "White", "Total", "Coop")))
 ```
 
-```{r plt-numgen-cousins-db}
+```{r plt-numgen-cousins-db, fig.cap= "Expected number of genetic p-th cousins in databases of varying sizes for different populations. Each panel represents a population, and the lines within each panel correspond to different database sizes"}
 plt_numgen_cousins <- function(data, my.cols) {
   plot <- ggplot(data, aes(x = p.degree, y = Num_Cousins, color = factor(DB.size), group = factor(DB.size))) +
     geom_point() +
