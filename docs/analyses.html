@@ -361,7 +361,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Analyses</h1>
 <h4 class="author">Tina Lasisi</h4>
-<h4 class="date">2023-03-24 00:34:50</h4>
+<h4 class="date">2023-03-28 01:34:57</h4>
 
 </div>
 
@@ -369,7 +369,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+workflowr <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -380,8 +380,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> </a>
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -390,13 +390,13 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2023-03-24
+<strong>Last updated:</strong> 2023-03-28
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 1
+aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>PODFRIDGE/</code> <span
@@ -419,21 +419,18 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
-<span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
-changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges"
+<div id="strongRMarkdownfilestronguptodate"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes. To know which version of
-the R Markdown file created these results, you’ll want to first commit
-it to the Git repo. If you’re still working on the analysis, you can
-ignore this warning. When you’re finished, you can run
-<code>wflow_publish</code> to commit the R Markdown file and build the
-HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
 </div>
 </div>
 </div>
@@ -524,15 +521,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtreec9daa86fbed0249f5e5fdaa39fab018f9afbbddctargetblankc9daa86a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtree3c181d1246013c6bd52411337b257a993740ae3dtargetblank3c181d1a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/tinalasisi/PODFRIDGE/tree/c9daa86fbed0249f5e5fdaa39fab018f9afbbddc" target="_blank">c9daa86</a>
+<a href="https://github.com/tinalasisi/PODFRIDGE/tree/3c181d1246013c6bd52411337b257a993740ae3d" target="_blank">3c181d1</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtreec9daa86fbed0249f5e5fdaa39fab018f9afbbddctargetblankc9daa86a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtree3c181d1246013c6bd52411337b257a993740ae3dtargetblank3c181d1a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -542,7 +539,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/tinalasisi/PODFRIDGE/tree/c9daa86fbed0249f5e5fdaa39fab018f9afbbddc" target="_blank">c9daa86</a>.
+<a href="https://github.com/tinalasisi/PODFRIDGE/tree/3c181d1246013c6bd52411337b257a993740ae3d" target="_blank">3c181d1</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -562,8 +559,13 @@ Ignored files:
     Ignored:    .Rproj.user/
     Ignored:    data/.DS_Store
 
+Untracked files:
+    Untracked:  output/raw-popsizes-1950.pdf
+    Untracked:  output/raw-popsizes.pdf
+
 Unstaged changes:
-    Modified:   analysis/analyses.Rmd
+    Modified:   analysis/methods.Rmd
+    Modified:   data/US_popsize.csv
 
 </code></pre>
 <p>
@@ -609,6 +611,57 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/3c181d1246013c6bd52411337b257a993740ae3d/analysis/analyses.Rmd" target="_blank">3c181d1</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2023-03-28
+</td>
+<td>
+updating analyses for all populations
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/f759e409508278f808893dc37afab90da9178971/analysis/analyses.Rmd" target="_blank">f759e40</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2023-03-24
+</td>
+<td>
+Return analyses to original
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tinalasisi/PODFRIDGE/f759e409508278f808893dc37afab90da9178971/docs/analyses.html" target="_blank">f759e40</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2023-03-24
+</td>
+<td>
+Return analyses to original
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -874,15 +927,19 @@ Publishing POPFORGE
 <pre class="r"><code># Load necessary packages
 library(wesanderson) # for color palettes
 library(tidyverse) #data wrangling etc</code></pre>
-<pre><code>── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
-✔ ggplot2 3.4.0      ✔ purrr   0.3.5 
-✔ tibble  3.1.8      ✔ dplyr   1.0.10
-✔ tidyr   1.2.1      ✔ stringr 1.5.0 
-✔ readr   2.1.3      ✔ forcats 0.5.2 
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.1     ✔ readr     2.1.4
+✔ forcats   1.0.0     ✔ stringr   1.5.0
+✔ ggplot2   3.4.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+✔ purrr     1.0.1     
 ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ✖ dplyr::filter() masks stats::filter()
-✖ dplyr::lag()    masks stats::lag()</code></pre>
-<pre class="r"><code># Set path to the data file
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<pre class="r"><code>library(RColorBrewer)
+
+# Set path to the data file
 path &lt;- file.path(&quot;.&quot;, &quot;data&quot;)
 savepath &lt;- file.path(&quot;.&quot;, &quot;output&quot;)
 
@@ -890,84 +947,72 @@ savepath &lt;- file.path(&quot;.&quot;, &quot;output&quot;)
 p &lt;- c(1:8) 
 
 # Set up initial population size
-N &lt;- 76e6
+N &lt;- 76e6 # what does this do?</code></pre>
+<pre class="r"><code># Read in data on US population sizes by year
+US_pop_fp &lt;- file.path(path, &quot;est-pop-combo.csv&quot;)
+US_pop_coop_fp &lt;- file.path(path, &quot;US_popsize.csv&quot;)
 
-# Set up vector of database sizes to test
+# Read in data on US population sizes by year
+pop1 &lt;- read.csv(US_pop_fp) %&gt;% 
+  select(Year, Black, White, Total)
+
+pop2 &lt;- read.csv(US_pop_coop_fp) %&gt;%
+  rename(Coop = Population)
+
+pop &lt;- left_join(pop1, pop2)</code></pre>
+<pre><code>Joining with `by = join_by(Year)`</code></pre>
+<pre class="r"><code># Set up vector of database sizes to test
 DB.sizes &lt;- c(1e6, 5e6, 10e6)
 
 # Set color palette for graphs
-my.cols &lt;- wes_palette(&quot;Darjeeling1&quot;)</code></pre>
-<pre class="r"><code># Read in data on US population sizes by year
-US_pop &lt;- read.csv(file.path(path,&quot;est-pop-combo.csv&quot;))
+my.cols &lt;- wes_palette(&quot;Darjeeling1&quot;)
 
-# Calculate number of grandparents by generation
-# p_grandpar_gen &lt;- 1950 - 30 * (p + 1)
-p_grandpar_gen &lt;- 1990 - 30 * (p + 1)
+# set starting generation
+start_gen &lt;- 1950</code></pre>
+<pre class="r"><code># Calculate number of grandparents by generation
+calc_grandparent_gen &lt;- function(year, p = c(1:8)) {
+  yrs_grandparent_gen &lt;- year - 30 * (p + 1)
+  return(yrs_grandparent_gen)
+}
 
-# Get population sizes by year for grandparents&#39; generation
 
-US_Ns &lt;- US_pop %&gt;% 
-  filter(Year %in% p_grandpar_gen)
+# Define a function to calculate final population sizes based on input data file and generation of grandparents
+calc_final_N &lt;- function(pop=pop, start_gen=start_gen) {
 
-# Scale population size down by 50% (assumed number of potential parents) and 90% of those have children + set minimum for populations
-# 
-# N &lt;- US_Ns %&gt;%
-#   mutate(across(!Year, ~ . * 0.5 * 0.9))
+  # Calculate number of grandparents by generation
+  yrs_grandpar_gen &lt;- calc_grandparent_gen(start_gen)
 
-N &lt;- US_Ns %&gt;%
+  # Get population sizes by year for grandparents&#39; generation
+  gp_Ns &lt;- pop %&gt;% 
+    filter(Year %in% yrs_grandpar_gen)
+
+  # Scale population size down by 50% (assumed number of potential parents) and 90% of those have children + set minimum for populations
+  # scaled_N &lt;- gp_Ns
+  scaled_N &lt;- gp_Ns %&gt;%
   mutate(across(!Year, ~ case_when(. * 0.5 * 0.9 &lt; 1e6 ~ 1e6,
                                    TRUE ~ . * 0.5 * 0.9)))
 
-# Set up vector of database sizes to test
-DB.sizes &lt;- c(1e6, 5e6, 10e6)
+  return(scaled_N)
+}</code></pre>
+<pre class="r"><code>N &lt;- calc_final_N(pop, start_gen) %&gt;% 
+  arrange(desc(Year))
 
-# Set color palette for graphs
-my.cols &lt;- wes_palette(&quot;Darjeeling1&quot;)</code></pre>
-<pre class="r"><code># Calculate number of grandparents by generation
-calc_grandparent_gen &lt;- function(year, p = c(1:8)) {
-  grandparent_gen &lt;- year - 30 * (p + 1)
-  return(grandparent_gen)
-}
-
-# Define a function to calculate final population sizes based on input data file and generation of grandparents
-calc_final_N &lt;- function(file_path, p_grandpar_gen) {
-
-  # Read in data on US population sizes by year
-  US_pop &lt;- read.csv(file_path)
-  
-  names(US_pop)[1] &lt;- &quot;Year&quot;
-
-  # Get population sizes by year for grandparents&#39; generation
-  US_Ns &lt;- US_pop %&gt;% 
-    filter(Year %in% p_grandpar_gen)
-
-  # Scale population size down by 50% (assumed number of potential parents) and 90% of those have children + set minimum for populations
-  N &lt;- US_Ns %&gt;%
-    mutate(across(!Year, ~ case_when(. * 0.5 * 0.9 &lt; 1e6 ~ 1e6,
-                                     TRUE ~ . * 0.5 * 0.9)))
-
-  return(N)
-}
-
-# get file
-US_pop_fp &lt;- file.path(path, &quot;est-pop-combo.csv&quot;)
-US_pop_coop_fp &lt;- file.path(path, &quot;US_popsize.csv&quot;)</code></pre>
-<pre class="r"><code>p_grandpar_gen &lt;- calc_grandparent_gen(1990)
-
-N &lt;- calc_final_N(US_pop_fp, p_grandpar_gen)</code></pre>
+# N2 &lt;- calc_final_N(pop2, start_gen)</code></pre>
 <pre class="r"><code># Define the population sizes and names
 populations &lt;- N %&gt;% 
-  pivot_longer(-Year, names_to = &quot;Population&quot;, values_to = &quot;N&quot;)
+  pivot_longer(-Year, names_to = &quot;Population&quot;, values_to = &quot;N&quot;) %&gt;% 
+  mutate(Population = factor(Population,
+                             levels = c(&quot;Black&quot;, &quot;White&quot;, &quot;Total&quot;, &quot;Coop&quot;)))
 
 # Create a ggplot object to visualize population sizes
 pop_size_plot &lt;- ggplot(populations, aes(x = Population, y = N)) +
   geom_bar(stat = &quot;identity&quot;, fill = &quot;steelblue&quot;) +
   labs(x = &quot;Population&quot;, y = &quot;Population size&quot;) +
   theme_minimal() +
-  facet_wrap(~Year)
+  facet_wrap(~Year, scales = &quot;free&quot;)
 
 # Display the plot
-print(pop_size_plot)</code></pre>
+pop_size_plot</code></pre>
 <p><img src="figure/analyses.Rmd/pop-size-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pop-size-1">
@@ -1008,131 +1053,75 @@ Tina Lasisi
 </div>
 <div id="probability-of-p-th-degree-cousin" class="section level2">
 <h2>Probability of p-th degree cousin</h2>
-<pre class="r"><code>library(wesanderson)
-library(ggplot2)
+<pre class="r"><code>calc_prob &lt;- function(p, DB.sizes, N) {
+  pop_columns &lt;- N[, -1, drop = FALSE]
 
-# Function to calculate probabilities for finding a p-th degree cousin
-calc_prob &lt;- function(p, DB.size, N) {
-  prob.no.rellys &lt;- exp(-2^(2*p - 2) * DB.size / N)
-  return(1 - prob.no.rellys)
-}
+  results_df &lt;- tibble(Population = character(), p.degree = numeric(), DB.size = numeric(), Prob = numeric())
 
-# Function to calculate probabilities for different database fractions
-calc_prob_db_frac &lt;- function(p, DB.sizes, db.frac, N) {
-  data &lt;- data.frame(p = integer(), Population = character(), DB.size = double(), Probability = double(), Fraction = double())
+  for (pop_name in colnames(pop_columns)) {
+    pop_vector &lt;- pop_columns[[pop_name]]
 
-  for (pop_name in names(N)) {
-    for (i in 1:length(db.frac)) {
-      for (j in 1:length(DB.sizes)) {
-        DB.size &lt;- DB.sizes[j] * db.frac[i]
-        prob &lt;- calc_prob(p, DB.size, N[[pop_name]])
-        data &lt;- rbind(data, data.frame(p = p, Population = rep(pop_name, length(p)), DB.size = rep(DB.sizes[j], length(p)), Probability = prob, Fraction = rep(db.frac[i], length(p))))
-      }
+    for (db_size in DB.sizes) {
+      prob.no.rellys &lt;- exp(-2^(2 * p - 2) * db_size / pop_vector)
+        prob.rel &lt;- 1 - prob.no.rellys
+
+        results_df &lt;- rbind(results_df, tibble(Population = pop_name, p.degree = p, DB.size = db_size, Prob = prob.rel))
     }
   }
 
-  return(data)
+  return(results_df)
 }
 
 
-# Function to generate ggplot object
-ggplot_prob &lt;- function(data, my.cols) {
-  plot &lt;- ggplot(data, aes(x = p, y = Probability, color = factor(DB.size), group = factor(DB.size))) +
+
+
+plt_df &lt;- calc_prob(p, DB.sizes, N) %&gt;% 
+  mutate(Population = factor(Population,
+                             levels = c(&quot;Black&quot;, &quot;White&quot;, &quot;Total&quot;, &quot;Coop&quot;)))</code></pre>
+<pre class="r"><code>ggplot_prob &lt;- function(data, my.cols=my.cols) {
+  # Group data by Population and DB.size
+  data_grouped &lt;- data %&gt;%
+    group_by(Population, DB.size)
+
+  plot &lt;- ggplot(data_grouped, aes(x = p.degree, y = Prob, color = factor(DB.size), group = factor(DB.size))) +
     geom_point() +
     geom_line() +
-    scale_color_manual(values = my.cols, name = &quot;Database size (Millions)&quot;, 
+    scale_color_manual(values = my.cols, name = &quot;Database size\n(Millions)&quot;,
                        labels = format(unique(data$DB.size) / 1e6, dig = 1)) +
     labs(x = &quot;p (degree of cousin)&quot;, y = &quot;Probability of at least one p-th cousin in database&quot;) +
     theme_minimal() +
-    facet_grid(Fraction ~ Population, labeller = labeller(Fraction = function(x) sprintf(&quot;%.0f%%&quot;, as.numeric(x) * 100)))
+    facet_wrap(~ Population, labeller = labeller(Population = as_labeller(function(x) x))) +
+    scale_x_continuous(breaks = 1:8) + # Show every value from 1 to 8 on the x-axis
+    scale_y_continuous(limits = c(0.0, 1.0)) # Set y-axis limits to 0.0 and 1.0
 
   return(plot)
 }
 
-# Set color palette for graphs
-my.cols &lt;- wes_palette(&quot;Darjeeling1&quot;)
 
-# Define the population sizes and names
-populations &lt;- list(
-  &quot;European American&quot; = N$White,
-  &quot;African American&quot; = N$Black,
-  &quot;Total US&quot; = N$Total
-)
+ggplot_prob(plt_df, my.cols)</code></pre>
+<p><img src="figure/analyses.Rmd/plt-cousinsprob-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># generate ggplot object with populations in different colors
 
-# Define the database sizes and fractions
-DB.sizes &lt;- c(1e6, 5e6, 10e6)
-db.frac &lt;- c(0.05, 0.8, 1)
 
-# Calculate the probabilities for each population and database fraction
-prob_data &lt;- calc_prob_db_frac(p, DB.sizes, db.frac, populations)
-
-# Create and display the ggplot object
-prob_plot &lt;- ggplot_prob(prob_data, my.cols)
-print(prob_plot)</code></pre>
-<p><img src="figure/analyses.Rmd/plt-cousins-new-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-cousins-new-1">
-Past versions of plt-cousins-new-1.png
-</button>
-</p>
-<div id="fig-plt-cousins-new-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/cdd09b6e00252317ec0d0066d9ca08f4e9e28f97/docs/figure/analyses.Rmd/plt-cousins-new-1.png" target="_blank">cdd09b6</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-03-23
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre class="r"><code># Print the table of final probabilities
-# print(prob_data)</code></pre>
-<pre class="r"><code># Function to generate ggplot object with populations in different colors
-ggplot_prob_combined &lt;- function(data, my.cols) {
-  plot &lt;- ggplot(data, aes(x = p, y = Probability, color = Population, group = interaction(Population, factor(DB.size)))) +
+ggplot_prob_combined &lt;- function(data){
+  palette &lt;- brewer.pal(n = length(unique(data$Population)), &quot;Dark2&quot;)
+  
+  
+  data &lt;- data %&gt;%
+    mutate(DB.size.formatted = factor(scales::label_number(scale = 1/1e6, accuracy = 1, suffix = &quot; Million&quot;)(DB.size)))
+  
+  plot &lt;- ggplot(data, aes(x = p.degree, y = Prob, color = Population, group = interaction(Population, DB.size.formatted))) +
     geom_point() +
     geom_line() +
-    scale_color_manual(values = my.cols, name = &quot;Population&quot;) +
+    scale_color_manual(values = palette, name = &quot;Population&quot;) +
     labs(x = &quot;p (degree of cousin)&quot;, y = &quot;Probability of at least one p-th cousin in database&quot;) +
     theme_minimal() +
-    facet_grid(Fraction ~ factor(DB.size), 
-               labeller = labeller(Fraction = function(x) sprintf(&quot;%.0f%%&quot;, as.numeric(x) * 100),
-                                                               DB.size = function(x) sprintf(&quot;%gM&quot;, x / 1e6)))
+    facet_wrap(~DB.size.formatted)
   
-  function(x) formatC(x / 1e6, format = &quot;f&quot;, digits = 0, big.mark = &quot;,&quot;)
-  
-
   return(plot)
 }
 
-# Set color palette for graphs
-my.cols &lt;- wes_palette(&quot;Darjeeling1&quot;, n = 3, type = &quot;continuous&quot;)
-
-# Create and display the ggplot object with populations in different colors
-prob_combined_plot &lt;- ggplot_prob_combined(prob_data, my.cols)
-print(prob_combined_plot)</code></pre>
+ggplot_prob_combined(plt_df)</code></pre>
 <p><img src="figure/analyses.Rmd/plt-diffs-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-diffs-1">
@@ -1174,99 +1163,48 @@ Tina Lasisi
 </div>
 <div id="number-of-p-th-degree-cousins" class="section level2">
 <h2>Number of p-th degree cousins</h2>
-<pre class="r"><code># Function to calculate the number of p-th degree cousins
-calc_cousins &lt;- function(p, DB.size, N) {
-  num_cousins &lt;- 4^(p) * DB.size / (N / 2)
-  return(num_cousins)
-}
+<pre class="r"><code>calc_cousins &lt;- function(p, DB.sizes, N) {
+  pop_columns &lt;- N[, -1, drop = FALSE]
 
-# Function to calculate the number of p-th degree cousins for different database fractions
-calc_cousins_db_frac &lt;- function(p, DB.sizes, db.frac, N) {
-  data &lt;- data.frame(p = integer(), Population = as.character(), DB.size = double(), Cousins = double(), Fraction = double())
+  results_df &lt;- tibble(Population = character(), p.degree = numeric(), DB.size = numeric(), Num_Cousins = numeric())
 
-  for (pop_name in names(N)) {
-    for (i in 1:length(db.frac)) {
-      for (j in 1:length(DB.sizes)) {
-        DB.size &lt;- DB.sizes[j] * db.frac[i]
-        cousins &lt;- calc_cousins(p, DB.size, N[[pop_name]])
-        data &lt;- rbind(data, data.frame(p = p, Population = rep(pop_name, length(p)), DB.size = rep(DB.sizes[j], length(p)), Cousins = cousins, Fraction = rep(db.frac[i], length(p))))
-      }
+  for (pop_name in colnames(pop_columns)) {
+    pop_vector &lt;- pop_columns[[pop_name]]
+
+    for (db_size in DB.sizes) {
+      num_cousins &lt;- 4^(p) * db_size / (pop_vector / 2)
+
+      results_df &lt;- rbind(results_df, tibble(Population = pop_name, p.degree = p, DB.size = db_size, Num_Cousins = num_cousins))
     }
   }
 
-  return(data)
+  return(results_df)
 }
 
-# Function to generate ggplot object
-ggplot_cousins &lt;- function(data, my.cols) {
-  plot &lt;- ggplot(data, aes(x = p, y = Cousins, color = factor(DB.size), group = factor(DB.size))) +
+plt_numcousins_df &lt;- calc_cousins(p, DB.sizes, N) %&gt;% 
+  mutate(Population = factor(Population,
+                             levels = c(&quot;Black&quot;, &quot;White&quot;, &quot;Total&quot;, &quot;Coop&quot;)))</code></pre>
+<pre class="r"><code>ggplot_cousins &lt;- function(data, my.cols=my.cols) {
+  # Group data by Population and DB.size
+  data_grouped &lt;- data %&gt;%
+    group_by(Population, DB.size)
+
+  plot &lt;- ggplot(data_grouped, aes(x = p.degree, y = Num_Cousins, color = factor(DB.size), group = factor(DB.size))) +
     geom_point() +
     geom_line() +
-    scale_color_manual(values = my.cols, name = &quot;Database size (Millions)&quot;, labels = c(&quot;1&quot;, &quot;5&quot;, &quot;10&quot;)) +
+    scale_color_manual(values = my.cols, name = &quot;Database size\n(Millions)&quot;,
+                       labels = format(unique(data$DB.size) / 1e6, dig = 1)) +
     labs(x = &quot;p (degree of cousin)&quot;, y = &quot;Number of p-th degree cousins in database&quot;) +
     theme_minimal() +
-    facet_grid(Fraction ~ Population, labeller = labeller(Fraction = function(x) sprintf(&quot;%.0f%%&quot;, as.numeric(x) * 100), Population = c(&quot;European American&quot; = &quot;European American&quot;, &quot;African American&quot; = &quot;African American&quot;, &quot;Total US&quot; = &quot;Total US&quot;)))
+    facet_wrap(~ Population, labeller = labeller(Population = as_labeller(function(x) x))) +
+    scale_x_continuous(breaks = 1:8) + # Show every value from 1 to 8 on the x-axis
+    scale_y_continuous(limits = c(0, max(data$Num_Cousins))) # Set y-axis limits to 0 and maximum number of cousins
 
   return(plot)
 }
 
-# Set up vector of database sizes to test
-DB.sizes &lt;- c(1e6, 5e6, 10e6)
-
-# Define the database fractions
-db.frac &lt;- c(0.05, 0.8, 1)
-
-# Define the population sizes and names
-populations &lt;- list(
-  &quot;European American&quot; = N$White,
-  &quot;African American&quot; = N$Black,
-  &quot;Total US&quot; = N$Total
-)
-
-# Calculate the number of cousins for each population and database fraction
-cousins_data &lt;- calc_cousins_db_frac(p, DB.sizes, db.frac, populations)
-
-# Create and display the ggplot object
-cousins_plot &lt;- ggplot_cousins(cousins_data, my.cols)
-print(cousins_plot)</code></pre>
-<p><img src="figure/analyses.Rmd/num-cousins-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-num-cousins-1">
-Past versions of num-cousins-1.png
-</button>
-</p>
-<div id="fig-num-cousins-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/cdd09b6e00252317ec0d0066d9ca08f4e9e28f97/docs/figure/analyses.Rmd/num-cousins-1.png" target="_blank">cdd09b6</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-03-23
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+ggplot_cousins(plt_numcousins_df, my.cols)</code></pre>
+<p><img src="figure/analyses.Rmd/plt-numcousins-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="probability-of-a-genetically-detectable-cousin"
 class="section level2">
@@ -1297,23 +1235,41 @@ prob.g.e.2.blocks &lt;- 1 - sapply(E.num.blocks, function(expected.num) {sum(dpo
 prob.g.e.3.blocks &lt;- 1 - sapply(E.num.blocks, function(expected.num) {sum(dpois(0:2, expected.num))})</code></pre>
 <div id="general" class="section level3">
 <h3>General</h3>
-<pre class="r"><code>## Plot for number of shared blocks with p-th degree cousins
-# Set layout of plot
-layout(t(1))
+<pre class="r"><code>library(ggplot2)
+
+# Create a data frame for the plot
+genetic_blocks_df &lt;- data.frame(p = p,
+                                Prob.genetic = Prob.genetic,
+                                prob.g.e.2.blocks = prob.g.e.2.blocks,
+                                prob.g.e.3.blocks = prob.g.e.3.blocks)
+
+# Pivot the data frame into a long format
+genetic_blocks_long &lt;- genetic_blocks_df %&gt;%
+  pivot_longer(-p, names_to = &quot;GeneticBlocks&quot;, values_to = &quot;Probability&quot;)
 
 # Set color palette for plot
-my.cols2&lt;-wes_palette(&quot;FantasticFox1&quot;)[3:5]
+my.cols2 &lt;- wes_palette(&quot;FantasticFox1&quot;)[3:5]
 
-# Create a blank plot with labeled axes
-plot(c(1,8),c(0,1),type=&quot;n&quot;,ylab=&quot;Probability p-th cousin \&quot;detectable\&quot;&quot;,xlab=&quot;p.(degree of cousin)&quot;)
-
-# Add points for probability of detecting pth cousin with genomic blocks using colors from my.cols2
-points(p,Prob.genetic,col=my.cols2[1],pch=19,type=&quot;b&quot;,lwd=2)
-points(p,prob.g.e.2.blocks,col=my.cols2[2],pch=19,type=&quot;b&quot;,lwd=2)
-points(p,prob.g.e.3.blocks,col=my.cols2[3],pch=19,type=&quot;b&quot;,lwd=2)
-
-# Add a legend to the plot
-legend(x=&quot;topright&quot;,legend=c(&quot;Cousins (w. &gt;0 genomic blocks)&quot;,&quot;Cousins (w. &gt;1 genomic blocks)&quot;,&quot;Cousins (w. &gt;2 genomic blocks)&quot;),col=my.cols2[1:3],lty=1)</code></pre>
+# Create the ggplot2 plot
+ggplot_genetic_blocks &lt;- ggplot(genetic_blocks_long, aes(x = p, y = Probability, color = GeneticBlocks, group = GeneticBlocks)) +
+  geom_point() +
+  geom_line(size = 2) +
+  scale_color_manual(values = my.cols2,
+                     labels = c(&quot;Cousins (w. &gt;0 genomic blocks)&quot;,
+                                &quot;Cousins (w. &gt;1 genomic blocks)&quot;,
+                                &quot;Cousins (w. &gt;2 genomic blocks)&quot;),
+                     name = &quot;Type of Cousin&quot;) +
+  labs(x = &quot;p (degree of cousin)&quot;, y = &quot;Probability p-th cousin \&quot;detectable\&quot;&quot;) +
+  theme_minimal() +
+  scale_x_continuous(breaks = 1:8) + # Show every value from 1 to 8 on the x-axis
+  scale_y_continuous(limits = c(0, 1)) # Set y-axis limits to 0 and 1</code></pre>
+<pre><code>Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+ℹ Please use `linewidth` instead.
+This warning is displayed once every 8 hours.
+Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+generated.</code></pre>
+<pre class="r"><code># Display the plot
+ggplot_genetic_blocks</code></pre>
 <div class="figure" style="text-align: center">
 <img src="figure/analyses.Rmd/plt-genetic-blocks-1.png" alt="Probabilities of detecting a genetic cousin in a database based on shared genomic blocks. Blue lines represent cousins with at least one genomic block, orange dotted and red lines represent cousins with at least two and three genomic blocks, respectively. The legend specifies the type of cousin being represented by each line." width="672" />
 <p class="caption">
@@ -1364,110 +1320,45 @@ Tina Lasisi
 </div>
 <div id="relative-to-database-size" class="section level3">
 <h3>Relative to database size</h3>
-<pre class="r"><code># Function to calculate expected number of p-th degree cousins based on shared genetic blocks
-calc_gen_cousins &lt;- function(p, DB.size, N, prob) {
-  num.cousins &lt;- 4^(p) * DB.size / (N / 2)
-  return(num.cousins * prob)
-}
+<pre class="r"><code>calc_numgen_cousins_df &lt;- function(p, DB.sizes, N, prob) {
+  pop_columns &lt;- N[, -1, drop = FALSE]
+  results_df &lt;- tibble(Population = character(), p.degree = numeric(), DB.size = numeric(), Num_Cousins = numeric())
 
-# Function to calculate expected number of p-th degree cousins based on shared genetic blocks for different database fractions
-calc_gen_cousins_db_frac &lt;- function(p, DB.sizes, db.frac, N, prob) {
-  data &lt;- data.frame(p = integer(), Population = character(), DB.size = double(), Gen_Cousins = double(), Fraction = double())
+  for (pop_name in colnames(pop_columns)) {
+    pop_vector &lt;- pop_columns[[pop_name]]
 
-  for (pop_name in names(N)) {
-    for (i in 1:length(db.frac)) {
-      for (j in 1:length(DB.sizes)) {
-        DB.size &lt;- DB.sizes[j] * db.frac[i]
-        num_cousins &lt;- calc_gen_cousins(p, DB.size, N[[pop_name]], prob)
-        data &lt;- rbind(data, data.frame(p = p, Population = rep(pop_name, length(p)), DB.size = rep(DB.sizes[j], length(p)), Gen_Cousins = num_cousins, Fraction = rep(db.frac[i], length(p))))
-      }
+    for (db_size in DB.sizes) {
+      num_cousins &lt;- 4^(p) * db_size / (pop_vector / 2)
+      gen_related_cousins &lt;- num_cousins * prob
+
+      results_df &lt;- rbind(results_df, tibble(Population = pop_name, p.degree = p, DB.size = db_size, Num_Cousins = gen_related_cousins))
     }
   }
 
-  return(data)
+  return(results_df)
 }
 
-# Function to generate ggplot object for expected number of p-th degree cousins based on shared genetic blocks
-ggplot_gen_cousins &lt;- function(data, my.cols) {
-  plot &lt;- ggplot(data, aes(x = p, y = Gen_Cousins, color = factor(DB.size), group = factor(DB.size))) +
+
+plt_numgen_cousins_df &lt;- calc_numgen_cousins_df(p, DB.sizes, N, prob.g.e.3.blocks) %&gt;% 
+  mutate(Population = factor(Population,
+                             levels = c(&quot;Black&quot;, &quot;White&quot;, &quot;Total&quot;, &quot;Coop&quot;)))</code></pre>
+<pre class="r"><code>plt_numgen_cousins &lt;- function(data, my.cols) {
+  plot &lt;- ggplot(data, aes(x = p.degree, y = Num_Cousins, color = factor(DB.size), group = factor(DB.size))) +
     geom_point() +
     geom_line() +
-    scale_color_manual(values = my.cols, name = &quot;Database size (Millions)&quot;, 
-                       labels = format(unique(data$DB.size) / 1e6, nsmall = 0)) +
+    scale_color_manual(values = my.cols, name = &quot;Database size\n(Millions)&quot;,
+                       labels = format(unique(data$DB.size) / 1e6, dig = 1)) +
     labs(x = &quot;p (degree of cousin)&quot;, y = &quot;Expected number of genetic p-th cousins in database&quot;) +
     theme_minimal() +
-    # facet_grid(Fraction ~ Population, labeller = label_parsed)
-  facet_grid(Fraction ~ Population, labeller = labeller(Fraction = function(x) sprintf(&quot;%.0f%%&quot;, as.numeric(x) * 100), Population = c(&quot;European American&quot; = &quot;European American&quot;, &quot;African American&quot; = &quot;African American&quot;, &quot;Total US&quot; = &quot;Total US&quot;)))
+    facet_wrap(~ Population, labeller = labeller(Population = as_labeller(function(x) x))) +
+    scale_x_continuous(breaks = 1:8) # Show every value from 1 to 8 on the x-axis
 
   return(plot)
 }
 
-# Calculate the expected number of p-th degree cousins based on shared genetic blocks for each population and database fraction
-gen_cousins_data &lt;- calc_gen_cousins_db_frac(p, DB.sizes, db.frac, populations, prob.g.e.3.blocks)
 
-# Create and display the ggplot object
-gen_cousins_plot &lt;- ggplot_gen_cousins(gen_cousins_data, my.cols)
-print(gen_cousins_plot)</code></pre>
-<p><img src="figure/analyses.Rmd/plt-num-cousins-db-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-num-cousins-db-1">
-Past versions of plt-num-cousins-db-1.png
-</button>
-</p>
-<div id="fig-plt-num-cousins-db-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/cdd09b6e00252317ec0d0066d9ca08f4e9e28f97/docs/figure/analyses.Rmd/plt-num-cousins-db-1.png" target="_blank">cdd09b6</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-03-23
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/6605057b54542682b623705449b2bc0b28bca277/docs/figure/analyses.Rmd/plt-num-cousins-db-1.png" target="_blank">6605057</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-03-20
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/5f805fe9b5638c72575d8adca031aa08ee3e9a31/docs/figure/analyses.Rmd/plt-num-cousins-db-1.png" target="_blank">5f805fe</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-03-06
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+plt_numgen_cousins(plt_numgen_cousins_df, my.cols)</code></pre>
+<p><img src="figure/analyses.Rmd/plt-numgen-cousins-db-1.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1492,36 +1383,27 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] forcats_0.5.2     stringr_1.5.0     dplyr_1.0.10      purrr_0.3.5      
- [5] readr_2.1.3       tidyr_1.2.1       tibble_3.1.8      ggplot2_3.4.0    
- [9] tidyverse_1.3.2   wesanderson_0.3.6 workflowr_1.7.0  
+ [1] RColorBrewer_1.1-3 lubridate_1.9.2    forcats_1.0.0      stringr_1.5.0     
+ [5] dplyr_1.1.1        purrr_1.0.1        readr_2.1.4        tidyr_1.3.0       
+ [9] tibble_3.2.1       ggplot2_3.4.1      tidyverse_2.0.0    wesanderson_0.3.6 
+[13] workflowr_1.7.0   
 
 loaded via a namespace (and not attached):
- [1] Rcpp_1.0.9          lubridate_1.9.0     getPass_0.2-2      
- [4] ps_1.7.2            assertthat_0.2.1    rprojroot_2.0.3    
- [7] digest_0.6.30       utf8_1.2.2          R6_2.5.1           
-[10] cellranger_1.1.0    backports_1.4.1     reprex_2.0.2       
-[13] evaluate_0.18       highr_0.9           httr_1.4.4         
-[16] pillar_1.8.1        rlang_1.0.6         readxl_1.4.1       
-[19] googlesheets4_1.0.1 rstudioapi_0.14     whisker_0.4        
-[22] callr_3.7.3         jquerylib_0.1.4     rmarkdown_2.18     
-[25] labeling_0.4.2      googledrive_2.0.0   munsell_0.5.0      
-[28] broom_1.0.1         modelr_0.1.10       compiler_4.2.2     
-[31] httpuv_1.6.6        xfun_0.35           pkgconfig_2.0.3    
-[34] htmltools_0.5.3     tidyselect_1.2.0    fansi_1.0.3        
-[37] crayon_1.5.2        withr_2.5.0         tzdb_0.3.0         
-[40] dbplyr_2.2.1        later_1.3.0         grid_4.2.2         
-[43] jsonlite_1.8.3      gtable_0.3.1        lifecycle_1.0.3    
-[46] DBI_1.1.3           git2r_0.30.1        magrittr_2.0.3     
-[49] scales_1.2.1        cli_3.4.1           stringi_1.7.8      
-[52] cachem_1.0.6        farver_2.1.1        fs_1.5.2           
-[55] promises_1.2.0.1    xml2_1.3.3          bslib_0.4.1        
-[58] ellipsis_0.3.2      generics_0.1.3      vctrs_0.5.1        
-[61] tools_4.2.2         glue_1.6.2          hms_1.1.2          
-[64] processx_3.8.0      fastmap_1.1.0       yaml_2.3.6         
-[67] timechange_0.1.1    colorspace_2.0-3    gargle_1.2.1       
-[70] rvest_1.0.3         knitr_1.41          haven_2.5.1        
-[73] sass_0.4.4         </code></pre>
+ [1] tidyselect_1.2.0 xfun_0.35        bslib_0.4.1      colorspace_2.0-3
+ [5] vctrs_0.6.1      generics_0.1.3   htmltools_0.5.3  yaml_2.3.6      
+ [9] utf8_1.2.2       rlang_1.1.0      jquerylib_0.1.4  later_1.3.0     
+[13] pillar_1.8.1     glue_1.6.2       withr_2.5.0      lifecycle_1.0.3 
+[17] munsell_0.5.0    gtable_0.3.1     evaluate_0.18    labeling_0.4.2  
+[21] knitr_1.41       tzdb_0.3.0       callr_3.7.3      fastmap_1.1.0   
+[25] httpuv_1.6.6     ps_1.7.2         fansi_1.0.3      highr_0.9       
+[29] Rcpp_1.0.9       promises_1.2.0.1 scales_1.2.1     cachem_1.0.6    
+[33] jsonlite_1.8.4   farver_2.1.1     fs_1.5.2         hms_1.1.2       
+[37] digest_0.6.30    stringi_1.7.8    processx_3.8.0   getPass_0.2-2   
+[41] rprojroot_2.0.3  grid_4.2.2       cli_3.6.1        tools_4.2.2     
+[45] magrittr_2.0.3   sass_0.4.4       crayon_1.5.2     whisker_0.4     
+[49] pkgconfig_2.0.3  ellipsis_0.3.2   timechange_0.1.1 rmarkdown_2.18  
+[53] httr_1.4.4       rstudioapi_0.14  R6_2.5.1         git2r_0.30.1    
+[57] compiler_4.2.2  </code></pre>
 </div>
 </div>
 </div>
