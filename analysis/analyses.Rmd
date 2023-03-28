@@ -43,9 +43,11 @@ pop <- left_join(pop1, pop2)
 
 # Set up vector of database sizes to test
 DB.sizes <- c(1e6, 5e6, 10e6)
+# DB.sizes <- c(0.05*1e6, 0.15*1e6, 0.50*1e6, 1e6, 5e6, 10e6)
 
 # Set color palette for graphs
 my.cols <- wes_palette("Darjeeling1")
+# my.cols <- brewer.pal(n = 6, name = "Dark2")
 
 # set starting generation
 start_gen <- 1950
