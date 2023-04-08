@@ -170,13 +170,111 @@ legend(x="topright",legend=my.leg,col=c(NA,rep("black",1),NA,my.cols),lty=c(NA,1
 ```
 
 
-## Ehrlich et al 2018
+## Erlich et al 2018
 
 ```{r}
 
+genome_size = 35 
+num_chrs = 22
+
+p_match = function(g,m,min_num_seg)
+{
+  m = m/100
+  f = exp(-2*g*m)/2^(2*g-2)
+  pr = 1 - pbinom(min_num_seg-1,num_chrs+genome_size*2*g,f) 
+  return(pr)
+}
+
+
+p_match_or = function(g,m,min_num_seg) 
+{
+  m = m/100
+  f = exp(-(2*g+1)*m)/2^(2*g-1)
+  pr = 1 - pbinom(min_num_seg-1,num_chrs+genome_size*(2*g+1),f) 
+  return(pr)
+}
+
+coverage = function(Ks,maxg,N_pop,r,m,min_num_seg,min_num_rel, rep_direct = rep(1,10), rep_or = rep(1,10))
+{
+  N = N_pop/2 # convert pop size to couple size
+  pr_succ = length(Ks)
+  
+  for (i in 1:length(Ks)) 
+  {
+    K = Ks[i]
+    K_same = round(K * (r/2) / (1+r/2)) 
+    K_or = round(K * 1 / (1+r/2))
+    
+    p_no_coal = numeric(maxg) 
+    p_coal = numeric(maxg)
+    # OR: Once Removed 
+    p_no_coal_or = numeric(maxg) 
+    p_coal_or = numeric(maxg)
+    Ns = N*(r/2)^(-(1:(maxg+1))) 
+    tot_p = 0
+    tot_p_or = 0
+    for (g in 1:maxg)
+    {
+      f = 2^(2*g-2)/Ns[g]
+      f_or = 2^(2*g-1)/Ns[g+1] 
+      if (g>1) {
+        p_coal[g] = p_no_coal[g-1] * f
+        p_no_coal[g] = p_no_coal[g-1] * (1-f)
+        p_coal_or[g] = p_no_coal_or[g-1] * f_or
+        p_no_coal_or[g] = p_no_coal_or[g-1] * (1-f_or)
+        } else {
+          p_coal[g] = f 
+          p_no_coal[g] = 1-f 
+          p_coal_or[g] = f_or 
+          p_no_coal_or[g] = 1-f_or
+        }
+      
+      tot_p = tot_p + p_coal[g] * p_match(g,m,min_num_seg) * rep_direct[g] 
+      if (g<maxg) {
+        tot_p_or = tot_p_or + p_coal_or[g] * p_match_or(g,m,min_num_seg) * rep_or[g]
+        } 
+      }
+
+    pr_no_succ = 0
+    for (n in 0:(min_num_rel-1)) 
+    {
+      for (n_or in 0:n) 
+      {
+        pr_no_succ = pr_no_succ + dbinom(n_or,K_or,tot_p_or) * dbinom(n- n_or,K_same,tot_p)
+        }
+      }
+    pr_succ[i] = 1 - pr_no_succ
+  }
+  return(pr_succ)
+}
+
+# Ks: A vector of database sizes
+# maxg: Maximum relatedness to consider (1: sibs, 2: 1st cousins, 3: 2nd cousins...)
+# N: Population size
+
+# r: Mean number of children per mating pair (=per family), so 2 for a constant size population, >2 for expanding population, <1 for contracting population
+# m: Maximum length in cM of a detectable segment
+# min_num_seg: Minimum number of segments to declare a match
+# min_num_rel: Minimum number of detected matches (=relatives)
+# to declare success of identification
+
 ```
 
+```{r}
 
-# Short-Range Familial Searching
+N = 250000000 #population size
+num_K = 10000 #number of data points between 0 to 1 
+m = 6 #minimal cM
+min_num_seg = 2 #number of segments
+r = 2.5 #number of kids per couple
+Ks = round(seq(from=N/num_K,to=N,length.out=num_K))
 
+# N_pop = N
+
+c1 = coverage(Ks,maxg=2,N_pop,r,m,min_num_seg=2,min_num_rel=1) 
+c2 = coverage(Ks,maxg=3,N_pop,r,m,min_num_seg=2,min_num_rel=1) 
+c3 = coverage(Ks,maxg=4,N_pop,r,m,min_num_seg=2,min_num_rel=1) 
+c4 = coverage(Ks,maxg=5,N_pop,r,m,min_num_seg=2,min_num_rel=1)
+
+```
 
