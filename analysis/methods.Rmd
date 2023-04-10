@@ -334,6 +334,6 @@ Differences in the assumptions between the two models are mainly in the followin
 
 Population size: Coop and Edge’s model uses data on US population sizes by year to estimate the number of grandparents by generation, whereas Erlich et al assume a constant population size with a mean number of children per couple  equal to 2.5.
 
-Genomic segments inheritance: Coop and Edge’s model calculates the expected number of shared blocks of genetic material between cousins of varying degrees of relatedness, and it uses a Poisson distribution assumption to estimate the probability of two cousins sharing at least one, two, or three blocks of genetic material. Ehrlich et al assume that genomic segments are inherited independently of each other and models the probability of a match using a binomial distribution.
+Genomic segments inheritance: Coop and Edge’s model calculates the expected number of shared blocks of genetic material between cousins of varying degrees of relatedness, and it uses a Poisson distribution assumption to estimate the probability of two cousins sharing at least one, two, or three blocks of genetic material. Erlich et al assume that genomic segments are inherited independently of each other and models the probability of a match using a binomial distribution.
 
 
