@@ -361,7 +361,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Methods</h1>
 <h4 class="author">Tina Lasisi</h4>
-<h4 class="date">2023-04-10 09:25:23</h4>
+<h4 class="date">2023-04-10 12:46:48</h4>
 
 </div>
 
@@ -369,7 +369,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -380,8 +380,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -394,9 +394,9 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>PODFRIDGE/</code> <span
@@ -419,18 +419,21 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
@@ -521,15 +524,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtree97753d69ffbe2865c3da8a91b5003ec5cd4e1f6ctargetblank97753d6a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtreedf279921e50e7a9398a8307670df2db9e17c2763targetblankdf27992a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/tinalasisi/PODFRIDGE/tree/97753d69ffbe2865c3da8a91b5003ec5cd4e1f6c" target="_blank">97753d6</a>
+<a href="https://github.com/tinalasisi/PODFRIDGE/tree/df279921e50e7a9398a8307670df2db9e17c2763" target="_blank">df27992</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtree97753d69ffbe2865c3da8a91b5003ec5cd4e1f6ctargetblank97753d6a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtreedf279921e50e7a9398a8307670df2db9e17c2763targetblankdf27992a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -539,7 +542,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/tinalasisi/PODFRIDGE/tree/97753d69ffbe2865c3da8a91b5003ec5cd4e1f6c" target="_blank">97753d6</a>.
+<a href="https://github.com/tinalasisi/PODFRIDGE/tree/df279921e50e7a9398a8307670df2db9e17c2763" target="_blank">df27992</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -558,6 +561,9 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
     Ignored:    data/.DS_Store
+
+Unstaged changes:
+    Modified:   analysis/methods.Rmd
 
 </code></pre>
 <p>
@@ -603,6 +609,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tinalasisi/PODFRIDGE/2a436aab6857b77db689b72aac35dbdcd5027f94/docs/methods.html" target="_blank">2a436aa</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2023-04-10
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1536,13 +1559,13 @@ coverage = function(Ks, maxg, N_pop, r, m, min_num_seg, min_num_rel, rep_direct 
 # min_num_rel: Minimum number of detected matches (=relatives)
 # to declare success of identification</code></pre>
 <pre class="r"><code>N = 250000000 #population size
+N_pop = 250000000 # added by Tina to run below
 num_K = 10000 #number of data points between 0 to 1 
 m = 6 #minimal cM
 min_num_seg = 2 #number of segments
 r = 2.5 #number of kids per couple
 Ks = round(seq(from=N/num_K,to=N,length.out=num_K))
 
-N_pop = N # added by Tina to run below
 
 c1 = coverage(Ks,maxg=2,N_pop,r,m,min_num_seg=2,min_num_rel=1) 
 c2 = coverage(Ks,maxg=3,N_pop,r,m,min_num_seg=2,min_num_rel=1) 
@@ -1625,6 +1648,132 @@ assumption to estimate the probability of two cousins sharing at least
 one, two, or three blocks of genetic material. Erlich et al assume that
 genomic segments are inherited independently of each other and models
 the probability of a match using a binomial distribution.</p>
+<pre class="r"><code># Compute the coverage for each degree of cousin (1st to 8th degree)
+cousin_probabilities &lt;- list()
+for (i in 1:8) {
+  cousin_probabilities[[i]] &lt;- coverage(Ks, maxg=(i+1), N_pop, r, m, min_num_seg=2, min_num_rel=1)
+}
+
+# Create a dataframe to store the results
+erlich_results &lt;- data.frame()
+
+# Loop through each degree of cousin and add the results to the dataframe
+for (i in 1:8) {
+  coverage_result &lt;- cousin_probabilities[[i]]
+
+  temp_df &lt;- data.frame(
+    &quot;Degree of Cousin&quot; = rep(i, length(Ks)),
+    &quot;Database Size&quot; = Ks,
+    &quot;Probability&quot; = coverage_result
+  )
+
+  erlich_results &lt;- rbind(erlich_results, temp_df)
+}
+
+# Print the resulting dataframe
+head(erlich_results)</code></pre>
+<pre><code>  Degree.of.Cousin Database.Size Probability
+1                1         25000 0.001110498
+2                1         50000 0.002219763
+3                1         75000 0.003327796
+4                1        100000 0.004434598
+5                1        125000 0.005540137
+6                1        150000 0.006644482</code></pre>
+<pre class="r"><code># Set up vector for cousin degree
+p &lt;- c(1:8) 
+
+# Set up initial population size
+N &lt;- 76e6 
+
+# Read in data on US population sizes by year
+US_pop &lt;- read.csv(paste(path, &quot;US_popsize.csv&quot;, sep = &quot;&quot;))
+
+# Calculate number of grandparents by generation
+p_grandpar_gen &lt;- 1950 - 30 * (p + 1)
+
+# Determine which years match the grandparents&#39; generation
+these.years &lt;- match(p_grandpar_gen, US_pop$Year)
+
+# Get population sizes by year for grandparents&#39; generation
+US_Ns &lt;- US_pop$Population[these.years]
+
+# Scale population size down by 50% (assumed number of potential parents) and 90% of those have children 
+N &lt;- US_Ns
+N &lt;- N * 0.5 * 0.9 
+
+# Set minimum population size for small populations
+N[US_Ns &lt; 1e6] &lt;- 1e6 # is this in the correct order? 
+
+# Set up vector of database sizes to test
+DB.sizes &lt;- c(1e6, 5e6, 10e6)
+# Constants
+DB.sizes &lt;- c(1000000, 5000000, 10000000, 20000000, 50000000)  # Database sizes
+p &lt;- 1:8                                                      # Degree of relatedness (1st to 8th cousins)
+
+# Calculate probabilities of having at least one p-th cousin in the database
+prob_no_rellys &lt;- sapply(1:length(DB.sizes), function(i) {
+  DB.size &lt;- DB.sizes[i]
+  sapply(p, function(p) {
+    N_p &lt;- N[p]
+    1 - exp(-2^(2*p - 2) * DB.size / N_p)
+  })
+})
+
+# Create a dataframe to store the results
+coop_edge_results &lt;- data.frame()
+
+# Loop through each degree of cousin and database size, and add the results to the dataframe
+for (i in 1:length(p)) {
+  for (j in 1:length(DB.sizes)) {
+    temp_df &lt;- data.frame(
+      &quot;Degree of Cousin&quot; = p[i],
+      &quot;Database Size&quot; = DB.sizes[j],
+      &quot;Probability&quot; = prob_no_rellys[i, j]
+    )
+    coop_edge_results &lt;- rbind(coop_edge_results, temp_df)
+  }
+}
+
+# Print the resulting dataframe
+head(coop_edge_results)</code></pre>
+<pre><code>  Degree.of.Cousin Database.Size Probability
+1                1         1e+06  0.03466945
+2                1         5e+06  0.16173710
+3                1         1e+07  0.29731531
+4                1         2e+07  0.50623423
+5                1         5e+07  0.82868222
+6                2         1e+06  0.24625082</code></pre>
+<pre class="r"><code># ... (insert code to load libraries, set up variables, read data, and calculate results) ...
+
+# Filter coop_edge_results and erlich_results for specified database sizes
+coop_edge_filtered &lt;- coop_edge_results[coop_edge_results$Database.Size %in% c(1e6, 5e6, 10e6), ]
+erlich_filtered &lt;- erlich_results[erlich_results$Database.Size %in% c(1e6, 5e6, 10e6), ]
+
+# Set up the plot layout
+par(mfrow = c(1, 2))
+
+# Plot coop_edge_results
+plot(c(1, 8), c(0, 1), type = &quot;n&quot;, xlab = &quot;p (Degree of Cousin)&quot;, ylab = &quot;Probability of at least one p-th cousin in database&quot;, main = &quot;Coop &amp; Edge Results&quot;)
+colors &lt;- c(&quot;blue&quot;, &quot;orange&quot;, &quot;red&quot;)
+i &lt;- 1
+for (db_size in c(1e6, 5e6, 10e6)) {
+  temp_df &lt;- coop_edge_filtered[coop_edge_filtered$Database.Size == db_size, ]
+  points(temp_df$Degree.of.Cousin, temp_df$Probability, type = &quot;b&quot;, pch = 19, lwd = 1.5, col = colors[i])
+  i &lt;- i + 1
+}
+legend(x = &quot;bottomright&quot;, legend = c(&quot;Database size (Millions) =&quot;, &quot;1&quot;, &quot;5&quot;, &quot;10&quot;), col = c(NA, colors), pch = 19)
+
+# Plot erlich_results
+plot(c(1, 8), c(0, 1), type = &quot;n&quot;, xlab = &quot;p (Degree of Cousin)&quot;, ylab = &quot;Probability of at least one p-th cousin in database&quot;, main = &quot;Erlich Results&quot;)
+i &lt;- 1
+for (db_size in c(1e6, 5e6, 10e6)) {
+  temp_df &lt;- erlich_filtered[erlich_filtered$Database.Size == db_size, ]
+  points(temp_df$Degree.of.Cousin, temp_df$Probability, type = &quot;b&quot;, pch = 19, lwd = 1.5, col = colors[i])
+  i &lt;- i + 1
+}</code></pre>
+<p><img src="figure/methods.Rmd/unnamed-chunk-2-1.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Reset plotting parameters
+par(mfrow = c(1, 1), mar = c(5.1, 4.1, 4.1, 2.1))</code></pre>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">

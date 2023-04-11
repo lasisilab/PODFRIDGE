@@ -283,13 +283,13 @@ coverage = function(Ks, maxg, N_pop, r, m, min_num_seg, min_num_rel, rep_direct 
 ```{r erlich-fig1b-calcs}
 
 N = 250000000 #population size
+N_pop = 250000000 # added by Tina to run below
 num_K = 10000 #number of data points between 0 to 1 
 m = 6 #minimal cM
 min_num_seg = 2 #number of segments
 r = 2.5 #number of kids per couple
 Ks = round(seq(from=N/num_K,to=N,length.out=num_K))
 
-N_pop = N # added by Tina to run below
 
 c1 = coverage(Ks,maxg=2,N_pop,r,m,min_num_seg=2,min_num_rel=1) 
 c2 = coverage(Ks,maxg=3,N_pop,r,m,min_num_seg=2,min_num_rel=1) 
@@ -335,5 +335,137 @@ Differences in the assumptions between the two models are mainly in the followin
 Population size: Coop and Edge’s model uses data on US population sizes by year to estimate the number of grandparents by generation, whereas Erlich et al assume a constant population size with a mean number of children per couple  equal to 2.5.
 
 Genomic segments inheritance: Coop and Edge’s model calculates the expected number of shared blocks of genetic material between cousins of varying degrees of relatedness, and it uses a Poisson distribution assumption to estimate the probability of two cousins sharing at least one, two, or three blocks of genetic material. Erlich et al assume that genomic segments are inherited independently of each other and models the probability of a match using a binomial distribution.
+
+```{r comp-df}
+
+
+# Compute the coverage for each degree of cousin (1st to 8th degree)
+cousin_probabilities <- list()
+for (i in 1:8) {
+  cousin_probabilities[[i]] <- coverage(Ks, maxg=(i+1), N_pop, r, m, min_num_seg=2, min_num_rel=1)
+}
+
+# Create a dataframe to store the results
+erlich_results <- data.frame()
+
+# Loop through each degree of cousin and add the results to the dataframe
+for (i in 1:8) {
+  coverage_result <- cousin_probabilities[[i]]
+
+  temp_df <- data.frame(
+    "Degree of Cousin" = rep(i, length(Ks)),
+    "Database Size" = Ks,
+    "Probability" = coverage_result
+  )
+
+  erlich_results <- rbind(erlich_results, temp_df)
+}
+
+# Print the resulting dataframe
+head(erlich_results)
+
+
+```
+
+```{r}
+# Set up vector for cousin degree
+p <- c(1:8) 
+
+# Set up initial population size
+N <- 76e6 
+
+# Read in data on US population sizes by year
+US_pop <- read.csv(paste(path, "US_popsize.csv", sep = ""))
+
+# Calculate number of grandparents by generation
+p_grandpar_gen <- 1950 - 30 * (p + 1)
+
+# Determine which years match the grandparents' generation
+these.years <- match(p_grandpar_gen, US_pop$Year)
+
+# Get population sizes by year for grandparents' generation
+US_Ns <- US_pop$Population[these.years]
+
+# Scale population size down by 50% (assumed number of potential parents) and 90% of those have children 
+N <- US_Ns
+N <- N * 0.5 * 0.9 
+
+# Set minimum population size for small populations
+N[US_Ns < 1e6] <- 1e6 # is this in the correct order? 
+
+# Set up vector of database sizes to test
+DB.sizes <- c(1e6, 5e6, 10e6)
+# Constants
+DB.sizes <- c(1000000, 5000000, 10000000, 20000000, 50000000)  # Database sizes
+p <- 1:8                                                      # Degree of relatedness (1st to 8th cousins)
+
+# Calculate probabilities of having at least one p-th cousin in the database
+prob_no_rellys <- sapply(1:length(DB.sizes), function(i) {
+  DB.size <- DB.sizes[i]
+  sapply(p, function(p) {
+    N_p <- N[p]
+    1 - exp(-2^(2*p - 2) * DB.size / N_p)
+  })
+})
+
+# Create a dataframe to store the results
+coop_edge_results <- data.frame()
+
+# Loop through each degree of cousin and database size, and add the results to the dataframe
+for (i in 1:length(p)) {
+  for (j in 1:length(DB.sizes)) {
+    temp_df <- data.frame(
+      "Degree of Cousin" = p[i],
+      "Database Size" = DB.sizes[j],
+      "Probability" = prob_no_rellys[i, j]
+    )
+    coop_edge_results <- rbind(coop_edge_results, temp_df)
+  }
+}
+
+# Print the resulting dataframe
+head(coop_edge_results)
+
+
+```
+
+
+```{r fig.height=6, fig.width=8}
+
+# ... (insert code to load libraries, set up variables, read data, and calculate results) ...
+
+# Filter coop_edge_results and erlich_results for specified database sizes
+coop_edge_filtered <- coop_edge_results[coop_edge_results$Database.Size %in% c(1e6, 5e6, 10e6), ]
+erlich_filtered <- erlich_results[erlich_results$Database.Size %in% c(1e6, 5e6, 10e6), ]
+
+# Set up the plot layout
+par(mfrow = c(1, 2))
+
+# Plot coop_edge_results
+plot(c(1, 8), c(0, 1), type = "n", xlab = "p (Degree of Cousin)", ylab = "Probability of at least one p-th cousin in database", main = "Coop & Edge Results")
+colors <- c("blue", "orange", "red")
+i <- 1
+for (db_size in c(1e6, 5e6, 10e6)) {
+  temp_df <- coop_edge_filtered[coop_edge_filtered$Database.Size == db_size, ]
+  points(temp_df$Degree.of.Cousin, temp_df$Probability, type = "b", pch = 19, lwd = 1.5, col = colors[i])
+  i <- i + 1
+}
+legend(x = "bottomright", legend = c("Database size (Millions) =", "1", "5", "10"), col = c(NA, colors), pch = 19)
+
+# Plot erlich_results
+plot(c(1, 8), c(0, 1), type = "n", xlab = "p (Degree of Cousin)", ylab = "Probability of at least one p-th cousin in database", main = "Erlich Results")
+i <- 1
+for (db_size in c(1e6, 5e6, 10e6)) {
+  temp_df <- erlich_filtered[erlich_filtered$Database.Size == db_size, ]
+  points(temp_df$Degree.of.Cousin, temp_df$Probability, type = "b", pch = 19, lwd = 1.5, col = colors[i])
+  i <- i + 1
+}
+
+# Reset plotting parameters
+par(mfrow = c(1, 1), mar = c(5.1, 4.1, 4.1, 2.1))
+
+
+
+```
 
 
