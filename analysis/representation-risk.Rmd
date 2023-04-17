@@ -208,8 +208,7 @@ library(patchwork)
 
 ### Raw DB size vs. Raw pop - Cousin panel
 
-This code generates four line plots that show the relationship between population size, database size, and the probability of finding a genetic match for different degrees of relatedness (1C, 2C, 3C, 4C). The plots are generated using the ggplot2 library and are combined into a single plot that shows the ratio of the first two plots divided by the last two plots. The fig.height and fig.width arguments control the size of the resulting plot.
-
+This code generates four line plots that show the relationship between population size, database size, and the probability of finding a genetic match for different degrees of relatedness (1C, 2C, 3C, 4C).
 
 
 ```{r fig.height=8, fig.width=10, fig.cap="Lines represent African American and European American population sizes, respectively."}
