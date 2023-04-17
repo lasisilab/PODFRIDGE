@@ -210,8 +210,9 @@ library(patchwork)
 
 This code generates four line plots that show the relationship between population size, database size, and the probability of finding a genetic match for different degrees of relatedness (1C, 2C, 3C, 4C). The plots are generated using the ggplot2 library and are combined into a single plot that shows the ratio of the first two plots divided by the last two plots. The fig.height and fig.width arguments control the size of the resulting plot.
 
+
+
 ```{r fig.height=8, fig.width=10, fig.cap="Lines represent African American and European American population sizes, respectively."}
-library(ggplot2)
 
 plot_PopVsDB <- function(name, maxg, rep_direct = rep(1, 10), rep_or = rep(1, 10)) {
   m = 6 #minimal cM
@@ -234,7 +235,7 @@ plot_PopVsDB <- function(name, maxg, rep_direct = rep(1, 10), rep_or = rep(1, 10
 
   plot_data <- data.frame(Population = rep(population_sizes, length(database_sizes)),
                           Coverage = unlist(results),
-                          DatabaseSize = factor(rep(database_sizes, each = length(population_sizes))))
+                          DatabaseSize = rep(database_sizes, each = length(population_sizes)))
 
   p <- ggplot(plot_data, aes(x = Population, y = Coverage, color = DatabaseSize, group = DatabaseSize)) +
     geom_point() +
@@ -246,7 +247,7 @@ plot_PopVsDB <- function(name, maxg, rep_direct = rep(1, 10), rep_or = rep(1, 10
     theme_minimal() +
     theme(legend.position = "right") +
     scale_x_continuous(labels = function(x) x / 1e6, breaks = seq(10e6, 250e6, 20e6)) +
-    scale_color_discrete(labels = function(x) as.numeric(x) / 1e6)+
+    scale_color_gradient(low = "lightblue", high = "darkblue", labels = function(x) x / 1e6)+
     geom_vline(xintercept = c(N_pop_aa_1990, N_pop_ea_1990))
 
   p
@@ -254,13 +255,12 @@ plot_PopVsDB <- function(name, maxg, rep_direct = rep(1, 10), rep_or = rep(1, 10
 
 
 # Example usage
-# Example usage
 plt_1c <- plot_PopVsDB(name = "1C", maxg = 2)
 plt_2c <- plot_PopVsDB(name = "2C", maxg = 3)
 plt_3c <- plot_PopVsDB(name = "3C", maxg = 4)
 plt_4c <- plot_PopVsDB(name = "4C", maxg = 5)
 
-((plt_1c + plt_2c)/(plt_3c + plt_4c)) +plot_layout(guides = "collect")
+((plt_1c + plt_2c)/(plt_3c + plt_4c)) + plot_layout(guides = "collect")
 
 
 
