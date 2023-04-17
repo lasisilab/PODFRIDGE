@@ -9,9 +9,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Tina Lasisi" />
 
 
-<title>License</title>
+<title>Representation and Risk</title>
 
 <script src="site_libs/header-attrs-2.18/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -29,6 +30,9 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -229,6 +233,69 @@ $(document).ready(function () {
 
 
 
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -236,6 +303,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -282,7 +359,9 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">License</h1>
+<h1 class="title toc-ignore">Representation and Risk</h1>
+<h4 class="author">Tina Lasisi</h4>
+<h4 class="date">2023-04-16 20:45:45</h4>
 
 </div>
 
@@ -315,7 +394,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span> 0
 </p>
@@ -352,6 +431,90 @@ class="panel-collapse collapse">
 <p>Great! Since the R Markdown file has been committed to the Git
 repository, you know the exact version of the code that produced these
 results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20230302code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20230302)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20230302code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20230302)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
 </div>
 </div>
 </div>
@@ -412,11 +575,11 @@ have uncommitted changes.
 
 <p>
 These are the previous versions of the repository in which changes were
-made to the R Markdown (<code>analysis/license.Rmd</code>) and HTML
-(<code>docs/license.html</code>) files. If you’ve configured a remote
-Git repository (see <code>?wflow_git_remote</code>), click on the
-hyperlinks in the table below to view the files as they were in that
-past version.
+made to the R Markdown (<code>analysis/representation-risk.Rmd</code>)
+and HTML (<code>docs/representation-risk.html</code>) files. If you’ve
+configured a remote Git repository (see <code>?wflow_git_remote</code>),
+click on the hyperlinks in the table below to view the files as they
+were in that past version.
 </p>
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
@@ -442,155 +605,19 @@ Message
 <tbody>
 <tr>
 <td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/tinalasisi/PODFRIDGE/5f805fe9b5638c72575d8adca031aa08ee3e9a31/docs/license.html" target="_blank">5f805fe</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-03-05
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/tinalasisi/PODFRIDGE/c3948af0114e77dacaf5bd4221c6b4639c120655/docs/license.html" target="_blank">c3948af</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-03-04
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/tinalasisi/PODFRIDGE/f02bc38a894a24323df5f6dadaf096826a830b88/docs/license.html" target="_blank">f02bc38</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-03-02
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/tinalasisi/PODFRIDGE/c9130d5e7bf0085f4fd6269628f455f21bbfbc65/docs/license.html" target="_blank">c9130d5</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-03-02
-</td>
-<td>
-wflow_git_commit(all = TRUE)
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/tinalasisi/PODFRIDGE/a4a7d45ed9fa00ec06842c882a5e6b6803a72eba/docs/license.html" target="_blank">a4a7d45</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-03-02
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/tinalasisi/PODFRIDGE/00073fd8cef2219c375fbfdd0bc41402d030b5a1/docs/license.html" target="_blank">00073fd</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-03-02
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/tinalasisi/PODFRIDGE/51ed5a6b8f5bc6d2bb799e9015da02662d74e21c/docs/license.html" target="_blank">51ed5a6</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-03-02
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/tinalasisi/PODFRIDGE/13ed9aecb20d1ca7b4c9dcbd6f1949f15ee1e341/docs/license.html" target="_blank">13ed9ae</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-03-02
-</td>
-<td>
-Publishing POPFORGE
-</td>
-</tr>
-<tr>
-<td>
 Rmd
 </td>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/144ddaead60a9f830dda8dc2efe51614699a5737/analysis/license.Rmd" target="_blank">144ddae</a>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/5ef241ff772c8be964a0774d909e140245a708d5/analysis/representation-risk.Rmd" target="_blank">5ef241f</a>
 </td>
 <td>
 Tina Lasisi
 </td>
 <td>
-2023-03-02
+2023-04-16
 </td>
 <td>
-Start workflowr project.
+update everything
 </td>
 </tr>
 </tbody>
@@ -600,17 +627,127 @@ Start workflowr project.
 </div>
 </div>
 </div>
-<p>What license are you using for your code? See <a
-href="https://choosealicense.com/">choosealicense.com</a> for help
-deciding. It’s a convention to save a file <code>LICENSE</code> in the
-root of your Git repo that contains the license text.</p>
-<p>What license are you using for the written content on your site? It
-is traditional to choose a <a
-href="https://creativecommons.org/choose/">Creative Commons</a> license
-for this type of content.</p>
-<p>How should others cite your work? It’s a convention to save a file
-<code>CITATION</code> in the root of your Git repo that contains the
-citation information.</p>
+<pre class="r"><code># Load required packages
+library(tidyverse)</code></pre>
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.1     ✔ readr     2.1.4
+✔ forcats   1.0.0     ✔ stringr   1.5.0
+✔ ggplot2   3.4.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+✔ purrr     1.0.1     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<pre class="r"><code>library(patchwork)
+
+knitr::opts_knit$set(root.dir = &quot;..&quot;)
+knitr::opts_chunk$set(eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 6)</code></pre>
+<div id="european-american-vs-african-american-probability-of-match"
+class="section level2">
+<h2>European American vs African American probability of match</h2>
+<div id="ibd-accounted" class="section level3">
+<h3>IBD accounted</h3>
+<p><img src="figure/representation-risk.Rmd/aa-fig-1.png" width="960" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="population-size-vs.-risk" class="section level2">
+<h2>Population size vs. risk</h2>
+<div id="raw-db-size-vs.-raw-pop---cousin-panel" class="section level3">
+<h3>Raw DB size vs. Raw pop - Cousin panel</h3>
+<p>This code generates four line plots that show the relationship
+between population size, database size, and the probability of finding a
+genetic match for different degrees of relatedness (1C, 2C, 3C, 4C). The
+plots are generated using the ggplot2 library and are combined into a
+single plot that shows the ratio of the first two plots divided by the
+last two plots. The fig.height and fig.width arguments control the size
+of the resulting plot.</p>
+<div class="figure" style="text-align: center">
+<img src="figure/representation-risk.Rmd/unnamed-chunk-2-1.png" alt="Lines represent African American and European American population sizes, respectively." width="960" />
+<p class="caption">
+Lines represent African American and European American population sizes,
+respectively.
+</p>
+</div>
+</div>
+<div id="match-vs.-population-size---rel-db-size-gradient"
+class="section level3">
+<h3>Match vs. population size - Rel DB size gradient</h3>
+<p><img src="figure/representation-risk.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div
+id="match-vs.-cousin-distance---rel-db-size-gradient---population-panel"
+class="section level3">
+<h3>Match vs. Cousin distance - Rel DB size gradient - population
+panel</h3>
+<p><img src="figure/representation-risk.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="match-vs.-rel-db-size---pop-size-panel" class="section level3">
+<h3>Match vs. Rel DB size - pop size panel</h3>
+<p><img src="figure/representation-risk.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="match-vs.-rel-db-size-overunder-representation-panel"
+class="section level3">
+<h3>Match vs. Rel DB size, over/under-representation panel</h3>
+<p><img src="figure/representation-risk.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="match-vs.-rel-db-size-vs---cousin-panel-pop-gradient"
+class="section level3">
+<h3>Match vs. Rel DB size vs - cousin panel, pop gradient</h3>
+<p><img src="figure/representation-risk.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div
+id="final---match-vs.-rel-db-size---cousin-gradient-ibd-not-accounted"
+class="section level3">
+<h3>Final - Match vs. Rel DB size - cousin gradient (IBD not
+accounted)</h3>
+<p><img src="figure/representation-risk.Rmd/unnamed-chunk-9-1.png" width="960" style="display: block; margin: auto;" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre><code>R version 4.2.2 (2022-10-31)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/lib/libRlapack.dylib
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] ggrepel_0.9.3   patchwork_1.1.2 lubridate_1.9.2 forcats_1.0.0  
+ [5] stringr_1.5.0   dplyr_1.1.1     purrr_1.0.1     readr_2.1.4    
+ [9] tidyr_1.3.0     tibble_3.2.1    ggplot2_3.4.1   tidyverse_2.0.0
+[13] workflowr_1.7.0
+
+loaded via a namespace (and not attached):
+ [1] tidyselect_1.2.0 xfun_0.35        bslib_0.4.1      colorspace_2.0-3
+ [5] vctrs_0.6.1      generics_0.1.3   htmltools_0.5.3  yaml_2.3.6      
+ [9] utf8_1.2.2       rlang_1.1.0      jquerylib_0.1.4  later_1.3.0     
+[13] pillar_1.8.1     glue_1.6.2       withr_2.5.0      lifecycle_1.0.3 
+[17] munsell_0.5.0    gtable_0.3.1     evaluate_0.18    labeling_0.4.2  
+[21] knitr_1.41       tzdb_0.3.0       callr_3.7.3      fastmap_1.1.0   
+[25] httpuv_1.6.6     ps_1.7.2         fansi_1.0.3      highr_0.9       
+[29] Rcpp_1.0.9       promises_1.2.0.1 scales_1.2.1     cachem_1.0.6    
+[33] jsonlite_1.8.4   farver_2.1.1     fs_1.5.2         hms_1.1.2       
+[37] digest_0.6.30    stringi_1.7.8    processx_3.8.0   getPass_0.2-2   
+[41] rprojroot_2.0.3  grid_4.2.2       cli_3.6.1        tools_4.2.2     
+[45] magrittr_2.0.3   sass_0.4.4       whisker_0.4      pkgconfig_2.0.3 
+[49] ellipsis_0.3.2   timechange_0.1.1 rmarkdown_2.18   httr_1.4.4      
+[53] rstudioapi_0.14  R6_2.5.1         git2r_0.30.1     compiler_4.2.2  </code></pre>
+</div>
+</div>
+</div>
 
 
 <!-- Adjust MathJax settings so that all math formulae are shown using
@@ -628,6 +765,8 @@ footer is added to webpages before the MathJax javascript. -->
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -660,6 +799,35 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
