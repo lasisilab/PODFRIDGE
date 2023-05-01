@@ -610,7 +610,7 @@ generate_plot <- function(rep_direct, rep_or, N_pop, name) {
 # Example usage
 ea <- generate_plot(rep_direct = rep(1, 10), rep_or = rep(1, 10), N_pop = N_pop_ea_1990, name = "European American (pop size)")
 
-aa <- generate_plot(rep_direct = rep(1, 10), rep_or = rep(1, 10), N_pop = N_pop_aa_1990, name = "African American (pop size")
+aa <- generate_plot(rep_direct = rep(1, 10), rep_or = rep(1, 10), N_pop = N_pop_aa_1990, name = "African American (pop size)")
 
 (ea + aa)+plot_layout(guides = "collect")
 
