@@ -12,7 +12,7 @@
 <meta name="author" content="Tina Lasisi" />
 
 
-<title>Representation and Risk</title>
+<title>IBD</title>
 
 <script src="site_libs/header-attrs-2.21/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -362,9 +362,9 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Representation and Risk</h1>
+<h1 class="title toc-ignore">IBD</h1>
 <h4 class="author">Tina Lasisi</h4>
-<h4 class="date">2023-05-15 13:33:26</h4>
+<h4 class="date">2023-05-15 13:34:39</h4>
 
 </div>
 
@@ -372,7 +372,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -383,8 +383,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -397,9 +397,9 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>PODFRIDGE/</code> <span
@@ -422,18 +422,21 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown is untracked by Git. To know which version of the R
+Markdown file created these results, you’ll want to first commit it to
+the Git repo. If you’re still working on the analysis, you can ignore
+this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
@@ -581,176 +584,10 @@ have uncommitted changes.
 <hr>
 </div>
 <div id="versions" class="tab-pane fade">
-
 <p>
-These are the previous versions of the repository in which changes were
-made to the R Markdown (<code>analysis/representation-risk.Rmd</code>)
-and HTML (<code>docs/representation-risk.html</code>) files. If you’ve
-configured a remote Git repository (see <code>?wflow_git_remote</code>),
-click on the hyperlinks in the table below to view the files as they
-were in that past version.
+There are no past versions. Publish this analysis with
+<code>wflow_publish()</code> to start tracking its development.
 </p>
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-File
-</th>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-<th>
-Message
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/64da0c31da9b7fc9dc6202bf02e1b776398d65f0/analysis/representation-risk.Rmd" target="_blank">64da0c3</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-04-30
-</td>
-<td>
-Update representation-risk.Rmd
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/tinalasisi/PODFRIDGE/c280b6f940af31573e4c3476b16188af1604f146/docs/representation-risk.html" target="_blank">c280b6f</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-04-16
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/tinalasisi/PODFRIDGE/fea10218d1c297e02b1a7cf7ba8a631909d6116a/docs/representation-risk.html" target="_blank">fea1021</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-04-16
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/7ae2686ecba5ec5ca1a340a71703e6f67113e8c0/analysis/representation-risk.Rmd" target="_blank">7ae2686</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-04-16
-</td>
-<td>
-update Representation risk
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/tinalasisi/PODFRIDGE/39f7bb62ab75810c4216b2f3ab3f30af1d48ac27/docs/representation-risk.html" target="_blank">39f7bb6</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-04-16
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/5f8febb7286d9c1694a1cee9b1a73f31cab534b4/analysis/representation-risk.Rmd" target="_blank">5f8febb</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-04-16
-</td>
-<td>
-update Representation risk
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/tinalasisi/PODFRIDGE/f89a90f2c7cc6808f21d805b3ba5df810ed06184/docs/representation-risk.html" target="_blank">f89a90f</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-04-16
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/5ef241ff772c8be964a0774d909e140245a708d5/analysis/representation-risk.Rmd" target="_blank">5ef241f</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-04-16
-</td>
-<td>
-update everything
-</td>
-</tr>
-</tbody>
-</table>
-</div>
 <hr>
 </div>
 </div>
@@ -771,368 +608,50 @@ library(tidyverse)</code></pre>
 
 knitr::opts_knit$set(root.dir = &quot;..&quot;)
 knitr::opts_chunk$set(eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 6)</code></pre>
-<div id="european-american-vs-african-american-probability-of-match"
-class="section level2">
-<h2>European American vs African American probability of match</h2>
-<div id="ibd-accounted" class="section level3">
-<h3>IBD accounted</h3>
-<p><img src="figure/representation-risk.Rmd/aa-fig-1.png" width="960" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-aa-fig-1">
-Past versions of aa-fig-1.png
-</button>
-</p>
-<div id="fig-aa-fig-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/f89a90f2c7cc6808f21d805b3ba5df810ed06184/docs/figure/representation-risk.Rmd/aa-fig-1.png" target="_blank">f89a90f</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-04-16
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</div>
-<div id="population-size-vs.-risk" class="section level2">
-<h2>Population size vs. risk</h2>
-<div id="raw-db-size-vs.-raw-pop---cousin-panel" class="section level3">
-<h3>Raw DB size vs. Raw pop - Cousin panel</h3>
-<p>This code generates four line plots that show the relationship
-between population size, database size, and the probability of finding a
-genetic match for different degrees of relatedness (1C, 2C, 3C, 4C).</p>
-<div class="figure" style="text-align: center">
-<img src="figure/representation-risk.Rmd/unnamed-chunk-2-1.png" alt="Lines represent African American and European American population sizes, respectively." width="960" />
-<p class="caption">
-Lines represent African American and European American population sizes,
-respectively.
-</p>
-</div>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-1">
-Past versions of unnamed-chunk-2-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-2-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/39f7bb62ab75810c4216b2f3ab3f30af1d48ac27/docs/figure/representation-risk.Rmd/unnamed-chunk-2-1.png" target="_blank">39f7bb6</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-04-16
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/f89a90f2c7cc6808f21d805b3ba5df810ed06184/docs/figure/representation-risk.Rmd/unnamed-chunk-2-1.png" target="_blank">f89a90f</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-04-16
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-<div id="match-vs.-population-size---rel-db-size-gradient"
-class="section level3">
-<h3>Match vs. population size - Rel DB size gradient</h3>
-<p><img src="figure/representation-risk.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
-Past versions of unnamed-chunk-3-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-3-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/f89a90f2c7cc6808f21d805b3ba5df810ed06184/docs/figure/representation-risk.Rmd/unnamed-chunk-3-1.png" target="_blank">f89a90f</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-04-16
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-<div
-id="match-vs.-cousin-distance---rel-db-size-gradient---population-panel"
-class="section level3">
-<h3>Match vs. Cousin distance - Rel DB size gradient - population
-panel</h3>
-<p><img src="figure/representation-risk.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-1">
-Past versions of unnamed-chunk-4-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-4-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/f89a90f2c7cc6808f21d805b3ba5df810ed06184/docs/figure/representation-risk.Rmd/unnamed-chunk-4-1.png" target="_blank">f89a90f</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-04-16
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-<div id="match-vs.-rel-db-size---pop-size-panel" class="section level3">
-<h3>Match vs. Rel DB size - pop size panel</h3>
-<p><img src="figure/representation-risk.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-1">
-Past versions of unnamed-chunk-5-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-5-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/f89a90f2c7cc6808f21d805b3ba5df810ed06184/docs/figure/representation-risk.Rmd/unnamed-chunk-5-1.png" target="_blank">f89a90f</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-04-16
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-<div id="match-vs.-rel-db-size-overunder-representation-panel"
-class="section level3">
-<h3>Match vs. Rel DB size, over/under-representation panel</h3>
-<p><img src="figure/representation-risk.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-6-1">
-Past versions of unnamed-chunk-6-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-6-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/f89a90f2c7cc6808f21d805b3ba5df810ed06184/docs/figure/representation-risk.Rmd/unnamed-chunk-6-1.png" target="_blank">f89a90f</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-04-16
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-<div id="match-vs.-rel-db-size-vs---cousin-panel-pop-gradient"
-class="section level3">
-<h3>Match vs. Rel DB size vs - cousin panel, pop gradient</h3>
-<p><img src="figure/representation-risk.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-1">
-Past versions of unnamed-chunk-7-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-7-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/f89a90f2c7cc6808f21d805b3ba5df810ed06184/docs/figure/representation-risk.Rmd/unnamed-chunk-7-1.png" target="_blank">f89a90f</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-04-16
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-<div
-id="final---match-vs.-rel-db-size---cousin-gradient-ibd-not-accounted"
-class="section level3">
-<h3>Final - Match vs. Rel DB size - cousin gradient (IBD not
-accounted)</h3>
-<p><img src="figure/representation-risk.Rmd/unnamed-chunk-9-1.png" width="960" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-1">
-Past versions of unnamed-chunk-9-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-9-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/f89a90f2c7cc6808f21d805b3ba5df810ed06184/docs/figure/representation-risk.Rmd/unnamed-chunk-9-1.png" target="_blank">f89a90f</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-04-16
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<div id="load-data-and-wrangle" class="section level3">
+<h3>Load data and wrangle</h3>
+<pre><code>Rows: 44737 Columns: 5
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: &quot;\t&quot;
+chr (4): ID1, POP1, ID2, POP2
+dbl (1): IBD_CM_SUM
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+`summarise()` has grouped output by &#39;POP1&#39;. You can override using the `.groups` argument.</code></pre>
+<pre><code># A tibble: 3 × 3
+# Groups:   POP1 [2]
+  POP1  POP2  mean_ibd
+  &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt;
+1 ASW   ASW     342.  
+2 CEU   ASW       5.79
+3 CEU   CEU      17.3 </code></pre>
+<p><img src="figure/IBD.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Here we see that there is much higher mean IBD in the ASW sample than
+expected. After checking for errors, it appears that this has to do with
+the nature of the HapMap sample. African Ancestry in SW USA (ASW)
+contains 20 parent-child duos, 13 trios, and 5 families of 2 or more
+with only 15 unrelated individuals (see <a
+href="https://catalog.coriell.org/1/NHGRI/Collections/HapMap-Collections/African-Ancestry-in-SW-USA-ASW">link</a>).
+Given the description of the sample, it seems really important to not
+use this population as a proxy for African Americans.</p>
+<p>Below the filtered data is re-visualized as distributions for
+different kinship levels.</p>
+<p><img src="figure/IBD.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/IBD.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/IBD.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>
+    Welch Two Sample t-test
+
+data:  IBD_CM_SUM by POP1
+t = 3.6655, df = 122.79, p-value = 0.0003659
+alternative hypothesis: true difference in means between group ASW and group CEU is not equal to 0
+95 percent confidence interval:
+ 18.14282 60.74416
+sample estimates:
+mean in group ASW mean in group CEU 
+         49.77737          10.33388 </code></pre>
+<p><img src="figure/IBD.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1156,27 +675,27 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] ggrepel_0.9.3   patchwork_1.1.2 lubridate_1.9.2 forcats_1.0.0  
- [5] stringr_1.5.0   dplyr_1.1.2     purrr_1.0.1     readr_2.1.4    
- [9] tidyr_1.3.0     tibble_3.2.1    ggplot2_3.4.2   tidyverse_2.0.0
-[13] workflowr_1.7.0
+ [1] patchwork_1.1.2 lubridate_1.9.2 forcats_1.0.0   stringr_1.5.0  
+ [5] dplyr_1.1.2     purrr_1.0.1     readr_2.1.4     tidyr_1.3.0    
+ [9] tibble_3.2.1    ggplot2_3.4.2   tidyverse_2.0.0 workflowr_1.7.0
 
 loaded via a namespace (and not attached):
- [1] tidyselect_1.2.0 xfun_0.39        bslib_0.4.2      colorspace_2.1-0
- [5] vctrs_0.6.2      generics_0.1.3   htmltools_0.5.5  yaml_2.3.7      
- [9] utf8_1.2.3       rlang_1.1.0      jquerylib_0.1.4  later_1.3.0     
-[13] pillar_1.9.0     glue_1.6.2       withr_2.5.0      lifecycle_1.0.3 
-[17] munsell_0.5.0    gtable_0.3.3     evaluate_0.20    labeling_0.4.2  
-[21] knitr_1.42       callr_3.7.3      tzdb_0.3.0       fastmap_1.1.1   
-[25] httpuv_1.6.9     ps_1.7.5         fansi_1.0.4      highr_0.10      
-[29] Rcpp_1.0.10      promises_1.2.0.1 scales_1.2.1     cachem_1.0.7    
-[33] jsonlite_1.8.4   farver_2.1.1     fs_1.6.1         hms_1.1.3       
-[37] digest_0.6.31    stringi_1.7.12   processx_3.8.1   getPass_0.2-2   
-[41] rprojroot_2.0.3  grid_4.2.2       cli_3.6.1        tools_4.2.2     
-[45] magrittr_2.0.3   sass_0.4.5       whisker_0.4.1    pkgconfig_2.0.3 
-[49] timechange_0.2.0 rmarkdown_2.21   httr_1.4.5       rstudioapi_0.14 
-[53] R6_2.5.1         git2r_0.32.0     compiler_4.2.2  </code></pre>
-</div>
+ [1] tidyselect_1.2.0   xfun_0.39          bslib_0.4.2        colorspace_2.1-0  
+ [5] vctrs_0.6.2        generics_0.1.3     htmltools_0.5.5    yaml_2.3.7        
+ [9] utf8_1.2.3         rlang_1.1.0        jquerylib_0.1.4    later_1.3.0       
+[13] pillar_1.9.0       glue_1.6.2         withr_2.5.0        RColorBrewer_1.1-3
+[17] bit64_4.0.5        lifecycle_1.0.3    munsell_0.5.0      gtable_0.3.3      
+[21] evaluate_0.20      labeling_0.4.2     knitr_1.42         callr_3.7.3       
+[25] tzdb_0.3.0         fastmap_1.1.1      httpuv_1.6.9       ps_1.7.5          
+[29] parallel_4.2.2     fansi_1.0.4        highr_0.10         Rcpp_1.0.10       
+[33] promises_1.2.0.1   scales_1.2.1       cachem_1.0.7       vroom_1.6.1       
+[37] jsonlite_1.8.4     farver_2.1.1       bit_4.0.5          fs_1.6.1          
+[41] hms_1.1.3          digest_0.6.31      stringi_1.7.12     processx_3.8.1    
+[45] getPass_0.2-2      rprojroot_2.0.3    grid_4.2.2         cli_3.6.1         
+[49] tools_4.2.2        magrittr_2.0.3     sass_0.4.5         crayon_1.5.2      
+[53] whisker_0.4.1      pkgconfig_2.0.3    timechange_0.2.0   rmarkdown_2.21    
+[57] httr_1.4.5         rstudioapi_0.14    R6_2.5.1           git2r_0.32.0      
+[61] compiler_4.2.2    </code></pre>
 </div>
 </div>
 
