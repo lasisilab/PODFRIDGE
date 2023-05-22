@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Tina Lasisi" />
+
+
+<title>Short Range Familial Search</title>
+
+<script src="site_libs/header-attrs-2.21/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">PODFRIDGE</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+<li>
+  <a href="methods.html">Methods</a>
+</li>
+<li>
+  <a href="demo-data.html">Demographic Data</a>
+</li>
+<li>
+  <a href="analyses.html">Analyses</a>
+</li>
+<li>
+  <a href="representation-risk.html">Risk</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Short Range Familial Search</h1>
+<h4 class="author">Tina Lasisi</h4>
+<h4 class="date">2023-05-21 20:49:32</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2023-05-21
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 1
+</p>
+<p>
+<strong>Knit directory:</strong> <code>PODFRIDGE/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguncommittedchanges"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The R Markdown is untracked by Git. To know which version of the R
+Markdown file created these results, you’ll want to first commit it to
+the Git repo. If you’re still working on the analysis, you can ignore
+this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20230302code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20230302)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20230302code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20230302)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtree10423d8edfbd1e0cedabf1e7b281aad3dbe03a84targetblank10423d8a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/tinalasisi/PODFRIDGE/tree/10423d8edfbd1e0cedabf1e7b281aad3dbe03a84" target="_blank">10423d8</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtree10423d8edfbd1e0cedabf1e7b281aad3dbe03a84targetblank10423d8a"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/tinalasisi/PODFRIDGE/tree/10423d8edfbd1e0cedabf1e7b281aad3dbe03a84" target="_blank">10423d8</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    data/.DS_Store
+    Ignored:    data/FGG_Database_v.2022.xlsx
+
+Untracked files:
+    Untracked:  1036 revised AfAm, n=342.csv
+    Untracked:  1036 revised Asian, n=97.csv
+    Untracked:  1036 revised Cauc, n=361.csv
+    Untracked:  1036 revised Hispanic, n=236.csv
+    Untracked:  1036 revised all, n=1036.csv
+    Untracked:  analysis/shortrange.Rmd
+    Untracked:  data/1036_AfAm.csv
+    Untracked:  data/1036_Asian.csv
+    Untracked:  data/1036_Cauc.csv
+    Untracked:  data/1036_Hispanic.csv
+    Untracked:  data/1036_all.csv
+    Untracked:  data/1036_allelefreqs.xlsx
+    Untracked:  data/1036_rawgeno.xlsx
+    Untracked:  data/FGGUserManual2022.pdf
+    Untracked:  data/~$1036_allelefreqs.xlsx
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+There are no past versions. Publish this analysis with
+<code>wflow_publish()</code> to start tracking its development.
+</p>
+<hr>
+</div>
+</div>
+</div>
+<div id="codis-marker-allele-frequencies" class="section level2">
+<h2>CODIS marker allele frequencies</h2>
+<p>Frequencies and raw genotypes for different populations were found <a
+href="https://www.promega.com/products/pm/genetic-identity/population-statistics/allele-frequencies/">here</a>
+and refer to Steffen, C.R., Coble, M.D., Gettings, K.B., Vallone, P.M.
+(2017) Corrigendum to ‘U.S. Population Data for 29 Autosomal STR Loci’
+[Forensic Sci. Int. Genet. 7 (2013) e82-e83]. Forensic Sci. Int. Genet.
+31, e36–e40. The US core CODIS markers are a subset of the 29 described
+here.</p>
+</div>
+<div id="load-codis-allele-frequencies" class="section level2">
+<h2>Load CODIS allele frequencies</h2>
+<pre class="r"><code># Define the file paths
+file_paths &lt;- list.files(path = &quot;data&quot;, pattern = &quot;1036_.*\\.csv&quot;, full.names = TRUE)
+
+# Create a list of data frames
+df_list &lt;- lapply(file_paths, function(path) {
+  read_csv(path, col_types = cols(
+    marker = col_character(),
+    allele = col_double(),
+    frequency = col_double(),
+    population = col_character()
+  ))
+})
+
+# Bind all data frames into one
+df &lt;- bind_rows(df_list)</code></pre>
+<pre class="r"><code># Find unique markers and split them into chunks of 5
+unique_markers &lt;- unique(df$marker)
+marker_chunks &lt;- split(unique_markers, ceiling(seq_along(unique_markers)/5))
+
+# Loop through the chunks and create a plot for each chunk
+for(i in seq_along(marker_chunks)) {
+  df_chunk &lt;- df %&gt;% filter(marker %in% marker_chunks[[i]])
+  
+  p &lt;- ggplot(df_chunk, aes(x = allele, y = frequency, fill = population)) +
+    geom_col(position = &quot;dodge&quot;, width = 0.7) +
+    facet_grid(population ~ marker) +
+    # scale_x_continuous(breaks = seq(2.2, 43.2, by = 1)) +
+    labs(x = &quot;Allele&quot;, y = &quot;Frequency&quot;,
+         title = paste(&quot;Allele Frequencies for Markers&quot;, i*5-4, &quot;to&quot;, min(i*5, length(unique_markers))),
+         caption = &quot;Source: CSV data&quot;) +
+    theme_bw()
+
+  print(p)
+}</code></pre>
+<pre><code>Warning: `position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals</code></pre>
+<p><img src="figure/shortrange.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>Warning: `position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals</code></pre>
+<p><img src="figure/shortrange.Rmd/unnamed-chunk-3-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>Warning: `position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals</code></pre>
+<p><img src="figure/shortrange.Rmd/unnamed-chunk-3-3.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>Warning: `position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals</code></pre>
+<p><img src="figure/shortrange.Rmd/unnamed-chunk-3-4.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>Warning: `position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals</code></pre>
+<p><img src="figure/shortrange.Rmd/unnamed-chunk-3-5.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>Warning: `position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals
+`position_dodge()` requires non-overlapping x intervals</code></pre>
+<p><img src="figure/shortrange.Rmd/unnamed-chunk-3-6.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>df %&gt;%
+  group_by(population) %&gt;%
+  filter(population != &quot;all&quot;) %&gt;%
+  ggplot(aes(x = marker, y = allele, fill = population)) +
+  geom_boxplot() +
+  labs(x = &quot;Marker&quot;, y = &quot;Allele&quot;,
+       title = &quot;Range of Alleles Across Different Markers (Grouped by Population)&quot;,
+       caption = &quot;Source: CSV data&quot;) +
+  coord_flip()</code></pre>
+<p><img src="figure/shortrange.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Filter out the &quot;all&quot; population
+df_filtered &lt;- df %&gt;% filter(population != &quot;all&quot;)
+
+# Get the unique markers and split them into chunks of 5
+unique_markers &lt;- unique(df_filtered$marker)
+marker_chunks &lt;- split(unique_markers, ceiling(seq_along(unique_markers)/6))
+
+# Loop through the chunks
+for(i in seq_along(marker_chunks)) {
+  
+  # Subset the data for the current chunk of markers
+  df_chunk &lt;- df_filtered %&gt;% filter(marker %in% marker_chunks[[i]])
+  
+  # Convert the allele variable to a factor
+  df_chunk$allele &lt;- as.factor(df_chunk$allele)
+  
+  # Create the plot
+  p &lt;- ggplot(df_chunk, aes(x = population, y = frequency, fill = allele)) +
+    geom_bar(stat = &quot;identity&quot;) +
+    facet_wrap(~ marker) +
+    labs(x = &quot;Population&quot;, y = &quot;Frequency&quot;, fill = &quot;Allele&quot;,
+         title = paste(&quot;Allele Frequencies for Markers&quot;, i*5-4, &quot;to&quot;, min(i*5, length(unique_markers))),
+         caption = &quot;Source: CSV data&quot;) +
+    theme_classic()  # Apply theme_classic()
+  
+  # Print the plot
+  print(p)
+}</code></pre>
+<p><img src="figure/shortrange.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/unnamed-chunk-5-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/unnamed-chunk-5-3.png" width="672" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/unnamed-chunk-5-4.png" width="672" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/unnamed-chunk-5-5.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>summary_df &lt;- df %&gt;%
+  group_by(marker, population) %&gt;%
+  summarise(num_alleles = n_distinct(allele))</code></pre>
+<pre><code>`summarise()` has grouped output by &#39;marker&#39;. You can override using the
+`.groups` argument.</code></pre>
+<pre class="r"><code>summary_df</code></pre>
+<pre><code># A tibble: 145 × 3
+# Groups:   marker [29]
+   marker   population num_alleles
+   &lt;chr&gt;    &lt;chr&gt;            &lt;int&gt;
+ 1 CSF1PO   AfAm                 8
+ 2 CSF1PO   Asian                8
+ 3 CSF1PO   Cauc                 7
+ 4 CSF1PO   Hispanic             9
+ 5 CSF1PO   all                  9
+ 6 D10S1248 AfAm                11
+ 7 D10S1248 Asian                7
+ 8 D10S1248 Cauc                 9
+ 9 D10S1248 Hispanic             9
+10 D10S1248 all                 12
+# ℹ 135 more rows</code></pre>
+<pre class="r"><code>summary_df &lt;- df %&gt;%
+  group_by(marker, population) %&gt;%
+  summarise(num_alleles = n_distinct(allele))</code></pre>
+<pre><code>`summarise()` has grouped output by &#39;marker&#39;. You can override using the
+`.groups` argument.</code></pre>
+<pre class="r"><code>summary_pivot &lt;- summary_df %&gt;%
+  pivot_wider(names_from = population, values_from = num_alleles)
+
+summary_pivot</code></pre>
+<pre><code># A tibble: 29 × 6
+# Groups:   marker [29]
+   marker    AfAm Asian  Cauc Hispanic   all
+   &lt;chr&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt; &lt;int&gt;
+ 1 CSF1PO       8     8     7        9     9
+ 2 D10S1248    11     7     9        9    12
+ 3 D12S391     19    15    16       19    24
+ 4 D13S317      7     6     8        8     8
+ 5 D16S539      8     6     7        8     9
+ 6 D18S51      19    13    15       15    22
+ 7 D19S433     14    11    15       13    16
+ 8 D1S1656     15    12    15       15    15
+ 9 D21S11      20    12    16       16    27
+10 D22S1045    11     8     8        9    11
+# ℹ 19 more rows</code></pre>
+</div>
+<div id="simulating-genotypes" class="section level2">
+<h2>Simulating genotypes</h2>
+<div id="one-marker-at-a-time" class="section level3">
+<h3>One marker at a time</h3>
+<pre class="r"><code># Function to simulate genotypes for a pair of individuals
+simulate_genotypes &lt;- function(allele_frequencies, relationship_type) {
+  # Simulate the first individual&#39;s alleles by drawing from the population frequency
+  individual1 &lt;- sample(names(allele_frequencies), size = 2, replace = TRUE, prob = allele_frequencies)
+  
+  # Relationship probabilities
+  relationship_probs &lt;- list(
+    &#39;parent_child&#39; = c(0, 1, 0),
+    &#39;full_siblings&#39; = c(1/4, 1/2, 1/4),
+    &#39;half_siblings&#39; = c(1/2, 1/2, 0),
+    &#39;cousins&#39; = c(7/8, 1/8, 0),
+    &#39;second_cousins&#39; = c(15/16, 1/16, 0),
+    &#39;unrelated&#39; = c(1, 0, 0)
+  )
+  
+  prob_shared_alleles &lt;- relationship_probs[[relationship_type]]
+  num_shared_alleles &lt;- sample(c(0, 1, 2), size = 1, prob = prob_shared_alleles)
+  individual2 &lt;- c(sample(individual1, size = num_shared_alleles), sample(names(allele_frequencies), size = 2 - num_shared_alleles, replace = TRUE, prob = allele_frequencies))
+  
+  # Return the simulated genotypes
+  return(list(individual1 = individual1, individual2 = individual2, num_shared_alleles = num_shared_alleles))
+}
+
+# Function to calculate the index of relatedness
+calculate_relatedness &lt;- function(simulated_genotypes, allele_frequencies) {
+  # Calculate the number of shared alleles
+  num_shared_alleles &lt;- sum(simulated_genotypes$individual1 %in% simulated_genotypes$individual2)
+  
+  # Calculate the index of relatedness as the number of shared alleles weighted inversely to their frequencies
+  # Now considering both individuals&#39; alleles for the inverse frequency weighting
+  relatedness &lt;- num_shared_alleles / (sum(1 / allele_frequencies[simulated_genotypes$individual1]) + sum(1 / allele_frequencies[simulated_genotypes$individual2]))
+  
+  # Return the index of relatedness
+  return(list(relatedness = relatedness, num_shared_alleles = simulated_genotypes$num_shared_alleles))
+}
+
+# Function to simulate genotypes and calculate relatedness for different relationships
+simulate_relatedness &lt;- function(df, marker, population, relationship_type) {
+  # Filter the allele frequencies for the marker and population
+  allele_frequencies &lt;- df %&gt;%
+    filter(marker == marker, population == population) %&gt;%
+    pull(frequency) %&gt;%
+    setNames(df$allele)
+  
+  # Simulate genotypes
+  simulated_genotypes &lt;- simulate_genotypes(allele_frequencies, relationship_type)
+  
+  # Calculate and return the relatedness
+  relatedness_data &lt;- calculate_relatedness(simulated_genotypes, allele_frequencies)
+  
+  return(c(list(marker = marker, population = population, relationship_type = relationship_type), relatedness_data))
+}
+
+# Example usage
+
+# simulate_relatedness(df, marker = &quot;F13A01&quot;, population = &quot;Asian&quot;, relationship_type = &quot;full_siblings&quot;)</code></pre>
+<pre class="r"><code>simulate_all_relationships &lt;- function(df) {
+  # Define the list of relationship types
+  relationship_types &lt;- c(&#39;parent_child&#39;, &#39;full_siblings&#39;, &#39;half_siblings&#39;, &#39;cousins&#39;, &#39;second_cousins&#39;, &#39;unrelated&#39;)
+  
+  # Initialize an empty list to store results
+  results &lt;- list()
+  
+  # Iterate over all combinations of markers, populations, and relationship types
+  for (marker in unique(df$marker)) {
+    for (population in unique(df$population)) {
+      for (relationship_type in relationship_types) {
+        # Simulate relatedness and add the result to the list
+        results[[length(results) + 1]] &lt;- simulate_relatedness(df, marker, population, relationship_type)
+      }
+    }
+  }
+  
+  # Convert the list of results to a dataframe
+  results_df &lt;- do.call(rbind, lapply(results, function(x) as.data.frame(t(unlist(x)))))
+  
+  return(results_df)
+}
+
+# Usage:
+# df &lt;- # Your dataframe here
+results_df &lt;- simulate_all_relationships(df)</code></pre>
+<pre class="r"><code>simulate_all_relationships &lt;- function(df, num_simulations) {
+  # Define the list of relationship types
+  relationship_types &lt;- c(&#39;parent_child&#39;, &#39;full_siblings&#39;, &#39;half_siblings&#39;, &#39;cousins&#39;, &#39;second_cousins&#39;, &#39;unrelated&#39;)
+  
+  # Initialize an empty list to store results
+  results &lt;- list()
+  
+  # Iterate over all combinations of markers, populations, and relationship types
+  for (marker in unique(df$marker)) {
+    for (population in unique(df$population)) {
+      for (relationship_type in relationship_types) {
+        for (i in 1:num_simulations) {
+          # Simulate relatedness and add the result to the list
+          results[[length(results) + 1]] &lt;- simulate_relatedness(df, marker, population, relationship_type)
+        }
+      }
+    }
+  }
+  
+  # Convert the list of results to a dataframe
+  results_df &lt;- do.call(rbind, lapply(results, function(x) as.data.frame(t(unlist(x)))))
+  
+  return(results_df)
+}
+
+# Usage:
+# df &lt;- # Your dataframe here
+results_df &lt;- simulate_all_relationships(df, num_simulations = 10)</code></pre>
+<div id="visualization" class="section level4">
+<h4>Visualization</h4>
+<pre class="r"><code># Function to capitalize the first letter of a string
+ucfirst &lt;- function(s) {
+  paste(toupper(substring(s, 1,1)), substring(s, 2), sep = &quot;&quot;)
+}</code></pre>
+<pre class="r"><code>create_plot &lt;- function(df, variable_to_plot) {
+  # Create the plot
+  p &lt;- ggplot(df, aes(x = relationship_type, y = .data[[variable_to_plot]], color = population, shape = population, fill = population)) +
+    geom_boxplot(alpha = 0.4) + # Change the order of geom_boxplot() and geom_point() and adjust alpha
+    geom_point(position = position_jitterdodge(jitter.width = 0.1, dodge.width = 0.75), size = 1, alpha = 0.6) +
+    facet_grid(. ~ marker) +
+    theme_classic() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    scale_x_discrete(limits = c(&#39;parent_child&#39;, &#39;full_siblings&#39;, &#39;half_siblings&#39;, &#39;cousins&#39;, &#39;second_cousins&#39;, &#39;unrelated&#39;)) +
+    labs(title = paste(ucfirst(variable_to_plot), &quot;by Relationship Type, Population, and STR Marker&quot;),
+         x = &quot;Relationship Type&quot;, 
+         y = ucfirst(variable_to_plot), 
+         color = &quot;Population&quot;,
+         shape = &quot;Population&quot;)
+  
+  return(p)
+}</code></pre>
+<pre class="r"><code># Filter your data for the first 3 unique STR markers
+factor_vars &lt;- c(&quot;marker&quot;, &quot;population&quot;, &quot;relationship_type&quot;)
+numeric_vars &lt;- c(&quot;relatedness&quot;, &quot;num_shared_alleles&quot;)
+
+# Filter your data for unique STR markers and remove the &quot;all&quot; population
+results_df_filtered &lt;- results_df %&gt;%
+  filter(population != &quot;all&quot;) %&gt;%
+  mutate(
+    across(all_of(factor_vars), as.factor),
+    across(all_of(numeric_vars), as.numeric)
+  )
+
+# Find the total number of unique markers
+total_markers &lt;- length(unique(results_df_filtered$marker))
+
+# Iterate through the unique markers in groups of 3
+for (i in seq(1, total_markers, by = 3)) {
+  # Filter the data for the current set of 3 or fewer markers
+  filtered_results_df &lt;- results_df_filtered %&gt;%
+    filter(marker %in% unique(marker)[i:min(i+2, total_markers)])
+  
+  # Create and display the plots for the current set of markers
+  for (variable_to_plot in c(&quot;relatedness&quot;, &quot;num_shared_alleles&quot;)) {
+    plot &lt;- create_plot(df = filtered_results_df, variable_to_plot = variable_to_plot)
+    print(plot) # Print the plot to display it in the RMarkdown document
+  }
+}</code></pre>
+<p><img src="figure/shortrange.Rmd/unnamed-chunk-11-1.png" width="768" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/unnamed-chunk-11-2.png" width="768" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/unnamed-chunk-11-3.png" width="768" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/unnamed-chunk-11-4.png" width="768" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/unnamed-chunk-11-5.png" width="768" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/unnamed-chunk-11-6.png" width="768" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/unnamed-chunk-11-7.png" width="768" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/unnamed-chunk-11-8.png" width="768" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/unnamed-chunk-11-9.png" width="768" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/unnamed-chunk-11-10.png" width="768" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/unnamed-chunk-11-11.png" width="768" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/unnamed-chunk-11-12.png" width="768" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/unnamed-chunk-11-13.png" width="768" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/unnamed-chunk-11-14.png" width="768" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/unnamed-chunk-11-15.png" width="768" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/unnamed-chunk-11-16.png" width="768" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/unnamed-chunk-11-17.png" width="768" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/unnamed-chunk-11-18.png" width="768" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/unnamed-chunk-11-19.png" width="768" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/unnamed-chunk-11-20.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="all-markers-together" class="section level3">
+<h3>All Markers together</h3>
+<pre class="r"><code># Function to simulate genotypes for a pair of individuals
+multi_simulate_genotypes &lt;- function(allele_frequencies, relationship_type) {
+  # Initialize an empty list to store results
+  genotypes &lt;- list()
+  
+  # Iterate over all markers
+  for (marker in names(allele_frequencies)) {
+    individual1 &lt;- sample(names(allele_frequencies[[marker]]), size = 2, replace = TRUE, prob = allele_frequencies[[marker]])
+    
+    # Relationship probabilities
+    relationship_probs &lt;- list(
+      &#39;parent_child&#39; = c(0, 1, 0),
+      &#39;full_siblings&#39; = c(1/4, 1/2, 1/4),
+      &#39;half_siblings&#39; = c(1/2, 1/2, 0),
+      &#39;cousins&#39; = c(7/8, 1/8, 0),
+      &#39;second_cousins&#39; = c(15/16, 1/16, 0),
+      &#39;unrelated&#39; = c(1, 0, 0)
+    )
+    
+    prob_shared_alleles &lt;- relationship_probs[[relationship_type]]
+    num_shared_alleles &lt;- sample(c(0, 1, 2), size = 1, prob = prob_shared_alleles)
+    individual2 &lt;- c(sample(individual1, size = num_shared_alleles), sample(names(allele_frequencies[[marker]]), size = 2 - num_shared_alleles, replace = TRUE, prob = allele_frequencies[[marker]]))
+    print(paste(&quot;The value of individual1 is:&quot;, individual1))
+    print(paste(&quot;The value of individual2 is:&quot;, individual2))
+
+    # Add the simulated genotypes to the list
+    genotypes[[marker]] &lt;- list(individual1 = individual1, individual2 = individual2, num_shared_alleles = num_shared_alleles)
+  }
+  
+  # Return the list of simulated genotypes
+  return(genotypes)
+}
+
+# Function to simulate genotypes and calculate relatedness for different relationships
+multi_simulate_relatedness &lt;- function(df, population, relationship_type) {
+  # Filter the allele frequencies for the marker and population
+  # allele_frequencies &lt;- split(df[df$population == population, ], df$marker)
+  allele_frequencies &lt;- split(df[df$population == population, ]$frequency, df$marker)
+  print(allele_frequencies)
+
+
+  
+  # Simulate genotypes
+  simulated_genotypes &lt;- multi_simulate_genotypes(allele_frequencies, relationship_type)
+  
+  # Calculate relatedness for each marker and store in a list
+  relatedness_data &lt;- lapply(names(simulated_genotypes), function(marker) {
+    calculate_relatedness(simulated_genotypes[[marker]], allele_frequencies[[marker]])
+  })
+  
+  # Convert the list of relatedness data to a dataframe
+  relatedness_df &lt;- do.call(rbind, lapply(relatedness_data, function(x) as.data.frame(t(unlist(x)))))
+  
+  # Add the marker, population, and relationship type to the dataframe
+  relatedness_df$marker &lt;- names(relatedness_data)
+  relatedness_df$population &lt;- population
+  relatedness_df$relationship_type &lt;- relationship_type
+  
+  return(relatedness_df)
+}</code></pre>
+<pre class="r"><code># Function to simulate genotypes for a pair of individuals for all markers
+simulate_genotypes_all_markers &lt;- function(df, relationship_type, population) {
+  markers &lt;- unique(df$marker)
+  
+  # Simulate the first individual&#39;s alleles by drawing from the population frequency for each marker
+  individual1 &lt;- setNames(lapply(markers, function(marker) {
+    allele_frequencies &lt;- df %&gt;%
+      filter(marker == marker, population == population) %&gt;%
+      pull(frequency) %&gt;%
+      setNames(df$allele)
+      
+    sample(names(allele_frequencies), size = 2, replace = TRUE, prob = allele_frequencies)
+  }), markers)
+  
+  # Relationship probabilities
+  relationship_probs &lt;- list(
+    &#39;parent_child&#39; = c(0, 1, 0),
+    &#39;full_siblings&#39; = c(1/4, 1/2, 1/4),
+    &#39;half_siblings&#39; = c(1/2, 1/2, 0),
+    &#39;cousins&#39; = c(7/8, 1/8, 0),
+    &#39;second_cousins&#39; = c(15/16, 1/16, 0),
+    &#39;unrelated&#39; = c(1, 0, 0)
+  )
+  
+  prob_shared_alleles &lt;- relationship_probs[[relationship_type]]
+  num_shared_alleles &lt;- sample(c(0, 1, 2), size = 1, prob = prob_shared_alleles)
+  
+  individual2 &lt;- setNames(lapply(markers, function(marker) {
+  allele_frequencies &lt;- df %&gt;%
+    filter(marker == marker, population == population) %&gt;%
+    arrange(marker, allele) %&gt;%
+    pull(frequency) %&gt;%
+    setNames(df$allele)
+  
+  prob_shared_alleles &lt;- relationship_probs[[relationship_type]]
+  non_zero_indices &lt;- which(prob_shared_alleles != 0)
+  num_shared_alleles &lt;- sample(non_zero_indices - 1, size = 1, prob = prob_shared_alleles[non_zero_indices])
+
+  alleles_from_individual1 &lt;- sample(individual1[[marker]], size = num_shared_alleles)
+  alleles_from_population &lt;- sample(names(allele_frequencies), size = 2 - num_shared_alleles, replace = TRUE, prob = allele_frequencies)
+  
+  return(c(alleles_from_individual1, alleles_from_population))
+}), markers)
+
+  # Return the simulated genotypes
+  return(list(individual1 = individual1, individual2 = individual2))
+}
+
+
+
+# Function to calculate the index of relatedness for all markers
+calculate_relatedness_all_markers &lt;- function(simulated_genotypes, df, population) {
+  markers &lt;- names(simulated_genotypes$individual1)
+  
+  # Calculate the number of shared alleles for each marker
+  num_shared_alleles &lt;- sapply(markers, function(marker) {
+    sum(simulated_genotypes$individual1[[marker]] %in% simulated_genotypes$individual2[[marker]])
+  })
+  
+  # Calculate the index of relatedness as the number of shared alleles weighted inversely to their frequencies
+  # Now considering both individuals&#39; alleles for the inverse frequency weighting
+  relatedness &lt;- sapply(markers, function(marker) {
+    allele_frequencies &lt;- df %&gt;%
+      filter(marker == marker, population == population) %&gt;%
+      pull(frequency) %&gt;%
+      setNames(df$allele)
+      
+    num_shared_alleles[marker] / (sum(1 / allele_frequencies[simulated_genotypes$individual1[[marker]]]) + sum(1 / allele_frequencies[simulated_genotypes$individual2[[marker]]]))
+  })
+  
+  # Return the index of relatedness
+  return(list(relatedness = relatedness, num_shared_alleles = num_shared_alleles))
+  }
+
+# Function to simulate genotypes and calculate relatedness for different relationships for all markers
+simulate_relatedness_all_markers &lt;- function(df, relationship_type, population) {
+  # Simulate genotypes for all markers
+  simulated_genotypes &lt;- simulate_genotypes_all_markers(df, relationship_type, population)
+  
+  # Calculate and return the relatedness for all markers
+  relatedness_data &lt;- calculate_relatedness_all_markers(simulated_genotypes, df, population)
+  
+   # Before returning the results_df, add marker and population information
+  results_df$marker &lt;- rownames(results_df)
+  results_df$population &lt;- population
+  
+  return(relatedness_data)
+}</code></pre>
+<div id="visualizations" class="section level4">
+<h4>Visualizations</h4>
+<pre class="r"><code># Define the list of relationship types
+relationship_types &lt;- c(&#39;parent_child&#39;, &#39;full_siblings&#39;, &#39;half_siblings&#39;, &#39;cousins&#39;, &#39;second_cousins&#39;, &#39;unrelated&#39;)
+
+# Create a dataframe of all combinations of populations and relationship types
+combinations &lt;- expand.grid(population = unique(df$population), relationship_type = relationship_types)
+
+# Apply the function to each combination
+results &lt;- combinations %&gt;%
+  split(seq(nrow(.))) %&gt;%
+  map_dfr(function(combination) {
+    population &lt;- combination$population
+    relationship_type &lt;- combination$relationship_type
+    # cat(&quot;Processing:&quot;, &quot;population =&quot;, population, &quot;; relationship_type =&quot;, relationship_type, &quot;\n&quot;)
+    sim_results &lt;- simulate_relatedness_all_markers(df, relationship_type[[1]], population[[1]])
+    
+    # Bind resulting data frames
+    tibble(
+      population = population,
+      relationship_type = relationship_type,
+      sim_results = list(sim_results)
+    )
+  })
+
+multi_results &lt;- results %&gt;% 
+  mutate(
+    sum_relatedness = map_dbl(sim_results, function(x) {
+      sum(x[[&quot;relatedness&quot;]], na.rm = TRUE)
+    }),
+    sum_alleles = map_dbl(sim_results, function(x) {
+      sum(x[[&quot;num_shared_alleles&quot;]], na.rm = TRUE)
+    })
+  ) %&gt;% 
+  select(-sim_results)
+
+multi_results</code></pre>
+<pre><code># A tibble: 30 × 4
+   population relationship_type sum_relatedness sum_alleles
+   &lt;fct&gt;      &lt;fct&gt;                       &lt;dbl&gt;       &lt;dbl&gt;
+ 1 AfAm       parent_child                0.650          32
+ 2 all        parent_child                0.553          32
+ 3 Asian      parent_child                0.377          30
+ 4 Cauc       parent_child                0.449          36
+ 5 Hispanic   parent_child                0.462          33
+ 6 AfAm       full_siblings               0.488          25
+ 7 all        full_siblings               0.897          35
+ 8 Asian      full_siblings               0.679          31
+ 9 Cauc       full_siblings               0.738          32
+10 Hispanic   full_siblings               0.566          31
+# ℹ 20 more rows</code></pre>
+<pre class="r"><code># Define the number of simulations
+n_sims &lt;- 100
+
+# Define the list of relationship types
+relationship_types &lt;- c(&#39;parent_child&#39;, &#39;full_siblings&#39;, &#39;half_siblings&#39;, &#39;cousins&#39;, &#39;second_cousins&#39;, &#39;unrelated&#39;)
+
+# Create a dataframe of all combinations of populations, relationship types, and simulations
+combinations &lt;- expand.grid(population = unique(df$population), relationship_type = relationship_types, simulation = 1:n_sims)
+
+# Apply the function to each combination
+results &lt;- combinations %&gt;%
+  split(seq(nrow(.))) %&gt;%
+  map_dfr(function(combination) {
+    population &lt;- combination$population
+    relationship_type &lt;- combination$relationship_type
+    sim &lt;- combination$simulation
+    # cat(&quot;Processing:&quot;, &quot;population =&quot;, population, &quot;; relationship_type =&quot;, relationship_type, &quot;; simulation =&quot;, sim, &quot;\n&quot;)
+    sim_results &lt;- simulate_relatedness_all_markers(df, relationship_type[[1]], population[[1]])
+    
+    # Bind resulting data frames
+    tibble(
+      population = population,
+      relationship_type = relationship_type,
+      simulation = sim,
+      sim_results = list(sim_results)
+    )
+  })
+
+multi_results &lt;- results %&gt;% 
+  mutate(
+    sum_relatedness = map_dbl(sim_results, function(x) {
+      sum(x[[&quot;relatedness&quot;]], na.rm = TRUE)
+    }),
+    sum_alleles = map_dbl(sim_results, function(x) {
+      sum(x[[&quot;num_shared_alleles&quot;]], na.rm = TRUE)
+    })
+  ) %&gt;% 
+  select(-sim_results)
+
+multi_results</code></pre>
+<pre><code># A tibble: 3,000 × 5
+   population relationship_type simulation sum_relatedness sum_alleles
+   &lt;fct&gt;      &lt;fct&gt;                  &lt;int&gt;           &lt;dbl&gt;       &lt;dbl&gt;
+ 1 AfAm       parent_child               1           0.301          33
+ 2 all        parent_child               1           0.395          29
+ 3 Asian      parent_child               1           0.534          31
+ 4 Cauc       parent_child               1           0.393          30
+ 5 Hispanic   parent_child               1           0.453          35
+ 6 AfAm       full_siblings              1           0.776          35
+ 7 all        full_siblings              1           0.248          30
+ 8 Asian      full_siblings              1           0.656          32
+ 9 Cauc       full_siblings              1           0.363          30
+10 Hispanic   full_siblings              1           0.342          30
+# ℹ 2,990 more rows</code></pre>
+<pre class="r"><code>create_plot &lt;- function(df, variable_to_plot) {
+  # Create the plot
+  p &lt;- ggplot(df, aes(x = relationship_type, y = .data[[variable_to_plot]], color = population, shape = population, fill = population)) +
+    geom_boxplot(alpha = 0.4, position = position_dodge(width = 0.75)) +
+    geom_point(position = position_jitterdodge(jitter.width = 0.1, dodge.width = 0.75), size = 1, alpha = 0.6) +
+    theme_classic() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    scale_x_discrete(limits = c(&#39;parent_child&#39;, &#39;full_siblings&#39;, &#39;half_siblings&#39;, &#39;cousins&#39;, &#39;second_cousins&#39;, &#39;unrelated&#39;)) +
+    labs(title = paste(ucfirst(variable_to_plot), &quot;by Relationship Type and Population&quot;),
+         x = &quot;Relationship Type&quot;, 
+         y = ucfirst(variable_to_plot), 
+         color = &quot;Population&quot;,
+         shape = &quot;Population&quot;)
+  
+  return(p)
+}</code></pre>
+<pre class="r"><code># Filter your data for unique STR markers and remove the &quot;all&quot; population
+df_plt_multi_results &lt;- multi_results %&gt;%
+  filter(population != &quot;all&quot;) %&gt;%
+  select(-simulation)
+
+p &lt;- create_plot(df_plt_multi_results, &quot;sum_relatedness&quot;)
+p</code></pre>
+<p><img src="figure/shortrange.Rmd/unnamed-chunk-16-1.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plt_allele &lt;- create_plot(df_plt_multi_results, &quot;sum_alleles&quot;)
+
+plt_allele</code></pre>
+<p><img src="figure/shortrange.Rmd/unnamed-chunk-16-2.png" width="768" style="display: block; margin: auto;" /></p>
+<p>`</p>
+</div>
+</div>
+</div>
+<div id="probabilities" class="section level2">
+<h2>Probabilities</h2>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.2.2 (2022-10-31)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.3.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/lib/libRlapack.dylib
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] lubridate_1.9.2 forcats_1.0.0   stringr_1.5.0   dplyr_1.1.2    
+ [5] purrr_1.0.1     readr_2.1.4     tidyr_1.3.0     tibble_3.2.1   
+ [9] ggplot2_3.4.2   tidyverse_2.0.0 readxl_1.4.2    workflowr_1.7.0
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.10      getPass_0.2-2    ps_1.7.5         rprojroot_2.0.3 
+ [5] digest_0.6.31    utf8_1.2.3       R6_2.5.1         cellranger_1.1.0
+ [9] evaluate_0.20    httr_1.4.5       highr_0.10       pillar_1.9.0    
+[13] rlang_1.1.0      rstudioapi_0.14  whisker_0.4.1    callr_3.7.3     
+[17] jquerylib_0.1.4  rmarkdown_2.21   labeling_0.4.2   bit_4.0.5       
+[21] munsell_0.5.0    compiler_4.2.2   httpuv_1.6.9     xfun_0.39       
+[25] pkgconfig_2.0.3  htmltools_0.5.5  tidyselect_1.2.0 fansi_1.0.4     
+[29] crayon_1.5.2     tzdb_0.3.0       withr_2.5.0      later_1.3.0     
+[33] grid_4.2.2       jsonlite_1.8.4   gtable_0.3.3     lifecycle_1.0.3 
+[37] git2r_0.32.0     magrittr_2.0.3   scales_1.2.1     cli_3.6.1       
+[41] stringi_1.7.12   vroom_1.6.1      cachem_1.0.7     farver_2.1.1    
+[45] fs_1.6.1         promises_1.2.0.1 bslib_0.4.2      generics_0.1.3  
+[49] vctrs_0.6.2      tools_4.2.2      bit64_4.0.5      glue_1.6.2      
+[53] hms_1.1.3        processx_3.8.1   parallel_4.2.2   fastmap_1.1.1   
+[57] yaml_2.3.7       timechange_0.2.0 colorspace_2.1-0 knitr_1.42      
+[61] sass_0.4.5      </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
