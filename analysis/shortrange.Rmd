@@ -11,14 +11,17 @@ editor_options:
 
 Frequencies and raw genotypes for different populations were found [here](https://www.promega.com/products/pm/genetic-identity/population-statistics/allele-frequencies/) and refer to Steffen, C.R., Coble, M.D., Gettings, K.B., Vallone, P.M. (2017) Corrigendum to 'U.S. Population Data for 29 Autosomal STR Loci' [Forensic Sci. Int. Genet. 7 (2013) e82-e83]. Forensic Sci. Int. Genet. 31, e36–e40. The US core CODIS markers are a subset of the 29 described here. 
 
-```{r include=FALSE}
+```{r setup, include=FALSE}
 # Load required libraries
 library(readxl)
 library(tidyverse)
 ```
 
 
-```{r eval=FALSE, include=FALSE}
+```{r convertxl, eval=FALSE, include=FALSE}
+
+# This chunk converts the Excel file that was downloaded into separate CSVs as there is a bunch of information that is spread across different sheets within the original Excel file.
+
 # Read all sheets
 file_path <- "data/1036_allelefreqs.xlsx"
 sheet_names <- excel_sheets(file_path)
@@ -58,6 +61,8 @@ for (sheet in sheet_names) {
 ```
 
 ## Load CODIS allele frequencies
+
+CODIS allele frequencies were found through NIST STR base and specifically downloaded from the supplementary materials of Steffen et al 2017. These are 1036 unrelated individuals from the U.S. population. 
 
 ```{r allelefreqs}
 # Define the file paths
