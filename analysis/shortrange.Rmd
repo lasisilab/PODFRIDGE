@@ -108,17 +108,15 @@ for(i in seq_along(marker_chunks)) {
 
 ```
 
-```{r}
+```{r fig.width=8}
 df %>%
   group_by(population) %>%
   filter(population != "all") %>%
   ggplot(aes(x = marker, y = allele, fill = population)) +
   geom_boxplot() +
   labs(x = "Marker", y = "Allele",
-       title = "Range of Alleles Across Different Markers (Grouped by Population)",
-       caption = "Source: CSV data") +
-  coord_flip()
-
+       title = "Range of Alleles Across Different Markers (Grouped by Population)") +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
 
@@ -145,8 +143,7 @@ for(i in seq_along(marker_chunks)) {
     geom_bar(stat = "identity") +
     facet_wrap(~ marker) +
     labs(x = "Population", y = "Frequency", fill = "Allele",
-         title = paste("Allele Frequencies for Markers", i*5-4, "to", min(i*5, length(unique_markers))),
-         caption = "Source: CSV data") +
+         title = paste("Allele Frequencies for Markers", i*5-4, "to", min(i*5, length(unique_markers)))) +
     theme_classic()  # Apply theme_classic()
   
   # Print the plot
@@ -177,101 +174,77 @@ summary_pivot
 
 ### One marker at a time
 
-```{r}
 
+
+```{r func-sim-geno-single}
 # Function to simulate genotypes for a pair of individuals
 simulate_genotypes <- function(allele_frequencies, relationship_type) {
-  # Simulate the first individual's alleles by drawing from the population frequency
+  # Draw two alleles for the first individual from the population allele frequencies
   individual1 <- sample(names(allele_frequencies), size = 2, replace = TRUE, prob = allele_frequencies)
   
-  # Relationship probabilities
+  # Define the probabilities of sharing 0, 1, or 2 IBD alleles for each relationship type
   relationship_probs <- list(
-    'parent_child' = c(0, 1, 0),
-    'full_siblings' = c(1/4, 1/2, 1/4),
-    'half_siblings' = c(1/2, 1/2, 0),
-    'cousins' = c(7/8, 1/8, 0),
-    'second_cousins' = c(15/16, 1/16, 0),
-    'unrelated' = c(1, 0, 0)
+    'parent_child' = c(0, 1, 0), # In a parent-child relationship, always 1 allele is shared
+    'full_siblings' = c(1/4, 1/2, 1/4), # For full siblings, the probabilities are 1/4 for sharing 0, 1/2 for sharing 1, and 1/4 for sharing 2 alleles
+    'half_siblings' = c(1/2, 1/2, 0), # For half siblings, the probabilities are 1/2 for sharing 0 and 1/2 for sharing 1 allele
+    'cousins' = c(7/8, 1/8, 0), # For cousins, the probabilities are 7/8 for sharing 0 and 1/8 for sharing 1 allele
+    'second_cousins' = c(15/16, 1/16, 0), # For second cousins, the probabilities are 15/16 for sharing 0 and 1/16 for sharing 1 allele
+    'unrelated' = c(1, 0, 0) # For unrelated individuals, they always share 0 alleles
   )
   
+  # Get the probabilities of sharing alleles for the specific relationship type
   prob_shared_alleles <- relationship_probs[[relationship_type]]
+  
+  # Draw the number of shared alleles based on these probabilities
   num_shared_alleles <- sample(c(0, 1, 2), size = 1, prob = prob_shared_alleles)
+  
+  # Construct the genotype of the second individual by sampling the shared alleles from the first individual 
+  # and the rest from the population allele frequencies
   individual2 <- c(sample(individual1, size = num_shared_alleles), sample(names(allele_frequencies), size = 2 - num_shared_alleles, replace = TRUE, prob = allele_frequencies))
   
-  # Return the simulated genotypes
+  # Return the genotypes of the two individuals and the number of shared alleles
   return(list(individual1 = individual1, individual2 = individual2, num_shared_alleles = num_shared_alleles))
 }
 
 # Function to calculate the index of relatedness
 calculate_relatedness <- function(simulated_genotypes, allele_frequencies) {
-  # Calculate the number of shared alleles
+  # Calculate the number of alleles that the two individuals share
   num_shared_alleles <- sum(simulated_genotypes$individual1 %in% simulated_genotypes$individual2)
   
-  # Calculate the index of relatedness as the number of shared alleles weighted inversely to their frequencies
-  # Now considering both individuals' alleles for the inverse frequency weighting
+  # Calculate the index of relatedness as the number of shared alleles divided by the sum of the inverse of allele frequencies 
+  # of the alleles in the genotypes of both individuals. This gives a higher weight to rare alleles.
   relatedness <- num_shared_alleles / (sum(1 / allele_frequencies[simulated_genotypes$individual1]) + sum(1 / allele_frequencies[simulated_genotypes$individual2]))
   
-  # Return the index of relatedness
+    # Return the index of relatedness and the number of shared alleles
   return(list(relatedness = relatedness, num_shared_alleles = simulated_genotypes$num_shared_alleles))
 }
 
 # Function to simulate genotypes and calculate relatedness for different relationships
 simulate_relatedness <- function(df, marker, population, relationship_type) {
-  # Filter the allele frequencies for the marker and population
+  # Filter the data frame to get the allele frequencies for the specific marker and population
   allele_frequencies <- df %>%
     filter(marker == marker, population == population) %>%
     pull(frequency) %>%
     setNames(df$allele)
   
-  # Simulate genotypes
+  # Simulate the genotypes for the pair of individuals using these allele frequencies and the specific relationship type
   simulated_genotypes <- simulate_genotypes(allele_frequencies, relationship_type)
   
-  # Calculate and return the relatedness
+  # Calculate the relatedness index based on these simulated genotypes and the allele frequencies
   relatedness_data <- calculate_relatedness(simulated_genotypes, allele_frequencies)
   
+  # Return the marker, population, relationship type, and the calculated relatedness data
   return(c(list(marker = marker, population = population, relationship_type = relationship_type), relatedness_data))
 }
 
 # Example usage
-
 # simulate_relatedness(df, marker = "F13A01", population = "Asian", relationship_type = "full_siblings")
 
 
-
-```
-
-```{r sim-1}
-simulate_all_relationships <- function(df) {
-  # Define the list of relationship types
-  relationship_types <- c('parent_child', 'full_siblings', 'half_siblings', 'cousins', 'second_cousins', 'unrelated')
-  
-  # Initialize an empty list to store results
-  results <- list()
-  
-  # Iterate over all combinations of markers, populations, and relationship types
-  for (marker in unique(df$marker)) {
-    for (population in unique(df$population)) {
-      for (relationship_type in relationship_types) {
-        # Simulate relatedness and add the result to the list
-        results[[length(results) + 1]] <- simulate_relatedness(df, marker, population, relationship_type)
-      }
-    }
-  }
-  
-  # Convert the list of results to a dataframe
-  results_df <- do.call(rbind, lapply(results, function(x) as.data.frame(t(unlist(x)))))
-  
-  return(results_df)
-}
-
-# Usage:
-# df <- # Your dataframe here
-results_df <- simulate_all_relationships(df)
 ```
 
 
-```{r sim}
-
+```{r func-iter-rel-single}
 simulate_all_relationships <- function(df, num_simulations) {
   # Define the list of relationship types
   relationship_types <- c('parent_child', 'full_siblings', 'half_siblings', 'cousins', 'second_cousins', 'unrelated')
@@ -296,7 +269,10 @@ simulate_all_relationships <- function(df, num_simulations) {
   
   return(results_df)
 }
+```
 
+
+```{r df-sim-single}
 # Usage:
 # df <- # Your dataframe here
 results_df <- simulate_all_relationships(df, num_simulations = 10)
@@ -305,15 +281,12 @@ results_df <- simulate_all_relationships(df, num_simulations = 10)
 
 #### Visualization
 
-```{r}
+```{r func-plt-single}
 # Function to capitalize the first letter of a string
 ucfirst <- function(s) {
   paste(toupper(substring(s, 1,1)), substring(s, 2), sep = "")
 }
-```
 
-
-```{r}
 create_plot <- function(df, variable_to_plot) {
   # Create the plot
   p <- ggplot(df, aes(x = relationship_type, y = .data[[variable_to_plot]], color = population, shape = population, fill = population)) +
@@ -333,7 +306,7 @@ create_plot <- function(df, variable_to_plot) {
 }
 ```
 
-```{r fig.width=8}
+```{r plt-single, fig.width=8}
 # Filter your data for the first 3 unique STR markers
 factor_vars <- c("marker", "population", "relationship_type")
 numeric_vars <- c("relatedness", "num_shared_alleles")
@@ -375,7 +348,7 @@ multi_simulate_genotypes <- function(allele_frequencies, relationship_type) {
   for (marker in names(allele_frequencies)) {
     individual1 <- sample(names(allele_frequencies[[marker]]), size = 2, replace = TRUE, prob = allele_frequencies[[marker]])
     
-    # Relationship probabilities
+    # Define the probabilities for sharing 0, 1, or 2 IBD alleles for different types of relationships
     relationship_probs <- list(
       'parent_child' = c(0, 1, 0),
       'full_siblings' = c(1/4, 1/2, 1/4),
@@ -384,24 +357,28 @@ multi_simulate_genotypes <- function(allele_frequencies, relationship_type) {
       'second_cousins' = c(15/16, 1/16, 0),
       'unrelated' = c(1, 0, 0)
     )
-    
+
+    # Get the probabilities for sharing 0, 1, or 2 alleles for the specified relationship type    
     prob_shared_alleles <- relationship_probs[[relationship_type]]
+    # Sample the number of shared alleles based on these probabilities
     num_shared_alleles <- sample(c(0, 1, 2), size = 1, prob = prob_shared_alleles)
+    # Simulate the second individual's alleles based on the number of shared alleles and the marker's population frequency
     individual2 <- c(sample(individual1, size = num_shared_alleles), sample(names(allele_frequencies[[marker]]), size = 2 - num_shared_alleles, replace = TRUE, prob = allele_frequencies[[marker]]))
-    print(paste("The value of individual1 is:", individual1))
-    print(paste("The value of individual2 is:", individual2))
+    
+    # Print to trouble shoot
+    # print(paste("The value of individual1 is:", individual1))
+    # print(paste("The value of individual2 is:", individual2))
 
 
-
-    # Add the simulated genotypes to the list
+    # Store the simulated genotypes for the current marker in the list
     genotypes[[marker]] <- list(individual1 = individual1, individual2 = individual2, num_shared_alleles = num_shared_alleles)
   }
   
-  # Return the list of simulated genotypes
+  # Return the list of simulated genotypes for all markers
   return(genotypes)
 }
 
-# Function to simulate genotypes and calculate relatedness for different relationships
+# Function to simulate genotypes and calculate relatedness for different relationships across multiple genetic markers
 multi_simulate_relatedness <- function(df, population, relationship_type) {
   # Filter the allele frequencies for the marker and population
   # allele_frequencies <- split(df[df$population == population, ], df$marker)
@@ -409,11 +386,10 @@ multi_simulate_relatedness <- function(df, population, relationship_type) {
   print(allele_frequencies)
 
 
-  
-  # Simulate genotypes
+  # Simulate the genotypes for the pair of individuals using these allele frequencies and the specific relationship type
   simulated_genotypes <- multi_simulate_genotypes(allele_frequencies, relationship_type)
   
-  # Calculate relatedness for each marker and store in a list
+  # Calculate the relatedness index for each marker based on the simulated genotypes and the allele frequencies
   relatedness_data <- lapply(names(simulated_genotypes), function(marker) {
     calculate_relatedness(simulated_genotypes[[marker]], allele_frequencies[[marker]])
   })
@@ -580,7 +556,7 @@ multi_results
 
 ```{r v2-multi}
 # Define the number of simulations
-n_sims <- 100
+n_sims <- 10
 
 # Define the list of relationship types
 relationship_types <- c('parent_child', 'full_siblings', 'half_siblings', 'cousins', 'second_cousins', 'unrelated')
