@@ -238,7 +238,7 @@ simulate_relatedness <- function(df, marker, population, relationship_type) {
 }
 
 # Example usage
-# simulate_relatedness(df, marker = "F13A01", population = "Asian", relationship_type = "full_siblings")
+simulate_relatedness(df, marker = "F13A01", population = "Asian", relationship_type = "full_siblings")
 
 
 ```
@@ -337,77 +337,6 @@ for (i in seq(1, total_markers, by = 3)) {
 ```
 
 ### All Markers together
-
-```{r sim-multi}
-# Function to simulate genotypes for a pair of individuals
-multi_simulate_genotypes <- function(allele_frequencies, relationship_type) {
-  # Initialize an empty list to store results
-  genotypes <- list()
-  
-  # Iterate over all markers
-  for (marker in names(allele_frequencies)) {
-    individual1 <- sample(names(allele_frequencies[[marker]]), size = 2, replace = TRUE, prob = allele_frequencies[[marker]])
-    
-    # Define the probabilities for sharing 0, 1, or 2 IBD alleles for different types of relationships
-    relationship_probs <- list(
-      'parent_child' = c(0, 1, 0),
-      'full_siblings' = c(1/4, 1/2, 1/4),
-      'half_siblings' = c(1/2, 1/2, 0),
-      'cousins' = c(7/8, 1/8, 0),
-      'second_cousins' = c(15/16, 1/16, 0),
-      'unrelated' = c(1, 0, 0)
-    )
-
-    # Get the probabilities for sharing 0, 1, or 2 alleles for the specified relationship type    
-    prob_shared_alleles <- relationship_probs[[relationship_type]]
-    # Sample the number of shared alleles based on these probabilities
-    num_shared_alleles <- sample(c(0, 1, 2), size = 1, prob = prob_shared_alleles)
-    # Simulate the second individual's alleles based on the number of shared alleles and the marker's population frequency
-    individual2 <- c(sample(individual1, size = num_shared_alleles), sample(names(allele_frequencies[[marker]]), size = 2 - num_shared_alleles, replace = TRUE, prob = allele_frequencies[[marker]]))
-    
-    # Print to trouble shoot
-    # print(paste("The value of individual1 is:", individual1))
-    # print(paste("The value of individual2 is:", individual2))
-
-
-    # Store the simulated genotypes for the current marker in the list
-    genotypes[[marker]] <- list(individual1 = individual1, individual2 = individual2, num_shared_alleles = num_shared_alleles)
-  }
-  
-  # Return the list of simulated genotypes for all markers
-  return(genotypes)
-}
-
-# Function to simulate genotypes and calculate relatedness for different relationships across multiple genetic markers
-multi_simulate_relatedness <- function(df, population, relationship_type) {
-  # Filter the allele frequencies for the marker and population
-  # allele_frequencies <- split(df[df$population == population, ], df$marker)
-  allele_frequencies <- split(df[df$population == population, ]$frequency, df$marker)
-  print(allele_frequencies)
-
-
-  # Simulate the genotypes for the pair of individuals using these allele frequencies and the specific relationship type
-  simulated_genotypes <- multi_simulate_genotypes(allele_frequencies, relationship_type)
-  
-  # Calculate the relatedness index for each marker based on the simulated genotypes and the allele frequencies
-  relatedness_data <- lapply(names(simulated_genotypes), function(marker) {
-    calculate_relatedness(simulated_genotypes[[marker]], allele_frequencies[[marker]])
-  })
-  
-  # Convert the list of relatedness data to a dataframe
-  relatedness_df <- do.call(rbind, lapply(relatedness_data, function(x) as.data.frame(t(unlist(x)))))
-  
-  # Add the marker, population, and relationship type to the dataframe
-  relatedness_df$marker <- names(relatedness_data)
-  relatedness_df$population <- population
-  relatedness_df$relationship_type <- relationship_type
-  
-  return(relatedness_df)
-}
-
-
-```
-
 
 
 ```{r}
@@ -638,274 +567,79 @@ plt_allele
 
 `
 
-## Probabilities
+## Updated LR
 
-```{r eval=FALSE, include=FALSE}
-# Define relationship probabilities
-relationship_probs <- list(
-  'parent_child' = c(0, 1, 0),
-  'full_siblings' = c(1/4, 1/2, 1/4),
-  'half_siblings' = c(1/2, 1/2, 0),
-  'cousins' = c(7/8, 1/8, 0),
-  'second_cousins' = c(15/16, 1/16, 0),
-  'unrelated' = c(1, 0, 0)
-)
+### From Weight-of-evidence for forensic DNA profiles book
 
-# Function to calculate the expected number of shared alleles for each relationship
-calculate_shared_alleles <- function(df, relationship_type) {
-  probs <- relationship_probs[[relationship_type]]
-  df %>%
-    group_by(marker, population) %>%
-    do({
-      alleles <- .$allele
-      frequencies <- .$frequency
-      prob_0 <- prob_1 <- prob_2 <- 0
-      for (i in seq_along(alleles)) {
-        for (j in seq_along(alleles)) {
-          num_shared_alleles <- length(intersect(alleles[i], alleles[j]))
-          prob_ij <- frequencies[i] * frequencies[j]
-          if (num_shared_alleles == 0) {
-            prob_0 <- prob_0 + prob_ij
-          } else if (num_shared_alleles == 1) {
-            prob_1 <- prob_1 + prob_ij
-          } else if (num_shared_alleles == 2) {
-            prob_2 <- prob_2 + prob_ij
-          }
-        }
-      }
-      data.frame(
-        marker = unique(.$marker),
-        population = unique(.$population),
-        p0 = prob_0 * probs[1],
-        p1 = prob_1 * probs[2],
-        p2 = prob_2 * probs[3]
-      )
-    })
-}
+Likelihood ratio for a single locus is:
 
+$$
+R=\kappa_0+\kappa_1 / R_X^p+\kappa_2 / R_X^u
+$$
+Where $\kappa$ is the probability of having 0, 1 or 2 alleles IBD for a given relationship. 
 
-# Calculate the expected number of shared alleles for each relationship
-relationship_types <- c('parent_child', 'full_siblings', 'half_siblings', 'cousins', 'second_cousins', 'unrelated')
-results <- lapply(relationship_types, function(rel) calculate_shared_alleles(df, rel))
-names(results) <- relationship_types
+The $R_X$ terms are quantifying the "surprisingness" of a particular pattern of allele sharing.
 
-# Print the results
-print(results)
+The $R_X^p$ terms attached to the $kappa_1$ are defined in the following table:
 
-```
+$$
+\begin{aligned}
+&\text { Table 7.2 Single-locus LRs for paternity when } \mathcal{C}_M \text { is unavailable. }\\
+&\begin{array}{llc}
+\hline c & Q & R_X \times\left(1+2 F_{S T}\right) \\
+\hline \mathrm{AA} & \mathrm{AA} & 3 F_{S T}+\left(1-F_{S T}\right) p_A \\
+\mathrm{AA} & \mathrm{AB} & 2\left(2 F_{S T}+\left(1-F_{S T}\right) p_A\right) \\
+\mathrm{AB} & \mathrm{AA} & 2\left(2 F_{S T}+\left(1-F_{S T}\right) p_A\right) \\
+\mathrm{AB} & \mathrm{AC} & 4\left(F_{S T}+\left(1-F_{S T}\right) p_A\right) \\
+\mathrm{AB} & \mathrm{AB} & 4\left(F_{S T}+\left(1-F_{S T}\right) p_A\right)\left(F_{S T}+\left(1-F_{S T}\right) p_B\right) /\left(2 F_{S T}+\left(1-F_{S T}\right)\left(p_A+p_B\right)\right) \\
+\hline
+\end{array}
+\end{aligned}
+$$
 
-```{r eval=FALSE, include=FALSE}
-calculate_relationship_probabilities <- function(allele_frequencies, relationship) {
-  # Get unique alleles for each marker
-  alleles <- unique(allele_frequencies$allele)
-  
-  # Initialize a list to store the probabilities for each number of IBD alleles
-  genotype_probs <- list()
-  
-  # Calculate the probabilities for each number of IBD alleles
-  for (m in 0:2) {
-    # Initialize a matrix to store the genotype probabilities
-    genotype_probs[[m + 1]] <- matrix(0, nrow = length(alleles), ncol = length(alleles))
-    
-    for (i in 1:length(alleles)) {
-      for (j in i:length(alleles)) {
-        if (m == 0) {
-          # If m = 0, the alleles are independent, so the probability is the product of the allele frequencies
-          genotype_probs[[m + 1]][i, j] <- allele_frequencies[allele_frequencies$allele == alleles[i], "frequency"] * allele_frequencies[allele_frequencies$allele == alleles[j], "frequency"]
-        } else if (m == 1) {
-          # If m = 1, one allele is shared IBD, so the probability is twice the product of the allele frequencies
-          genotype_probs[[m + 1]][i, j] <- 2 * allele_frequencies[allele_frequencies$allele == alleles[i], "frequency"] * allele_frequencies[allele_frequencies$allele == alleles[j], "frequency"]
-        } else if (m == 2) {
-          # If m = 2, both alleles are shared IBD, so the probability is the square of the allele frequency
-          genotype_probs[[m + 1]][i, j] <- allele_frequencies[allele_frequencies$allele == alleles[i], "frequency"]^2
-        }
-        
-        if (i != j) {
-          # If the alleles are different, they can be received in either order, so we add the probability to the symmetric position in the matrix
-          genotype_probs[[m + 1]][j, i] <- genotype_probs[[m + 1]][i, j]
-        }
-      }
-    }
-  }
-  
-  # Calculate the total probability of observing the pair of genotypes given the relationship as a weighted sum of the probabilities for each number of IBD alleles
-  total_probability <- 0
-  for (m in 0:2) {
-    total_probability <- total_probability + relationship[m + 1] * sum(genotype_probs[[m + 1]])
-  }
-  
-  return(total_probability)
-}
-```
+For our purposes we will take out the $F_{S T}$ values. So the table will be as follows:
+
+$$
+\begin{aligned}
+&\begin{array}{llc}
+\hline c & Q & R_X \\
+\hline \mathrm{AA} & \mathrm{AA} & p_A \\
+\mathrm{AA} & \mathrm{AB} & 2 p_A \\
+\mathrm{AB} & \mathrm{AA} & 2p_A \\
+\mathrm{AB} & \mathrm{AC} & 4p_A \\
+\mathrm{AB} & \mathrm{AB} & 4 p_A p_B/(p_A+p_B) \\
+\hline
+\end{array}
+\end{aligned}
+$$
 
 
-```{r eval=FALSE, include=FALSE}
+If none of the alleles match, then the $\kappa_1 / R_X^p = 0$.
 
-calculate_relationship_probabilities(df_test, relationship_probs)
-```
+The $R_X^u$ terms attached to the $kappa_2$ are defined as:
 
+If both alleles match and are homozygous the equation is 6.4 (pg 85).
+Single locus match probability: $\mathrm{CSP}=\mathcal{G}_Q=\mathrm{AA}$
+$$
+\frac{\left(2 F_{S T}+\left(1-F_{S T}\right) p_A\right)\left(3 F_{S T}+\left(1-F_{S T}\right) p_A\right)}{\left(1+F_{S T}\right)\left(1+2 F_{S T}\right)}
+$$
+Simplified to:
+$$
+p_A{ }^2
+$$
 
-```{r calc-v1,  eval=FALSE, include=FALSE}
-calculate_conditional_probability <- function(df, relationship_type) {
-  
-  total_probability <- 0
-  for (allele1 in df$allele) {
-    for (allele2 in df$allele) {
-      
-      # The probability that the first individual has the genotype (allele1, allele2)
-      prob_genotype_1 <- 2 * df$frequency[df$allele == allele1] * df$frequency[df$allele == allele2] 
-      
-      if (allele1 != allele2) {
-        # If the alleles are different, we have double the possibilities (allele1, allele2) and (allele2, allele1)
-        prob_genotype_1 <- 2 * prob_genotype_1
-      }
-      
-      # Now we consider the possible genotypes for the second individual, taking into account the relationship type
-      for (shared_allele in c(allele1, allele2)) {
-        for (other_allele in df$allele) {
-          
-          # The chance that the first individual passes on the shared_allele
-          prob_pass_on_shared_allele <- 0.5
-          
-          # The chance that the second individual gets the other allele from the other parent
-          prob_get_other_allele <- df$frequency[df$allele == other_allele]
-          
-          if (relationship_type == 'parent_child' || relationship_type == 'full_siblings') {
-            total_probability <- total_probability + prob_genotype_1 * prob_pass_on_shared_allele * prob_get_other_allele
-          }
-          else if (relationship_type == 'half_siblings') {
-            if (allele1 == shared_allele && allele2 == shared_allele) {
-              total_probability <- total_probability + prob_genotype_1 * prob_pass_on_shared_allele * prob_get_other_allele
-            }
-          }
-          else if (relationship_type == 'cousins' || relationship_type == 'second_cousins') {
-            if (allele1 == shared_allele && allele2 == shared_allele && allele1 == other_allele) {
-              total_probability <- total_probability + prob_genotype_1 * prob_pass_on_shared_allele * prob_get_other_allele
-            }
-          }
-          
-        }
-      }
-      
-    }
-  }
-  
-  return(total_probability)
-  
-}
+If both alleles match and are heterozygous, the equation is 6.5 (pg 85)
+Single locus match probability: $\mathrm{CSP}=\mathcal{G}_Q=\mathrm{AB}$
+$$
+2 \frac{\left(F_{S T}+\left(1-F_{S T}\right) p_A\right)\left(F_{S T}+\left(1-F_{S T}\right) p_B\right)}{\left(1+F_{S T}\right)\left(1+2 F_{S T}\right)}
+$$
+Simplified to:
 
-```
-
-```{r calc-v2,  eval=FALSE, include=FALSE}
-calculate_conditional_probability <- function(df, relationship_type) {
-  
-  # Create a lookup table to quickly find allele frequencies
-  frequency_lookup <- df$frequency
-  names(frequency_lookup) <- df$allele
-  
-  # Get the allele pairs
-  allele_pairs <- expand.grid(df$allele, df$allele)
-  
-  # Calculate the genotype probabilities for the first individual
-  prob_genotype_1 <- frequency_lookup[allele_pairs$Var1] * frequency_lookup[allele_pairs$Var2]
-  
-  # Double the probabilities for pairs with different alleles
-  prob_genotype_1[allele_pairs$Var1 != allele_pairs$Var2] <- 2 * prob_genotype_1[allele_pairs$Var1 != allele_pairs$Var2]
-  
-  total_probability <- 0
-  
-  # Iterate over each possible shared allele
-  for (shared_allele in unique(c(allele_pairs$Var1, allele_pairs$Var2))) {
-    
-    # Calculate the probability of passing on the shared allele
-    prob_pass_on_shared_allele <- 0.5
-    
-    # Calculate the probability of the second individual getting each other allele
-    prob_get_other_allele <- frequency_lookup
-    
-    # Determine which allele pairs share the current allele
-    shares_allele <- allele_pairs$Var1 == shared_allele | allele_pairs$Var2 == shared_allele
-    
-    # Calculate the conditional probability for each relationship type
-    if (relationship_type == 'parent_child' || relationship_type == 'full_siblings') {
-      total_probability <- total_probability + sum(prob_genotype_1[shares_allele] * prob_pass_on_shared_allele * prob_get_other_allele)
-    }
-    else if (relationship_type == 'half_siblings') {
-      total_probability <- total_probability + sum(prob_genotype_1[shares_allele & allele_pairs$Var1 == allele_pairs$Var2] * prob_pass_on_shared_allele * prob_get_other_allele)
-    }
-    else if (relationship_type == 'cousins' || relationship_type == 'second_cousins') {
-      total_probability <- total_probability + sum(prob_genotype_1[shares_allele & allele_pairs$Var1 == shared_allele & allele_pairs$Var2 == shared_allele] * prob_pass_on_shared_allele * prob_get_other_allele)
-    }
-  }
-  
-  return(total_probability)
-  
-}
+$$
+2 p_A p_B
+$$
+If both alleles do not match then $\kappa_2 / R_X^u = 0$. 
 
 
-
-```
-
-
-
-```{r eval=FALSE, include=FALSE}
-# List of relationship types
-relationship_types <- c('parent_child', 'full_siblings', 'half_siblings', 'cousins', 'second_cousins', 'unrelated')
-
-
-# Function to calculate conditional probabilities for all combinations
-# generate_conditional_probabilities <- function(df, relationship_types) {
-#   # Replace with your logic to calculate the conditional probabilities
-#   prob <- calculate_conditional_probability(df, relationship_types)
-#   
-#   # Return the result as a tibble
-#   tibble(prob = prob)
-# }
-
-generate_conditional_probabilities <- function(df, relationship_types) {
-  # Loop over relationship types and calculate the probability for each
-  probs <- purrr::map_dfr(relationship_types, ~calculate_conditional_probability(df, .x) %>% 
-                            tibble(relationship_type = .x, prob = .))
-  return(probs)
-}
-
-```
-
-
-```{r test,  eval=FALSE, include=FALSE}
-
-# test set
-df_test <- df %>% 
-  filter(marker == "Penta_D")
-
-# Generate the data
-# conditional_probabilities <- df_test %>%
-#   group_by(marker, population) %>%
-#   nest(data = c(allele, frequency)) %>%
-#   mutate(probabilities = map(data, ~ generate_conditional_probabilities(.x, relationship_types))) %>%
-#   unnest
-
-conditional_probabilities <- df_test %>%
-  group_by(marker, population) %>%
-  nest(data = c(allele, frequency)) %>%
-  mutate(probabilities = map(data, ~ generate_conditional_probabilities(.x, relationship_types))) %>%
-  select(-data) %>% 
-  unnest(cols = probabilities)
-
-
-conditional_probabilities
-```
-
-
-```{r eval=FALSE, include=FALSE}
-# Plot the data
-ggplot(conditional_probabilities, aes(x = relationship, y = prob, color = population)) +
-  geom_line() +
-  facet_wrap(~marker) +
-  labs(x = "Relationship type", y = "Probability of sharing at least one allele",
-       title = "Conditional probability of sharing at least one allele for different relationships and populations",
-       color = "Population") +
-  theme_minimal()
-
-```
-
+### Calculating LR
+We need 100,000 unrelated pairs. 
