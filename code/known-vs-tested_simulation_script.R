@@ -2,6 +2,8 @@ library(tidyverse)
 library(furrr)
 library(progressr)
 
+setwd("../")
+
 args <- commandArgs(trailingOnly = TRUE)
 n_sims_unrelated <- as.numeric(args[1])
 n_sims_related <- as.numeric(args[2])
@@ -118,8 +120,13 @@ calc_R <- function(relationship_type, R_Xp, R_Xu, df_ibdprobs) {
     R <- R + (k2 / R_Xu)
   }
 
+  # Replace R value of 0 with 1.4e-11
+  if (R == 0) {
+    R <- 1.4e-11
+  }
+
   # Calculate the log(R) value
-  log_R <- log(R)
+  log_R <- log(R+1)
 
   # Return R and log(R) as a list
   return(list(R = R, log_R = log_R))
@@ -413,7 +420,9 @@ create_heatmap <- function(df, known_relationship_col, tested_relationship_col) 
 
 result_combinations <- simulation_combinations_all_relationships(df_freq, n_sims_unrelated = n_sims_unrelated, n_sims_related = n_sims_related)
 
-plan(multisession, workers = availableCores()-1)
+num_workers <- max(1, availableCores() - 1)
+
+plan(multisession, workers = num_workers)
 handlers(global = TRUE)
 handlers("progress")
 
