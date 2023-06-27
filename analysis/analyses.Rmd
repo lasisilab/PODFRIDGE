@@ -381,3 +381,102 @@ plt_numgen_cousins(plt_numgen_cousins_df, my.cols)
 
 ```
 
+```{r}
+predict_total_simulations <- function(n_sims_unrelated, n_sims_related) {
+  unique_populations <- 4
+  relationship_types <- 6  # Includes parent_child, full_siblings, half_siblings, cousins, second_cousins, unrelated
+
+  # Calculate total number of observations
+  total_simulations <- unique_populations *
+                       (n_sims_unrelated + (relationship_types - 1) * n_sims_related) 
+  
+  total_observations <- total_simulations * relationship_types
+
+  cat("Total number of simulations =", total_simulations, "\n")
+  cat("Total number of observations in csv =", total_observations, "\n")
+}
+```
+
+```{r}
+
+predict_total_simulations(100000, 10000)
+
+```
+
+```{r}
+input_df <- read_csv("data/dl_known_vs_tested_simulation_results.csv") %>% 
+  mutate(log_R_sum = ifelse(is.infinite(log_R_sum) & log_R_sum < 0,
+                            log(1.4e-11),
+                            log_R_sum))
+
+```
+
+
+```{r}
+# Check if there are any -Inf values in the log_R_sum column
+inf_values_log_R_sum <- sapply(input_df$log_R_sum, function(x) is.infinite(x) & x < 0)
+
+# Count the number of rows containing -Inf values
+num_rows_with_inf <- sum(inf_values_log_R_sum)
+
+# Print the count of rows containing -Inf values in log_R_sum
+print(paste("Number of rows with -Inf values in log_R_sum column:", num_rows_with_inf))
+
+
+```
+
+
+
+```{r}
+# Filter the input dataframe for unrelated values only
+input_df_unrelated <- input_df %>% filter(known_relationship_type == "unrelated")
+```
+
+```{r}
+# Improved function to calculate false-positive rates for each relationship type
+calculate_false_positive_rate <- function(input_df, input_df_unrelated, population, relationship_type, m_value) {
+  
+  # Filter the input dataframe for the specific population and relationship type combination
+  input_df_filtered <- input_df %>%
+    filter(population == population,
+           known_relationship_type == relationship_type,
+           tested_relationship_type != "unrelated")
+
+  input_df_tested_unrelated <- input_df_unrelated %>%
+    filter(population == population, tested_relationship_type == relationship_type)
+
+  # Calculate the number of simulations for the relationship type
+  n_sims_relationship_type <- nrow(input_df_filtered)
+
+  # Calculate the cut value from unrelated log_R_sum values
+  cut_value <- quantile(input_df_tested_unrelated$log_R_sum, 1 - m_value)
+
+  # Calculate the false-positive rate for the relationship type
+  false_positive_rate <- mean(input_df_filtered$log_R_sum > cut_value)
+
+  return(false_positive_rate)
+}
+```
+
+
+```{r}
+# Define a vector of 'm' values
+m_values <- c(1, 5, 10) / nrow(input_df %>% filter(known_relationship_type == "unrelated"))
+
+population_groups = unique(input_df$population)
+relationship_types = unique(input_df$known_relationship_type)
+
+# Calculate false-positive rates for each combination of population group, relationship type, and 'm' value
+false_positive_rates <- expand.grid(population = population_groups,
+                                    relationship = relationship_types,
+                                    m_value = m_values) %>%
+  mutate(false_positive_rate = pmap_dbl(list(population, relationship, m_value),
+                                        ~ calculate_false_positive_rate(input_df,
+                                                                        input_df_unrelated,
+                                                                        ..1, ..2, ..3)))
+
+# Print the results
+print(false_positive_rates)
+
+```
+
