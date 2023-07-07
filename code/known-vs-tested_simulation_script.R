@@ -1,12 +1,16 @@
-library(tidyverse)
-library(furrr)
-library(progressr)
+suppressMessages(suppressWarnings({
+  library(tidyverse)
+  library(furrr)
+  library(progressr)
+  library(parallel)}
+  ))
 
 setwd("../")
 
 args <- commandArgs(trailingOnly = TRUE)
 n_sims_unrelated <- as.numeric(args[1])
 n_sims_related <- as.numeric(args[2])
+
 
 marker_list <- readLines("data/marker_list.txt")
 
@@ -36,31 +40,41 @@ create_df_ibdprobs <- function() {
 df_ibdprobs <- create_df_ibdprobs()
 
 get_allele_frequencies <- function(population, marker, num_shared_alleles, A, B, df_allelefreq) {
-  # Initialize the output values for p_A and p_B
-  p_A <- NA
-  p_B <- NA
 
-  # Check whether there are shared alleles
-  if (num_shared_alleles > 0) {
-    # Get the frequency of allele A in the df_allelefreq dataset
-    p_A <- df_allelefreq %>%
-      filter(population == population, marker == marker, allele == A) %>%
-      group_by(population, marker, allele) %>%
-      pull(frequency) %>%
-      first()
+  # First, create a data frame with the input values
+  df <- tibble::tibble(
+    population = population,
+    marker = marker,
+    num_shared_alleles = num_shared_alleles,
+    A = A,
+    B = B
+  )
 
-    # If two alleles are shared and B is not NA, get the frequency of allele B
-    if (num_shared_alleles == 2 && !is.na(B)) {
-      p_B <- df_allelefreq %>%
-        filter(population == population, marker == marker, allele == B) %>%
-        group_by(population, marker, allele) %>%
-        pull(frequency) %>%
-        first()
-    }
-  }
+  # Perform calculations on a per-row basis
+  df <- df %>%
+    rowwise() %>%
+    mutate(
+      p_A = if (num_shared_alleles > 0) {
+        df_allelefreq %>%
+          filter(population == population, marker == marker, allele == A) %>%
+          pull(frequency) %>%
+          first(default = NA)
+      } else {
+        NA
+      },
+      p_B = if (num_shared_alleles == 2 && !is.na(B)) {
+        df_allelefreq %>%
+          filter(population == population, marker == marker, allele == B) %>%
+          pull(frequency) %>%
+          first(default = NA)
+      } else {
+        NA
+      }
+    )
 
-  # Return named list of p_A and p_B
-  return(list(p_A = p_A, p_B = p_B))
+
+  # Return the tibble
+  return(df)
 }
 
 
@@ -96,42 +110,29 @@ get_R_Xu <- function(c, Q, p_A, p_B) {
   return(0)
 }
 
-# Define a function to calculate R values using the relationship, R_Xp, and R_Xu values, and the global df_ibdprobs dataframe
 calc_R <- function(relationship_type, R_Xp, R_Xu, df_ibdprobs) {
 
-  # Get the corresponding kappa values based on the given relationship type
-  df_ibdprobs$relationship <- as.character(df_ibdprobs$relationship)
+  # Convert the relationship type to a data frame for joining
+  df_relationship <- data.frame(relationship = relationship_type)
 
-  k_values <- df_ibdprobs %>%
-    filter(relationship == relationship_type) %>%
-    select(k0, k1, k2) %>%
-    as.list()
+  # Join with df_ibdprobs to get k values
+  df_k_values <- left_join(df_relationship, df_ibdprobs, by = "relationship")
 
-  k0 <- k_values$k0
-  k1 <- k_values$k1
-  k2 <- k_values$k2
+  # Calculate R values
+  R <- with(df_k_values, {
+    R_value <- k0
+    R_value[R_Xp != 0] <- R_value[R_Xp != 0] + k1[R_Xp != 0] / R_Xp[R_Xp != 0]
+    R_value[R_Xu != 0] <- R_value[R_Xu != 0] + k2[R_Xu != 0] / R_Xu[R_Xu != 0]
+    R_value[R_value == 0] <- 1.4e-11
+    R_value
+  })
 
-  # Calculate the R value using the provided formula with correct parenthesis and handling of R_Xp and R_Xu equal to zero
-  R <- k0
-  if (R_Xp != 0) {
-    R <- R + (k1 / R_Xp)
-  }
-  if (R_Xu != 0) {
-    R <- R + (k2 / R_Xu)
-  }
-
-  # Replace R value of 0 with 1.4e-11
-  if (R == 0) {
-    R <- 1.4e-11
-  }
-
-  # Calculate the log(R) value
-  log_R <- log(R+1)
+  # Calculate log(R) values
+  log_R <- log(R + 1)
 
   # Return R and log(R) as a list
   return(list(R = R, log_R = log_R))
 }
-
 
 shared_alleles <- function(ind_1_allele_1, ind_1_allele_2, ind_2_allele_1, ind_2_allele_2, population, marker, relationship_type, df_allelefreq, df_ibdprobs) {
 
@@ -139,42 +140,20 @@ shared_alleles <- function(ind_1_allele_1, ind_1_allele_2, ind_2_allele_1, ind_2
   alleles_ind1 <- c(ind_1_allele_1, ind_1_allele_2)
   alleles_ind2 <- c(ind_2_allele_1, ind_2_allele_2)
 
-  # Initialize variables to keep track of shared alleles and used alleles
-  shared <- character()
-  used_ind1 <- rep(FALSE, 2)
-  used_ind2 <- rep(FALSE, 2)
-
-  # Iterate through alleles of individual 1
-  for (i in 1:2) {
-    allele_ind1 <- alleles_ind1[i]
-
-    # Iterate through alleles of individual 2
-    for (j in 1:2) {
-      # Check if alleles are not used and are the same
-      if (!used_ind2[j] && allele_ind1 == alleles_ind2[j]) {
-        # Add the shared allele to the shared vector
-        shared <- c(shared, allele_ind1)
-        # Mark the alleles as used
-        used_ind1[i] <- TRUE
-        used_ind2[j] <- TRUE
-        break
-      }
-    }
-  }
-
-  # Calculate the number of shared alleles and find unique shared alleles
+  # Find shared alleles
+  shared <- intersect(alleles_ind1, alleles_ind2)
   num_shared_alleles <- length(shared)
+
+  # Find unique shared alleles and non-shared alleles
   unique_shared <- unique(shared)
+  non_shared <- setdiff(union(alleles_ind1, alleles_ind2), shared)
 
   # Create a letter map for shared and non-shared alleles using capitalized letters
-  letter_map <- setNames(LETTERS[seq_along(unique_shared)], unique_shared)
-  remaining_alleles <- union(alleles_ind1, alleles_ind2)
-  non_shared <- setdiff(remaining_alleles, unique_shared)
-  letter_map <- c(letter_map, setNames(LETTERS[length(unique_shared) + seq_along(non_shared)], non_shared))
+  letter_map <- c(setNames(LETTERS[seq_along(unique_shared)], unique_shared), setNames(LETTERS[length(unique_shared) + seq_along(non_shared)], non_shared))
 
   # Assign capitalized letters to alleles based on the letter map and create sorted vectors
-  ind1_geno <- sort(letter_map[alleles_ind1])
-  ind2_geno <- sort(letter_map[alleles_ind2])
+  ind1_geno <- paste0(sort(letter_map[alleles_ind1]), collapse = "")
+  ind2_geno <- paste0(sort(letter_map[alleles_ind2]), collapse = "")
 
   # Initialize A and B
   A <- NA_character_
@@ -187,10 +166,6 @@ shared_alleles <- function(ind_1_allele_1, ind_1_allele_2, ind_2_allele_1, ind_2
       B <- names(letter_map)[2]
     }
   }
-
-  # Sort ind1_geno and ind2_geno alphabetically and paste them together as a string vector
-  ind1_geno <- paste0(sort(ind1_geno), collapse = "")
-  ind2_geno <- paste0(sort(ind2_geno), collapse = "")
 
   # Return a single-row tibble directly
   result <- tibble::tibble(
@@ -220,7 +195,26 @@ shared_alleles <- function(ind_1_allele_1, ind_1_allele_2, ind_2_allele_1, ind_2
   return(result)
 }
 
-# Define a function called 'simulate_STRpairs' to generate pairs of STR profiles for a known relationship type and calculate relatedness for tested relationship type
+
+generate_individuals <- function(current_marker, allele_frequencies_by_marker, markers) {
+  setNames(
+    lapply(markers, function(current_marker) {
+      allele_frequencies <- allele_frequencies_by_marker[[current_marker]]
+      return(sample(names(allele_frequencies), size = 2, replace = TRUE, prob = allele_frequencies))
+    }), markers)
+}
+
+generate_individuals_shared <- function(current_marker, allele_frequencies_by_marker, markers, individual1, non_zero_indices_known, prob_shared_alleles) {
+  setNames(
+    lapply(markers, function(current_marker) {
+      allele_frequencies <- allele_frequencies_by_marker[[current_marker]]
+      num_shared_alleles <- sample(non_zero_indices_known - 1, size = 1, prob = prob_shared_alleles[non_zero_indices_known])
+      alleles_from_individual1 <- sample(individual1[[current_marker]], size = num_shared_alleles)
+      alleles_from_population <- sample(names(allele_frequencies), size = 2 - num_shared_alleles, replace = TRUE, prob = allele_frequencies)
+      return(c(alleles_from_individual1, alleles_from_population))
+    }), markers)
+}
+
 simulate_STRpairs <- function(population, known_relationship_type, tested_relationship_type, df_allelefreq, df_ibdprobs, n_sims=1) {
 
   # Extract unique markers from the df_allelefreq dataframe
@@ -228,95 +222,58 @@ simulate_STRpairs <- function(population, known_relationship_type, tested_relati
 
   # Filter df_allelefreq by population, then split by marker and extract frequencies
   allele_frequencies_by_marker <- df_allelefreq %>%
-    filter(population == population) %>%
-    split(.$marker)
+    split(.$marker) %>%
+    map(~.x %>% pull(frequency) %>% setNames(.x$allele))
 
-  allele_frequencies_by_marker <- map(allele_frequencies_by_marker, ~.x %>% pull(frequency) %>% setNames(.x$allele))
-
-  # Get probabilities of shared alleles (k0, k1, k2) for the known_relationship_type from the df_ibdprobs dataframe
-  prob_shared_alleles <- df_ibdprobs %>%
-    # Filter df_ibdprobs to keep rows with relationship equal to known_relationship_type
+  # Compute probabilities of shared alleles (k0, k1, k2) for the known_relationship_type and the tested_relationship_type from the df_ibdprobs dataframe
+  prob_shared_alleles_known <- df_ibdprobs %>%
     filter(relationship == known_relationship_type) %>%
-    # Select k0, k1, and k2 columns (probabilities of sharing 0, 1, or 2 alleles identical by descent)
-    select(k0, k1, k2) %>%
-    # Convert the dataframe columns into a single numeric vector
+    select(k0:k2) %>%
     unlist() %>%
-    # Ensure the output vector has a numeric datatype
     as.numeric()
 
   # Identify the indices of non-zero probabilities in the prob_shared_alleles vector
-  non_zero_indices_known <- which(prob_shared_alleles != 0)
+  non_zero_indices_known <- which(prob_shared_alleles_known != 0)
 
-
-  # Assign k0, k1, and k2 probabilities for known_relationship_type
-  k0_known <- prob_shared_alleles[1]
-  k1_known <- prob_shared_alleles[2]
-  k2_known <- prob_shared_alleles[3]
-
-  # Get probabilities of shared alleles (k0, k1, k2) for the tested_relationship_type from the df_ibdprobs dataframe
   prob_shared_alleles_tested <- df_ibdprobs %>%
-    # Filter df_ibdprobs to keep rows with relationship equal to tested_relationship_type
     filter(relationship == tested_relationship_type) %>%
-    # Select k0, k1, and k2 columns (probabilities of sharing 0, 1, or 2 alleles identical by descent)
-    select(k0, k1, k2) %>%
-    # Convert the dataframe columns into a single numeric vector
+    select(k0:k2) %>%
     unlist() %>%
-    # Ensure the output vector has a numeric datatype
     as.numeric()
-
-  # Identify the indices of non-zero probabilities in the prob_shared_alleles_tested vector
-  non_zero_indices_tested <- which(prob_shared_alleles_tested != 0)
-
 
   # Assign k0, k1, and k2 probabilities for tested_relationship_type
   k0_tested <- prob_shared_alleles_tested[1]
   k1_tested <- prob_shared_alleles_tested[2]
   k2_tested <- prob_shared_alleles_tested[3]
 
+  # Identify the indices of non-zero probabilities in the prob_shared_alleles_tested vector
+  non_zero_indices_tested <- which(prob_shared_alleles_tested != 0)
+
+  # Create all combinations of markers and replicates
+  combinations <- expand.grid(marker = markers, replicate_id = seq_len(n_sims))
+
+  # get cores
+  num_cores <- detectCores() - 1
+
   # Run simulations for each marker
-  results <- lapply(markers, function(current_marker) {
+  results <- mclapply(markers, function(current_marker) {
+
     marker_results <- lapply(seq_len(n_sims), function(replicate_id) {
 
-      # Generate individual1's alleles based on the alleles frequencies
-      individual1 <- setNames(
-        # Iterate through the markers using the lapply function
-        lapply(markers, function(current_marker) {
-          # Retrieve the allele frequencies for the current_marker from the allele_frequencies_by_marker list
-          allele_frequencies <- allele_frequencies_by_marker[[current_marker]]
-          # Sample two alleles according to their frequencies, replace = TRUE allows sampling the same allele twice
-          return(sample(names(allele_frequencies), size = 2, replace = TRUE, prob = allele_frequencies))
-          # Set the names of the list elements as the marker names
-        }), markers)
+      # Generate individual1's alleles based on the allele frequencies
+      individual1 <- generate_individuals(current_marker, allele_frequencies_by_marker, markers)
 
+      # Generate individual2's alleles based on the allele frequencies and the number of shared alleles with individual1
+      individual2 <- generate_individuals_shared(current_marker, allele_frequencies_by_marker, markers, individual1, non_zero_indices_known, prob_shared_alleles_known)
 
-      # Generate individual2's alleles based on the alleles frequencies and the number of shared alleles with individual1
-      individual2 <- setNames(
-        lapply(markers, function(current_marker) {
-          # Retrieve the allele frequencies for the current_marker from the allele_frequencies_by_marker list
-          allele_frequencies <- allele_frequencies_by_marker[[current_marker]]
-          # Sample the number of shared alleles following the known relationship type probabilities, using non_zero_indices_known
-          num_shared_alleles <- sample(non_zero_indices_known - 1, size = 1, prob = prob_shared_alleles[non_zero_indices_known])
-          # Select the shared alleles from individual1
-          alleles_from_individual1 <- sample(individual1[[current_marker]], size = num_shared_alleles)
-          # Sample the remaining alleles from the population for individual2
-          alleles_from_population <- sample(names(allele_frequencies), size = 2 - num_shared_alleles, replace = TRUE, prob = allele_frequencies)
-          # Combine the shared alleles from individual1 and the remaining alleles from thepopulation
-          return(c(alleles_from_individual1, alleles_from_population))
-          # Set the names of the list elements as the marker names
-        }), markers)
+      # Create allele vectors for individuals 1 and 2
+      alleles_ind1 <- individual1[[current_marker]]
+      alleles_ind2 <- individual2[[current_marker]]
 
-      # Calculate the number of shared alleles between the two individuals for the current marker
-      ind1_alleles <- individual1[[current_marker]]
-      ind2_alleles <- individual2[[current_marker]]
+      # Calculate shared_alleles and get the result from shared_alleles function
+      result <- shared_alleles(alleles_ind1[1], alleles_ind1[2], alleles_ind2[1], alleles_ind2[2], population, current_marker, tested_relationship_type, df_allelefreq, df_ibdprobs)
 
-      shared_allele_result <- shared_alleles(ind1_alleles[1], ind1_alleles[2], ind2_alleles[1], ind2_alleles[2], population, current_marker, tested_relationship_type, df_allelefreq, df_ibdprobs)
-
-      # Extract num_shared_alleles and log_R from the shared_allele_result:
-      num_shared_alleles <- shared_allele_result$num_shared_alleles
-      log_R <- shared_allele_result$log_R
-
-
-      # Store the results from the current simulation in a tibble
+      # Return the results from the current simulation in a tibble
       return(tibble(population = population,
                     known_relationship_type = known_relationship_type,
                     tested_relationship_type = tested_relationship_type,
@@ -324,15 +281,15 @@ simulate_STRpairs <- function(population, known_relationship_type, tested_relati
                     k1_tested = k1_tested,
                     k2_tested = k2_tested,
                     marker = current_marker,
-                    num_shared_alleles = num_shared_alleles,
-                    log_R = log_R,
+                    num_shared_alleles = result$num_shared_alleles,
+                    log_R = result$log_R,
                     replicate_id = replicate_id))
     })
 
     # Combine the results from the current marker
     marker_results <- bind_rows(marker_results)
     return(marker_results)
-  })
+  }, mc.cores = num_cores)
 
   # Combine the results from all markers
   result <- bind_rows(results)
@@ -345,7 +302,6 @@ simulate_STRpairs <- function(population, known_relationship_type, tested_relati
               .groups = "drop")
 
   return(result_by_replicate)
-
 }
 
 
@@ -415,8 +371,6 @@ create_heatmap <- function(df, known_relationship_col, tested_relationship_col) 
 
   return(heatmap_plot)
 }
-
-
 
 result_combinations <- simulation_combinations_all_relationships(df_freq, n_sims_unrelated = n_sims_unrelated, n_sims_related = n_sims_related)
 
