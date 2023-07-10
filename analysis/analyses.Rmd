@@ -433,50 +433,96 @@ input_df_unrelated <- input_df %>% filter(known_relationship_type == "unrelated"
 ```
 
 ```{r}
-# Improved function to calculate false-positive rates for each relationship type
-calculate_false_positive_rate <- function(input_df, input_df_unrelated, population, relationship_type, m_value) {
-  
-  # Filter the input dataframe for the specific population and relationship type combination
-  input_df_filtered <- input_df %>%
-    filter(population == population,
-           known_relationship_type == relationship_type,
-           tested_relationship_type != "unrelated")
-
-  input_df_tested_unrelated <- input_df_unrelated %>%
-    filter(population == population, tested_relationship_type == relationship_type)
-
-  # Calculate the number of simulations for the relationship type
-  n_sims_relationship_type <- nrow(input_df_filtered)
-
-  # Calculate the cut value from unrelated log_R_sum values
-  cut_value <- quantile(input_df_tested_unrelated$log_R_sum, 1 - m_value)
-
-  # Calculate the false-positive rate for the relationship type
-  false_positive_rate <- mean(input_df_filtered$log_R_sum > cut_value)
-
-  return(false_positive_rate)
-}
+# input_df <- read_csv("data/jvc-known_vs_tested_simulation_results.csv") 
 ```
 
 
 ```{r}
-# Define a vector of 'm' values
-m_values <- c(1, 5, 10) / nrow(input_df %>% filter(known_relationship_type == "unrelated"))
+# Function to calculate proportion exceeding cutoff
+calculate_proportion_exceeding_cutoff <- function(population, relationship_type, fp_rate, input_df) {
+
+  unrelated_tested <- input_df %>%
+    filter(population == population,
+           known_relationship_type == "unrelated",
+           tested_relationship_type == relationship_type)
+  
+  m_value = fp_rate / 100
+  cut_value <- quantile(unrelated_tested$log_R_sum, 1 - m_value)
+  
+  actual_relationship <- input_df %>%
+    filter(population == population,
+           known_relationship_type == relationship_type,
+           tested_relationship_type == relationship_type)
+  
+  proportion_exceeding_cutoff <- mean(actual_relationship$log_R_sum > cut_value)
+  
+  return(data.frame(population = population,
+                    relationship_type = relationship_type,
+                    fp_rate = fp_rate,
+                    prop_exceeding = proportion_exceeding_cutoff))
+}
+
+# Define a vector of false positive rates as percentages
+fp_rates <- c(1, 5, 10)
 
 population_groups = unique(input_df$population)
 relationship_types = unique(input_df$known_relationship_type)
 
-# Calculate false-positive rates for each combination of population group, relationship type, and 'm' value
-false_positive_rates <- expand.grid(population = population_groups,
-                                    relationship = relationship_types,
-                                    m_value = m_values) %>%
-  mutate(false_positive_rate = pmap_dbl(list(population, relationship, m_value),
-                                        ~ calculate_false_positive_rate(input_df,
-                                                                        input_df_unrelated,
-                                                                        ..1, ..2, ..3)))
+# Exclude "unrelated" from relationship types for calculation purposes
+relationship_types = relationship_types[relationship_types != "unrelated"]
 
-# Print the results
-print(false_positive_rates)
+# Apply function to calculate proportions for each combination of population group, relationship type and false positive rate
+proportion_args <- expand.grid(population = population_groups, 
+                               relationship_type = relationship_types,
+                               fp_rate = fp_rates,
+                               input_df = list(input_df))
+
+exceeding_proportions <- purrr::pmap_df(proportion_args,
+                                        calculate_proportion_exceeding_cutoff)
+
+# Look at the results
+exceeding_proportions
+
+```
+
+```{r}
+
+# Convert population to factor so it can be used in fill aesthetic
+exceeding_proportions$population <- as.factor(exceeding_proportions$population)
+
+# Calculate the total number of unrelated pairs and full sibling pairs
+num_pairs <- input_df %>% 
+  group_by(population, known_relationship_type) %>%
+  summarise(n_pairs = n()) %>% 
+  spread(known_relationship_type, n_pairs, fill = 0)
+
+# Take the values from the first population
+first_population <- num_pairs$population[1]
+num_unrelated_pairs <- num_pairs$unrelated[1]
+num_related_pairs <- num_pairs$full_siblings[1] 
+
+# format numbers with comma as thousands separator
+num_unrelated_pairs <- format(num_unrelated_pairs, big.mark = ",")
+num_related_pairs <- format(num_related_pairs, big.mark = ",")
+
+# Create the caption
+caption_text <- paste("Number of unrelated pairs per population: ", num_unrelated_pairs,
+                      ". Number of related pairs: ", num_related_pairs, ".")
+
+# Create the facetted bar plot
+ggplot(exceeding_proportions, aes(x = relationship_type, y = prop_exceeding, fill = population)) +
+  geom_bar(stat = "identity", position=position_dodge()) +
+  facet_wrap(~fp_rate, scales="free") +
+  scale_fill_manual(values = wes_palette("Darjeeling1", n = length(unique(exceeding_proportions$population)), type = "continuous")) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  ylab("Proportion exceeding cut-off") +
+  xlab("Relationship type") +
+  ggtitle("Proportions exceeding likelihood cut-off for different relationship types") +
+  labs(fill = "Population") +
+  labs(caption = caption_text)
+
+
 
 ```
 
