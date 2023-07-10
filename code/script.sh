@@ -2,11 +2,11 @@
 #SBATCH --job-name=known_vs_tested_simulation
 #SBATCH --output=/project/jazlynmo_738/Tina/PODFRIDGE_upload/logfiles/known_vs_tested_simulation_%j.out
 #SBATCH --error=/project/jazlynmo_738/Tina/PODFRIDGE_upload/logfiles/known_vs_tested_simulation_%j.err
-#SBATCH --time=14:00:00
-#SBATCH -p main
-#SBATCH --ntasks=2
-#SBATCH --cpus-per-task=10
-#SBATCH --mem-per-cpu=5000MB
+#SBATCH --time=16:00:00
+#SBATCH -p epyc-64
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=64
+#SBATCH --mem-per-cpu=4000MB
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=tlasisi@usc.edu
 
