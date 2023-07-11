@@ -128,7 +128,7 @@ calc_R <- function(relationship_type, R_Xp, R_Xu, df_ibdprobs) {
   })
 
   # Calculate log(R) values
-  log_R <- log(R + 1)
+  log_R <- log(R)
 
   # Return R and log(R) as a list
   return(list(R = R, log_R = log_R))
