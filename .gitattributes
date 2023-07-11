@@ -10,3 +10,4 @@
 *.txt filter=lfs diff=lfs merge=lfs -text
 *.xlsx filter=lfs diff=lfs merge=lfs -text
 *.csv filter=lfs diff=lfs merge=lfs -text
+/output/exceeding_cutoff filter=lfs diff=lfs merge=lfs -text
