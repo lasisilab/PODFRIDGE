@@ -439,10 +439,10 @@ input_df_unrelated <- input_df %>% filter(known_relationship_type == "unrelated"
 
 ```{r}
 # Function to calculate proportion exceeding cutoff
-calculate_proportion_exceeding_cutoff <- function(population, relationship_type, fp_rate, input_df) {
+calculate_proportion_exceeding_cutoff <- function(input_population, relationship_type, fp_rate, input_df) {
 
   unrelated_tested <- input_df %>%
-    filter(population == population,
+    filter(population == input_population,
            known_relationship_type == "unrelated",
            tested_relationship_type == relationship_type)
   
@@ -450,13 +450,13 @@ calculate_proportion_exceeding_cutoff <- function(population, relationship_type,
   cut_value <- quantile(unrelated_tested$log_R_sum, 1 - m_value)
   
   actual_relationship <- input_df %>%
-    filter(population == population,
+    filter(population == input_population,
            known_relationship_type == relationship_type,
            tested_relationship_type == relationship_type)
   
   proportion_exceeding_cutoff <- mean(actual_relationship$log_R_sum > cut_value)
   
-  return(data.frame(population = population,
+  return(data.frame(population = input_population,
                     relationship_type = relationship_type,
                     fp_rate = fp_rate,
                     prop_exceeding = proportion_exceeding_cutoff))
@@ -472,10 +472,12 @@ relationship_types = unique(input_df$known_relationship_type)
 relationship_types = relationship_types[relationship_types != "unrelated"]
 
 # Apply function to calculate proportions for each combination of population group, relationship type and false positive rate
-proportion_args <- expand.grid(population = population_groups, 
+proportion_args <- expand.grid(input_population = population_groups, 
                                relationship_type = relationship_types,
-                               fp_rate = fp_rates,
-                               input_df = list(input_df))
+                               fp_rate = fp_rates)
+
+# add input_df for each row
+proportion_args$input_df <- I(rep(list(input_df), nrow(proportion_args)))
 
 exceeding_proportions <- purrr::pmap_df(proportion_args,
                                         calculate_proportion_exceeding_cutoff)
@@ -521,8 +523,5 @@ ggplot(exceeding_proportions, aes(x = relationship_type, y = prop_exceeding, fil
   ggtitle("Proportions exceeding likelihood cut-off for different relationship types") +
   labs(fill = "Population") +
   labs(caption = caption_text)
-
-
-
 ```
 
