@@ -12,7 +12,7 @@ editor_options:
 
 ## Coop & Edge 2019
 
-Coop & Edge ([2019](https://www.biorxiv.org/content/10.1101/531384v1.full)) use a population genetics approach to estimate the likelihood of finding a genetic relative in a database. They assumes that two individuals are related if they share a certain number of genetic blocks, which is determined by the degree of relatedness (e.g. first cousin, second cousin, etc.). Using this assumption, they calculates the expected number of blocks shared between two individuals of a given degree of relatedness based on the size of the genetic database and the population size. They then uses the Poisson distribution to estimate the probability of finding at least one relative of a given degree of relatedness in a database of a certain size.
+Coop & Edge ([2019](https://www.biorxiv.org/content/10.1101/531384v1.full)) use a population genetics approach to estimate the likelihood of finding a genetic relative in a database. They assume that two individuals are related if they share a certain number of genetic blocks, which is determined by the degree of relatedness (e.g. first cousin, second cousin, etc.). Using this assumption, they calculate the expected number of blocks shared between two individuals of a given degree of relatedness based on the size of the genetic database and the population size. They then uses the Poisson distribution to estimate the probability of finding at least one relative of a given degree of relatedness in a database of a certain size.
 
 The original code can be found [here](https://github.com/tinalasisi/POPFORGE/blob/master/data/Coop_cousins_vs_database_size.R). 
 
