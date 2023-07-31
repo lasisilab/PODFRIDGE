@@ -399,7 +399,7 @@ predict_total_simulations <- function(n_sims_unrelated, n_sims_related) {
 
 ```{r}
 
-predict_total_simulations(100000, 10000)
+# predict_total_simulations(100000, 10000)
 
 ```
 
