@@ -204,6 +204,67 @@ library(patchwork)
 (ea_fig + aa_fig) + plot_layout(guides = "collect")
 ```
 
+```{r}
+
+generate_plot2 <- function(rep_direct, rep_or, N_pop, name) {
+  N = N_pop
+  num_K = 10000
+  m = 6
+  min_num_seg = 2
+  r = 2.5
+  Ks = round(seq(from=N/num_K, to=N, length.out=num_K))
+  
+  c1 = coverage(Ks, maxg = 2, N_pop, r, m, min_num_seg = 2, min_num_rel = 1, rep_direct = rep_direct, rep_or = rep_or)
+  c2 = coverage(Ks, maxg = 3, N_pop, r, m, min_num_seg = 2, min_num_rel = 1, rep_direct = rep_direct, rep_or = rep_or)
+  c3 = coverage(Ks, maxg = 4, N_pop, r, m, min_num_seg = 2, min_num_rel = 1, rep_direct = rep_direct, rep_or = rep_or)
+  c4 = coverage(Ks, maxg = 5, N_pop, r, m, min_num_seg = 2, min_num_rel = 1, rep_direct = rep_direct, rep_or = rep_or)
+  
+  plot_data <- data.frame(Ks = rep(Ks, 4),
+                          Coverage = c(c1, c2, c3, c4),
+                          Relationship = factor(rep(c("1C", "2C", "3C", "4C"), each = num_K)))
+  
+  plot_data$Ks_proportion <- plot_data$Ks / N
+  
+  plot_data <- plot_data[complete.cases(plot_data) & plot_data$Ks_proportion <= 0.2,]
+  
+  min_coverage <- min(plot_data$Coverage, na.rm = TRUE) # calculate the minimum coverage
+  
+  p <- ggplot(plot_data, aes(x = Ks_proportion, y = Coverage, color = Relationship, group = Relationship)) +
+    geom_point() +
+    geom_line() +
+    geom_vline(xintercept = 0.025, color = "orange", show.legend = FALSE) +
+    geom_vline(xintercept = 0.125, color = "red", show.legend = FALSE) +
+    geom_vline(xintercept = 0.08, color = "lightgreen", show.legend = FALSE) +
+    geom_vline(xintercept = 0.04, color = "darkgreen", show.legend = FALSE) +
+    geom_text(aes(x = 0.025, label = "AA DTC"), y = min_coverage, hjust = 1, vjust = 0, show.legend = FALSE, color = "black") +
+    geom_text(aes(x = 0.125, label = "AA CODIS"), y = min_coverage, hjust = -0.1, vjust = 1.1, show.legend = FALSE, color = "black") +
+    geom_text(aes(x = 0.08, label = "EA DTC"), y = min_coverage, hjust = -0.1, vjust = 1.1, show.legend = FALSE, color = "black") +
+    geom_text(aes(x = 0.04, label = "EA CODIS"), y = min_coverage, hjust = -0.1, vjust = 1.1, show.legend = FALSE, color = "black") +
+    scale_color_manual(values = c("1C" = "#ADD8E6", "2C" = "#1E90FF", "3C" = "#00008B", "4C" = "#000080")) + 
+    labs(title = name,
+         x = "Database Size / Population Size",
+         y = "Probability of a Match",
+         color = "Relationship") +
+    theme_minimal()
+  
+  p
+}
+
+```
+
+```{r combo-fig}
+
+rep_direct_ea = rep(1, 10)
+rep_or_ea = rep(1, 10)
+N_pop_1990 = 2.5e8
+
+combo_fig <- generate_plot2(rep_direct_ea, rep_or_ea, N_pop_1990, "US")
+
+combo_fig
+
+
+
+```
 ## Population size vs. risk
 
 ### Raw DB size vs. Raw pop - Cousin panel
