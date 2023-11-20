@@ -296,6 +296,7 @@ generate_plot2 <- function(rep_direct, rep_or, N_pop, name) {
 
 ```
 
+
 ```{r combo-fig}
 
 rep_direct_ea = rep(1, 10)
@@ -308,7 +309,52 @@ combo_fig
 
 ```
 
-```{r database-composition}
+```{r number-matches}
+
+plot_number_matches <- function(rep_direct, rep_or, N_pop, name) {
+    num_K = 10000
+    m = 6
+    min_num_seg = 2
+    r = 2.5
+    Ks = round(seq(from=N/num_K, to=N, length.out=num_K))
+    
+    c1 = coverage(Ks, maxg = 2, N_pop, r, m, min_num_seg = 2, min_num_rel = 1, rep_direct = rep_direct, rep_or = rep_or)
+    c2 = coverage(Ks, maxg = 3, N_pop, r, m, min_num_seg = 2, min_num_rel = 1, rep_direct = rep_direct, rep_or = rep_or)
+    c3 = coverage(Ks, maxg = 4, N_pop, r, m, min_num_seg = 2, min_num_rel = 1, rep_direct = rep_direct, rep_or = rep_or)
+    c4 = coverage(Ks, maxg = 5, N_pop, r, m, min_num_seg = 2, min_num_rel = 1, rep_direct = rep_direct, rep_or = rep_or)
+    
+    plot_data <- data.frame(Ks = rep(Ks, 4),
+                            Coverage = c(c1, c2, c3, c4),
+                            Relationship = factor(rep(c("1C", "2C", "3C", "4C"), each = num_K)))
+    
+    plot_data$Ks_proportion <- plot_data$Ks / N_pop
+    
+    plot_data <- plot_data[complete.cases(plot_data) & plot_data$Ks_proportion <= 0.2,]
+    
+    # calculated number of matches
+    plot_data_matches <- plot_data %>% 
+      mutate(matches = Coverage * N_pop)
+    
+    p <- plot_data_matches %>%
+      ggplot(aes(x=Ks_proportion, y=matches/1e6, color = Relationship, group = Relationship)) +
+      geom_point() +
+      geom_line() +
+      labs(title = name,
+           x = "Database Size / Population Size",
+           y = "Number of Matches (Millions)",
+           color = "Relationship") +
+      theme_minimal()
+    
+    return(p)
+}
+
+plot_number_matches(rep(1, 10), rep(1, 10), US_POP_1990, "Number of Matches by Relationship vs Database Size")
+
+```
+
+```{r database-composition1}
+
+# OPTION 1 
 
 # plot relative composition of the database types
 
@@ -325,7 +371,24 @@ ggplot(data, aes(y=PROPS, fill=DATABASE)) +
          color = "Database") +
     theme_minimal()
 
-
 ```
 
+```{r database-composition2}
+
+# OPTION 2
+add_other <- data %>% 
+  group_by(DATABASE) %>%
+  summarise(PROPS = 1 - sum(PROPS)) %>%
+  mutate(POPULATION = "other") %>%
+  bind_rows(data)
+
+ggplot(add_other, aes(y=PROPS, fill=POPULATION)) +
+  geom_col(aes(x=DATABASE)) +
+   labs(title = "Genetic database composition for European and African Americans",
+         x = "Database",
+         y = "Proportion of Database",
+         color = "Database") +
+    theme_minimal()
+
+```
 
