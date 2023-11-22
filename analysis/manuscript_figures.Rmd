@@ -16,6 +16,51 @@ library(patchwork)
 knitr::opts_knit$set(root.dir = "..")
 knitr::opts_chunk$set(eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 6)
 
+# CONFIGURE CONSTANTS
+
+# Total US Population 1990: source?
+US_POP_1990 = 2.5e8
+
+# European American Population 1990: source?
+EA_POP_1990 = 199686070
+  
+# African American Population 1990: source?
+AA_POP_1990 = 29986060
+
+# calculate proportion of us population each group
+US_PROP_AA = AA_POP_1990 / US_POP_1990
+US_PROP_EA = EA_POP_1990 / US_POP_1990
+
+# CODIS SIZE 
+CODIS_SIZE = 2.10e7
+
+# DTC SIZE 
+ANCESTRY_SIZE = 2.3e7
+TWTY_THREE_ME_SIZE = 1.4e7
+MY_HERATIGE_SIZE = 7e6
+FTDNA = 1.8e6
+GEDMATCH = 1.8e6
+
+# calculate total DTC SIZE
+DTC_SIZE = ANCESTRY_SIZE + TWTY_THREE_ME_SIZE + MY_HERATIGE_SIZE + FTDNA + GEDMATCH
+
+# calculate searchable DTC size (FTDNA + GEDMATCH)
+DTC_SEARCH = FTDNA + GEDMATCH
+
+# Proportion AA in CODIS
+PROP_AA_CODIS = 0.236
+
+# Proportion EA in CODIS
+PROP_EA_CODIS = 0.429
+
+### TODO: UPDATE THESE WITH CORRECT VALUES
+PROP_AA_DTC = 0.236 # TODO: need this value
+PROP_EA_DTC = 0.429 # TODO: need this value
+
+### TODO: UPDATE THESE NUMBERS WITH CORRECT VALUES
+PROP_AA_DTC_S = 0.136
+PROP_EA_DTC_S = 0.365
+
 ```
 
 
@@ -185,9 +230,8 @@ generate_plot <- function(rep_direct, rep_or, N_pop, name) {
 
 rep_direct_ea = rep(1, 10)
 rep_or_ea = rep(1, 10)
-N_pop_ea_1990 = 199686070
 
-ea_fig <- generate_plot(rep_direct_ea, rep_or_ea, N_pop_ea_1990, "European Americans")
+ea_fig <- generate_plot(rep_direct_ea, rep_or_ea, EA_POP_1990, "European Americans")
 
 
 
@@ -197,9 +241,8 @@ ea_fig <- generate_plot(rep_direct_ea, rep_or_ea, N_pop_ea_1990, "European Ameri
 
 rep_direct_aa = rep(2.4, 10)
 rep_or_aa = rep(2.4, 10)
-N_pop_aa_1990 = 29986060
 
-aa_fig <- generate_plot(rep_direct_aa, rep_or_aa, N_pop_aa_1990, "African Americans")
+aa_fig <- generate_plot(rep_direct_aa, rep_or_aa, AA_POP_1990, "African Americans")
 
 library(patchwork)
 (ea_fig + aa_fig) + plot_layout(guides = "collect")
@@ -253,16 +296,99 @@ generate_plot2 <- function(rep_direct, rep_or, N_pop, name) {
 
 ```
 
+
 ```{r combo-fig}
 
 rep_direct_ea = rep(1, 10)
 rep_or_ea = rep(1, 10)
-N_pop_1990 = 2.5e8
-
-combo_fig <- generate_plot2(rep_direct_ea, rep_or_ea, N_pop_1990, "US")
+combo_fig <- generate_plot2(rep_direct_ea, rep_or_ea, US_POP_1990, "US")
 
 combo_fig
 
 
 
 ```
+
+```{r number-matches}
+
+plot_number_matches <- function(rep_direct, rep_or, N_pop) {
+    num_K = 10000
+    m = 6
+    min_num_seg = 2
+    r = 2.5
+    Ks = round(seq(from=N_pop/num_K, to=N_pop, length.out=num_K))
+    
+    c1 = coverage(Ks, maxg = 2, N_pop, r, m, min_num_seg = 2, min_num_rel = 1, rep_direct = rep_direct, rep_or = rep_or)
+    c2 = coverage(Ks, maxg = 3, N_pop, r, m, min_num_seg = 2, min_num_rel = 1, rep_direct = rep_direct, rep_or = rep_or)
+    c3 = coverage(Ks, maxg = 4, N_pop, r, m, min_num_seg = 2, min_num_rel = 1, rep_direct = rep_direct, rep_or = rep_or)
+    c4 = coverage(Ks, maxg = 5, N_pop, r, m, min_num_seg = 2, min_num_rel = 1, rep_direct = rep_direct, rep_or = rep_or)
+    
+    plot_data <- data.frame(Ks = rep(Ks, 4),
+                            Coverage = c(c1, c2, c3, c4),
+                            Relationship = factor(rep(c("1C", "2C", "3C", "4C"), each = num_K)))
+    
+    plot_data$Ks_proportion <- plot_data$Ks / N_pop
+    
+    plot_data <- plot_data[complete.cases(plot_data) & plot_data$Ks_proportion <= 0.2,]
+    
+    # calculated number of matches
+    plot_data_matches <- plot_data %>% 
+      mutate(matches = Coverage * N_pop)
+    
+    p <- plot_data_matches %>%
+      ggplot(aes(x=Ks_proportion, y=matches/1e6, color = Relationship, group = Relationship)) +
+      geom_point() +
+      geom_line() +
+      labs(title = "Number of Matches by Relationship vs Database Size",
+           x = "Database Size / Population Size",
+           y = "Number of Matches (Millions)",
+           color = "Relationship") +
+      theme_minimal()
+    
+    return(p)
+}
+
+plot_number_matches(rep(1, 10), rep(1, 10), US_POP_1990)
+
+```
+
+```{r database-composition1}
+
+# OPTION 1 
+
+# plot relative composition of the database types
+
+PROPS <- c(PROP_EA_CODIS, PROP_EA_DTC, PROP_AA_CODIS, PROP_AA_DTC, PROP_AA_DTC_S, PROP_EA_DTC_S)
+DATABASE <- c("CODIS", "DTC", "CODIS", "DTC", "DTCS", "DTCS")
+POPULATION <- c("European American", "European American", "African American", "African American", "African American", "European American")
+
+data = tibble(PROPS, DATABASE, POPULATION)
+ggplot(data, aes(y=PROPS, fill=DATABASE)) + 
+  geom_col(aes(x=POPULATION, group=POPULATION), position = position_dodge2()) + 
+  labs(title = "Genetic database composition for European and African Americans",
+         x = "Population",
+         y = "Proportion of Database",
+         color = "Database") +
+    theme_minimal()
+
+```
+
+```{r database-composition2}
+
+# OPTION 2
+add_other <- data %>% 
+  group_by(DATABASE) %>%
+  summarise(PROPS = 1 - sum(PROPS)) %>%
+  mutate(POPULATION = "other") %>%
+  bind_rows(data)
+
+ggplot(add_other, aes(y=PROPS, fill=POPULATION)) +
+  geom_col(aes(x=DATABASE)) +
+   labs(title = "Genetic database composition for European and African Americans",
+         x = "Database",
+         y = "Proportion of Database",
+         color = "Database") +
+    theme_minimal()
+
+```
+
