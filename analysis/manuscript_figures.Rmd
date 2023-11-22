@@ -311,12 +311,12 @@ combo_fig
 
 ```{r number-matches}
 
-plot_number_matches <- function(rep_direct, rep_or, N_pop, name) {
+plot_number_matches <- function(rep_direct, rep_or, N_pop) {
     num_K = 10000
     m = 6
     min_num_seg = 2
     r = 2.5
-    Ks = round(seq(from=N/num_K, to=N, length.out=num_K))
+    Ks = round(seq(from=N_pop/num_K, to=N_pop, length.out=num_K))
     
     c1 = coverage(Ks, maxg = 2, N_pop, r, m, min_num_seg = 2, min_num_rel = 1, rep_direct = rep_direct, rep_or = rep_or)
     c2 = coverage(Ks, maxg = 3, N_pop, r, m, min_num_seg = 2, min_num_rel = 1, rep_direct = rep_direct, rep_or = rep_or)
@@ -339,7 +339,7 @@ plot_number_matches <- function(rep_direct, rep_or, N_pop, name) {
       ggplot(aes(x=Ks_proportion, y=matches/1e6, color = Relationship, group = Relationship)) +
       geom_point() +
       geom_line() +
-      labs(title = name,
+      labs(title = "Number of Matches by Relationship vs Database Size",
            x = "Database Size / Population Size",
            y = "Number of Matches (Millions)",
            color = "Relationship") +
@@ -348,7 +348,7 @@ plot_number_matches <- function(rep_direct, rep_or, N_pop, name) {
     return(p)
 }
 
-plot_number_matches(rep(1, 10), rep(1, 10), US_POP_1990, "Number of Matches by Relationship vs Database Size")
+plot_number_matches(rep(1, 10), rep(1, 10), US_POP_1990)
 
 ```
 
