@@ -54,12 +54,12 @@ PROP_AA_CODIS = 0.236
 PROP_EA_CODIS = 0.429
 
 ### TODO: UPDATE THESE WITH CORRECT VALUES
-PROP_AA_DTC = 0.236 # TODO: need this value
-PROP_EA_DTC = 0.429 # TODO: need this value
+PROP_AA_DTC = 0.03 # TODO: need this value
+PROP_EA_DTC = 0.60 # TODO: need this value
 
 ### TODO: UPDATE THESE NUMBERS WITH CORRECT VALUES
-PROP_AA_DTC_S = 0.136
-PROP_EA_DTC_S = 0.365
+PROP_AA_DTC_S = 0.03
+PROP_EA_DTC_S = 0.60
 
 ```
 
@@ -363,32 +363,16 @@ DATABASE <- c("CODIS", "DTC", "CODIS", "DTC", "DTCS", "DTCS")
 POPULATION <- c("European American", "European American", "African American", "African American", "African American", "European American")
 
 data = tibble(PROPS, DATABASE, POPULATION)
-ggplot(data, aes(y=PROPS, fill=DATABASE)) + 
-  geom_col(aes(x=POPULATION, group=POPULATION), position = position_dodge2()) + 
+# Reorder the levels of POPULATION
+data$POPULATION <- factor(data$POPULATION, levels = c("European American", "African American"))
+
+ggplot(data, aes(y=PROPS, fill=POPULATION)) + 
+  geom_col(aes(x=DATABASE, group=POPULATION), position = position_dodge2()) + 
   labs(title = "Genetic database composition for European and African Americans",
          x = "Population",
          y = "Proportion of Database",
          color = "Database") +
-    theme_minimal()
+    theme_minimal() + 
+    scale_y_continuous(limits = c(0, 1))
 
 ```
-
-```{r database-composition2}
-
-# OPTION 2
-add_other <- data %>% 
-  group_by(DATABASE) %>%
-  summarise(PROPS = 1 - sum(PROPS)) %>%
-  mutate(POPULATION = "other") %>%
-  bind_rows(data)
-
-ggplot(add_other, aes(y=PROPS, fill=POPULATION)) +
-  geom_col(aes(x=DATABASE)) +
-   labs(title = "Genetic database composition for European and African Americans",
-         x = "Database",
-         y = "Proportion of Database",
-         color = "Database") +
-    theme_minimal()
-
-```
-
