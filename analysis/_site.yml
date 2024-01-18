@@ -17,6 +17,10 @@ navbar:
     href: analyses.html
   - text: Risk
     href: representation-risk.html
+  - text: Short Range
+    href: shortrange.Rmd
+  - text: STR
+    href: STR.Rmd
 output:
   workflowr::wflow_html:
     toc: yes
