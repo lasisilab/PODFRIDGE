@@ -1,0 +1,78 @@
+State,Demographic Group,Context,Value
+California,White ,Database,29.60%
+California,White ,Population,37%
+California,Black ,Database,17.10%
+California,Black ,Population,5.50%
+California,Hispanic ,Database,34.70%
+California,Hispanic ,Population,39.20%
+California,Asian ,Database,0.99%
+California,Asian ,Population,14.40%
+California,Native American ,Database,
+California,Native American ,Population,1.60%
+California,Other ,Database,
+Florida,White ,Database,61.40%
+Florida,White ,Population,54.10%
+Florida,Black ,Database,35.20%
+Florida,Black ,Population,16.90%
+Florida,Hispanic ,Database,2.40%
+Florida,Hispanic ,Population,25.60%
+Florida,Asian ,Database,0.23%
+Florida,Asian ,Population,2.90%
+Florida,Native American ,Database,0.06%
+Florida,Native American ,Population,0.50%
+Florida,Other ,Database,0.61%
+Indiana,White ,Database,70%
+Indiana,White ,Population,79.20%
+Indiana,Black ,Database,26%
+Indiana,Black ,Population,9.70%
+Indiana,Hispanic ,Database,4%
+Indiana,Hispanic ,Population,7%
+Indiana,Asian ,Database,2.40%
+Indiana,Asian ,Population,
+Indiana,Native American ,Database,0.40%
+Indiana,Native American ,Population,
+Indiana,Other ,Database,
+Maine,White ,Database,92.80%
+Maine,White ,Population,93.30%
+Maine,Black ,Database,3.90%
+Maine,Black ,Population,1.60%
+Maine,Hispanic ,Database,1.60%
+Maine,Hispanic ,Population,
+Maine,Asian ,Database,0.38%
+Maine,Asian ,Population,1.20%
+Maine,Native American ,Database,1.02%
+Maine,Native American ,Population,0.70%
+Maine,Other ,Database,1.40%
+Nevada,White ,Database,69.40%
+Nevada,White ,Population,49.10%
+Nevada,Black ,Database,25.60%
+Nevada,Black ,Population,9.80%
+Nevada,Hispanic ,Database,
+Nevada,Hispanic ,Population,28.80%
+Nevada,Asian ,Database,2.30%
+Nevada,Asian ,Population,8.80%
+Nevada,Native American ,Database,1.7
+Nevada,Native American ,Population,1.70%
+Nevada,Other ,Database,1.00%
+South Dakota,White ,Database,67%
+South Dakota,White ,Population,82.20%
+South Dakota,Black ,Database,6.00%
+South Dakota,Black ,Population,2.10%
+South Dakota,Hispanic ,Database,4.40%
+South Dakota,Hispanic ,Population,3.80%
+South Dakota,Asian ,Database,0.08%
+South Dakota,Asian ,Population,1.50%
+South Dakota,Native American ,Database,21.60%
+South Dakota,Native American ,Population,9%
+South Dakota,Other ,Database,1.30%
+Texas,White ,Database,37.30%
+Texas,White ,Population,42%
+Texas,Black ,Database,29.10%
+Texas,Black ,Population,12.70%
+Texas,Hispanic ,Database,32.70%
+Texas,Hispanic ,Population,39.40%
+Texas,Asian ,Database,0.42%
+Texas,Asian ,Population,5%
+Texas,Native American ,Database,0.02%
+Texas,Native American ,Population,1%
+Texas,Other ,Database,0.28%

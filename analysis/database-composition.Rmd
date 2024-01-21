@@ -1,0 +1,19 @@
+---
+title: "Database composition"
+author: "Tina Lasisi"
+date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Forensic
+
+Data based on Murphy & Tong
+
+
+
+```{r}
+
+```
+
