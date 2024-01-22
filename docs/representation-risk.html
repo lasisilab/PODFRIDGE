@@ -14,7 +14,7 @@
 
 <title>Representation and Risk</title>
 
-<script src="site_libs/header-attrs-2.21/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -30,7 +30,7 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
@@ -348,7 +348,13 @@ div.tocify {
   <a href="analyses.html">Analyses</a>
 </li>
 <li>
-  <a href="representation-risk.html">Risk</a>
+  <a href="database-composition.html">Database composition</a>
+</li>
+<li>
+  <a href="shortrange.Rmd">Short Range</a>
+</li>
+<li>
+  <a href="manuscript_figures.Rmd">Manuscript Figures</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -364,7 +370,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Representation and Risk</h1>
 <h4 class="author">Tina Lasisi</h4>
-<h4 class="date">2023-05-15 13:33:26</h4>
+<h4 class="date">2024-01-22 11:39:05</h4>
 
 </div>
 
@@ -393,7 +399,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2023-05-15
+<strong>Last updated:</strong> 2024-01-22
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -411,7 +417,7 @@ title="This is the local directory in which the code in this file was executed."
 This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
 analysis was created with <a
   href="https://github.com/workflowr/workflowr">workflowr</a> (version
-1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
 that were applied when the results were created. The <em>Past
 versions</em> tab lists the development history.
 </p>
@@ -524,15 +530,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtree64da0c31da9b7fc9dc6202bf02e1b776398d65f0targetblank64da0c3a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtree1f3a662c92715a3a43386f135628e33c0d110553targetblank1f3a662a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/tinalasisi/PODFRIDGE/tree/64da0c31da9b7fc9dc6202bf02e1b776398d65f0" target="_blank">64da0c3</a>
+<a href="https://github.com/tinalasisi/PODFRIDGE/tree/1f3a662c92715a3a43386f135628e33c0d110553" target="_blank">1f3a662</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtree64da0c31da9b7fc9dc6202bf02e1b776398d65f0targetblank64da0c3a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtree1f3a662c92715a3a43386f135628e33c0d110553targetblank1f3a662a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -542,7 +548,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/tinalasisi/PODFRIDGE/tree/64da0c31da9b7fc9dc6202bf02e1b776398d65f0" target="_blank">64da0c3</a>.
+<a href="https://github.com/tinalasisi/PODFRIDGE/tree/1f3a662c92715a3a43386f135628e33c0d110553" target="_blank">1f3a662</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -560,13 +566,9 @@ Ignored files:
     Ignored:    .DS_Store
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-    Ignored:    data/.DS_Store
-    Ignored:    data/FGG User Manual 2022.pdf
-    Ignored:    data/FGG_Database_v.2022.xlsx
 
-Untracked files:
-    Untracked:  analysis/IBD.Rmd
-    Untracked:  data/autosomal_ibd_by_pair.20150206.txt
+Unstaged changes:
+    Modified:   analysis/_site.yml
 
 </code></pre>
 <p>
@@ -612,6 +614,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/aca0182c071d0f737ffed22a2e10e5cfea33cc02/analysis/representation-risk.Rmd" target="_blank">aca0182</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2023-08-07
+</td>
+<td>
+Update FPR
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tinalasisi/PODFRIDGE/10423d8edfbd1e0cedabf1e7b281aad3dbe03a84/docs/representation-risk.html" target="_blank">10423d8</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2023-05-18
+</td>
+<td>
+Update to add IBD page
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -758,11 +794,11 @@ update everything
 <pre class="r"><code># Load required packages
 library(tidyverse)</code></pre>
 <pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.1.2     ✔ readr     2.1.4
-✔ forcats   1.0.0     ✔ stringr   1.5.0
-✔ ggplot2   3.4.2     ✔ tibble    3.2.1
-✔ lubridate 1.9.2     ✔ tidyr     1.3.0
-✔ purrr     1.0.1     
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.4.4     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.0
+✔ purrr     1.0.2     
 ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ✖ dplyr::filter() masks stats::filter()
 ✖ dplyr::lag()    masks stats::lag()
@@ -814,75 +850,21 @@ Tina Lasisi
 </table>
 </div>
 </div>
+<p><img src="figure/representation-risk.Rmd/combo-fig-1.png" width="672" style="display: block; margin: auto;" />
+## Population size vs. risk</p>
 </div>
-</div>
-<div id="population-size-vs.-risk" class="section level2">
-<h2>Population size vs. risk</h2>
 <div id="raw-db-size-vs.-raw-pop---cousin-panel" class="section level3">
 <h3>Raw DB size vs. Raw pop - Cousin panel</h3>
 <p>This code generates four line plots that show the relationship
 between population size, database size, and the probability of finding a
 genetic match for different degrees of relatedness (1C, 2C, 3C, 4C).</p>
 <div class="figure" style="text-align: center">
-<img src="figure/representation-risk.Rmd/unnamed-chunk-2-1.png" alt="Lines represent African American and European American population sizes, respectively." width="960" />
+<img src="figure/representation-risk.Rmd/unnamed-chunk-3-1.png" alt="Lines represent African American and European American population sizes, respectively." width="960" />
 <p class="caption">
 Lines represent African American and European American population sizes,
 respectively.
 </p>
 </div>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-1">
-Past versions of unnamed-chunk-2-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-2-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/39f7bb62ab75810c4216b2f3ab3f30af1d48ac27/docs/figure/representation-risk.Rmd/unnamed-chunk-2-1.png" target="_blank">39f7bb6</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-04-16
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/f89a90f2c7cc6808f21d805b3ba5df810ed06184/docs/figure/representation-risk.Rmd/unnamed-chunk-2-1.png" target="_blank">f89a90f</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-04-16
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-<div id="match-vs.-population-size---rel-db-size-gradient"
-class="section level3">
-<h3>Match vs. population size - Rel DB size gradient</h3>
-<p><img src="figure/representation-risk.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
 Past versions of unnamed-chunk-3-1.png
@@ -921,11 +903,9 @@ Tina Lasisi
 </div>
 </div>
 </div>
-<div
-id="match-vs.-cousin-distance---rel-db-size-gradient---population-panel"
+<div id="match-vs.-population-size---rel-db-size-gradient"
 class="section level3">
-<h3>Match vs. Cousin distance - Rel DB size gradient - population
-panel</h3>
+<h3>Match vs. population size - Rel DB size gradient</h3>
 <p><img src="figure/representation-risk.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-1">
@@ -965,8 +945,11 @@ Tina Lasisi
 </div>
 </div>
 </div>
-<div id="match-vs.-rel-db-size---pop-size-panel" class="section level3">
-<h3>Match vs. Rel DB size - pop size panel</h3>
+<div
+id="match-vs.-cousin-distance---rel-db-size-gradient---population-panel"
+class="section level3">
+<h3>Match vs. Cousin distance - Rel DB size gradient - population
+panel</h3>
 <p><img src="figure/representation-risk.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-1">
@@ -1006,9 +989,8 @@ Tina Lasisi
 </div>
 </div>
 </div>
-<div id="match-vs.-rel-db-size-overunder-representation-panel"
-class="section level3">
-<h3>Match vs. Rel DB size, over/under-representation panel</h3>
+<div id="match-vs.-rel-db-size---pop-size-panel" class="section level3">
+<h3>Match vs. Rel DB size - pop size panel</h3>
 <p><img src="figure/representation-risk.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-6-1">
@@ -1048,9 +1030,9 @@ Tina Lasisi
 </div>
 </div>
 </div>
-<div id="match-vs.-rel-db-size-vs---cousin-panel-pop-gradient"
+<div id="match-vs.-rel-db-size-overunder-representation-panel"
 class="section level3">
-<h3>Match vs. Rel DB size vs - cousin panel, pop gradient</h3>
+<h3>Match vs. Rel DB size, over/under-representation panel</h3>
 <p><img src="figure/representation-risk.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-1">
@@ -1090,49 +1072,17 @@ Tina Lasisi
 </div>
 </div>
 </div>
+<div id="match-vs.-rel-db-size-vs---cousin-panel-pop-gradient"
+class="section level3">
+<h3>Match vs. Rel DB size vs - cousin panel, pop gradient</h3>
+<p><img src="figure/representation-risk.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
 <div
 id="final---match-vs.-rel-db-size---cousin-gradient-ibd-not-accounted"
 class="section level3">
 <h3>Final - Match vs. Rel DB size - cousin gradient (IBD not
 accounted)</h3>
-<p><img src="figure/representation-risk.Rmd/unnamed-chunk-9-1.png" width="960" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-1">
-Past versions of unnamed-chunk-9-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-9-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/f89a90f2c7cc6808f21d805b3ba5df810ed06184/docs/figure/representation-risk.Rmd/unnamed-chunk-9-1.png" target="_blank">f89a90f</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-04-16
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p><img src="figure/representation-risk.Rmd/unnamed-chunk-10-1.png" width="960" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1141,41 +1091,44 @@ Session information
 </button>
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
-<pre><code>R version 4.2.2 (2022-10-31)
+<pre><code>R version 4.3.2 (2023-10-31)
 Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Ventura 13.3.1
+Running under: macOS Sonoma 14.2.1
 
 Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/lib/libRblas.0.dylib
-LAPACK: /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/lib/libRlapack.dylib
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
 
 locale:
 [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: America/Detroit
+tzcode source: internal
 
 attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] ggrepel_0.9.3   patchwork_1.1.2 lubridate_1.9.2 forcats_1.0.0  
- [5] stringr_1.5.0   dplyr_1.1.2     purrr_1.0.1     readr_2.1.4    
- [9] tidyr_1.3.0     tibble_3.2.1    ggplot2_3.4.2   tidyverse_2.0.0
-[13] workflowr_1.7.0
+ [1] ggrepel_0.9.5   patchwork_1.2.0 lubridate_1.9.3 forcats_1.0.0  
+ [5] stringr_1.5.1   dplyr_1.1.4     purrr_1.0.2     readr_2.1.5    
+ [9] tidyr_1.3.0     tibble_3.2.1    ggplot2_3.4.4   tidyverse_2.0.0
+[13] workflowr_1.7.1
 
 loaded via a namespace (and not attached):
- [1] tidyselect_1.2.0 xfun_0.39        bslib_0.4.2      colorspace_2.1-0
- [5] vctrs_0.6.2      generics_0.1.3   htmltools_0.5.5  yaml_2.3.7      
- [9] utf8_1.2.3       rlang_1.1.0      jquerylib_0.1.4  later_1.3.0     
-[13] pillar_1.9.0     glue_1.6.2       withr_2.5.0      lifecycle_1.0.3 
-[17] munsell_0.5.0    gtable_0.3.3     evaluate_0.20    labeling_0.4.2  
-[21] knitr_1.42       callr_3.7.3      tzdb_0.3.0       fastmap_1.1.1   
-[25] httpuv_1.6.9     ps_1.7.5         fansi_1.0.4      highr_0.10      
-[29] Rcpp_1.0.10      promises_1.2.0.1 scales_1.2.1     cachem_1.0.7    
-[33] jsonlite_1.8.4   farver_2.1.1     fs_1.6.1         hms_1.1.3       
-[37] digest_0.6.31    stringi_1.7.12   processx_3.8.1   getPass_0.2-2   
-[41] rprojroot_2.0.3  grid_4.2.2       cli_3.6.1        tools_4.2.2     
-[45] magrittr_2.0.3   sass_0.4.5       whisker_0.4.1    pkgconfig_2.0.3 
-[49] timechange_0.2.0 rmarkdown_2.21   httr_1.4.5       rstudioapi_0.14 
-[53] R6_2.5.1         git2r_0.32.0     compiler_4.2.2  </code></pre>
+ [1] sass_0.4.8        utf8_1.2.4        generics_0.1.3    stringi_1.8.3    
+ [5] hms_1.1.3         digest_0.6.34     magrittr_2.0.3    timechange_0.2.0 
+ [9] evaluate_0.23     grid_4.3.2        fastmap_1.1.1     rprojroot_2.0.4  
+[13] jsonlite_1.8.8    processx_3.8.3    whisker_0.4.1     ps_1.7.5         
+[17] promises_1.2.1    httr_1.4.7        fansi_1.0.6       scales_1.3.0     
+[21] jquerylib_0.1.4   cli_3.6.2         rlang_1.1.3       munsell_0.5.0    
+[25] withr_2.5.2       cachem_1.0.8      yaml_2.3.8        tools_4.3.2      
+[29] tzdb_0.4.0        colorspace_2.1-0  httpuv_1.6.13     vctrs_0.6.5      
+[33] R6_2.5.1          lifecycle_1.0.4   git2r_0.33.0      fs_1.6.3         
+[37] pkgconfig_2.0.3   callr_3.7.3       pillar_1.9.0      bslib_0.6.1      
+[41] later_1.3.2       gtable_0.3.4      glue_1.7.0        Rcpp_1.0.12      
+[45] highr_0.10        xfun_0.41         tidyselect_1.2.0  rstudioapi_0.15.0
+[49] knitr_1.45        farver_2.1.1      htmltools_0.5.7   labeling_0.4.3   
+[53] rmarkdown_2.25    compiler_4.3.2    getPass_0.2-4    </code></pre>
 </div>
 </div>
 </div>
