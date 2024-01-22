@@ -15,12 +15,12 @@ navbar:
     href: demo-data.html
   - text: Analyses
     href: analyses.html
-  - text: Risk
-    href: representation-risk.html
+  - text: Database composition
+    href: database-composition.html
   - text: Short Range
     href: shortrange.Rmd
-  - text: STR
-    href: STR.Rmd
+  - text: Manuscript Figures
+    href: manuscript_figures.Rmd
 output:
   workflowr::wflow_html:
     toc: yes
