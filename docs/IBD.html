@@ -14,7 +14,7 @@
 
 <title>IBD</title>
 
-<script src="site_libs/header-attrs-2.21/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -30,7 +30,7 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
@@ -348,7 +348,13 @@ div.tocify {
   <a href="analyses.html">Analyses</a>
 </li>
 <li>
-  <a href="representation-risk.html">Risk</a>
+  <a href="database-composition.html">Database composition</a>
+</li>
+<li>
+  <a href="shortrange.Rmd">Short Range</a>
+</li>
+<li>
+  <a href="manuscript_figures.Rmd">Manuscript Figures</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -364,7 +370,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">IBD</h1>
 <h4 class="author">Tina Lasisi</h4>
-<h4 class="date">2023-05-15 13:34:39</h4>
+<h4 class="date">2024-01-22 11:38:59</h4>
 
 </div>
 
@@ -372,7 +378,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+workflowr <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -383,8 +389,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> </a>
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -393,13 +399,13 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2023-05-15
+<strong>Last updated:</strong> 2024-01-22
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 1
+aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>PODFRIDGE/</code> <span
@@ -411,7 +417,7 @@ title="This is the local directory in which the code in this file was executed."
 This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
 analysis was created with <a
   href="https://github.com/workflowr/workflowr">workflowr</a> (version
-1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
 that were applied when the results were created. The <em>Past
 versions</em> tab lists the development history.
 </p>
@@ -422,21 +428,18 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
-<span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
-changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges"
+<div id="strongRMarkdownfilestronguptodate"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown is untracked by Git. To know which version of the R
-Markdown file created these results, you’ll want to first commit it to
-the Git repo. If you’re still working on the analysis, you can ignore
-this warning. When you’re finished, you can run
-<code>wflow_publish</code> to commit the R Markdown file and build the
-HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
 </div>
 </div>
 </div>
@@ -527,15 +530,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtree64da0c31da9b7fc9dc6202bf02e1b776398d65f0targetblank64da0c3a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtree1f3a662c92715a3a43386f135628e33c0d110553targetblank1f3a662a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/tinalasisi/PODFRIDGE/tree/64da0c31da9b7fc9dc6202bf02e1b776398d65f0" target="_blank">64da0c3</a>
+<a href="https://github.com/tinalasisi/PODFRIDGE/tree/1f3a662c92715a3a43386f135628e33c0d110553" target="_blank">1f3a662</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtree64da0c31da9b7fc9dc6202bf02e1b776398d65f0targetblank64da0c3a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtree1f3a662c92715a3a43386f135628e33c0d110553targetblank1f3a662a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -545,7 +548,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/tinalasisi/PODFRIDGE/tree/64da0c31da9b7fc9dc6202bf02e1b776398d65f0" target="_blank">64da0c3</a>.
+<a href="https://github.com/tinalasisi/PODFRIDGE/tree/1f3a662c92715a3a43386f135628e33c0d110553" target="_blank">1f3a662</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -563,13 +566,9 @@ Ignored files:
     Ignored:    .DS_Store
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-    Ignored:    data/.DS_Store
-    Ignored:    data/FGG User Manual 2022.pdf
-    Ignored:    data/FGG_Database_v.2022.xlsx
 
-Untracked files:
-    Untracked:  analysis/IBD.Rmd
-    Untracked:  data/autosomal_ibd_by_pair.20150206.txt
+Unstaged changes:
+    Modified:   analysis/_site.yml
 
 </code></pre>
 <p>
@@ -584,10 +583,73 @@ have uncommitted changes.
 <hr>
 </div>
 <div id="versions" class="tab-pane fade">
+
 <p>
-There are no past versions. Publish this analysis with
-<code>wflow_publish()</code> to start tracking its development.
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/IBD.Rmd</code>) and HTML
+(<code>docs/IBD.html</code>) files. If you’ve configured a remote Git
+repository (see <code>?wflow_git_remote</code>), click on the hyperlinks
+in the table below to view the files as they were in that past version.
 </p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/10423d8edfbd1e0cedabf1e7b281aad3dbe03a84/analysis/IBD.Rmd" target="_blank">10423d8</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2023-05-18
+</td>
+<td>
+Update to add IBD page
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tinalasisi/PODFRIDGE/10423d8edfbd1e0cedabf1e7b281aad3dbe03a84/docs/IBD.html" target="_blank">10423d8</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2023-05-18
+</td>
+<td>
+Update to add IBD page
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <hr>
 </div>
 </div>
@@ -595,11 +657,11 @@ There are no past versions. Publish this analysis with
 <pre class="r"><code># Load required packages
 library(tidyverse)</code></pre>
 <pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.1.2     ✔ readr     2.1.4
-✔ forcats   1.0.0     ✔ stringr   1.5.0
-✔ ggplot2   3.4.2     ✔ tibble    3.2.1
-✔ lubridate 1.9.2     ✔ tidyr     1.3.0
-✔ purrr     1.0.1     
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.4.4     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.0
+✔ purrr     1.0.2     
 ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ✖ dplyr::filter() masks stats::filter()
 ✖ dplyr::lag()    masks stats::lag()
@@ -627,6 +689,43 @@ dbl (1): IBD_CM_SUM
 2 CEU   ASW       5.79
 3 CEU   CEU      17.3 </code></pre>
 <p><img src="figure/IBD.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-1">
+Past versions of unnamed-chunk-2-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/10423d8edfbd1e0cedabf1e7b281aad3dbe03a84/docs/figure/IBD.Rmd/unnamed-chunk-2-1.png" target="_blank">10423d8</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2023-05-18
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Here we see that there is much higher mean IBD in the ASW sample than
 expected. After checking for errors, it appears that this has to do with
 the nature of the HapMap sample. African Ancestry in SW USA (ASW)
@@ -638,8 +737,119 @@ use this population as a proxy for African Americans.</p>
 <p>Below the filtered data is re-visualized as distributions for
 different kinship levels.</p>
 <p><img src="figure/IBD.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
+Past versions of unnamed-chunk-3-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/10423d8edfbd1e0cedabf1e7b281aad3dbe03a84/docs/figure/IBD.Rmd/unnamed-chunk-3-1.png" target="_blank">10423d8</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2023-05-18
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p><img src="figure/IBD.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-1">
+Past versions of unnamed-chunk-4-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/10423d8edfbd1e0cedabf1e7b281aad3dbe03a84/docs/figure/IBD.Rmd/unnamed-chunk-4-1.png" target="_blank">10423d8</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2023-05-18
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p><img src="figure/IBD.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-6-1">
+Past versions of unnamed-chunk-6-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-6-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/10423d8edfbd1e0cedabf1e7b281aad3dbe03a84/docs/figure/IBD.Rmd/unnamed-chunk-6-1.png" target="_blank">10423d8</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2023-05-18
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
     Welch Two Sample t-test
 
@@ -652,6 +862,43 @@ sample estimates:
 mean in group ASW mean in group CEU 
          49.77737          10.33388 </code></pre>
 <p><img src="figure/IBD.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-1">
+Past versions of unnamed-chunk-8-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-8-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/10423d8edfbd1e0cedabf1e7b281aad3dbe03a84/docs/figure/IBD.Rmd/unnamed-chunk-8-1.png" target="_blank">10423d8</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2023-05-18
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -660,42 +907,45 @@ Session information
 </button>
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
-<pre><code>R version 4.2.2 (2022-10-31)
+<pre><code>R version 4.3.2 (2023-10-31)
 Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Ventura 13.3.1
+Running under: macOS Sonoma 14.2.1
 
 Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/lib/libRblas.0.dylib
-LAPACK: /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/lib/libRlapack.dylib
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
 
 locale:
 [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: America/Detroit
+tzcode source: internal
 
 attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] patchwork_1.1.2 lubridate_1.9.2 forcats_1.0.0   stringr_1.5.0  
- [5] dplyr_1.1.2     purrr_1.0.1     readr_2.1.4     tidyr_1.3.0    
- [9] tibble_3.2.1    ggplot2_3.4.2   tidyverse_2.0.0 workflowr_1.7.0
+ [1] patchwork_1.2.0 lubridate_1.9.3 forcats_1.0.0   stringr_1.5.1  
+ [5] dplyr_1.1.4     purrr_1.0.2     readr_2.1.5     tidyr_1.3.0    
+ [9] tibble_3.2.1    ggplot2_3.4.4   tidyverse_2.0.0 workflowr_1.7.1
 
 loaded via a namespace (and not attached):
- [1] tidyselect_1.2.0   xfun_0.39          bslib_0.4.2        colorspace_2.1-0  
- [5] vctrs_0.6.2        generics_0.1.3     htmltools_0.5.5    yaml_2.3.7        
- [9] utf8_1.2.3         rlang_1.1.0        jquerylib_0.1.4    later_1.3.0       
-[13] pillar_1.9.0       glue_1.6.2         withr_2.5.0        RColorBrewer_1.1-3
-[17] bit64_4.0.5        lifecycle_1.0.3    munsell_0.5.0      gtable_0.3.3      
-[21] evaluate_0.20      labeling_0.4.2     knitr_1.42         callr_3.7.3       
-[25] tzdb_0.3.0         fastmap_1.1.1      httpuv_1.6.9       ps_1.7.5          
-[29] parallel_4.2.2     fansi_1.0.4        highr_0.10         Rcpp_1.0.10       
-[33] promises_1.2.0.1   scales_1.2.1       cachem_1.0.7       vroom_1.6.1       
-[37] jsonlite_1.8.4     farver_2.1.1       bit_4.0.5          fs_1.6.1          
-[41] hms_1.1.3          digest_0.6.31      stringi_1.7.12     processx_3.8.1    
-[45] getPass_0.2-2      rprojroot_2.0.3    grid_4.2.2         cli_3.6.1         
-[49] tools_4.2.2        magrittr_2.0.3     sass_0.4.5         crayon_1.5.2      
-[53] whisker_0.4.1      pkgconfig_2.0.3    timechange_0.2.0   rmarkdown_2.21    
-[57] httr_1.4.5         rstudioapi_0.14    R6_2.5.1           git2r_0.32.0      
-[61] compiler_4.2.2    </code></pre>
+ [1] gtable_0.3.4       xfun_0.41          bslib_0.6.1        processx_3.8.3    
+ [5] callr_3.7.3        tzdb_0.4.0         vctrs_0.6.5        tools_4.3.2       
+ [9] ps_1.7.5           generics_0.1.3     parallel_4.3.2     fansi_1.0.6       
+[13] highr_0.10         pkgconfig_2.0.3    RColorBrewer_1.1-3 lifecycle_1.0.4   
+[17] compiler_4.3.2     farver_2.1.1       git2r_0.33.0       munsell_0.5.0     
+[21] getPass_0.2-4      httpuv_1.6.13      htmltools_0.5.7    sass_0.4.8        
+[25] yaml_2.3.8         later_1.3.2        pillar_1.9.0       crayon_1.5.2      
+[29] jquerylib_0.1.4    whisker_0.4.1      cachem_1.0.8       tidyselect_1.2.0  
+[33] digest_0.6.34      stringi_1.8.3      labeling_0.4.3     rprojroot_2.0.4   
+[37] fastmap_1.1.1      grid_4.3.2         colorspace_2.1-0   cli_3.6.2         
+[41] magrittr_2.0.3     utf8_1.2.4         withr_2.5.2        scales_1.3.0      
+[45] promises_1.2.1     bit64_4.0.5        timechange_0.2.0   rmarkdown_2.25    
+[49] httr_1.4.7         bit_4.0.5          hms_1.1.3          evaluate_0.23     
+[53] knitr_1.45         rlang_1.1.3        Rcpp_1.0.12        glue_1.7.0        
+[57] rstudioapi_0.15.0  vroom_1.6.5        jsonlite_1.8.8     R6_2.5.1          
+[61] fs_1.6.3          </code></pre>
 </div>
 </div>
 

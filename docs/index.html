@@ -13,7 +13,7 @@
 
 <title>PODFRIDGE</title>
 
-<script src="site_libs/header-attrs-2.18/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -271,7 +271,13 @@ $(document).ready(function () {
   <a href="analyses.html">Analyses</a>
 </li>
 <li>
-  <a href="representation-risk.html">Risk</a>
+  <a href="database-composition.html">Database composition</a>
+</li>
+<li>
+  <a href="shortrange.Rmd">Short Range</a>
+</li>
+<li>
+  <a href="manuscript_figures.Rmd">Manuscript Figures</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -314,7 +320,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2023-04-16
+<strong>Last updated:</strong> 2024-01-22
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -332,7 +338,7 @@ title="This is the local directory in which the code in this file was executed."
 This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
 analysis was created with <a
   href="https://github.com/workflowr/workflowr">workflowr</a> (version
-1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
 that were applied when the results were created. The <em>Past
 versions</em> tab lists the development history.
 </p>
@@ -361,15 +367,15 @@ results.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtreefea10218d1c297e02b1a7cf7ba8a631909d6116atargetblankfea1021a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtree1f3a662c92715a3a43386f135628e33c0d110553targetblank1f3a662a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/tinalasisi/PODFRIDGE/tree/fea10218d1c297e02b1a7cf7ba8a631909d6116a" target="_blank">fea1021</a>
+<a href="https://github.com/tinalasisi/PODFRIDGE/tree/1f3a662c92715a3a43386f135628e33c0d110553" target="_blank">1f3a662</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtreefea10218d1c297e02b1a7cf7ba8a631909d6116atargetblankfea1021a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtree1f3a662c92715a3a43386f135628e33c0d110553targetblank1f3a662a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -379,7 +385,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/tinalasisi/PODFRIDGE/tree/fea10218d1c297e02b1a7cf7ba8a631909d6116a" target="_blank">fea1021</a>.
+<a href="https://github.com/tinalasisi/PODFRIDGE/tree/1f3a662c92715a3a43386f135628e33c0d110553" target="_blank">1f3a662</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -397,7 +403,6 @@ Ignored files:
     Ignored:    .DS_Store
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-    Ignored:    data/.DS_Store
 
 Unstaged changes:
     Modified:   analysis/_site.yml
@@ -450,6 +455,23 @@ Message
 html
 </td>
 <td>
+<a href="https://rawcdn.githack.com/tinalasisi/PODFRIDGE/c280b6f940af31573e4c3476b16188af1604f146/docs/index.html" target="_blank">c280b6f</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2023-04-16
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
 <a href="https://rawcdn.githack.com/tinalasisi/PODFRIDGE/f89a90f2c7cc6808f21d805b3ba5df810ed06184/docs/index.html" target="_blank">f89a90f</a>
 </td>
 <td>
@@ -490,7 +512,7 @@ Rmd
 Tina Lasisi
 </td>
 <td>
-2023-04-07
+2023-04-08
 </td>
 <td>
 Typo
@@ -507,7 +529,7 @@ html
 Tina Lasisi
 </td>
 <td>
-2023-03-05
+2023-03-06
 </td>
 <td>
 Build site.
@@ -575,7 +597,7 @@ html
 Tina Lasisi
 </td>
 <td>
-2023-03-02
+2023-03-03
 </td>
 <td>
 Build site.
@@ -592,7 +614,7 @@ html
 Tina Lasisi
 </td>
 <td>
-2023-03-02
+2023-03-03
 </td>
 <td>
 wflow_git_commit(all = TRUE)
@@ -609,7 +631,7 @@ html
 Tina Lasisi
 </td>
 <td>
-2023-03-02
+2023-03-03
 </td>
 <td>
 Build site.
@@ -626,7 +648,7 @@ html
 Tina Lasisi
 </td>
 <td>
-2023-03-02
+2023-03-03
 </td>
 <td>
 Build site.
@@ -643,7 +665,7 @@ Rmd
 Tina Lasisi
 </td>
 <td>
-2023-03-02
+2023-03-03
 </td>
 <td>
 Update website
@@ -660,7 +682,7 @@ html
 Tina Lasisi
 </td>
 <td>
-2023-03-02
+2023-03-03
 </td>
 <td>
 Update website

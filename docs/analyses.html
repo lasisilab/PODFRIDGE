@@ -14,7 +14,7 @@
 
 <title>Analyses</title>
 
-<script src="site_libs/header-attrs-2.18/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -30,7 +30,7 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
@@ -348,7 +348,13 @@ div.tocify {
   <a href="analyses.html">Analyses</a>
 </li>
 <li>
-  <a href="representation-risk.html">Risk</a>
+  <a href="database-composition.html">Database composition</a>
+</li>
+<li>
+  <a href="shortrange.Rmd">Short Range</a>
+</li>
+<li>
+  <a href="manuscript_figures.Rmd">Manuscript Figures</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -364,7 +370,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Analyses</h1>
 <h4 class="author">Tina Lasisi</h4>
-<h4 class="date">2023-04-16 20:55:53</h4>
+<h4 class="date">2024-01-22 11:38:53</h4>
 
 </div>
 
@@ -393,7 +399,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2023-04-16
+<strong>Last updated:</strong> 2024-01-22
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -411,7 +417,7 @@ title="This is the local directory in which the code in this file was executed."
 This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
 analysis was created with <a
   href="https://github.com/workflowr/workflowr">workflowr</a> (version
-1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
 that were applied when the results were created. The <em>Past
 versions</em> tab lists the development history.
 </p>
@@ -524,15 +530,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtreefea10218d1c297e02b1a7cf7ba8a631909d6116atargetblankfea1021a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtree1f3a662c92715a3a43386f135628e33c0d110553targetblank1f3a662a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/tinalasisi/PODFRIDGE/tree/fea10218d1c297e02b1a7cf7ba8a631909d6116a" target="_blank">fea1021</a>
+<a href="https://github.com/tinalasisi/PODFRIDGE/tree/1f3a662c92715a3a43386f135628e33c0d110553" target="_blank">1f3a662</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtreefea10218d1c297e02b1a7cf7ba8a631909d6116atargetblankfea1021a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtree1f3a662c92715a3a43386f135628e33c0d110553targetblank1f3a662a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -542,7 +548,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/tinalasisi/PODFRIDGE/tree/fea10218d1c297e02b1a7cf7ba8a631909d6116a" target="_blank">fea1021</a>.
+<a href="https://github.com/tinalasisi/PODFRIDGE/tree/1f3a662c92715a3a43386f135628e33c0d110553" target="_blank">1f3a662</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -560,7 +566,6 @@ Ignored files:
     Ignored:    .DS_Store
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-    Ignored:    data/.DS_Store
 
 Unstaged changes:
     Modified:   analysis/_site.yml
@@ -609,6 +614,108 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/aca0182c071d0f737ffed22a2e10e5cfea33cc02/analysis/analyses.Rmd" target="_blank">aca0182</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2023-08-07
+</td>
+<td>
+Update FPR
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/f8cdf88ac6248d8895d6645080bd7dcb8bc45113/analysis/analyses.Rmd" target="_blank">f8cdf88</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2023-07-31
+</td>
+<td>
+Update analyses.Rmd
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/7743dac23b98955847067c3c23ae26b90840b65f/analysis/analyses.Rmd" target="_blank">7743dac</a>
+</td>
+<td>
+jakevc
+</td>
+<td>
+2023-07-12
+</td>
+<td>
+update analyiss to fix calc plot
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/7c36abecfa4da3ab591c81ea9bf43daf3f4f6469/analysis/analyses.Rmd" target="_blank">7c36abe</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2023-07-10
+</td>
+<td>
+Update analyses.Rmd
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/4168249a300fb77dc9ca357ddbb7c3fb6798d7c7/analysis/analyses.Rmd" target="_blank">4168249</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2023-06-27
+</td>
+<td>
+Update analyses and cluster script
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tinalasisi/PODFRIDGE/c280b6f940af31573e4c3476b16188af1604f146/docs/analyses.html" target="_blank">c280b6f</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2023-04-16
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -858,7 +965,7 @@ html
 Tina Lasisi
 </td>
 <td>
-2023-03-05
+2023-03-06
 </td>
 <td>
 Build site.
@@ -875,7 +982,7 @@ Rmd
 Tina Lasisi
 </td>
 <td>
-2023-03-05
+2023-03-06
 </td>
 <td>
 add analyses
@@ -909,7 +1016,7 @@ html
 Tina Lasisi
 </td>
 <td>
-2023-03-02
+2023-03-03
 </td>
 <td>
 Build site.
@@ -926,7 +1033,7 @@ html
 Tina Lasisi
 </td>
 <td>
-2023-03-02
+2023-03-03
 </td>
 <td>
 wflow_git_commit(all = TRUE)
@@ -943,7 +1050,7 @@ html
 Tina Lasisi
 </td>
 <td>
-2023-03-02
+2023-03-03
 </td>
 <td>
 Build site.
@@ -960,7 +1067,7 @@ html
 Tina Lasisi
 </td>
 <td>
-2023-03-02
+2023-03-03
 </td>
 <td>
 Build site.
@@ -1028,11 +1135,11 @@ Publishing POPFORGE
 library(wesanderson) # for color palettes
 library(tidyverse) #data wrangling etc</code></pre>
 <pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.1.1     ✔ readr     2.1.4
-✔ forcats   1.0.0     ✔ stringr   1.5.0
-✔ ggplot2   3.4.1     ✔ tibble    3.2.1
-✔ lubridate 1.9.2     ✔ tidyr     1.3.0
-✔ purrr     1.0.1     
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.4.4     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.0
+✔ purrr     1.0.2     
 ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ✖ dplyr::filter() masks stats::filter()
 ✖ dplyr::lag()    masks stats::lag()
@@ -1530,7 +1637,7 @@ Tina Lasisi
 Tina Lasisi
 </td>
 <td>
-2023-03-05
+2023-03-06
 </td>
 </tr>
 </tbody>
@@ -1623,6 +1730,187 @@ Tina Lasisi
 </table>
 </div>
 </div>
+<pre class="r"><code>predict_total_simulations &lt;- function(n_sims_unrelated, n_sims_related) {
+  unique_populations &lt;- 4
+  relationship_types &lt;- 6  # Includes parent_child, full_siblings, half_siblings, cousins, second_cousins, unrelated
+
+  # Calculate total number of observations
+  total_simulations &lt;- unique_populations *
+                       (n_sims_unrelated + (relationship_types - 1) * n_sims_related) 
+  
+  total_observations &lt;- total_simulations * relationship_types
+
+  cat(&quot;Total number of simulations =&quot;, total_simulations, &quot;\n&quot;)
+  cat(&quot;Total number of observations in csv =&quot;, total_observations, &quot;\n&quot;)
+}</code></pre>
+<pre class="r"><code># predict_total_simulations(100000, 10000)</code></pre>
+<pre class="r"><code>input_df &lt;- read_csv(&quot;data/dl_known_vs_tested_simulation_results.csv&quot;) %&gt;% 
+  mutate(log_R_sum = ifelse(is.infinite(log_R_sum) &amp; log_R_sum &lt; 0,
+                            log(1.4e-11),
+                            log_R_sum))</code></pre>
+<pre><code>Rows: 360000 Columns: 6
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: &quot;,&quot;
+chr (3): population, known_relationship_type, tested_relationship_type
+dbl (3): replicate_id, num_shared_alleles_sum, log_R_sum
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code># Check if there are any -Inf values in the log_R_sum column
+inf_values_log_R_sum &lt;- sapply(input_df$log_R_sum, function(x) is.infinite(x) &amp; x &lt; 0)
+
+# Count the number of rows containing -Inf values
+num_rows_with_inf &lt;- sum(inf_values_log_R_sum)
+
+# Print the count of rows containing -Inf values in log_R_sum
+print(paste(&quot;Number of rows with -Inf values in log_R_sum column:&quot;, num_rows_with_inf))</code></pre>
+<pre><code>[1] &quot;Number of rows with -Inf values in log_R_sum column: 0&quot;</code></pre>
+<pre class="r"><code># Filter the input dataframe for unrelated values only
+input_df_unrelated &lt;- input_df %&gt;% filter(known_relationship_type == &quot;unrelated&quot;)</code></pre>
+<pre class="r"><code># input_df &lt;- read_csv(&quot;data/jvc-known_vs_tested_simulation_results.csv&quot;) </code></pre>
+<pre class="r"><code># Function to calculate proportion exceeding cutoff
+calculate_proportion_exceeding_cutoff &lt;- function(input_population, relationship_type, fp_rate, input_df) {
+
+  unrelated_tested &lt;- input_df %&gt;%
+    filter(population == input_population,
+           known_relationship_type == &quot;unrelated&quot;,
+           tested_relationship_type == relationship_type)
+  
+  m_value = fp_rate / 100
+  cut_value &lt;- quantile(unrelated_tested$log_R_sum, 1 - m_value)
+  
+  actual_relationship &lt;- input_df %&gt;%
+    filter(population == input_population,
+           known_relationship_type == relationship_type,
+           tested_relationship_type == relationship_type)
+  
+  proportion_exceeding_cutoff &lt;- mean(actual_relationship$log_R_sum &gt; cut_value)
+  
+  return(data.frame(population = input_population,
+                    relationship_type = relationship_type,
+                    fp_rate = fp_rate,
+                    prop_exceeding = proportion_exceeding_cutoff))
+}
+
+# Define a vector of false positive rates as percentages
+fp_rates &lt;- c(0.1, 1, 5)
+
+population_groups = unique(input_df$population)
+relationship_types = unique(input_df$known_relationship_type)
+
+# Exclude &quot;unrelated&quot; from relationship types for calculation purposes
+relationship_types = relationship_types[relationship_types != &quot;unrelated&quot;]
+
+# Apply function to calculate proportions for each combination of population group, relationship type and false positive rate
+proportion_args &lt;- expand.grid(input_population = population_groups, 
+                               relationship_type = relationship_types,
+                               fp_rate = fp_rates)
+
+# add input_df for each row
+proportion_args$input_df &lt;- I(rep(list(input_df), nrow(proportion_args)))
+
+exceeding_proportions &lt;- purrr::pmap_df(proportion_args,
+                                        calculate_proportion_exceeding_cutoff)
+
+# Look at the results
+exceeding_proportions</code></pre>
+<pre><code>   population relationship_type fp_rate prop_exceeding
+1        AfAm      parent_child     0.1          1.000
+2       Asian      parent_child     0.1          1.000
+3        Cauc      parent_child     0.1          1.000
+4    Hispanic      parent_child     0.1          1.000
+5        AfAm     full_siblings     0.1          0.794
+6       Asian     full_siblings     0.1          0.820
+7        Cauc     full_siblings     0.1          0.822
+8    Hispanic     full_siblings     0.1          0.782
+9        AfAm     half_siblings     0.1          0.088
+10      Asian     half_siblings     0.1          0.091
+11       Cauc     half_siblings     0.1          0.106
+12   Hispanic     half_siblings     0.1          0.089
+13       AfAm           cousins     0.1          0.004
+14      Asian           cousins     0.1          0.001
+15       Cauc           cousins     0.1          0.007
+16   Hispanic           cousins     0.1          0.003
+17       AfAm    second_cousins     0.1          0.000
+18      Asian    second_cousins     0.1          0.001
+19       Cauc    second_cousins     0.1          0.001
+20   Hispanic    second_cousins     0.1          0.003
+21       AfAm      parent_child     1.0          1.000
+22      Asian      parent_child     1.0          1.000
+23       Cauc      parent_child     1.0          1.000
+24   Hispanic      parent_child     1.0          1.000
+25       AfAm     full_siblings     1.0          0.959
+26      Asian     full_siblings     1.0          0.958
+27       Cauc     full_siblings     1.0          0.945
+28   Hispanic     full_siblings     1.0          0.941
+29       AfAm     half_siblings     1.0          0.302
+30      Asian     half_siblings     1.0          0.313
+31       Cauc     half_siblings     1.0          0.334
+32   Hispanic     half_siblings     1.0          0.356
+33       AfAm           cousins     1.0          0.020
+34      Asian           cousins     1.0          0.016
+35       Cauc           cousins     1.0          0.037
+36   Hispanic           cousins     1.0          0.019
+37       AfAm    second_cousins     1.0          0.012
+38      Asian    second_cousins     1.0          0.007
+39       Cauc    second_cousins     1.0          0.015
+40   Hispanic    second_cousins     1.0          0.022
+41       AfAm      parent_child     5.0          1.000
+42      Asian      parent_child     5.0          1.000
+43       Cauc      parent_child     5.0          1.000
+44   Hispanic      parent_child     5.0          1.000
+45       AfAm     full_siblings     5.0          0.991
+46      Asian     full_siblings     5.0          0.992
+47       Cauc     full_siblings     5.0          0.990
+48   Hispanic     full_siblings     5.0          0.986
+49       AfAm     half_siblings     5.0          0.579
+50      Asian     half_siblings     5.0          0.601
+51       Cauc     half_siblings     5.0          0.588
+52   Hispanic     half_siblings     5.0          0.587
+53       AfAm           cousins     5.0          0.090
+54      Asian           cousins     5.0          0.089
+55       Cauc           cousins     5.0          0.107
+56   Hispanic           cousins     5.0          0.102
+57       AfAm    second_cousins     5.0          0.071
+58      Asian    second_cousins     5.0          0.055
+59       Cauc    second_cousins     5.0          0.073
+60   Hispanic    second_cousins     5.0          0.069</code></pre>
+<pre class="r"><code># Convert population to factor so it can be used in fill aesthetic
+exceeding_proportions$population &lt;- as.factor(exceeding_proportions$population)
+
+# Calculate the total number of unrelated pairs and full sibling pairs
+num_pairs &lt;- input_df %&gt;% 
+  group_by(population, known_relationship_type) %&gt;%
+  summarise(n_pairs = n()) %&gt;% 
+  spread(known_relationship_type, n_pairs, fill = 0)</code></pre>
+<pre><code>`summarise()` has grouped output by &#39;population&#39;. You can override using the
+`.groups` argument.</code></pre>
+<pre class="r"><code># Take the values from the first population
+first_population &lt;- num_pairs$population[1]
+num_unrelated_pairs &lt;- num_pairs$unrelated[1]
+num_related_pairs &lt;- num_pairs$full_siblings[1] 
+
+# format numbers with comma as thousands separator
+num_unrelated_pairs &lt;- format(num_unrelated_pairs, big.mark = &quot;,&quot;)
+num_related_pairs &lt;- format(num_related_pairs, big.mark = &quot;,&quot;)
+
+# Create the caption
+caption_text &lt;- paste(&quot;Number of unrelated pairs per population: &quot;, num_unrelated_pairs,
+                      &quot;. Number of related pairs: &quot;, num_related_pairs, &quot;.&quot;)
+
+# Create the facetted bar plot
+ggplot(exceeding_proportions, aes(x = relationship_type, y = prop_exceeding, fill = population)) +
+  geom_bar(stat = &quot;identity&quot;, position=position_dodge()) +
+  facet_wrap(~fp_rate, scales=&quot;free&quot;) +
+  scale_fill_manual(values = wes_palette(&quot;Darjeeling1&quot;, n = length(unique(exceeding_proportions$population)), type = &quot;continuous&quot;)) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  ylab(&quot;Proportion exceeding cut-off&quot;) +
+  xlab(&quot;Relationship type&quot;) +
+  ggtitle(&quot;Proportions exceeding likelihood cut-off for different relationship types&quot;) +
+  labs(fill = &quot;Population&quot;) +
+  labs(caption = caption_text)</code></pre>
+<p><img src="figure/analyses.Rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1632,42 +1920,45 @@ Session information
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 4.2.2 (2022-10-31)
+<pre><code>R version 4.3.2 (2023-10-31)
 Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Ventura 13.2.1
+Running under: macOS Sonoma 14.2.1
 
 Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/lib/libRblas.0.dylib
-LAPACK: /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/lib/libRlapack.dylib
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
 
 locale:
 [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: America/Detroit
+tzcode source: internal
 
 attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] RColorBrewer_1.1-3 lubridate_1.9.2    forcats_1.0.0      stringr_1.5.0     
- [5] dplyr_1.1.1        purrr_1.0.1        readr_2.1.4        tidyr_1.3.0       
- [9] tibble_3.2.1       ggplot2_3.4.1      tidyverse_2.0.0    wesanderson_0.3.6 
-[13] workflowr_1.7.0   
+ [1] RColorBrewer_1.1-3 lubridate_1.9.3    forcats_1.0.0      stringr_1.5.1     
+ [5] dplyr_1.1.4        purrr_1.0.2        readr_2.1.5        tidyr_1.3.0       
+ [9] tibble_3.2.1       ggplot2_3.4.4      tidyverse_2.0.0    wesanderson_0.3.7 
+[13] workflowr_1.7.1   
 
 loaded via a namespace (and not attached):
- [1] tidyselect_1.2.0 xfun_0.35        bslib_0.4.1      colorspace_2.0-3
- [5] vctrs_0.6.1      generics_0.1.3   htmltools_0.5.3  yaml_2.3.6      
- [9] utf8_1.2.2       rlang_1.1.0      jquerylib_0.1.4  later_1.3.0     
-[13] pillar_1.8.1     glue_1.6.2       withr_2.5.0      lifecycle_1.0.3 
-[17] munsell_0.5.0    gtable_0.3.1     evaluate_0.18    labeling_0.4.2  
-[21] knitr_1.41       tzdb_0.3.0       callr_3.7.3      fastmap_1.1.0   
-[25] httpuv_1.6.6     ps_1.7.2         fansi_1.0.3      highr_0.9       
-[29] Rcpp_1.0.9       promises_1.2.0.1 scales_1.2.1     cachem_1.0.6    
-[33] jsonlite_1.8.4   farver_2.1.1     fs_1.5.2         hms_1.1.2       
-[37] digest_0.6.30    stringi_1.7.8    processx_3.8.0   getPass_0.2-2   
-[41] rprojroot_2.0.3  grid_4.2.2       cli_3.6.1        tools_4.2.2     
-[45] magrittr_2.0.3   sass_0.4.4       crayon_1.5.2     whisker_0.4     
-[49] pkgconfig_2.0.3  ellipsis_0.3.2   timechange_0.1.1 rmarkdown_2.18  
-[53] httr_1.4.4       rstudioapi_0.14  R6_2.5.1         git2r_0.30.1    
-[57] compiler_4.2.2  </code></pre>
+ [1] gtable_0.3.4      xfun_0.41         bslib_0.6.1       processx_3.8.3   
+ [5] callr_3.7.3       tzdb_0.4.0        vctrs_0.6.5       tools_4.3.2      
+ [9] ps_1.7.5          generics_0.1.3    parallel_4.3.2    fansi_1.0.6      
+[13] highr_0.10        pkgconfig_2.0.3   lifecycle_1.0.4   compiler_4.3.2   
+[17] farver_2.1.1      git2r_0.33.0      munsell_0.5.0     getPass_0.2-4    
+[21] httpuv_1.6.13     htmltools_0.5.7   sass_0.4.8        yaml_2.3.8       
+[25] later_1.3.2       pillar_1.9.0      crayon_1.5.2      jquerylib_0.1.4  
+[29] whisker_0.4.1     cachem_1.0.8      tidyselect_1.2.0  digest_0.6.34    
+[33] stringi_1.8.3     labeling_0.4.3    rprojroot_2.0.4   fastmap_1.1.1    
+[37] grid_4.3.2        colorspace_2.1-0  cli_3.6.2         magrittr_2.0.3   
+[41] utf8_1.2.4        withr_2.5.2       scales_1.3.0      promises_1.2.1   
+[45] bit64_4.0.5       timechange_0.2.0  rmarkdown_2.25    httr_1.4.7       
+[49] bit_4.0.5         hms_1.1.3         evaluate_0.23     knitr_1.45       
+[53] rlang_1.1.3       Rcpp_1.0.12       glue_1.7.0        rstudioapi_0.15.0
+[57] vroom_1.6.5       jsonlite_1.8.8    R6_2.5.1          fs_1.6.3         </code></pre>
 </div>
 </div>
 </div>
