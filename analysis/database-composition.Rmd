@@ -25,6 +25,7 @@ library(tidyverse)
 
 # Load the dataset
 data <- read_csv("data/df_state-breakdown.csv")
+data_total <- read_csv("data/df_state_total.csv")
 ```
 
 ### Data Cleaning

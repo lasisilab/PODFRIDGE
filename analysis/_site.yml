@@ -18,9 +18,9 @@ navbar:
   - text: Database composition
     href: database-composition.html
   - text: Short Range
-    href: shortrange.Rmd
+    href: shortrange.html
   - text: Manuscript Figures
-    href: manuscript_figures.Rmd
+    href: manuscript_figures.html
 output:
   workflowr::wflow_html:
     toc: yes
