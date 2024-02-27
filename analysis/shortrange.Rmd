@@ -643,3 +643,5 @@ If both alleles do not match then $\kappa_2 / R_X^u = 0$.
 
 ### Calculating LR
 We need 100,000 unrelated pairs. 
+
+
