@@ -195,7 +195,7 @@ R_Xu <- sum(purrr::map_dbl(ind1_alleles, function(x) unlist(allele_frequencies_b
 ```
 
 
-```{r}
+```{r eval=FALSE, include=FALSE}
 # 
 result <- simulate_STRpairs(population = "AfAm", relationship_type = "full_siblings", df_allelefreq = df_freq, df_ibdprobs = df_ibdprobs, n_sims=4)
 
@@ -244,7 +244,7 @@ result_combinations
 
 ```
 
-```{r}
+```{r eval=FALSE, include=FALSE}
 # Load the furrr, progressr, and future packages
 library(furrr)
 library(progressr)

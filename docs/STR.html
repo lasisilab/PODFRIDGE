@@ -12,7 +12,7 @@
 <meta name="author" content="Tina Lasisi" />
 
 
-<title>Database composition</title>
+<title>Short Range Familial Search</title>
 
 <script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -368,9 +368,9 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Database composition</h1>
+<h1 class="title toc-ignore">Short Range Familial Search</h1>
 <h4 class="author">Tina Lasisi</h4>
-<h4 class="date">2024-02-27 11:06:29</h4>
+<h4 class="date">2024-02-27 16:56:54</h4>
 
 </div>
 
@@ -378,7 +378,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -389,8 +389,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -403,9 +403,9 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>PODFRIDGE/</code> <span
@@ -428,18 +428,21 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
@@ -568,6 +571,12 @@ Ignored files:
     Ignored:    .Rproj.user/
     Ignored:    analysis/.DS_Store
 
+Unstaged changes:
+    Modified:   analysis/STR.Rmd
+    Modified:   analysis/shortrange.Rmd
+    Modified:   output/plot_log_R_sum.png
+    Modified:   output/plot_num_shared_alleles_sum.png
+
 </code></pre>
 <p>
 Note that any generated files, e.g. HTML, png, CSS, etc., are not
@@ -584,11 +593,10 @@ have uncommitted changes.
 
 <p>
 These are the previous versions of the repository in which changes were
-made to the R Markdown (<code>analysis/database-composition.Rmd</code>)
-and HTML (<code>docs/database-composition.html</code>) files. If you’ve
-configured a remote Git repository (see <code>?wflow_git_remote</code>),
-click on the hyperlinks in the table below to view the files as they
-were in that past version.
+made to the R Markdown (<code>analysis/STR.Rmd</code>) and HTML
+(<code>docs/STR.html</code>) files. If you’ve configured a remote Git
+repository (see <code>?wflow_git_remote</code>), click on the hyperlinks
+in the table below to view the files as they were in that past version.
 </p>
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
@@ -617,33 +625,16 @@ Message
 Rmd
 </td>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/b6c047d2ea0cd93123beb8b65776d3bd2886e8a3/analysis/database-composition.Rmd" target="_blank">b6c047d</a>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/acfb421286f581facbf8c7e0c912f6d8bc66f628/analysis/STR.Rmd" target="_blank">acfb421</a>
 </td>
 <td>
 Tina Lasisi
 </td>
 <td>
-2024-01-26
+2023-06-06
 </td>
 <td>
-update extensions
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/tinalasisi/PODFRIDGE/9e71347bf88281897c8f83d0531c703b068b0267/docs/database-composition.html" target="_blank">9e71347</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2024-01-22
-</td>
-<td>
-Build site.
+Update simulation script
 </td>
 </tr>
 <tr>
@@ -651,33 +642,16 @@ Build site.
 Rmd
 </td>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/1f3a662c92715a3a43386f135628e33c0d110553/analysis/database-composition.Rmd" target="_blank">1f3a662</a>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/d959019be3a6eb5dd858286a593c0cae129a7400/analysis/STR.Rmd" target="_blank">d959019</a>
 </td>
 <td>
 Tina Lasisi
 </td>
 <td>
-2024-01-22
+2023-05-31
 </td>
 <td>
-Republish website with database composition page.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/9bbc7fba3ed57e8a1f343ce721183f8f17a1a8d8/analysis/database-composition.Rmd" target="_blank">9bbc7fb</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2024-01-21
-</td>
-<td>
-Add new page for database composition + data
+Add STR.Rmd
 </td>
 </tr>
 </tbody>
@@ -687,145 +661,232 @@ Add new page for database composition + data
 </div>
 </div>
 </div>
-<div id="forensic" class="section level1">
-<h1>Forensic</h1>
-<p>Data based on Murphy &amp; Tong</p>
-<div
-id="analysis-of-demographic-group-representation-in-database-vs-population"
-class="section level2">
-<h2>Analysis of Demographic Group Representation in Database vs
-Population</h2>
-<p>This document presents an analysis of the representation of various
-demographic groups in a database compared to their representation in the
-general population across different states.</p>
-<div id="data-loading-and-preparation" class="section level3">
-<h3>Data Loading and Preparation</h3>
-<p>We start by loading the necessary libraries and the dataset.</p>
-<pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.1.4     ✔ readr     2.1.5
-✔ forcats   1.0.0     ✔ stringr   1.5.1
-✔ ggplot2   3.4.4     ✔ tibble    3.2.1
-✔ lubridate 1.9.3     ✔ tidyr     1.3.0
-✔ purrr     1.0.2     
-── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-✖ dplyr::filter() masks stats::filter()
-✖ dplyr::lag()    masks stats::lag()
-ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-<pre class="r"><code># Load the dataset
-data &lt;- read_csv(&quot;data/df_state-breakdown.csv&quot;)</code></pre>
-<pre><code>Rows: 77 Columns: 4
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: &quot;,&quot;
-chr (4): State, Demographic Group, Context, Value
+<div id="codis-marker-allele-frequencies" class="section level2">
+<h2>CODIS marker allele frequencies</h2>
+<p>Frequencies and raw genotypes for different populations were found <a
+href="https://www.promega.com/products/pm/genetic-identity/population-statistics/allele-frequencies/">here</a>
+and refer to Steffen, C.R., Coble, M.D., Gettings, K.B., Vallone, P.M.
+(2017) Corrigendum to ‘U.S. Population Data for 29 Autosomal STR Loci’
+[Forensic Sci. Int. Genet. 7 (2013) e82-e83]. Forensic Sci. Int. Genet.
+31, e36–e40. The US core CODIS markers are a subset of the 29 described
+here.</p>
+</div>
+<div id="load-codis-allele-frequencies" class="section level2">
+<h2>Load CODIS allele frequencies</h2>
+<p>CODIS allele frequencies were found through NIST STR base and
+specifically downloaded from the supplementary materials of Steffen et
+al 2017. These are 1036 unrelated individuals from the U.S.
+population.</p>
+<pre class="r"><code># Define the file paths
+file_paths &lt;- list.files(path = &quot;data&quot;, pattern = &quot;1036_.*\\.csv&quot;, full.names = TRUE)
 
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-<pre class="r"><code>data_total &lt;- read_csv(&quot;data/df_state_total.csv&quot;)</code></pre>
-<pre><code>Rows: 14 Columns: 3
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: &quot;,&quot;
-chr (3): Demographic, Region, Value
+# Create a list of data frames
+df_list &lt;- lapply(file_paths, function(path) {
+  read_csv(path, col_types = cols(
+    marker = col_character(),
+    allele = col_double(),
+    frequency = col_double(),
+    population = col_character()
+  ))
+})
 
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-</div>
-<div id="data-cleaning" class="section level3">
-<h3>Data Cleaning</h3>
-<p>The data contains demographic information with percentages in two
-contexts: ‘Database’ and ‘Population’. We need to clean and transform
-the data for analysis.</p>
-<pre class="r"><code># Convert the &#39;Value&#39; column to numeric
-data &lt;- data %&gt;%
-  mutate(Value = as.numeric(str_remove(Value, &quot;%&quot;)) / 100)
+# Bind all data frames into one
+df &lt;- bind_rows(df_list)
 
-# Separate the data into database and population datasets
-database_data &lt;- data %&gt;% filter(Context == &quot;Database&quot;)
-population_data &lt;- data %&gt;% filter(Context == &quot;Population&quot;)
+df_freq &lt;- df</code></pre>
+</div>
+<div id="simulating-genotypes" class="section level2">
+<h2>Simulating genotypes</h2>
+<pre class="r"><code>df_ibdprobs &lt;- tibble(
+  relationship = 
+    c(&quot;parent_child&quot;, &quot;full_siblings&quot;, &quot;half_siblings&quot;, &quot;cousins&quot;, &quot;second_cousins&quot;, &quot;unrelated&quot;),
+  k0 = c(0, 1/4, 1/2, 7/8, 15/16, 1),
+  k1 = c(1, 1/2, 1/2, 1/8, 1/16, 0),
+  k2 = c(0, 1/4, 0, 0, 0, 0)
+)
 
-# Merge the two datasets
-merged_data &lt;- database_data %&gt;%
-  inner_join(population_data, by = c(&quot;State&quot;, &quot;Demographic Group&quot;)) %&gt;%
-  rename(Value_Database = Value.x, Value_Population = Value.y) %&gt;%
-  mutate(Difference = Value_Database - Value_Population)</code></pre>
+df_ibdprobs</code></pre>
+<pre><code># A tibble: 6 × 4
+  relationship      k0     k1    k2
+  &lt;chr&gt;          &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+1 parent_child   0     1       0   
+2 full_siblings  0.25  0.5     0.25
+3 half_siblings  0.5   0.5     0   
+4 cousins        0.875 0.125   0   
+5 second_cousins 0.938 0.0625  0   
+6 unrelated      1     0       0   </code></pre>
+<pre class="r"><code>simulate_STRpairs &lt;- function(population, relationship_type, df_allelefreq, df_ibdprobs, n_sims=1) {
+  
+  markers &lt;- unique(df_allelefreq$marker)
+  
+  allele_frequencies_by_marker &lt;- df_allelefreq %&gt;%
+    filter(population == population) %&gt;%
+    split(.$marker)
+
+  allele_frequencies_by_marker &lt;- map(allele_frequencies_by_marker, ~.x %&gt;% pull(frequency) %&gt;% setNames(.x$allele))
+
+  prob_shared_alleles &lt;- df_ibdprobs %&gt;%
+    filter(relationship == relationship) %&gt;%
+    select(k0, k1, k2) %&gt;%
+    unlist() %&gt;%
+    as.numeric()
+  non_zero_indices &lt;- which(prob_shared_alleles != 0)
+
+  k0 &lt;- prob_shared_alleles[1]
+  k1 &lt;- prob_shared_alleles[2]
+  k2 &lt;- prob_shared_alleles[3]
+
+  results &lt;- lapply(markers, function(current_marker) {
+    marker_results &lt;- lapply(seq_len(n_sims), function(replicate_id) {
+      individual1 &lt;- setNames(
+        lapply(markers, function(current_marker) {
+          allele_frequencies &lt;- allele_frequencies_by_marker[[current_marker]]
+          return(sample(names(allele_frequencies), size = 2, replace = TRUE, prob = allele_frequencies))
+        }), markers)
+      
+      individual2 &lt;- setNames(
+        lapply(markers, function(current_marker) {
+          allele_frequencies &lt;- allele_frequencies_by_marker[[current_marker]]
+          num_shared_alleles &lt;- sample(non_zero_indices - 1, size = 1, prob = prob_shared_alleles[non_zero_indices])
+          alleles_from_individual1 &lt;- sample(individual1[[current_marker]], size = num_shared_alleles)
+          alleles_from_population &lt;- sample(names(allele_frequencies), size = 2 - num_shared_alleles, replace = TRUE, prob = allele_frequencies)
+          return(c(alleles_from_individual1, alleles_from_population))
+        }), markers)
+
+      ind1_alleles &lt;- individual1[[current_marker]]
+      ind2_alleles &lt;- individual2[[current_marker]]
+      shared_alleles &lt;- intersect(ind1_alleles, ind2_alleles)
+      num_shared_alleles &lt;- length(shared_alleles)
+      
+      R_Xp &lt;- sum(purrr::map_dbl(shared_alleles, function(x) unlist(allele_frequencies_by_marker[[current_marker]][x])))
+R_Xu &lt;- sum(purrr::map_dbl(ind1_alleles, function(x) unlist(allele_frequencies_by_marker[[current_marker]][x])) * purrr::map_dbl(ind2_alleles, function(x) unlist(allele_frequencies_by_marker[[current_marker]][x])))
+
+      R &lt;- k0
+      if (R_Xp != 0) { R &lt;- R + (k1 / R_Xp) }
+      if (R_Xu != 0) { R &lt;- R + (k2 / R_Xu) }
+      
+      log_R &lt;- log(R)
+      
+       # Add the replicate_id column to the output tibble
+      return(tibble(population = population,
+                relationship_type = relationship_type,
+                marker = current_marker,
+                num_shared_alleles = num_shared_alleles,
+                log_R = log_R,
+                replicate_id = replicate_id)) # Add this line
+})
+    
+    marker_results &lt;- bind_rows(marker_results)
+    return(marker_results)
+  })
+
+  result &lt;- bind_rows(results)
+
+  # Aggregate results for each replicate, summing num_shared_alleles and log_R values.
+  result_by_replicate &lt;- result %&gt;%
+    group_by(population, relationship_type, replicate_id) %&gt;%
+    summarise(num_shared_alleles_sum = sum(num_shared_alleles),
+              log_R_sum = sum(log_R),
+              .groups = &quot;drop&quot;)
+  
+  return(result_by_replicate)
+
+}</code></pre>
 </div>
-<div id="data-visualization" class="section level3">
-<h3>Data Visualization</h3>
-<p>We create a visualization to show the differences in representation
-for each demographic group by state.</p>
-<pre class="r"><code># Plotting the differences
-ggplot(merged_data, aes(x = State, y = Difference, fill = `Demographic Group`)) +
-  geom_bar(stat = &quot;identity&quot;, position = position_dodge(width = 0.8)) +
-  theme_minimal() +
-  labs(title = &quot;Difference in Demographic Group Representation: Database vs Population by State&quot;,
-       x = &quot;State&quot;, y = &quot;Difference in Representation&quot;) +
-  geom_hline(yintercept = 0, linetype = 1)</code></pre>
-<pre><code>Warning: Removed 5 rows containing missing values (`geom_bar()`).</code></pre>
-<p><img src="figure/database-composition.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
-Past versions of unnamed-chunk-3-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-3-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/9e71347bf88281897c8f83d0531c703b068b0267/docs/figure/database-composition.Rmd/unnamed-chunk-3-1.png" target="_blank">9e71347</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2024-01-22
-</td>
-</tr>
-</tbody>
-</table>
+<div id="combinations" class="section level2">
+<h2>Combinations</h2>
+<pre class="r"><code>simulation_combinations &lt;- function(df, n_sims_unrelated, n_sims_related) {
+  # Define the list of relationship types
+  relationship_types &lt;- c(&#39;parent_child&#39;, &#39;full_siblings&#39;, &#39;half_siblings&#39;, &#39;cousins&#39;, &#39;second_cousins&#39;, &#39;unrelated&#39;)
+  
+  # Get unique populations from the input dataframe
+  unique_populations &lt;- unique(df$population)
+  filtered_populations &lt;- unique_populations[unique_populations != &quot;all&quot;]
+  
+  # Create a dataframe of all combinations of populations and relationship types
+  combinations &lt;- expand_grid(population = filtered_populations, relationship_type = relationship_types)
+
+  # Add the number of simulations for unrelated or related relationships
+  combinations$n_sims &lt;- ifelse(combinations$relationship_type == &quot;unrelated&quot;, n_sims_unrelated, n_sims_related)
+  
+  return(combinations)
+}</code></pre>
+<pre class="r"><code># Example usage
+result_combinations &lt;- simulation_combinations(df, n_sims_unrelated = 10, n_sims_related = 5)
+
+result_combinations</code></pre>
+<pre><code># A tibble: 24 × 3
+   population relationship_type n_sims
+   &lt;chr&gt;      &lt;chr&gt;              &lt;dbl&gt;
+ 1 AfAm       parent_child           5
+ 2 AfAm       full_siblings          5
+ 3 AfAm       half_siblings          5
+ 4 AfAm       cousins                5
+ 5 AfAm       second_cousins         5
+ 6 AfAm       unrelated             10
+ 7 Asian      parent_child           5
+ 8 Asian      full_siblings          5
+ 9 Asian      half_siblings          5
+10 Asian      cousins                5
+# ℹ 14 more rows</code></pre>
 </div>
+<div id="parallel" class="section level2">
+<h2>Parallel</h2>
+<pre class="r"><code># # Apply the simulate_STRpairs function to each row in result_combinations
+# results &lt;- result_combinations %&gt;%
+#   pmap_dfr(function(population, relationship_type, n_sims) {
+#     simulate_STRpairs(population, relationship_type, df_allelefreq = df_freq, df_ibdprobs = df_ibdprobs, n_sims = n_sims)
+#   })</code></pre>
 </div>
-</div>
-<div id="summary-table" class="section level3">
-<h3>Summary Table</h3>
-<p>Finally, we create a summary table showing the difference in
-representation for each state and demographic group.</p>
-<pre class="r"><code># Creating the summary table
-state_group_summary &lt;- merged_data %&gt;%
-  group_by(State, `Demographic Group`) %&gt;%
-  summarize(Difference = mean(Difference)) %&gt;%
-  ungroup()</code></pre>
-<pre><code>`summarise()` has grouped output by &#39;State&#39;. You can override using the
-`.groups` argument.</code></pre>
-<pre class="r"><code>state_group_summary</code></pre>
-<pre><code># A tibble: 35 × 3
-   State      `Demographic Group` Difference
-   &lt;chr&gt;      &lt;chr&gt;                    &lt;dbl&gt;
- 1 California Asian                  -0.134 
- 2 California Black                   0.116 
- 3 California Hispanic               -0.045 
- 4 California Native American        NA     
- 5 California White                  -0.0740
- 6 Florida    Asian                  -0.0267
- 7 Florida    Black                   0.183 
- 8 Florida    Hispanic               -0.232 
- 9 Florida    Native American        -0.0044
-10 Florida    White                   0.0730
-# ℹ 25 more rows</code></pre>
+<div id="figures" class="section level2">
+<h2>Figures</h2>
+<pre class="r"><code># Function to capitalize the first letter of a string
+ucfirst &lt;- function(s) {
+  paste(toupper(substring(s, 1,1)), substring(s, 2), sep = &quot;&quot;)
+}
+
+create_plot &lt;- function(df, variable_to_plot, relationship_col, population_col) {
+  # Set the population_shape variable as factor
+  df$population_shape &lt;- factor(df[[population_col]])
+
+  # Create the plot
+  p &lt;- ggplot(df, aes(x = .data[[relationship_col]], y = .data[[variable_to_plot]], 
+                      color = .data[[population_col]], shape = .data[[population_col]], fill = .data[[population_col]])) +
+    geom_boxplot(alpha = 0.4, position = position_dodge(width = 0.75)) +
+    geom_point(position = position_jitterdodge(jitter.width = 0.1, dodge.width = 0.75), size = 1, alpha = 0.6) +
+    theme_classic() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    scale_x_discrete(limits = c(&#39;parent_child&#39;, &#39;full_siblings&#39;, &#39;half_siblings&#39;, &#39;cousins&#39;, &#39;second_cousins&#39;, &#39;unrelated&#39;)) +
+    scale_shape_manual(values = c(16, 17, 15, 18)) + # Change these values to desired shapes
+    labs(title = paste(ucfirst(variable_to_plot), &quot;by Relationship Type and Population&quot;),
+         x = &quot;Relationship Type&quot;, 
+         y = ucfirst(variable_to_plot), 
+         color = &quot;Population&quot;,
+         shape = &quot;Population&quot;,
+         fill = &quot;Population&quot;)
+  
+  # Save the plot to the /output folder with a custom file name
+  save_plot &lt;- function(plot, plot_name) {
+    ggsave(filename = paste0(&quot;output/&quot;, plot_name, &quot;.png&quot;), plot = plot, height = 6, width = 8, units = &quot;in&quot;)
+  }
+  
+  # Call the save_plot function to save the plot
+  save_plot(p, paste(&quot;plot_&quot;, variable_to_plot, sep = &quot;&quot;))
+  
+  return(p)
+}</code></pre>
+<pre class="r"><code>simulation_results &lt;- read.csv(&quot;data/simulation_results.csv&quot;)</code></pre>
+<pre class="r"><code># Filter your data for unique STR markers and remove the &quot;all&quot; population
+# df_plt_final &lt;- results_parallel %&gt;%
+df_plt_final &lt;- simulation_results %&gt;%
+  select(-replicate_id)
+
+p &lt;- create_plot(df_plt_final, &quot;log_R_sum&quot;, &quot;relationship_type&quot;, &quot;population&quot;)
+p</code></pre>
+<p><img src="figure/STR.Rmd/unnamed-chunk-8-1.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plt_allele &lt;- create_plot(df_plt_final, &quot;num_shared_alleles_sum&quot;, &quot;relationship_type&quot;, &quot;population&quot;)
+plt_allele</code></pre>
+<p><img src="figure/STR.Rmd/unnamed-chunk-8-2.png" width="768" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -853,28 +914,29 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] lubridate_1.9.3 forcats_1.0.0   stringr_1.5.1   dplyr_1.1.4    
- [5] purrr_1.0.2     readr_2.1.5     tidyr_1.3.0     tibble_3.2.1   
- [9] ggplot2_3.4.4   tidyverse_2.0.0 workflowr_1.7.1
+ [1] progressr_0.14.0 furrr_0.3.1      future_1.33.1    lubridate_1.9.3 
+ [5] forcats_1.0.0    stringr_1.5.1    dplyr_1.1.4      purrr_1.0.2     
+ [9] readr_2.1.5      tidyr_1.3.0      tibble_3.2.1     ggplot2_3.4.4   
+[13] tidyverse_2.0.0  readxl_1.4.3     workflowr_1.7.1 
 
 loaded via a namespace (and not attached):
- [1] sass_0.4.8        utf8_1.2.4        generics_0.1.3    stringi_1.8.3    
- [5] hms_1.1.3         digest_0.6.34     magrittr_2.0.3    timechange_0.2.0 
- [9] evaluate_0.23     grid_4.3.2        fastmap_1.1.1     rprojroot_2.0.4  
-[13] jsonlite_1.8.8    processx_3.8.3    whisker_0.4.1     ps_1.7.5         
-[17] promises_1.2.1    httr_1.4.7        fansi_1.0.6       scales_1.3.0     
-[21] jquerylib_0.1.4   cli_3.6.2         crayon_1.5.2      rlang_1.1.3      
-[25] bit64_4.0.5       munsell_0.5.0     withr_2.5.2       cachem_1.0.8     
-[29] yaml_2.3.8        parallel_4.3.2    tools_4.3.2       tzdb_0.4.0       
-[33] colorspace_2.1-0  httpuv_1.6.13     vctrs_0.6.5       R6_2.5.1         
-[37] lifecycle_1.0.4   git2r_0.33.0      bit_4.0.5         fs_1.6.3         
-[41] vroom_1.6.5       pkgconfig_2.0.3   callr_3.7.3       pillar_1.9.0     
-[45] bslib_0.6.1       later_1.3.2       gtable_0.3.4      glue_1.7.0       
-[49] Rcpp_1.0.12       highr_0.10        xfun_0.41         tidyselect_1.2.0 
-[53] rstudioapi_0.15.0 knitr_1.45        farver_2.1.1      htmltools_0.5.7  
-[57] labeling_0.4.3    rmarkdown_2.25    compiler_4.3.2    getPass_0.2-4    </code></pre>
-</div>
-</div>
+ [1] gtable_0.3.4      xfun_0.41         bslib_0.6.1       processx_3.8.3   
+ [5] callr_3.7.3       tzdb_0.4.0        vctrs_0.6.5       tools_4.3.2      
+ [9] ps_1.7.5          generics_0.1.3    parallel_4.3.2    fansi_1.0.6      
+[13] highr_0.10        pkgconfig_2.0.3   lifecycle_1.0.4   farver_2.1.1     
+[17] compiler_4.3.2    git2r_0.33.0      textshaping_0.3.7 munsell_0.5.0    
+[21] getPass_0.2-4     codetools_0.2-19  httpuv_1.6.13     htmltools_0.5.7  
+[25] sass_0.4.8        yaml_2.3.8        crayon_1.5.2      later_1.3.2      
+[29] pillar_1.9.0      jquerylib_0.1.4   whisker_0.4.1     cachem_1.0.8     
+[33] parallelly_1.36.0 tidyselect_1.2.0  digest_0.6.34     stringi_1.8.3    
+[37] listenv_0.9.0     labeling_0.4.3    rprojroot_2.0.4   fastmap_1.1.1    
+[41] grid_4.3.2        colorspace_2.1-0  cli_3.6.2         magrittr_2.0.3   
+[45] utf8_1.2.4        withr_2.5.2       scales_1.3.0      promises_1.2.1   
+[49] bit64_4.0.5       timechange_0.2.0  rmarkdown_2.25    httr_1.4.7       
+[53] globals_0.16.2    bit_4.0.5         cellranger_1.1.0  ragg_1.2.7       
+[57] hms_1.1.3         evaluate_0.23     knitr_1.45        rlang_1.1.3      
+[61] Rcpp_1.0.12       glue_1.7.0        vroom_1.6.5       rstudioapi_0.15.0
+[65] jsonlite_1.8.8    R6_2.5.1          systemfonts_1.0.5 fs_1.6.3         </code></pre>
 </div>
 </div>
 
