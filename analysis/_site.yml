@@ -21,6 +21,10 @@ navbar:
     href: shortrange.html
   - text: Manuscript Figures
     href: manuscript_figures.html
+  right:
+  - icon: fab fa-github
+    text: Source code
+    href: https://tinalasisi.github.io/PODFRIDGE/
 output:
   workflowr::wflow_html:
     toc: yes
