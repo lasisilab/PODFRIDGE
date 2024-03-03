@@ -12,7 +12,7 @@
 <meta name="author" content="Tina Lasisi" />
 
 
-<title>Short Range Familial Search</title>
+<title>CODIS Marker Allele Frequencies</title>
 
 <script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -370,9 +370,9 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Short Range Familial Search</h1>
+<h1 class="title toc-ignore">CODIS Marker Allele Frequencies</h1>
 <h4 class="author">Tina Lasisi</h4>
-<h4 class="date">2024-03-02 21:58:27</h4>
+<h4 class="date">2024-03-03 13:35:30</h4>
 
 </div>
 
@@ -380,7 +380,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -391,8 +391,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -401,13 +401,13 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2024-03-02
+<strong>Last updated:</strong> 2024-03-03
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>PODFRIDGE/</code> <span
@@ -430,18 +430,21 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
@@ -532,15 +535,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtree53520650eae29fa3beb2bb25bd6e2441359f3d0dtargetblank5352065a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtreea48eed3ae9d69684a0eca13716472a00e410addftargetblanka48eed3a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/tinalasisi/PODFRIDGE/tree/53520650eae29fa3beb2bb25bd6e2441359f3d0d" target="_blank">5352065</a>
+<a href="https://github.com/tinalasisi/PODFRIDGE/tree/a48eed3ae9d69684a0eca13716472a00e410addf" target="_blank">a48eed3</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtree53520650eae29fa3beb2bb25bd6e2441359f3d0dtargetblank5352065a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtreea48eed3ae9d69684a0eca13716472a00e410addftargetblanka48eed3a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -550,7 +553,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/tinalasisi/PODFRIDGE/tree/53520650eae29fa3beb2bb25bd6e2441359f3d0d" target="_blank">5352065</a>.
+<a href="https://github.com/tinalasisi/PODFRIDGE/tree/a48eed3ae9d69684a0eca13716472a00e410addf" target="_blank">a48eed3</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -571,12 +574,9 @@ Ignored files:
     Ignored:    analysis/.DS_Store
     Ignored:    output/.DS_Store
 
-Untracked files:
-    Untracked:  data/data_filtered_recoded.csv
-    Untracked:  data/data_proportions.csv
-    Untracked:  data/frequency_table_by_race_year.csv
-    Untracked:  data/proportions_table_by_race_year.csv
-    Untracked:  data/stats_by_race_year.csv
+Unstaged changes:
+    Modified:   analysis/STR.Rmd
+    Modified:   analysis/shortrange.Rmd
 
 </code></pre>
 <p>
@@ -622,6 +622,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tinalasisi/PODFRIDGE/48acb9f6ede345fe2546bcf9bff6264624ab9e88/docs/shortrange.html" target="_blank">48acb9f</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2024-03-02
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -808,14 +825,17 @@ and refer to Steffen, C.R., Coble, M.D., Gettings, K.B., Vallone, P.M.
 [Forensic Sci. Int. Genet. 7 (2013) e82-e83]. Forensic Sci. Int. Genet.
 31, e36–e40. The US core CODIS markers are a subset of the 29 described
 here.</p>
-</div>
-<div id="load-codis-allele-frequencies" class="section level2">
-<h2>Load CODIS allele frequencies</h2>
-<p>CODIS allele frequencies were found through NIST STR base and
-specifically downloaded from the supplementary materials of Steffen et
-al 2017. These are 1036 unrelated individuals from the U.S.
-population.</p>
-<pre class="r"><code># Define the file paths
+<pre><code>
+
+
+
+## Load CODIS allele frequencies
+
+CODIS allele frequencies were found through NIST STR base and specifically downloaded from the supplementary materials of Steffen et al 2017. These are 1036 unrelated individuals from the U.S. population. 
+
+
+```r
+# Define the file paths
 file_paths &lt;- list.files(path = &quot;data&quot;, pattern = &quot;1036_.*\\.csv&quot;, full.names = TRUE)
 
 # Create a list of data frames
@@ -849,303 +869,7 @@ for(i in seq_along(marker_chunks)) {
 
   print(p)
 }</code></pre>
-<pre><code>Warning: `position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals</code></pre>
-<p><img src="figure/shortrange.Rmd/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-1-1">
-Past versions of unnamed-chunk-1-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-1-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/8a464dc56a42405de7e49a72dcf238da5b6c515b/docs/figure/shortrange.Rmd/unnamed-chunk-1-1.png" target="_blank">8a464dc</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2024-01-18
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre><code>Warning: `position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals</code></pre>
-<p><img src="figure/shortrange.Rmd/unnamed-chunk-1-2.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-1-2">
-Past versions of unnamed-chunk-1-2.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-1-2" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/8a464dc56a42405de7e49a72dcf238da5b6c515b/docs/figure/shortrange.Rmd/unnamed-chunk-1-2.png" target="_blank">8a464dc</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2024-01-18
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre><code>Warning: `position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals</code></pre>
-<p><img src="figure/shortrange.Rmd/unnamed-chunk-1-3.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-1-3">
-Past versions of unnamed-chunk-1-3.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-1-3" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/8a464dc56a42405de7e49a72dcf238da5b6c515b/docs/figure/shortrange.Rmd/unnamed-chunk-1-3.png" target="_blank">8a464dc</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2024-01-18
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre><code>Warning: `position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals</code></pre>
-<p><img src="figure/shortrange.Rmd/unnamed-chunk-1-4.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-1-4">
-Past versions of unnamed-chunk-1-4.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-1-4" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/8a464dc56a42405de7e49a72dcf238da5b6c515b/docs/figure/shortrange.Rmd/unnamed-chunk-1-4.png" target="_blank">8a464dc</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2024-01-18
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre><code>Warning: `position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals</code></pre>
-<p><img src="figure/shortrange.Rmd/unnamed-chunk-1-5.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-1-5">
-Past versions of unnamed-chunk-1-5.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-1-5" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/8a464dc56a42405de7e49a72dcf238da5b6c515b/docs/figure/shortrange.Rmd/unnamed-chunk-1-5.png" target="_blank">8a464dc</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2024-01-18
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre><code>Warning: `position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals
-`position_dodge()` requires non-overlapping x intervals</code></pre>
-<p><img src="figure/shortrange.Rmd/unnamed-chunk-1-6.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-1-6">
-Past versions of unnamed-chunk-1-6.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-1-6" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/8a464dc56a42405de7e49a72dcf238da5b6c515b/docs/figure/shortrange.Rmd/unnamed-chunk-1-6.png" target="_blank">8a464dc</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2024-01-18
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p><img src="figure/shortrange.Rmd/find-unique-markers-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/find-unique-markers-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/find-unique-markers-3.png" width="672" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/find-unique-markers-4.png" width="672" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/find-unique-markers-5.png" width="672" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/find-unique-markers-6.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>df %&gt;%
   group_by(population) %&gt;%
   filter(population != &quot;all&quot;) %&gt;%
@@ -1154,44 +878,7 @@ Tina Lasisi
   labs(x = &quot;Marker&quot;, y = &quot;Allele&quot;,
        title = &quot;Range of Alleles Across Different Markers (Grouped by Population)&quot;) +
     theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
-<p><img src="figure/shortrange.Rmd/unnamed-chunk-2-1.png" width="768" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-1">
-Past versions of unnamed-chunk-2-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-2-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/8a464dc56a42405de7e49a72dcf238da5b6c515b/docs/figure/shortrange.Rmd/unnamed-chunk-2-1.png" target="_blank">8a464dc</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2024-01-18
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p><img src="figure/shortrange.Rmd/df-group-allelefreqs-1.png" width="768" style="display: block; margin: auto;" /></p>
 <pre class="r"><code># Filter out the &quot;all&quot; population
 df_filtered &lt;- df %&gt;% filter(population != &quot;all&quot;)
 
@@ -1219,257 +906,12 @@ for(i in seq_along(marker_chunks)) {
   # Print the plot
   print(p)
 }</code></pre>
-<p><img src="figure/shortrange.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
-Past versions of unnamed-chunk-3-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-3-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/8a464dc56a42405de7e49a72dcf238da5b6c515b/docs/figure/shortrange.Rmd/unnamed-chunk-3-1.png" target="_blank">8a464dc</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2024-01-18
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/ab788f703ab64ca513aef8dd12965f4ef37e3510/docs/figure/shortrange.Rmd/unnamed-chunk-3-1.png" target="_blank">ab788f7</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-05-22
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/shortrange.Rmd/unnamed-chunk-3-2.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-2">
-Past versions of unnamed-chunk-3-2.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-3-2" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/8a464dc56a42405de7e49a72dcf238da5b6c515b/docs/figure/shortrange.Rmd/unnamed-chunk-3-2.png" target="_blank">8a464dc</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2024-01-18
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/ab788f703ab64ca513aef8dd12965f4ef37e3510/docs/figure/shortrange.Rmd/unnamed-chunk-3-2.png" target="_blank">ab788f7</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-05-22
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/shortrange.Rmd/unnamed-chunk-3-3.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-3">
-Past versions of unnamed-chunk-3-3.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-3-3" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/8a464dc56a42405de7e49a72dcf238da5b6c515b/docs/figure/shortrange.Rmd/unnamed-chunk-3-3.png" target="_blank">8a464dc</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2024-01-18
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/ab788f703ab64ca513aef8dd12965f4ef37e3510/docs/figure/shortrange.Rmd/unnamed-chunk-3-3.png" target="_blank">ab788f7</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-05-22
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/shortrange.Rmd/unnamed-chunk-3-4.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-4">
-Past versions of unnamed-chunk-3-4.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-3-4" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/8a464dc56a42405de7e49a72dcf238da5b6c515b/docs/figure/shortrange.Rmd/unnamed-chunk-3-4.png" target="_blank">8a464dc</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2024-01-18
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/ab788f703ab64ca513aef8dd12965f4ef37e3510/docs/figure/shortrange.Rmd/unnamed-chunk-3-4.png" target="_blank">ab788f7</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-05-22
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/shortrange.Rmd/unnamed-chunk-3-5.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-5">
-Past versions of unnamed-chunk-3-5.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-3-5" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/8a464dc56a42405de7e49a72dcf238da5b6c515b/docs/figure/shortrange.Rmd/unnamed-chunk-3-5.png" target="_blank">8a464dc</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2024-01-18
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/ab788f703ab64ca513aef8dd12965f4ef37e3510/docs/figure/shortrange.Rmd/unnamed-chunk-3-5.png" target="_blank">ab788f7</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-05-22
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p><img src="figure/shortrange.Rmd/plt-allelefreqs-1.png" width="768" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/plt-allelefreqs-2.png" width="768" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/plt-allelefreqs-3.png" width="768" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/plt-allelefreqs-4.png" width="768" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/plt-allelefreqs-5.png" width="768" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>summary_df &lt;- df %&gt;%
   group_by(marker, population) %&gt;%
-  summarise(num_alleles = n_distinct(allele))</code></pre>
-<pre><code>`summarise()` has grouped output by &#39;marker&#39;. You can override using the
-`.groups` argument.</code></pre>
-<pre class="r"><code>summary_df</code></pre>
+  summarise(num_alleles = n_distinct(allele))
+
+summary_df</code></pre>
 <pre><code># A tibble: 145 × 3
 # Groups:   marker [29]
    marker   population num_alleles
@@ -1487,10 +929,9 @@ Tina Lasisi
 # ℹ 135 more rows</code></pre>
 <pre class="r"><code>summary_df &lt;- df %&gt;%
   group_by(marker, population) %&gt;%
-  summarise(num_alleles = n_distinct(allele))</code></pre>
-<pre><code>`summarise()` has grouped output by &#39;marker&#39;. You can override using the
-`.groups` argument.</code></pre>
-<pre class="r"><code>summary_pivot &lt;- summary_df %&gt;%
+  summarise(num_alleles = n_distinct(allele))
+
+summary_pivot &lt;- summary_df %&gt;%
   pivot_wider(names_from = population, values_from = num_alleles)
 
 summary_pivot</code></pre>
@@ -2648,85 +2089,11 @@ df_plt_multi_results &lt;- multi_results %&gt;%
 
 p &lt;- create_plot(df_plt_multi_results, &quot;sum_relatedness&quot;)
 p</code></pre>
-<p><img src="figure/shortrange.Rmd/unnamed-chunk-10-1.png" width="768" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-1">
-Past versions of unnamed-chunk-10-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-10-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/8a464dc56a42405de7e49a72dcf238da5b6c515b/docs/figure/shortrange.Rmd/unnamed-chunk-10-1.png" target="_blank">8a464dc</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2024-01-18
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p><img src="figure/shortrange.Rmd/unnamed-chunk-7-1.png" width="768" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>plt_allele &lt;- create_plot(df_plt_multi_results, &quot;sum_alleles&quot;)
 
 plt_allele</code></pre>
-<p><img src="figure/shortrange.Rmd/unnamed-chunk-10-2.png" width="768" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-2">
-Past versions of unnamed-chunk-10-2.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-10-2" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/8a464dc56a42405de7e49a72dcf238da5b6c515b/docs/figure/shortrange.Rmd/unnamed-chunk-10-2.png" target="_blank">8a464dc</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2024-01-18
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p><img src="figure/shortrange.Rmd/unnamed-chunk-7-2.png" width="768" style="display: block; margin: auto;" /></p>
 <p>`</p>
 </div>
 </div>
@@ -2843,25 +2210,24 @@ attached base packages:
 other attached packages:
  [1] lubridate_1.9.3 forcats_1.0.0   stringr_1.5.1   dplyr_1.1.4    
  [5] purrr_1.0.2     readr_2.1.5     tidyr_1.3.0     tibble_3.2.1   
- [9] ggplot2_3.4.4   tidyverse_2.0.0 readxl_1.4.3    workflowr_1.7.1
+ [9] ggplot2_3.4.4   tidyverse_2.0.0 readxl_1.4.3   
 
 loaded via a namespace (and not attached):
- [1] gtable_0.3.4      xfun_0.41         bslib_0.6.1       processx_3.8.3   
- [5] callr_3.7.3       tzdb_0.4.0        vctrs_0.6.5       tools_4.3.2      
- [9] ps_1.7.5          generics_0.1.3    parallel_4.3.2    fansi_1.0.6      
-[13] highr_0.10        pkgconfig_2.0.3   lifecycle_1.0.4   compiler_4.3.2   
-[17] farver_2.1.1      git2r_0.33.0      munsell_0.5.0     getPass_0.2-4    
-[21] httpuv_1.6.13     htmltools_0.5.7   sass_0.4.8        yaml_2.3.8       
-[25] later_1.3.2       pillar_1.9.0      crayon_1.5.2      jquerylib_0.1.4  
-[29] whisker_0.4.1     cachem_1.0.8      tidyselect_1.2.0  digest_0.6.34    
-[33] stringi_1.8.3     labeling_0.4.3    rprojroot_2.0.4   fastmap_1.1.1    
-[37] grid_4.3.2        colorspace_2.1-0  cli_3.6.2         magrittr_2.0.3   
-[41] utf8_1.2.4        withr_2.5.2       scales_1.3.0      promises_1.2.1   
-[45] bit64_4.0.5       timechange_0.2.0  rmarkdown_2.25    httr_1.4.7       
-[49] bit_4.0.5         cellranger_1.1.0  hms_1.1.3         evaluate_0.23    
-[53] knitr_1.45        rlang_1.1.3       Rcpp_1.0.12       glue_1.7.0       
-[57] rstudioapi_0.15.0 vroom_1.6.5       jsonlite_1.8.8    R6_2.5.1         
-[61] fs_1.6.3         </code></pre>
+ [1] sass_0.4.8        utf8_1.2.4        generics_0.1.3    stringi_1.8.3    
+ [5] hms_1.1.3         digest_0.6.34     magrittr_2.0.3    timechange_0.2.0 
+ [9] evaluate_0.23     grid_4.3.2        fastmap_1.1.1     cellranger_1.1.0 
+[13] rprojroot_2.0.4   workflowr_1.7.1   jsonlite_1.8.8    whisker_0.4.1    
+[17] promises_1.2.1    fansi_1.0.6       scales_1.3.0      jquerylib_0.1.4  
+[21] cli_3.6.2         crayon_1.5.2      rlang_1.1.3       bit64_4.0.5      
+[25] munsell_0.5.0     withr_2.5.2       cachem_1.0.8      yaml_2.3.8       
+[29] parallel_4.3.2    tools_4.3.2       tzdb_0.4.0        colorspace_2.1-0 
+[33] httpuv_1.6.13     vctrs_0.6.5       R6_2.5.1          lifecycle_1.0.4  
+[37] git2r_0.33.0      bit_4.0.5         fs_1.6.3          vroom_1.6.5      
+[41] pkgconfig_2.0.3   pillar_1.9.0      bslib_0.6.1       later_1.3.2      
+[45] gtable_0.3.4      glue_1.7.0        Rcpp_1.0.12       highr_0.10       
+[49] xfun_0.41         tidyselect_1.2.0  rstudioapi_0.15.0 knitr_1.45       
+[53] farver_2.1.1      htmltools_0.5.7   labeling_0.4.3    rmarkdown_2.25   
+[57] compiler_4.3.2   </code></pre>
 </div>
 </div>
 </div>

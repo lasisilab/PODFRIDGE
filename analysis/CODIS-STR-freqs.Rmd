@@ -1,5 +1,5 @@
 ---
-title: "Short Range Familial Search"
+title: "CODIS Marker Allele Frequencies"
 author: "Tina Lasisi"
 date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
 output: workflowr::wflow_html
@@ -15,6 +15,8 @@ Frequencies and raw genotypes for different populations were found [here](https:
 # Load required libraries
 library(readxl)
 library(tidyverse)
+
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
 
@@ -82,8 +84,25 @@ df_list <- lapply(file_paths, function(path) {
 df <- bind_rows(df_list)
 ```
 
+### Box plot of allele frequencies
+Below we show a box plot of the distribution of allele frequencies for each marker, grouped by population. 
 
-```{r}
+```{r plt-boxplot-all-group-allelefreqs, fig.width=12}
+df %>%
+  group_by(population) %>%
+  filter(population != "all") %>%
+  ggplot(aes(x = marker, y = allele, fill = population)) +
+  geom_boxplot() +
+  labs(x = "Marker", y = "Allele",
+       title = "Range of Alleles Across Different Markers (Grouped by Population)") +
+  theme_classic() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+### Histogram of allele frequencies
+Below we show a histogram of the distribution of allele frequencies for each marker, grouped by population. 
+
+```{r plt-histo-all-group-allelefreqs, fig.width=12}
 # Find unique markers and split them into chunks of 5
 unique_markers <- unique(df$marker)
 marker_chunks <- split(unique_markers, ceiling(seq_along(unique_markers)/5))
@@ -108,66 +127,30 @@ for(i in seq_along(marker_chunks)) {
 
 ```
 
-```{r fig.width=8}
-df %>%
-  group_by(population) %>%
-  filter(population != "all") %>%
-  ggplot(aes(x = marker, y = allele, fill = population)) +
-  geom_boxplot() +
-  labs(x = "Marker", y = "Allele",
-       title = "Range of Alleles Across Different Markers (Grouped by Population)") +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1))
-```
-
-
-```{r}
-
-# Filter out the "all" population
-df_filtered <- df %>% filter(population != "all")
-
-# Get the unique markers and split them into chunks of 5
-unique_markers <- unique(df_filtered$marker)
-marker_chunks <- split(unique_markers, ceiling(seq_along(unique_markers)/6))
-
-# Loop through the chunks
-for(i in seq_along(marker_chunks)) {
-  
-  # Subset the data for the current chunk of markers
-  df_chunk <- df_filtered %>% filter(marker %in% marker_chunks[[i]])
-  
-  # Convert the allele variable to a factor
-  df_chunk$allele <- as.factor(df_chunk$allele)
-  
-  # Create the plot
-  p <- ggplot(df_chunk, aes(x = population, y = frequency, fill = allele)) +
-    geom_bar(stat = "identity") +
-    facet_wrap(~ marker) +
-    labs(x = "Population", y = "Frequency", fill = "Allele",
-         title = paste("Allele Frequencies for Markers", i*5-4, "to", min(i*5, length(unique_markers)))) +
-    theme_classic()  # Apply theme_classic()
-  
-  # Print the plot
-  print(p)
-}
-```
-
-```{r}
+### Summary of allele frequencies
+```{r df-summary}
 summary_df <- df %>%
   group_by(marker, population) %>%
   summarise(num_alleles = n_distinct(allele))
 
-summary_df
 ```
 
-```{r}
+```{r df-summary-wide}
+library(knitr)
+library(kableExtra)
+
 summary_df <- df %>%
   group_by(marker, population) %>%
-  summarise(num_alleles = n_distinct(allele))
+  summarise(num_alleles = n_distinct(allele), .groups = 'drop')
 
 summary_pivot <- summary_df %>%
   pivot_wider(names_from = population, values_from = num_alleles)
 
-summary_pivot
+# Print the table using kable and kableExtra for styling
+summary_pivot %>%
+  kable("markdown", caption = "Summary of Distinct Alleles by Marker and Population") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+
 ```
 
 ## Simulating genotypes
