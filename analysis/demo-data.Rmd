@@ -8,17 +8,146 @@ editor_options:
 ---
 
 
-## Population size
+## Demographic data
 
-The demographic data that the analyses will rely on for now is based on a combination of [Hacker et al 2020](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7716878/), [US Census](https://sda.usa.ipums.org/sdaweb/analysis/?dataset=all_usa_samples) and Graham Coop's inputs for [Edge & Coop 2019](https://www.biorxiv.org/content/10.1101/531384v1.full). 
+The population size data (as well as number of children) in our analyses is based on the [US Census data hosted at IPUMS USA](https://sda.usa.ipums.org/sdaweb/analysis/?dataset=all_usa_samples).
 
-This GitHub Repo contains an .xls file with multiple sheets that contain the different inputs ([here](https://github.com/tinalasisi/PODFRIDGE/blob/master/data/us-pop-detailed-multisheet.xls)). Below is the final file that was uploaded and used in the analyses:
+
+### Detailed demographic data
+
+The website [here](https://tinalasisi.github.io/USC-QCB-IPUMS/exploratory.html) has some figures from an exploratory analysis of birth rate-related data from IPUMS. Due to the terms of agreement for using this data, we cannot share the full dataset but our repo contains the subset that was used to calculate the mean number of offspring and variance. 
+
+"STANDARD REDISTRIBUTION TERM
+You will not redistribute the data without permission. You may publish a subset of the data to meet journal requirements for accessing data related to a particular publication. Contact us for permission for any other redistribution; we will consider requests for free and commercial redistribution."
+
+citation: Steven Ruggles, Sarah Flood, Matthew Sobek, Daniel Backman, Annie Chen, Grace Cooper, Stephanie Richards, Renae Rogers, and Megan Schouweiler. IPUMS USA: Version 14.0 [dataset]. Minneapolis, MN: IPUMS, 2023. https://doi.org/10.18128/D010.V14.0
+
+
+### Number of children
+
+
+We start by loading our pre-processed dataset which focuses on the number of children per family from the US Census data.
+
+```{r load-data}
+library(tidyverse)
+library(data.table)
+
+data_filtered_recoded <- read.csv("data/data_filtered_recoded.csv")
+
+
+```
+
+Next, we identify the unique values of the number of children to understand the range of family sizes.
+
+```{r}
+sorted_unique_chborn_num <- sort(unique(data_filtered_recoded$chborn_num))
+print(sorted_unique_chborn_num)
+
+```
+
+We then create a frequency table to analyze the distribution of family sizes across race and census years.
 
 ```{r}
 
-library(readr)
-est_pop_combo <- read_csv("data/est-pop-combo.csv")
-est_pop_combo
+frequency_table_by_race_year <- data_filtered_recoded %>%
+  count(RACE, YEAR, chborn_num) %>%
+  arrange(RACE, YEAR, chborn_num)
+
+print(frequency_table_by_race_year)
+
+```
+
+```{r}
+library(ggplot2)
+library(viridis)
+
+ggplot(frequency_table_by_race_year, aes(x = as.factor(chborn_num), y = n, fill = as.factor(chborn_num))) +
+  geom_col() +
+  facet_grid(RACE ~ YEAR) +
+  scale_fill_viridis(discrete = TRUE, option = "magma", direction = -1, name = "Number of Children") +
+  labs(title = "Distribution of Number of Children by Race and Census Year",
+       x = "Number of Children",
+       y = "Frequency") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        strip.text.x = element_text(size = 8),
+        strip.text.y = element_text(size = 8))
+
+```
+
+```{r}
+
+ggplot(frequency_table_by_race_year, aes(x = as.factor(chborn_num), y = n, fill = as.factor(chborn_num))) +
+  geom_col() +
+  facet_grid(RACE ~ YEAR, scales = "free_y") +
+  scale_fill_viridis(discrete = TRUE, option = "magma", direction = -1, name = "Number of Children") +
+  labs(title = "Distribution of Number of Children by Race and Census Year",
+       x = "Number of Children",
+       y = "Frequency") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        strip.text.x = element_text(size = 8),
+        strip.text.y = element_text(size = 8))
+
+```
+
+To compare distributions within the context of the total population, we calculate and visualize proportions.
+
+```{r}
+data_proportions <- frequency_table_by_race_year %>%
+  group_by(RACE, YEAR) %>%
+  mutate(Total = sum(n),
+         Proportion = n / Total) %>%
+  ungroup()
+
+ggplot(data_proportions, aes(x = as.factor(YEAR), y = Proportion, fill = as.factor(chborn_num))) +
+  geom_bar(stat = "identity") +
+  scale_fill_viridis(discrete = TRUE, option = "magma", direction = -1, name = "Number of Children") +
+  labs(title = "Proportion of Number of Children by Race and Census Year",
+       x = "Census Year",
+       y = "Proportion") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.title = element_text(size = 14, face = "bold"),
+        legend.title = element_text(size = 10),
+        legend.text = element_text(size = 8)) +
+  facet_wrap(~ RACE, ncol = 1, scales = "free_x")
+
+```
+
+And we summarize the mean and variance per year
+
+```{r}
+stats_by_race_year <- frequency_table_by_race_year %>%
+  group_by(RACE, YEAR) %>%
+  summarise(
+    Mean = sum(chborn_num * n) / sum(n),
+    Variance = sum(n * (chborn_num - Mean)^2) / (sum(n) - 1)
+  )
+
+print(stats_by_race_year)
+
+```
+
+```{r}
+
+ggplot(data_filtered_recoded, aes(x = as.factor(YEAR), y = chborn_num, fill = RACE, 
+                                  group = interaction(YEAR, RACE))) +
+  geom_boxplot(position = position_dodge(width = 0.75)) +
+  labs(title = "Distribution of Number of Children by Race and Census Year",
+       x = "Census Year",
+       y = "Number of Children") +
+  scale_fill_brewer(palette = "Set1", name = "Race") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+```
+
+```{r}
+write.csv(frequency_table_by_race_year, "data/frequency_table_by_race_year.csv", row.names = FALSE)
+write.csv(data_proportions, "data/data_proportions.csv", row.names = FALSE)
+write.csv(stats_by_race_year, "data/stats_by_race_year.csv", row.names = FALSE)
 
 ```
 
@@ -30,6 +159,4 @@ What are realistic database sizes for US European- and African American populati
 For now, the analyses will use an estimate of 80% for White Americans and 5% for Black Americans in the DTC databases.
 
 
-## Detailed demographic data
 
-The website [here](https://tinalasisi.github.io/USC-QCB-IPUMS/exploratory.html) has some figures from an exploratory analysis of birth rate-related data from IPUMS. We will revisit this when we simulate populations and need to draw from this data for the parameters.
