@@ -5,10 +5,6 @@ navbar:
   left:
   - text: Home
     href: index.html
-  - text: About
-    href: about.html
-  - text: License
-    href: license.html
   - text: Methods
     href: methods.html
   - text: Demographic Data
@@ -24,7 +20,7 @@ navbar:
   right:
   - icon: fab fa-github
     text: Source code
-    href: https://tinalasisi.github.io/PODFRIDGE/
+    href: https://github.com/tinalasisi/PODFRIDGE
 output:
   workflowr::wflow_html:
     toc: yes
