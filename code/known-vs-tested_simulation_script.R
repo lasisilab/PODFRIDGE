@@ -432,7 +432,3 @@ p_num_shared_alleles_sum_v2 <- create_plot_v2(df_plt_final_v2, "num_shared_allel
 
 save_plot(p_log_R_sum_v2, "plot_log_R_sum_v2")
 save_plot(p_num_shared_alleles_sum_v2, "plot_num_shared_alleles_sum_v2")
-
-
-
-
