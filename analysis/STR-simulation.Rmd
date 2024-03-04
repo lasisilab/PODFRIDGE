@@ -1,0 +1,449 @@
+---
+title: "Simulation of STR Pairs and Calculation of Likelihood Ratios"
+author: "Tina Lasisi"
+date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+
+```{r setup, include=FALSE, echo=FALSE}
+# Load necessary packages
+library(wesanderson) # for color palettes
+library(RColorBrewer)
+library(tidyverse)
+library(patchwork)
+
+knitr::opts_knit$set(root.dir = "..")
+knitr::opts_chunk$set(
+	fig.height = 6,
+	fig.width = 8,
+	warning = FALSE,
+	echo = FALSE
+)
+# Set path to the data file
+path <- file.path(".", "data")
+savepath <- file.path(".", "output")
+
+# Set up vector for cousin degree
+p <- c(1:8) 
+
+# Set up initial population size
+N <- 76e6 # what does this do?
+
+```
+
+## Introduction
+
+This document provides a comprehensive guide on simulating Short Tandem Repeat (STR) pairs, and calculating shared alleles, relatedness scores, and likelihood ratios across different populations. It aims to elucidate the methodologies applied in forensic genetics for estimating the degree of relationship between individuals using genetic markers.
+
+## Background
+
+### Understanding Likelihood Ratios, Shared Alleles, and Relatedness
+
+The likelihood ratio (LR) is a evaluates the probability of observing genetic evidence under two competing hypotheses, typically pertaining to the relationship between individuals. This ratio assists in determining whether the genetic evidence supports a specific relationship (e.g., parent-child, siblings) between two individuals more than being unrelated.
+
+- **Shared alleles** refer to alleles (versions of a gene) that are identical by descent, meaning they are inherited from a common ancestor.
+- **Relatedness scores** quantify the degree of genetic similarity between individuals, indicating potential familial relationships.
+- **Likelihood ratios (LR)** compare the probability of observing the genetic evidence if two individuals have a specified relationship versus if they are unrelated.
+
+### From Weight-of-evidence for forensic DNA profiles book
+
+Likelihood ratio for a single locus is:
+
+$$
+R=\kappa_0+\kappa_1 / R_X^p+\kappa_2 / R_X^u
+$$
+Where $\kappa$ is the probability of having 0, 1 or 2 alleles IBD for a given relationship. 
+
+The $R_X$ terms are quantifying the "surprisingness" of a particular pattern of allele sharing.
+
+The $R_X^p$ terms attached to the $kappa_1$ are defined in the following table:
+
+$$
+\begin{aligned}
+&\text { Table 7.2 Single-locus LRs for paternity when } \mathcal{C}_M \text { is unavailable. }\\
+&\begin{array}{llc}
+\hline c & Q & R_X \times\left(1+2 F_{S T}\right) \\
+\hline \mathrm{AA} & \mathrm{AA} & 3 F_{S T}+\left(1-F_{S T}\right) p_A \\
+\mathrm{AA} & \mathrm{AB} & 2\left(2 F_{S T}+\left(1-F_{S T}\right) p_A\right) \\
+\mathrm{AB} & \mathrm{AA} & 2\left(2 F_{S T}+\left(1-F_{S T}\right) p_A\right) \\
+\mathrm{AB} & \mathrm{AC} & 4\left(F_{S T}+\left(1-F_{S T}\right) p_A\right) \\
+\mathrm{AB} & \mathrm{AB} & 4\left(F_{S T}+\left(1-F_{S T}\right) p_A\right)\left(F_{S T}+\left(1-F_{S T}\right) p_B\right) /\left(2 F_{S T}+\left(1-F_{S T}\right)\left(p_A+p_B\right)\right) \\
+\hline
+\end{array}
+\end{aligned}
+$$
+
+For our purposes we will take out the $F_{S T}$ values. So the table will be as follows:
+
+$$
+\begin{aligned}
+&\begin{array}{llc}
+\hline c & Q & R_X \\
+\hline \mathrm{AA} & \mathrm{AA} & p_A \\
+\mathrm{AA} & \mathrm{AB} & 2 p_A \\
+\mathrm{AB} & \mathrm{AA} & 2p_A \\
+\mathrm{AB} & \mathrm{AC} & 4p_A \\
+\mathrm{AB} & \mathrm{AB} & 4 p_A p_B/(p_A+p_B) \\
+\hline
+\end{array}
+\end{aligned}
+$$
+
+
+If none of the alleles match, then the $\kappa_1 / R_X^p = 0$.
+
+The $R_X^u$ terms attached to the $kappa_2$ are defined as:
+
+If both alleles match and are homozygous the equation is 6.4 (pg 85).
+Single locus match probability: $\mathrm{CSP}=\mathcal{G}_Q=\mathrm{AA}$
+$$
+\frac{\left(2 F_{S T}+\left(1-F_{S T}\right) p_A\right)\left(3 F_{S T}+\left(1-F_{S T}\right) p_A\right)}{\left(1+F_{S T}\right)\left(1+2 F_{S T}\right)}
+$$
+Simplified to:
+$$
+p_A{ }^2
+$$
+
+If both alleles match and are heterozygous, the equation is 6.5 (pg 85)
+Single locus match probability: $\mathrm{CSP}=\mathcal{G}_Q=\mathrm{AB}$
+$$
+2 \frac{\left(F_{S T}+\left(1-F_{S T}\right) p_A\right)\left(F_{S T}+\left(1-F_{S T}\right) p_B\right)}{\left(1+F_{S T}\right)\left(1+2 F_{S T}\right)}
+$$
+Simplified to:
+
+$$
+2 p_A p_B
+$$
+If both alleles do not match then $\kappa_2 / R_X^u = 0$. 
+
+
+## Rscript for simulation
+
+The R script "code/known-vs-tested_simulation_script.R" simulates STR pairs and calculates likelihood ratios, shared alleles, and relatedness scores across different populations. The script is divided into the following sections:
+
+1. **Initialization**: Load required R packages and set the working directory.
+
+2. **Parameter Configuration**: Input parameters for the number of simulations for unrelated and related pairs are specified, allowing adjustable sample sizes.
+
+3. **Data Preparation**: Aggregate CODIS allele frequency data from CSV files representing different populations into a single dataset.
+
+4. **IBD Probability Definitions**: Construct a table detailing the probabilities of sharing zero, one, or two alleles identical by descent (IBD) for various relationship types.
+
+5. **Allele Frequency Calculation**: Calculate allele frequencies within the population for each simulated pair to determine the likelihood of observing specific allele combinations.
+
+6. **Likelihood Ratio Computation**: Calculate likelihood ratios for each pair using allele frequencies and IBD probabilities, focusing on $R_{Xp}$ and $R_{Xu}$ values.
+
+7. **Simulation of Individual Pairs**: Generate alleles for individuals based on population-specific allele frequencies to simulate STR pairs.
+
+8. **Shared Allele Analysis**: Evaluate the number of alleles shared between pairs, categorizing them by their genetic relationship.
+
+9. **Aggregate Analysis and Visualization**: Summarize the results and generate visual representations, such as box plots and heatmaps, to illustrate the relationship between known and tested relationships across populations.
+
+10. **Result Exportation**: Export aggregated results as CSV files for further analysis.
+
+Due to the computational cost of simulating large numbers of STR pairs, the script has been run separately and we visualize the results below.
+
+## Simulation results
+
+```{r}
+input_df <- read_csv("data/dl_known_vs_tested_simulation_results.csv") %>% 
+  mutate(log_R_sum = ifelse(is.infinite(log_R_sum) & log_R_sum < 0,
+                            log(1.4e-11),
+                            log_R_sum))
+
+```
+
+
+```{r include=FALSE}
+# Check if there are any -Inf values in the log_R_sum column
+inf_values_log_R_sum <- sapply(input_df$log_R_sum, function(x) is.infinite(x) & x < 0)
+
+# Count the number of rows containing -Inf values
+num_rows_with_inf <- sum(inf_values_log_R_sum)
+
+# Print the count of rows containing -Inf values in log_R_sum
+print(paste("Number of rows with -Inf values in log_R_sum column:", num_rows_with_inf))
+
+
+```
+
+
+
+```{r}
+# Filter the input dataframe for unrelated values only
+input_df_unrelated <- input_df %>% filter(known_relationship_type == "unrelated")
+```
+
+## Proportion of individuals of known relationship type exceeding likelihood cut-off
+
+```{r func-exceeding-cut-off}
+# Function to calculate proportion exceeding cutoff
+calculate_proportion_exceeding_cutoff <- function(input_population, relationship_type, fp_rate, input_df) {
+
+  unrelated_tested <- input_df %>%
+    filter(population == input_population,
+           known_relationship_type == "unrelated",
+           tested_relationship_type == relationship_type)
+  
+  m_value = fp_rate / 100
+  cut_value <- quantile(unrelated_tested$log_R_sum, 1 - m_value)
+  
+  actual_relationship <- input_df %>%
+    filter(population == input_population,
+           known_relationship_type == relationship_type,
+           tested_relationship_type == relationship_type)
+  
+  proportion_exceeding_cutoff <- mean(actual_relationship$log_R_sum > cut_value)
+  
+  return(data.frame(population = input_population,
+                    relationship_type = relationship_type,
+                    fp_rate = fp_rate,
+                    prop_exceeding = proportion_exceeding_cutoff))
+}
+```
+
+
+```{r pars}
+# Define a vector of false positive rates as percentages
+fp_rates <- c(0.1, 0.01, 0.001)
+
+population_groups = unique(input_df$population)
+relationship_types = unique(input_df$known_relationship_type)
+```
+
+
+```{r pars2}
+# Exclude "unrelated" from relationship types for calculation purposes
+relationship_types = relationship_types[relationship_types != "unrelated"]
+
+# Apply function to calculate proportions for each combination of population group, relationship type and false positive rate
+proportion_args <- expand.grid(input_population = population_groups, 
+                               relationship_type = relationship_types,
+                               fp_rate = fp_rates)
+
+# add input_df for each row
+exceeding_proportions <- purrr::pmap_df(proportion_args, 
+                                        calculate_proportion_exceeding_cutoff, 
+                                        input_df = input_df)
+
+
+# Look at the results
+head(exceeding_proportions)
+
+```
+
+```{r fig.width=10}
+
+# Convert population to factor so it can be used in fill aesthetic
+exceeding_proportions$population <- as.factor(exceeding_proportions$population)
+
+# Calculate the total number of unrelated pairs and full sibling pairs
+num_pairs <- input_df %>% 
+  group_by(population, known_relationship_type) %>%
+  summarise(n_pairs = n()) %>% 
+  spread(known_relationship_type, n_pairs, fill = 0)
+
+# Take the values from the first population
+first_population <- num_pairs$population[1]
+num_unrelated_pairs <- num_pairs$unrelated[1]
+num_related_pairs <- num_pairs$full_siblings[1] 
+
+# format numbers with comma as thousands separator
+num_unrelated_pairs <- format(num_unrelated_pairs, big.mark = ",")
+num_related_pairs <- format(num_related_pairs, big.mark = ",")
+
+# Create the caption
+caption_text <- paste("Number of unrelated pairs per population: ", num_unrelated_pairs,
+                      ". Number of related pairs: ", num_related_pairs, ".")
+
+# Create the facetted bar plot
+ggplot(exceeding_proportions, aes(x = relationship_type, y = prop_exceeding, fill = population)) +
+  geom_bar(stat = "identity", position=position_dodge()) +
+  facet_wrap(~fp_rate, scales="free") +
+  scale_fill_manual(values = wes_palette("Darjeeling1", n = length(unique(exceeding_proportions$population)), type = "continuous")) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  ylab("Proportion exceeding cut-off") +
+  xlab("Relationship type") +
+  ggtitle("Proportions exceeding likelihood cut-off for different relationship types") +
+  labs(fill = "Population") +
+  labs(caption = caption_text)
+```
+
+## Cut-offs for each FPR
+
+```{r}
+# Function to calculate and return cutoff values
+calculate_cutoffs <- function(input_population, relationship_type, fp_rates, input_df) {
+  cutoffs <- data.frame()
+  for (fp_rate in fp_rates) {
+    unrelated_tested <- input_df %>%
+      filter(population == input_population,
+             known_relationship_type == "unrelated",
+             tested_relationship_type == relationship_type)
+    
+    m_value = fp_rate / 100
+    cut_value <- quantile(unrelated_tested$log_R_sum, 1 - m_value, na.rm = TRUE)
+    
+    cutoffs <- rbind(cutoffs, data.frame(population = input_population,
+                                         relationship_type = relationship_type,
+                                         fp_rate = fp_rate,
+                                         cutoff = cut_value))
+  }
+  return(cutoffs)
+}
+
+# Example usage:
+fp_rates <- c(1, 0.1, 0.01)
+population_groups <- unique(input_df$population)
+relationship_types <- c("parent_child", "full_siblings", "half_siblings", "unrelated") # Ensure this matches your data structure
+
+cutoff_results <- lapply(population_groups, function(pop) {
+  lapply(relationship_types, function(rel) {
+    calculate_cutoffs(pop, rel, fp_rates, input_df)
+  })
+})
+cutoff_results <- do.call(rbind, do.call(rbind, cutoff_results))
+
+```
+
+```{r}
+library(dplyr)
+
+# Assuming 'input_df' is your DataFrame with the necessary columns
+
+# Aggregate LLR results by population and known relationship type
+aggregated_llr_results_by_population <- input_df %>%
+  group_by(population, known_relationship_type) %>%
+  summarize(mean_log_R_sum = mean(log_R_sum, na.rm = TRUE),
+            median_log_R_sum = median(log_R_sum, na.rm = TRUE),
+            min_log_R_sum = min(log_R_sum, na.rm = TRUE),
+            max_log_R_sum = max(log_R_sum, na.rm = TRUE),
+            count = n()) %>%
+  ungroup()  # Remove grouping
+
+# View the aggregated results
+print(aggregated_llr_results_by_population)
+
+
+
+```
+
+#### Calculate LLR cutoffs for unrelated pairs at each FPR by population
+This table presents aggregated log_R_sum values by relationship type for each population, alongside LLR cutoffs calculated for unrelated pairs to maintain false positive rates (FPRs) of 1%, 0.1%, and 0.01%. The cutoffs indicate the LLR threshold above which a pair is less likely to be unrelated at the given FPR, thereby serving as a critical benchmark for assessing relationship evidence. The mean log_R_sum values further elucidate the average strength of genetic evidence supporting each relationship type within populations, highlighting variations and consistencies in genetic relatedness indicators across demographic groups.
+
+```{r}
+calculate_llr_cutoffs <- function(df, fpr_vector) {
+  df %>%
+    filter(known_relationship_type == "unrelated") %>%
+    group_by(population) %>%
+    summarize(cutoff_1 = quantile(log_R_sum, probs = 1 - fpr_vector[1], na.rm = TRUE),
+              cutoff_0_1 = quantile(log_R_sum, probs = 1 - fpr_vector[2], na.rm = TRUE),
+              cutoff_0_01 = quantile(log_R_sum, probs = 1 - fpr_vector[3], na.rm = TRUE),
+              .groups = 'drop')
+}
+
+fpr_vector <- c(0.01, 0.001, 0.0001) # FPRs: 1%, 0.1%, and 0.01%
+llr_cutoffs <- calculate_llr_cutoffs(input_df, fpr_vector)
+
+
+```
+
+```{r}
+aggregated_llr_results <- input_df %>%
+  group_by(population, known_relationship_type) %>%
+  summarize(mean_log_R_sum = mean(log_R_sum, na.rm = TRUE),
+            .groups = 'drop')
+
+```
+
+```{r}
+library(kableExtra)
+
+# Transforming the data to a wide format
+wide_format_results <- aggregated_llr_results %>%
+  pivot_wider(names_from = known_relationship_type, values_from = mean_log_R_sum) %>%
+  arrange(population)
+
+# Using kable and kableExtra to create and style the table
+kable_styled <- kable(wide_format_results, format = "html", booktabs = TRUE) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = F) %>%
+  column_spec(1, bold = T)  # Assuming the first column is 'population'
+
+# Display the table in an R Markdown document or R Notebook
+kable_styled
+
+```
+
+```{r}
+visualize_llr_distribution <- function(df, cutoffs) {
+  ggplot(df, aes(x = log_R_sum, fill = known_relationship_type)) +
+    geom_histogram(alpha = 0.6, bins = 30, position = "identity") +
+    geom_vline(data = cutoffs, aes(xintercept = cutoff_1, color = "1% FPR"), linetype = "dashed") +
+    geom_vline(data = cutoffs, aes(xintercept = cutoff_0_1, color = "0.1% FPR"), linetype = "dashed") +
+    geom_vline(data = cutoffs, aes(xintercept = cutoff_0_01, color = "0.01% FPR"), linetype = "dashed") +
+    scale_color_manual(values = c("1% FPR" = "red", "0.1% FPR" = "blue", "0.01% FPR" = "green")) +
+    facet_wrap(~population) +
+    labs(title = "Distribution of log_R_sum Values and LLR Cutoffs by Population",
+         x = "Log Likelihood Ratio (LLR)", y = "Frequency") +
+    theme_minimal()
+}
+
+visualize_llr_distribution(input_df, llr_cutoffs)
+```
+
+```{r}
+calculate_proportions_exceeding_cutoffs <- function(df, cutoffs) {
+  # Join the cutoffs with the original data frame to have cutoffs accessible for each row
+  df_with_cutoffs <- left_join(df, cutoffs, by = "population")
+  
+  # Calculate a flag indicating whether the log_R_sum exceeds the cutoff for each FPR
+  df_with_cutoffs <- df_with_cutoffs %>%
+    mutate(exceeds_cutoff_1 = log_R_sum > cutoff_1,
+           exceeds_cutoff_0_1 = log_R_sum > cutoff_0_1,
+           exceeds_cutoff_0_01 = log_R_sum > cutoff_0_01)
+  
+  # Aggregate to calculate the proportion of pairs exceeding the cutoffs by relationship type and population
+  proportions_exceeding <- df_with_cutoffs %>%
+    group_by(population, known_relationship_type) %>%
+    summarize(proportion_exceeding_1 = mean(exceeds_cutoff_1, na.rm = TRUE),
+              proportion_exceeding_0_1 = mean(exceeds_cutoff_0_1, na.rm = TRUE),
+              proportion_exceeding_0_01 = mean(exceeds_cutoff_0_01, na.rm = TRUE),
+              .groups = 'drop')
+  
+  return(proportions_exceeding)
+}
+
+proportions_exceeding_cutoffs <- calculate_proportions_exceeding_cutoffs(input_df, llr_cutoffs)
+
+```
+
+```{r}
+visualize_proportions_exceeding_cutoffs <- function(proportions_df) {
+  proportions_df$known_relationship_type <- factor(proportions_df$known_relationship_type,
+                                                   levels = c("parent_child", "full_siblings", "half_siblings", 
+                                                              "cousins", "second_cousins", "unrelated"))
+  proportions_long <- pivot_longer(proportions_df, cols = starts_with("proportion_exceeding"), 
+                                   names_to = "FPR", values_to = "Proportion",
+                                   names_prefix = "proportion_exceeding_")
+  
+  proportions_long$FPR <- factor(proportions_long$FPR, levels = c("1", "0_1", "0_01"),
+                                 labels = c("1% FPR", "0.1% FPR", "0.01% FPR"))
+  
+  ggplot(proportions_long, aes(x = known_relationship_type, y = Proportion, fill = population)) +
+    geom_bar(stat = "identity", position = position_dodge()) +
+    facet_grid(FPR ~ .) +
+      scale_fill_manual(values = wes_palette("Darjeeling1", n = length(unique(exceeding_proportions$population)), type = "continuous")) +
+    labs(title = "Proportion of Individuals Exceeding Cutoffs by Relationship Type",
+         x = "Relationship Type", y = "Proportion Exceeding Cutoff",
+         fill = "Population") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+}
+
+visualize_proportions_exceeding_cutoffs(proportions_exceeding_cutoffs)
+```
+

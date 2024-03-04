@@ -7,6 +7,16 @@ editor_options:
   chunk_output_type: console
 ---
 
+```{r setup, echo=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+# Load required packages
+library(tidyverse)
+library(patchwork)
+
+knitr::opts_knit$set(root.dir = "..")
+knitr::opts_chunk$set(eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 6)
+
+```
+
 # Forensic
 
 Data based on Murphy & Tong
@@ -75,4 +85,77 @@ state_group_summary <- merged_data %>%
 state_group_summary
 ```
 
+### Summary of representation across Forensic and DTC databases
+
+```{r}
+# CONFIGURE CONSTANTS
+
+# Total US Population 1990: source?
+US_POP_1990 = 2.5e8
+
+# European American Population 1990: source?
+EA_POP_1990 = 199686070
+  
+# African American Population 1990: source?
+AA_POP_1990 = 29986060
+
+# calculate proportion of us population each group
+US_PROP_AA = AA_POP_1990 / US_POP_1990
+US_PROP_EA = EA_POP_1990 / US_POP_1990
+
+# CODIS SIZE 
+CODIS_SIZE = 2.10e7
+
+# DTC SIZE 
+ANCESTRY_SIZE = 2.3e7
+TWTY_THREE_ME_SIZE = 1.4e7
+MY_HERATIGE_SIZE = 7e6
+FTDNA = 1.8e6
+GEDMATCH = 1.8e6
+
+# calculate total DTC SIZE
+DTC_SIZE = ANCESTRY_SIZE + TWTY_THREE_ME_SIZE + MY_HERATIGE_SIZE + FTDNA + GEDMATCH
+
+# calculate searchable DTC size (FTDNA + GEDMATCH)
+DTC_SEARCH = FTDNA + GEDMATCH
+
+# Proportion AA in CODIS
+PROP_AA_CODIS = 0.236
+
+# Proportion EA in CODIS
+PROP_EA_CODIS = 0.429
+
+### TODO: UPDATE THESE WITH CORRECT VALUES
+PROP_AA_DTC = 0.03 # TODO: need this value
+PROP_EA_DTC = 0.60 # TODO: need this value
+
+### TODO: UPDATE THESE NUMBERS WITH CORRECT VALUES
+PROP_AA_DTC_S = 0.03
+PROP_EA_DTC_S = 0.60
+```
+
+```{r forensic-database-composition}
+
+# OPTION 1 
+
+# plot relative composition of the database types
+
+PROPS <- c(PROP_EA_CODIS, PROP_EA_DTC, PROP_AA_CODIS, PROP_AA_DTC, PROP_AA_DTC_S, PROP_EA_DTC_S)
+DATABASE <- c("CODIS", "DTC", "CODIS", "DTC", "DTCS", "DTCS")
+POPULATION <- c("European American", "European American", "African American", "African American", "African American", "European American")
+
+data = tibble(PROPS, DATABASE, POPULATION)
+# Reorder the levels of POPULATION
+data$POPULATION <- factor(data$POPULATION, levels = c("European American", "African American"))
+
+ggplot(data, aes(y=PROPS, fill=POPULATION)) + 
+  geom_col(aes(x=DATABASE, group=POPULATION), position = position_dodge2()) + 
+  labs(title = "Genetic database composition for European and African Americans",
+         x = "Population",
+         y = "Proportion of Database",
+         color = "Database") +
+    theme_minimal() + 
+    scale_y_continuous(limits = c(0, 1))
+
+```
 
