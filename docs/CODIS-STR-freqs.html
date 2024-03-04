@@ -36,6 +36,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
 
@@ -341,16 +343,13 @@ div.tocify {
   <a href="demo-data.html">Demographic Data</a>
 </li>
 <li>
-  <a href="analyses.html">Analyses</a>
-</li>
-<li>
   <a href="database-composition.html">Database composition</a>
 </li>
 <li>
-  <a href="shortrange.html">Short Range</a>
+  <a href="STR-simulation.html">STR simulations</a>
 </li>
 <li>
-  <a href="manuscript_figures.html">Manuscript Figures</a>
+  <a href="CODIS-STR-freqs.html">CODIS STRs</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -372,7 +371,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">CODIS Marker Allele Frequencies</h1>
 <h4 class="author">Tina Lasisi</h4>
-<h4 class="date">2024-03-03 13:35:30</h4>
+<h4 class="date">2024-03-03 20:01:51</h4>
 
 </div>
 
@@ -380,7 +379,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+workflowr <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -391,8 +390,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> </a>
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -405,9 +404,9 @@ aria-hidden="true"></span> </a>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 1
+aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>PODFRIDGE/</code> <span
@@ -430,21 +429,18 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
-<span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
-changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges"
+<div id="strongRMarkdownfilestronguptodate"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes. To know which version of
-the R Markdown file created these results, you’ll want to first commit
-it to the Git repo. If you’re still working on the analysis, you can
-ignore this warning. When you’re finished, you can run
-<code>wflow_publish</code> to commit the R Markdown file and build the
-HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
 </div>
 </div>
 </div>
@@ -535,15 +531,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtreea48eed3ae9d69684a0eca13716472a00e410addftargetblanka48eed3a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtree2596546a55e9369c81787cb7f9f35c660272aa16targetblank2596546a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/tinalasisi/PODFRIDGE/tree/a48eed3ae9d69684a0eca13716472a00e410addf" target="_blank">a48eed3</a>
+<a href="https://github.com/tinalasisi/PODFRIDGE/tree/2596546a55e9369c81787cb7f9f35c660272aa16" target="_blank">2596546</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtreea48eed3ae9d69684a0eca13716472a00e410addftargetblanka48eed3a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtree2596546a55e9369c81787cb7f9f35c660272aa16targetblank2596546a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -553,7 +549,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/tinalasisi/PODFRIDGE/tree/a48eed3ae9d69684a0eca13716472a00e410addf" target="_blank">a48eed3</a>.
+<a href="https://github.com/tinalasisi/PODFRIDGE/tree/2596546a55e9369c81787cb7f9f35c660272aa16" target="_blank">2596546</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -574,10 +570,6 @@ Ignored files:
     Ignored:    analysis/.DS_Store
     Ignored:    output/.DS_Store
 
-Unstaged changes:
-    Modified:   analysis/STR.Rmd
-    Modified:   analysis/shortrange.Rmd
-
 </code></pre>
 <p>
 Note that any generated files, e.g. HTML, png, CSS, etc., are not
@@ -594,11 +586,11 @@ have uncommitted changes.
 
 <p>
 These are the previous versions of the repository in which changes were
-made to the R Markdown (<code>analysis/shortrange.Rmd</code>) and HTML
-(<code>docs/shortrange.html</code>) files. If you’ve configured a remote
-Git repository (see <code>?wflow_git_remote</code>), click on the
-hyperlinks in the table below to view the files as they were in that
-past version.
+made to the R Markdown (<code>analysis/CODIS-STR-freqs.Rmd</code>) and
+HTML (<code>docs/CODIS-STR-freqs.html</code>) files. If you’ve
+configured a remote Git repository (see <code>?wflow_git_remote</code>),
+click on the hyperlinks in the table below to view the files as they
+were in that past version.
 </p>
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
@@ -624,53 +616,19 @@ Message
 <tbody>
 <tr>
 <td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/tinalasisi/PODFRIDGE/48acb9f6ede345fe2546bcf9bff6264624ab9e88/docs/shortrange.html" target="_blank">48acb9f</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2024-03-02
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/tinalasisi/PODFRIDGE/aa3ff5cd58cd98d8f1274294dfd38b244f01c65b/docs/shortrange.html" target="_blank">aa3ff5c</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2024-03-01
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
 Rmd
 </td>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/e4c698e5b7d0702fee532f0800fb7bc9daeacf1c/analysis/shortrange.Rmd" target="_blank">e4c698e</a>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/analysis/CODIS-STR-freqs.Rmd" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
 </td>
 <td>
-2024-02-27
+2024-03-03
 </td>
 <td>
-Publish new pages + update plots
+wflow_rename("analysis/shortrange.Rmd", "analysis/CODIS-STR-freqs.Rmd")
 </td>
 </tr>
 <tr>
@@ -678,135 +636,16 @@ Publish new pages + update plots
 html
 </td>
 <td>
-<a href="https://rawcdn.githack.com/tinalasisi/PODFRIDGE/e4c698e5b7d0702fee532f0800fb7bc9daeacf1c/docs/shortrange.html" target="_blank">e4c698e</a>
+<a href="https://rawcdn.githack.com/tinalasisi/PODFRIDGE/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/CODIS-STR-freqs.html" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
 </td>
 <td>
-2024-02-27
+2024-03-03
 </td>
 <td>
-Publish new pages + update plots
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/tinalasisi/PODFRIDGE/9e71347bf88281897c8f83d0531c703b068b0267/docs/shortrange.html" target="_blank">9e71347</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2024-01-22
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/tinalasisi/PODFRIDGE/8a464dc56a42405de7e49a72dcf238da5b6c515b/docs/shortrange.html" target="_blank">8a464dc</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2024-01-18
-</td>
-<td>
-Updated shortrange links + re-built website
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/d959019be3a6eb5dd858286a593c0cae129a7400/analysis/shortrange.Rmd" target="_blank">d959019</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-05-31
-</td>
-<td>
-Add STR.Rmd
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/8b2d06ac97d8d3ec2459fb5eb718b0b7fc732b97/analysis/shortrange.Rmd" target="_blank">8b2d06a</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-05-23
-</td>
-<td>
-Remove excess data + comment code
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/345b86789326c9b3a58a7514920a4e43c2589bce/analysis/shortrange.Rmd" target="_blank">345b867</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-05-22
-</td>
-<td>
-Update shortrange.Rmd
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/ab788f703ab64ca513aef8dd12965f4ef37e3510/analysis/shortrange.Rmd" target="_blank">ab788f7</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-05-22
-</td>
-<td>
-Upload short range material
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/tinalasisi/PODFRIDGE/ab788f703ab64ca513aef8dd12965f4ef37e3510/docs/shortrange.html" target="_blank">ab788f7</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2023-05-22
-</td>
-<td>
-Upload short range material
+wflow_rename("analysis/shortrange.Rmd", "analysis/CODIS-STR-freqs.Rmd")
 </td>
 </tr>
 </tbody>
@@ -825,17 +664,14 @@ and refer to Steffen, C.R., Coble, M.D., Gettings, K.B., Vallone, P.M.
 [Forensic Sci. Int. Genet. 7 (2013) e82-e83]. Forensic Sci. Int. Genet.
 31, e36–e40. The US core CODIS markers are a subset of the 29 described
 here.</p>
-<pre><code>
-
-
-
-## Load CODIS allele frequencies
-
-CODIS allele frequencies were found through NIST STR base and specifically downloaded from the supplementary materials of Steffen et al 2017. These are 1036 unrelated individuals from the U.S. population. 
-
-
-```r
-# Define the file paths
+</div>
+<div id="load-codis-allele-frequencies" class="section level2">
+<h2>Load CODIS allele frequencies</h2>
+<p>CODIS allele frequencies were found through NIST STR base and
+specifically downloaded from the supplementary materials of Steffen et
+al 2017. These are 1036 unrelated individuals from the U.S.
+population.</p>
+<pre class="r"><code># Define the file paths
 file_paths &lt;- list.files(path = &quot;data&quot;, pattern = &quot;1036_.*\\.csv&quot;, full.names = TRUE)
 
 # Create a list of data frames
@@ -850,6 +686,25 @@ df_list &lt;- lapply(file_paths, function(path) {
 
 # Bind all data frames into one
 df &lt;- bind_rows(df_list)</code></pre>
+<div id="box-plot-of-allele-frequencies" class="section level3">
+<h3>Box plot of allele frequencies</h3>
+<p>Below we show a box plot of the distribution of allele frequencies
+for each marker, grouped by population.</p>
+<pre class="r"><code>df %&gt;%
+  group_by(population) %&gt;%
+  filter(population != &quot;all&quot;) %&gt;%
+  ggplot(aes(x = marker, y = allele, fill = population)) +
+  geom_boxplot() +
+  labs(x = &quot;Marker&quot;, y = &quot;Allele&quot;,
+       title = &quot;Range of Alleles Across Different Markers (Grouped by Population)&quot;) +
+  theme_classic() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
+<p><img src="figure/CODIS-STR-freqs.Rmd/plt-boxplot-all-group-allelefreqs-1.png" width="1152" style="display: block; margin: auto;" /></p>
+</div>
+<div id="histogram-of-allele-frequencies" class="section level3">
+<h3>Histogram of allele frequencies</h3>
+<p>Below we show a histogram of the distribution of allele frequencies
+for each marker, grouped by population.</p>
 <pre class="r"><code># Find unique markers and split them into chunks of 5
 unique_markers &lt;- unique(df$marker)
 marker_chunks &lt;- split(unique_markers, ceiling(seq_along(unique_markers)/5))
@@ -869,87 +724,637 @@ for(i in seq_along(marker_chunks)) {
 
   print(p)
 }</code></pre>
-<p><img src="figure/shortrange.Rmd/find-unique-markers-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/find-unique-markers-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/find-unique-markers-3.png" width="672" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/find-unique-markers-4.png" width="672" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/find-unique-markers-5.png" width="672" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/find-unique-markers-6.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>df %&gt;%
-  group_by(population) %&gt;%
-  filter(population != &quot;all&quot;) %&gt;%
-  ggplot(aes(x = marker, y = allele, fill = population)) +
-  geom_boxplot() +
-  labs(x = &quot;Marker&quot;, y = &quot;Allele&quot;,
-       title = &quot;Range of Alleles Across Different Markers (Grouped by Population)&quot;) +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
-<p><img src="figure/shortrange.Rmd/df-group-allelefreqs-1.png" width="768" style="display: block; margin: auto;" /></p>
-<pre class="r"><code># Filter out the &quot;all&quot; population
-df_filtered &lt;- df %&gt;% filter(population != &quot;all&quot;)
-
-# Get the unique markers and split them into chunks of 5
-unique_markers &lt;- unique(df_filtered$marker)
-marker_chunks &lt;- split(unique_markers, ceiling(seq_along(unique_markers)/6))
-
-# Loop through the chunks
-for(i in seq_along(marker_chunks)) {
-  
-  # Subset the data for the current chunk of markers
-  df_chunk &lt;- df_filtered %&gt;% filter(marker %in% marker_chunks[[i]])
-  
-  # Convert the allele variable to a factor
-  df_chunk$allele &lt;- as.factor(df_chunk$allele)
-  
-  # Create the plot
-  p &lt;- ggplot(df_chunk, aes(x = population, y = frequency, fill = allele)) +
-    geom_bar(stat = &quot;identity&quot;) +
-    facet_wrap(~ marker) +
-    labs(x = &quot;Population&quot;, y = &quot;Frequency&quot;, fill = &quot;Allele&quot;,
-         title = paste(&quot;Allele Frequencies for Markers&quot;, i*5-4, &quot;to&quot;, min(i*5, length(unique_markers)))) +
-    theme_classic()  # Apply theme_classic()
-  
-  # Print the plot
-  print(p)
-}</code></pre>
-<p><img src="figure/shortrange.Rmd/plt-allelefreqs-1.png" width="768" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/plt-allelefreqs-2.png" width="768" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/plt-allelefreqs-3.png" width="768" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/plt-allelefreqs-4.png" width="768" style="display: block; margin: auto;" /><img src="figure/shortrange.Rmd/plt-allelefreqs-5.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/CODIS-STR-freqs.Rmd/plt-histo-all-group-allelefreqs-1.png" width="1152" style="display: block; margin: auto;" /><img src="figure/CODIS-STR-freqs.Rmd/plt-histo-all-group-allelefreqs-2.png" width="1152" style="display: block; margin: auto;" /><img src="figure/CODIS-STR-freqs.Rmd/plt-histo-all-group-allelefreqs-3.png" width="1152" style="display: block; margin: auto;" /><img src="figure/CODIS-STR-freqs.Rmd/plt-histo-all-group-allelefreqs-4.png" width="1152" style="display: block; margin: auto;" /><img src="figure/CODIS-STR-freqs.Rmd/plt-histo-all-group-allelefreqs-5.png" width="1152" style="display: block; margin: auto;" /><img src="figure/CODIS-STR-freqs.Rmd/plt-histo-all-group-allelefreqs-6.png" width="1152" style="display: block; margin: auto;" /></p>
+</div>
+<div id="summary-of-allele-frequencies" class="section level3">
+<h3>Summary of allele frequencies</h3>
 <pre class="r"><code>summary_df &lt;- df %&gt;%
   group_by(marker, population) %&gt;%
-  summarise(num_alleles = n_distinct(allele))
+  summarise(num_alleles = n_distinct(allele))</code></pre>
+<pre class="r"><code>library(knitr)
+library(kableExtra)
 
-summary_df</code></pre>
-<pre><code># A tibble: 145 × 3
-# Groups:   marker [29]
-   marker   population num_alleles
-   &lt;chr&gt;    &lt;chr&gt;            &lt;int&gt;
- 1 CSF1PO   AfAm                 8
- 2 CSF1PO   Asian                8
- 3 CSF1PO   Cauc                 7
- 4 CSF1PO   Hispanic             9
- 5 CSF1PO   all                  9
- 6 D10S1248 AfAm                11
- 7 D10S1248 Asian                7
- 8 D10S1248 Cauc                 9
- 9 D10S1248 Hispanic             9
-10 D10S1248 all                 12
-# ℹ 135 more rows</code></pre>
-<pre class="r"><code>summary_df &lt;- df %&gt;%
+summary_df &lt;- df %&gt;%
   group_by(marker, population) %&gt;%
-  summarise(num_alleles = n_distinct(allele))
+  summarise(num_alleles = n_distinct(allele), .groups = &#39;drop&#39;)
 
 summary_pivot &lt;- summary_df %&gt;%
   pivot_wider(names_from = population, values_from = num_alleles)
 
-summary_pivot</code></pre>
-<pre><code># A tibble: 29 × 6
-# Groups:   marker [29]
-   marker    AfAm Asian  Cauc Hispanic   all
-   &lt;chr&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt; &lt;int&gt;
- 1 CSF1PO       8     8     7        9     9
- 2 D10S1248    11     7     9        9    12
- 3 D12S391     19    15    16       19    24
- 4 D13S317      7     6     8        8     8
- 5 D16S539      8     6     7        8     9
- 6 D18S51      19    13    15       15    22
- 7 D19S433     14    11    15       13    16
- 8 D1S1656     15    12    15       15    15
- 9 D21S11      20    12    16       16    27
-10 D22S1045    11     8     8        9    11
-# ℹ 19 more rows</code></pre>
+# Print the table using kable and kableExtra for styling
+summary_pivot %&gt;%
+  kable(&quot;markdown&quot;, caption = &quot;Summary of Distinct Alleles by Marker and Population&quot;) %&gt;%
+  kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;, &quot;condensed&quot;, &quot;responsive&quot;))</code></pre>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<caption>
+Summary of Distinct Alleles by Marker and Population
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+marker
+</th>
+<th style="text-align:right;">
+AfAm
+</th>
+<th style="text-align:right;">
+Asian
+</th>
+<th style="text-align:right;">
+Cauc
+</th>
+<th style="text-align:right;">
+Hispanic
+</th>
+<th style="text-align:right;">
+all
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+CSF1PO
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+D10S1248
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+12
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+D12S391
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+24
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+D13S317
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+D16S539
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+D18S51
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+22
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+D19S433
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+16
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+D1S1656
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+15
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+D21S11
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;">
+27
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+D22S1045
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+11
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+D2S1338
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+13
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+D2S441
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+15
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+D3S1358
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+11
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+D5S818
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+D6S1043
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+27
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+D7S820
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+11
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+D8S1179
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+11
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+F13A01
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+16
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+F13B
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+FESFPS
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+12
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+FGA
+</td>
+<td style="text-align:right;">
+23
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;">
+27
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+LPL
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Penta_C
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+12
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Penta_D
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+16
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Penta_E
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+23
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SE33
+</td>
+<td style="text-align:right;">
+41
+</td>
+<td style="text-align:right;">
+22
+</td>
+<td style="text-align:right;">
+39
+</td>
+<td style="text-align:right;">
+36
+</td>
+<td style="text-align:right;">
+53
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TH01
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TPOX
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+vWA
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+11
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <div id="simulating-genotypes" class="section level2">
 <h2>Simulating genotypes</h2>
@@ -1109,7 +1514,7 @@ for (i in seq(1, total_markers, by = 3)) {
     print(plot) # Print the plot to display it in the RMarkdown document
   }
 }</code></pre>
-<p><img src="figure/shortrange.Rmd/plt-single-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/CODIS-STR-freqs.Rmd/plt-single-1.png" width="768" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-single-1">
 Past versions of plt-single-1.png
@@ -1134,20 +1539,20 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/8a464dc56a42405de7e49a72dcf238da5b6c515b/docs/figure/shortrange.Rmd/plt-single-1.png" target="_blank">8a464dc</a>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-1.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
 </td>
 <td>
-2024-01-18
+2024-03-03
 </td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<p><img src="figure/shortrange.Rmd/plt-single-2.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/CODIS-STR-freqs.Rmd/plt-single-2.png" width="768" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-single-2">
 Past versions of plt-single-2.png
@@ -1172,20 +1577,20 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/8a464dc56a42405de7e49a72dcf238da5b6c515b/docs/figure/shortrange.Rmd/plt-single-2.png" target="_blank">8a464dc</a>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-2.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
 </td>
 <td>
-2024-01-18
+2024-03-03
 </td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<p><img src="figure/shortrange.Rmd/plt-single-3.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/CODIS-STR-freqs.Rmd/plt-single-3.png" width="768" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-single-3">
 Past versions of plt-single-3.png
@@ -1210,20 +1615,20 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/8a464dc56a42405de7e49a72dcf238da5b6c515b/docs/figure/shortrange.Rmd/plt-single-3.png" target="_blank">8a464dc</a>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-3.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
 </td>
 <td>
-2024-01-18
+2024-03-03
 </td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<p><img src="figure/shortrange.Rmd/plt-single-4.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/CODIS-STR-freqs.Rmd/plt-single-4.png" width="768" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-single-4">
 Past versions of plt-single-4.png
@@ -1248,20 +1653,20 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/8a464dc56a42405de7e49a72dcf238da5b6c515b/docs/figure/shortrange.Rmd/plt-single-4.png" target="_blank">8a464dc</a>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-4.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
 </td>
 <td>
-2024-01-18
+2024-03-03
 </td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<p><img src="figure/shortrange.Rmd/plt-single-5.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/CODIS-STR-freqs.Rmd/plt-single-5.png" width="768" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-single-5">
 Past versions of plt-single-5.png
@@ -1286,20 +1691,20 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/8a464dc56a42405de7e49a72dcf238da5b6c515b/docs/figure/shortrange.Rmd/plt-single-5.png" target="_blank">8a464dc</a>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-5.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
 </td>
 <td>
-2024-01-18
+2024-03-03
 </td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<p><img src="figure/shortrange.Rmd/plt-single-6.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/CODIS-STR-freqs.Rmd/plt-single-6.png" width="768" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-single-6">
 Past versions of plt-single-6.png
@@ -1324,20 +1729,20 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/8a464dc56a42405de7e49a72dcf238da5b6c515b/docs/figure/shortrange.Rmd/plt-single-6.png" target="_blank">8a464dc</a>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-6.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
 </td>
 <td>
-2024-01-18
+2024-03-03
 </td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<p><img src="figure/shortrange.Rmd/plt-single-7.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/CODIS-STR-freqs.Rmd/plt-single-7.png" width="768" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-single-7">
 Past versions of plt-single-7.png
@@ -1362,20 +1767,20 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/8a464dc56a42405de7e49a72dcf238da5b6c515b/docs/figure/shortrange.Rmd/plt-single-7.png" target="_blank">8a464dc</a>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-7.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
 </td>
 <td>
-2024-01-18
+2024-03-03
 </td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<p><img src="figure/shortrange.Rmd/plt-single-8.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/CODIS-STR-freqs.Rmd/plt-single-8.png" width="768" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-single-8">
 Past versions of plt-single-8.png
@@ -1400,20 +1805,20 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/8a464dc56a42405de7e49a72dcf238da5b6c515b/docs/figure/shortrange.Rmd/plt-single-8.png" target="_blank">8a464dc</a>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-8.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
 </td>
 <td>
-2024-01-18
+2024-03-03
 </td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<p><img src="figure/shortrange.Rmd/plt-single-9.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/CODIS-STR-freqs.Rmd/plt-single-9.png" width="768" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-single-9">
 Past versions of plt-single-9.png
@@ -1438,20 +1843,20 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/8a464dc56a42405de7e49a72dcf238da5b6c515b/docs/figure/shortrange.Rmd/plt-single-9.png" target="_blank">8a464dc</a>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-9.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
 </td>
 <td>
-2024-01-18
+2024-03-03
 </td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<p><img src="figure/shortrange.Rmd/plt-single-10.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/CODIS-STR-freqs.Rmd/plt-single-10.png" width="768" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-single-10">
 Past versions of plt-single-10.png
@@ -1476,20 +1881,20 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/8a464dc56a42405de7e49a72dcf238da5b6c515b/docs/figure/shortrange.Rmd/plt-single-10.png" target="_blank">8a464dc</a>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-10.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
 </td>
 <td>
-2024-01-18
+2024-03-03
 </td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<p><img src="figure/shortrange.Rmd/plt-single-11.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/CODIS-STR-freqs.Rmd/plt-single-11.png" width="768" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-single-11">
 Past versions of plt-single-11.png
@@ -1514,20 +1919,20 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/8a464dc56a42405de7e49a72dcf238da5b6c515b/docs/figure/shortrange.Rmd/plt-single-11.png" target="_blank">8a464dc</a>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-11.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
 </td>
 <td>
-2024-01-18
+2024-03-03
 </td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<p><img src="figure/shortrange.Rmd/plt-single-12.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/CODIS-STR-freqs.Rmd/plt-single-12.png" width="768" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-single-12">
 Past versions of plt-single-12.png
@@ -1552,20 +1957,20 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/8a464dc56a42405de7e49a72dcf238da5b6c515b/docs/figure/shortrange.Rmd/plt-single-12.png" target="_blank">8a464dc</a>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-12.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
 </td>
 <td>
-2024-01-18
+2024-03-03
 </td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<p><img src="figure/shortrange.Rmd/plt-single-13.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/CODIS-STR-freqs.Rmd/plt-single-13.png" width="768" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-single-13">
 Past versions of plt-single-13.png
@@ -1590,20 +1995,20 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/8a464dc56a42405de7e49a72dcf238da5b6c515b/docs/figure/shortrange.Rmd/plt-single-13.png" target="_blank">8a464dc</a>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-13.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
 </td>
 <td>
-2024-01-18
+2024-03-03
 </td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<p><img src="figure/shortrange.Rmd/plt-single-14.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/CODIS-STR-freqs.Rmd/plt-single-14.png" width="768" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-single-14">
 Past versions of plt-single-14.png
@@ -1628,20 +2033,20 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/8a464dc56a42405de7e49a72dcf238da5b6c515b/docs/figure/shortrange.Rmd/plt-single-14.png" target="_blank">8a464dc</a>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-14.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
 </td>
 <td>
-2024-01-18
+2024-03-03
 </td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<p><img src="figure/shortrange.Rmd/plt-single-15.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/CODIS-STR-freqs.Rmd/plt-single-15.png" width="768" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-single-15">
 Past versions of plt-single-15.png
@@ -1666,20 +2071,20 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/8a464dc56a42405de7e49a72dcf238da5b6c515b/docs/figure/shortrange.Rmd/plt-single-15.png" target="_blank">8a464dc</a>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-15.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
 </td>
 <td>
-2024-01-18
+2024-03-03
 </td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<p><img src="figure/shortrange.Rmd/plt-single-16.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/CODIS-STR-freqs.Rmd/plt-single-16.png" width="768" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-single-16">
 Past versions of plt-single-16.png
@@ -1704,20 +2109,20 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/8a464dc56a42405de7e49a72dcf238da5b6c515b/docs/figure/shortrange.Rmd/plt-single-16.png" target="_blank">8a464dc</a>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-16.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
 </td>
 <td>
-2024-01-18
+2024-03-03
 </td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<p><img src="figure/shortrange.Rmd/plt-single-17.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/CODIS-STR-freqs.Rmd/plt-single-17.png" width="768" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-single-17">
 Past versions of plt-single-17.png
@@ -1742,20 +2147,20 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/8a464dc56a42405de7e49a72dcf238da5b6c515b/docs/figure/shortrange.Rmd/plt-single-17.png" target="_blank">8a464dc</a>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-17.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
 </td>
 <td>
-2024-01-18
+2024-03-03
 </td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<p><img src="figure/shortrange.Rmd/plt-single-18.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/CODIS-STR-freqs.Rmd/plt-single-18.png" width="768" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-single-18">
 Past versions of plt-single-18.png
@@ -1780,20 +2185,20 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/8a464dc56a42405de7e49a72dcf238da5b6c515b/docs/figure/shortrange.Rmd/plt-single-18.png" target="_blank">8a464dc</a>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-18.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
 </td>
 <td>
-2024-01-18
+2024-03-03
 </td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<p><img src="figure/shortrange.Rmd/plt-single-19.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/CODIS-STR-freqs.Rmd/plt-single-19.png" width="768" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-single-19">
 Past versions of plt-single-19.png
@@ -1818,20 +2223,20 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/8a464dc56a42405de7e49a72dcf238da5b6c515b/docs/figure/shortrange.Rmd/plt-single-19.png" target="_blank">8a464dc</a>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-19.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
 </td>
 <td>
-2024-01-18
+2024-03-03
 </td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<p><img src="figure/shortrange.Rmd/plt-single-20.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/CODIS-STR-freqs.Rmd/plt-single-20.png" width="768" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-single-20">
 Past versions of plt-single-20.png
@@ -1856,13 +2261,13 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/8a464dc56a42405de7e49a72dcf238da5b6c515b/docs/figure/shortrange.Rmd/plt-single-20.png" target="_blank">8a464dc</a>
+<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-20.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
 </td>
 <td>
-2024-01-18
+2024-03-03
 </td>
 </tr>
 </tbody>
@@ -2089,11 +2494,11 @@ df_plt_multi_results &lt;- multi_results %&gt;%
 
 p &lt;- create_plot(df_plt_multi_results, &quot;sum_relatedness&quot;)
 p</code></pre>
-<p><img src="figure/shortrange.Rmd/unnamed-chunk-7-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/CODIS-STR-freqs.Rmd/unnamed-chunk-5-1.png" width="768" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>plt_allele &lt;- create_plot(df_plt_multi_results, &quot;sum_alleles&quot;)
 
 plt_allele</code></pre>
-<p><img src="figure/shortrange.Rmd/unnamed-chunk-7-2.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/CODIS-STR-freqs.Rmd/unnamed-chunk-5-2.png" width="768" style="display: block; margin: auto;" /></p>
 <p>`</p>
 </div>
 </div>
@@ -2208,26 +2613,28 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] lubridate_1.9.3 forcats_1.0.0   stringr_1.5.1   dplyr_1.1.4    
- [5] purrr_1.0.2     readr_2.1.5     tidyr_1.3.0     tibble_3.2.1   
- [9] ggplot2_3.4.4   tidyverse_2.0.0 readxl_1.4.3   
+ [1] kableExtra_1.4.0 knitr_1.45       lubridate_1.9.3  forcats_1.0.0   
+ [5] stringr_1.5.1    dplyr_1.1.4      purrr_1.0.2      readr_2.1.5     
+ [9] tidyr_1.3.0      tibble_3.2.1     ggplot2_3.4.4    tidyverse_2.0.0 
+[13] readxl_1.4.3     workflowr_1.7.1 
 
 loaded via a namespace (and not attached):
- [1] sass_0.4.8        utf8_1.2.4        generics_0.1.3    stringi_1.8.3    
- [5] hms_1.1.3         digest_0.6.34     magrittr_2.0.3    timechange_0.2.0 
- [9] evaluate_0.23     grid_4.3.2        fastmap_1.1.1     cellranger_1.1.0 
-[13] rprojroot_2.0.4   workflowr_1.7.1   jsonlite_1.8.8    whisker_0.4.1    
-[17] promises_1.2.1    fansi_1.0.6       scales_1.3.0      jquerylib_0.1.4  
-[21] cli_3.6.2         crayon_1.5.2      rlang_1.1.3       bit64_4.0.5      
-[25] munsell_0.5.0     withr_2.5.2       cachem_1.0.8      yaml_2.3.8       
-[29] parallel_4.3.2    tools_4.3.2       tzdb_0.4.0        colorspace_2.1-0 
-[33] httpuv_1.6.13     vctrs_0.6.5       R6_2.5.1          lifecycle_1.0.4  
-[37] git2r_0.33.0      bit_4.0.5         fs_1.6.3          vroom_1.6.5      
-[41] pkgconfig_2.0.3   pillar_1.9.0      bslib_0.6.1       later_1.3.2      
-[45] gtable_0.3.4      glue_1.7.0        Rcpp_1.0.12       highr_0.10       
-[49] xfun_0.41         tidyselect_1.2.0  rstudioapi_0.15.0 knitr_1.45       
-[53] farver_2.1.1      htmltools_0.5.7   labeling_0.4.3    rmarkdown_2.25   
-[57] compiler_4.3.2   </code></pre>
+ [1] gtable_0.3.4      xfun_0.41         bslib_0.6.1       processx_3.8.3   
+ [5] callr_3.7.3       tzdb_0.4.0        vctrs_0.6.5       tools_4.3.2      
+ [9] ps_1.7.5          generics_0.1.3    parallel_4.3.2    fansi_1.0.6      
+[13] highr_0.10        pkgconfig_2.0.3   lifecycle_1.0.4   compiler_4.3.2   
+[17] farver_2.1.1      git2r_0.33.0      munsell_0.5.0     getPass_0.2-4    
+[21] httpuv_1.6.13     htmltools_0.5.7   sass_0.4.8        yaml_2.3.8       
+[25] later_1.3.2       pillar_1.9.0      crayon_1.5.2      jquerylib_0.1.4  
+[29] whisker_0.4.1     cachem_1.0.8      tidyselect_1.2.0  digest_0.6.34    
+[33] stringi_1.8.3     labeling_0.4.3    rprojroot_2.0.4   fastmap_1.1.1    
+[37] grid_4.3.2        colorspace_2.1-0  cli_3.6.2         magrittr_2.0.3   
+[41] utf8_1.2.4        withr_2.5.2       scales_1.3.0      promises_1.2.1   
+[45] bit64_4.0.5       timechange_0.2.0  rmarkdown_2.25    httr_1.4.7       
+[49] bit_4.0.5         cellranger_1.1.0  hms_1.1.3         evaluate_0.23    
+[53] viridisLite_0.4.2 rlang_1.1.3       Rcpp_1.0.12       glue_1.7.0       
+[57] xml2_1.3.6        svglite_2.1.3     rstudioapi_0.15.0 vroom_1.6.5      
+[61] jsonlite_1.8.8    R6_2.5.1          systemfonts_1.0.5 fs_1.6.3         </code></pre>
 </div>
 </div>
 </div>
