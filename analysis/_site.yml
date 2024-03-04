@@ -9,14 +9,12 @@ navbar:
     href: methods.html
   - text: Demographic Data
     href: demo-data.html
-  - text: Analyses
-    href: analyses.html
   - text: Database composition
     href: database-composition.html
-  - text: Short Range
-    href: shortrange.html
-  - text: Manuscript Figures
-    href: manuscript_figures.html
+  - text: STR simulations
+    href: STR-simulation.html
+  - text: CODIS STRs
+    href: CODIS-STR-freqs.html
   right:
   - icon: fab fa-github
     text: Source code

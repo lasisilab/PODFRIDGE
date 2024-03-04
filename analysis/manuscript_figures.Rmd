@@ -14,7 +14,7 @@ library(tidyverse)
 library(patchwork)
 
 knitr::opts_knit$set(root.dir = "..")
-knitr::opts_chunk$set(eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 6)
+knitr::opts_chunk$set(eval = TRUE, echo = FALSE, warning = FALSE, fig.width = 7, fig.height = 6)
 
 # CONFIGURE CONSTANTS
 

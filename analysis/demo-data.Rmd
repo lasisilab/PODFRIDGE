@@ -8,6 +8,17 @@ editor_options:
 ---
 
 
+```{r setup}
+# Load necessary packages
+library(wesanderson) # for color palettes
+library(RColorBrewer)
+library(tidyverse)
+library(patchwork)
+
+knitr::opts_knit$set(root.dir = "..")
+knitr::opts_chunk$set(eval = TRUE, echo = FALSE, warning = FALSE, fig.width = 7, fig.height = 6)
+```
+
 ## Demographic data
 
 The population size data (as well as number of children) in our analyses is based on the [US Census data hosted at IPUMS USA](https://sda.usa.ipums.org/sdaweb/analysis/?dataset=all_usa_samples).
