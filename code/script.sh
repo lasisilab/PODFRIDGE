@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=known_vs_tested_simulation
 #SBATCH --output=/home/%u/%u/slurm/%x-%j.log
-#SBATCH --time=14-00:00:00
+#SBATCH --time=14-00:00:000
 #SBATCH --account=tlasisi0
 #SBATCH --partition=standard
 #SBATCH --ntasks=1
