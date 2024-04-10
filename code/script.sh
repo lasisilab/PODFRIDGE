@@ -1,20 +1,24 @@
 #!/bin/bash
 #SBATCH --job-name=known_vs_tested_simulation
-#SBATCH --output=/home/tlasisi/PODFRIDGE_upload/logfiles/known_vs_tested_simulation_%j.out
-#SBATCH --error=/home/tlasisi/PODFRIDGE_upload/logfiles/known_vs_tested_simulation_%j.err
-#SBATCH --time=16:00:00
+#SBATCH --output=/home/%u/%u/slurm/%x-%j.log
+#SBATCH --time=14-00:00:000
+#SBATCH --account=tlasisi0
 #SBATCH --partition=standard
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=64
+#SBATCH --cpus-per-task=36
 #SBATCH --mem-per-cpu=4000MB
 #SBATCH --mail-type=END,FAIL
-#SBATCH --mail-user=tlasisi@umich.edu
+#SBATCH --mail-user=jakevanc@umich.edu
 
-# Load necessary modules
-module load gcc/9.3.0 openblas/0.3.13 r/4.0.5
+# stimulate conda
+CONDA_HOME="/home/jakevanc/miniconda3"
+source "$CONDA_HOME/etc/profile.d/conda.sh" || exit 1
+
+# Load conda env created with conda env create -f env.yml
+conda activate simulations
 
 # Ensure the directory structure exists
-mkdir -p /home/tlasisi/PODFRIDGE_upload/logfiles
+mkdir -p /home/jakevanc/jakevanc/PODFRIDGE/logfiles
 
 # Run the R script
-Rscript /home/tlasisi/PODFRIDGE_upload/code/known-vs-tested_simulation_script.R 100000 5000
+Rscript /home/jakevanc/jakevanc/PODFRIDGE/code/known-vs-tested_simulation_script.R 100000 50000
