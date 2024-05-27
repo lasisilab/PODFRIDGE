@@ -1,0 +1,30 @@
+---
+title: "The probability of detection"
+output: 
+  html_document: 
+    keep_tex: true
+date: "2024-05-19"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+### Equation for the probability of an individual being detected
+
+The probability of an individual being detected in the database is comprised of three separate probabilities: (1) the probability of the individual being in the database, (2) the probability of being detected due to one or both parents being in the database, and (3) the probability of being detected due to one or more siblings being present in the database. \smallskip
+
+(1) The probability of the individual being in the database: This is simply the probability of being in the database based on the individuals race and state of residency, which is located in the table on the CODIS database racial composition page. \
+(2) The probability of the individual being detected due to one or both parents being present in the database: This probability is the same as 1 minus the probability that neither parents are in the database, which is $(1-P(\text{present}_\text{par}))^2$, where $P(\text{present}_\text{par})$ is the probability is the probability that the parent is in the database. For simplicity, we assume that the risk of being in the database is the same for all age groups (i.e., $P(\text{present}_\text{par}) = P(\text{present}_\text{self})$). \
+(3) The probability of the individual being detected due to a sibling being present in the database: This probability is more complicated because of population heterogeneity in the number of siblings per person and a probability of less than 1 that an individual is detected due to their sibling being present in the database due to shared allele frequencies among siblings. To calculate this probability, we first sum over the probability of having $n$ siblings for $n=1$ through $n=11$, the largest number of siblings we have data on. For the probability of having $n$ siblings for Black/African American or white individuals, see "Siblings Analysis". Within each number of siblings, we sum over the probability of being detected for each possible number of siblings that are in the database. For example, if an individual has 3 siblings, we must account for them having 0, 1, 2, or all 3 siblings in the database, then the probability of being detected given all these possibilities. This is taken by calculating the binomial distribution for each possible number of siblings in the database $i$, for the total $n$ siblings, which is equivalent to  $\binom{n}{i}P(\text{present}_{\text{sib}})^{i} (1-P(\text{present}_{\text{sib}}))^{n-i}(1-(1-P(\text{detected} | \text{present}_{\text{sib}})^{i}))$. Similar to the probability of an individual being detected due to either parents being in the CODIS database, the probability of being detected due to $i$ siblings being in the database is given by $(1-(1-P(\text{detected} | \text{present}_{\text{sib}})^{i}))$. \
+
+
+$$P(\text{detected}) = P(\text{present}_{\text{self}}) + 
+(1-(1-P(\text{present}_\text{par}))^2) + $$
+$$\sum_{n=1}^{12}\left[P(n_{sib} = n)\sum_{i=1}^{n}\binom{n}{i}P(\text{present}_{\text{sib}})^{i} (1-P(\text{present}_{\text{sib}}))^{n-i}(1-(1-P(\text{detected} | \text{present}_{\text{sib}})^{i}))\right]
+$$
+
+
+
+
+
+
