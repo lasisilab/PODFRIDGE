@@ -1,0 +1,54 @@
+---
+title: "Siblings analysis"
+output: html_document
+date: "2024-04-28"
+site: workflowr::wflow_site
+---
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r data, results = FALSE,warning=FALSE,message=FALSE}
+# load necessary libraryes
+library(readr)
+library(tidyverse)
+library(ggplot2)
+library(viridis)
+library(dplyr)
+library(knitr)
+
+children_data = read.csv("./data/proportions_table_by_race_year.csv")
+mother_data = read.csv("./data/data_filtered_recoded.csv")
+```
+
+```{r chidren, results = FALSE,warning=FALSE,message=FALSE}
+ggplot(data = children_data,aes(x=chborn_num,y=proportion)) +
+  geom_col(position = position_dodge()) +
+  facet_grid(RACE~YEAR) + theme_classic()
+```
+```{r,warning=FALSE,out.width="100%"}
+mother_data <- mother_data %>% mutate(id = row_number())
+child_df = as.data.frame(rep(mother_data$id,mother_data$chborn_num))
+colnames(child_df) = "id"
+child_df = merge(child_df,mother_data,by="id")
+child_df$nsib = child_df$chborn_num - 1
+
+child_df_gb = child_df %>%
+  group_by(RACE,nsib) %>%
+  summarise(count = n()) 
+
+child_df_gb$prob = ifelse(child_df_gb$RACE == "White",child_df_gb$count/4380009, child_df_gb$count/547692)
+
+ggplot(data = child_df_gb, aes(x = nsib, y = prob)) +
+  geom_col(position = position_dodge()) +
+  facet_wrap(~RACE) + theme_classic()
+```
+
+# Probability of a person of each race having each number of siblings
+```{r,warning=FALSE,results='asis'}
+colnames(child_df_gb) = c("Race","Number of Siblings","Count",'Probability')
+kable(child_df_gb[,c(1,2,4)])
+```
+
+
