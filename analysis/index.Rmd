@@ -14,7 +14,7 @@ editor_options:
 
 [Analyses](analyses.html)
 
-[Demographic Data](demo_data.html)
+[Demographic Data](demo-data.html)
 
 [Database Composition](database-composition.html)
 
@@ -30,7 +30,7 @@ editor_options:
 
 [Manuscript Figures](manuscript_figures.html)
 
-[Representation-Risk](representatoin-risk.html)
+[Representation-Risk](representation-risk.html)
 
 [Siblings Analysis](siblings_analysis.html)
 
