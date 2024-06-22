@@ -8,6 +8,33 @@ editor_options:
   chunk_output_type: console
 ---
 
+[Background](background.Rmd)
+
+[Method](methods.Rmd)
+
+[Analyses](analyses.Rmd)
+
+[Demographic Data](demo_data.Rmd)
+
+[Database Composition](database-composition.Rmd)
+
+[CODIS Database Composition](CODIS_DB_composition)
+
+[STR](STR.Rmd)
+
+[STR Simulation](STR-simulation.Rmd)
+
+[CODIS STR Frequency](CODIS-STR-freqs.Rmd)
+
+[IBD](IBD.Rmd)
+
+[Manuscript Figures](manuscript_figures.Rmd)
+
+[Representation-Risk](representatoin-risk.Rmd)
+
+[Siblings Analysis](siblings_analysis.Rmd)
+
+[Final Equation](final_equation.Rmd)
 
 The use of genetic data to identify individuals has become increasingly prevalent with the rise of consumer genomics databases and forensic genetic genealogy. Recent studies have shown that long-range familial searches can implicate the majority of US individuals of European descent (see [Erlich et al 2018](https://www.science.org/doi/10.1126/science.aau4832) and [Coop & Edge 2019](https://www.biorxiv.org/content/10.1101/531384v1)). These findings have motivated us to carry out further investigations into the disparities between populations in the likelihood of identifying individuals through genetic relatives. 
 
