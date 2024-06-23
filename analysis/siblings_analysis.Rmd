@@ -56,15 +56,17 @@ kable(child_df_gb[,c(1,2,4)])
 ```
 
 ```{r}
-child_df2 <- mother_data %>% group_by(YEAR, AGE_RANGE, RACE) %>% summarize(total_births = sum(chborn_num)) %>% ungroup()
+fert_df <- mother_data %>% group_by(YEAR, AGE_RANGE, RACE) %>% summarize(total_births = sum(chborn_num)) %>% ungroup()
 #pivot_df <- child_df2 %>% pivot_wider(names_from = YEAR, values_from = total_births)
 ```
 
 ```{r}
-ggplot(data = child_df2, aes(x = AGE_RANGE, y = total_births, fill = RACE)) + 
+ggplot(data = fert_df, aes(x = AGE_RANGE, y = total_births, fill = RACE)) + 
   geom_col(position = "dodge") + 
   facet_wrap(~YEAR) +
-  labs(title ='Fertility Distribution', x = 'Age Range', y = 'number of children', color = 'Race') +
-  theme_classic()
+  labs(title ='Fertility Distribution', x = 'Age Range', y = 'Number of Children', color = 'Race') +
+  theme_classic() +
+  theme(plot.title = element_text(hjust = 0.5, size = 16, face = "bold"))
+
 ```
 
