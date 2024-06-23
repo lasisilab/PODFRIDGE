@@ -9,6 +9,7 @@ site: workflowr::wflow_site
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+
 ```{r data, results = FALSE,warning=FALSE,message=FALSE}
 # load necessary libraryes
 library(readr)
@@ -18,9 +19,12 @@ library(viridis)
 library(dplyr)
 library(knitr)
 
+#setwd("/Users/linmatch/Documents/GitHub/PODFRIDGE")
+
 children_data = read.csv("./data/proportions_table_by_race_year.csv")
 mother_data = read.csv("./data/data_filtered_recoded.csv")
 ```
+
 
 ```{r chidren, results = FALSE,warning=FALSE,message=FALSE}
 ggplot(data = children_data,aes(x=chborn_num,y=proportion)) +
@@ -51,4 +55,16 @@ colnames(child_df_gb) = c("Race","Number of Siblings","Count",'Probability')
 kable(child_df_gb[,c(1,2,4)])
 ```
 
+```{r}
+child_df2 <- mother_data %>% group_by(YEAR, AGE_RANGE, RACE) %>% summarize(total_births = sum(chborn_num)) %>% ungroup()
+#pivot_df <- child_df2 %>% pivot_wider(names_from = YEAR, values_from = total_births)
+```
+
+```{r}
+ggplot(data = child_df2, aes(x = AGE_RANGE, y = total_births, fill = RACE)) + 
+  geom_col(position = "dodge") + 
+  facet_wrap(~YEAR) +
+  labs(title ='Fertility Distribution', x = 'Age Range', y = 'number of children', color = 'Race') +
+  theme_classic()
+```
 
