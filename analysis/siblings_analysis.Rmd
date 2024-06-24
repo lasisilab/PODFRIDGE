@@ -64,7 +64,7 @@ fert_df <- mother_data %>% group_by(YEAR, AGE_RANGE, RACE) %>% summarize(total_b
 ggplot(data = fert_df, aes(x = AGE_RANGE, y = total_births, fill = RACE)) + 
   geom_col(position = "dodge") + 
   facet_wrap(~YEAR) +
-  labs(title ='Fertility Distribution', x = 'Age Range', y = 'Number of Children', color = 'Race') +
+  labs(title ='Fertility Distribution', x = 'Age Range', y = 'Number of Children', fill = 'Race') +
   theme_classic() +
   theme(plot.title = element_text(hjust = 0.5, size = 16, face = "bold"))
 
