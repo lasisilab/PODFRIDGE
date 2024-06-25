@@ -308,6 +308,12 @@ cutoff_results <- lapply(population_groups, function(pop) {
 })
 cutoff_results <- do.call(rbind, do.call(rbind, cutoff_results))
 
+write_csv(cutoff_results, "output/cutoff_results.csv")
+
+```
+
+```{r}
+
 ```
 
 ```{r}
@@ -328,7 +334,11 @@ aggregated_llr_results_by_population <- input_df %>%
 # View the aggregated results
 print(aggregated_llr_results_by_population)
 
+write_csv(aggregated_llr_results_by_population, "output/aggregated_llr_results_by_population.csv")
 
+```
+
+```{r}
 
 ```
 
