@@ -14,6 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 # load necessary libraryes
 library(readr)
 library(tidyverse)
+library(tidyr)
 library(ggplot2)
 library(viridis)
 library(dplyr)
@@ -59,25 +60,51 @@ Here, we are trying to create a frequency table to show the number of children b
 - n_sib = chborn_num - 1
 - freq_n_sib = freq_mother * chborn_num
 eg.Suppose 10 mothers (generation 0) has 7 children, then there will be 70 children (generation 1) in total who has 6 siblings. 
+```{r}
+blue_colors <- c("#0000FF", "#0000E5", "#0000CC", "#0000B2", "#000099", "#00007F", "#000066", 
+                 "#00004C", "#000033", "#000019", "#3333FF", "#6666FF", "#9999FF")
+
+unique_chborn_num <- sort(unique(mother_data$chborn_num))
+color_mapping <- setNames(blue_colors, unique_chborn_num)
+```
 
 
 ```{r}
 fert_df <- mother_data %>%
   count(RACE, YEAR, chborn_num) %>%
   arrange(RACE, YEAR, chborn_num) %>% 
-  mutate(n_sib = chborn_num -1, freq_n_sib = n * chborn_num) %>% 
+  mutate(n_sib = chborn_num -1, freq_n_sib = n * chborn_num, 
+         color = color_mapping[as.character(chborn_num)]) %>%
   rename(freq_mother = n)
 
 print(fert_df)
 ```
 
 ```{r}
-ggplot(data = fert_df, aes(x = AGE_RANGE, y = total_births, fill = RACE)) + 
-  geom_col(position = "dodge") + 
-  facet_wrap(~YEAR) +
-  labs(title ='Fertility Distribution', x = 'Age Range', y = 'Number of Children', fill = 'Race') +
-  theme_classic() +
-  theme(plot.title = element_text(hjust = 0.5, size = 16, face = "bold"))
+fert_df_black <- fert_df %>% filter(RACE == "Black/African American")
+fert_df_white <- fert_df %>% filter(RACE == "White")
+  
+df_long1 <- fert_df_black %>%
+  pivot_longer(cols = c(freq_mother, freq_n_sib),
+               names_to = "frequency_type",
+               values_to = "frequency") %>%
+  mutate(x_axis = ifelse(frequency_type == "freq_mother", chborn_num, n_sib))
 
+```
+
+```{r}
+ggplot(df_long1, aes(x = x_axis, y = frequency, fill = as.factor(x_axis))) +
+  geom_col() +
+  facet_grid(frequency_type ~ YEAR, scales = "free", 
+             labeller = labeller(frequency_type = c("freq_mother" = "Number of Children Born", 
+                                                    "freq_n_sib" = "Number of Siblings"),
+                                 YEAR = function(x) paste("Year", x))) +
+  scale_fill_viridis_d(option = "plasma", name = "Number of Children/Siblings") +
+  labs(title = "Distribution of Number of Children/Siblings by Census Year",
+       x = "Number of Children/Siblings",
+       y = "Frequency") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "right")
 ```
 
