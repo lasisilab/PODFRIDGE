@@ -62,7 +62,7 @@ We then create a frequency table to analyze the distribution of family sizes acr
 
 frequency_table_by_race_year <- data_filtered_recoded %>%
   count(RACE, YEAR, chborn_num) %>%
-  arrange(RACE, YEAR, chborn_num)
+  arrange(RACE, YEAR, chborn_num) 
 
 print(frequency_table_by_race_year)
 
