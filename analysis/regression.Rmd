@@ -1,0 +1,175 @@
+---
+title: "Regression to predict CODIS database proportions"
+output: html_document
+date: "2024-04-28"
+site: workflowr::wflow_site
+---
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r data, results = FALSE,warning=FALSE,message=FALSE}
+# Load necessary libraries
+library(readr)
+library(tidycensus)
+library(tidyverse)
+library(knitr)
+library(jtools)
+library(sandwich)
+
+# Load prison data
+prison_data = read.csv("./data/populations_states.csv")
+
+# Load CODIS data
+codis_data = read.csv("./data/CODIS_data.csv")
+
+# Create a data frame for Murphy and Tong profiles
+murphy.tong = data.frame(
+  state = c("California", "Florida", "Indiana", "Maine", "Nevada", "South Dakota", "Texas"), 
+  total = c(2768269, 1350667, 307714, 32847, 167726, 67600, 960985,2768269, 1350667, 307714, 32847, 167726, 67600, 960985),
+  mt.percent = c(0.296, 0.614, 0.7, 0.928, 0.694, 0.668, 0.373,0.171, 0.352, 0.26, 0.039, 0.256, 0.06, 0.291),
+  race = c("White","White","White","White","White","White","White","Black","Black","Black","Black","Black","Black","Black")
+)
+```
+
+```{r data_wrangling, results = FALSE,warning=FALSE,message=FALSE}
+# Load necessary libraries
+
+# Calculate the number of White and Black profiles in Murphy and Tong data
+murphy.tong$n = murphy.tong$total * murphy.tong$mt.percent
+
+# Extract year from the date and filter data for 2022
+prison_data$year = substring(prison_data$date, 1, 4)
+prison_data_2022 = prison_data[which(prison_data$year == "2022"),]
+prison_data_2022 = prison_data_2022[!duplicated(prison_data_2022[, 'state']),]
+
+# Load census data for each state
+# P1_002N is the total population, P1_003N is the total White population, and P1_004N is the total Black population
+us_state_density <- get_decennial(
+  geography = "state",
+  variables = c(all = "P1_002N", white = "P1_003N", black = "P1_004N"),
+  year = 2020,
+  geometry = TRUE,
+  keep_geo_vars = TRUE
+)
+
+# Spread the data into a wider format
+us_state_density = spread(us_state_density, variable, value)
+
+# Calculate the proportion of Black and White populations
+us_state_density$census.percent.black = us_state_density$black / us_state_density$all
+us_state_density$census.percent.white = us_state_density$white / us_state_density$all
+
+# Rename column for merging
+us_state_density$state = us_state_density$NAME.x
+
+# Merge census data with prison data
+us_state_density = merge(us_state_density, prison_data_2022, by = "state")
+
+# Calculate the proportion of Black and White incarcerated individuals
+us_state_density$percent.black.incarc = us_state_density$incarcerated_black / us_state_density$incarcerated_total
+us_state_density$percent.white.incarc = us_state_density$incarcerated_white / us_state_density$incarcerated_total
+
+# Merge with CODIS data
+us_state_density = merge(us_state_density, codis_data, by = "state")
+
+# Calculate the number of Black and White profiles in CODIS
+us_state_density$black_profiles = us_state_density$percent.black.incarc * (us_state_density$offender_profiles)
+us_state_density$white_profiles = us_state_density$percent.white.incarc * (us_state_density$offender_profiles)
+
+us_state_density_black = as.data.frame(us_state_density[,c("state","all","black","census.percent.black","incarcerated_total",
+                                       "incarcerated_black","percent.black.incarc","arrestee_profiles","offender_profiles","black_profiles")])
+us_state_density_black$race = "Black"
+colnames(us_state_density_black) = c("state","all","population","census.percent","incarcerated_total",
+                                     "incarcerated_race","percent.incar","arrestee_profiles","offender_profiles","geometry","race_profiles","race")
+
+us_state_density_white = as.data.frame(us_state_density[,c("state","all","white","census.percent.white","incarcerated_total",
+                                             "incarcerated_white","percent.white.incarc", "arrestee_profiles","offender_profiles","white_profiles")])
+us_state_density_white$race = "White"
+colnames(us_state_density_white) = c("state","all","population","census.percent","incarcerated_total",
+                                     "incarcerated_race","percent.incar","arrestee_profiles","offender_profiles","geometry","race_profiles","race")
+
+inferred_data = rbind(us_state_density_black, us_state_density_white)
+
+# Combine Murphy and Tong data with the merged dataset
+combined = merge(murphy.tong, inferred_data, by = c("state","race"), all.x = TRUE)
+combined$race_bin = ifelse(combined$race == "White",0,1)
+
+```
+```{r regression, results = FALSE,warning=FALSE,message=FALSE}
+# Fit linear models for Black and White population proportions
+model.all <- lm(
+    mt.percent ~           # Outcome: Murphy & Tong numbers for 7 states
+    census.percent +       # Main effect of census proportion on CODIS proportion
+    percent.incar +        # Main effect of prison proportion on CODIS proportion
+    race_bin+                 # Main effect of race. This will estimate the change in CODIS proportion for different races relative to a baseline race.
+    race_bin:census.percent +  # Interaction between race and census proportion.
+                           # This checks if the effect of census proportion on CODIS proportion varies by race.
+    race_bin:percent.incar,    # Interaction between race and prison proportion.
+                           # This checks if the effect of prison proportion on CODIS proportion varies by race.
+    data = combined        # The data set containing the variables
+)
+
+summary(model.all)
+plot_summs(model.all, robust = TRUE)
+
+# Run regression model for different combinations of the following predictors:
+# race, census proportion of race, estimated population from Klein data
+formula_a = "census.percent + percent.incar + race_bin" # no interactions
+formula_b = "percent.incar + race_bin + race_bin:percent.incar" # no census
+formula_c = "percent.incar + race_bin"  # no census or interaction
+formula_d = "census.percent + percent.incar" # no race
+
+formulas = c(formula_a, formula_b, formula_c, formula_d)
+
+model_df = as.data.frame(matrix(0,nrow = 4, ncol = 3))
+colnames(model_df) = c("model","R^2","Anova")
+for(i in 1:4){
+  form = formulas[[i]]
+  model <- lm(paste0('mt.percent ~', form), data = combined)
+  p.val = round(anova(model, model.all)[[6]][2],2)
+  model_df[i,] = c(form, round(summary(model)$adj.r.squared,2),p.val)
+}
+kable(model_df)
+
+# generate predictions based on the model with all coefficients
+combined$prediction = predict(model.all, combined)
+
+```
+
+```{r plots, results = FALSE,warning=FALSE,message=FALSE}
+# Plot the results with linear regression lines
+ggplot(data = combined) +
+  geom_point(aes(x = prediction, y = mt.percent,fill=state,shape = race),size=5,col="black") +
+  scale_shape_manual(name="Race",labels = c("Black","White"),values = c(21,24)) +
+  geom_abline(intercept = 0, slope = 1,col ="grey30", linetype = "dashed",size=1.5) +
+  theme_classic() + xlab("Estimated CODIS profiles") + ylab("Murphy & Tong profiles (FOIA)") +
+  annotate("text", x=0.2, y=0.75, size = 6, label= paste0(as.expression("R² = "), round(summary(model)$adj.r.squared,2))) +
+  annotate("text", x=0.6, y=0.56, size = 4, label= "Perfect prediction line",angle = 46) +
+  guides(fill=guide_legend(override.aes=list(shape=21))) +
+  theme(axis.text.x = element_text(color = "black", size = 16, angle = 0, hjust = .5, vjust = .5, face = "plain"),
+        axis.text.y = element_text(color = "black", size = 16, angle = 0, hjust = 1, vjust = 0, face = "plain"),  
+        axis.title.x = element_text(color = "black", size = 16, angle = 0, hjust = .5, vjust = 0, face = "plain"),
+        axis.title.y = element_text(color = "black", size = 16, angle = 90, hjust = .5, vjust = .5, face = "plain"),
+        aspect.ratio=1) 
+
+combined$Dif <- combined$prediction - combined$mt.percent
+combined$Avg <- (combined$prediction + combined$mt.percent) / 2
+
+ggplot(combined, aes(x = Avg, y = Dif)) +
+  geom_point(aes(shape = race,fill=state),size=4,col="black") +
+  scale_fill_discrete(name = "State") +
+  guides(fill=guide_legend(override.aes=list(shape=21))) +
+  scale_shape_manual(name="Race",labels = c("Black","White"),values = c(21,24)) +
+  geom_hline(yintercept = mean(combined$Dif), colour = "black", size = 1) +
+  geom_hline(yintercept = mean(combined$Dif) - (1.96 * sd(combined$Dif)), colour = "grey30", size = 0.5) +
+  geom_hline(yintercept = mean(combined$Dif) + (1.96 * sd(combined$Dif)), colour = "grey30", size = 0.5) +
+  ylab("Difference Between Measures") +
+  xlab("Average Measure") + theme_light() +
+  theme(axis.text.x = element_text(color = "black", size = 16, angle = 0, hjust = .5, vjust = .5, face = "plain"),
+        axis.text.y = element_text(color = "black", size = 16, angle = 0, hjust = 1, vjust = 0, face = "plain"),  
+        axis.title.x = element_text(color = "black", size = 16, angle = 0, hjust = .5, vjust = 0, face = "plain"),
+        axis.title.y = element_text(color = "black", size = 16, angle = 90, hjust = .5, vjust = .5, face = "plain"),
+        aspect.ratio=1) 
+```
