@@ -19,6 +19,7 @@ library(ggplot2)
 library(viridis)
 library(dplyr)
 library(knitr)
+library(scales)
 
 setwd("/Users/linmatch/Documents/GitHub/PODFRIDGE")
 
@@ -61,15 +62,24 @@ Here, we are trying to create a frequency table to show the number of children b
 - freq_n_sib = freq_mother * chborn_num
 eg.Suppose 10 mothers (generation 0) has 7 children, then there will be 70 children (generation 1) in total who has 6 siblings. 
 ```{r}
-blue_colors <- c("#0000FF", "#0000E5", "#0000CC", "#0000B2", "#000099", "#00007F", "#000066", 
-                 "#00004C", "#000033", "#000019", "#3333FF", "#6666FF", "#9999FF")
-
+colors <- c(
+  "#E41A1C",  # Red
+  "#377EB8",  # Blue
+  "#4DAF4A",  # Green
+  "#984EA3",  # Purple
+  "#FF7F00",  # Orange
+  "#FFFF33",  # Yellow
+  "#A65628",  # Brown
+  "#F781BF",  # Pink
+  "#999999",  # Grey
+  "#66C2A5",  # Teal
+  "#FC8D62",  # Salmon
+  "#8DA0CB",  # Light blue
+  "#E78AC3"   # Light pink
+)
 unique_chborn_num <- sort(unique(mother_data$chborn_num))
-color_mapping <- setNames(blue_colors, unique_chborn_num)
-```
+color_mapping <- setNames(colors, unique_chborn_num)
 
-
-```{r}
 fert_df <- mother_data %>%
   count(RACE, YEAR, chborn_num) %>%
   arrange(RACE, YEAR, chborn_num) %>% 
@@ -84,7 +94,7 @@ print(fert_df)
 fert_df_black <- fert_df %>% filter(RACE == "Black/African American")
 fert_df_white <- fert_df %>% filter(RACE == "White")
   
-df_long1 <- fert_df_black %>%
+df_long_black <- fert_df_black %>%
   pivot_longer(cols = c(freq_mother, freq_n_sib),
                names_to = "frequency_type",
                values_to = "frequency") %>%
@@ -93,14 +103,40 @@ df_long1 <- fert_df_black %>%
 ```
 
 ```{r}
-ggplot(df_long1, aes(x = x_axis, y = frequency, fill = as.factor(x_axis))) +
+ggplot(df_long_black, aes(x = x_axis, y = frequency, fill = as.factor(x_axis))) +
   geom_col() +
   facet_grid(frequency_type ~ YEAR, scales = "free", 
              labeller = labeller(frequency_type = c("freq_mother" = "Number of Children Born", 
                                                     "freq_n_sib" = "Number of Siblings"),
                                  YEAR = function(x) paste("Year", x))) +
-  scale_fill_viridis_d(option = "plasma", name = "Number of Children/Siblings") +
-  labs(title = "Distribution of Number of Children/Siblings by Census Year",
+  scale_fill_manual(values = color_mapping, name = "Number of Children/Siblings") +
+  scale_y_continuous(labels = comma_format(scale = 1, big.mark = ",")) +
+  labs(title = "Distribution of Number of Children/Siblings by Census Year (Black/African American)",
+       x = "Number of Children/Siblings",
+       y = "Frequency") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "right")
+```
+
+```{r}
+df_long_white <- fert_df_white %>%
+  pivot_longer(cols = c(freq_mother, freq_n_sib),
+               names_to = "frequency_type",
+               values_to = "frequency") %>%
+  mutate(x_axis = ifelse(frequency_type == "freq_mother", chborn_num, n_sib))
+```
+
+```{r}
+ggplot(df_long_white, aes(x = x_axis, y = frequency, fill = as.factor(x_axis))) +
+  geom_col() +
+  facet_grid(frequency_type ~ YEAR, scales = "free", 
+             labeller = labeller(frequency_type = c("freq_mother" = "Number of Children Born", 
+                                                    "freq_n_sib" = "Number of Siblings"),
+                                 YEAR = function(x) paste("Year", x))) +
+  scale_fill_manual(values = color_mapping, name = "Number of Children/Siblings") +
+  scale_y_continuous(labels = comma_format(scale = 1, big.mark = ",")) +
+  labs(title = "Distribution of Number of Children/Siblings by Census Year (White)",
        x = "Number of Children/Siblings",
        y = "Frequency") +
   theme_minimal() +

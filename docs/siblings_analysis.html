@@ -401,9 +401,9 @@ aria-hidden="true"></span> </a>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 5
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 1
+aria-hidden="true"></span> 2
 </p>
 <p>
 <strong>Knit directory:</strong> <code>PODFRIDGE/</code> <span
@@ -426,18 +426,21 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
@@ -554,15 +557,15 @@ relative
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreecdc3bd0825c5e3f403fe12e9a18333b695619c43targetblankcdc3bd0a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreecc5fc63c1f1bfa15ae20c27160118ed55f2e3e1ctargetblankcc5fc63a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/cdc3bd0825c5e3f403fe12e9a18333b695619c43" target="_blank">cdc3bd0</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/cc5fc63c1f1bfa15ae20c27160118ed55f2e3e1c" target="_blank">cc5fc63</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreecdc3bd0825c5e3f403fe12e9a18333b695619c43targetblankcdc3bd0a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreecc5fc63c1f1bfa15ae20c27160118ed55f2e3e1ctargetblankcc5fc63a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -572,7 +575,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/cdc3bd0825c5e3f403fe12e9a18333b695619c43" target="_blank">cdc3bd0</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/cc5fc63c1f1bfa15ae20c27160118ed55f2e3e1c" target="_blank">cc5fc63</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -592,7 +595,7 @@ Ignored files:
     Ignored:    .Rproj.user/
 
 Unstaged changes:
-    Modified:   data/data_proportions.csv
+    Modified:   analysis/siblings_analysis.Rmd
 
 </code></pre>
 <p>
@@ -638,6 +641,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/cc5fc63c1f1bfa15ae20c27160118ed55f2e3e1c/docs/siblings_analysis.html" target="_blank">cc5fc63</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-06-26
+</td>
+<td>
+fert_dis6
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -773,6 +793,7 @@ library(ggplot2)
 library(viridis)
 library(dplyr)
 library(knitr)
+library(scales)
 
 setwd(&quot;/Users/linmatch/Documents/GitHub/PODFRIDGE&quot;)
 
@@ -804,6 +825,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/cc5fc63c1f1bfa15ae20c27160118ed55f2e3e1c/docs/figure/siblings_analysis.Rmd/chidren-1.png" target="_blank">cc5fc63</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-06-26
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/bce5e2eef5fa3b97eae5b6643fadd5f8626724d7/docs/figure/siblings_analysis.Rmd/chidren-1.png" target="_blank">bce5e2e</a>
@@ -858,6 +890,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/cc5fc63c1f1bfa15ae20c27160118ed55f2e3e1c/docs/figure/siblings_analysis.Rmd/unnamed-chunk-1-1.png" target="_blank">cc5fc63</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-06-26
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/bce5e2eef5fa3b97eae5b6643fadd5f8626724d7/docs/figure/siblings_analysis.Rmd/unnamed-chunk-1-1.png" target="_blank">bce5e2e</a>
@@ -1018,12 +1061,25 @@ siblings. - n_sib = chborn_num - 1 - freq_n_sib = freq_mother *
 chborn_num eg.Suppose 10 mothers (generation 0) has 7 children, then
 there will be 70 children (generation 1) in total who has 6
 siblings.</p>
-<pre class="r"><code>blue_colors &lt;- c(&quot;#0000FF&quot;, &quot;#0000E5&quot;, &quot;#0000CC&quot;, &quot;#0000B2&quot;, &quot;#000099&quot;, &quot;#00007F&quot;, &quot;#000066&quot;, 
-                 &quot;#00004C&quot;, &quot;#000033&quot;, &quot;#000019&quot;, &quot;#3333FF&quot;, &quot;#6666FF&quot;, &quot;#9999FF&quot;)
-
+<pre class="r"><code>colors &lt;- c(
+  &quot;#E41A1C&quot;,  # Red
+  &quot;#377EB8&quot;,  # Blue
+  &quot;#4DAF4A&quot;,  # Green
+  &quot;#984EA3&quot;,  # Purple
+  &quot;#FF7F00&quot;,  # Orange
+  &quot;#FFFF33&quot;,  # Yellow
+  &quot;#A65628&quot;,  # Brown
+  &quot;#F781BF&quot;,  # Pink
+  &quot;#999999&quot;,  # Grey
+  &quot;#66C2A5&quot;,  # Teal
+  &quot;#FC8D62&quot;,  # Salmon
+  &quot;#8DA0CB&quot;,  # Light blue
+  &quot;#E78AC3&quot;   # Light pink
+)
 unique_chborn_num &lt;- sort(unique(mother_data$chborn_num))
-color_mapping &lt;- setNames(blue_colors, unique_chborn_num)</code></pre>
-<pre class="r"><code>fert_df &lt;- mother_data %&gt;%
+color_mapping &lt;- setNames(colors, unique_chborn_num)
+
+fert_df &lt;- mother_data %&gt;%
   count(RACE, YEAR, chborn_num) %&gt;%
   arrange(RACE, YEAR, chborn_num) %&gt;% 
   mutate(n_sib = chborn_num -1, freq_n_sib = n * chborn_num, 
@@ -1032,132 +1088,153 @@ color_mapping &lt;- setNames(blue_colors, unique_chborn_num)</code></pre>
 
 print(fert_df)</code></pre>
 <pre><code>                      RACE YEAR chborn_num freq_mother n_sib freq_n_sib   color
-1   Black/African American 1960          0        6697    -1          0 #0000FF
-2   Black/African American 1960          1        4698     0       4698 #0000E5
-3   Black/African American 1960          2        3411     1       6822 #0000CC
-4   Black/African American 1960          3        2445     2       7335 #0000B2
-5   Black/African American 1960          4        1949     3       7796 #000099
-6   Black/African American 1960          5        1361     4       6805 #00007F
-7   Black/African American 1960          6        1162     5       6972 #000066
-8   Black/African American 1960          7         932     6       6524 #00004C
-9   Black/African American 1960          8         810     7       6480 #000033
-10  Black/African American 1960          9         588     8       5292 #000019
-11  Black/African American 1960         10         549     9       5490 #3333FF
-12  Black/African American 1960         11         326    10       3586 #6666FF
-13  Black/African American 1960         12         821    11       9852 #9999FF
-14  Black/African American 1970          0       16490    -1          0 #0000FF
-15  Black/African American 1970          1       11686     0      11686 #0000E5
-16  Black/African American 1970          2        9275     1      18550 #0000CC
-17  Black/African American 1970          3        7161     2      21483 #0000B2
-18  Black/African American 1970          4        5659     3      22636 #000099
-19  Black/African American 1970          5        4147     4      20735 #00007F
-20  Black/African American 1970          6        3147     5      18882 #000066
-21  Black/African American 1970          7        2542     6      17794 #00004C
-22  Black/African American 1970          8        2012     7      16096 #000033
-23  Black/African American 1970          9        1473     8      13257 #000019
-24  Black/African American 1970         10        1194     9      11940 #3333FF
-25  Black/African American 1970         11         784    10       8624 #6666FF
-26  Black/African American 1970         12        1682    11      20184 #9999FF
-27  Black/African American 1980          0        8417    -1          0 #0000FF
-28  Black/African American 1980          1        6383     0       6383 #0000E5
-29  Black/African American 1980          2        5681     1      11362 #0000CC
-30  Black/African American 1980          3        4797     2      14391 #0000B2
-31  Black/African American 1980          4        3732     3      14928 #000099
-32  Black/African American 1980          5        2870     4      14350 #00007F
-33  Black/African American 1980          6        2264     5      13584 #000066
-34  Black/African American 1980          7        1782     6      12474 #00004C
-35  Black/African American 1980          8        1310     7      10480 #000033
-36  Black/African American 1980          9         943     8       8487 #000019
-37  Black/African American 1980         10         717     9       7170 #3333FF
-38  Black/African American 1980         11         452    10       4972 #6666FF
-39  Black/African American 1980         12         870    11      10440 #9999FF
-40  Black/African American 1990          0        7193    -1          0 #0000FF
-41  Black/African American 1990          1        6635     0       6635 #0000E5
-42  Black/African American 1990          2        7485     1      14970 #0000CC
-43  Black/African American 1990          3        6161     2      18483 #0000B2
-44  Black/African American 1990          4        4673     3      18692 #000099
-45  Black/African American 1990          5        3333     4      16665 #00007F
-46  Black/African American 1990          6        2445     5      14670 #000066
-47  Black/African American 1990          7        1752     6      12264 #00004C
-48  Black/African American 1990          8        1263     7      10104 #000033
-49  Black/African American 1990          9         853     8       7677 #000019
-50  Black/African American 1990         10         590     9       5900 #3333FF
-51  Black/African American 1990         11         348    10       3828 #6666FF
-52  Black/African American 1990         12         772    11       9264 #9999FF
-53                   White 1960          0       46202    -1          0 #0000FF
-54                   White 1960          1       47433     0      47433 #0000E5
-55                   White 1960          2       60732     1     121464 #0000CC
-56                   White 1960          3       41272     2     123816 #0000B2
-57                   White 1960          4       25666     3     102664 #000099
-58                   White 1960          5       15327     4      76635 #00007F
-59                   White 1960          6        9697     5      58182 #000066
-60                   White 1960          7        6347     6      44429 #00004C
-61                   White 1960          8        4518     7      36144 #000033
-62                   White 1960          9        2990     8      26910 #000019
-63                   White 1960         10        2148     9      21480 #3333FF
-64                   White 1960         11        1280    10      14080 #6666FF
-65                   White 1960         12        1747    11      20964 #9999FF
-66                   White 1970          0      133940    -1          0 #0000FF
-67                   White 1970          1      106663     0     106663 #0000E5
-68                   White 1970          2      157405     1     314810 #0000CC
-69                   White 1970          3      112397     2     337191 #0000B2
-70                   White 1970          4       68603     3     274412 #000099
-71                   White 1970          5       38000     4     190000 #00007F
-72                   White 1970          6       22023     5     132138 #000066
-73                   White 1970          7       12927     6      90489 #00004C
-74                   White 1970          8        8534     7      68272 #000033
-75                   White 1970          9        5342     8      48078 #000019
-76                   White 1970         10        3593     9      35930 #3333FF
-77                   White 1970         11        2082    10      22902 #6666FF
-78                   White 1970         12        2858    11      34296 #9999FF
-79                   White 1980          0       61909    -1          0 #0000FF
-80                   White 1980          1       51856     0      51856 #0000E5
-81                   White 1980          2       89551     1     179102 #0000CC
-82                   White 1980          3       70716     2     212148 #0000B2
-83                   White 1980          4       43190     3     172760 #000099
-84                   White 1980          5       23170     4     115850 #00007F
-85                   White 1980          6       12556     5      75336 #000066
-86                   White 1980          7        6589     6      46123 #00004C
-87                   White 1980          8        3874     7      30992 #000033
-88                   White 1980          9        2254     8      20286 #000019
-89                   White 1980         10        1368     9      13680 #3333FF
-90                   White 1980         11         757    10       8327 #6666FF
-91                   White 1980         12        1073    11      12876 #9999FF
-92                   White 1990          0       62471    -1          0 #0000FF
-93                   White 1990          1       56647     0      56647 #0000E5
-94                   White 1990          2      119054     1     238108 #0000CC
-95                   White 1990          3       90170     2     270510 #0000B2
-96                   White 1990          4       51511     3     206044 #000099
-97                   White 1990          5       25385     4     126925 #00007F
-98                   White 1990          6       12698     5      76188 #000066
-99                   White 1990          7        6292     6      44044 #00004C
-100                  White 1990          8        3479     7      27832 #000033
-101                  White 1990          9        1876     8      16884 #000019
-102                  White 1990         10        1132     9      11320 #3333FF
-103                  White 1990         11         623    10       6853 #6666FF
-104                  White 1990         12         828    11       9936 #9999FF</code></pre>
+1   Black/African American 1960          0        6697    -1          0 #E41A1C
+2   Black/African American 1960          1        4698     0       4698 #377EB8
+3   Black/African American 1960          2        3411     1       6822 #4DAF4A
+4   Black/African American 1960          3        2445     2       7335 #984EA3
+5   Black/African American 1960          4        1949     3       7796 #FF7F00
+6   Black/African American 1960          5        1361     4       6805 #FFFF33
+7   Black/African American 1960          6        1162     5       6972 #A65628
+8   Black/African American 1960          7         932     6       6524 #F781BF
+9   Black/African American 1960          8         810     7       6480 #999999
+10  Black/African American 1960          9         588     8       5292 #66C2A5
+11  Black/African American 1960         10         549     9       5490 #FC8D62
+12  Black/African American 1960         11         326    10       3586 #8DA0CB
+13  Black/African American 1960         12         821    11       9852 #E78AC3
+14  Black/African American 1970          0       16490    -1          0 #E41A1C
+15  Black/African American 1970          1       11686     0      11686 #377EB8
+16  Black/African American 1970          2        9275     1      18550 #4DAF4A
+17  Black/African American 1970          3        7161     2      21483 #984EA3
+18  Black/African American 1970          4        5659     3      22636 #FF7F00
+19  Black/African American 1970          5        4147     4      20735 #FFFF33
+20  Black/African American 1970          6        3147     5      18882 #A65628
+21  Black/African American 1970          7        2542     6      17794 #F781BF
+22  Black/African American 1970          8        2012     7      16096 #999999
+23  Black/African American 1970          9        1473     8      13257 #66C2A5
+24  Black/African American 1970         10        1194     9      11940 #FC8D62
+25  Black/African American 1970         11         784    10       8624 #8DA0CB
+26  Black/African American 1970         12        1682    11      20184 #E78AC3
+27  Black/African American 1980          0        8417    -1          0 #E41A1C
+28  Black/African American 1980          1        6383     0       6383 #377EB8
+29  Black/African American 1980          2        5681     1      11362 #4DAF4A
+30  Black/African American 1980          3        4797     2      14391 #984EA3
+31  Black/African American 1980          4        3732     3      14928 #FF7F00
+32  Black/African American 1980          5        2870     4      14350 #FFFF33
+33  Black/African American 1980          6        2264     5      13584 #A65628
+34  Black/African American 1980          7        1782     6      12474 #F781BF
+35  Black/African American 1980          8        1310     7      10480 #999999
+36  Black/African American 1980          9         943     8       8487 #66C2A5
+37  Black/African American 1980         10         717     9       7170 #FC8D62
+38  Black/African American 1980         11         452    10       4972 #8DA0CB
+39  Black/African American 1980         12         870    11      10440 #E78AC3
+40  Black/African American 1990          0        7193    -1          0 #E41A1C
+41  Black/African American 1990          1        6635     0       6635 #377EB8
+42  Black/African American 1990          2        7485     1      14970 #4DAF4A
+43  Black/African American 1990          3        6161     2      18483 #984EA3
+44  Black/African American 1990          4        4673     3      18692 #FF7F00
+45  Black/African American 1990          5        3333     4      16665 #FFFF33
+46  Black/African American 1990          6        2445     5      14670 #A65628
+47  Black/African American 1990          7        1752     6      12264 #F781BF
+48  Black/African American 1990          8        1263     7      10104 #999999
+49  Black/African American 1990          9         853     8       7677 #66C2A5
+50  Black/African American 1990         10         590     9       5900 #FC8D62
+51  Black/African American 1990         11         348    10       3828 #8DA0CB
+52  Black/African American 1990         12         772    11       9264 #E78AC3
+53                   White 1960          0       46202    -1          0 #E41A1C
+54                   White 1960          1       47433     0      47433 #377EB8
+55                   White 1960          2       60732     1     121464 #4DAF4A
+56                   White 1960          3       41272     2     123816 #984EA3
+57                   White 1960          4       25666     3     102664 #FF7F00
+58                   White 1960          5       15327     4      76635 #FFFF33
+59                   White 1960          6        9697     5      58182 #A65628
+60                   White 1960          7        6347     6      44429 #F781BF
+61                   White 1960          8        4518     7      36144 #999999
+62                   White 1960          9        2990     8      26910 #66C2A5
+63                   White 1960         10        2148     9      21480 #FC8D62
+64                   White 1960         11        1280    10      14080 #8DA0CB
+65                   White 1960         12        1747    11      20964 #E78AC3
+66                   White 1970          0      133940    -1          0 #E41A1C
+67                   White 1970          1      106663     0     106663 #377EB8
+68                   White 1970          2      157405     1     314810 #4DAF4A
+69                   White 1970          3      112397     2     337191 #984EA3
+70                   White 1970          4       68603     3     274412 #FF7F00
+71                   White 1970          5       38000     4     190000 #FFFF33
+72                   White 1970          6       22023     5     132138 #A65628
+73                   White 1970          7       12927     6      90489 #F781BF
+74                   White 1970          8        8534     7      68272 #999999
+75                   White 1970          9        5342     8      48078 #66C2A5
+76                   White 1970         10        3593     9      35930 #FC8D62
+77                   White 1970         11        2082    10      22902 #8DA0CB
+78                   White 1970         12        2858    11      34296 #E78AC3
+79                   White 1980          0       61909    -1          0 #E41A1C
+80                   White 1980          1       51856     0      51856 #377EB8
+81                   White 1980          2       89551     1     179102 #4DAF4A
+82                   White 1980          3       70716     2     212148 #984EA3
+83                   White 1980          4       43190     3     172760 #FF7F00
+84                   White 1980          5       23170     4     115850 #FFFF33
+85                   White 1980          6       12556     5      75336 #A65628
+86                   White 1980          7        6589     6      46123 #F781BF
+87                   White 1980          8        3874     7      30992 #999999
+88                   White 1980          9        2254     8      20286 #66C2A5
+89                   White 1980         10        1368     9      13680 #FC8D62
+90                   White 1980         11         757    10       8327 #8DA0CB
+91                   White 1980         12        1073    11      12876 #E78AC3
+92                   White 1990          0       62471    -1          0 #E41A1C
+93                   White 1990          1       56647     0      56647 #377EB8
+94                   White 1990          2      119054     1     238108 #4DAF4A
+95                   White 1990          3       90170     2     270510 #984EA3
+96                   White 1990          4       51511     3     206044 #FF7F00
+97                   White 1990          5       25385     4     126925 #FFFF33
+98                   White 1990          6       12698     5      76188 #A65628
+99                   White 1990          7        6292     6      44044 #F781BF
+100                  White 1990          8        3479     7      27832 #999999
+101                  White 1990          9        1876     8      16884 #66C2A5
+102                  White 1990         10        1132     9      11320 #FC8D62
+103                  White 1990         11         623    10       6853 #8DA0CB
+104                  White 1990         12         828    11       9936 #E78AC3</code></pre>
 <pre class="r"><code>fert_df_black &lt;- fert_df %&gt;% filter(RACE == &quot;Black/African American&quot;)
 fert_df_white &lt;- fert_df %&gt;% filter(RACE == &quot;White&quot;)
   
-df_long1 &lt;- fert_df_black %&gt;%
+df_long_black &lt;- fert_df_black %&gt;%
   pivot_longer(cols = c(freq_mother, freq_n_sib),
                names_to = &quot;frequency_type&quot;,
                values_to = &quot;frequency&quot;) %&gt;%
   mutate(x_axis = ifelse(frequency_type == &quot;freq_mother&quot;, chborn_num, n_sib))</code></pre>
-<pre class="r"><code>ggplot(df_long1, aes(x = x_axis, y = frequency, fill = as.factor(x_axis))) +
+<pre class="r"><code>ggplot(df_long_black, aes(x = x_axis, y = frequency, fill = as.factor(x_axis))) +
   geom_col() +
   facet_grid(frequency_type ~ YEAR, scales = &quot;free&quot;, 
              labeller = labeller(frequency_type = c(&quot;freq_mother&quot; = &quot;Number of Children Born&quot;, 
                                                     &quot;freq_n_sib&quot; = &quot;Number of Siblings&quot;),
                                  YEAR = function(x) paste(&quot;Year&quot;, x))) +
-  scale_fill_viridis_d(option = &quot;plasma&quot;, name = &quot;Number of Children/Siblings&quot;) +
-  labs(title = &quot;Distribution of Number of Children/Siblings by Census Year&quot;,
+  scale_fill_manual(values = color_mapping, name = &quot;Number of Children/Siblings&quot;) +
+  scale_y_continuous(labels = comma_format(scale = 1, big.mark = &quot;,&quot;)) +
+  labs(title = &quot;Distribution of Number of Children/Siblings by Census Year (Black/African American)&quot;,
        x = &quot;Number of Children/Siblings&quot;,
        y = &quot;Frequency&quot;) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
         legend.position = &quot;right&quot;)</code></pre>
-<p><img src="figure/siblings_analysis.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/siblings_analysis.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>df_long_white &lt;- fert_df_white %&gt;%
+  pivot_longer(cols = c(freq_mother, freq_n_sib),
+               names_to = &quot;frequency_type&quot;,
+               values_to = &quot;frequency&quot;) %&gt;%
+  mutate(x_axis = ifelse(frequency_type == &quot;freq_mother&quot;, chborn_num, n_sib))</code></pre>
+<pre class="r"><code>ggplot(df_long_white, aes(x = x_axis, y = frequency, fill = as.factor(x_axis))) +
+  geom_col() +
+  facet_grid(frequency_type ~ YEAR, scales = &quot;free&quot;, 
+             labeller = labeller(frequency_type = c(&quot;freq_mother&quot; = &quot;Number of Children Born&quot;, 
+                                                    &quot;freq_n_sib&quot; = &quot;Number of Siblings&quot;),
+                                 YEAR = function(x) paste(&quot;Year&quot;, x))) +
+  scale_fill_manual(values = color_mapping, name = &quot;Number of Children/Siblings&quot;) +
+  scale_y_continuous(labels = comma_format(scale = 1, big.mark = &quot;,&quot;)) +
+  labs(title = &quot;Distribution of Number of Children/Siblings by Census Year (White)&quot;,
+       x = &quot;Number of Children/Siblings&quot;,
+       y = &quot;Frequency&quot;) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = &quot;right&quot;)</code></pre>
+<p><img src="figure/siblings_analysis.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1185,10 +1262,10 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] knitr_1.45        viridis_0.6.5     viridisLite_0.4.2 lubridate_1.9.3  
- [5] forcats_1.0.0     stringr_1.5.1     dplyr_1.1.4       purrr_1.0.2      
- [9] tidyr_1.3.1       tibble_3.2.1      ggplot2_3.4.4     tidyverse_2.0.0  
-[13] readr_2.1.5       workflowr_1.7.1  
+ [1] scales_1.3.0      knitr_1.45        viridis_0.6.5     viridisLite_0.4.2
+ [5] lubridate_1.9.3   forcats_1.0.0     stringr_1.5.1     dplyr_1.1.4      
+ [9] purrr_1.0.2       tidyr_1.3.1       tibble_3.2.1      ggplot2_3.4.4    
+[13] tidyverse_2.0.0   readr_2.1.5       workflowr_1.7.1  
 
 loaded via a namespace (and not attached):
  [1] sass_0.4.8        utf8_1.2.4        generics_0.1.3    stringi_1.8.3    
@@ -1196,15 +1273,15 @@ loaded via a namespace (and not attached):
  [9] evaluate_0.23     grid_4.3.2        fastmap_1.1.1     rprojroot_2.0.4  
 [13] jsonlite_1.8.8    processx_3.8.3    whisker_0.4.1     gridExtra_2.3    
 [17] ps_1.7.6          promises_1.2.1    httr_1.4.7        fansi_1.0.6      
-[21] scales_1.3.0      jquerylib_0.1.4   cli_3.6.2         rlang_1.1.3      
-[25] munsell_0.5.0     withr_3.0.0       cachem_1.0.8      yaml_2.3.8       
-[29] tools_4.3.2       tzdb_0.4.0        colorspace_2.1-0  httpuv_1.6.14    
-[33] vctrs_0.6.5       R6_2.5.1          lifecycle_1.0.4   git2r_0.33.0     
-[37] fs_1.6.3          pkgconfig_2.0.3   callr_3.7.3       pillar_1.9.0     
-[41] bslib_0.6.1       later_1.3.2       gtable_0.3.4      glue_1.7.0       
-[45] Rcpp_1.0.12       xfun_0.41         tidyselect_1.2.1  highr_0.10       
-[49] rstudioapi_0.15.0 farver_2.1.1      htmltools_0.5.7   labeling_0.4.3   
-[53] rmarkdown_2.25    compiler_4.3.2    getPass_0.2-4    </code></pre>
+[21] jquerylib_0.1.4   cli_3.6.2         rlang_1.1.3       munsell_0.5.0    
+[25] withr_3.0.0       cachem_1.0.8      yaml_2.3.8        tools_4.3.2      
+[29] tzdb_0.4.0        colorspace_2.1-0  httpuv_1.6.14     vctrs_0.6.5      
+[33] R6_2.5.1          lifecycle_1.0.4   git2r_0.33.0      fs_1.6.3         
+[37] pkgconfig_2.0.3   callr_3.7.3       pillar_1.9.0      bslib_0.6.1      
+[41] later_1.3.2       gtable_0.3.4      glue_1.7.0        Rcpp_1.0.12      
+[45] xfun_0.41         tidyselect_1.2.1  highr_0.10        rstudioapi_0.15.0
+[49] farver_2.1.1      htmltools_0.5.7   labeling_0.4.3    rmarkdown_2.25   
+[53] compiler_4.3.2    getPass_0.2-4    </code></pre>
 </div>
 </div>
 
