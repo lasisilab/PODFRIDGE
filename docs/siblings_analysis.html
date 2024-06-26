@@ -36,8 +36,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-6.4.0/css/all.min.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-6.4.0/css/v4-shims.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
 
 <link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
 <!-- Add a small amount of space between sections. -->
@@ -375,7 +375,9 @@ div.tocify {
 
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -384,7 +386,9 @@ div.tocify {
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
 <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -393,17 +397,27 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2024-05-27
+<strong>Last updated:</strong> 2024-06-26
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 1
 </p>
 <p>
-<strong>Knit directory:</strong> <code>PODFRIDGE/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+<strong>Knit directory:</strong> <code>PODFRIDGE/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
 </p>
 <p>
-This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
-  href="https://github.com/workflowr/workflowr">workflowr</a> (version 1.7.1). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
 </p>
 <hr>
 </div>
@@ -412,99 +426,179 @@ This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a> analysi
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
 </p>
 </div>
 <div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20230302code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20230302)</code> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20230302code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20230302)</code> </a>
 </p>
 </div>
-<div id="strongSeedstrongcodesetseed20230302code" class="panel-collapse collapse">
+<div id="strongSeedstrongcodesetseed20230302code"
+class="panel-collapse collapse">
 <div class="panel-body">
-<p>The command <code>set.seed(20230302)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+<p>The command <code>set.seed(20230302)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
 </p>
 </div>
-<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
 </p>
 </div>
 <div id="strongCachestrongnone" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongabsolute">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>File paths:</strong> absolute </a>
 </p>
 </div>
-<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div id="strongFilepathsstrongabsolute" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+<p>
+Using absolute paths to the files within your workflowr project makes it
+difficult for you and others to run your code on a different machine.
+Change the absolute path(s) below to the suggested relative path(s) to
+make your code more reproducible.
+</p>
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th style="text-align:left;">
+absolute
+</th>
+<th style="text-align:left;">
+relative
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+/Users/linmatch/Documents/GitHub/PODFRIDGE
+</td>
+<td style="text-align:left;">
+.
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree332d5a271a93905642914c17d72bd09027f81afctargetblank332d5a2a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/lasisilab/PODFRIDGE/tree/332d5a271a93905642914c17d72bd09027f81afc" target="_blank">332d5a2</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreecdc3bd0825c5e3f403fe12e9a18333b695619c43targetblankcdc3bd0a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/cdc3bd0825c5e3f403fe12e9a18333b695619c43" target="_blank">cdc3bd0</a>
+</a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree332d5a271a93905642914c17d72bd09027f81afctargetblank332d5a2a" class="panel-collapse collapse">
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreecdc3bd0825c5e3f403fe12e9a18333b695619c43targetblankcdc3bd0a"
+class="panel-collapse collapse">
 <div class="panel-body">
 <p>
-Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/lasisilab/PODFRIDGE/tree/332d5a271a93905642914c17d72bd09027f81afc" target="_blank">332d5a2</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/cdc3bd0825c5e3f403fe12e9a18333b695619c43" target="_blank">cdc3bd0</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
 </p>
 <p>
-Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
 </p>
 <pre><code>
-Untracked files:
-    Untracked:  Rplots.pdf
+Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+
+Unstaged changes:
+    Modified:   data/data_proportions.csv
 
 </code></pre>
 <p>
-Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
 </p>
 </div>
 </div>
@@ -515,7 +609,12 @@ Note that any generated files, e.g. HTML, png, CSS, etc., are not included in t
 <div id="versions" class="tab-pane fade">
 
 <p>
-These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/siblings_analysis.Rmd</code>) and HTML (<code>docs/siblings_analysis.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/siblings_analysis.Rmd</code>) and
+HTML (<code>docs/siblings_analysis.html</code>) files. If you’ve
+configured a remote Git repository (see <code>?wflow_git_remote</code>),
+click on the hyperlinks in the table below to view the files as they
+were in that past version.
 </p>
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
@@ -544,6 +643,108 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/cdc3bd0825c5e3f403fe12e9a18333b695619c43/analysis/siblings_analysis.Rmd" target="_blank">cdc3bd0</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-06-26
+</td>
+<td>
+fer_dis
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/326ad11168c06cf98858991389c21abc82a24451/analysis/siblings_analysis.Rmd" target="_blank">326ad11</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-06-26
+</td>
+<td>
+fert distribution
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/892720fa615adc12132f20091ab0e82ee5f9b85d/analysis/siblings_analysis.Rmd" target="_blank">892720f</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-06-23
+</td>
+<td>
+fert dis3
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/c865baa127467c97d73a9e769b6bc1c0a8935cbd/analysis/siblings_analysis.Rmd" target="_blank">c865baa</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-06-23
+</td>
+<td>
+fertility dis2
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/f2c131dc9c78b7c8e02b2068ec16dfe7c856681d/analysis/siblings_analysis.Rmd" target="_blank">f2c131d</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-06-23
+</td>
+<td>
+fertility distribution
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/bce5e2eef5fa3b97eae5b6643fadd5f8626724d7/docs/siblings_analysis.html" target="_blank">bce5e2e</a>
+</td>
+<td>
+hcvw
+</td>
+<td>
+2024-05-27
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/332d5a271a93905642914c17d72bd09027f81afc/analysis/siblings_analysis.Rmd" target="_blank">332d5a2</a>
 </td>
 <td>
@@ -553,7 +754,8 @@ hcvw
 2024-05-27
 </td>
 <td>
-wflow_publish(c(“analysis/CODIS_DB_composition.Rmd”, “analysis/final_equation.Rmd”,
+wflow_publish(c("analysis/CODIS_DB_composition.Rmd",
+"analysis/final_equation.Rmd",
 </td>
 </tr>
 </tbody>
@@ -566,10 +768,13 @@ wflow_publish(c(“analysis/CODIS_DB_composition.Rmd”, “analysis/final_equat
 <pre class="r"><code># load necessary libraryes
 library(readr)
 library(tidyverse)
+library(tidyr)
 library(ggplot2)
 library(viridis)
 library(dplyr)
 library(knitr)
+
+setwd(&quot;/Users/linmatch/Documents/GitHub/PODFRIDGE&quot;)
 
 children_data = read.csv(&quot;./data/proportions_table_by_race_year.csv&quot;)
 mother_data = read.csv(&quot;./data/data_filtered_recoded.csv&quot;)</code></pre>
@@ -577,6 +782,43 @@ mother_data = read.csv(&quot;./data/data_filtered_recoded.csv&quot;)</code></pre
   geom_col(position = position_dodge()) +
   facet_grid(RACE~YEAR) + theme_classic()</code></pre>
 <p><img src="figure/siblings_analysis.Rmd/chidren-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-chidren-1">
+Past versions of chidren-1.png
+</button>
+</p>
+<div id="fig-chidren-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/bce5e2eef5fa3b97eae5b6643fadd5f8626724d7/docs/figure/siblings_analysis.Rmd/chidren-1.png" target="_blank">bce5e2e</a>
+</td>
+<td>
+hcvw
+</td>
+<td>
+2024-05-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>mother_data &lt;- mother_data %&gt;% mutate(id = row_number())
 child_df = as.data.frame(rep(mother_data$id,mother_data$chborn_num))
 colnames(child_df) = &quot;id&quot;
@@ -594,8 +836,48 @@ ggplot(data = child_df_gb, aes(x = nsib, y = prob)) +
   geom_col(position = position_dodge()) +
   facet_wrap(~RACE) + theme_classic()</code></pre>
 <p><img src="figure/siblings_analysis.Rmd/unnamed-chunk-1-1.png" width="100%" style="display: block; margin: auto;" /></p>
-<div id="probability-of-a-person-of-each-race-having-each-number-of-siblings" class="section level1">
-<h1>Probability of a person of each race having each number of siblings</h1>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-1-1">
+Past versions of unnamed-chunk-1-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/bce5e2eef5fa3b97eae5b6643fadd5f8626724d7/docs/figure/siblings_analysis.Rmd/unnamed-chunk-1-1.png" target="_blank">bce5e2e</a>
+</td>
+<td>
+hcvw
+</td>
+<td>
+2024-05-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div
+id="probability-of-a-person-of-each-race-having-each-number-of-siblings"
+class="section level1">
+<h1>Probability of a person of each race having each number of
+siblings</h1>
 <pre class="r"><code>colnames(child_df_gb) = c(&quot;Race&quot;,&quot;Number of Siblings&quot;,&quot;Count&quot;,&#39;Probability&#39;)
 kable(child_df_gb[,c(1,2,4)])</code></pre>
 <table>
@@ -729,57 +1011,200 @@ kable(child_df_gb[,c(1,2,4)])</code></pre>
 </tr>
 </tbody>
 </table>
+<p>Here, we are trying to create a frequency table to show the number of
+children born, the number of mother who has “chborn_num” children, the
+number of sibling, and the number of individuals who has “n_sib”
+siblings. - n_sib = chborn_num - 1 - freq_n_sib = freq_mother *
+chborn_num eg.Suppose 10 mothers (generation 0) has 7 children, then
+there will be 70 children (generation 1) in total who has 6
+siblings.</p>
+<pre class="r"><code>blue_colors &lt;- c(&quot;#0000FF&quot;, &quot;#0000E5&quot;, &quot;#0000CC&quot;, &quot;#0000B2&quot;, &quot;#000099&quot;, &quot;#00007F&quot;, &quot;#000066&quot;, 
+                 &quot;#00004C&quot;, &quot;#000033&quot;, &quot;#000019&quot;, &quot;#3333FF&quot;, &quot;#6666FF&quot;, &quot;#9999FF&quot;)
+
+unique_chborn_num &lt;- sort(unique(mother_data$chborn_num))
+color_mapping &lt;- setNames(blue_colors, unique_chborn_num)</code></pre>
+<pre class="r"><code>fert_df &lt;- mother_data %&gt;%
+  count(RACE, YEAR, chborn_num) %&gt;%
+  arrange(RACE, YEAR, chborn_num) %&gt;% 
+  mutate(n_sib = chborn_num -1, freq_n_sib = n * chborn_num, 
+         color = color_mapping[as.character(chborn_num)]) %&gt;%
+  rename(freq_mother = n)
+
+print(fert_df)</code></pre>
+<pre><code>                      RACE YEAR chborn_num freq_mother n_sib freq_n_sib   color
+1   Black/African American 1960          0        6697    -1          0 #0000FF
+2   Black/African American 1960          1        4698     0       4698 #0000E5
+3   Black/African American 1960          2        3411     1       6822 #0000CC
+4   Black/African American 1960          3        2445     2       7335 #0000B2
+5   Black/African American 1960          4        1949     3       7796 #000099
+6   Black/African American 1960          5        1361     4       6805 #00007F
+7   Black/African American 1960          6        1162     5       6972 #000066
+8   Black/African American 1960          7         932     6       6524 #00004C
+9   Black/African American 1960          8         810     7       6480 #000033
+10  Black/African American 1960          9         588     8       5292 #000019
+11  Black/African American 1960         10         549     9       5490 #3333FF
+12  Black/African American 1960         11         326    10       3586 #6666FF
+13  Black/African American 1960         12         821    11       9852 #9999FF
+14  Black/African American 1970          0       16490    -1          0 #0000FF
+15  Black/African American 1970          1       11686     0      11686 #0000E5
+16  Black/African American 1970          2        9275     1      18550 #0000CC
+17  Black/African American 1970          3        7161     2      21483 #0000B2
+18  Black/African American 1970          4        5659     3      22636 #000099
+19  Black/African American 1970          5        4147     4      20735 #00007F
+20  Black/African American 1970          6        3147     5      18882 #000066
+21  Black/African American 1970          7        2542     6      17794 #00004C
+22  Black/African American 1970          8        2012     7      16096 #000033
+23  Black/African American 1970          9        1473     8      13257 #000019
+24  Black/African American 1970         10        1194     9      11940 #3333FF
+25  Black/African American 1970         11         784    10       8624 #6666FF
+26  Black/African American 1970         12        1682    11      20184 #9999FF
+27  Black/African American 1980          0        8417    -1          0 #0000FF
+28  Black/African American 1980          1        6383     0       6383 #0000E5
+29  Black/African American 1980          2        5681     1      11362 #0000CC
+30  Black/African American 1980          3        4797     2      14391 #0000B2
+31  Black/African American 1980          4        3732     3      14928 #000099
+32  Black/African American 1980          5        2870     4      14350 #00007F
+33  Black/African American 1980          6        2264     5      13584 #000066
+34  Black/African American 1980          7        1782     6      12474 #00004C
+35  Black/African American 1980          8        1310     7      10480 #000033
+36  Black/African American 1980          9         943     8       8487 #000019
+37  Black/African American 1980         10         717     9       7170 #3333FF
+38  Black/African American 1980         11         452    10       4972 #6666FF
+39  Black/African American 1980         12         870    11      10440 #9999FF
+40  Black/African American 1990          0        7193    -1          0 #0000FF
+41  Black/African American 1990          1        6635     0       6635 #0000E5
+42  Black/African American 1990          2        7485     1      14970 #0000CC
+43  Black/African American 1990          3        6161     2      18483 #0000B2
+44  Black/African American 1990          4        4673     3      18692 #000099
+45  Black/African American 1990          5        3333     4      16665 #00007F
+46  Black/African American 1990          6        2445     5      14670 #000066
+47  Black/African American 1990          7        1752     6      12264 #00004C
+48  Black/African American 1990          8        1263     7      10104 #000033
+49  Black/African American 1990          9         853     8       7677 #000019
+50  Black/African American 1990         10         590     9       5900 #3333FF
+51  Black/African American 1990         11         348    10       3828 #6666FF
+52  Black/African American 1990         12         772    11       9264 #9999FF
+53                   White 1960          0       46202    -1          0 #0000FF
+54                   White 1960          1       47433     0      47433 #0000E5
+55                   White 1960          2       60732     1     121464 #0000CC
+56                   White 1960          3       41272     2     123816 #0000B2
+57                   White 1960          4       25666     3     102664 #000099
+58                   White 1960          5       15327     4      76635 #00007F
+59                   White 1960          6        9697     5      58182 #000066
+60                   White 1960          7        6347     6      44429 #00004C
+61                   White 1960          8        4518     7      36144 #000033
+62                   White 1960          9        2990     8      26910 #000019
+63                   White 1960         10        2148     9      21480 #3333FF
+64                   White 1960         11        1280    10      14080 #6666FF
+65                   White 1960         12        1747    11      20964 #9999FF
+66                   White 1970          0      133940    -1          0 #0000FF
+67                   White 1970          1      106663     0     106663 #0000E5
+68                   White 1970          2      157405     1     314810 #0000CC
+69                   White 1970          3      112397     2     337191 #0000B2
+70                   White 1970          4       68603     3     274412 #000099
+71                   White 1970          5       38000     4     190000 #00007F
+72                   White 1970          6       22023     5     132138 #000066
+73                   White 1970          7       12927     6      90489 #00004C
+74                   White 1970          8        8534     7      68272 #000033
+75                   White 1970          9        5342     8      48078 #000019
+76                   White 1970         10        3593     9      35930 #3333FF
+77                   White 1970         11        2082    10      22902 #6666FF
+78                   White 1970         12        2858    11      34296 #9999FF
+79                   White 1980          0       61909    -1          0 #0000FF
+80                   White 1980          1       51856     0      51856 #0000E5
+81                   White 1980          2       89551     1     179102 #0000CC
+82                   White 1980          3       70716     2     212148 #0000B2
+83                   White 1980          4       43190     3     172760 #000099
+84                   White 1980          5       23170     4     115850 #00007F
+85                   White 1980          6       12556     5      75336 #000066
+86                   White 1980          7        6589     6      46123 #00004C
+87                   White 1980          8        3874     7      30992 #000033
+88                   White 1980          9        2254     8      20286 #000019
+89                   White 1980         10        1368     9      13680 #3333FF
+90                   White 1980         11         757    10       8327 #6666FF
+91                   White 1980         12        1073    11      12876 #9999FF
+92                   White 1990          0       62471    -1          0 #0000FF
+93                   White 1990          1       56647     0      56647 #0000E5
+94                   White 1990          2      119054     1     238108 #0000CC
+95                   White 1990          3       90170     2     270510 #0000B2
+96                   White 1990          4       51511     3     206044 #000099
+97                   White 1990          5       25385     4     126925 #00007F
+98                   White 1990          6       12698     5      76188 #000066
+99                   White 1990          7        6292     6      44044 #00004C
+100                  White 1990          8        3479     7      27832 #000033
+101                  White 1990          9        1876     8      16884 #000019
+102                  White 1990         10        1132     9      11320 #3333FF
+103                  White 1990         11         623    10       6853 #6666FF
+104                  White 1990         12         828    11       9936 #9999FF</code></pre>
+<pre class="r"><code>fert_df_black &lt;- fert_df %&gt;% filter(RACE == &quot;Black/African American&quot;)
+fert_df_white &lt;- fert_df %&gt;% filter(RACE == &quot;White&quot;)
+  
+df_long1 &lt;- fert_df_black %&gt;%
+  pivot_longer(cols = c(freq_mother, freq_n_sib),
+               names_to = &quot;frequency_type&quot;,
+               values_to = &quot;frequency&quot;) %&gt;%
+  mutate(x_axis = ifelse(frequency_type == &quot;freq_mother&quot;, chborn_num, n_sib))</code></pre>
+<pre class="r"><code>ggplot(df_long1, aes(x = x_axis, y = frequency, fill = as.factor(x_axis))) +
+  geom_col() +
+  facet_grid(frequency_type ~ YEAR, scales = &quot;free&quot;, 
+             labeller = labeller(frequency_type = c(&quot;freq_mother&quot; = &quot;Number of Children Born&quot;, 
+                                                    &quot;freq_n_sib&quot; = &quot;Number of Siblings&quot;),
+                                 YEAR = function(x) paste(&quot;Year&quot;, x))) +
+  scale_fill_viridis_d(option = &quot;plasma&quot;, name = &quot;Number of Children/Siblings&quot;) +
+  labs(title = &quot;Distribution of Number of Children/Siblings by Census Year&quot;,
+       x = &quot;Number of Children/Siblings&quot;,
+       y = &quot;Frequency&quot;) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = &quot;right&quot;)</code></pre>
+<p><img src="figure/siblings_analysis.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
-<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
 </button>
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 4.3.1 (2023-06-16)
-Platform: x86_64-pc-linux-gnu (64-bit)
-Running under: Ubuntu 22.04.3 LTS
+<pre><code>R version 4.3.2 (2023-10-31)
+Platform: x86_64-apple-darwin20 (64-bit)
+Running under: macOS Monterey 12.7.4
 
 Matrix products: default
-BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
-LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so;  LAPACK version 3.10.0
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
 
 locale:
- [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
- [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
- [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
- [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
- [9] LC_ADDRESS=C               LC_TELEPHONE=C            
-[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 
 time zone: America/New_York
-tzcode source: system (glibc)
+tzcode source: internal
 
 attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] knitr_1.46        viridis_0.6.4     viridisLite_0.4.2 lubridate_1.9.2  
- [5] forcats_1.0.0     stringr_1.5.0     dplyr_1.1.2       purrr_1.0.2      
- [9] tidyr_1.3.0       tibble_3.2.1      ggplot2_3.5.0     tidyverse_2.0.0  
-[13] readr_2.1.4       workflowr_1.7.1  
+ [1] knitr_1.45        viridis_0.6.5     viridisLite_0.4.2 lubridate_1.9.3  
+ [5] forcats_1.0.0     stringr_1.5.1     dplyr_1.1.4       purrr_1.0.2      
+ [9] tidyr_1.3.1       tibble_3.2.1      ggplot2_3.4.4     tidyverse_2.0.0  
+[13] readr_2.1.5       workflowr_1.7.1  
 
 loaded via a namespace (and not attached):
- [1] sass_0.4.7        utf8_1.2.4        generics_0.1.3    stringi_1.7.12   
- [5] hms_1.1.3         digest_0.6.33     magrittr_2.0.3    timechange_0.2.0 
- [9] evaluate_0.21     grid_4.3.1        fastmap_1.1.1     rprojroot_2.0.3  
-[13] jsonlite_1.8.8    processx_3.8.4    whisker_0.4.1     gridExtra_2.3    
+ [1] sass_0.4.8        utf8_1.2.4        generics_0.1.3    stringi_1.8.3    
+ [5] hms_1.1.3         digest_0.6.34     magrittr_2.0.3    timechange_0.3.0 
+ [9] evaluate_0.23     grid_4.3.2        fastmap_1.1.1     rprojroot_2.0.4  
+[13] jsonlite_1.8.8    processx_3.8.3    whisker_0.4.1     gridExtra_2.3    
 [17] ps_1.7.6          promises_1.2.1    httr_1.4.7        fansi_1.0.6      
 [21] scales_1.3.0      jquerylib_0.1.4   cli_3.6.2         rlang_1.1.3      
-[25] munsell_0.5.0     withr_3.0.0       cachem_1.0.8      yaml_2.3.7       
-[29] tools_4.3.1       tzdb_0.4.0        colorspace_2.1-0  httpuv_1.6.11    
+[25] munsell_0.5.0     withr_3.0.0       cachem_1.0.8      yaml_2.3.8       
+[29] tools_4.3.2       tzdb_0.4.0        colorspace_2.1-0  httpuv_1.6.14    
 [33] vctrs_0.6.5       R6_2.5.1          lifecycle_1.0.4   git2r_0.33.0     
 [37] fs_1.6.3          pkgconfig_2.0.3   callr_3.7.3       pillar_1.9.0     
-[41] bslib_0.5.1       later_1.3.1       gtable_0.3.3      glue_1.7.0       
-[45] Rcpp_1.0.11       highr_0.10        xfun_0.44         tidyselect_1.2.0 
-[49] rstudioapi_0.15.0 farver_2.1.1      htmltools_0.5.6   labeling_0.4.2   
-[53] rmarkdown_2.25    compiler_4.3.1    getPass_0.2-4    </code></pre>
+[41] bslib_0.6.1       later_1.3.2       gtable_0.3.4      glue_1.7.0       
+[45] Rcpp_1.0.12       xfun_0.41         tidyselect_1.2.1  highr_0.10       
+[49] rstudioapi_0.15.0 farver_2.1.1      htmltools_0.5.7   labeling_0.4.3   
+[53] rmarkdown_2.25    compiler_4.3.2    getPass_0.2-4    </code></pre>
 </div>
 </div>
 
