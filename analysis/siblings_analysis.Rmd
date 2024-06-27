@@ -84,7 +84,8 @@ fert_df <- mother_data %>%
   count(RACE, YEAR, chborn_num) %>%
   arrange(RACE, YEAR, chborn_num) %>% 
   mutate(n_sib = chborn_num -1, freq_n_sib = n * chborn_num, 
-         color = color_mapping[as.character(chborn_num)]) %>%
+         color = color_mapping[as.character(chborn_num)], 
+         color.label = paste(chborn_num, "_kids", n_sib, "_sibs", sep = "")) %>%
   rename(freq_mother = n)
 
 print(fert_df)
@@ -100,16 +101,20 @@ df_long_black <- fert_df_black %>%
                values_to = "frequency") %>%
   mutate(x_axis = ifelse(frequency_type == "freq_mother", chborn_num, n_sib))
 
+
+
 ```
 
 ```{r}
-ggplot(df_long_black, aes(x = x_axis, y = frequency, fill = as.factor(x_axis))) +
+ggplot(df_long_black, aes(x = x_axis, y = frequency, fill = "color")) +
   geom_col() +
   facet_grid(frequency_type ~ YEAR, scales = "free", 
              labeller = labeller(frequency_type = c("freq_mother" = "Number of Children Born", 
                                                     "freq_n_sib" = "Number of Siblings"),
                                  YEAR = function(x) paste("Year", x))) +
-  scale_fill_manual(values = color_mapping, name = "Number of Children/Siblings") +
+  scale_fill_identity(name = "Number of Children/Siblings",
+                      labels = df_long_black$color.label,
+                      guide = "legend") +
   scale_y_continuous(labels = comma_format(scale = 1, big.mark = ",")) +
   labs(title = "Distribution of Number of Children/Siblings by Census Year (Black/African American)",
        x = "Number of Children/Siblings",
