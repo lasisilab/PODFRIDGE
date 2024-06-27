@@ -33,6 +33,7 @@ ggplot(data = children_data,aes(x=chborn_num,y=proportion)) +
   geom_col(position = position_dodge()) +
   facet_grid(RACE~YEAR) + theme_classic()
 ```
+
 ```{r,warning=FALSE,out.width="100%"}
 mother_data <- mother_data %>% mutate(id = row_number())
 child_df = as.data.frame(rep(mother_data$id,mother_data$chborn_num))
@@ -84,8 +85,8 @@ fert_df <- mother_data %>%
   count(RACE, YEAR, chborn_num) %>%
   arrange(RACE, YEAR, chborn_num) %>% 
   mutate(n_sib = chborn_num -1, freq_n_sib = n * chborn_num, 
-         color = color_mapping[as.character(chborn_num)], 
-         color.label = paste(chborn_num, "_kids", n_sib, "_sibs", sep = "")) %>%
+         color = color_mapping[as.character(chborn_num)],
+         color.label = paste(chborn_num, "_kids"," ", n_sib, "_sibs", sep = "")) %>%
   rename(freq_mother = n)
 
 print(fert_df)
@@ -101,14 +102,12 @@ df_long_black <- fert_df_black %>%
                values_to = "frequency") %>%
   mutate(x_axis = ifelse(frequency_type == "freq_mother", chborn_num, n_sib))
 
-
-
 ```
 
 ```{r}
-ggplot(df_long_black, aes(x = x_axis, y = frequency, fill = "color")) +
+ggplot(df_long_black, aes(x = x_axis, y = frequency, fill = color)) +
   geom_col() +
-  facet_grid(frequency_type ~ YEAR, scales = "free", 
+  facet_grid(frequency_type ~ YEAR, 
              labeller = labeller(frequency_type = c("freq_mother" = "Number of Children Born", 
                                                     "freq_n_sib" = "Number of Siblings"),
                                  YEAR = function(x) paste("Year", x))) +
