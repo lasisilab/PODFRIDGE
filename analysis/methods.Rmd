@@ -83,11 +83,11 @@ sapply(1:length(DB.sizes), function(i) {
 legend(x = "bottomright", legend = c("Database size (Millions) =", format(DB.sizes / 1e6, dig = 1)), col = c(NA, my.cols), pch = 19)
 
 # Plot of expected number of p-th cousins in sample
-plot(c(1,8),c(0,1000),type="n",ylab="Expected number of p-th cousins in database",xlab="p.(degree of cousin)")
+plot(c(1,8),c(0,1000),type = "n",ylab = "Expected number of p-th cousins in database",xlab = "p.(degree of cousin)")
 sapply(1:length(DB.sizes),function(i){
 
-    num.cousins<-4^(p)*DB.sizes[i]/(N/2)
-    points(p,num.cousins,type="b",col=my.cols[i],lwd=1.5,pch=19)
+    num.cousins <- 4^(p)*DB.sizes[i]/(N/2)
+    points(p,num.cousins,type="b",col = my.cols[i],lwd = 1.5,pch = 19)
    # points(p,4^(p),type="b",col="black")
 })
 
