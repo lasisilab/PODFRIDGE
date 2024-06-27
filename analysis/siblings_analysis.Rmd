@@ -8,11 +8,10 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE, echo=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+knitr::opts_knit$set(root.dir = "..")
+knitr::opts_chunk$set(eval = TRUE, echo = FALSE, warning = FALSE, fig.width = 7, fig.height = 6)
 
 
-```{r data, results = FALSE,warning=FALSE,message=FALSE}
 # load necessary libraries
 library(readr)
 library(tidyverse)
@@ -22,8 +21,12 @@ library(viridis)
 library(dplyr)
 library(knitr)
 library(scales)
+```
 
-children_data = read.csv("./data/proportions_table_by_race_year.csv")
+
+```{r data, results = FALSE,warning=FALSE,message=FALSE}
+read_csv("")
+
 mother_data = read.csv("./data/data_filtered_recoded.csv")
 ```
 
