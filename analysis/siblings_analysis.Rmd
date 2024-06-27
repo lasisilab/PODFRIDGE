@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 ```{r data, results = FALSE,warning=FALSE,message=FALSE}
-# load necessary libraryes
+# load necessary libraries
 library(readr)
 library(tidyverse)
 library(tidyr)
@@ -22,8 +22,6 @@ library(viridis)
 library(dplyr)
 library(knitr)
 library(scales)
-
-setwd("/Users/linmatch/Documents/GitHub/PODFRIDGE")
 
 children_data = read.csv("./data/proportions_table_by_race_year.csv")
 mother_data = read.csv("./data/data_filtered_recoded.csv")
