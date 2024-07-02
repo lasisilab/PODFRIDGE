@@ -1,0 +1,19 @@
+---
+title: "Likelihood Ratio"
+author: "Tina Lasisi"
+date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Introduction
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_knit$set(root.dir = ".")
+knitr::opts_chunk$set(eval = TRUE, echo = FALSE, warning = FALSE, fig.width = 7, fig.height = 6)
+                      
+```
+
+
+
