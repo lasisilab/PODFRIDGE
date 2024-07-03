@@ -125,7 +125,8 @@ ggplot(df_long_black, aes(x = x_axis, y = frequency, fill = color_order)) +
        y = "Frequency") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
-        legend.position = "right")
+        legend.position = "right",
+        plot.title = element_text(size = 14, hjust = 0.5))
 ```
 
 
@@ -148,7 +149,7 @@ ggplot(df_long_white, aes(x = x_axis, y = frequency, fill = color_order)) +
                         YEAR = function(x) paste("Year", x))) +
   scale_fill_manual(name = "Number of Children/Siblings",
                     values = color_mapping,
-                    labels = unique(df_long_black$color.label),
+                    labels = unique(df_long_white$color.label),
                     guide = "legend") +
   scale_y_continuous(labels = comma_format(scale = 1, big.mark = ",")) +
   labs(title = "Distribution of Number of Children/Siblings by Census Year (White)",
@@ -156,6 +157,7 @@ ggplot(df_long_white, aes(x = x_axis, y = frequency, fill = color_order)) +
        y = "Frequency") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
-        legend.position = "right")
+        legend.position = "right",
+        plot.title = element_text(size = 14, hjust = 0.5))
 ```
 
