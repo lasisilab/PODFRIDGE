@@ -8,7 +8,7 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE, echo=FALSE}
-knitr::opts_knit$set(root.dir = ".")
+#knitr::opts_knit$set(root.dir = ".")
 knitr::opts_chunk$set(eval = TRUE, echo = FALSE, warning = FALSE, fig.width = 7, fig.height = 6)
 
 
@@ -61,8 +61,15 @@ kable(child_df_gb[,c(1,2,4)])
 ```
 
 Here, we are trying to create a frequency table to show the number of children born, the number of mother who has "chborn_num" children, the number of sibling, and the number of individuals who has "n_sib" siblings. 
-- n_sib = chborn_num - 1
-- freq_n_sib = freq_mother * chborn_num
+
+$$
+n_{sib} = chborn_{num} - 1
+$$
+
+$$
+\text{freq}_{n_{\text{sib}}} = \text{freq}_{\text{mother}} \cdot \text{chborn}_{\text{num}}
+$$
+
 eg.Suppose 10 mothers (generation 0) has 7 children, then there will be 70 children (generation 1) in total who has 6 siblings. 
 ```{r}
 colors <- c(
@@ -125,7 +132,8 @@ ggplot(df_long_black, aes(x = x_axis, y = frequency, fill = color_order)) +
        y = "Frequency") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
-        legend.position = "right")
+        legend.position = "right",
+        plot.title = element_text(size = 10, hjust = 0.5))
 ```
 
 
@@ -148,7 +156,7 @@ ggplot(df_long_white, aes(x = x_axis, y = frequency, fill = color_order)) +
                         YEAR = function(x) paste("Year", x))) +
   scale_fill_manual(name = "Number of Children/Siblings",
                     values = color_mapping,
-                    labels = unique(df_long_black$color.label),
+                    labels = unique(df_long_white$color.label),
                     guide = "legend") +
   scale_y_continuous(labels = comma_format(scale = 1, big.mark = ",")) +
   labs(title = "Distribution of Number of Children/Siblings by Census Year (White)",
@@ -156,6 +164,7 @@ ggplot(df_long_white, aes(x = x_axis, y = frequency, fill = color_order)) +
        y = "Frequency") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
-        legend.position = "right")
+        legend.position = "right",
+        plot.title = element_text(size = 12, hjust = 0.5))
 ```
 

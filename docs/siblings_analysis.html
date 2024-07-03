@@ -369,7 +369,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Siblings analysis</h1>
 <h4 class="author">Manqing Lin</h4>
-<h4 class="date">2024-07-02 09:51:23</h4>
+<h4 class="date">2024-07-03 10:07:12</h4>
 
 </div>
 
@@ -377,7 +377,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+workflowr <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -388,8 +388,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> </a>
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -398,13 +398,13 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2024-07-02
+<strong>Last updated:</strong> 2024-07-03
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 1
+aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>PODFRIDGE/</code> <span
@@ -427,21 +427,18 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
-<span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
-changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges"
+<div id="strongRMarkdownfilestronguptodate"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes. To know which version of
-the R Markdown file created these results, you’ll want to first commit
-it to the Git repo. If you’re still working on the analysis, you can
-ignore this warning. When you’re finished, you can run
-<code>wflow_publish</code> to commit the R Markdown file and build the
-HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
 </div>
 </div>
 </div>
@@ -532,15 +529,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree0efd2aa24d975437eacf8631c0fdc333b0f4b55btargetblank0efd2aaa">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree73a6b6a5e7340afaa9cedc67439b710c92a8e2dctargetblank73a6b6aa">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/0efd2aa24d975437eacf8631c0fdc333b0f4b55b" target="_blank">0efd2aa</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/73a6b6a5e7340afaa9cedc67439b710c92a8e2dc" target="_blank">73a6b6a</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree0efd2aa24d975437eacf8631c0fdc333b0f4b55btargetblank0efd2aaa"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree73a6b6a5e7340afaa9cedc67439b710c92a8e2dctargetblank73a6b6aa"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -550,7 +547,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/0efd2aa24d975437eacf8631c0fdc333b0f4b55b" target="_blank">0efd2aa</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/73a6b6a5e7340afaa9cedc67439b710c92a8e2dc" target="_blank">73a6b6a</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -568,9 +565,6 @@ Ignored files:
     Ignored:    .DS_Store
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-
-Unstaged changes:
-    Modified:   analysis/siblings_analysis.Rmd
 
 </code></pre>
 <p>
@@ -616,6 +610,91 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/73a6b6a5e7340afaa9cedc67439b710c92a8e2dc/analysis/siblings_analysis.Rmd" target="_blank">73a6b6a</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-07-03
+</td>
+<td>
+new com
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/2c460cf0b9e64eda25cb093b857b38fbd3851d9d/analysis/siblings_analysis.Rmd" target="_blank">2c460cf</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-07-03
+</td>
+<td>
+new com
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/2c460cf0b9e64eda25cb093b857b38fbd3851d9d/docs/siblings_analysis.html" target="_blank">2c460cf</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-07-03
+</td>
+<td>
+new com
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/b71e11f832df192746780574bf1647081c8c0efe/analysis/siblings_analysis.Rmd" target="_blank">b71e11f</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-07-03
+</td>
+<td>
+new com
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/7e507f5f1b7adebe950574f0c7b3f91f497aaf9e/docs/siblings_analysis.html" target="_blank">7e507f5</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-07-02
+</td>
+<td>
+new com
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -921,6 +1000,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/7e507f5f1b7adebe950574f0c7b3f91f497aaf9e/docs/figure/siblings_analysis.Rmd/chidren-1.png" target="_blank">7e507f5</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-07-02
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/cc5fc63c1f1bfa15ae20c27160118ed55f2e3e1c/docs/figure/siblings_analysis.Rmd/chidren-1.png" target="_blank">cc5fc63</a>
 </td>
 <td>
@@ -970,6 +1060,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/7e507f5f1b7adebe950574f0c7b3f91f497aaf9e/docs/figure/siblings_analysis.Rmd/unnamed-chunk-1-1.png" target="_blank">7e507f5</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-07-02
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/cc5fc63c1f1bfa15ae20c27160118ed55f2e3e1c/docs/figure/siblings_analysis.Rmd/unnamed-chunk-1-1.png" target="_blank">cc5fc63</a>
@@ -1135,10 +1236,16 @@ siblings</h1>
 <p>Here, we are trying to create a frequency table to show the number of
 children born, the number of mother who has “chborn_num” children, the
 number of sibling, and the number of individuals who has “n_sib”
-siblings. - n_sib = chborn_num - 1 - freq_n_sib = freq_mother *
-chborn_num eg.Suppose 10 mothers (generation 0) has 7 children, then
-there will be 70 children (generation 1) in total who has 6
 siblings.</p>
+<p><span class="math display">\[
+n_{sib} = chborn_{num} - 1
+\]</span></p>
+<p><span class="math display">\[
+\text{freq}_{n_{\text{sib}}} = \text{freq}_{\text{mother}} \cdot
+\text{chborn}_{\text{num}}
+\]</span></p>
+<p>eg.Suppose 10 mothers (generation 0) has 7 children, then there will
+be 70 children (generation 1) in total who has 6 siblings.</p>
 <pre><code>                      RACE YEAR chborn_num freq_mother n_sib freq_n_sib   color
 1   Black/African American 1960          0        6697    -1          0 #E41A1C
 2   Black/African American 1960          1        4698     0       4698 #377EB8
@@ -1269,6 +1376,28 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/2c460cf0b9e64eda25cb093b857b38fbd3851d9d/docs/figure/siblings_analysis.Rmd/unnamed-chunk-5-1.png" target="_blank">2c460cf</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-07-03
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/7e507f5f1b7adebe950574f0c7b3f91f497aaf9e/docs/figure/siblings_analysis.Rmd/unnamed-chunk-5-1.png" target="_blank">7e507f5</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-07-02
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/19aab9943cce7f4c7c7284c2b3e3609df6f43bb7/docs/figure/siblings_analysis.Rmd/unnamed-chunk-5-1.png" target="_blank">19aab99</a>
 </td>
 <td>
@@ -1305,6 +1434,28 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/2c460cf0b9e64eda25cb093b857b38fbd3851d9d/docs/figure/siblings_analysis.Rmd/unnamed-chunk-7-1.png" target="_blank">2c460cf</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-07-03
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/7e507f5f1b7adebe950574f0c7b3f91f497aaf9e/docs/figure/siblings_analysis.Rmd/unnamed-chunk-7-1.png" target="_blank">7e507f5</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-07-02
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/19aab9943cce7f4c7c7284c2b3e3609df6f43bb7/docs/figure/siblings_analysis.Rmd/unnamed-chunk-7-1.png" target="_blank">19aab99</a>
