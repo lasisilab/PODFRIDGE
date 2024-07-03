@@ -16,17 +16,17 @@ knitr::opts_chunk$set(eval = TRUE, echo = FALSE, warning = FALSE, fig.width = 7,
 ```
 
 5.6 in Weight of Evidence 
-The following equation predicts the probability that the next allele sampled in a population will be allele X, also known as the Match Probability, $M$. 
+The following equation predicts the probability that the next allele sampled in a population will be allele A, also known as the Match Probability, $M$. 
 $$
 M=\frac{m \theta+(1-\theta) p}{1+(n-1) \theta}
 $$
-Where $p$ is the probability of allele X appearing in the population, $n$ is the number of alleles being sampled, and $m$ is the number of observed allele X in the sampled population. 
+Where $p$ is the probability of allele A appearing in the population, $n$ is the number of alleles being sampled, and $m$ is the number of observed allele A in the sampled population. 
 
 $\theta$ represents the correction for population stratification and genetic drift. The higher the value of $\theta$, the higher the likelihood of seeing any given allele in a population once it has already been observed. The most common $\theta$ value is 0.01, but in many cases $\theta$ can be set to 0. 
 
 ## Developing the Likelihood Ratio
 
-A likelihood ratio calculation will be used to compare a forensic unknown, profile u, to a convicted offender profile, profile O, and determine the likelihood that those individuals are related. 
+A likelihood ratio calculation will be used to compare a forensic unknown, profile c, to a convicted offender profile, profile O, and determine the likelihood that those individuals are related. 
 To determine the likelihood of relatedness, or the relatedness score, we compare the probability that profile A and profile B sharing alleles at specific loci is due to them being related, versus the probability that the shared alleles are due to random chance and the pair is unrelated. 
 This gives us our base likelihood ratio, which we will be deriving using the equation above.
 $$
@@ -36,7 +36,7 @@ We know related individuals will likely share a certain number of alleles due to
 
 table
 
-To determine the probability of sharing $i$ alleles for a related pair, we must multiple the probability of sharing 0, 1, or 2 alleles due to IBD by the probability of profile B having $i$ shared alleles based on profile A. 
+To determine the probability of sharing $i$ alleles for a related pair, we must multiple the probability of sharing 0, 1, or 2 alleles due to IBD by the probability of profile O having $i$ shared alleles based on profile c, and sum the possible options for all values of i. 
 
 This results in the following equation:
 $$
