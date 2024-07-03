@@ -8,7 +8,7 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE, echo=FALSE}
-knitr::opts_knit$set(root.dir = ".")
+#knitr::opts_knit$set(root.dir = ".")
 knitr::opts_chunk$set(eval = TRUE, echo = FALSE, warning = FALSE, fig.width = 7, fig.height = 6)
 
 
@@ -126,7 +126,7 @@ ggplot(df_long_black, aes(x = x_axis, y = frequency, fill = color_order)) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
         legend.position = "right",
-        plot.title = element_text(size = 14, hjust = 0.5))
+        plot.title = element_text(size = 10, hjust = 0.5))
 ```
 
 
@@ -158,6 +158,6 @@ ggplot(df_long_white, aes(x = x_axis, y = frequency, fill = color_order)) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
         legend.position = "right",
-        plot.title = element_text(size = 14, hjust = 0.5))
+        plot.title = element_text(size = 12, hjust = 0.5))
 ```
 
