@@ -9,12 +9,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Tina Lasisi" />
+<meta name="author" content="Sam Muller" />
 
 
 <title>Likelihood Ratio</title>
 
-<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.26/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -368,8 +368,8 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Likelihood Ratio</h1>
-<h4 class="author">Tina Lasisi</h4>
-<h4 class="date">2024-07-02 09:58:46</h4>
+<h4 class="author">Sam Muller</h4>
+<h4 class="date">2024-07-03 10:55:20</h4>
 
 </div>
 
@@ -398,7 +398,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2024-07-02
+<strong>Last updated:</strong> 2024-07-03
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -529,15 +529,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree0ee07347c4178382b943b382822ba9a6e4247e7ftargetblank0ee0734a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree55080c05c4028d81b5eebaab27cf8bbe6aae0c77targetblank55080c0a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/0ee07347c4178382b943b382822ba9a6e4247e7f" target="_blank">0ee0734</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/55080c05c4028d81b5eebaab27cf8bbe6aae0c77" target="_blank">55080c0</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree0ee07347c4178382b943b382822ba9a6e4247e7ftargetblank0ee0734a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree55080c05c4028d81b5eebaab27cf8bbe6aae0c77targetblank55080c0a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -547,7 +547,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/0ee07347c4178382b943b382822ba9a6e4247e7f" target="_blank">0ee0734</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/55080c05c4028d81b5eebaab27cf8bbe6aae0c77" target="_blank">55080c0</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -562,7 +562,6 @@ were generated:
 </p>
 <pre><code>
 Ignored files:
-    Ignored:    .DS_Store
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
 
@@ -614,6 +613,57 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/8f1347cb4ed22c3890320a33a46c084c1b07b6b3/analysis/lr.Rmd" target="_blank">8f1347c</a>
+</td>
+<td>
+sammuller917
+</td>
+<td>
+2024-07-03
+</td>
+<td>
+Update lr.Rmd
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/b71e11f832df192746780574bf1647081c8c0efe/docs/lr.html" target="_blank">b71e11f</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-07-03
+</td>
+<td>
+new com
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/609a24074616215781a2332c8a0471baf6f3b337/analysis/lr.Rmd" target="_blank">609a240</a>
+</td>
+<td>
+sammuller917
+</td>
+<td>
+2024-07-03
+</td>
+<td>
+Update lr.Rmd
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/009643cee337ea7c1e1e739fe9be1f78dc980624/analysis/lr.Rmd" target="_blank">009643c</a>
 </td>
 <td>
@@ -635,6 +685,197 @@ Create lr.Rmd
 </div>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
+<p>5.6 in Weight of Evidence The following equation predicts the
+probability that the next allele sampled in a population will be allele
+A, also known as the Match Probability, <span
+class="math inline">\(M\)</span>. <span class="math display">\[
+M=\frac{m \theta+(1-\theta) p}{1+(n-1) \theta}
+\]</span> Where <span class="math inline">\(p\)</span> is the
+probability of allele A appearing in the population, <span
+class="math inline">\(n\)</span> is the number of alleles being sampled,
+and <span class="math inline">\(m\)</span> is the number of observed
+allele A in the sampled population.</p>
+<p><span class="math inline">\(\theta\)</span> represents the correction
+for population stratification and genetic drift. The higher the value of
+<span class="math inline">\(\theta\)</span>, the higher the likelihood
+of seeing any given allele in a population once it has already been
+observed. The most common <span class="math inline">\(\theta\)</span>
+value is 0.01, but in many cases <span
+class="math inline">\(\theta\)</span> can be set to 0.</p>
+</div>
+<div id="developing-the-likelihood-ratio" class="section level2">
+<h2>Developing the Likelihood Ratio</h2>
+<p>A likelihood ratio calculation will be used to compare a forensic
+unknown, profile c, to a convicted offender profile, profile O, and
+determine the likelihood that those individuals are related. To
+determine the likelihood of relatedness, or the relatedness score, we
+compare the probability that profile A and profile B sharing alleles at
+specific loci is due to them being related, versus the probability that
+the shared alleles are due to random chance and the pair is unrelated.
+This gives us our base likelihood ratio, which we will be deriving using
+the equation above. <span class="math display">\[
+R = \frac{P(profile\:c
+\:|\:profile\:O,\:related)}{P(profile\:c\:|\:profile\:O,\:unrelated)}
+\]</span> We know related individuals will likely share a certain number
+of alleles due to recent common ancestors. This is known as alleles
+being identical by descent, or IBD, and can either be 0, 1, or 2. The
+probability for sharing 0, 1, or 2 alleles due to IBD is represented as
+<span class="math inline">\(\kappa\)</span>, and will be calculated for
+each relationship as shown in the table below.</p>
+<p>table</p>
+<p>To determine the probability of sharing <span
+class="math inline">\(i\)</span> alleles for a related pair, we must
+multiple the probability of sharing 0, 1, or 2 alleles due to IBD by the
+probability of profile O having <span class="math inline">\(i\)</span>
+shared alleles based on profile c, and sum the possible options for all
+values of i.</p>
+<p>This results in the following equation: <span class="math display">\[
+P(profile\:c\:|\:profile\:O,\:related)=\kappa_2(M_0)+\kappa_1(M_1)+\kappa_0(M_2)
+\]</span></p>
+<p>In the instance of <span class="math inline">\(\kappa_2\)</span>, we
+know the match probability to be certain, so <span
+class="math inline">\(M_0 = 1\)</span>, as in this scenario there is a
+100% match between both alleles due to them both being IBD. If both
+alleles in profile O do not match to profile c, then <span
+class="math inline">\(\kappa_2\)</span> will be 0 and will not be
+used.</p>
+<p>To determine what equations should be used for <span
+class="math inline">\(M_1\)</span> and <span
+class="math inline">\(M_2\)</span>, we must look at the alleles of the
+population being sampled, that is, the alleles of profile c and profile
+O at the designated locus. The table below describes the potential
+allele combinations at a designated locus where C is any other allele.
+<span class="math display">\[
+\begin{aligned}
+&amp;\begin{array}{llc}
+\hline c &amp; O \\
+\hline \mathrm{AA} &amp; \mathrm{AA} \\
+\mathrm{AA} &amp; \mathrm{AB} \\
+\mathrm{AB} &amp; \mathrm{AA}\\
+\mathrm{AB} &amp; \mathrm{AB}\\
+\mathrm{AB} &amp; \mathrm{AC} \\
+\hline
+\end{array}
+\end{aligned}
+\]</span></p>
+<p><span class="math inline">\(M_1\)</span> will tell us the match
+probability of profile O to <strong>one</strong> allele in profile c. To
+calculate <span class="math inline">\(M_1\)</span> we must evaluate the
+scenarios in which profile c is homozygous or heterozygous.</p>
+<p>In the case of homozygous profile c (AA) we calculate the probability
+that profile O has a matching allele A. This is based on the condition
+that two A alleles have already been observed in the sampled population,
+giving us an <span class="math inline">\(m\)</span> value of 2 and an
+<span class="math inline">\(n\)</span> value of 2. Using equation 5.6 we
+come up with the following <span class="math inline">\(M_1\)</span> for
+use when profile c is homozygous <span class="math display">\[
+M_{1\:c|homo}=\frac {2\theta+(1-\theta)p_A}{1+(2-1)\theta}
+\]</span> which when <span class="math inline">\(\theta = 0\)</span>
+reduces to <span class="math inline">\(p_A\)</span></p>
+<p>In the case of heterozygous profile c (AB) we calculate the
+probability that profile O has one matching allele, either matching
+allele A or allele B. This will sum the equation for observing an A
+allele after one has already been observed, <span
+class="math inline">\(m = 1\)</span>, <span class="math inline">\(n =
+2\)</span>, and <span class="math inline">\(p_A\)</span>, with the
+equation for observing a B allele after one has already been observed,
+<span class="math inline">\(m = 1\)</span>, <span
+class="math inline">\(n = 2\)</span>, <span
+class="math inline">\(p_B\)</span>. The options are equally likely, so
+we multiply by <span class="math inline">\(\frac {1}{2}\)</span>. Using
+equation 5.6 we come up with the following <span
+class="math inline">\(M_1\)</span> for use when profile c is
+heterozygous.<br />
+<span class="math display">\[
+\begin{equation}
+M_{1\:c|hetero}=(\frac {1\theta+(1-\theta)p_A}{1+(2-1)\theta}+\frac
+{1\theta+(1-\theta)p_B}{1+(2-1)\theta})*\frac{1}{2}=\frac
+{2\theta+(1-\theta)(p_A+p_B)}{2+2\theta}*\frac{1}{2}\\
+\: \\
+M_{1\:c|hetero}=\frac{\theta+(1-\theta)(p_A+p_B)/2}{1+\theta}
+\end{equation}
+\]</span> which when <span class="math inline">\(\theta = 0\)</span>
+reduces to <span class="math inline">\(\frac{p_A+p_B}{2}\)</span></p>
+<p>In the scenario of <span class="math inline">\(\kappa_0\)</span>, no
+alleles are presumed IBD, so we must use <span
+class="math inline">\(M_2\)</span> to determine the probability that the
+alleles in profile O match to any of the alleles found in profile c
+randomly. This is also known as the unrelated match probability.</p>
+<p>To determine <span class="math inline">\(M_2\)</span>, we again start
+with profile c, and ask whether it is homozygous or heterozygous.</p>
+<p>If profile c is homozygous, we are trying to determine the
+probability of profile O having matching two matching allele As. This
+probability is the product of the calculation for each allele in profile
+O given that all previous alleles have been A. We will calculate
+equation 5.6 using an m and n value of 2, and then an m and n value of
+3, as seen below, or in the Weight of Evidence as formula 6.3 <span
+class="math display">\[
+M_{2\:
+homo}=\frac{2\theta+(1-\theta)p_A}{1+(2-1)\theta}*\frac{3\theta+(1-\theta)p_A}{1+(3-1)\theta}
+\]</span> which when <span class="math inline">\(\theta = 0\)</span>
+reduces to <span class="math inline">\({p_A}^2\)</span></p>
+<p>If profile c is heterozygous, we are trying to determine the
+probability of profile O having two matching alleles, allele A and
+allele B. This probability evaluates 5.6 for the instances where m = 1,
+n = 2 and again with m = 1, n = 3, and multiplying by two for the two
+possible orderings of the A and B alleles, as seen below and in Weight
+of Evidence as formula 6.4 <span class="math display">\[
+M_{2\:
+hetero}=2\frac{\theta+(1-\theta)p_A}{1+(2-1)\theta}*\frac{\theta+(1-\theta)p_B}{1+(3-1)\theta}
+\]</span> which when <span class="math inline">\(\theta = 0\)</span>
+reduces to <span class="math inline">\(2p_Ap_B\)</span></p>
+<p>The various match probability equations for each scenario are shown
+in the table below: <span class="math display">\[
+\begin{aligned}
+&amp;\begin{array}{llc}
+\hline c &amp; O &amp; \kappa_i\:used &amp;
+M_0|\theta=0&amp;M_1|\theta=0&amp;M_2|\theta=0\\
+\hline \mathrm{AA} &amp; \mathrm{AA} &amp; \kappa_2,\kappa_1,\kappa_0
+&amp; 1&amp;p_A &amp; {p_A}^2 \\
+\mathrm{AA}&amp; \mathrm{AC} &amp; \kappa_1,\kappa_0 &amp; N/A &amp; p_A
+&amp; 2p_Ap_A\\
+\mathrm{AB} &amp; \mathrm{AC} &amp; \kappa_1,\kappa_0 &amp; N/A &amp;
+\frac{p_A}{2} &amp; {p_A}^2 \\
+\mathrm{AB} &amp; \mathrm{CB} &amp; \kappa_1,\kappa_0 &amp; N/A &amp;
+\frac{p_B}{2} &amp; {p_B}^2 \\
+\mathrm{AB} &amp; \mathrm{AB} &amp; \kappa_2,\kappa_1,\kappa_0 &amp; 1
+&amp; \frac{p_A}{2}+\frac{p_B}{2} &amp; 2p_Ap_B \\
+\hline
+\end{array}
+\end{aligned}
+\]</span> ## The Final Likelihood Ratio To calculate the final
+likelihood ratio, we must place our related probability estimate for
+matched alleles over the unrelated estimate for matched alleles. We have
+already done the calculation for this denominator in calculating the
+<span class="math inline">\(M_2\)</span> equation, which is comparing
+the probability of a profile appearing twice in a pair of unrelated
+individuals</p>
+<p>For heterozygous profile c using a <span
+class="math inline">\(\theta=0\)</span>, the denominator of the
+likelihood ratio will be <span
+class="math inline">\(2p_Ap_B\)</span></p>
+<p>For homozygous profile c using a <span
+class="math inline">\(\theta=0\)</span>, the denominator of the
+likelihood ratio will be <span
+class="math inline">\({p_A}^2\)</span></p>
+<p>The following proofs demonstrate the simplification of the likelihood
+ratio equations for each scenario present in the table</p>
+<p><span class="math display">\[
+\begin{equation}
+profile\;c=AA,\;profile\;O=AA\\
+R=\frac{\kappa_2+\kappa_1(p_A)+\kappa_0({p_A}^2)}{{p_A}^2}=\frac{\kappa_2}{{p_A}^2}+\frac{\kappa_1}{p_A}+\kappa_0
+\end{equation}
+\]</span> <span class="math display">\[
+\begin{equation}
+profile\;c=AA,\;profile\;O=AC\\
+R=\frac{\kappa_1(p_A)+\kappa_0(2p_Ap_A)}{2p_Ap_A}=\frac{\kappa_1}{2p_A}+\kappa_0
+\end{equation}
+\]</span> <span class="math display">\[
+\begin{equation}
+profile\;c=AB,\;profile\;O=AC\\
+R=\frac{\kappa_1(\frac{p_A}{2})+\kappa_0({p_A}^2)}{{p_A}^2}=\frac{\kappa_1}{2p_A}+\kappa_0
+\end{equation}
+\]</span></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -643,18 +884,18 @@ Session information
 </button>
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
-<pre><code>R version 4.3.2 (2023-10-31)
-Platform: x86_64-apple-darwin20 (64-bit)
-Running under: macOS Monterey 12.7.4
+<pre><code>R version 4.4.0 (2024-04-24)
+Platform: aarch64-apple-darwin20
+Running under: macOS Sonoma 14.5
 
 Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
 
 locale:
 [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 
-time zone: America/New_York
+time zone: America/Detroit
 tzcode source: internal
 
 attached base packages:
@@ -664,17 +905,17 @@ other attached packages:
 [1] workflowr_1.7.1
 
 loaded via a namespace (and not attached):
- [1] vctrs_0.6.5       httr_1.4.7        cli_3.6.2         knitr_1.45       
- [5] rlang_1.1.3       xfun_0.41         stringi_1.8.3     processx_3.8.3   
- [9] promises_1.2.1    jsonlite_1.8.8    glue_1.7.0        rprojroot_2.0.4  
-[13] git2r_0.33.0      htmltools_0.5.7   httpuv_1.6.14     ps_1.7.6         
-[17] sass_0.4.8        fansi_1.0.6       rmarkdown_2.25    jquerylib_0.1.4  
+ [1] vctrs_0.6.5       httr_1.4.7        cli_3.6.2         knitr_1.46       
+ [5] rlang_1.1.3       xfun_0.43         stringi_1.8.4     processx_3.8.4   
+ [9] promises_1.3.0    jsonlite_1.8.8    glue_1.7.0        rprojroot_2.0.4  
+[13] git2r_0.33.0      htmltools_0.5.8.1 httpuv_1.6.15     ps_1.7.6         
+[17] sass_0.4.9        fansi_1.0.6       rmarkdown_2.26    jquerylib_0.1.4  
 [21] tibble_3.2.1      evaluate_0.23     fastmap_1.1.1     yaml_2.3.8       
-[25] lifecycle_1.0.4   whisker_0.4.1     stringr_1.5.1     compiler_4.3.2   
-[29] fs_1.6.3          pkgconfig_2.0.3   Rcpp_1.0.12       rstudioapi_0.15.0
-[33] later_1.3.2       digest_0.6.34     R6_2.5.1          utf8_1.2.4       
-[37] pillar_1.9.0      callr_3.7.3       magrittr_2.0.3    bslib_0.6.1      
-[41] tools_4.3.2       cachem_1.0.8      getPass_0.2-4    </code></pre>
+[25] lifecycle_1.0.4   whisker_0.4.1     stringr_1.5.1     compiler_4.4.0   
+[29] fs_1.6.4          pkgconfig_2.0.3   Rcpp_1.0.12       rstudioapi_0.16.0
+[33] later_1.3.2       digest_0.6.35     R6_2.5.1          utf8_1.2.4       
+[37] pillar_1.9.0      callr_3.7.6       magrittr_2.0.3    bslib_0.7.0      
+[41] tools_4.4.0       cachem_1.0.8      getPass_0.2-4    </code></pre>
 </div>
 </div>
 
