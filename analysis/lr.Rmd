@@ -1,6 +1,6 @@
 ---
 title: "Likelihood Ratio"
-author: "Tina Lasisi"
+author: "Sam Muller"
 date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
 output: workflowr::wflow_html
 editor_options:
@@ -14,6 +14,129 @@ knitr::opts_knit$set(root.dir = ".")
 knitr::opts_chunk$set(eval = TRUE, echo = FALSE, warning = FALSE, fig.width = 7, fig.height = 6)
                       
 ```
+
+5.6 in Weight of Evidence 
+The following equation predicts the probability that the next allele sampled in a population will be allele X, also known as the Match Probability, $M$. 
+$$
+M=\frac{m \theta+(1-\theta) p}{1+(n-1) \theta}
+$$
+Where $p$ is the probability of allele X appearing in the population, $n$ is the number of alleles being sampled, and $m$ is the number of observed allele X in the sampled population. 
+
+$\theta$ represents the correction for population stratification and genetic drift. The higher the value of $\theta$, the higher the likelihood of seeing any given allele in a population once it has already been observed. The most common $\theta$ value is 0.01, but in many cases $\theta$ can be set to 0. 
+
+## Developing the Likelihood Ratio
+
+A likelihood ratio calculation will be used to compare a forensic unknown, profile u, to a convicted offender profile, profile O, and determine the likelihood that those individuals are related. 
+To determine the likelihood of relatedness, or the relatedness score, we compare the probability that profile A and profile B sharing alleles at specific loci is due to them being related, versus the probability that the shared alleles are due to random chance and the pair is unrelated. 
+This gives us our base likelihood ratio, which we will be deriving using the equation above.
+$$
+R = \frac{P(profile\:c \:|\:profile\:O,\:related)}{P(profile\:c\:|\:profile\:O,\:unrelated)}
+$$
+We know related individuals will likely share a certain number of alleles due to recent common ancestors. This is known as alleles being identical by descent, or IBD, and can either be 0, 1, or 2. The probability for sharing 0, 1, or 2 alleles due to IBD is represented as $\kappa$, and will be calculated for each relationship as shown in the table below. 
+
+table
+
+To determine the probability of sharing $i$ alleles for a related pair, we must multiple the probability of sharing 0, 1, or 2 alleles due to IBD by the probability of profile B having $i$ shared alleles based on profile A. 
+
+This results in the following equation:
+$$
+P(profile\:c\:|\:profile\:O,\:related)=\kappa_2(M_0)+\kappa_1(M_1)+\kappa_0(M_2)
+$$
+
+In the instance of $\kappa_2$, we know the match probability to be certain, so $M_0 = 1$, as in this scenario there is a 100% match between both alleles due to them both being IBD. If both alleles in profile O do not match to profile c, then $\kappa_2$ will be 0 and will not be used. 
+
+To determine what equations should be used for $M_1$ and $M_2$, we must look at the alleles of the population being sampled, that is, the alleles of profile c and profile O at the designated locus. 
+The table below describes the potential allele combinations at a designated locus where C is any other allele.
+$$
+\begin{aligned}
+&\begin{array}{llc}
+\hline c & O \\
+\hline \mathrm{AA} & \mathrm{AA} \\
+\mathrm{AA} & \mathrm{AB} \\
+\mathrm{AB} & \mathrm{AA}\\
+\mathrm{AB} & \mathrm{AB}\\
+\mathrm{AB} & \mathrm{AC} \\
+\hline
+\end{array}
+\end{aligned}
+$$
+
+$M_1$ will tell us the match probability of profile O to **one** allele in profile c. To calculate $M_1$ we must evaluate the scenarios in which profile c is homozygous or heterozygous. 
+
+In the case of homozygous profile c (AA) we calculate the probability that profile O has a matching allele A. This is based on the condition that two A alleles have already been observed in the sampled population, giving us an $m$ value of 2 and an $n$ value of 2. Using equation 5.6 we come up with the following $M_1$ for use when profile c is homozygous
+$$
+M_{1\:c|homo}=\frac {2\theta+(1-\theta)p_A}{1+(2-1)\theta}
+$$
+which when $\theta = 0$ reduces to $p_A$
+
+In the case of heterozygous profile c (AB) we calculate the probability that profile O has one matching allele, either matching allele A or allele B. This will sum the equation for observing an A allele after one has already been observed, $m = 1$, $n = 2$, and $p_A$, with the equation for observing a B allele after one has already been observed, $m = 1$, $n = 2$, $p_B$. The options are equally likely, so we multiply by $\frac {1}{2}$. Using equation 5.6 we come up with the following $M_1$ for use when profile c is heterozygous.  
+$$
+\begin{equation}
+M_{1\:c|hetero}=(\frac {1\theta+(1-\theta)p_A}{1+(2-1)\theta}+\frac {1\theta+(1-\theta)p_B}{1+(2-1)\theta})*\frac{1}{2}=\frac {2\theta+(1-\theta)(p_A+p_B)}{2+2\theta}*\frac{1}{2}\\
+\: \\
+M_{1\:c|hetero}=\frac{\theta+(1-\theta)(p_A+p_B)/2}{1+\theta}
+\end{equation}
+$$
+which when $\theta = 0$ reduces to $\frac{p_A+p_B}{2}$
+
+In the scenario of $\kappa_0$, no alleles are presumed IBD, so we must use $M_2$ to determine the probability that the alleles in profile O match to any of the alleles found in profile c randomly. This is also known as the unrelated match probability. 
+
+To determine $M_2$, we again start with profile c, and ask whether it is homozygous or heterozygous. 
+
+If profile c is homozygous, we are trying to determine the probability of profile O having matching two matching allele As. This probability is the product of the calculation for each allele in profile O given that all previous alleles have been A. We will calculate equation 5.6 using an m and n value of 2, and then an m and n value of 3, as seen below, or in the Weight of Evidence as formula 6.3
+$$
+M_{2\: homo}=\frac{2\theta+(1-\theta)p_A}{1+(2-1)\theta}*\frac{3\theta+(1-\theta)p_A}{1+(3-1)\theta}
+$$
+which when $\theta = 0$ reduces to ${p_A}^2$
+
+If profile c is heterozygous, we are trying to determine the probability of profile O having two matching alleles, allele A and allele B. This probability evaluates 5.6 for the instances where m = 1, n = 2 and again with m = 1, n = 3, and multiplying by two for the two possible orderings of the A and B alleles, as seen below and in Weight of Evidence as formula 6.4
+$$
+M_{2\: hetero}=2\frac{\theta+(1-\theta)p_A}{1+(2-1)\theta}*\frac{\theta+(1-\theta)p_B}{1+(3-1)\theta}
+$$
+which when $\theta = 0$ reduces to $2p_Ap_B$
+
+The various match probability equations for each scenario are shown in the table below:
+$$
+\begin{aligned}
+&\begin{array}{llc}
+\hline c & O & \kappa_i\:used & M_0|\theta=0&M_1|\theta=0&M_2|\theta=0\\
+\hline \mathrm{AA} & \mathrm{AA} & \kappa_2,\kappa_1,\kappa_0 & 1&p_A & {p_A}^2 \\
+\mathrm{AA}& \mathrm{AC} & \kappa_1,\kappa_0 & N/A & p_A & 2p_Ap_A\\
+\mathrm{AB} & \mathrm{AC} & \kappa_1,\kappa_0 & N/A & \frac{p_A}{2} & {p_A}^2 \\
+\mathrm{AB} & \mathrm{CB} & \kappa_1,\kappa_0 & N/A & \frac{p_B}{2} & {p_B}^2 \\
+\mathrm{AB} & \mathrm{AB} & \kappa_2,\kappa_1,\kappa_0 & 1 & \frac{p_A}{2}+\frac{p_B}{2} & 2p_Ap_B \\
+\hline
+\end{array}
+\end{aligned}
+$$
+## The Final Likelihood Ratio
+To calculate the final likelihood ratio, we must place our related probability estimate for matched alleles over the unrelated estimate for matched alleles.
+We have already done the calculation for this denominator in calculating the $M_2$ equation, which is comparing the probability of a profile appearing twice in a pair of unrelated individuals
+
+For heterozygous profile c using a $\theta=0$, the denominator of the likelihood ratio will be $2p_Ap_B$
+
+For homozygous profile c using a $\theta=0$, the denominator of the likelihood ratio will be ${p_A}^2$
+
+The following proofs demonstrate the simplification of the likelihood ratio equations for each scenario present in the table
+
+$$
+\begin{equation}
+profile\;c=AA,\;profile\;O=AA\\
+R=\frac{\kappa_2+\kappa_1(p_A)+\kappa_0({p_A}^2)}{{p_A}^2}=\frac{\kappa_2}{{p_A}^2}+\frac{\kappa_1}{p_A}+\kappa_0
+\end{equation}
+$$
+$$
+\begin{equation}
+profile\;c=AA,\;profile\;O=AC\\
+R=\frac{\kappa_1(p_A)+\kappa_0(2p_Ap_A)}{2p_Ap_A}=\frac{\kappa_1}{2p_A}+\kappa_0
+\end{equation}
+$$
+$$
+\begin{equation}
+profile\;c=AB,\;profile\;O=AC\\
+R=\frac{\kappa_1(\frac{p_A}{2})+\kappa_0({p_A}^2)}{{p_A}^2}=\frac{\kappa_1}{2p_A}+\kappa_0
+\end{equation}
+$$
 
 
 
