@@ -14,7 +14,7 @@
 
 <title>Simulation of STR Pairs and Calculation of Likelihood Ratios</title>
 
-<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -372,7 +372,7 @@ div.tocify {
 <h1 class="title toc-ignore">Simulation of STR Pairs and Calculation of
 Likelihood Ratios</h1>
 <h4 class="author">Tina Lasisi</h4>
-<h4 class="date">2024-03-03 20:02:58</h4>
+<h4 class="date">2024-07-10 15:18:32</h4>
 
 </div>
 
@@ -380,7 +380,7 @@ Likelihood Ratios</h1>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -391,8 +391,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -401,13 +401,13 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2024-03-03
+<strong>Last updated:</strong> 2024-07-10
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>PODFRIDGE/</code> <span
@@ -430,18 +430,21 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
@@ -532,15 +535,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtree2596546a55e9369c81787cb7f9f35c660272aa16targetblank2596546a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreea2f65792ecaaca6bda9b547a75aa5facb04990b8targetblanka2f6579a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/tinalasisi/PODFRIDGE/tree/2596546a55e9369c81787cb7f9f35c660272aa16" target="_blank">2596546</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/a2f65792ecaaca6bda9b547a75aa5facb04990b8" target="_blank">a2f6579</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtree2596546a55e9369c81787cb7f9f35c660272aa16targetblank2596546a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreea2f65792ecaaca6bda9b547a75aa5facb04990b8targetblanka2f6579a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -550,7 +553,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/tinalasisi/PODFRIDGE/tree/2596546a55e9369c81787cb7f9f35c660272aa16" target="_blank">2596546</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/a2f65792ecaaca6bda9b547a75aa5facb04990b8" target="_blank">a2f6579</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -565,11 +568,10 @@ were generated:
 </p>
 <pre><code>
 Ignored files:
-    Ignored:    .DS_Store
-    Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-    Ignored:    analysis/.DS_Store
-    Ignored:    output/.DS_Store
+
+Unstaged changes:
+    Modified:   analysis/STR-simulation.Rmd
 
 </code></pre>
 <p>
@@ -620,7 +622,41 @@ Message
 Rmd
 </td>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/2596546a55e9369c81787cb7f9f35c660272aa16/analysis/STR-simulation.Rmd" target="_blank">2596546</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/11fb32c8db06273cc164a483beec8755b89037d1/analysis/STR-simulation.Rmd" target="_blank">11fb32c</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2024-03-10
+</td>
+<td>
+write CSVs with output data
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/cf281b698161b692f571b83e0d7a11f828eb6a91/docs/STR-simulation.html" target="_blank">cf281b6</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2024-03-03
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/2596546a55e9369c81787cb7f9f35c660272aa16/analysis/STR-simulation.Rmd" target="_blank">2596546</a>
 </td>
 <td>
 Tina Lasisi
@@ -639,39 +675,6 @@ TRUE)
 <hr>
 </div>
 </div>
-</div>
-<div id="introduction" class="section level2">
-<h2>Introduction</h2>
-<p>This document provides a comprehensive guide on simulating Short
-Tandem Repeat (STR) pairs, and calculating shared alleles, relatedness
-scores, and likelihood ratios across different populations. It aims to
-elucidate the methodologies applied in forensic genetics for estimating
-the degree of relationship between individuals using genetic
-markers.</p>
-</div>
-<div id="background" class="section level2">
-<h2>Background</h2>
-<div id="understanding-likelihood-ratios-shared-alleles-and-relatedness"
-class="section level3">
-<h3>Understanding Likelihood Ratios, Shared Alleles, and
-Relatedness</h3>
-<p>The likelihood ratio (LR) is a evaluates the probability of observing
-genetic evidence under two competing hypotheses, typically pertaining to
-the relationship between individuals. This ratio assists in determining
-whether the genetic evidence supports a specific relationship (e.g.,
-parent-child, siblings) between two individuals more than being
-unrelated.</p>
-<ul>
-<li><strong>Shared alleles</strong> refer to alleles (versions of a
-gene) that are identical by descent, meaning they are inherited from a
-common ancestor.</li>
-<li><strong>Relatedness scores</strong> quantify the degree of genetic
-similarity between individuals, indicating potential familial
-relationships.</li>
-<li><strong>Likelihood ratios (LR)</strong> compare the probability of
-observing the genetic evidence if two individuals have a specified
-relationship versus if they are unrelated.</li>
-</ul>
 </div>
 <div id="from-weight-of-evidence-for-forensic-dna-profiles-book"
 class="section level3">
@@ -751,7 +754,6 @@ F_{S T}\right)}
 \]</span> If both alleles do not match then <span
 class="math inline">\(\kappa_2 / R_X^u = 0\)</span>.</p>
 </div>
-</div>
 <div id="rscript-for-simulation" class="section level2">
 <h2>Rscript for simulation</h2>
 <p>The R script “code/known-vs-tested_simulation_script.R” simulates STR
@@ -820,6 +822,43 @@ likelihood cut-off</h2>
 <pre><code>`summarise()` has grouped output by &#39;population&#39;. You can override using the
 `.groups` argument.</code></pre>
 <p><img src="figure/STR-simulation.Rmd/unnamed-chunk-4-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-1">
+Past versions of unnamed-chunk-4-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/cf281b698161b692f571b83e0d7a11f828eb6a91/docs/figure/STR-simulation.Rmd/unnamed-chunk-4-1.png" target="_blank">cf281b6</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2024-03-03
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="cut-offs-for-each-fpr" class="section level2">
 <h2>Cut-offs for each FPR</h2>
@@ -981,8 +1020,45 @@ Hispanic
 </tr>
 </tbody>
 </table>
-<p><img src="figure/STR-simulation.Rmd/unnamed-chunk-10-1.png" width="768" style="display: block; margin: auto;" /></p>
 <p><img src="figure/STR-simulation.Rmd/unnamed-chunk-12-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-12-1">
+Past versions of unnamed-chunk-12-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-12-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/cf281b698161b692f571b83e0d7a11f828eb6a91/docs/figure/STR-simulation.Rmd/unnamed-chunk-12-1.png" target="_blank">cf281b6</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2024-03-03
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/STR-simulation.Rmd/unnamed-chunk-14-1.png" width="768" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -991,13 +1067,13 @@ Session information
 </button>
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
-<pre><code>R version 4.3.2 (2023-10-31)
-Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Sonoma 14.3.1
+<pre><code>R version 4.4.1 (2024-06-14)
+Platform: x86_64-apple-darwin20
+Running under: macOS Sonoma 14.5
 
 Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+BLAS:   /Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
 
 locale:
 [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -1011,26 +1087,26 @@ attached base packages:
 other attached packages:
  [1] kableExtra_1.4.0   patchwork_1.2.0    lubridate_1.9.3    forcats_1.0.0     
  [5] stringr_1.5.1      dplyr_1.1.4        purrr_1.0.2        readr_2.1.5       
- [9] tidyr_1.3.0        tibble_3.2.1       ggplot2_3.4.4      tidyverse_2.0.0   
+ [9] tidyr_1.3.1        tibble_3.2.1       ggplot2_3.5.1      tidyverse_2.0.0   
 [13] RColorBrewer_1.1-3 wesanderson_0.3.7  workflowr_1.7.1   
 
 loaded via a namespace (and not attached):
- [1] gtable_0.3.4      xfun_0.41         bslib_0.6.1       processx_3.8.3   
- [5] callr_3.7.3       tzdb_0.4.0        vctrs_0.6.5       tools_4.3.2      
- [9] ps_1.7.5          generics_0.1.3    parallel_4.3.2    fansi_1.0.6      
-[13] highr_0.10        pkgconfig_2.0.3   lifecycle_1.0.4   compiler_4.3.2   
-[17] farver_2.1.1      git2r_0.33.0      munsell_0.5.0     getPass_0.2-4    
-[21] httpuv_1.6.13     htmltools_0.5.7   sass_0.4.8        yaml_2.3.8       
-[25] later_1.3.2       pillar_1.9.0      crayon_1.5.2      jquerylib_0.1.4  
-[29] whisker_0.4.1     cachem_1.0.8      tidyselect_1.2.0  digest_0.6.34    
-[33] stringi_1.8.3     labeling_0.4.3    rprojroot_2.0.4   fastmap_1.1.1    
-[37] grid_4.3.2        colorspace_2.1-0  cli_3.6.2         magrittr_2.0.3   
-[41] utf8_1.2.4        withr_2.5.2       scales_1.3.0      promises_1.2.1   
-[45] bit64_4.0.5       timechange_0.2.0  rmarkdown_2.25    httr_1.4.7       
-[49] bit_4.0.5         hms_1.1.3         evaluate_0.23     knitr_1.45       
-[53] viridisLite_0.4.2 rlang_1.1.3       Rcpp_1.0.12       glue_1.7.0       
-[57] xml2_1.3.6        svglite_2.1.3     rstudioapi_0.15.0 vroom_1.6.5      
-[61] jsonlite_1.8.8    R6_2.5.1          systemfonts_1.0.5 fs_1.6.3         </code></pre>
+ [1] gtable_0.3.5      xfun_0.45         bslib_0.7.0       processx_3.8.4   
+ [5] callr_3.7.6       tzdb_0.4.0        vctrs_0.6.5       tools_4.4.1      
+ [9] ps_1.7.7          generics_0.1.3    parallel_4.4.1    fansi_1.0.6      
+[13] highr_0.11        pkgconfig_2.0.3   lifecycle_1.0.4   compiler_4.4.1   
+[17] farver_2.1.2      git2r_0.33.0      munsell_0.5.1     getPass_0.2-4    
+[21] httpuv_1.6.15     htmltools_0.5.8.1 sass_0.4.9        yaml_2.3.9       
+[25] later_1.3.2       pillar_1.9.0      crayon_1.5.3      jquerylib_0.1.4  
+[29] whisker_0.4.1     cachem_1.1.0      tidyselect_1.2.1  digest_0.6.36    
+[33] stringi_1.8.4     labeling_0.4.3    rprojroot_2.0.4   fastmap_1.2.0    
+[37] grid_4.4.1        colorspace_2.1-0  cli_3.6.3         magrittr_2.0.3   
+[41] utf8_1.2.4        withr_3.0.0       scales_1.3.0      promises_1.3.0   
+[45] bit64_4.0.5       timechange_0.3.0  rmarkdown_2.27    httr_1.4.7       
+[49] bit_4.0.5         hms_1.1.3         evaluate_0.24.0   knitr_1.48       
+[53] viridisLite_0.4.2 rlang_1.1.4       Rcpp_1.0.12       glue_1.7.0       
+[57] xml2_1.3.6        svglite_2.1.3     rstudioapi_0.16.0 vroom_1.6.5      
+[61] jsonlite_1.8.8    R6_2.5.1          systemfonts_1.1.0 fs_1.6.4         </code></pre>
 </div>
 </div>
 </div>

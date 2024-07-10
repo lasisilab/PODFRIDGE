@@ -34,19 +34,6 @@ N <- 76e6 # what does this do?
 
 ```
 
-## Introduction
-
-This document provides a comprehensive guide on simulating Short Tandem Repeat (STR) pairs, and calculating shared alleles, relatedness scores, and likelihood ratios across different populations. It aims to elucidate the methodologies applied in forensic genetics for estimating the degree of relationship between individuals using genetic markers.
-
-## Background
-
-### Understanding Likelihood Ratios, Shared Alleles, and Relatedness
-
-The likelihood ratio (LR) is a evaluates the probability of observing genetic evidence under two competing hypotheses, typically pertaining to the relationship between individuals. This ratio assists in determining whether the genetic evidence supports a specific relationship (e.g., parent-child, siblings) between two individuals more than being unrelated.
-
-- **Shared alleles** refer to alleles (versions of a gene) that are identical by descent, meaning they are inherited from a common ancestor.
-- **Relatedness scores** quantify the degree of genetic similarity between individuals, indicating potential familial relationships.
-- **Likelihood ratios (LR)** compare the probability of observing the genetic evidence if two individuals have a specified relationship versus if they are unrelated.
 
 ### From Weight-of-evidence for forensic DNA profiles book
 
