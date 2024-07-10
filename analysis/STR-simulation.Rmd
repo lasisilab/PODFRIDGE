@@ -14,6 +14,7 @@ library(wesanderson) # for color palettes
 library(RColorBrewer)
 library(tidyverse)
 library(patchwork)
+library(DiagrammeR)
 
 knitr::opts_knit$set(root.dir = "..")
 knitr::opts_chunk$set(
@@ -106,10 +107,105 @@ $$
 $$
 If both alleles do not match then $\kappa_2 / R_X^u = 0$. 
 
+## LR function
+
+Flowchart
+
+![](assets/STR_LR.png)
+
+```{r}
+calculate_likelihood_ratio <- function(shared_alleles, genotype_match = NULL, pA = NULL, pB = NULL, k0, k1, k2) {
+
+  # Case 0: No Shared Alleles
+  if (shared_alleles == 0) {
+    LR <- k0
+    return(LR)
+  }
+
+  # Case 1: One Shared Allele
+  if (shared_alleles == 1) {
+    if (genotype_match == "AA-AA") {
+      Rxp <- pA
+    } else if (genotype_match == "AA-AB" | genotype_match == "AB-AA") {
+      Rxp <- 2 * pA
+    } else if (genotype_match == "AB-AC") {
+      Rxp <- 4 * pA
+    } else if (genotype_match == "AB-AB") {
+      Rxp <- (4 * pA * pB) / (pA + pB)
+    } else {
+      stop("Invalid genotype match for 1 shared allele.")
+    }
+    
+    LR <- k0 + (k1 / Rxp)
+    return(LR)
+  }
+
+  # Case 2: Two Shared Alleles
+  if (shared_alleles == 2) {
+    if (genotype_match == "AA-AA") {
+      Rxp <- pA
+      Rxu <- pA^2
+    } else if (genotype_match == "AB-AB") {
+      Rxp <- (4 * pA * pB) / (pA + pB)
+      Rxu <- 2 * pA * pB
+    } else {
+      stop("Invalid genotype match for 2 shared alleles.")
+    }
+
+    LR <- k0 + (k1 / Rxp) + (k2 / Rxu)
+    return(LR)
+  }
+}
+
+
+```
+
+
+Input for LR function
+```{r}
+get_lr_input_and_calculate <- function(row, allele_frequency_data) {
+
+  # 1. Get k values from relationship matrix
+  relationship_matrix <- data.frame(
+    relationship_type = c("parent-child", "siblings", "unrelated"),
+    k0 = c(0, 0.25, 1),
+    k1 = c(1, 0.5, 0),
+    k2 = c(0, 0.25, 0)
+  )
+
+  k_values <- relationship_matrix[relationship_matrix$relationship_type == row$relationship_type, c("k0", "k1", "k2")]
+
+  # 2. Convert genotypes to alphabetical representation (assuming genotypes are already character vectors)
+  genotype_match <- paste(
+    paste(row$individual1_genotype, collapse = "-"),
+    paste(unique(c(row$individual1_genotype, row$individual2_genotype)), collapse = "-")
+  )
+  
+  # 3. Extract allele frequencies
+  allele_freqs <- subset(allele_frequency_data, Population == row$population & Locus == row$locus)
+
+  if (nrow(allele_freqs) == 0) {
+    stop("No allele frequencies found for the given population and locus.")
+  }
+
+  allele_freqs <- allele_freqs[order(allele_freqs$Allele), ]  
+
+  pA <- allele_freqs$Frequency[1]
+  pB <- ifelse(length(unique(c(row$individual1_genotype, row$individual2_genotype))) > 2, allele_freqs$Frequency[2], NULL)
+
+  # 4. Determine shared alleles
+  shared_alleles <- sum(row$individual1_genotype %in% row$individual2_genotype)
+
+  # 5. Calculate LR
+  LR <- calculate_likelihood_ratio(shared_alleles, genotype_match, pA, pB, k_values$k0, k_values$k1, k_values$k2)
+
+  return(list(pair_ID = row$pair_ID, LR = LR))
+}
+
+```
+
 
 ## Rscript for simulation
-
-The R script "code/known-vs-tested_simulation_script.R" simulates STR pairs and calculates likelihood ratios, shared alleles, and relatedness scores across different populations. The script is divided into the following sections:
 
 1. **Initialization**: Load required R packages and set the working directory.
 

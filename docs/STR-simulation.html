@@ -372,7 +372,7 @@ div.tocify {
 <h1 class="title toc-ignore">Simulation of STR Pairs and Calculation of
 Likelihood Ratios</h1>
 <h4 class="author">Tina Lasisi</h4>
-<h4 class="date">2024-07-10 15:18:32</h4>
+<h4 class="date">2024-07-10 18:29:46</h4>
 
 </div>
 
@@ -535,15 +535,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreea2f65792ecaaca6bda9b547a75aa5facb04990b8targetblanka2f6579a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreef80f86ef4c12e38ac5c8d73fd3561ebcc831329ctargetblankf80f86ea">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/a2f65792ecaaca6bda9b547a75aa5facb04990b8" target="_blank">a2f6579</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/f80f86ef4c12e38ac5c8d73fd3561ebcc831329c" target="_blank">f80f86e</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreea2f65792ecaaca6bda9b547a75aa5facb04990b8targetblanka2f6579a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreef80f86ef4c12e38ac5c8d73fd3561ebcc831329ctargetblankf80f86ea"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -553,7 +553,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/a2f65792ecaaca6bda9b547a75aa5facb04990b8" target="_blank">a2f6579</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/f80f86ef4c12e38ac5c8d73fd3561ebcc831329c" target="_blank">f80f86e</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -568,7 +568,10 @@ were generated:
 </p>
 <pre><code>
 Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    .Rhistory
     Ignored:    .Rproj.user/
+    Ignored:    data/.DS_Store
 
 Unstaged changes:
     Modified:   analysis/STR-simulation.Rmd
@@ -617,6 +620,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/f80f86ef4c12e38ac5c8d73fd3561ebcc831329c/analysis/STR-simulation.Rmd" target="_blank">f80f86e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2024-07-10
+</td>
+<td>
+Updated STR-simulation.Rmd
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/f80f86ef4c12e38ac5c8d73fd3561ebcc831329c/docs/STR-simulation.html" target="_blank">f80f86e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2024-07-10
+</td>
+<td>
+Updated STR-simulation.Rmd
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -754,12 +791,14 @@ F_{S T}\right)}
 \]</span> If both alleles do not match then <span
 class="math inline">\(\kappa_2 / R_X^u = 0\)</span>.</p>
 </div>
+<div id="lr-function" class="section level2">
+<h2>LR function</h2>
+<p>Flowchart</p>
+<p><img src="assets/STR_LR.png" /></p>
+<p>Input for LR function</p>
+</div>
 <div id="rscript-for-simulation" class="section level2">
 <h2>Rscript for simulation</h2>
-<p>The R script “code/known-vs-tested_simulation_script.R” simulates STR
-pairs and calculates likelihood ratios, shared alleles, and relatedness
-scores across different populations. The script is divided into the
-following sections:</p>
 <ol style="list-style-type: decimal">
 <li><p><strong>Initialization</strong>: Load required R packages and set
 the working directory.</p></li>
@@ -821,44 +860,7 @@ likelihood cut-off</h2>
 6      Asian     full_siblings     0.1          0.820</code></pre>
 <pre><code>`summarise()` has grouped output by &#39;population&#39;. You can override using the
 `.groups` argument.</code></pre>
-<p><img src="figure/STR-simulation.Rmd/unnamed-chunk-4-1.png" width="960" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-1">
-Past versions of unnamed-chunk-4-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-4-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/cf281b698161b692f571b83e0d7a11f828eb6a91/docs/figure/STR-simulation.Rmd/unnamed-chunk-4-1.png" target="_blank">cf281b6</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2024-03-03
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p><img src="figure/STR-simulation.Rmd/unnamed-chunk-6-1.png" width="960" style="display: block; margin: auto;" /></p>
 </div>
 <div id="cut-offs-for-each-fpr" class="section level2">
 <h2>Cut-offs for each FPR</h2>
@@ -1020,13 +1022,13 @@ Hispanic
 </tr>
 </tbody>
 </table>
-<p><img src="figure/STR-simulation.Rmd/unnamed-chunk-12-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/STR-simulation.Rmd/unnamed-chunk-14-1.png" width="768" style="display: block; margin: auto;" /></p>
 <p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-12-1">
-Past versions of unnamed-chunk-12-1.png
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-14-1">
+Past versions of unnamed-chunk-14-1.png
 </button>
 </p>
-<div id="fig-unnamed-chunk-12-1" class="collapse">
+<div id="fig-unnamed-chunk-14-1" class="collapse">
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
 <thead>
@@ -1045,20 +1047,20 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/cf281b698161b692f571b83e0d7a11f828eb6a91/docs/figure/STR-simulation.Rmd/unnamed-chunk-12-1.png" target="_blank">cf281b6</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/f80f86ef4c12e38ac5c8d73fd3561ebcc831329c/docs/figure/STR-simulation.Rmd/unnamed-chunk-14-1.png" target="_blank">f80f86e</a>
 </td>
 <td>
-Tina Lasisi
+tinalasisi
 </td>
 <td>
-2024-03-03
+2024-07-10
 </td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<p><img src="figure/STR-simulation.Rmd/unnamed-chunk-14-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/STR-simulation.Rmd/unnamed-chunk-16-1.png" width="768" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1085,28 +1087,29 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] kableExtra_1.4.0   patchwork_1.2.0    lubridate_1.9.3    forcats_1.0.0     
- [5] stringr_1.5.1      dplyr_1.1.4        purrr_1.0.2        readr_2.1.5       
- [9] tidyr_1.3.1        tibble_3.2.1       ggplot2_3.5.1      tidyverse_2.0.0   
-[13] RColorBrewer_1.1-3 wesanderson_0.3.7  workflowr_1.7.1   
+ [1] kableExtra_1.4.0   DiagrammeR_1.0.11  patchwork_1.2.0    lubridate_1.9.3   
+ [5] forcats_1.0.0      stringr_1.5.1      dplyr_1.1.4        purrr_1.0.2       
+ [9] readr_2.1.5        tidyr_1.3.1        tibble_3.2.1       ggplot2_3.5.1     
+[13] tidyverse_2.0.0    RColorBrewer_1.1-3 wesanderson_0.3.7  workflowr_1.7.1   
 
 loaded via a namespace (and not attached):
- [1] gtable_0.3.5      xfun_0.45         bslib_0.7.0       processx_3.8.4   
- [5] callr_3.7.6       tzdb_0.4.0        vctrs_0.6.5       tools_4.4.1      
- [9] ps_1.7.7          generics_0.1.3    parallel_4.4.1    fansi_1.0.6      
-[13] highr_0.11        pkgconfig_2.0.3   lifecycle_1.0.4   compiler_4.4.1   
-[17] farver_2.1.2      git2r_0.33.0      munsell_0.5.1     getPass_0.2-4    
-[21] httpuv_1.6.15     htmltools_0.5.8.1 sass_0.4.9        yaml_2.3.9       
-[25] later_1.3.2       pillar_1.9.0      crayon_1.5.3      jquerylib_0.1.4  
-[29] whisker_0.4.1     cachem_1.1.0      tidyselect_1.2.1  digest_0.6.36    
-[33] stringi_1.8.4     labeling_0.4.3    rprojroot_2.0.4   fastmap_1.2.0    
-[37] grid_4.4.1        colorspace_2.1-0  cli_3.6.3         magrittr_2.0.3   
-[41] utf8_1.2.4        withr_3.0.0       scales_1.3.0      promises_1.3.0   
-[45] bit64_4.0.5       timechange_0.3.0  rmarkdown_2.27    httr_1.4.7       
-[49] bit_4.0.5         hms_1.1.3         evaluate_0.24.0   knitr_1.48       
-[53] viridisLite_0.4.2 rlang_1.1.4       Rcpp_1.0.12       glue_1.7.0       
-[57] xml2_1.3.6        svglite_2.1.3     rstudioapi_0.16.0 vroom_1.6.5      
-[61] jsonlite_1.8.8    R6_2.5.1          systemfonts_1.1.0 fs_1.6.4         </code></pre>
+ [1] gtable_0.3.5      xfun_0.45         bslib_0.7.0       htmlwidgets_1.6.4
+ [5] visNetwork_2.1.2  processx_3.8.4    callr_3.7.6       tzdb_0.4.0       
+ [9] vctrs_0.6.5       tools_4.4.1       ps_1.7.6          generics_0.1.3   
+[13] parallel_4.4.1    fansi_1.0.6       highr_0.11        pkgconfig_2.0.3  
+[17] lifecycle_1.0.4   farver_2.1.2      compiler_4.4.1    git2r_0.33.0     
+[21] munsell_0.5.1     getPass_0.2-4     httpuv_1.6.15     htmltools_0.5.8.1
+[25] sass_0.4.9        yaml_2.3.8        later_1.3.2       pillar_1.9.0     
+[29] crayon_1.5.3      jquerylib_0.1.4   whisker_0.4.1     cachem_1.1.0     
+[33] tidyselect_1.2.1  digest_0.6.36     stringi_1.8.4     labeling_0.4.3   
+[37] rprojroot_2.0.4   fastmap_1.2.0     grid_4.4.1        colorspace_2.1-0 
+[41] cli_3.6.3         magrittr_2.0.3    utf8_1.2.4        withr_3.0.0      
+[45] scales_1.3.0      promises_1.3.0    bit64_4.0.5       timechange_0.3.0 
+[49] rmarkdown_2.27    httr_1.4.7        bit_4.0.5         hms_1.1.3        
+[53] evaluate_0.24.0   knitr_1.47        viridisLite_0.4.2 rlang_1.1.4      
+[57] Rcpp_1.0.12       glue_1.7.0        xml2_1.3.6        svglite_2.1.3    
+[61] rstudioapi_0.16.0 vroom_1.6.5       jsonlite_1.8.8    R6_2.5.1         
+[65] systemfonts_1.1.0 fs_1.6.4         </code></pre>
 </div>
 </div>
 </div>
