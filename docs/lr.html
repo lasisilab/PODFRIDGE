@@ -369,7 +369,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Likelihood Ratio</h1>
 <h4 class="author">Sam Muller</h4>
-<h4 class="date">2024-07-03 10:55:20</h4>
+<h4 class="date">2024-07-11 15:35:57</h4>
 
 </div>
 
@@ -398,7 +398,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2024-07-03
+<strong>Last updated:</strong> 2024-07-11
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -529,15 +529,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree55080c05c4028d81b5eebaab27cf8bbe6aae0c77targetblank55080c0a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree9ce56263ac96bf626e274bd67beff7283fbd76e4targetblank9ce5626a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/55080c05c4028d81b5eebaab27cf8bbe6aae0c77" target="_blank">55080c0</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/9ce56263ac96bf626e274bd67beff7283fbd76e4" target="_blank">9ce5626</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree55080c05c4028d81b5eebaab27cf8bbe6aae0c77targetblank55080c0a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree9ce56263ac96bf626e274bd67beff7283fbd76e4targetblank9ce5626a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -547,7 +547,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/55080c05c4028d81b5eebaab27cf8bbe6aae0c77" target="_blank">55080c0</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/9ce56263ac96bf626e274bd67beff7283fbd76e4" target="_blank">9ce5626</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -608,6 +608,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/9ce56263ac96bf626e274bd67beff7283fbd76e4/analysis/lr.Rmd" target="_blank">9ce5626</a>
+</td>
+<td>
+sammuller917
+</td>
+<td>
+2024-07-11
+</td>
+<td>
+Update lr.Rmd
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/49f9b23e3f37103616b1d99f6b2654f3206127ff/docs/lr.html" target="_blank">49f9b23</a>
+</td>
+<td>
+sammuller917
+</td>
+<td>
+2024-07-03
+</td>
+<td>
+created lr page
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -814,6 +848,10 @@ M_{2\:
 homo}=\frac{2\theta+(1-\theta)p_A}{1+(2-1)\theta}*\frac{3\theta+(1-\theta)p_A}{1+(3-1)\theta}
 \]</span> which when <span class="math inline">\(\theta = 0\)</span>
 reduces to <span class="math inline">\({p_A}^2\)</span></p>
+<p>In the instance where only one allele matches between profile A and
+profile C, <span class="math inline">\(M_2\)</span> would be doubled to
+account for either allele being the one that is IBD vs IBS, making <span
+class="math inline">\(M_2 = 2{p_A}^2\)</span>.</p>
 <p>If profile c is heterozygous, we are trying to determine the
 probability of profile O having two matching alleles, allele A and
 allele B. This probability evaluates 5.6 for the instances where m = 1,
@@ -832,11 +870,11 @@ in the table below: <span class="math display">\[
 M_0|\theta=0&amp;M_1|\theta=0&amp;M_2|\theta=0\\
 \hline \mathrm{AA} &amp; \mathrm{AA} &amp; \kappa_2,\kappa_1,\kappa_0
 &amp; 1&amp;p_A &amp; {p_A}^2 \\
-\mathrm{AA}&amp; \mathrm{AC} &amp; \kappa_1,\kappa_0 &amp; N/A &amp; p_A
-&amp; 2p_Ap_A\\
-\mathrm{AB} &amp; \mathrm{AC} &amp; \kappa_1,\kappa_0 &amp; N/A &amp;
+\mathrm{AA}&amp; \mathrm{AC} &amp; \kappa_1,\kappa_0 &amp; 0 &amp; p_A
+&amp; 2{p_A}^2\\
+\mathrm{AB} &amp; \mathrm{AC} &amp; \kappa_1,\kappa_0 &amp; 0 &amp;
 \frac{p_A}{2} &amp; {p_A}^2 \\
-\mathrm{AB} &amp; \mathrm{CB} &amp; \kappa_1,\kappa_0 &amp; N/A &amp;
+\mathrm{AB} &amp; \mathrm{CB} &amp; \kappa_1,\kappa_0 &amp; 0 &amp;
 \frac{p_B}{2} &amp; {p_B}^2 \\
 \mathrm{AB} &amp; \mathrm{AB} &amp; \kappa_2,\kappa_1,\kappa_0 &amp; 1
 &amp; \frac{p_A}{2}+\frac{p_B}{2} &amp; 2p_Ap_B \\
@@ -868,12 +906,21 @@ R=\frac{\kappa_2+\kappa_1(p_A)+\kappa_0({p_A}^2)}{{p_A}^2}=\frac{\kappa_2}{{p_A}
 \]</span> <span class="math display">\[
 \begin{equation}
 profile\;c=AA,\;profile\;O=AC\\
-R=\frac{\kappa_1(p_A)+\kappa_0(2p_Ap_A)}{2p_Ap_A}=\frac{\kappa_1}{2p_A}+\kappa_0
+R=\frac{\kappa_1(p_A)+\kappa_0(2{p_A}^2)}{2{p_A}^2}=\frac{\kappa_1}{2p_A}+\kappa_0
 \end{equation}
 \]</span> <span class="math display">\[
 \begin{equation}
 profile\;c=AB,\;profile\;O=AC\\
 R=\frac{\kappa_1(\frac{p_A}{2})+\kappa_0({p_A}^2)}{{p_A}^2}=\frac{\kappa_1}{2p_A}+\kappa_0
+\end{equation}
+\]</span> This above equation would also be utilized in the instance of
+profile c = AB and profile O = CB, although <span
+class="math inline">\(p_B\)</span> would be substituted for <span
+class="math inline">\(p_A\)</span>.</p>
+<p><span class="math display">\[
+\begin{equation}
+profile\;c=AB,\;profile\;O=AB\\
+R=\frac{\kappa_2+\kappa_1(\frac{p_A}{2}+\frac{p_B}{2})+\kappa_0(2p_Ap_B)}{2p_Ap_B}=\frac{\kappa_2}{2p_Ap_B}+\frac{\kappa_1}{\frac{p_A+p_B}{4p_Ap_B}}+\kappa_0
 \end{equation}
 \]</span></p>
 <br>
@@ -901,21 +948,17 @@ tzcode source: internal
 attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
-other attached packages:
-[1] workflowr_1.7.1
-
 loaded via a namespace (and not attached):
- [1] vctrs_0.6.5       httr_1.4.7        cli_3.6.2         knitr_1.46       
- [5] rlang_1.1.3       xfun_0.43         stringi_1.8.4     processx_3.8.4   
- [9] promises_1.3.0    jsonlite_1.8.8    glue_1.7.0        rprojroot_2.0.4  
-[13] git2r_0.33.0      htmltools_0.5.8.1 httpuv_1.6.15     ps_1.7.6         
-[17] sass_0.4.9        fansi_1.0.6       rmarkdown_2.26    jquerylib_0.1.4  
-[21] tibble_3.2.1      evaluate_0.23     fastmap_1.1.1     yaml_2.3.8       
-[25] lifecycle_1.0.4   whisker_0.4.1     stringr_1.5.1     compiler_4.4.0   
-[29] fs_1.6.4          pkgconfig_2.0.3   Rcpp_1.0.12       rstudioapi_0.16.0
-[33] later_1.3.2       digest_0.6.35     R6_2.5.1          utf8_1.2.4       
-[37] pillar_1.9.0      callr_3.7.6       magrittr_2.0.3    bslib_0.7.0      
-[41] tools_4.4.0       cachem_1.0.8      getPass_0.2-4    </code></pre>
+ [1] vctrs_0.6.5       cli_3.6.2         knitr_1.46        rlang_1.1.3      
+ [5] xfun_0.43         stringi_1.8.4     promises_1.3.0    jsonlite_1.8.8   
+ [9] workflowr_1.7.1   glue_1.7.0        rprojroot_2.0.4   git2r_0.33.0     
+[13] htmltools_0.5.8.1 httpuv_1.6.15     sass_0.4.9        fansi_1.0.6      
+[17] rmarkdown_2.26    jquerylib_0.1.4   evaluate_0.23     tibble_3.2.1     
+[21] fastmap_1.1.1     yaml_2.3.8        lifecycle_1.0.4   whisker_0.4.1    
+[25] stringr_1.5.1     compiler_4.4.0    fs_1.6.4          Rcpp_1.0.12      
+[29] pkgconfig_2.0.3   rstudioapi_0.16.0 later_1.3.2       digest_0.6.35    
+[33] R6_2.5.1          utf8_1.2.4        pillar_1.9.0      magrittr_2.0.3   
+[37] bslib_0.7.0       tools_4.4.0       cachem_1.0.8     </code></pre>
 </div>
 </div>
 
