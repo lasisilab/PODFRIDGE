@@ -89,6 +89,8 @@ M_{2\: homo}=\frac{2\theta+(1-\theta)p_A}{1+(2-1)\theta}*\frac{3\theta+(1-\theta
 $$
 which when $\theta = 0$ reduces to ${p_A}^2$
 
+In the instance where only one allele matches between profile A and profile C, $M_2$ would be doubled to account for either allele being the one that is IBD vs IBS, making $M_2 = 2{p_A}^2$.
+
 If profile c is heterozygous, we are trying to determine the probability of profile O having two matching alleles, allele A and allele B. This probability evaluates 5.6 for the instances where m = 1, n = 2 and again with m = 1, n = 3, and multiplying by two for the two possible orderings of the A and B alleles, as seen below and in Weight of Evidence as formula 6.4
 $$
 M_{2\: hetero}=2\frac{\theta+(1-\theta)p_A}{1+(2-1)\theta}*\frac{\theta+(1-\theta)p_B}{1+(3-1)\theta}
@@ -101,9 +103,9 @@ $$
 &\begin{array}{llc}
 \hline c & O & \kappa_i\:used & M_0|\theta=0&M_1|\theta=0&M_2|\theta=0\\
 \hline \mathrm{AA} & \mathrm{AA} & \kappa_2,\kappa_1,\kappa_0 & 1&p_A & {p_A}^2 \\
-\mathrm{AA}& \mathrm{AC} & \kappa_1,\kappa_0 & N/A & p_A & 2p_Ap_A\\
-\mathrm{AB} & \mathrm{AC} & \kappa_1,\kappa_0 & N/A & \frac{p_A}{2} & {p_A}^2 \\
-\mathrm{AB} & \mathrm{CB} & \kappa_1,\kappa_0 & N/A & \frac{p_B}{2} & {p_B}^2 \\
+\mathrm{AA}& \mathrm{AC} & \kappa_1,\kappa_0 & 0 & p_A & 2{p_A}^2\\
+\mathrm{AB} & \mathrm{AC} & \kappa_1,\kappa_0 & 0 & \frac{p_A}{2} & {p_A}^2 \\
+\mathrm{AB} & \mathrm{CB} & \kappa_1,\kappa_0 & 0 & \frac{p_B}{2} & {p_B}^2 \\
 \mathrm{AB} & \mathrm{AB} & \kappa_2,\kappa_1,\kappa_0 & 1 & \frac{p_A}{2}+\frac{p_B}{2} & 2p_Ap_B \\
 \hline
 \end{array}
@@ -128,13 +130,21 @@ $$
 $$
 \begin{equation}
 profile\;c=AA,\;profile\;O=AC\\
-R=\frac{\kappa_1(p_A)+\kappa_0(2p_Ap_A)}{2p_Ap_A}=\frac{\kappa_1}{2p_A}+\kappa_0
+R=\frac{\kappa_1(p_A)+\kappa_0(2{p_A}^2)}{2{p_A}^2}=\frac{\kappa_1}{2p_A}+\kappa_0
 \end{equation}
 $$
 $$
 \begin{equation}
 profile\;c=AB,\;profile\;O=AC\\
 R=\frac{\kappa_1(\frac{p_A}{2})+\kappa_0({p_A}^2)}{{p_A}^2}=\frac{\kappa_1}{2p_A}+\kappa_0
+\end{equation}
+$$
+This above equation would also be utilized in the instance of profile c = AB and profile O = CB, although $p_B$ would be substituted for $p_A$.
+
+$$
+\begin{equation}
+profile\;c=AB,\;profile\;O=AB\\
+R=\frac{\kappa_2+\kappa_1(\frac{p_A}{2}+\frac{p_B}{2})+\kappa_0(2p_Ap_B)}{2p_Ap_B}=\frac{\kappa_2}{2p_Ap_B}+\frac{\kappa_1}{\frac{p_A+p_B}{4p_Ap_B}}+\kappa_0
 \end{equation}
 $$
 
