@@ -369,7 +369,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Siblings analysis</h1>
 <h4 class="author">Manqing Lin</h4>
-<h4 class="date">2024-07-03 10:07:12</h4>
+<h4 class="date">2024-07-12 10:34:18</h4>
 
 </div>
 
@@ -377,7 +377,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -388,8 +388,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -398,13 +398,13 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2024-07-03
+<strong>Last updated:</strong> 2024-07-12
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>PODFRIDGE/</code> <span
@@ -427,18 +427,21 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
@@ -529,15 +532,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree73a6b6a5e7340afaa9cedc67439b710c92a8e2dctargetblank73a6b6aa">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree9a85666490b7d01f6566d3c038676d8e95182038targetblank9a85666a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/73a6b6a5e7340afaa9cedc67439b710c92a8e2dc" target="_blank">73a6b6a</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/9a85666490b7d01f6566d3c038676d8e95182038" target="_blank">9a85666</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree73a6b6a5e7340afaa9cedc67439b710c92a8e2dctargetblank73a6b6aa"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree9a85666490b7d01f6566d3c038676d8e95182038targetblank9a85666a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -547,7 +550,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/73a6b6a5e7340afaa9cedc67439b710c92a8e2dc" target="_blank">73a6b6a</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/9a85666490b7d01f6566d3c038676d8e95182038" target="_blank">9a85666</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -563,8 +566,10 @@ were generated:
 <pre><code>
 Ignored files:
     Ignored:    .DS_Store
-    Ignored:    .Rhistory
     Ignored:    .Rproj.user/
+
+Unstaged changes:
+    Modified:   analysis/siblings_analysis.Rmd
 
 </code></pre>
 <p>
@@ -610,6 +615,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/5284e15468b63d0d19d0aff094447df016d091ed/docs/siblings_analysis.html" target="_blank">5284e15</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-07-03
+</td>
+<td>
+new com
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1471,6 +1493,270 @@ linmatch
 </table>
 </div>
 </div>
+<pre><code>                      RACE chborn_num Age_bin freq_mother n_sib freq_n_sib
+1   Black/African American          0   40-50        9469    -1          0
+2   Black/African American          0   50-60       10846    -1          0
+3   Black/African American          0   60-70        9907    -1          0
+4   Black/African American          0   70-80        5991    -1          0
+5   Black/African American          0      80        2584    -1          0
+6   Black/African American          1   40-50        8690     0       8690
+7   Black/African American          1   50-60        8309     0       8309
+8   Black/African American          1   60-70        6786     0       6786
+9   Black/African American          1   70-80        3953     0       3953
+10  Black/African American          1      80        1664     0       1664
+11  Black/African American          2   40-50        9174     1      18348
+12  Black/African American          2   50-60        7133     1      14266
+13  Black/African American          2   60-70        5420     1      10840
+14  Black/African American          2   70-80        2911     1       5822
+15  Black/African American          2      80        1214     1       2428
+16  Black/African American          3   40-50        7678     2      23034
+17  Black/African American          3   50-60        5777     2      17331
+18  Black/African American          3   60-70        4001     2      12003
+19  Black/African American          3   70-80        2192     2       6576
+20  Black/African American          3      80         916     2       2748
+21  Black/African American          4   40-50        5863     3      23452
+22  Black/African American          4   50-60        4653     3      18612
+23  Black/African American          4   60-70        3054     3      12216
+24  Black/African American          4   70-80        1661     3       6644
+25  Black/African American          4      80         782     3       3128
+26  Black/African American          5   40-50        4259     4      21295
+27  Black/African American          5   50-60        3323     4      16615
+28  Black/African American          5   60-70        2391     4      11955
+29  Black/African American          5   70-80        1222     4       6110
+30  Black/African American          5      80         516     4       2580
+31  Black/African American          6   40-50        3095     5      18570
+32  Black/African American          6   50-60        2687     5      16122
+33  Black/African American          6   60-70        1803     5      10818
+34  Black/African American          6   70-80         996     5       5976
+35  Black/African American          6      80         437     5       2622
+36  Black/African American          7   40-50        2332     6      16324
+37  Black/African American          7   50-60        2023     6      14161
+38  Black/African American          7   60-70        1451     6      10157
+39  Black/African American          7   70-80         825     6       5775
+40  Black/African American          7      80         377     6       2639
+41  Black/African American          8   40-50        1669     7      13352
+42  Black/African American          8   50-60        1636     7      13088
+43  Black/African American          8   60-70        1149     7       9192
+44  Black/African American          8   70-80         643     7       5144
+45  Black/African American          8      80         298     7       2384
+46  Black/African American          9   40-50        1085     8       9765
+47  Black/African American          9   50-60        1170     8      10530
+48  Black/African American          9   60-70         861     8       7749
+49  Black/African American          9   70-80         509     8       4581
+50  Black/African American          9      80         232     8       2088
+51  Black/African American         10   40-50         844     9       8440
+52  Black/African American         10   50-60         841     9       8410
+53  Black/African American         10   60-70         735     9       7350
+54  Black/African American         10   70-80         425     9       4250
+55  Black/African American         10      80         205     9       2050
+56  Black/African American         11   40-50         516    10       5676
+57  Black/African American         11   50-60         538    10       5918
+58  Black/African American         11   60-70         464    10       5104
+59  Black/African American         11   70-80         274    10       3014
+60  Black/African American         11      80         118    10       1298
+61  Black/African American         12   40-50         968    11      11616
+62  Black/African American         12   50-60        1112    11      13344
+63  Black/African American         12   60-70        1061    11      12732
+64  Black/African American         12   70-80         668    11       8016
+65  Black/African American         12      80         336    11       4032
+66                   White          0   40-50       63463    -1          0
+67                   White          0   50-60       76528    -1          0
+68                   White          0   60-70       77238    -1          0
+69                   White          0   70-80       58261    -1          0
+70                   White          0      80       29032    -1          0
+71                   White          1   40-50       63238     0      63238
+72                   White          1   50-60       68858     0      68858
+73                   White          1   60-70       64498     0      64498
+74                   White          1   70-80       45087     0      45087
+75                   White          1      80       20918     0      20918
+76                   White          2   40-50      131141     1     262282
+77                   White          2   50-60      116440     1     232880
+78                   White          2   60-70       93330     1     186660
+79                   White          2   70-80       59718     1     119436
+80                   White          2      80       26113     1      52226
+81                   White          3   40-50       99738     2     299214
+82                   White          3   50-60       88944     2     266832
+83                   White          3   60-70       66651     2     199953
+84                   White          3   70-80       41169     2     123507
+85                   White          3      80       18053     2      54159
+86                   White          4   40-50       57565     3     230260
+87                   White          4   50-60       53793     3     215172
+88                   White          4   60-70       40166     3     160664
+89                   White          4   70-80       25589     3     102356
+90                   White          4      80       11857     3      47428
+91                   White          5   40-50       28227     4     141135
+92                   White          5   50-60       28366     4     141830
+93                   White          5   60-70       22377     4     111885
+94                   White          5   70-80       15367     4      76835
+95                   White          5      80        7545     4      37725
+96                   White          6   40-50       14389     5      86334
+97                   White          6   50-60       14849     5      89094
+98                   White          6   60-70       13114     5      78684
+99                   White          6   70-80        9537     5      57222
+100                  White          6      80        5085     5      30510
+101                  White          7   40-50        7101     6      49707
+102                  White          7   50-60        8218     6      57526
+103                  White          7   60-70        7425     6      51975
+104                  White          7   70-80        5990     6      41930
+105                  White          7      80        3421     6      23947
+106                  White          8   40-50        3803     7      30424
+107                  White          8   50-60        4786     7      38288
+108                  White          8   60-70        4859     7      38872
+109                  White          8   70-80        4359     7      34872
+110                  White          8      80        2598     7      20784
+111                  White          9   40-50        2128     8      19152
+112                  White          9   50-60        2698     8      24282
+113                  White          9   60-70        3078     8      27702
+114                  White          9   70-80        2875     8      25875
+115                  White          9      80        1683     8      15147
+116                  White         10   40-50        1214     9      12140
+117                  White         10   50-60        1728     9      17280
+118                  White         10   60-70        2103     9      21030
+119                  White         10   70-80        1935     9      19350
+120                  White         10      80        1261     9      12610
+121                  White         11   40-50         665    10       7315
+122                  White         11   50-60         974    10      10714
+123                  White         11   60-70        1145    10      12595
+124                  White         11   70-80        1242    10      13662
+125                  White         11      80         716    10       7876
+126                  White         12   40-50         846    11      10152
+127                  White         12   50-60        1390    11      16680
+128                  White         12   60-70        1762    11      21144
+129                  White         12   70-80        1579    11      18948
+130                  White         12      80         929    11      11148
+      color
+1   #E41A1C
+2   #E41A1C
+3   #E41A1C
+4   #E41A1C
+5   #E41A1C
+6   #377EB8
+7   #377EB8
+8   #377EB8
+9   #377EB8
+10  #377EB8
+11  #4DAF4A
+12  #4DAF4A
+13  #4DAF4A
+14  #4DAF4A
+15  #4DAF4A
+16  #984EA3
+17  #984EA3
+18  #984EA3
+19  #984EA3
+20  #984EA3
+21  #FF7F00
+22  #FF7F00
+23  #FF7F00
+24  #FF7F00
+25  #FF7F00
+26  #FFFF33
+27  #FFFF33
+28  #FFFF33
+29  #FFFF33
+30  #FFFF33
+31  #A65628
+32  #A65628
+33  #A65628
+34  #A65628
+35  #A65628
+36  #F781BF
+37  #F781BF
+38  #F781BF
+39  #F781BF
+40  #F781BF
+41  #999999
+42  #999999
+43  #999999
+44  #999999
+45  #999999
+46  #66C2A5
+47  #66C2A5
+48  #66C2A5
+49  #66C2A5
+50  #66C2A5
+51  #FC8D62
+52  #FC8D62
+53  #FC8D62
+54  #FC8D62
+55  #FC8D62
+56  #8DA0CB
+57  #8DA0CB
+58  #8DA0CB
+59  #8DA0CB
+60  #8DA0CB
+61  #E78AC3
+62  #E78AC3
+63  #E78AC3
+64  #E78AC3
+65  #E78AC3
+66  #E41A1C
+67  #E41A1C
+68  #E41A1C
+69  #E41A1C
+70  #E41A1C
+71  #377EB8
+72  #377EB8
+73  #377EB8
+74  #377EB8
+75  #377EB8
+76  #4DAF4A
+77  #4DAF4A
+78  #4DAF4A
+79  #4DAF4A
+80  #4DAF4A
+81  #984EA3
+82  #984EA3
+83  #984EA3
+84  #984EA3
+85  #984EA3
+86  #FF7F00
+87  #FF7F00
+88  #FF7F00
+89  #FF7F00
+90  #FF7F00
+91  #FFFF33
+92  #FFFF33
+93  #FFFF33
+94  #FFFF33
+95  #FFFF33
+96  #A65628
+97  #A65628
+98  #A65628
+99  #A65628
+100 #A65628
+101 #F781BF
+102 #F781BF
+103 #F781BF
+104 #F781BF
+105 #F781BF
+106 #999999
+107 #999999
+108 #999999
+109 #999999
+110 #999999
+111 #66C2A5
+112 #66C2A5
+113 #66C2A5
+114 #66C2A5
+115 #66C2A5
+116 #FC8D62
+117 #FC8D62
+118 #FC8D62
+119 #FC8D62
+120 #FC8D62
+121 #8DA0CB
+122 #8DA0CB
+123 #8DA0CB
+124 #8DA0CB
+125 #8DA0CB
+126 #E78AC3
+127 #E78AC3
+128 #E78AC3
+129 #E78AC3
+130 #E78AC3</code></pre>
+<p><img src="figure/siblings_analysis.Rmd/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/siblings_analysis.Rmd/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">

@@ -149,6 +149,7 @@ df_long_white <- fert_df_white %>%
   )
 ```
 
+
 ```{r}
 ggplot(df_long_white, aes(x = x_axis, y = frequency, fill = color_order)) +
   geom_col() +
@@ -161,6 +162,92 @@ ggplot(df_long_white, aes(x = x_axis, y = frequency, fill = color_order)) +
                     guide = "legend") +
   scale_y_continuous(labels = comma_format(scale = 1, big.mark = ",")) +
   labs(title = "Distribution of Number of Children/Siblings by Census Year (White)",
+       x = "Number of Children/Siblings",
+       y = "Frequency") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "right",
+        plot.title = element_text(size = 12, hjust = 0.5))
+```
+
+
+
+```{r}
+fert_df2 <- mother_data %>% mutate(Age_bin = case_when(
+    AGE >= 20 & AGE < 30 ~ "20-30",
+    AGE >= 30 & AGE < 40 ~ "30-40",
+    AGE >= 40 & AGE < 50 ~ "40-50",
+    AGE >= 50 & AGE < 60 ~ "50-60",
+    AGE >= 60 & AGE < 70 ~ "60-70",
+    AGE >= 70 & AGE < 80 ~ "70-80", 
+    AGE >= 80 ~ "80"
+  ))
+
+fert_df2 <- fert_df2 %>%count(RACE, chborn_num, Age_bin) %>%
+  arrange(RACE, chborn_num, Age_bin) %>%
+  mutate(n_sib = chborn_num -1, freq_n_sib = n * chborn_num, 
+         color = color_mapping[as.character(chborn_num)], 
+         ) %>% rename(freq_mother = n)
+
+print(fert_df2)
+```
+
+
+```{r}
+fert_df2_black <- fert_df2 %>% filter(RACE == "Black/African American")
+fert_df2_white <- fert_df2 %>% filter(RACE == "White")
+
+df_long_black2 <- fert_df2_black %>%
+  pivot_longer(cols = c(freq_mother, freq_n_sib),
+               names_to = "frequency_type",
+               values_to = "frequency") %>%
+  mutate(x_axis = ifelse(frequency_type == "freq_mother", chborn_num, n_sib), 
+         color.label = paste(chborn_num, "_kids"," ", n_sib, "_sibs", sep = ""), 
+         color_order = factor(chborn_num, levels = unique_chborn_num)
+  )
+
+df_long_white2 <- fert_df2_white %>%
+  pivot_longer(cols = c(freq_mother, freq_n_sib),
+               names_to = "frequency_type",
+               values_to = "frequency") %>%
+  mutate(x_axis = ifelse(frequency_type == "freq_mother", chborn_num, n_sib), 
+         color.label = paste(chborn_num, "_kids"," ", n_sib, "_sibs", sep = ""), 
+         color_order = factor(chborn_num, levels = unique_chborn_num)
+  )
+```
+
+```{r}
+ggplot(df_long_black2, aes(x = x_axis, y = frequency, fill = color_order)) +
+  geom_col() +
+  facet_grid(frequency_type ~ Age_bin, 
+             labeller = labeller(frequency_type = c("freq_mother" = "Number of Children Born", "freq_n_sib" = "Number of Siblings"), 
+                        Age_bin = function(x) paste("Age_bin", x))) +
+  scale_fill_manual(name = "Number of Children/Siblings",
+                    values = color_mapping,
+                    labels = unique(df_long_black2$color.label),
+                    guide = "legend") +
+  scale_y_continuous(labels = comma_format(scale = 1, big.mark = ",")) +
+  labs(title = "Distribution of Number of Children/Siblings by Age (Balck/African American)",
+       x = "Number of Children/Siblings",
+       y = "Frequency") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "right",
+        plot.title = element_text(size = 12, hjust = 0.5))
+```
+
+```{r}
+ggplot(df_long_white2, aes(x = x_axis, y = frequency, fill = color_order)) +
+  geom_col() +
+  facet_grid(frequency_type ~ Age_bin, 
+             labeller = labeller(frequency_type = c("freq_mother" = "Number of Children Born", "freq_n_sib" = "Number of Siblings"), 
+                        Age_bin = function(x) paste("Age_bin", x))) +
+  scale_fill_manual(name = "Number of Children/Siblings",
+                    values = color_mapping,
+                    labels = unique(df_long_white2$color.label),
+                    guide = "legend") +
+  scale_y_continuous(labels = comma_format(scale = 1, big.mark = ",")) +
+  labs(title = "Distribution of Number of Children/Siblings by Age (White)",
        x = "Number of Children/Siblings",
        y = "Frequency") +
   theme_minimal() +
