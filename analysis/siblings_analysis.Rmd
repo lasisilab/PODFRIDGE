@@ -73,19 +73,20 @@ $$
 eg.Suppose 10 mothers (generation 0) has 7 children, then there will be 70 children (generation 1) in total who has 6 siblings. 
 ```{r}
 colors <- c(
-  "#E41A1C",  # Red
-  "#377EB8",  # Blue
-  "#4DAF4A",  # Green
-  "#984EA3",  # Purple
-  "#FF7F00",  # Orange
-  "#FFFF33",  # Yellow
-  "#A65628",  # Brown
-  "#F781BF",  # Pink
-  "#999999",  # Grey
+  "#8A9A5B",  # Sage
+  "#355E3B",  # Hunter Green
+  "#5F8575",  # Eucalyptus
   "#66C2A5",  # Teal
-  "#FC8D62",  # Salmon
-  "#8DA0CB",  # Light blue
-  "#E78AC3"   # Light pink
+  "#088F8F",  # Blue Green
+  "#b2d8d8",  # Robin Egg
+  "#93C572",  # Pistachio
+  "#454B1B",  # Army Green
+  "#5F9EA0",  # Cadet Blue
+  "#00A36C",  # Jade
+  "#9FE2BF",  # Seafoam
+  "#2E8B57",  # Sea Green
+  "#40B5AD"   # Verdigris
+
 )
 unique_chborn_num <- sort(unique(mother_data$chborn_num))
 color_mapping <- setNames(colors, unique_chborn_num)
