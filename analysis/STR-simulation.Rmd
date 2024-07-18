@@ -112,8 +112,9 @@ If both alleles do not match then $\kappa_2 / R_X^u = 0$.
 Flowchart
 
 ![](assets/STR_LR.png)
+## Likelihood ratio funtion
 
-```{r}
+```{r echo=TRUE}
 calculate_likelihood_ratio <- function(shared_alleles, genotype_match = NULL, pA = NULL, pB = NULL, k0, k1, k2) {
 
   # Case 0: No Shared Alleles
@@ -207,27 +208,6 @@ get_lr_input_and_calculate <- function(row, allele_frequency_data) {
 
 ## Rscript for simulation
 
-1. **Initialization**: Load required R packages and set the working directory.
-
-2. **Parameter Configuration**: Input parameters for the number of simulations for unrelated and related pairs are specified, allowing adjustable sample sizes.
-
-3. **Data Preparation**: Aggregate CODIS allele frequency data from CSV files representing different populations into a single dataset.
-
-4. **IBD Probability Definitions**: Construct a table detailing the probabilities of sharing zero, one, or two alleles identical by descent (IBD) for various relationship types.
-
-5. **Allele Frequency Calculation**: Calculate allele frequencies within the population for each simulated pair to determine the likelihood of observing specific allele combinations.
-
-6. **Likelihood Ratio Computation**: Calculate likelihood ratios for each pair using allele frequencies and IBD probabilities, focusing on $R_{Xp}$ and $R_{Xu}$ values.
-
-7. **Simulation of Individual Pairs**: Generate alleles for individuals based on population-specific allele frequencies to simulate STR pairs.
-
-8. **Shared Allele Analysis**: Evaluate the number of alleles shared between pairs, categorizing them by their genetic relationship.
-
-9. **Aggregate Analysis and Visualization**: Summarize the results and generate visual representations, such as box plots and heatmaps, to illustrate the relationship between known and tested relationships across populations.
-
-10. **Result Exportation**: Export aggregated results as CSV files for further analysis.
-
-Due to the computational cost of simulating large numbers of STR pairs, the script has been run separately and we visualize the results below.
 
 ## Simulation results
 
