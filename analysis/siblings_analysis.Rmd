@@ -7,11 +7,11 @@ editor_options:
   chunk_output_type: console
 ---
 
-#Introduction
+# Introduction
 
 The sibling analysis aims to provide an overview of pattern about family size. By examining the number of children a mother has and its relationship with the number of sibling each individual has, we know the number of first degree relatives each individual has. Therefore, it is helpful to predict the probability of individual to be detected in the forensic database. 
 
-#Data Exploration
+# Data Exploration
 ```{r setup, include=FALSE, echo=FALSE}
 #knitr::opts_knit$set(root.dir = ".")
 knitr::opts_chunk$set(eval = TRUE, echo = FALSE, warning = FALSE, fig.width = 7, fig.height = 6)
@@ -46,7 +46,7 @@ $$
 \text{freq}_{n_{\text{sib}}} = \text{freq}_{\text{mother}} \cdot \text{chborn}_{\text{num}}
 $$
 
-eg.Suppose 10 mothers (generation 0) has 7 children, then there will be 70 children (generation 1) in total who has 6 siblings.
+For example: Suppose 10 mothers (generation 0) has 7 children, then there will be 70 children (generation 1) in total who has 6 siblings.
 
 ```{r}
 fert_df <- mother_data %>%
