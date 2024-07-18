@@ -7,6 +7,11 @@ editor_options:
   chunk_output_type: console
 ---
 
+#Introduction
+
+The sibling analysis aims to provide an overview of pattern about family size. By examining the number of children a mother has and its relationship with the number of sibling each individual has, we know the number of first degree relatives each individual has. Therefore, it is helpful to predict the probability of individual to be detected in the forensic database. 
+
+#Data Exploration
 ```{r setup, include=FALSE, echo=FALSE}
 #knitr::opts_knit$set(root.dir = ".")
 knitr::opts_chunk$set(eval = TRUE, echo = FALSE, warning = FALSE, fig.width = 7, fig.height = 6)
@@ -21,6 +26,7 @@ library(viridis)
 library(dplyr)
 library(knitr)
 library(scales)
+library(rempsyc)
 ```
 
 
@@ -30,12 +36,56 @@ mother_data = read.csv("./data/data_filtered_recoded.csv")
 ```
 
 
+## Frequency of Number of Children & Sibling of Black/African American
+Here, we are trying to create a frequency table for each race to show the number of children born, the number of mother who has "chborn_num" children, the number of sibling, and the number of individuals who has "n_sib" siblings. 
+$$
+n_{sib} = chborn_{num} - 1
+$$
+
+$$
+\text{freq}_{n_{\text{sib}}} = \text{freq}_{\text{mother}} \cdot \text{chborn}_{\text{num}}
+$$
+
+eg.Suppose 10 mothers (generation 0) has 7 children, then there will be 70 children (generation 1) in total who has 6 siblings.
+
+```{r}
+fert_df <- mother_data %>%
+  count(RACE, YEAR, chborn_num) %>%
+  arrange(RACE, YEAR, chborn_num) %>% 
+  mutate(chborn_num = chborn_num, 
+    n_sib = as.integer(if_else(chborn_num == 0, 0, chborn_num - 1)),
+    freq_n_sib = n * chborn_num) %>%
+  rename(freq_mother = n)
+
+nice_table(
+  fert_df[fert_df$RACE == "Black/African American", ],
+  title = c("Table 1", "Probability of each Number of Sibling of Black/African American"),
+  note = c(
+    "We can see"
+  )
+)
+```
+
+## Frequency of Number of Children & Sibling of White
+
+```{r}
+nice_table(
+  fert_df[fert_df$RACE == "White", ],
+  title = c("Table 2", "Probability of each Number of Sibling of White"),
+  note = c(
+    "We can see"
+  )
+)
+```
+
+
 ```{r chidren, results = FALSE,warning=FALSE,message=FALSE}
 ggplot(data = children_data,aes(x=chborn_num,y=proportion)) +
   geom_col(position = position_dodge()) +
   facet_grid(RACE~YEAR) + theme_classic()
 ```
 
+# Data Visualization
 ```{r,warning=FALSE,out.width="100%"}
 mother_data <- mother_data %>% mutate(id = row_number())
 child_df = as.data.frame(rep(mother_data$id,mother_data$chborn_num))
@@ -54,23 +104,12 @@ ggplot(data = child_df_gb, aes(x = nsib, y = prob)) +
   facet_wrap(~RACE) + theme_classic()
 ```
 
-# Probability of a person of each race having each number of siblings
+## Probability of a person of each race having each number of siblings
 ```{r,warning=FALSE,results='asis'}
 colnames(child_df_gb) = c("Race","Number of Siblings","Count",'Probability')
-kable(child_df_gb[,c(1,2,4)])
 ```
 
-Here, we are trying to create a frequency table to show the number of children born, the number of mother who has "chborn_num" children, the number of sibling, and the number of individuals who has "n_sib" siblings. 
-
-$$
-n_{sib} = chborn_{num} - 1
-$$
-
-$$
-\text{freq}_{n_{\text{sib}}} = \text{freq}_{\text{mother}} \cdot \text{chborn}_{\text{num}}
-$$
-
-eg.Suppose 10 mothers (generation 0) has 7 children, then there will be 70 children (generation 1) in total who has 6 siblings. 
+ 
 ```{r}
 colors <- c(
   "#E41A1C",  # Red
