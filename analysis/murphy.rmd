@@ -7,9 +7,20 @@ editor_options:
   chunk_output_type: console
 ---
 
-## Introduction
-hello
+## Database of Murphy Data
 ```{r}
 library(tidyverse)
+library(readr)
+library(knitr)
+```
+
+
+```{r}
+murphy_appendix <- read_csv("data/murphy_appendix.csv")
+```
+
+
+```{r}
+kable(murphy_appendix)
 ```
 
