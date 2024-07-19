@@ -12,6 +12,7 @@ editor_options:
 The sibling analysis aims to provide an overview of pattern about family size. By examining the number of children a mother has and its relationship with the number of sibling each individual has, we know the number of first degree relatives each individual has. Therefore, it is helpful to predict the probability of individual to be detected in the forensic database. 
 
 # Data Exploration
+
 ```{r setup, include=FALSE, echo=FALSE}
 #knitr::opts_knit$set(root.dir = ".")
 knitr::opts_chunk$set(eval = TRUE, echo = FALSE, warning = FALSE, fig.width = 7, fig.height = 6)
@@ -36,8 +37,8 @@ mother_data = read.csv("./data/data_filtered_recoded.csv")
 ```
 
 
-## Frequency of Number of Children & Sibling of Black/African American
-Here, we are trying to create a frequency table for each race to show the number of children born, the number of mother who has "chborn_num" children, the number of sibling, and the number of individuals who has "n_sib" siblings. 
+## 1.Frequency of Number of Children & Sibling of Black/African American by Census Year
+Here, we are trying to create frequency tables for each race to show the number of children born, the number of mother who has "chborn_num" children, the number of sibling, and the number of individuals who has "n_sib" siblings. 
 $$
 n_{sib} = chborn_{num} - 1
 $$
@@ -63,7 +64,8 @@ nice_table(
 )
 ```
 
-## Frequency of Number of Children & Sibling of White
+## 2.Frequency of Number of Children & Sibling of White by Census Year
+
 ```{r}
 nice_table(
   fert_df[fert_df$RACE == "White", ],
@@ -72,7 +74,8 @@ nice_table(
 ```
 
 
-## Summary Statistics of Number of Sibling of Black/African American
+## 3.Summary Statistics of Number of Sibling of Black/African American
+
 ```{r}
 fert_df_sum <- fert_df%>%group_by(RACE, YEAR) %>%
   summarise(
@@ -88,7 +91,7 @@ nice_table(
 ```
 
 
-## Summary Statistics of Number of Sibling of White
+## 4.Summary Statistics of Number of Sibling of White
 
 ```{r}
 nice_table(
@@ -97,6 +100,7 @@ nice_table(
 )
 ```
 
+# Data Visualization
 
 ```{r chidren, results = FALSE,warning=FALSE,message=FALSE}
 ggplot(data = children_data,aes(x=chborn_num,y=proportion)) +
@@ -104,7 +108,6 @@ ggplot(data = children_data,aes(x=chborn_num,y=proportion)) +
   facet_grid(RACE~YEAR) + theme_classic()
 ```
 
-# Data Visualization
 ```{r,warning=FALSE,out.width="100%"}
 mother_data <- mother_data %>% mutate(id = row_number())
 child_df = as.data.frame(rep(mother_data$id,mother_data$chborn_num))
@@ -123,7 +126,8 @@ ggplot(data = child_df_gb, aes(x = nsib, y = prob)) +
   facet_wrap(~RACE) + theme_classic()
 ```
 
- 
+## Distribution of Number of Children/Siblings by Census Year (Black/African American)
+
 ```{r}
 colors <- c(
   "#8A9A5B",  # Sage
@@ -151,7 +155,7 @@ fert_df <- mother_data %>%
          color = color_mapping[as.character(chborn_num)]) %>%
   rename(freq_mother = n)
 
-print(fert_df)
+#print(fert_df)
 ```
 
 ```{r}
@@ -191,6 +195,8 @@ ggplot(df_long_black, aes(x = x_axis, y = frequency, fill = color_order)) +
 ```
 
 
+## Distribution of Number of Children/Siblings by Census Year (Black/African American)
+
 ```{r}
 df_long_white <- fert_df_white %>%
    pivot_longer(cols = c(freq_mother, freq_n_sib),
@@ -224,6 +230,7 @@ ggplot(df_long_white, aes(x = x_axis, y = frequency, fill = color_order)) +
 ```
 
 
+## Distribution of Number of Children/Siblings by Age (Balck/African American)
 
 ```{r}
 fert_df2 <- mother_data %>% mutate(Age_bin = case_when(
@@ -236,13 +243,13 @@ fert_df2 <- mother_data %>% mutate(Age_bin = case_when(
     AGE >= 80 ~ "80"
   ))
 
-fert_df2 <- fert_df2 %>%count(RACE, chborn_num, Age_bin) %>%
-  arrange(RACE, chborn_num, Age_bin) %>%
+fert_df2 <- fert_df2 %>%count(RACE, chborn_num, Age_bin, YEAR) %>%
+  arrange(RACE, chborn_num, Age_bin, YEAR) %>%
   mutate(n_sib = chborn_num -1, freq_n_sib = n * chborn_num, 
          color = color_mapping[as.character(chborn_num)], 
          ) %>% rename(freq_mother = n)
 
-print(fert_df2)
+#print(fert_df2)
 ```
 
 
@@ -288,6 +295,9 @@ ggplot(df_long_black2, aes(x = x_axis, y = frequency, fill = color_order)) +
         legend.position = "right",
         plot.title = element_text(size = 12, hjust = 0.5))
 ```
+
+
+## Distribution of Number of Children/Siblings by Age (White)
 
 ```{r}
 ggplot(df_long_white2, aes(x = x_axis, y = frequency, fill = color_order)) +
