@@ -1,5 +1,5 @@
 ---
-title: "Siblings analysis"
+title: "Sibling analysis"
 author: "Manqing Lin"
 date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
 output: workflowr::wflow_html
@@ -9,7 +9,7 @@ editor_options:
 
 # Introduction
 
-The sibling analysis aims to provide an overview of pattern about family size. By examining the number of children a mother has and its relationship with the number of sibling each individual has, we know the number of first degree relatives each individual has. Therefore, it is helpful to predict the probability of individual to be detected in the forensic database. 
+Our sibling analysis provides an overview of family size, examining the number of children a mother has and its relationship with the number of sibling each individual has. This tells us the number of first degree relatives each individual has, helping to predict the probability that an individual will be detected in the forensic database.
 
 # Data Exploration
 ```{r setup, include=FALSE, echo=FALSE}
@@ -36,17 +36,19 @@ mother_data = read.csv("./data/data_filtered_recoded.csv")
 ```
 
 
-## Frequency of Number of Children & Sibling of Black/African American
-Here, we are trying to create a frequency table for each race to show the number of children born, the number of mother who has "chborn_num" children, the number of sibling, and the number of individuals who has "n_sib" siblings. 
+Here, we are trying to create a frequency table for each race to show the number of children born, the number of mothers who have "chborn_num" children, the number of siblings, and the number of individuals who have "n_sib" siblings. 
 $$
 n_{sib} = chborn_{num} - 1
 $$
+
 
 $$
 \text{freq}_{n_{\text{sib}}} = \text{freq}_{\text{mother}} \cdot \text{chborn}_{\text{num}}
 $$
 
-For example: Suppose 10 mothers (generation 0) has 7 children, then there will be 70 children (generation 1) in total who has 6 siblings.
+For example, suppose 10 mothers (generation 0) have 7 children, then there will be 70 children (generation 1) in total who each have 6 siblings.
+
+## Frequency of Number of Children & Siblings of Black/African American Population
 
 ```{r}
 fert_df <- mother_data %>%
@@ -59,20 +61,20 @@ fert_df <- mother_data %>%
 
 nice_table(
   fert_df[fert_df$RACE == "Black/African American", ],
-  title = c("Table 1", "Frequency of each Number of Children & Sibling of Black/African American")
+  title = c("Table 1", "Frequency of Number of Children & Siblings of Black/African American Population")
 )
 ```
 
-## Frequency of Number of Children & Sibling of White
+## Frequency of Number of Children & Siblings of White Population
 ```{r}
 nice_table(
   fert_df[fert_df$RACE == "White", ],
-  title = c("Table 2", "Frequency of each Number of Children & Sibling of White")
+  title = c("Table 2", "Frequency of Number of Children & Siblings of White Population")
 )
 ```
 
 
-## Summary Statistics of Number of Sibling of Black/African American
+## Summary Statistics of Number of Siblings of Black/African American Population
 ```{r}
 fert_df_sum <- fert_df%>%group_by(RACE, YEAR) %>%
   summarise(
@@ -83,17 +85,17 @@ fert_df_sum <- fert_df%>%group_by(RACE, YEAR) %>%
 
 nice_table(
   fert_df_sum[fert_df_sum$RACE == "Black/African American", ],
-  title = c("Table 3", "Summary Statistics of each Number of Sibling of Black/African American")
+  title = c("Table 3", "Summary Statistics of Number of Siblings of Black/African American Population")
 )
 ```
 
 
-## Summary Statistics of Number of Sibling of White
+## Summary Statistics of Number of Siblings of White Population
 
 ```{r}
 nice_table(
   fert_df_sum[fert_df_sum$RACE == "White", ],
-  title = c("Table 4", "Summary Statistics of each Number of Sibling of White")
+  title = c("Table 4", "Summary Statistics of Number of Siblings of White Population")
 )
 ```
 
@@ -126,20 +128,19 @@ ggplot(data = child_df_gb, aes(x = nsib, y = prob)) +
  
 ```{r}
 colors <- c(
-  "#8A9A5B",  # Sage
-  "#355E3B",  # Hunter Green
-  "#5F8575",  # Eucalyptus
-  "#66C2A5",  # Teal
-  "#088F8F",  # Blue Green
   "#b2d8d8",  # Robin Egg
-  "#93C572",  # Pistachio
-  "#454B1B",  # Army Green
-  "#5F9EA0",  # Cadet Blue
-  "#00A36C",  # Jade
   "#9FE2BF",  # Seafoam
+  "#93C572",  # Pistachio
+  "#66C2A5",  # Teal
+  "#00A36C",  # Jade
+  "#40B5AD",  # Verdigris
+  "#088F8F",  # Blue Green
+  "#5F9EA0",  # Cadet Blue
+  "#5F8575",  # Eucalyptus
+  "#8A9A5B",  # Sage
   "#2E8B57",  # Sea Green
-  "#40B5AD"   # Verdigris
-
+  "#454B1B",  # Army Green
+  "#355E3B"  # Hunter Green
 )
 unique_chborn_num <- sort(unique(mother_data$chborn_num))
 color_mapping <- setNames(colors, unique_chborn_num)
