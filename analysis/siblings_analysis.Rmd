@@ -121,11 +121,18 @@ nice_table(
 
 # Data Visualization
 
+## 1.Distribution of Number of Children by Census Year for each Race
 ```{r chidren, results = FALSE,warning=FALSE,message=FALSE}
 ggplot(data = children_data,aes(x=chborn_num,y=proportion)) +
-  geom_col(position = position_dodge()) +
-  facet_grid(RACE~YEAR) + theme_classic()
+  geom_col(position = position_dodge()) + 
+  labs(title = "Distribution of Number of Children by Census Year for each Race") +
+  facet_grid(RACE~YEAR) + theme_classic()+
+  theme(plot.margin = unit(c(1, 1, 1, 1), "cm"), 
+        plot.title = element_text(size = 10, hjust = 0.5))
 ```
+
+
+## 2.Distribution of Number of Sibling by Census Year for each Race
 
 ```{r,warning=FALSE,out.width="100%"}
 mother_data <- mother_data %>% mutate(id = row_number())
@@ -135,17 +142,19 @@ child_df = merge(child_df,mother_data,by="id")
 child_df$nsib = child_df$chborn_num - 1
 
 child_df_gb = child_df %>%
-  group_by(RACE,nsib) %>%
+  group_by(RACE,nsib, YEAR) %>%
   summarise(count = n()) 
 
 child_df_gb$prob = ifelse(child_df_gb$RACE == "White",child_df_gb$count/4380009, child_df_gb$count/547692)
 
 ggplot(data = child_df_gb, aes(x = nsib, y = prob)) +
-  geom_col(position = position_dodge()) +
-  facet_wrap(~RACE) + theme_classic()
+  geom_col(position = position_dodge()) + 
+  labs(title = "Distribution of Number of Sibling by Census Year for each Race") +
+  facet_wrap(RACE~YEAR) + theme_classic()
 ```
 
-## Distribution of Number of Children/Siblings by Census Year (Black/African American)
+
+## 3.Distribution of Number of Children/Siblings by Census Year (Black/African American)
 
 ```{r}
 colors <- c(
@@ -213,7 +222,7 @@ ggplot(df_long_black, aes(x = x_axis, y = frequency, fill = color_order)) +
 ```
 
 
-## Distribution of Number of Children/Siblings by Census Year (Black/African American)
+## 4.Distribution of Number of Children/Siblings by Census Year (Black/African American)
 
 ```{r}
 df_long_white <- fert_df_white %>%
@@ -248,7 +257,7 @@ ggplot(df_long_white, aes(x = x_axis, y = frequency, fill = color_order)) +
 ```
 
 
-## Distribution of Number of Children/Siblings by Age (Balck/African American)
+## 5.Distribution of Number of Children/Siblings by Age (Balck/African American)
 
 ```{r}
 fert_df2 <- mother_data %>% mutate(Age_bin = case_when(
@@ -315,7 +324,7 @@ ggplot(df_long_black2, aes(x = x_axis, y = frequency, fill = color_order)) +
 ```
 
 
-## Distribution of Number of Children/Siblings by Age (White)
+## 6.Distribution of Number of Children/Siblings by Age (White)
 
 ```{r}
 ggplot(df_long_white2, aes(x = x_axis, y = frequency, fill = color_order)) +
