@@ -279,6 +279,71 @@ populations <- c("all", "AfAm", "Cauc", "Hispanic", "Asian")
 print(populations)
 ```
 
+Now we can test the simulation setup function:### Step 1: Simulation Setup
+
+The first step is to set up the simulation by defining the parameters and functions required for generating the simulated data. This includes specifying the population size, allele frequencies, and the kinship matrix for likelihood ratio calculations. The simulation will generate pairs of individuals with known relationships (e.g., parent-child, siblings) and unknown relationships (unrelated) based on the specified parameters.
+
+
+```{r echo=TRUE}
+
+generate_simulation_setup <- function(kinship_matrix, population_list, num_related, num_unrelated) {
+  # Create an empty dataframe to store the simulation setup
+  simulation_setup <- data.frame(
+    population = character(),
+    relationship_type = character(),
+    num_simulations = integer(),
+    stringsAsFactors = FALSE
+  )
+  
+  # Loop through each population and relationship type to create the setup
+  for (population in population_list) {
+    for (relationship in kinship_matrix$relationship_type) {
+      num_simulations <- ifelse(relationship == "unrelated", num_unrelated, num_related)
+      
+      # Append to the simulation setup dataframe
+      simulation_setup <- rbind(simulation_setup, data.frame(
+        population = population,
+        relationship_type = relationship,
+        num_simulations = num_simulations
+      ))
+    }
+  }
+  
+  return(simulation_setup)
+}
+
+
+```
+
+The necessary parameters for this are initialized beforehand. 
+
+First, the kinship coefficients are provided in a matrix:
+
+```{r echo=TRUE}
+# Create a dataframe with relationship types and their respective kinship coefficients (k0, k1, k2)
+kinship_matrix <- tibble(
+    relationship_type =
+      c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated"),
+    k0 = c(0, 1/4, 1/2, 7/8, 15/16, 1),
+    k1 = c(1, 1/2, 1/2, 1/8, 1/16, 0),
+    k2 = c(0, 1/4, 0, 0, 0, 0)
+  )
+
+# Print the kinship matrix to check the contents
+print(kinship_matrix)
+
+```
+
+Then a list of populations is created:
+
+```{r}
+# Define the populations for the simulation
+
+populations <- c("all", "AfAm", "Cauc", "Hispanic", "Asian")
+
+print(populations)
+```
+
 Now we can test the simulation setup function:
 
 
@@ -406,6 +471,8 @@ print(individuals_genotypes)
 
 ```
 
+
+### Step 3: Simulate Genotypes
 ```{r}
 simulate_genotypes <- function(row, df_allelefreq, kinship_matrix) {
   population <- row$population
@@ -454,6 +521,7 @@ simulate_genotypes <- function(row, df_allelefreq, kinship_matrix) {
 
 ```
 
+### Step 4: Calculate Kinship
 ```{r}
 kinship_calculation <- function(row, allele_frequency_data, kinship_matrix) {
   # Step 1: Extract alleles directly from the row
@@ -594,8 +662,8 @@ print(final_output)
 
 
 ```{r}
-# Combined function to simulate genotypes and calculate kinship
-process_row <- function(row, allele_frequency_data, kinship_matrix) {
+# Function to simulate genotypes and calculate kinship for each row
+process_loci <- function(row, allele_frequency_data, kinship_matrix) {
   simulated_row <- simulate_genotypes(row, allele_frequency_data, kinship_matrix)
   final_row <- kinship_calculation(simulated_row, allele_frequency_data, kinship_matrix)
   return(final_row)
@@ -605,7 +673,457 @@ process_row <- function(row, allele_frequency_data, kinship_matrix) {
 ```{r}
 # Apply the combined function to each row and update the dataframe
 for (i in 1:nrow(individuals_genotypes)) {
-  individuals_genotypes[i, ] <- process_row(individuals_genotypes[i, ], df_allelefreq, kinship_matrix)
+  individuals_genotypes[i, ] <- process_loci(individuals_genotypes[i, ], df_allelefreq, kinship_matrix)
+}
+
+# Print the final output to check the updated allele values and computed likelihood ratio
+print(individuals_genotypes)
+```
+
+
+```{r}
+# Set up parallel processing plan
+plan(multisession, workers = parallel::detectCores() - 1)
+set.seed(123)
+```
+
+```{r}
+
+# Function for the list of rows approach
+list_of_rows_approach <- function(individuals_genotypes, df_allelefreq, kinship_matrix) {
+  rows_list <- split(individuals_genotypes, seq(nrow(individuals_genotypes)))
+  final_rows_list <- future_map(rows_list, ~process_loci(.x, df_allelefreq, kinship_matrix), seed = TRUE)
+  final_individuals_genotypes <- bind_rows(final_rows_list)
+  return(final_individuals_genotypes)
+}
+
+# Function for the future_pmap approach
+future_pmap_approach <- function(individuals_genotypes, df_allelefreq, kinship_matrix) {
+  final_individuals_genotypes <- individuals_genotypes %>%
+    future_pmap(~ process_loci(list(...), df_allelefreq, kinship_matrix), seed = TRUE) %>%
+    bind_rows()
+  return(final_individuals_genotypes)
+}
+
+```
+
+```{r}
+# Measure the execution time using system.time() for list_of_rows_approach
+list_of_rows_time <- system.time({
+  list_of_rows_result <- list_of_rows_approach(individuals_genotypes, df_allelefreq, kinship_matrix)
+})
+
+# Print the execution time
+cat("Execution time for list_of_rows_approach:\n")
+print(list_of_rows_time)
+
+# Measure the execution time using system.time() for future_pmap_approach
+future_pmap_time <- system.time({
+  future_pmap_result <- future_pmap_approach(individuals_genotypes, df_allelefreq, kinship_matrix)
+})
+
+# Print the execution time
+cat("Execution time for future_pmap_approach:\n")
+print(future_pmap_time)
+
+# Benchmark both approaches using microbenchmark
+benchmark_results <- microbenchmark(
+  list_of_rows = list_of_rows_approach(individuals_genotypes, df_allelefreq, kinship_matrix),
+  future_pmap = future_pmap_approach(individuals_genotypes, df_allelefreq, kinship_matrix),
+  times = 10  # Number of iterations
+)
+
+# Print the benchmark results
+cat("Benchmark results for both approaches:\n")
+print(benchmark_results)
+
+```
+
+
+```{r}
+
+# Function to process the individuals' genotypes dataframe
+process_individuals_genotypes <- function(individuals_genotypes, df_allelefreq, kinship_matrix) {
+  final_individuals_genotypes <- individuals_genotypes %>%
+    future_pmap(~ process_loci(list(...), df_allelefreq, kinship_matrix), seed = TRUE) %>%
+    bind_rows()
+  
+  return(final_individuals_genotypes)
+}
+
+
+```
+
+```{r}
+# Function to process the simulation setup and initialize + process individuals' genotypes
+process_simulation_setup <- function(simulation_setup, df_allelefreq, kinship_matrix, loci_list, output_file) {
+  # Set up parallel processing
+  plan(multisession, workers = parallel::detectCores() - 1)
+  set.seed(123)  # Set a seed for reproducibility
+  
+  # Process each simulation setup row
+  final_results <- simulation_setup %>%
+    future_pmap_dfr(function(population, relationship_type, num_simulations) {
+      purrr::map_dfr(1:num_simulations, function(sim_id) {
+        # Initialize individuals' genotypes
+        individuals_genotypes <- initialize_individuals_pair(population, relationship_type, sim_id, loci_list)
+        
+        # Process individuals' genotypes
+        processed_genotypes <- process_individuals_genotypes(individuals_genotypes, df_allelefreq, kinship_matrix)
+        
+        return(processed_genotypes)
+      })
+    }, .progress = TRUE)
+  
+  # Remove the `seed` column if it exists
+  if ("seed" %in% colnames(final_results)) {
+    final_results <- final_results %>% select(-seed)
+  }
+  
+  
+  # Save the result to a CSV file
+  write.csv(final_results, output_file, row.names = FALSE)
+  
+  return(final_results)
+}
+```
+
+
+```{r}
+# Example usage:
+final_df <- process_simulation_setup(simulation_setup, df_allelefreq, kinship_matrix, loci_list, "data/processed_genotypes.csv")
+
+```
+
+
+
+```{r}
+
+# Test the simulation setup function
+simulation_setup <- generate_simulation_setup(kinship_matrix, populations, 2,5)
+
+print(simulation_setup)
+
+```
+
+### Step 2: Initialize Individuals
+Once the general simulation setup is done, each pair of individuals must be initialized as its own dataframe. This requires knowing how many loci will be simulated per pair. We will therefore first extract the unique loci from our allele frequency tables.
+
+```{r}
+
+# load allele frequency tables
+# List all CSV files matching the pattern
+csv_files <- list.files(path = "data", pattern = "1036_.*\\.csv", full.names = TRUE)
+
+# Read and combine all CSV files
+df_allelefreq <- csv_files |>
+  purrr::map_dfr(readr::read_csv)
+
+# Print the combined dataframe to check
+print(df_allelefreq)
+
+# Save as CSV for future reference
+write_csv(df_allelefreq, "data/df_allelefreq.csv")
+
+```
+
+We will now extract the unique loci from the allele frequency tables:
+
+```{r}
+# Extract unique loci (marker) variables
+loci_list <- df_allelefreq |>
+  pull(marker) |>
+  unique()
+
+# Print loci_list to check
+print(loci_list)
+
+# Print the number of unique loci
+num_unique_loci <- length(loci_list)
+cat("Number of unique loci:", num_unique_loci, "\n")
+
+```
+
+These are the 29 autosomal loci from the 2013 and 2017 FSI paper on US STR allele frequencies for 29 autosomal STR loci [Steffen et al 2017](https://www.fsigenetics.com/article/S1872-4973(17)30180-1/fulltext).
+
+We will use the list of different required loci to calculate likelihood ratios for pairs of individuals. Below is a reference with which loci are used in various sets.
+
+```{r}
+
+core_loci <- read.csv("data/core_CODIS_loci.csv")
+
+core_loci
+
+# Column names for which we need to create lists of loci
+columns <- c("core_13", "identifiler_15", "expanded_20", "supplementary")
+
+# Create a named list where each element is a vector of loci for which the column value is 1
+loci_lists <- lapply(columns, function(col) {
+  core_loci |> 
+    filter(get(col) == 1) |> 
+    pull(locus)
+})
+
+# Set the names of the list elements to the column names
+names(loci_lists) <- columns
+
+# Add the loci_list as autosomal_29
+loci_lists$autosomal_29 <- loci_list
+
+# Display the result
+loci_lists
+
+```
+
+Now we can initialize the individuals:
+
+
+```{r}
+initialize_individuals_pair <- function(population, relationship_type, sim_id, loci_list) {
+  num_loci <- length(loci_list)
+  
+  # Create a dataframe to store the genotype information along with additional columns
+  # for the calculation of the likelihood ratio and other necessary metrics
+  individuals_genotypes <- data.frame(
+    population = rep(population, num_loci),
+    relationship_type = rep(relationship_type, num_loci),
+    sim_id = rep(sim_id, num_loci),
+    locus = loci_list,
+    ind1_allele1 = character(num_loci),
+    ind1_allele2 = character(num_loci),
+    ind2_allele1 = character(num_loci),
+    ind2_allele2 = character(num_loci),
+    shared_alleles = integer(num_loci),  # Initialize shared_alleles with integer default (0)
+    genotype_match = character(num_loci),  # Initialize genotype_match with blank characters
+    LR = numeric(num_loci),  # Initialize the LR column with numeric defaults (floating point)
+    stringsAsFactors = FALSE
+  )
+  
+  return(individuals_genotypes)
+}
+
+
+```
+
+```{r}
+# Assuming loci_list is already defined and contains the list of loci
+# Example usage:
+population <- "all"
+relationship_type <- "parent_child"
+sim_id <- 1
+
+# Initialize a single pair of individuals
+individuals_genotypes <- initialize_individuals_pair(population, relationship_type, sim_id, loci_list)
+
+# Print the initialized individuals
+print("Initialized individuals:")
+print(individuals_genotypes)
+
+```
+
+
+### Step 3: Simulate Genotypes
+```{r}
+simulate_genotypes <- function(row, df_allelefreq, kinship_matrix) {
+  population <- row$population
+  locus <- row$locus
+  relationship <- row$relationship_type
+
+  # Fetch allele frequencies for the current population and locus
+  allele_freqs <- df_allelefreq[df_allelefreq$population == population & df_allelefreq$marker == locus, ]
+
+  # Fetch kinship coefficients based on the relationship type
+  kinship_coeffs <- kinship_matrix[kinship_matrix$relationship_type == relationship, ]
+
+  # Extract alleles and their frequencies
+  alleles <- allele_freqs$allele
+  frequencies <- allele_freqs$frequency
+
+  # Simulate alleles for individual 1
+  ind1_alleles <- sample(alleles, size = 2, replace = TRUE, prob = frequencies)
+
+  # Determine the number of shared alleles using kinship coefficients
+  relationship_choice <- sample(c('none', 'one', 'both'), size = 1, prob = c(kinship_coeffs$k0, kinship_coeffs$k1, kinship_coeffs$k2))
+
+  # Simulate alleles for individual 2 based on the relationship choice
+  if (relationship_choice == 'none') {
+    ind2_alleles <- sample(alleles, size = 2, replace = TRUE, prob = frequencies)
+  } else if (relationship_choice == 'one') {
+    shared_allele <- sample(ind1_alleles, size = 1)
+    non_shared_allele <- sample(alleles, size = 1, prob = frequencies)
+    if (runif(1) > 0.5) {
+      ind2_alleles <- c(shared_allele, non_shared_allele)
+    } else {
+      ind2_alleles <- c(non_shared_allele, shared_allele)
+    }
+  } else if (relationship_choice == 'both') {
+    ind2_alleles <- ind1_alleles
+  }
+
+  # Return the updated row
+  row$ind1_allele1 <- ind1_alleles[1]
+  row$ind1_allele2 <- ind1_alleles[2]
+  row$ind2_allele1 <- ind2_alleles[1]
+  row$ind2_allele2 <- ind2_alleles[2]
+
+  return(row)
+}
+
+```
+
+### Step 4: Calculate Kinship
+```{r}
+kinship_calculation <- function(row, allele_frequency_data, kinship_matrix) {
+  # Step 1: Extract alleles directly from the row
+  alleles_ind1 <- c(row$ind1_allele1, row$ind1_allele2)
+  alleles_ind2 <- c(row$ind2_allele1, row$ind2_allele2)
+
+  # Step 2: Determine shared and unique alleles
+  shared_alleles_vector <- intersect(alleles_ind1, alleles_ind2)
+  unique_alleles_ind1 <- setdiff(alleles_ind1, shared_alleles_vector)
+  unique_alleles_ind2 <- setdiff(alleles_ind2, shared_alleles_vector)
+
+  # # Debugging prints
+  # print(paste("Alleles Ind1:", toString(alleles_ind1)))
+  # print(paste("Alleles Ind2:", toString(alleles_ind2)))
+  # print(paste("Shared Alleles Vector:", toString(shared_alleles_vector)))
+  # print(paste("Unique Alleles Ind1:", toString(unique_alleles_ind1)))
+  # print(paste("Unique Alleles Ind2:", toString(unique_alleles_ind2)))
+
+  # Step 3: Map alleles to letters
+  allele_map <- list()
+  next_label <- 1
+
+  # Map shared alleles first
+  for (allele in shared_alleles_vector) {
+    allele_map[[LETTERS[next_label]]] <- allele
+    next_label <- next_label + 1
+  }
+
+  # Map unique alleles from individual 1 next
+  for (allele in unique_alleles_ind1) {
+    if (!(allele %in% allele_map)) {
+      allele_map[[LETTERS[next_label]]] <- allele
+      next_label <- next_label + 1
+    }
+  }
+
+  # Map unique alleles from individual 2 last
+  for (allele in unique_alleles_ind2) {
+    if (!(allele %in% allele_map)) {
+      allele_map[[LETTERS[next_label]]] <- allele
+      next_label <- next_label + 1
+    }
+  }
+
+  # Convert list to named vector for easier access
+  allele_map <- unlist(allele_map)
+
+  # Debugging prints
+  # print(paste("Allele Map:", paste(names(allele_map), allele_map, sep = "=", collapse = ", ")))
+
+  # Step 4: Apply the map to individual alleles
+  labeled_alleles_ind1 <- sapply(as.character(alleles_ind1), function(x) names(allele_map)[which(allele_map == x)])
+  labeled_alleles_ind2 <- sapply(as.character(alleles_ind2), function(x) names(allele_map)[which(allele_map == x)])
+
+  # Calculate shared allele count
+  shared_alleles <- length(shared_alleles_vector)
+
+  # # Print intermediate values for debugging
+  # print(paste("Labeled Alleles Ind1:", toString(labeled_alleles_ind1)))
+  # print(paste("Labeled Alleles Ind2:", toString(labeled_alleles_ind2)))
+  # print(paste("Shared Alleles Count:", shared_alleles))
+
+  # Step 5: Construct genotype matches
+  genotype_ind1 <- paste(sort(labeled_alleles_ind1), collapse = "")
+  genotype_ind2 <- paste(sort(labeled_alleles_ind2), collapse = "")
+  genotype_match <- paste(genotype_ind1, genotype_ind2, sep = "-")
+
+  # Print genotype match for debugging
+  # print(paste("Genotype Match:", genotype_match))
+
+  # Step 6: Fetch allele frequencies
+  allele_freqs <- dplyr::filter(allele_frequency_data, population == row$population, marker == row$locus)
+  if (nrow(allele_freqs) == 0) {
+    stop("No allele frequencies found for the given population and locus.")
+  }
+
+  # Determine pA and pB based on the final map
+  A_allele <- ifelse("A" %in% names(allele_map), allele_map[["A"]], NA)
+  B_allele <- ifelse("B" %in% names(allele_map), allele_map[["B"]], NA)
+
+  # # Debugging prints for allele mapping
+  # print(paste("A_allele:", A_allele))
+  # print(paste("B_allele:", B_allele))
+
+  pA <- ifelse(any(allele_freqs$allele == A_allele), allele_freqs$frequency[allele_freqs$allele == A_allele], NA)
+  pB <- ifelse(any(allele_freqs$allele == B_allele), allele_freqs$frequency[allele_freqs$allele == B_allele], NA)
+
+  # # Debugging prints for allele frequencies
+  # print(paste("pA:", pA))
+  # print(paste("pB:", pB))
+
+  if (is.na(pA)) {
+    stop("Allele frequency for A is missing.")
+  }
+  if (is.na(pB) && length(shared_alleles_vector) > 1) {
+    stop("Allele frequency for B is missing.")
+  }
+
+  # Step 7: Fetch kinship coefficients and calculate likelihood ratio
+  k_values <- kinship_matrix[kinship_matrix$relationship_type == row$relationship_type, ]
+  LR <- calculate_likelihood_ratio(shared_alleles, genotype_match, pA, pB, k_values$k0, k_values$k1, k_values$k2)
+
+  # # Print final calculation values for debugging
+  # print(paste("k_values:", toString(k_values)))
+  # print(paste("Likelihood Ratio:", LR))
+
+  # Step 8: Update the row with calculated values
+  row$shared_alleles <- shared_alleles
+  row$genotype_match <- genotype_match
+  row$LR <- LR
+
+  return(row)
+}
+
+
+```
+
+
+```{r test-func-ind-genotypes}
+# Assuming both simulate_genotypes and kinship_calculation functions are defined and ready to use
+# Also assuming df_allelefreq and kinship_matrix are loaded and properly structured
+
+# Select the specific row to be used for the example
+example_row <- individuals_genotypes[9, ]
+
+# Simulate genotypes for the example row
+simulated_output <- simulate_genotypes(example_row, df_allelefreq, kinship_matrix)
+
+simulated_output
+
+# Calculate kinship and likelihood ratios using the simulated genotypes
+final_output <- kinship_calculation(simulated_output, df_allelefreq, kinship_matrix)
+
+# Print the final output to check the updated allele values and computed likelihood ratio
+print(final_output)
+
+```
+
+
+```{r}
+# Function to simulate genotypes and calculate kinship for each row
+process_loci <- function(row, allele_frequency_data, kinship_matrix) {
+  simulated_row <- simulate_genotypes(row, allele_frequency_data, kinship_matrix)
+  final_row <- kinship_calculation(simulated_row, allele_frequency_data, kinship_matrix)
+  return(final_row)
+}
+```
+
+```{r}
+# Apply the combined function to each row and update the dataframe
+for (i in 1:nrow(individuals_genotypes)) {
+  individuals_genotypes[i, ] <- process_loci(individuals_genotypes[i, ], df_allelefreq, kinship_matrix)
 }
 
 # Print the final output to check the updated allele values and computed likelihood ratio
@@ -621,16 +1139,17 @@ set.seed(123)
 
 ```{r}
 # Function for the list of rows approach
-list_of_rows_approach <- function() {
+list_of_rows_approach <- function(individuals_genotypes, df_allelefreq, kinship_matrix) {
   rows_list <- split(individuals_genotypes, seq(nrow(individuals_genotypes)))
-  final_rows_list <- future_map(rows_list, ~process_row(.x, df_allelefreq, kinship_matrix), seed = TRUE)
+  final_rows_list <- future_map(rows_list, ~ process_loci(.x, df_allelefreq, kinship_matrix), .options = furrr_options(seed = TRUE))
   final_individuals_genotypes <- bind_rows(final_rows_list)
+  
   return(final_individuals_genotypes)
 }
 
 # Measure the execution time using system.time()
 list_of_rows_time <- system.time({
-  list_of_rows_result <- list_of_rows_approach()
+  list_of_rows_result <- list_of_rows_approach(individuals_genotypes, df_allelefreq, kinship_matrix)
 })
 
 # Print the execution time
@@ -642,35 +1161,307 @@ print(list_of_rows_time)
 
 ```{r}
 # Function for the future_pmap approach
-future_pmap_approach <- function() {
+future_pmap_approach <- function(individuals_genotypes, df_allelefreq, kinship_matrix) {
   final_individuals_genotypes <- individuals_genotypes %>%
-    future_pmap(~ process_row(list(...), df_allelefreq, kinship_matrix), seed = TRUE) %>%
-    bind_rows()
+    future_pmap(~ process_loci(list(...), df_allelefreq, kinship_matrix), .options = furrr_options(seed = TRUE)) %>%
+    bind_rows() 
+  
   return(final_individuals_genotypes)
 }
 
 # Measure the execution time using system.time()
 future_pmap_time <- system.time({
-  future_pmap_result <- future_pmap_approach()
+  future_pmap_result <- future_pmap_approach(individuals_genotypes, df_allelefreq, kinship_matrix)
 })
 
 # Print the execution time
 cat("Execution time for future_pmap_approach:\n")
 print(future_pmap_time)
 
+
 ```
 
 ```{r}
 # Benchmark both approaches using microbenchmark
 benchmark_results <- microbenchmark(
-  list_of_rows = list_of_rows_approach(),
-  future_pmap = future_pmap_approach(),
+  list_of_rows = list_of_rows_approach(individuals_genotypes, df_allelefreq, kinship_matrix),
+  future_pmap = future_pmap_approach(individuals_genotypes, df_allelefreq, kinship_matrix),
   times = 10  # Number of iterations
 )
 
 # Print the benchmark results
 cat("Benchmark results for both approaches:\n")
 print(benchmark_results)
+
+```
+
+```{r}
+
+# Function to process the individuals' genotypes dataframe
+process_individuals_genotypes <- function(individuals_genotypes, df_allelefreq, kinship_matrix) {
+  final_individuals_genotypes <- individuals_genotypes %>%
+    future_pmap(~ process_loci(list(...), df_allelefreq, kinship_matrix), seed = TRUE) %>%
+    bind_rows()
+  
+  return(final_individuals_genotypes)
+}
+
+
+```
+
+```{r}
+calculate_combined_lrs <- function(final_results, loci_lists) {
+  combined_lrs <- final_results %>%
+    group_by(population, relationship_type, sim_id) %>%
+    summarize(
+      core_13 = prod(LR[locus %in% loci_lists$core_13], na.rm = TRUE),
+      identifiler_15 = prod(LR[locus %in% loci_lists$identifiler_15], na.rm = TRUE),
+      expanded_20 = prod(LR[locus %in% loci_lists$expanded_20], na.rm = TRUE),
+      supplementary = prod(LR[locus %in% loci_lists$supplementary], na.rm = TRUE),
+      autosomal_29 = prod(LR[locus %in% loci_lists$autosomal_29], na.rm = TRUE)
+    ) %>%
+    pivot_longer(cols = starts_with("core_13"):starts_with("autosomal_29"),
+                 names_to = "loci_set",
+                 values_to = "combined_LR")
+  
+  return(combined_lrs)
+}
+
+```
+
+
+```{r}
+# Function to process the simulation setup and initialize + process individuals' genotypes
+process_simulation_setup <- function(simulation_setup, df_allelefreq, kinship_matrix, loci_list, loci_lists, output_file, summary_output_file) {
+  # Set up parallel processing
+  plan(multisession, workers = parallel::detectCores() - 1)
+  set.seed(123)  # Set a seed for reproducibility
+  
+  # Process each simulation setup row
+  final_results <- simulation_setup %>%
+    future_pmap_dfr(function(population, relationship_type, num_simulations) {
+      purrr::map_dfr(1:num_simulations, function(sim_id) {
+        # Initialize individuals' genotypes
+        individuals_genotypes <- initialize_individuals_pair(population, relationship_type, sim_id, loci_list)
+        
+        # Process individuals' genotypes
+        processed_genotypes <- process_individuals_genotypes(individuals_genotypes, df_allelefreq, kinship_matrix)
+        
+        return(processed_genotypes)
+      })
+    }, .progress = TRUE)
+  
+  # Remove the `seed` column if it exists
+  if ("seed" %in% colnames(final_results)) {
+    final_results <- final_results %>% select(-seed)
+  }
+  
+  # Save the final results to a CSV file
+  write.csv(final_results, output_file, row.names = FALSE)
+  
+  # Calculate combined LRs for each loci set and create a summary dataframe
+  combined_lrs <- calculate_combined_lrs(final_results, loci_lists)
+  
+  # Save the summary dataframe to a CSV file
+  write.csv(combined_lrs, summary_output_file, row.names = FALSE)
+  
+  return(list(final_results = final_results, combined_lrs = combined_lrs))
+}
+```
+
+
+```{r}
+# Example usage:
+result <- process_simulation_setup(
+  simulation_setup, df_allelefreq, kinship_matrix, loci_list, loci_lists, 
+  "data/processed_genotypes.csv", "data/summary_genotypes.csv"
+)
+
+final_df <- result$final_results
+combined_lrs <- result$combined_lrs
+```
+
+
+```{r}
+# Define the order of relationship types based on the kinship coefficients (most to least related)
+relationship_order <- c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated")
+
+# Define the order of populations
+population_order <- c("all", "AfAm", "Cauc", "Hispanic", "Asian")
+
+# Define the order of loci sets
+loci_set_order <- c("core_13", "identifiler_15", "expanded_20", "supplementary", "autosomal_29")
+
+# Convert relationship_type, population, and loci_set to factors with the specified orders
+combined_lrs <- combined_lrs %>%
+  mutate(
+    relationship_type = factor(relationship_type, levels = relationship_order),
+    population = factor(population, levels = population_order),
+    loci_set = factor(loci_set, levels = loci_set_order)
+  )
+
+# Plot the combined LR data with logarithmic scale on y-axis
+ggplot(combined_lrs, aes(x = relationship_type, y = combined_LR, fill = population, color = population)) +
+  geom_boxplot() +
+  facet_wrap(~ loci_set, scales = "fixed") +
+  labs(
+    title = "Combined LR Distributions Across Populations and Relationship Types",
+    x = "Relationship Type",
+    y = "Combined LR",
+    fill = "Population",
+    color = "Population"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  ) +
+  scale_y_log10() +
+  scale_fill_manual(values = c("all" = "yellow", "AfAm" = "red", "Cauc" = "blue", "Hispanic" = "green", "Asian" = "purple")) +
+  coord_flip()+
+  scale_x_discrete(limits = rev(levels(combined_lrs$relationship_type)))
+
+# Save the plot to a file
+ggsave("output/log_combined_lr_panel_plot.png", width = 12, height = 8)
+```
+
+```{r}
+# Calculate summary statistics
+summary_stats <- combined_lrs %>%
+  group_by(relationship_type, population, loci_set) %>%
+  summarize(
+    mean_LR = mean(combined_LR),
+    lower_95 = quantile(combined_LR, 0.025),
+    upper_95 = quantile(combined_LR, 0.975)
+  ) %>%
+  ungroup()
+```
+
+
+```{r}
+# Plot the mean line
+ggplot(summary_stats, aes(x = loci_set, y = mean_LR, group = population, color = population)) +
+  geom_line(size = 1) +
+  facet_wrap(~ relationship_type, scales = "free_y", ncol = 2) +
+  scale_y_log10() +
+  labs(
+    title = "Mean Combined LR Across Populations and Relationship Types",
+    x = "Loci Set",
+    y = "Combined LR",
+    color = "Population"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "bottom"
+  ) +
+  scale_color_manual(values = c("all" = "yellow", "AfAm" = "red", "Cauc" = "blue", "Hispanic" = "green", "Asian" = "purple"))
+
+# Save the plot to a file
+ggsave("output/line_chart_combined_lr.png", width = 14, height = 10)
+```
+
+```{r}
+# Function to calculate cut-off values for 1%, 0.1%, and 0.01% FPR
+calculate_cutoffs <- function(input_df, fp_rates) {
+  cutoffs <- input_df %>%
+    filter(relationship_type == "unrelated") %>%
+    group_by(loci_set) %>%
+    summarize(
+      fixed_cutoff = 1.00,
+      cutoff_1 = quantile(combined_LR, probs = 1 - fp_rates[1] / 100, na.rm = TRUE),
+      cutoff_0_1 = quantile(combined_LR, probs = 1 - fp_rates[2] / 100, na.rm = TRUE),
+      cutoff_0_01 = quantile(combined_LR, probs = 1 - fp_rates[3] / 100, na.rm = TRUE)
+    ) %>%
+    ungroup()
+  
+  return(cutoffs)
+}
+
+# Define false positive rates as percentages
+fp_rates <- c(1, 0.1, 0.01)
+
+# Calculate cutoffs for each loci set
+cutoffs <- calculate_cutoffs(combined_lrs, fp_rates)
+
+print(cutoffs)
+
+
+```
+
+```{r}
+# Function to calculate proportions exceeding the cut-offs
+calculate_proportions_exceeding_cutoffs <- function(input_df, cutoffs) {
+  # Join the cut-offs with the original data frame
+  df_with_cutoffs <- left_join(input_df, cutoffs, by = "loci_set")
+  
+  # Calculate a flag indicating whether the combined_LR exceeds each cut-off
+  df_with_cutoffs <- df_with_cutoffs %>%
+    mutate(
+      exceeds_fixed_cutoff = combined_LR > fixed_cutoff,
+      exceeds_cutoff_1 = combined_LR > cutoff_1,
+      exceeds_cutoff_0_1 = combined_LR > cutoff_0_1,
+      exceeds_cutoff_0_01 = combined_LR > cutoff_0_01
+    )
+  
+  # Aggregate to calculate the proportion of pairs exceeding the cut-offs by relationship type and loci set
+  proportions_exceeding <- df_with_cutoffs %>%
+    group_by(population, relationship_type, loci_set) %>%
+    summarize(
+      proportion_exceeding_fixed = mean(exceeds_fixed_cutoff, na.rm = TRUE),
+      proportion_exceeding_1 = mean(exceeds_cutoff_1, na.rm = TRUE),
+      proportion_exceeding_0_1 = mean(exceeds_cutoff_0_1, na.rm = TRUE),
+      proportion_exceeding_0_01 = mean(exceeds_cutoff_0_01, na.rm = TRUE),
+      .groups = 'drop'
+    ) %>%
+    filter(relationship_type != "unrelated")  # Exclude unrelated relationship type
+  
+  return(proportions_exceeding)
+}
+
+# Calculate the proportions exceeding the cut-offs
+proportions_exceeding_cutoffs <- calculate_proportions_exceeding_cutoffs(combined_lrs, cutoffs)
+
+print(proportions_exceeding_cutoffs)
+
+```
+
+```{r}
+library(ggplot2)
+
+# Convert population to factor for plotting
+proportions_exceeding_cutoffs$population <- factor(proportions_exceeding_cutoffs$population, levels = population_order)
+
+# Pivot the data to long format for easier plotting
+proportions_long <- proportions_exceeding_cutoffs %>%
+  pivot_longer(cols = starts_with("proportion_exceeding"), 
+               names_to = "Cutoff_Type", values_to = "Proportion", 
+               names_prefix = "proportion_exceeding_")
+
+# Map Cutoff_Type to human-readable labels
+proportions_long$Cutoff_Type <- factor(proportions_long$Cutoff_Type, levels = c("fixed", "1", "0_1", "0_01"),
+                                       labels = c("Fixed Cutoff (1.00)", "1% FPR", "0.1% FPR", "0.01% FPR"))
+
+# Plot the proportions exceeding the cut-offs
+ggplot(proportions_long, aes(x = relationship_type, y = Proportion, fill = population, color = population)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  facet_wrap(~ Cutoff_Type + loci_set, scales = "fixed") +
+  labs(
+    title = "Proportions Exceeding Likelihood Cut-offs Across Relationship Types and Loci Sets",
+    x = "Relationship Type",
+    y = "Proportion Exceeding Cut-off",
+    fill = "Population",
+    color = "Population"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  ) +
+  scale_fill_manual(values = c("all" = "yellow", "AfAm" = "red", "Cauc" = "blue", "Hispanic" = "green", "Asian" = "purple")) +
+  coord_flip()
+
+# Save the plot to a file
+ggsave("output/proportions_exceeding_cutoffs_combined.png", width = 12, height = 8)
+
 
 ```
 
