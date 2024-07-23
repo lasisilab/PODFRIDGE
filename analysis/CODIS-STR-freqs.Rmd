@@ -15,73 +15,115 @@ Frequencies and raw genotypes for different populations were found [here](https:
 # Load required libraries
 library(readxl)
 library(tidyverse)
+library(data.table)
 
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
-
-```{r convertxl, eval=FALSE, include=FALSE}
-
-# This chunk converts the Excel file that was downloaded into separate CSVs as there is a bunch of information that is spread across different sheets within the original Excel file.
-
-# Read all sheets
-file_path <- "data/1036_allelefreqs.xlsx"
-sheet_names <- excel_sheets(file_path)
-
-# Iterate over each sheet
-for (sheet in sheet_names) {
-  # Read the marker names and sample sizes
-  markers <- read_excel(file_path, sheet = sheet, range = cell_rows(2:2), col_names = FALSE)
-  sample_sizes <- read_excel(file_path, sheet = sheet, range = cell_rows(3:3), col_names = FALSE)
-
-  # Read the main data (starting from the fourth row)
-  data <- read_excel(file_path, sheet = sheet, skip = 3, col_names = FALSE)
-
-  # Set the column names
-  colnames(data) <- c("allele", as.character(unlist(markers)))
-
-  # Transform the data to long format
-  tidy_data <- data %>%
-    pivot_longer(cols = -allele, names_to = "marker", values_to = "frequency") %>%
-    rename_with(~tolower(.), everything()) # Convert all variable names to lowercase
-
-  # Remove the rows that contain 'Hobs', 'PI', 'PPE' or 'HWE'
-  tidy_data <- tidy_data[!tidy_data$allele %in% c("Hobs", "PI", "PPE", "HWE", "Allele"),] %>% 
-    drop_na() %>% 
-    select(marker, everything())
-
-  # Extract population from sheet name
-  tidy_data$population <- str_extract(sheet, "(?<=revised\\s)[^,]*") # Extract string between "revised " and the first comma
-  
-  # Clean the name for the CSV file
-  filename <- gsub(" ", "", tidy_data$population[1]) # Remove spaces
-  
-  # Write to CSV
-  write_csv(tidy_data, paste0("data/1036_", filename, ".csv")) # Write CSV to the "data" folder
-}
-
-```
 
 ## Load CODIS allele frequencies
 
 CODIS allele frequencies were found through NIST STR base and specifically downloaded from the supplementary materials of Steffen et al 2017. These are 1036 unrelated individuals from the U.S. population. 
 
 ```{r allelefreqs}
-# Define the file paths
-file_paths <- list.files(path = "data", pattern = "1036_.*\\.csv", full.names = TRUE)
+library(readxl)
+library(tidyverse)
+library(data.table)
 
-# Create a list of data frames
-df_list <- lapply(file_paths, function(path) {
-  read_csv(path, col_types = cols(
-    marker = col_character(),
-    allele = col_double(),
-    frequency = col_double(),
-    population = col_character()
-  ))
-})
+# Define the file path
+file_path <- "data/1036_allelefreqs.xlsx"
 
-# Bind all data frames into one
-df <- bind_rows(df_list)
+# Function to map sheet names to population names
+map_population_name <- function(sheet_name) {
+  case_when(
+    str_detect(sheet_name, "all") ~ "all",
+    str_detect(sheet_name, "AfAm") ~ "AfAm",
+    str_detect(sheet_name, "Cauc") ~ "Cauc",
+    str_detect(sheet_name, "Hispanic") ~ "Hispanic",
+    str_detect(sheet_name, "Asian") ~ "Asian",
+    TRUE ~ "Unknown"
+  )
+}
+
+# Function to read each sheet and process the data
+read_and_process_sheet <- function(sheet) {
+  df <- read_excel(file_path, sheet = sheet, range = "A5:AD101", col_names = FALSE)
+  colnames(df) <- c("allele", "CSF1PO", "D10S1248", "D12S391", "D13S317", "D16S539", "D18S51", "D19S433", "D1S1656", 
+                    "D21S11", "D22S1045", "D2S1338", "D2S441", "D3S1358", "D5S818", "D6S1043", "D7S820", "D8S1179", 
+                    "F13A01", "F13B", "FESFPS", "FGA", "LPL", "Penta_C", "Penta_D", "Penta_E", "SE33", "TH01", "TPOX", "vWA")
+  
+  df <- df %>%
+    mutate(allele = as.character(allele)) %>%
+    pivot_longer(-allele, names_to = "marker", values_to = "frequency") %>%
+    mutate(population = map_population_name(sheet)) %>%
+    replace_na(list(frequency = 0))
+  
+  return(df)
+}
+
+# Read all sheets into a list of dataframes and combine them
+sheet_names <- excel_sheets(file_path)
+sheets_data <- lapply(sheet_names, read_and_process_sheet)
+df_allelefreq <- bind_rows(sheets_data)
+
+# Convert to data.table
+setDT(df_allelefreq)
+
+# Print the combined dataframe to check
+print(head(df_allelefreq))
+
+# Check if the population column is correct
+print(unique(df_allelefreq$population))
+
+# Save the combined dataframe to a single CSV file
+fwrite(df_allelefreq, "data/df_allelefreq_combined.csv")
+
+# Function to sort alleles numerically while treating them as characters
+sort_alleles <- function(df) {
+  df %>% 
+    mutate(allele = as.numeric(allele)) %>%
+    arrange(allele) %>%
+    mutate(allele = as.character(allele))
+}
+
+# Create and save a dataframe per population with alleles as the first column and markers as subsequent columns
+populations <- unique(df_allelefreq$population)
+for (pop in populations) {
+  df_pop <- df_allelefreq[population == pop] %>%
+    pivot_wider(names_from = marker, values_from = frequency) %>%
+    sort_alleles()
+  fwrite(df_pop, paste0("data/1036_", pop, "_wide.csv"))
+}
+
+# Create the wide-format dataframe for all populations
+df_allelefreq_wide <- df_allelefreq %>%
+  pivot_wider(names_from = population, values_from = frequency) %>%
+  replace_na(list(all = 0, AfAm = 0, Cauc = 0, Hispanic = 0, Asian = 0))
+
+# Convert to data.table
+setDT(df_allelefreq_wide)
+
+# Sort the wide dataframe alleles numerically
+df_allelefreq_wide <- sort_alleles(df_allelefreq_wide)
+
+# Print the wide dataframe to check
+# print(head(df_allelefreq_wide))
+
+# Save the wide-format dataframe to a CSV file
+fwrite(df_allelefreq_wide, "data/df_allelefreq_wide.csv")
+
+# Convert allele to numeric in the df_allelefreq table
+df <- copy(df_allelefreq)
+df[, allele := as.numeric(allele)]
+
+# Print the modified dataframe to check
+# print(head(df))
+# 
+# # Filter out rows where frequency is 0
+df<- df %>%
+  filter(frequency != 0)
+
+
 ```
 
 ### Box plot of allele frequencies

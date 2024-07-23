@@ -372,7 +372,7 @@ div.tocify {
 <h1 class="title toc-ignore">Simulation of STR Pairs and Calculation of
 Likelihood Ratios</h1>
 <h4 class="author">Tina Lasisi</h4>
-<h4 class="date">2024-07-19 18:23:50</h4>
+<h4 class="date">2024-07-23 12:36:24</h4>
 
 </div>
 
@@ -401,7 +401,7 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2024-07-19
+<strong>Last updated:</strong> 2024-07-23
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -535,15 +535,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree635de08209d7930a6436c8693341cf7793cdaf84targetblank635de08a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreee1eec3c686364a517c3bc660f26678019d11a522targetblanke1eec3ca">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/635de08209d7930a6436c8693341cf7793cdaf84" target="_blank">635de08</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/e1eec3c686364a517c3bc660f26678019d11a522" target="_blank">e1eec3c</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree635de08209d7930a6436c8693341cf7793cdaf84targetblank635de08a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreee1eec3c686364a517c3bc660f26678019d11a522targetblanke1eec3ca"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -553,7 +553,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/635de08209d7930a6436c8693341cf7793cdaf84" target="_blank">635de08</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/e1eec3c686364a517c3bc660f26678019d11a522" target="_blank">e1eec3c</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -573,12 +573,13 @@ Ignored files:
     Ignored:    .Rproj.user/
     Ignored:    data/.DS_Store
 
-Untracked files:
-    Untracked:  data/core_CODIS_loci.csv
-    Untracked:  data/df_allelefreq.csv
-
 Unstaged changes:
     Modified:   analysis/STR-simulation.Rmd
+    Modified:   data/processed_genotypes.csv
+    Modified:   data/summary_genotypes.csv
+    Modified:   output/line_chart_combined_lr.png
+    Modified:   output/log_combined_lr_panel_plot.png
+    Modified:   output/proportions_exceeding_cutoffs_combined.png
 
 </code></pre>
 <p>
@@ -624,6 +625,57 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/e1eec3c686364a517c3bc660f26678019d11a522/analysis/STR-simulation.Rmd" target="_blank">e1eec3c</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2024-07-22
+</td>
+<td>
+Updating the STR-simulation
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/b5e4ed4b749b7a2ae3f8a8ab144de66db2850e90/analysis/STR-simulation.Rmd" target="_blank">b5e4ed4</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2024-07-19
+</td>
+<td>
+Updated simulation components + added to data folder
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/b5e4ed4b749b7a2ae3f8a8ab144de66db2850e90/docs/STR-simulation.html" target="_blank">b5e4ed4</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2024-07-19
+</td>
+<td>
+Updated simulation components + added to data folder
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -913,7 +965,66 @@ class="math inline">\(\kappa_2 / R_X^u = 0\)</span>.</p>
 </div>
 <div id="rscript-for-simulation" class="section level2">
 <h2>Rscript for simulation</h2>
-<p><img src="assets/simulation-framework.png" /> ### Step 1: Simulation
+<p><img src="assets/simulation-framework.png" /></p>
+<div id="step-1-simulation-setup" class="section level3">
+<h3>Step 1: Simulation Setup</h3>
+<p>The first step is to set up the simulation by defining the parameters
+and functions required for generating the simulated data. This includes
+specifying the population size, allele frequencies, and the kinship
+matrix for likelihood ratio calculations. The simulation will generate
+pairs of individuals with known relationships (e.g., parent-child,
+siblings) and unknown relationships (unrelated) based on the specified
+parameters.</p>
+<pre class="r"><code>generate_simulation_setup &lt;- function(kinship_matrix, population_list, num_related, num_unrelated) {
+  # Create an empty dataframe to store the simulation setup
+  simulation_setup &lt;- data.frame(
+    population = character(),
+    relationship_type = character(),
+    num_simulations = integer(),
+    stringsAsFactors = FALSE
+  )
+  
+  # Loop through each population and relationship type to create the setup
+  for (population in population_list) {
+    for (relationship in kinship_matrix$relationship_type) {
+      num_simulations &lt;- ifelse(relationship == &quot;unrelated&quot;, num_unrelated, num_related)
+      
+      # Append to the simulation setup dataframe
+      simulation_setup &lt;- rbind(simulation_setup, data.frame(
+        population = population,
+        relationship_type = relationship,
+        num_simulations = num_simulations
+      ))
+    }
+  }
+  
+  return(simulation_setup)
+}</code></pre>
+<p>The necessary parameters for this are initialized beforehand.</p>
+<p>First, the kinship coefficients are provided in a matrix:</p>
+<pre class="r"><code># Create a dataframe with relationship types and their respective kinship coefficients (k0, k1, k2)
+kinship_matrix &lt;- tibble(
+    relationship_type =
+      c(&quot;parent_child&quot;, &quot;full_siblings&quot;, &quot;half_siblings&quot;, &quot;cousins&quot;, &quot;second_cousins&quot;, &quot;unrelated&quot;),
+    k0 = c(0, 1/4, 1/2, 7/8, 15/16, 1),
+    k1 = c(1, 1/2, 1/2, 1/8, 1/16, 0),
+    k2 = c(0, 1/4, 0, 0, 0, 0)
+  )
+
+# Print the kinship matrix to check the contents
+print(kinship_matrix)</code></pre>
+<pre><code># A tibble: 6 × 4
+  relationship_type    k0     k1    k2
+  &lt;chr&gt;             &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+1 parent_child      0     1       0   
+2 full_siblings     0.25  0.5     0.25
+3 half_siblings     0.5   0.5     0   
+4 cousins           0.875 0.125   0   
+5 second_cousins    0.938 0.0625  0   
+6 unrelated         1     0       0   </code></pre>
+<p>Then a list of populations is created:</p>
+<pre><code>[1] &quot;all&quot;      &quot;AfAm&quot;     &quot;Cauc&quot;     &quot;Hispanic&quot; &quot;Asian&quot;   </code></pre>
+<p>Now we can test the simulation setup function:### Step 1: Simulation
 Setup</p>
 <p>The first step is to set up the simulation by defining the parameters
 and functions required for generating the simulated data. This includes
@@ -1003,6 +1114,7 @@ print(kinship_matrix)</code></pre>
 28      Asian           cousins               2
 29      Asian    second_cousins               2
 30      Asian         unrelated               5</code></pre>
+</div>
 <div id="step-2-initialize-individuals" class="section level3">
 <h3>Step 2: Initialize Individuals</h3>
 <p>Once the general simulation setup is done, each pair of individuals
@@ -1191,6 +1303,12 @@ $autosomal_29
 27                                        0                 0
 28                                        0                 0
 29                                        0                 0</code></pre>
+</div>
+<div id="step-3-simulate-genotypes" class="section level3">
+<h3>Step 3: Simulate Genotypes</h3>
+</div>
+<div id="step-4-calculate-kinship" class="section level3">
+<h3>Step 4: Calculate Kinship</h3>
 <pre><code>  population relationship_type sim_id  locus ind1_allele1 ind1_allele2
 9        all      parent_child      1 FESFPS           11         10.3
   ind2_allele1 ind2_allele2 shared_alleles genotype_match LR
@@ -1261,15 +1379,351 @@ $autosomal_29
 29           31           29              1          AB-AC 1.2245863</code></pre>
 <pre><code>Execution time for list_of_rows_approach:</code></pre>
 <pre><code>   user  system elapsed 
-  0.529   0.010   1.393 </code></pre>
+  0.546   0.013   1.460 </code></pre>
 <pre><code>Execution time for future_pmap_approach:</code></pre>
 <pre><code>   user  system elapsed 
-  0.528   0.009   0.571 </code></pre>
+  0.506   0.007   0.542 </code></pre>
 <pre><code>Benchmark results for both approaches:</code></pre>
 <pre><code>Unit: milliseconds
-         expr      min       lq     mean   median      uq      max neval
- list_of_rows 529.5072 531.5589 545.7189 541.9877 552.289 579.0596    10
-  future_pmap 526.2015 531.2727 539.3893 536.4072 545.551 559.4490    10</code></pre>
+         expr      min       lq     mean   median       uq      max neval
+ list_of_rows 540.2258 549.6349 557.7970 554.4797 569.1483 577.8931    10
+  future_pmap 540.2387 544.3072 552.3609 548.7928 553.6963 577.4973    10</code></pre>
+<pre><code>   population relationship_type num_simulations
+1         all      parent_child               2
+2         all     full_siblings               2
+3         all     half_siblings               2
+4         all           cousins               2
+5         all    second_cousins               2
+6         all         unrelated               5
+7        AfAm      parent_child               2
+8        AfAm     full_siblings               2
+9        AfAm     half_siblings               2
+10       AfAm           cousins               2
+11       AfAm    second_cousins               2
+12       AfAm         unrelated               5
+13       Cauc      parent_child               2
+14       Cauc     full_siblings               2
+15       Cauc     half_siblings               2
+16       Cauc           cousins               2
+17       Cauc    second_cousins               2
+18       Cauc         unrelated               5
+19   Hispanic      parent_child               2
+20   Hispanic     full_siblings               2
+21   Hispanic     half_siblings               2
+22   Hispanic           cousins               2
+23   Hispanic    second_cousins               2
+24   Hispanic         unrelated               5
+25      Asian      parent_child               2
+26      Asian     full_siblings               2
+27      Asian     half_siblings               2
+28      Asian           cousins               2
+29      Asian    second_cousins               2
+30      Asian         unrelated               5</code></pre>
+</div>
+<div id="step-2-initialize-individuals-1" class="section level3">
+<h3>Step 2: Initialize Individuals</h3>
+<p>Once the general simulation setup is done, each pair of individuals
+must be initialized as its own dataframe. This requires knowing how many
+loci will be simulated per pair. We will therefore first extract the
+unique loci from our allele frequency tables.</p>
+<pre><code>Rows: 387 Columns: 4
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: &quot;,&quot;
+chr (2): marker, population
+dbl (2): allele, frequency
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 453 Columns: 4
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: &quot;,&quot;
+chr (2): marker, population
+dbl (2): allele, frequency
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 277 Columns: 4
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: &quot;,&quot;
+chr (2): marker, population
+dbl (2): allele, frequency
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 344 Columns: 4
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: &quot;,&quot;
+chr (2): marker, population
+dbl (2): allele, frequency
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 348 Columns: 4
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: &quot;,&quot;
+chr (2): marker, population
+dbl (2): allele, frequency
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre><code># A tibble: 1,809 × 4
+   marker  allele frequency population
+   &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;     
+ 1 Penta_D    2.2   0.114   AfAm      
+ 2 F13A01     3.2   0.118   AfAm      
+ 3 Penta_D    3.2   0.00877 AfAm      
+ 4 F13A01     4     0.0687  AfAm      
+ 5 F13A01     4.2   0.00146 AfAm      
+ 6 D16S539    5     0.00146 AfAm      
+ 7 F13A01     5     0.339   AfAm      
+ 8 Penta_C    5     0.0249  AfAm      
+ 9 Penta_D    5     0.0439  AfAm      
+10 Penta_E    5     0.0950  AfAm      
+# ℹ 1,799 more rows</code></pre>
+<p>We will now extract the unique loci from the allele frequency
+tables:</p>
+<pre><code> [1] &quot;Penta_D&quot;  &quot;F13A01&quot;   &quot;D16S539&quot;  &quot;Penta_C&quot;  &quot;Penta_E&quot;  &quot;TH01&quot;    
+ [7] &quot;D7S820&quot;   &quot;F13B&quot;     &quot;FESFPS&quot;   &quot;TPOX&quot;     &quot;CSF1PO&quot;   &quot;D5S818&quot;  
+[13] &quot;LPL&quot;      &quot;SE33&quot;     &quot;D10S1248&quot; &quot;D13S317&quot;  &quot;D22S1045&quot; &quot;D8S1179&quot; 
+[19] &quot;D18S51&quot;   &quot;D2S441&quot;   &quot;D6S1043&quot;  &quot;D19S433&quot;  &quot;D1S1656&quot;  &quot;vWA&quot;     
+[25] &quot;D3S1358&quot;  &quot;D12S391&quot;  &quot;D2S1338&quot;  &quot;FGA&quot;      &quot;D21S11&quot;  </code></pre>
+<pre><code>Number of unique loci: 29 </code></pre>
+<p>These are the 29 autosomal loci from the 2013 and 2017 FSI paper on
+US STR allele frequencies for 29 autosomal STR loci <a
+href="https://www.fsigenetics.com/article/S1872-4973(17)30180-1/fulltext">Steffen
+et al 2017</a>.</p>
+<p>We will use the list of different required loci to calculate
+likelihood ratios for pairs of individuals. Below is a reference with
+which loci are used in various sets.</p>
+<pre><code>      locus core_13 identifiler_15 expanded_20 supplementary
+1    CSF1PO       1              1           1             1
+2       FGA       1              1           1             1
+3      THO1       1              1           1             1
+4      TPOX       1              1           1             1
+5       vWA       1              1           1             1
+6   D3S1358       1              1           1             1
+7    D5S818       1              1           1             1
+8    D7S820       1              1           1             1
+9   D8S1179       1              1           1             1
+10  D13S317       1              1           1             1
+11  D16S539       1              1           1             1
+12   D18S51       1              1           1             1
+13   D21S11       1              1           1             1
+14  D1S1656       0              0           1             1
+15   D2S441       0              0           1             1
+16  D2S1338       0              1           1             1
+17 D10S1248       0              0           1             1
+18  D12S391       0              0           1             1
+19  D19S433       0              1           1             1
+20 D22S1045       0              0           1             1
+21     SE33       0              0           0             1
+22  Penta_E       0              0           0             1
+23  Penta_D       0              0           0             1</code></pre>
+<pre><code>$core_13
+ [1] &quot;CSF1PO&quot;  &quot;FGA&quot;     &quot;THO1&quot;    &quot;TPOX&quot;    &quot;vWA&quot;     &quot;D3S1358&quot; &quot;D5S818&quot; 
+ [8] &quot;D7S820&quot;  &quot;D8S1179&quot; &quot;D13S317&quot; &quot;D16S539&quot; &quot;D18S51&quot;  &quot;D21S11&quot; 
+
+$identifiler_15
+ [1] &quot;CSF1PO&quot;  &quot;FGA&quot;     &quot;THO1&quot;    &quot;TPOX&quot;    &quot;vWA&quot;     &quot;D3S1358&quot; &quot;D5S818&quot; 
+ [8] &quot;D7S820&quot;  &quot;D8S1179&quot; &quot;D13S317&quot; &quot;D16S539&quot; &quot;D18S51&quot;  &quot;D21S11&quot;  &quot;D2S1338&quot;
+[15] &quot;D19S433&quot;
+
+$expanded_20
+ [1] &quot;CSF1PO&quot;   &quot;FGA&quot;      &quot;THO1&quot;     &quot;TPOX&quot;     &quot;vWA&quot;      &quot;D3S1358&quot; 
+ [7] &quot;D5S818&quot;   &quot;D7S820&quot;   &quot;D8S1179&quot;  &quot;D13S317&quot;  &quot;D16S539&quot;  &quot;D18S51&quot;  
+[13] &quot;D21S11&quot;   &quot;D1S1656&quot;  &quot;D2S441&quot;   &quot;D2S1338&quot;  &quot;D10S1248&quot; &quot;D12S391&quot; 
+[19] &quot;D19S433&quot;  &quot;D22S1045&quot;
+
+$supplementary
+ [1] &quot;CSF1PO&quot;   &quot;FGA&quot;      &quot;THO1&quot;     &quot;TPOX&quot;     &quot;vWA&quot;      &quot;D3S1358&quot; 
+ [7] &quot;D5S818&quot;   &quot;D7S820&quot;   &quot;D8S1179&quot;  &quot;D13S317&quot;  &quot;D16S539&quot;  &quot;D18S51&quot;  
+[13] &quot;D21S11&quot;   &quot;D1S1656&quot;  &quot;D2S441&quot;   &quot;D2S1338&quot;  &quot;D10S1248&quot; &quot;D12S391&quot; 
+[19] &quot;D19S433&quot;  &quot;D22S1045&quot; &quot;SE33&quot;     &quot;Penta_E&quot;  &quot;Penta_D&quot; 
+
+$autosomal_29
+ [1] &quot;Penta_D&quot;  &quot;F13A01&quot;   &quot;D16S539&quot;  &quot;Penta_C&quot;  &quot;Penta_E&quot;  &quot;TH01&quot;    
+ [7] &quot;D7S820&quot;   &quot;F13B&quot;     &quot;FESFPS&quot;   &quot;TPOX&quot;     &quot;CSF1PO&quot;   &quot;D5S818&quot;  
+[13] &quot;LPL&quot;      &quot;SE33&quot;     &quot;D10S1248&quot; &quot;D13S317&quot;  &quot;D22S1045&quot; &quot;D8S1179&quot; 
+[19] &quot;D18S51&quot;   &quot;D2S441&quot;   &quot;D6S1043&quot;  &quot;D19S433&quot;  &quot;D1S1656&quot;  &quot;vWA&quot;     
+[25] &quot;D3S1358&quot;  &quot;D12S391&quot;  &quot;D2S1338&quot;  &quot;FGA&quot;      &quot;D21S11&quot;  </code></pre>
+<p>Now we can initialize the individuals:</p>
+<pre><code>[1] &quot;Initialized individuals:&quot;</code></pre>
+<pre><code>   population relationship_type sim_id    locus ind1_allele1 ind1_allele2
+1         all      parent_child      1  Penta_D                          
+2         all      parent_child      1   F13A01                          
+3         all      parent_child      1  D16S539                          
+4         all      parent_child      1  Penta_C                          
+5         all      parent_child      1  Penta_E                          
+6         all      parent_child      1     TH01                          
+7         all      parent_child      1   D7S820                          
+8         all      parent_child      1     F13B                          
+9         all      parent_child      1   FESFPS                          
+10        all      parent_child      1     TPOX                          
+11        all      parent_child      1   CSF1PO                          
+12        all      parent_child      1   D5S818                          
+13        all      parent_child      1      LPL                          
+14        all      parent_child      1     SE33                          
+15        all      parent_child      1 D10S1248                          
+16        all      parent_child      1  D13S317                          
+17        all      parent_child      1 D22S1045                          
+18        all      parent_child      1  D8S1179                          
+19        all      parent_child      1   D18S51                          
+20        all      parent_child      1   D2S441                          
+21        all      parent_child      1  D6S1043                          
+22        all      parent_child      1  D19S433                          
+23        all      parent_child      1  D1S1656                          
+24        all      parent_child      1      vWA                          
+25        all      parent_child      1  D3S1358                          
+26        all      parent_child      1  D12S391                          
+27        all      parent_child      1  D2S1338                          
+28        all      parent_child      1      FGA                          
+29        all      parent_child      1   D21S11                          
+   ind2_allele1 ind2_allele2 shared_alleles genotype_match LR
+1                                         0                 0
+2                                         0                 0
+3                                         0                 0
+4                                         0                 0
+5                                         0                 0
+6                                         0                 0
+7                                         0                 0
+8                                         0                 0
+9                                         0                 0
+10                                        0                 0
+11                                        0                 0
+12                                        0                 0
+13                                        0                 0
+14                                        0                 0
+15                                        0                 0
+16                                        0                 0
+17                                        0                 0
+18                                        0                 0
+19                                        0                 0
+20                                        0                 0
+21                                        0                 0
+22                                        0                 0
+23                                        0                 0
+24                                        0                 0
+25                                        0                 0
+26                                        0                 0
+27                                        0                 0
+28                                        0                 0
+29                                        0                 0</code></pre>
+</div>
+<div id="step-3-simulate-genotypes-1" class="section level3">
+<h3>Step 3: Simulate Genotypes</h3>
+</div>
+<div id="step-4-calculate-kinship-1" class="section level3">
+<h3>Step 4: Calculate Kinship</h3>
+<pre><code>  population relationship_type sim_id  locus ind1_allele1 ind1_allele2
+9        all      parent_child      1 FESFPS           11           10
+  ind2_allele1 ind2_allele2 shared_alleles genotype_match LR
+9            8           10              0                 0</code></pre>
+<pre><code>  population relationship_type sim_id  locus ind1_allele1 ind1_allele2
+9        all      parent_child      1 FESFPS           11           10
+  ind2_allele1 ind2_allele2 shared_alleles genotype_match       LR
+9            8           10              1          AB-AC 1.097458</code></pre>
+<pre><code>   population relationship_type sim_id    locus ind1_allele1 ind1_allele2
+1         all      parent_child      1  Penta_D           11           14
+2         all      parent_child      1   F13A01            5            5
+3         all      parent_child      1  D16S539           12           10
+4         all      parent_child      1  Penta_C            9            9
+5         all      parent_child      1  Penta_E           19           18
+6         all      parent_child      1     TH01            9            7
+7         all      parent_child      1   D7S820           11           11
+8         all      parent_child      1     F13B           10            8
+9         all      parent_child      1   FESFPS           12           11
+10        all      parent_child      1     TPOX           11            8
+11        all      parent_child      1   CSF1PO           10           10
+12        all      parent_child      1   D5S818           13           12
+13        all      parent_child      1      LPL           10           10
+14        all      parent_child      1     SE33           19         28.2
+15        all      parent_child      1 D10S1248           14           15
+16        all      parent_child      1  D13S317            8           12
+17        all      parent_child      1 D22S1045           16           12
+18        all      parent_child      1  D8S1179           14           13
+19        all      parent_child      1   D18S51           12           15
+20        all      parent_child      1   D2S441           10           11
+21        all      parent_child      1  D6S1043           12           12
+22        all      parent_child      1  D19S433           12           12
+23        all      parent_child      1  D1S1656         19.3           16
+24        all      parent_child      1      vWA           14           17
+25        all      parent_child      1  D3S1358           18           16
+26        all      parent_child      1  D12S391           17           19
+27        all      parent_child      1  D2S1338           25           20
+28        all      parent_child      1      FGA           21           23
+29        all      parent_child      1   D21S11         32.2         32.2
+   ind2_allele1 ind2_allele2 shared_alleles genotype_match        LR
+1             7           11              1          AB-AC 1.6071429
+2             6            5              1          AA-AB 2.1764706
+3            10            9              1          AB-AC 2.3125000
+4            11            9              1          AA-AB 2.5900000
+5            12           18              1          AB-AC 7.8484848
+6             7            7              1          AB-AA 1.6955810
+7            10           11              1          AA-AB 2.1316872
+8             8           10              2          AB-AB 2.2056892
+9            13           12              1          AB-AC 1.0614754
+10            9           11              1          AB-AC 1.0227273
+11           10           10              1          AA-AA 4.3076923
+12           12           11              1          AB-AC 0.7076503
+13           10           10              1          AA-AA 2.3125000
+14         31.2           19              1          AB-AC 2.6839378
+15           13           15              1          AB-AC 1.2422062
+16           13            8              1          AB-AC 2.5900000
+17           12           14              1          AB-AC 9.7735849
+18           13           13              1          AB-AA 1.8633094
+19           13           15              1          AB-AC 1.4971098
+20           10           14              1          AB-AC 1.2304038
+21           12           19              1          AA-AB 2.3333333
+22           12         14.2              1          AA-AB 5.9884393
+23           15           16              1          AB-AC 1.7559322
+24           14           17              2          AB-AB 3.5701211
+25           15           16              1          AB-AC 0.8839590
+26           17           17              1          AB-AA 4.0155039
+27           22           20              1          AB-AC 1.8836364
+28           23           19              1          AB-AC 1.6037152
+29         32.2           27              1          AA-AB 5.4814815</code></pre>
+<pre><code>Execution time for list_of_rows_approach:</code></pre>
+<pre><code>   user  system elapsed 
+  0.528   0.009   1.450 </code></pre>
+<pre><code>Execution time for future_pmap_approach:</code></pre>
+<pre><code>   user  system elapsed 
+  0.501   0.007   0.536 </code></pre>
+<pre><code>Benchmark results for both approaches:</code></pre>
+<pre><code>Unit: milliseconds
+         expr      min       lq     mean   median       uq      max neval
+ list_of_rows 526.1602 540.7774 547.7191 543.9689 560.0311 568.3521    10
+  future_pmap 526.1298 541.5628 558.2019 548.1681 583.6142 589.4595    10</code></pre>
+<pre><code>`summarise()` has grouped output by &#39;population&#39;, &#39;relationship_type&#39;. You can
+override using the `.groups` argument.</code></pre>
+<p><img src="figure/STR-simulation.Rmd/unnamed-chunk-45-1.png" width="768" style="display: block; margin: auto;" /></p>
+<pre><code>`summarise()` has grouped output by &#39;relationship_type&#39;, &#39;population&#39;. You can
+override using the `.groups` argument.</code></pre>
+<p><img src="figure/STR-simulation.Rmd/unnamed-chunk-47-1.png" width="768" style="display: block; margin: auto;" /></p>
+<pre><code># A tibble: 5 × 5
+  loci_set       fixed_cutoff cutoff_1 cutoff_0_1 cutoff_0_01
+  &lt;fct&gt;                 &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;
+1 core_13                   1        1          1           1
+2 identifiler_15            1        1          1           1
+3 expanded_20               1        1          1           1
+4 supplementary             1        1          1           1
+5 autosomal_29              1        1          1           1</code></pre>
+<pre><code># A tibble: 125 × 7
+   population relationship_type loci_set       proportion_exceeding_fixed
+   &lt;fct&gt;      &lt;fct&gt;             &lt;fct&gt;                               &lt;dbl&gt;
+ 1 all        parent_child      core_13                                 1
+ 2 all        parent_child      identifiler_15                          1
+ 3 all        parent_child      expanded_20                             1
+ 4 all        parent_child      supplementary                           1
+ 5 all        parent_child      autosomal_29                            1
+ 6 all        full_siblings     core_13                                 1
+ 7 all        full_siblings     identifiler_15                          1
+ 8 all        full_siblings     expanded_20                             1
+ 9 all        full_siblings     supplementary                           1
+10 all        full_siblings     autosomal_29                            1
+# ℹ 115 more rows
+# ℹ 3 more variables: proportion_exceeding_1 &lt;dbl&gt;,
+#   proportion_exceeding_0_1 &lt;dbl&gt;, proportion_exceeding_0_01 &lt;dbl&gt;</code></pre>
+<p><img src="figure/STR-simulation.Rmd/unnamed-chunk-50-1.png" width="768" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="simulation-results" class="section level2">
@@ -1297,7 +1751,7 @@ likelihood cut-off</h2>
 6      Asian     full_siblings     0.1          0.820</code></pre>
 <pre><code>`summarise()` has grouped output by &#39;population&#39;. You can override using the
 `.groups` argument.</code></pre>
-<p><img src="figure/STR-simulation.Rmd/unnamed-chunk-23-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="figure/STR-simulation.Rmd/unnamed-chunk-54-1.png" width="960" style="display: block; margin: auto;" /></p>
 </div>
 <div id="cut-offs-for-each-fpr" class="section level2">
 <h2>Cut-offs for each FPR</h2>
@@ -1333,11 +1787,6 @@ further elucidate the average strength of genetic evidence supporting
 each relationship type within populations, highlighting variations and
 consistencies in genetic relatedness indicators across demographic
 groups.</p>
-<pre><code>
-Attaching package: &#39;kableExtra&#39;</code></pre>
-<pre><code>The following object is masked from &#39;package:dplyr&#39;:
-
-    group_rows</code></pre>
 <table class="table table-striped table-hover table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -1459,8 +1908,8 @@ Hispanic
 </tr>
 </tbody>
 </table>
-<p><img src="figure/STR-simulation.Rmd/unnamed-chunk-31-1.png" width="768" style="display: block; margin: auto;" /></p>
-<p><img src="figure/STR-simulation.Rmd/unnamed-chunk-33-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/STR-simulation.Rmd/unnamed-chunk-62-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/STR-simulation.Rmd/unnamed-chunk-64-1.png" width="768" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1487,7 +1936,7 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] kableExtra_1.4.0      furrr_0.3.1           future_1.33.2        
+ [1] furrr_0.3.1           future_1.33.2         kableExtra_1.4.0     
  [4] microbenchmark_1.4.10 patchwork_1.2.0       lubridate_1.9.3      
  [7] forcats_1.0.0         stringr_1.5.1         dplyr_1.1.4          
 [10] purrr_1.0.2           readr_2.1.5           tidyr_1.3.1          
@@ -1499,19 +1948,20 @@ loaded via a namespace (and not attached):
  [5] callr_3.7.6       tzdb_0.4.0        vctrs_0.6.5       tools_4.4.1      
  [9] ps_1.7.6          generics_0.1.3    parallel_4.4.1    fansi_1.0.6      
 [13] highr_0.11        pkgconfig_2.0.3   lifecycle_1.0.4   farver_2.1.2     
-[17] compiler_4.4.1    git2r_0.33.0      munsell_0.5.1     getPass_0.2-4    
-[21] codetools_0.2-20  httpuv_1.6.15     htmltools_0.5.8.1 sass_0.4.9       
-[25] yaml_2.3.8        crayon_1.5.3      later_1.3.2       pillar_1.9.0     
-[29] jquerylib_0.1.4   whisker_0.4.1     cachem_1.1.0      parallelly_1.37.1
-[33] tidyselect_1.2.1  digest_0.6.36     stringi_1.8.4     listenv_0.9.1    
-[37] labeling_0.4.3    rprojroot_2.0.4   fastmap_1.2.0     grid_4.4.1       
-[41] colorspace_2.1-0  cli_3.6.3         magrittr_2.0.3    utf8_1.2.4       
-[45] withr_3.0.0       scales_1.3.0      promises_1.3.0    bit64_4.0.5      
-[49] timechange_0.3.0  rmarkdown_2.27    httr_1.4.7        globals_0.16.3   
-[53] bit_4.0.5         hms_1.1.3         evaluate_0.24.0   knitr_1.47       
-[57] viridisLite_0.4.2 rlang_1.1.4       Rcpp_1.0.12       glue_1.7.0       
-[61] xml2_1.3.6        svglite_2.1.3     vroom_1.6.5       rstudioapi_0.16.0
-[65] jsonlite_1.8.8    R6_2.5.1          systemfonts_1.1.0 fs_1.6.4         </code></pre>
+[17] compiler_4.4.1    git2r_0.33.0      textshaping_0.4.0 munsell_0.5.1    
+[21] codetools_0.2-20  getPass_0.2-4     httpuv_1.6.15     htmltools_0.5.8.1
+[25] sass_0.4.9        yaml_2.3.8        crayon_1.5.3      later_1.3.2      
+[29] pillar_1.9.0      jquerylib_0.1.4   whisker_0.4.1     cachem_1.1.0     
+[33] parallelly_1.37.1 tidyselect_1.2.1  digest_0.6.36     stringi_1.8.4    
+[37] listenv_0.9.1     labeling_0.4.3    rprojroot_2.0.4   fastmap_1.2.0    
+[41] grid_4.4.1        colorspace_2.1-0  cli_3.6.3         magrittr_2.0.3   
+[45] utf8_1.2.4        withr_3.0.0       scales_1.3.0      promises_1.3.0   
+[49] bit64_4.0.5       timechange_0.3.0  rmarkdown_2.27    httr_1.4.7       
+[53] globals_0.16.3    bit_4.0.5         ragg_1.3.2        hms_1.1.3        
+[57] evaluate_0.24.0   knitr_1.47        viridisLite_0.4.2 rlang_1.1.4      
+[61] Rcpp_1.0.12       glue_1.7.0        xml2_1.3.6        vroom_1.6.5      
+[65] svglite_2.1.3     rstudioapi_0.16.0 jsonlite_1.8.8    R6_2.5.1         
+[69] systemfonts_1.1.0 fs_1.6.4         </code></pre>
 </div>
 </div>
 </div>

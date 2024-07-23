@@ -15,10 +15,11 @@ library(RColorBrewer)
 library(tidyverse)
 library(patchwork)
 library(microbenchmark)
-
-# Load the packages
+library(kableExtra)
 library(future)
 library(furrr)
+library(dtplyr)
+library(data.table)
 
 
 knitr::opts_knit$set(root.dir = "..")
@@ -40,6 +41,12 @@ N <- 76e6 # what does this do?
 
 ```
 
+
+## Background
+
+We will simulate pairs of individuals with known relationships (e.g., parent-child, siblings), including unrelated individuals, based on the specified parameters. We will then calculate the likelihood ratio for each pair of individuals based on the simulated genotypes and known relationships.
+
+To do this, we will draw the likelihood ratio caluclations from Balding & Steele's 'Weight-of-evidence for forensic DNA profiles' book. 
 
 ### From Weight-of-evidence for forensic DNA profiles book
 
@@ -112,12 +119,15 @@ $$
 $$
 If both alleles do not match then $\kappa_2 / R_X^u = 0$. 
 
-## LR function
+## Likelihood ratio calculation
 
-Flowchart
+### Flowchart
+
+For our purposes, we can describe the flowchart for the likelihood ratio calculation as follows:
 
 ![](assets/STR_LR.png)
-## Likelihood ratio funtion
+
+### Function
 
 ```{r echo=TRUE}
 calculate_likelihood_ratio <- function(shared_alleles, genotype_match = NULL, pA = NULL, pB = NULL, k0, k1, k2) {
@@ -166,123 +176,17 @@ calculate_likelihood_ratio <- function(shared_alleles, genotype_match = NULL, pA
 
 ```
 
-
-Input for LR function
-```{r}
-get_lr_input_and_calculate <- function(row, allele_frequency_data) {
-
-  # 1. Get k values from relationship matrix
-  relationship_matrix <- data.frame(
-    relationship_type = c("parent-child", "siblings", "unrelated"),
-    k0 = c(0, 0.25, 1),
-    k1 = c(1, 0.5, 0),
-    k2 = c(0, 0.25, 0)
-  )
-
-  k_values <- relationship_matrix[relationship_matrix$relationship_type == row$relationship_type, c("k0", "k1", "k2")]
-
-  # 2. Convert genotypes to alphabetical representation (assuming genotypes are already character vectors)
-  genotype_match <- paste(
-    paste(row$individual1_genotype, collapse = "-"),
-    paste(unique(c(row$individual1_genotype, row$individual2_genotype)), collapse = "-")
-  )
-  
-  # 3. Extract allele frequencies
-  allele_freqs <- subset(allele_frequency_data, Population == row$population & Locus == row$locus)
-
-  if (nrow(allele_freqs) == 0) {
-    stop("No allele frequencies found for the given population and locus.")
-  }
-
-  allele_freqs <- allele_freqs[order(allele_freqs$Allele), ]  
-
-  pA <- allele_freqs$Frequency[1]
-  pB <- ifelse(length(unique(c(row$individual1_genotype, row$individual2_genotype))) > 2, allele_freqs$Frequency[2], NULL)
-
-  # 4. Determine shared alleles
-  shared_alleles <- sum(row$individual1_genotype %in% row$individual2_genotype)
-
-  # 5. Calculate LR
-  LR <- calculate_likelihood_ratio(shared_alleles, genotype_match, pA, pB, k_values$k0, k_values$k1, k_values$k2)
-
-  return(list(pair_ID = row$pair_ID, LR = LR))
-}
-
-```
-
-
 ## Rscript for simulation
 
+Given our likelihood ratio calculation, we will now build a framework around this for simulating pairs of individuals of known relationships and calculating the likelihood ratio for each pair based on the simulated genotypes.
+
+The general flow of our simulation framework will be as follows:
+
 ![](assets/simulation-framework.png)
+
 ### Step 1: Simulation Setup
 
-The first step is to set up the simulation by defining the parameters and functions required for generating the simulated data. This includes specifying the population size, allele frequencies, and the kinship matrix for likelihood ratio calculations. The simulation will generate pairs of individuals with known relationships (e.g., parent-child, siblings) and unknown relationships (unrelated) based on the specified parameters.
-
-
-```{r echo=TRUE}
-
-generate_simulation_setup <- function(kinship_matrix, population_list, num_related, num_unrelated) {
-  # Create an empty dataframe to store the simulation setup
-  simulation_setup <- data.frame(
-    population = character(),
-    relationship_type = character(),
-    num_simulations = integer(),
-    stringsAsFactors = FALSE
-  )
-  
-  # Loop through each population and relationship type to create the setup
-  for (population in population_list) {
-    for (relationship in kinship_matrix$relationship_type) {
-      num_simulations <- ifelse(relationship == "unrelated", num_unrelated, num_related)
-      
-      # Append to the simulation setup dataframe
-      simulation_setup <- rbind(simulation_setup, data.frame(
-        population = population,
-        relationship_type = relationship,
-        num_simulations = num_simulations
-      ))
-    }
-  }
-  
-  return(simulation_setup)
-}
-
-
-```
-
-The necessary parameters for this are initialized beforehand. 
-
-First, the kinship coefficients are provided in a matrix:
-
-```{r echo=TRUE}
-# Create a dataframe with relationship types and their respective kinship coefficients (k0, k1, k2)
-kinship_matrix <- tibble(
-    relationship_type =
-      c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated"),
-    k0 = c(0, 1/4, 1/2, 7/8, 15/16, 1),
-    k1 = c(1, 1/2, 1/2, 1/8, 1/16, 0),
-    k2 = c(0, 1/4, 0, 0, 0, 0)
-  )
-
-# Print the kinship matrix to check the contents
-print(kinship_matrix)
-
-```
-
-Then a list of populations is created:
-
-```{r}
-# Define the populations for the simulation
-
-populations <- c("all", "AfAm", "Cauc", "Hispanic", "Asian")
-
-print(populations)
-```
-
-Now we can test the simulation setup function:### Step 1: Simulation Setup
-
-The first step is to set up the simulation by defining the parameters and functions required for generating the simulated data. This includes specifying the population size, allele frequencies, and the kinship matrix for likelihood ratio calculations. The simulation will generate pairs of individuals with known relationships (e.g., parent-child, siblings) and unknown relationships (unrelated) based on the specified parameters.
-
+The first step is to set up the simulation by defining the parameters and functions required for generating the simulated data. This includes specifying the populations, allele frequencies, and the kinship coefficient matrix for likelihood ratio calculations. 
 
 ```{r echo=TRUE}
 
@@ -315,6 +219,8 @@ generate_simulation_setup <- function(kinship_matrix, population_list, num_relat
 
 ```
 
+#### Create input parameters
+
 The necessary parameters for this are initialized beforehand. 
 
 First, the kinship coefficients are provided in a matrix:
@@ -322,8 +228,10 @@ First, the kinship coefficients are provided in a matrix:
 ```{r echo=TRUE}
 # Create a dataframe with relationship types and their respective kinship coefficients (k0, k1, k2)
 kinship_matrix <- tibble(
-    relationship_type =
+    relationship_type = factor(
       c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated"),
+      levels = c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated")
+    ),
     k0 = c(0, 1/4, 1/2, 7/8, 15/16, 1),
     k1 = c(1, 1/2, 1/2, 1/8, 1/16, 0),
     k2 = c(0, 1/4, 0, 0, 0, 0)
@@ -332,48 +240,49 @@ kinship_matrix <- tibble(
 # Print the kinship matrix to check the contents
 print(kinship_matrix)
 
+
 ```
 
 Then a list of populations is created:
 
 ```{r}
-# Define the populations for the simulation
+# Create a tibble with populations and their labels
+population_labels <- tibble(
+  population = factor(
+    c("all", "AfAm", "Cauc", "Hispanic", "Asian"),
+    levels = c("all", "AfAm", "Cauc", "Hispanic", "Asian")
+  ),
+  label = c("All", "African American", "Caucasian", "Hispanic", "Asian")
+)
 
-populations <- c("all", "AfAm", "Cauc", "Hispanic", "Asian")
+# Create a simple list based on the population names
+populations_list <- levels(population_labels$population)
 
-print(populations)
+# Print the tibble to check the contents
+print(population_labels)
+
+# Print the simple list to check the contents
+print(populations_list)
+
+
 ```
 
-Now we can test the simulation setup function:
-
+#### Gather allele frequency information
 
 ```{r}
 
-# Test the simulation setup function
-simulation_setup <- generate_simulation_setup(kinship_matrix, populations, 2,5)
+# Read the combined allele frequency data
+df_allelefreq <- fread("data/df_allelefreq_combined.csv")
 
-print(simulation_setup)
+# Ensure the 'allele' column is character
+df_allelefreq[, allele := as.character(allele)]
 
-```
+# Verify the structure
+str(df_allelefreq)
 
-### Step 2: Initialize Individuals
-Once the general simulation setup is done, each pair of individuals must be initialized as its own dataframe. This requires knowing how many loci will be simulated per pair. We will therefore first extract the unique loci from our allele frequency tables.
+# Print the first few rows to check the data
+print(head(df_allelefreq))
 
-```{r}
-
-# load allele frequency tables
-# List all CSV files matching the pattern
-csv_files <- list.files(path = "data", pattern = "1036_.*\\.csv", full.names = TRUE)
-
-# Read and combine all CSV files
-df_allelefreq <- csv_files |>
-  purrr::map_dfr(readr::read_csv)
-
-# Print the combined dataframe to check
-print(df_allelefreq)
-
-# Save as CSV for future reference
-write_csv(df_allelefreq, "data/df_allelefreq.csv")
 
 ```
 
@@ -425,16 +334,31 @@ loci_lists
 
 ```
 
-Now we can initialize the individuals:
+Now we can test the simulation setup function:
 
 
 ```{r}
-initialize_individuals_pair <- function(population, relationship_type, sim_id, loci_list) {
+
+# Test the simulation setup function
+simulation_setup <- generate_simulation_setup(kinship_matrix, populations_list, 2,5)
+
+print(simulation_setup)
+
+```
+
+### Step 2: Initialize Individuals
+Once the general simulation setup is done, each pair of individuals must be initialized as its own dataframe. 
+
+Now we can initialize the individuals:
+
+```{r tidy-initialize}
+
+tidy_initialize_individuals_pair <- function(population, relationship_type, sim_id, loci_list) {
   num_loci <- length(loci_list)
   
-  # Create a dataframe to store the genotype information along with additional columns
+  # Create a tibble to store the genotype information along with additional columns
   # for the calculation of the likelihood ratio and other necessary metrics
-  individuals_genotypes <- data.frame(
+  individuals_genotypes <- tibble(
     population = rep(population, num_loci),
     relationship_type = rep(relationship_type, num_loci),
     sim_id = rep(sim_id, num_loci),
@@ -445,8 +369,7 @@ initialize_individuals_pair <- function(population, relationship_type, sim_id, l
     ind2_allele2 = character(num_loci),
     shared_alleles = integer(num_loci),  # Initialize shared_alleles with integer default (0)
     genotype_match = character(num_loci),  # Initialize genotype_match with blank characters
-    LR = numeric(num_loci),  # Initialize the LR column with numeric defaults (floating point)
-    stringsAsFactors = FALSE
+    LR = numeric(num_loci)  # Initialize the LR column with numeric defaults (floating point)
   )
   
   return(individuals_genotypes)
@@ -454,6 +377,37 @@ initialize_individuals_pair <- function(population, relationship_type, sim_id, l
 
 
 ```
+
+```{r dt-initialize}
+
+dt_initialize_individuals_pair <- function(population, relationship_type, sim_id, loci_list) {
+  num_loci <- length(loci_list)
+  
+  # Create a data.table to store the genotype information along with additional columns
+  # for the calculation of the likelihood ratio and other necessary metrics
+  individuals_genotypes <- data.table(
+    population = rep(population, num_loci),
+    relationship_type = rep(relationship_type, num_loci),
+    sim_id = rep(sim_id, num_loci),
+    locus = loci_list,
+    ind1_allele1 = character(num_loci),
+    ind1_allele2 = character(num_loci),
+    ind2_allele1 = character(num_loci),
+    ind2_allele2 = character(num_loci),
+    shared_alleles = integer(num_loci),  # Initialize shared_alleles with integer default (0)
+    genotype_match = character(num_loci),  # Initialize genotype_match with blank characters
+    LR = numeric(num_loci)  # Initialize the LR column with numeric defaults (floating point)
+  )
+  
+  return(individuals_genotypes)
+}
+
+```
+
+
+
+#### Testing the initialization function
+Here we test to see what the intialization function creates
 
 ```{r}
 # Assuming loci_list is already defined and contains the list of loci
@@ -463,18 +417,50 @@ relationship_type <- "parent_child"
 sim_id <- 1
 
 # Initialize a single pair of individuals
-individuals_genotypes <- initialize_individuals_pair(population, relationship_type, sim_id, loci_list)
+individuals_genotypes <- tidy_initialize_individuals_pair(population, relationship_type, sim_id, loci_list)
 
 # Print the initialized individuals
-print("Initialized individuals:")
 print(individuals_genotypes)
 
 ```
 
 
-### Step 3: Simulate Genotypes
 ```{r}
-simulate_genotypes <- function(row, df_allelefreq, kinship_matrix) {
+# Assuming loci_list is already defined and contains the list of loci
+# Example usage:
+population <- "all"
+relationship_type <- "parent_child"
+sim_id <- 1
+
+# Initialize a single pair of individuals
+individuals_genotypes <- dt_initialize_individuals_pair(population, relationship_type, sim_id, loci_list)
+
+# Print the initialized individuals
+print(individuals_genotypes)
+
+```
+
+```{r}
+library(microbenchmark)
+
+# Benchmark the initialization functions
+benchmark_results <- microbenchmark(
+  tidy = tidy_initialize_individuals_pair(population, relationship_type, sim_id, loci_list),
+  dt = dt_initialize_individuals_pair(population, relationship_type, sim_id, loci_list),
+  times = 100
+)
+
+# Print the benchmark results
+print(benchmark_results)
+
+```
+
+### Step 3: Simulate Genotypes
+
+Next, we define a function to simulate the genotypes for each pair of individuals based on the allele frequencies and kinship coefficients. 
+
+```{r tidy-geno}
+tidy_simulate_genotypes <- function(row, df_allelefreq, kinship_matrix) {
   population <- row$population
   locus <- row$locus
   relationship <- row$relationship_type
@@ -521,12 +507,125 @@ simulate_genotypes <- function(row, df_allelefreq, kinship_matrix) {
 
 ```
 
-### Step 4: Calculate Kinship
+```{r dt-geno}
+
+dt_simulate_genotypes <- function(row, df_allelefreq, kinship_matrix) {
+  population <- row$population
+  locus <- row$locus
+  relationship <- row$relationship_type
+
+  # print(paste("Population:", population))
+  # print(paste("Locus:", locus))
+  # print(paste("Relationship:", relationship))
+
+  # Fetch allele frequencies for the current population and locus
+  allele_freqs <- df_allelefreq[population == population & marker == locus, ]
+  
+  if (nrow(allele_freqs) == 0) {
+    stop("No allele frequencies found for the given population and locus.")
+  }
+  
+  # print(allele_freqs)
+
+  # Fetch kinship coefficients based on the relationship type
+  kinship_coeffs <- kinship_matrix[kinship_matrix$relationship_type == relationship, ]
+  
+  if (nrow(kinship_coeffs) == 0) {
+    stop("No kinship coefficients found for the given relationship type.")
+  }
+
+  # Extract alleles and their frequencies
+  alleles <- allele_freqs$allele
+  frequencies <- allele_freqs$frequency
+  
+  # print(paste("Alleles:", paste(alleles, collapse = ", ")))
+  # print(paste("Frequencies:", paste(frequencies, collapse = ", ")))
+  
+  # Ensure that the lengths of alleles and frequencies match
+  if (length(alleles) != length(frequencies)) {
+    stop("Length of alleles and frequencies do not match.")
+  }
+  
+  # Simulate alleles for individual 1
+  ind1_alleles <- sample(alleles, size = 2, replace = TRUE, prob = frequencies)
+
+  # print(paste("Ind1 Alleles:", paste(ind1_alleles, collapse = ", ")))
+
+  # Determine the number of shared alleles using kinship coefficients
+  relationship_choice <- sample(c('none', 'one', 'both'), size = 1, prob = c(kinship_coeffs$k0, kinship_coeffs$k1, kinship_coeffs$k2))
+  
+  # print(paste("Relationship Choice:", relationship_choice))
+
+  # Simulate alleles for individual 2 based on the relationship choice
+  if (relationship_choice == 'none') {
+    ind2_alleles <- sample(alleles, size = 2, replace = TRUE, prob = frequencies)
+  } else if (relationship_choice == 'one') {
+    shared_allele <- sample(ind1_alleles, size = 1)
+    non_shared_allele <- sample(alleles, size = 1, prob = frequencies)
+    if (runif(1) > 0.5) {
+      ind2_alleles <- c(shared_allele, non_shared_allele)
+    } else {
+      ind2_alleles <- c(non_shared_allele, shared_allele)
+    }
+  } else if (relationship_choice == 'both') {
+    ind2_alleles <- ind1_alleles
+  }
+  
+  # print(paste("Ind2 Alleles:", paste(ind2_alleles, collapse = ", ")))
+
+  # Return the updated row
+  row$ind1_allele1 <- ind1_alleles[1]
+  row$ind1_allele2 <- ind1_alleles[2]
+  row$ind2_allele1 <- ind2_alleles[1]
+  row$ind2_allele2 <- ind2_alleles[2]
+
+  return(row)
+}
+
+
+```
+
 ```{r}
-kinship_calculation <- function(row, allele_frequency_data, kinship_matrix) {
+# Assuming df_allelefreq, kinship_matrix, and individuals_genotypes are already defined
+
+# Tidyverse version
+tidy_result <- tidy_simulate_genotypes(individuals_genotypes[1, ], df_allelefreq, kinship_matrix)
+print(tidy_result)
+
+# Data.table version
+dt_result <- dt_simulate_genotypes(individuals_genotypes[1, ], df_allelefreq, kinship_matrix)
+print(dt_result)
+
+```
+
+
+```{r}
+
+# Perform the microbenchmark
+benchmark_result <- microbenchmark(
+  tidy = tidy_simulate_genotypes(individuals_genotypes[1, ], df_allelefreq, kinship_matrix),
+  dt = dt_simulate_genotypes(individuals_genotypes[1, ], df_allelefreq, kinship_matrix),
+  times = 1000
+)
+
+# Print the benchmark results
+print(benchmark_result)
+
+```
+
+### Step 4: Calculate Kinship
+
+Then we define a related function to calculate the kinship and likelihood ratios based on the simulated genotypes.
+
+```{r}
+original_kinship_calculation <- function(row, allele_frequency_data, kinship_matrix) {
   # Step 1: Extract alleles directly from the row
-  alleles_ind1 <- c(row$ind1_allele1, row$ind1_allele2)
-  alleles_ind2 <- c(row$ind2_allele1, row$ind2_allele2)
+  # alleles_ind1 <- c(row$ind1_allele1, row$ind1_allele2)
+  # alleles_ind2 <- c(row$ind2_allele1, row$ind2_allele2)
+  
+  alleles_ind1 <- as.character(c(row$ind1_allele1, row$ind1_allele2))
+  alleles_ind2 <- as.character(c(row$ind2_allele1, row$ind2_allele2))
+
 
   # Step 2: Determine shared and unique alleles
   shared_alleles_vector <- intersect(alleles_ind1, alleles_ind2)
@@ -639,21 +738,19 @@ kinship_calculation <- function(row, allele_frequency_data, kinship_matrix) {
 
 ```
 
+Here we test what the simulation will produce for each locus in a pair of individuals.
 
-```{r test-func-ind-genotypes}
-# Assuming both simulate_genotypes and kinship_calculation functions are defined and ready to use
-# Also assuming df_allelefreq and kinship_matrix are loaded and properly structured
-
+```{r}
 # Select the specific row to be used for the example
 example_row <- individuals_genotypes[9, ]
 
 # Simulate genotypes for the example row
-simulated_output <- simulate_genotypes(example_row, df_allelefreq, kinship_matrix)
+simulated_output <- dt_simulate_genotypes(example_row, df_allelefreq, kinship_matrix)
 
 simulated_output
 
 # Calculate kinship and likelihood ratios using the simulated genotypes
-final_output <- kinship_calculation(simulated_output, df_allelefreq, kinship_matrix)
+final_output <- original_kinship_calculation(simulated_output, df_allelefreq, kinship_matrix)
 
 # Print the final output to check the updated allele values and computed likelihood ratio
 print(final_output)
@@ -661,14 +758,40 @@ print(final_output)
 ```
 
 
+We then need a function to process the loci and calculate the kinship for each row.
+
+
 ```{r}
 # Function to simulate genotypes and calculate kinship for each row
+
 process_loci <- function(row, allele_frequency_data, kinship_matrix) {
+  # Ensure the row is in tibble format for consistency
+  row <- as_tibble(row)
+  
+  # Simulate genotypes
   simulated_row <- simulate_genotypes(row, allele_frequency_data, kinship_matrix)
+  
+  # Calculate kinship
   final_row <- kinship_calculation(simulated_row, allele_frequency_data, kinship_matrix)
+  
+  # Explicitly convert the columns to the correct types to ensure compatibility
+  final_row <- final_row %>%
+    mutate(
+      ind1_allele1 = as.character(ind1_allele1),
+      ind1_allele2 = as.character(ind1_allele2),
+      ind2_allele1 = as.character(ind2_allele1),
+      ind2_allele2 = as.character(ind2_allele2),
+      shared_alleles = as.integer(shared_alleles),
+      genotype_match = as.character(genotype_match),
+      LR = as.numeric(LR)
+    )
+  
   return(final_row)
 }
+
 ```
+
+An example of the final output is shown below for one complete set of loci for a pair of individuals:
 
 ```{r}
 # Apply the combined function to each row and update the dataframe
@@ -680,12 +803,9 @@ for (i in 1:nrow(individuals_genotypes)) {
 print(individuals_genotypes)
 ```
 
+#### Benchmark speed for simulation per individual
 
-```{r}
-# Set up parallel processing plan
-plan(multisession, workers = parallel::detectCores() - 1)
-set.seed(123)
-```
+Now to benchmark the speed
 
 ```{r}
 
@@ -740,19 +860,10 @@ print(benchmark_results)
 ```
 
 
-```{r}
+### Step 5: Process Simulation Setup
 
-# Function to process the individuals' genotypes dataframe
-process_individuals_genotypes <- function(individuals_genotypes, df_allelefreq, kinship_matrix) {
-  final_individuals_genotypes <- individuals_genotypes %>%
-    future_pmap(~ process_loci(list(...), df_allelefreq, kinship_matrix), seed = TRUE) %>%
-    bind_rows()
-  
-  return(final_individuals_genotypes)
-}
+Finally, we define a function to process the simulation setup and initialize and process the pairs of individuals for each simulation scenario.
 
-
-```
 
 ```{r}
 # Function to process the simulation setup and initialize + process individuals' genotypes
@@ -1090,7 +1201,7 @@ kinship_calculation <- function(row, allele_frequency_data, kinship_matrix) {
 ```
 
 
-```{r test-func-ind-genotypes}
+```{r}
 # Assuming both simulate_genotypes and kinship_calculation functions are defined and ready to use
 # Also assuming df_allelefreq and kinship_matrix are loaded and properly structured
 
@@ -1691,7 +1802,7 @@ aggregated_llr_results <- input_df %>%
 ```
 
 ```{r}
-library(kableExtra)
+
 
 # Transforming the data to a wide format
 wide_format_results <- aggregated_llr_results %>%
