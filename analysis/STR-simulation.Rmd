@@ -351,58 +351,6 @@ Once the general simulation setup is done, each pair of individuals must be init
 
 Now we can initialize the individuals:
 
-```{r tidy-initialize}
-
-tidy_initialize_individuals_pair <- function(population, relationship_type, sim_id, loci_list) {
-  num_loci <- length(loci_list)
-  
-  # Create a tibble to store the genotype information along with additional columns
-  # for the calculation of the likelihood ratio and other necessary metrics
-  individuals_genotypes <- tibble(
-    population = rep(population, num_loci),
-    relationship_type = rep(relationship_type, num_loci),
-    sim_id = rep(sim_id, num_loci),
-    locus = loci_list,
-    ind1_allele1 = character(num_loci),
-    ind1_allele2 = character(num_loci),
-    ind2_allele1 = character(num_loci),
-    ind2_allele2 = character(num_loci),
-    shared_alleles = integer(num_loci),  # Initialize shared_alleles with integer default (0)
-    genotype_match = character(num_loci),  # Initialize genotype_match with blank characters
-    LR = numeric(num_loci)  # Initialize the LR column with numeric defaults (floating point)
-  )
-  
-  return(individuals_genotypes)
-}
-
-
-```
-
-```{r dt-initialize}
-
-dt_initialize_individuals_pair <- function(population, relationship_type, sim_id, loci_list) {
-  num_loci <- length(loci_list)
-  
-  # Create a data.table to store the genotype information along with additional columns
-  # for the calculation of the likelihood ratio and other necessary metrics
-  individuals_genotypes <- data.table(
-    population = rep(population, num_loci),
-    relationship_type = rep(relationship_type, num_loci),
-    sim_id = rep(sim_id, num_loci),
-    locus = loci_list,
-    ind1_allele1 = character(num_loci),
-    ind1_allele2 = character(num_loci),
-    ind2_allele1 = character(num_loci),
-    ind2_allele2 = character(num_loci),
-    shared_alleles = integer(num_loci),  # Initialize shared_alleles with integer default (0)
-    genotype_match = character(num_loci),  # Initialize genotype_match with blank characters
-    LR = numeric(num_loci)  # Initialize the LR column with numeric defaults (floating point)
-  )
-  
-  return(individuals_genotypes)
-}
-
-```
 
 ```{r func-initialize}
 
@@ -432,7 +380,7 @@ initialize_individuals_pair <- function(population, relationship_type, sim_id, l
 
 
 #### Testing the initialization function
-Here we test to see what the intialization function creates
+Here we test to see what the intialization function creates:
 
 ```{r}
 # Assuming loci_list is already defined and contains the list of loci
@@ -442,23 +390,7 @@ relationship_type <- "parent_child"
 sim_id <- 1
 
 # Initialize a single pair of individuals
-individuals_genotypes <- tidy_initialize_individuals_pair(population, relationship_type, sim_id, loci_list)
-
-# Print the initialized individuals
-print(individuals_genotypes)
-
-```
-
-
-```{r}
-# Assuming loci_list is already defined and contains the list of loci
-# Example usage:
-population <- "all"
-relationship_type <- "parent_child"
-sim_id <- 1
-
-# Initialize a single pair of individuals
-individuals_genotypes <- dt_initialize_individuals_pair(population, relationship_type, sim_id, loci_list)
+individuals_genotypes <- initialize_individuals_pair(population, relationship_type, sim_id, loci_list)
 
 # Print the initialized individuals
 print(individuals_genotypes)
@@ -469,9 +401,7 @@ print(individuals_genotypes)
 library(microbenchmark)
 
 # Benchmark the initialization functions
-benchmark_results <- microbenchmark(
-  tidy = tidy_initialize_individuals_pair(population, relationship_type, sim_id, loci_list),
-  dt = dt_initialize_individuals_pair(population, relationship_type, sim_id, loci_list),
+benchmark_results <- microbenchmark(initialize = initialize_individuals_pair(population, relationship_type, sim_id, loci_list),
   times = 100
 )
 
@@ -484,161 +414,8 @@ print(benchmark_results)
 
 Next, we define a function to simulate the genotypes for each pair of individuals based on the allele frequencies and kinship coefficients. 
 
-```{r tidy-geno}
-tidy_simulate_genotypes <- function(row, df_allelefreq, kinship_matrix) {
-  population <- row$population
-  locus <- row$locus
-  relationship <- row$relationship_type
 
-  # Fetch allele frequencies for the current population and locus
-  allele_freqs <- df_allelefreq[df_allelefreq$population == population & df_allelefreq$marker == locus, ]
-
-  # Fetch kinship coefficients based on the relationship type
-  kinship_coeffs <- kinship_matrix[kinship_matrix$relationship_type == relationship, ]
-
-  # Extract alleles and their frequencies
-  alleles <- allele_freqs$allele
-  frequencies <- allele_freqs$frequency
-
-  # Simulate alleles for individual 1
-  ind1_alleles <- sample(alleles, size = 2, replace = TRUE, prob = frequencies)
-
-  # Determine the number of shared alleles using kinship coefficients
-  relationship_choice <- sample(c('none', 'one', 'both'), size = 1, prob = c(kinship_coeffs$k0, kinship_coeffs$k1, kinship_coeffs$k2))
-
-  # Simulate alleles for individual 2 based on the relationship choice
-  if (relationship_choice == 'none') {
-    ind2_alleles <- sample(alleles, size = 2, replace = TRUE, prob = frequencies)
-  } else if (relationship_choice == 'one') {
-    shared_allele <- sample(ind1_alleles, size = 1)
-    non_shared_allele <- sample(alleles, size = 1, prob = frequencies)
-    if (runif(1) > 0.5) {
-      ind2_alleles <- c(shared_allele, non_shared_allele)
-    } else {
-      ind2_alleles <- c(non_shared_allele, shared_allele)
-    }
-  } else if (relationship_choice == 'both') {
-    ind2_alleles <- ind1_alleles
-  }
-
-  # Return the updated row
-  row$ind1_allele1 <- ind1_alleles[1]
-  row$ind1_allele2 <- ind1_alleles[2]
-  row$ind2_allele1 <- ind2_alleles[1]
-  row$ind2_allele2 <- ind2_alleles[2]
-
-  return(row)
-}
-
-```
-
-```{r dt-geno}
-
-dt_simulate_genotypes <- function(row, df_allelefreq, kinship_matrix) {
-  population <- row$population
-  locus <- row$locus
-  relationship <- row$relationship_type
-
-  # print(paste("Population:", population))
-  # print(paste("Locus:", locus))
-  # print(paste("Relationship:", relationship))
-
-  # Fetch allele frequencies for the current population and locus
-  allele_freqs <- df_allelefreq[population == population & marker == locus, ]
-  
-  if (nrow(allele_freqs) == 0) {
-    stop("No allele frequencies found for the given population and locus.")
-  }
-  
-  # print(allele_freqs)
-
-  # Fetch kinship coefficients based on the relationship type
-  kinship_coeffs <- kinship_matrix[kinship_matrix$relationship_type == relationship, ]
-  
-  if (nrow(kinship_coeffs) == 0) {
-    stop("No kinship coefficients found for the given relationship type.")
-  }
-
-  # Extract alleles and their frequencies
-  alleles <- allele_freqs$allele
-  frequencies <- allele_freqs$frequency
-  
-  # print(paste("Alleles:", paste(alleles, collapse = ", ")))
-  # print(paste("Frequencies:", paste(frequencies, collapse = ", ")))
-  
-  # Ensure that the lengths of alleles and frequencies match
-  if (length(alleles) != length(frequencies)) {
-    stop("Length of alleles and frequencies do not match.")
-  }
-  
-  # Simulate alleles for individual 1
-  ind1_alleles <- sample(alleles, size = 2, replace = TRUE, prob = frequencies)
-
-  # print(paste("Ind1 Alleles:", paste(ind1_alleles, collapse = ", ")))
-
-  # Determine the number of shared alleles using kinship coefficients
-  relationship_choice <- sample(c('none', 'one', 'both'), size = 1, prob = c(kinship_coeffs$k0, kinship_coeffs$k1, kinship_coeffs$k2))
-  
-  # print(paste("Relationship Choice:", relationship_choice))
-
-  # Simulate alleles for individual 2 based on the relationship choice
-  if (relationship_choice == 'none') {
-    ind2_alleles <- sample(alleles, size = 2, replace = TRUE, prob = frequencies)
-  } else if (relationship_choice == 'one') {
-    shared_allele <- sample(ind1_alleles, size = 1)
-    non_shared_allele <- sample(alleles, size = 1, prob = frequencies)
-    if (runif(1) > 0.5) {
-      ind2_alleles <- c(shared_allele, non_shared_allele)
-    } else {
-      ind2_alleles <- c(non_shared_allele, shared_allele)
-    }
-  } else if (relationship_choice == 'both') {
-    ind2_alleles <- ind1_alleles
-  }
-  
-  # print(paste("Ind2 Alleles:", paste(ind2_alleles, collapse = ", ")))
-
-  # Return the updated row
-  row$ind1_allele1 <- ind1_alleles[1]
-  row$ind1_allele2 <- ind1_alleles[2]
-  row$ind2_allele1 <- ind2_alleles[1]
-  row$ind2_allele2 <- ind2_alleles[2]
-
-  return(row)
-}
-
-
-```
-
-```{r}
-# Assuming df_allelefreq, kinship_matrix, and individuals_genotypes are already defined
-
-# Tidyverse version
-tidy_result <- tidy_simulate_genotypes(individuals_genotypes[1, ], df_allelefreq, kinship_matrix)
-print(tidy_result)
-
-# Data.table version
-dt_result <- dt_simulate_genotypes(individuals_genotypes[1, ], df_allelefreq, kinship_matrix)
-print(dt_result)
-
-```
-
-
-```{r}
-
-# Perform the microbenchmark
-benchmark_result <- microbenchmark(
-  tidy = tidy_simulate_genotypes(individuals_genotypes[1, ], df_allelefreq, kinship_matrix),
-  dt = dt_simulate_genotypes(individuals_genotypes[1, ], df_allelefreq, kinship_matrix),
-  times = 1000
-)
-
-# Print the benchmark results
-print(benchmark_result)
-
-```
-
-```{r tidy-geno}
+```{r func-geno-sim}
 simulate_genotypes <- function(row, df_allelefreq, kinship_matrix) {
   population <- row$population
   locus <- row$locus
@@ -683,6 +460,19 @@ simulate_genotypes <- function(row, df_allelefreq, kinship_matrix) {
 
   return(row)
 }
+
+```
+
+```{r}
+
+# Perform the microbenchmark
+benchmark_result <- microbenchmark(
+  geno_sim = simulate_genotypes(individuals_genotypes[1, ], df_allelefreq, kinship_matrix),
+  times = 100
+)
+
+# Print the benchmark results
+print(benchmark_result)
 
 ```
 
@@ -926,41 +716,6 @@ print(benchmark_results)
 
 Finally, we define a function to process the simulation setup and initialize and process the pairs of individuals for each simulation scenario.
 
-
-```{r}
-# Function to process the simulation setup and initialize + process individuals' genotypes
-process_simulation_setup <- function(simulation_setup, df_allelefreq, kinship_matrix, loci_list, output_file) {
-  # Set up parallel processing
-  plan(multisession, workers = parallel::detectCores() - 1)
-  set.seed(123)  # Set a seed for reproducibility
-  
-  # Process each simulation setup row
-  final_results <- simulation_setup %>%
-    future_pmap_dfr(function(population, relationship_type, num_simulations) {
-      purrr::map_dfr(1:num_simulations, function(sim_id) {
-        # Initialize individuals' genotypes
-        individuals_genotypes <- initialize_individuals_pair(population, relationship_type, sim_id, loci_list)
-        
-        # Process individuals' genotypes
-        processed_genotypes <- process_individuals_genotypes(individuals_genotypes, df_allelefreq, kinship_matrix)
-        
-        return(processed_genotypes)
-      })
-    }, .progress = TRUE)
-  
-  # Remove the `seed` column if it exists
-  if ("seed" %in% colnames(final_results)) {
-    final_results <- final_results %>% select(-seed)
-  }
-  
-  
-  # Save the result to a CSV file
-  write.csv(final_results, output_file, row.names = FALSE)
-  
-  return(final_results)
-}
-```
-
 ```{r}
 
 # Function to process the individuals' genotypes dataframe
@@ -981,51 +736,9 @@ final_df <- process_simulation_setup(simulation_setup, df_allelefreq, kinship_ma
 
 ```
 
-```{r}
-# Set up parallel processing plan
-plan(multisession, workers = parallel::detectCores() - 1)
-set.seed(123)
-```
 
 ```{r}
-# Function for the list of rows approach
-list_of_rows_approach <- function(individuals_genotypes, df_allelefreq, kinship_matrix) {
-  rows_list <- split(individuals_genotypes, seq(nrow(individuals_genotypes)))
-  final_rows_list <- future_map(rows_list, ~ process_loci(.x, df_allelefreq, kinship_matrix), .options = furrr_options(seed = TRUE))
-  final_individuals_genotypes <- bind_rows(final_rows_list)
-  
-  return(final_individuals_genotypes)
-}
 
-# Measure the execution time using system.time()
-list_of_rows_time <- system.time({
-  list_of_rows_result <- list_of_rows_approach(individuals_genotypes, df_allelefreq, kinship_matrix)
-})
-
-# Print the execution time
-cat("Execution time for list_of_rows_approach:\n")
-print(list_of_rows_time)
-
-
-```
-
-```{r}
-# Benchmark both approaches using microbenchmark
-benchmark_results <- microbenchmark(
-  list_of_rows = list_of_rows_approach(individuals_genotypes, df_allelefreq, kinship_matrix),
-  future_pmap = future_pmap_approach(individuals_genotypes, df_allelefreq, kinship_matrix),
-  times = 10  # Number of iterations
-)
-
-# Print the benchmark results
-cat("Benchmark results for both approaches:\n")
-print(benchmark_results)
-
-```
-
-
-
-```{r}
 calculate_combined_lrs <- function(final_results, loci_lists) {
   combined_lrs <- final_results %>%
     group_by(population, relationship_type, sim_id) %>%
@@ -1046,13 +759,15 @@ calculate_combined_lrs <- function(final_results, loci_lists) {
 ```
 
 
+
+
 ```{r}
-# Function to process the simulation setup and initialize + process individuals' genotypes
+# Pre-initialize parallel backend
+plan(multisession, workers = parallel::detectCores() - 1)
+set.seed(123)  # Set a seed for reproducibility
+
+# Efficient process_simulation_setup function
 process_simulation_setup <- function(simulation_setup, df_allelefreq, kinship_matrix, loci_list, loci_lists, output_file, summary_output_file) {
-  # Set up parallel processing
-  plan(multisession, workers = parallel::detectCores() - 1)
-  set.seed(123)  # Set a seed for reproducibility
-  
   # Process each simulation setup row
   final_results <- simulation_setup %>%
     future_pmap_dfr(function(population, relationship_type, num_simulations) {
@@ -1087,15 +802,20 @@ process_simulation_setup <- function(simulation_setup, df_allelefreq, kinship_ma
 
 
 ```{r}
-# Example usage:
-result <- process_simulation_setup(
-  simulation_setup, df_allelefreq, kinship_matrix, loci_list, loci_lists, 
-  "data/processed_genotypes.csv", "data/summary_genotypes.csv"
+# Microbenchmarking the efficient function
+benchmark <- microbenchmark(
+  efficient = process_simulation_setup(
+    simulation_setup, df_allelefreq, kinship_matrix, loci_list, loci_lists, 
+    "data/processed_genotypest.csv", "data/summary_genotypes.csv"
+  ),
+  times = 10
 )
 
-final_df <- result$final_results
-combined_lrs <- result$combined_lrs
+benchmark_efficient
 ```
+
+
+### Plotting
 
 
 ```{r}
