@@ -37,12 +37,8 @@ mother_data = read.csv("./data/data_filtered_recoded.csv")
 ```
 
 
-<<<<<<< HEAD
-Here, we are trying to create a frequency table for each race to show the number of children born, the number of mothers who have "chborn_num" children, the number of siblings, and the number of individuals who have "n_sib" siblings. 
-=======
-## 1.Frequency of Number of Children & Sibling of Black/African American by Census Year
 Here, we are trying to create frequency tables for each race to show the number of children born, the number of mother who has "chborn_num" children, the number of sibling, and the number of individuals who has "n_sib" siblings. 
->>>>>>> f8e47e643b1555b8598ac2661c5a2b18dba6bdbb
+
 $$
 n_{sib} = chborn_{num} - 1
 $$
@@ -54,7 +50,8 @@ $$
 
 For example, suppose 10 mothers (generation 0) have 7 children, then there will be 70 children (generation 1) in total who each have 6 siblings.
 
-## Frequency of Number of Children & Siblings of Black/African American Population
+
+## 1.Frequency Table of Number of Children & Siblings of Black/African American Population
 
 ```{r}
 fert_df <- mother_data %>%
@@ -71,12 +68,9 @@ nice_table(
 )
 ```
 
-<<<<<<< HEAD
-## Frequency of Number of Children & Siblings of White Population
-=======
-## 2.Frequency of Number of Children & Sibling of White by Census Year
 
->>>>>>> f8e47e643b1555b8598ac2661c5a2b18dba6bdbb
+## 2.Frequency of Number of Children & Siblings of White Population by Census Year
+
 ```{r}
 nice_table(
   fert_df[fert_df$RACE == "White", ],
@@ -85,12 +79,9 @@ nice_table(
 ```
 
 
-<<<<<<< HEAD
-## Summary Statistics of Number of Siblings of Black/African American Population
-=======
-## 3.Summary Statistics of Number of Sibling of Black/African American
 
->>>>>>> f8e47e643b1555b8598ac2661c5a2b18dba6bdbb
+## 3.Summary Statistics of Number of Siblings of Black/African American Population
+
 ```{r}
 fert_df_sum <- fert_df%>%group_by(RACE, YEAR) %>%
   summarise(
@@ -106,11 +97,8 @@ nice_table(
 ```
 
 
-<<<<<<< HEAD
-## Summary Statistics of Number of Siblings of White Population
-=======
-## 4.Summary Statistics of Number of Sibling of White
->>>>>>> f8e47e643b1555b8598ac2661c5a2b18dba6bdbb
+
+## 4.Summary Statistics of Number of Siblings of White Population
 
 ```{r}
 nice_table(
