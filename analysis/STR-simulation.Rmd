@@ -21,6 +21,9 @@ library(furrr)
 library(dtplyr)
 library(data.table)
 
+plan(multisession, workers = parallel::detectCores() - 2)
+set.seed(123)  # Set a seed for reproducibility
+
 
 knitr::opts_knit$set(root.dir = "..")
 knitr::opts_chunk$set(
@@ -147,7 +150,7 @@ calculate_likelihood_ratio <- function(shared_alleles, genotype_match = NULL, pA
     } else if (genotype_match == "AB-AC") {
       Rxp <- 4 * pA
     } else if (genotype_match == "AB-AB") {
-      Rxp <- (4 * pA * pB) / (pA + pB)
+      Rxp <- (4 * (pA * pB) )/ (pA + pB)
     } else {
       stop("Invalid genotype match for 1 shared allele.")
     }
@@ -340,7 +343,7 @@ Now we can test the simulation setup function:
 ```{r}
 
 # Test the simulation setup function
-simulation_setup <- generate_simulation_setup(kinship_matrix, populations_list, 2,5)
+simulation_setup <- generate_simulation_setup(kinship_matrix, populations_list, 10,100)
 
 print(simulation_setup)
 
@@ -416,25 +419,98 @@ Next, we define a function to simulate the genotypes for each pair of individual
 
 
 ```{r func-geno-sim}
+# simulate_genotypes <- function(row, df_allelefreq, kinship_matrix) {
+#   population <- row$population
+#   locus <- row$locus
+#   relationship <- row$relationship_type
+# 
+#   # Fetch allele frequencies for the current population and locus
+#   allele_freqs <- df_allelefreq[df_allelefreq$population == population & df_allelefreq$marker == locus, ]
+# 
+#   # Fetch kinship coefficients based on the relationship type
+#   kinship_coeffs <- kinship_matrix[kinship_matrix$relationship_type == relationship, ]
+# 
+#   # Extract alleles and their frequencies
+#   alleles <- allele_freqs$allele
+#   frequencies <- allele_freqs$frequency
+# 
+#   # Simulate alleles for individual 1
+#   ind1_alleles <- sample(alleles, size = 2, replace = TRUE, prob = frequencies)
+# 
+#   # Determine the number of shared alleles using kinship coefficients
+#   relationship_choice <- sample(c('none', 'one', 'both'), size = 1, prob = c(kinship_coeffs$k0, kinship_coeffs$k1, kinship_coeffs$k2))
+# 
+#   # Simulate alleles for individual 2 based on the relationship choice
+#   if (relationship_choice == 'none') {
+#     ind2_alleles <- sample(alleles, size = 2, replace = TRUE, prob = frequencies)
+#   } else if (relationship_choice == 'one') {
+#     shared_allele <- sample(ind1_alleles, size = 1)
+#     non_shared_allele <- sample(alleles, size = 1, prob = frequencies)
+#     if (runif(1) > 0.5) {
+#       ind2_alleles <- c(shared_allele, non_shared_allele)
+#     } else {
+#       ind2_alleles <- c(non_shared_allele, shared_allele)
+#     }
+#   } else if (relationship_choice == 'both') {
+#     ind2_alleles <- ind1_alleles
+#   }
+# 
+#   # Return the updated row
+#   row$ind1_allele1 <- ind1_alleles[1]
+#   row$ind1_allele2 <- ind1_alleles[2]
+#   row$ind2_allele1 <- ind2_alleles[1]
+#   row$ind2_allele2 <- ind2_alleles[2]
+# 
+#   return(row)
+# }
+```
+
+
+```{r new-func-geno-sim}
+
 simulate_genotypes <- function(row, df_allelefreq, kinship_matrix) {
   population <- row$population
   locus <- row$locus
   relationship <- row$relationship_type
 
-  # Fetch allele frequencies for the current population and locus
-  allele_freqs <- df_allelefreq[df_allelefreq$population == population & df_allelefreq$marker == locus, ]
-
-  # Fetch kinship coefficients based on the relationship type
-  kinship_coeffs <- kinship_matrix[kinship_matrix$relationship_type == relationship, ]
+  # Fetch allele frequencies for the current population and locus, filtering out zero frequencies
+  allele_freqs <- df_allelefreq %>%
+    filter(population == !!population, marker == !!locus, frequency > 0)
+  
+  # Ensure there are valid alleles to sample from
+  if (nrow(allele_freqs) == 0) {
+    stop(paste("No valid alleles found for population", population, "and locus", locus))
+  }
 
   # Extract alleles and their frequencies
   alleles <- allele_freqs$allele
   frequencies <- allele_freqs$frequency
 
+  # Debugging information
+  # cat("Population:", population, "Locus:", locus, "\n")
+  # cat("Alleles and Frequencies before normalization:\n")
+  # print(data.frame(Allele = alleles, Frequency = frequencies))
+
+  # Normalize frequencies to sum to 1 and round to 6 decimal places to handle floating point issues
+  frequencies <- round(frequencies / sum(frequencies), 6)
+
+  # Filter out zero probabilities after normalization and rounding
+  valid_indices <- frequencies > 0
+  alleles <- alleles[valid_indices]
+  frequencies <- frequencies[valid_indices]
+
+  # Debugging information after normalization and filtering
+  # cat("Alleles and Normalized Frequencies:\n")
+  # print(data.frame(Allele = alleles, Frequency = frequencies))
+
   # Simulate alleles for individual 1
   ind1_alleles <- sample(alleles, size = 2, replace = TRUE, prob = frequencies)
 
+  # Debugging information
+  # cat("Simulated Alleles for Individual 1:", toString(ind1_alleles), "\n")
+
   # Determine the number of shared alleles using kinship coefficients
+  kinship_coeffs <- kinship_matrix[kinship_matrix$relationship_type == relationship, ]
   relationship_choice <- sample(c('none', 'one', 'both'), size = 1, prob = c(kinship_coeffs$k0, kinship_coeffs$k1, kinship_coeffs$k2))
 
   # Simulate alleles for individual 2 based on the relationship choice
@@ -442,7 +518,7 @@ simulate_genotypes <- function(row, df_allelefreq, kinship_matrix) {
     ind2_alleles <- sample(alleles, size = 2, replace = TRUE, prob = frequencies)
   } else if (relationship_choice == 'one') {
     shared_allele <- sample(ind1_alleles, size = 1)
-    non_shared_allele <- sample(alleles, size = 1, prob = frequencies)
+    non_shared_allele <- sample(alleles, size = 1, replace = TRUE, prob = frequencies)
     if (runif(1) > 0.5) {
       ind2_alleles <- c(shared_allele, non_shared_allele)
     } else {
@@ -451,6 +527,9 @@ simulate_genotypes <- function(row, df_allelefreq, kinship_matrix) {
   } else if (relationship_choice == 'both') {
     ind2_alleles <- ind1_alleles
   }
+
+  # Debugging information
+  # cat("Simulated Alleles for Individual 2:", toString(ind2_alleles), "\n")
 
   # Return the updated row
   row$ind1_allele1 <- ind1_alleles[1]
@@ -483,8 +562,8 @@ Then we define a related function to calculate the kinship and likelihood ratios
 ```{r}
 kinship_calculation <- function(row, allele_frequency_data, kinship_matrix) {
   # Step 1: Extract alleles directly from the row
-  # alleles_ind1 <- c(row$ind1_allele1, row$ind1_allele2)
-  # alleles_ind2 <- c(row$ind2_allele1, row$ind2_allele2)
+  alleles_ind1 <- c(row$ind1_allele1, row$ind1_allele2)
+  alleles_ind2 <- c(row$ind2_allele1, row$ind2_allele2)
   
   alleles_ind1 <- as.character(c(row$ind1_allele1, row$ind1_allele2))
   alleles_ind2 <- as.character(c(row$ind2_allele1, row$ind2_allele2))
@@ -657,9 +736,6 @@ Now to benchmark the speed
 
 ```{r}
 
-# Set up parallel backend
-plan(multisession, workers = parallel::detectCores())
-
 # Function for the list of rows approach
 list_of_rows_approach <- function(individuals_genotypes, df_allelefreq, kinship_matrix) {
   rows_list <- split(individuals_genotypes, seq(nrow(individuals_genotypes)))
@@ -730,11 +806,7 @@ process_individuals_genotypes <- function(individuals_genotypes, df_allelefreq, 
 
 ```
 
-```{r}
-# Example usage:
-final_df <- process_simulation_setup(simulation_setup, df_allelefreq, kinship_matrix, loci_list, "data/processed_genotypes.csv")
 
-```
 
 
 ```{r}
@@ -747,11 +819,12 @@ calculate_combined_lrs <- function(final_results, loci_lists) {
       identifiler_15 = prod(LR[locus %in% loci_lists$identifiler_15], na.rm = TRUE),
       expanded_20 = prod(LR[locus %in% loci_lists$expanded_20], na.rm = TRUE),
       supplementary = prod(LR[locus %in% loci_lists$supplementary], na.rm = TRUE),
-      autosomal_29 = prod(LR[locus %in% loci_lists$autosomal_29], na.rm = TRUE)
+      autosomal_29 = prod(LR[locus %in% loci_lists$autosomal_29], na.rm = TRUE),
+      .groups = "drop"
     ) %>%
     pivot_longer(cols = starts_with("core_13"):starts_with("autosomal_29"),
                  names_to = "loci_set",
-                 values_to = "combined_LR")
+                 values_to = "LR")
   
   return(combined_lrs)
 }
@@ -759,15 +832,70 @@ calculate_combined_lrs <- function(final_results, loci_lists) {
 ```
 
 
+```{r dt-calc-lrs}
+
+calculate_combined_lrs_dt <- function(final_results, loci_lists) {
+  final_results <- as.data.table(final_results)
+  
+  combined_lrs <- final_results[, .(
+    core_13 = prod(LR[locus %in% loci_lists$core_13], na.rm = TRUE),
+    identifiler_15 = prod(LR[locus %in% loci_lists$identifiler_15], na.rm = TRUE),
+    expanded_20 = prod(LR[locus %in% loci_lists$expanded_20], na.rm = TRUE),
+    supplementary = prod(LR[locus %in% loci_lists$supplementary], na.rm = TRUE),
+    autosomal_29 = prod(LR[locus %in% loci_lists$autosomal_29], na.rm = TRUE)
+  ), by = .(population, relationship_type, sim_id)]
+  
+  combined_lrs <- melt(combined_lrs, 
+                       id.vars = c("population", "relationship_type", "sim_id"),
+                       measure.vars = c("core_13", "identifiler_15", "expanded_20", "supplementary", "autosomal_29"),
+                       variable.name = "loci_set", value.name = "LR")
+  
+  return(combined_lrs)
+}
+
+```
 
 
 ```{r}
-# Pre-initialize parallel backend
-plan(multisession, workers = parallel::detectCores() - 1)
-set.seed(123)  # Set a seed for reproducibility
 
 # Efficient process_simulation_setup function
 process_simulation_setup <- function(simulation_setup, df_allelefreq, kinship_matrix, loci_list, loci_lists, output_file, summary_output_file) {
+  # Process each simulation setup row
+  final_results <- simulation_setup %>%
+    future_pmap_dfr(function(population, relationship_type, num_simulations) {
+      purrr::map_dfr(1:num_simulations, function(sim_id) {
+        # Initialize individuals' genotypes
+        individuals_genotypes <- initialize_individuals_pair(population, relationship_type, sim_id, loci_list)
+        
+        # Process individuals' genotypes
+        processed_genotypes <- process_individuals_genotypes(individuals_genotypes, df_allelefreq, kinship_matrix)
+        
+        return(processed_genotypes)
+      })
+    }, .progress = TRUE)
+  
+  # # Remove the `seed` column if it exists
+  if ("seed" %in% colnames(final_results)) {
+    final_results <- final_results %>% select(-seed)
+  }
+
+  # Save the final results to a CSV file
+  write.csv(final_results, output_file, row.names = FALSE)
+  
+  # Calculate combined LRs for each loci set and create a summary dataframe
+  combined_lrs <- calculate_combined_lrs(final_results, loci_lists)
+  
+  # Save the summary dataframe to a CSV file
+  write.csv(combined_lrs, summary_output_file, row.names = FALSE)
+  
+  return(list(final_results = final_results, combined_lrs = combined_lrs))
+}
+```
+
+```{r dt-process-sim}
+
+# Efficient process_simulation_setup function using data.table
+process_simulation_setup_dt <- function(simulation_setup, df_allelefreq, kinship_matrix, loci_list, loci_lists, output_file, summary_output_file) {
   # Process each simulation setup row
   final_results <- simulation_setup %>%
     future_pmap_dfr(function(population, relationship_type, num_simulations) {
@@ -786,33 +914,132 @@ process_simulation_setup <- function(simulation_setup, df_allelefreq, kinship_ma
   if ("seed" %in% colnames(final_results)) {
     final_results <- final_results %>% select(-seed)
   }
-  
+
   # Save the final results to a CSV file
   write.csv(final_results, output_file, row.names = FALSE)
   
   # Calculate combined LRs for each loci set and create a summary dataframe
-  combined_lrs <- calculate_combined_lrs(final_results, loci_lists)
+  combined_lrs <- calculate_combined_lrs_dt(final_results, loci_lists)
   
   # Save the summary dataframe to a CSV file
   write.csv(combined_lrs, summary_output_file, row.names = FALSE)
   
   return(list(final_results = final_results, combined_lrs = combined_lrs))
 }
+
+
+```
+
+```{r}
+
+# Assuming simulation_setup, df_allelefreq, kinship_matrix, loci_list, loci_lists, output_file, and summary_output_file are already defined
+
+benchmark <- microbenchmark(
+  dplyr_version = process_simulation_setup(simulation_setup, df_allelefreq, kinship_matrix, loci_list, loci_lists, "data/processed_genotypes_dplyr.csv", "data/summary_genotypes_dplyr.csv"),
+  datatable_version = process_simulation_setup_dt(simulation_setup, df_allelefreq, kinship_matrix, loci_list, loci_lists, "data/processed_genotypes_dt.csv", "data/summary_genotypes_dt.csv"),
+  times = 10
+)
+
+print(benchmark)
+
+```
+
+```{r}
+estimate_simulation_time_from_benchmark <- function(benchmark_results, total_simulations) {
+  # Extract median times for dplyr and data.table versions
+  dplyr_median_time <- median(benchmark_results$time[benchmark_results$expr == "dplyr_version"]) / 1e9
+  datatable_median_time <- median(benchmark_results$time[benchmark_results$expr == "datatable_version"]) / 1e9
+  
+  # Calculate total estimated time in seconds
+  dplyr_total_time_estimate <- dplyr_median_time * total_simulations
+  datatable_total_time_estimate <- datatable_median_time * total_simulations
+  
+  # Convert total estimated time to minutes and hours
+  dplyr_total_time_estimate_min <- dplyr_total_time_estimate / 60
+  datatable_total_time_estimate_min <- datatable_total_time_estimate / 60
+  
+  dplyr_total_time_estimate_hr <- dplyr_total_time_estimate_min / 60
+  datatable_total_time_estimate_hr <- datatable_total_time_estimate_min / 60
+  
+  # Create a data frame for the results
+  results <- data.frame(
+    Method = c("dplyr_version", "datatable_version"),
+    Median_Time_Seconds = c(dplyr_median_time, datatable_median_time),
+    Estimated_Time_Minutes = c(dplyr_total_time_estimate_min, datatable_total_time_estimate_min),
+    Estimated_Time_Hours = c(dplyr_total_time_estimate_hr, datatable_total_time_estimate_hr)
+  )
+  
+  # Print the table using kable
+  kable(results, format = "html", digits = 2, caption = "Estimated Total Simulation Time") %>%
+    kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+}
+
+total_simulations <- 1000  # Total number of simulations to estimate
+
+# Estimate simulation time
+estimate_simulation_time_from_benchmark(benchmark, total_simulations)
+
 ```
 
 
 ```{r}
-# Microbenchmarking the efficient function
-benchmark <- microbenchmark(
-  efficient = process_simulation_setup(
-    simulation_setup, df_allelefreq, kinship_matrix, loci_list, loci_lists, 
-    "data/processed_genotypest.csv", "data/summary_genotypes.csv"
-  ),
-  times = 10
-)
+# Example usage:
+final_df <- process_simulation_setup(simulation_setup, df_allelefreq, kinship_matrix, loci_list, loci_lists, "data/processed_genotypes.csv", "data/summary_genotypes.csv")
 
-benchmark_efficient
 ```
+
+```{r}
+df_geno <- final_df$final_results |> 
+  filter(is.infinite(LR) | is.na(LR)) |> 
+  print()
+
+df_pairs <- final_df$combined_lrs |> 
+  filter(is.infinite(LR) | is.na(LR)) |> 
+  print()
+```
+
+```{r}
+
+# Ensure df_geno is not empty
+if (nrow(df_geno) > 0) {
+  # Create a copy of the dataframe to store the results
+  df_geno_results <- df_geno
+
+  # Loop through each row and apply the kinship_calculation function
+  for (i in 1:nrow(df_geno)) {
+    cat("\nProcessing row:", i, "\n")
+    
+    # Apply the kinship_calculation function
+    df_geno_results[i, ] <- kinship_calculation(df_geno[i, ], df_allelefreq, kinship_matrix)
+  }
+
+  # Print the dataframe to check the results
+  print(df_geno_results)
+} else {
+  stop("df_geno is empty. No data to process.")
+}
+
+```
+
+```{r}
+# Extract unique locus, alleles, and population from df_geno_results
+unique_locus_alleles <- df_geno_results %>%
+  select(population, locus, ind1_allele1, ind1_allele2, ind2_allele1, ind2_allele2) %>%
+  gather(key = "allele_type", value = "allele", -population, -locus) %>%
+  distinct(population, locus, allele)
+
+# Print unique locus, alleles, and population
+print(unique_locus_alleles)
+
+# Filter df_allelefreq for the extracted unique combinations
+filtered_allele_freqs <- df_allelefreq %>%
+  semi_join(unique_locus_alleles, by = c("population", "marker" = "locus", "allele"))
+
+# Print the filtered allele frequencies
+print(filtered_allele_freqs)
+```
+
+
 
 
 ### Plotting
@@ -829,7 +1056,7 @@ population_order <- c("all", "AfAm", "Cauc", "Hispanic", "Asian")
 loci_set_order <- c("core_13", "identifiler_15", "expanded_20", "supplementary", "autosomal_29")
 
 # Convert relationship_type, population, and loci_set to factors with the specified orders
-combined_lrs <- combined_lrs %>%
+combined_lrs <- final_df$combined_lrs %>%
   mutate(
     relationship_type = factor(relationship_type, levels = relationship_order),
     population = factor(population, levels = population_order),
@@ -837,13 +1064,13 @@ combined_lrs <- combined_lrs %>%
   )
 
 # Plot the combined LR data with logarithmic scale on y-axis
-ggplot(combined_lrs, aes(x = relationship_type, y = combined_LR, fill = population, color = population)) +
+ggplot(combined_lrs, aes(x = relationship_type, y = LR, fill = population, color = population)) +
   geom_boxplot() +
   facet_wrap(~ loci_set, scales = "fixed") +
   labs(
-    title = "Combined LR Distributions Across Populations and Relationship Types",
+    title = "LR Distributions Across Populations and Relationship Types",
     x = "Relationship Type",
-    y = "Combined LR",
+    y = "LR",
     fill = "Population",
     color = "Population"
   ) +
@@ -857,7 +1084,7 @@ ggplot(combined_lrs, aes(x = relationship_type, y = combined_LR, fill = populati
   scale_x_discrete(limits = rev(levels(combined_lrs$relationship_type)))
 
 # Save the plot to a file
-ggsave("output/log_combined_lr_panel_plot.png", width = 12, height = 8)
+ggsave("output/log_lr_panel_plot.png", width = 12, height = 8)
 ```
 
 ```{r}
@@ -865,9 +1092,9 @@ ggsave("output/log_combined_lr_panel_plot.png", width = 12, height = 8)
 summary_stats <- combined_lrs %>%
   group_by(relationship_type, population, loci_set) %>%
   summarize(
-    mean_LR = mean(combined_LR),
-    lower_95 = quantile(combined_LR, 0.025),
-    upper_95 = quantile(combined_LR, 0.975)
+    mean_LR = mean(LR),
+    lower_95 = quantile(LR, 0.025),
+    upper_95 = quantile(LR, 0.975)
   ) %>%
   ungroup()
 ```
@@ -880,7 +1107,7 @@ ggplot(summary_stats, aes(x = loci_set, y = mean_LR, group = population, color =
   facet_wrap(~ relationship_type, scales = "free_y", ncol = 2) +
   scale_y_log10() +
   labs(
-    title = "Mean Combined LR Across Populations and Relationship Types",
+    title = "Mean LR Across Populations and Relationship Types",
     x = "Loci Set",
     y = "Combined LR",
     color = "Population"
@@ -893,7 +1120,7 @@ ggplot(summary_stats, aes(x = loci_set, y = mean_LR, group = population, color =
   scale_color_manual(values = c("all" = "yellow", "AfAm" = "red", "Cauc" = "blue", "Hispanic" = "green", "Asian" = "purple"))
 
 # Save the plot to a file
-ggsave("output/line_chart_combined_lr.png", width = 14, height = 10)
+ggsave("output/line_chart_lr.png", width = 14, height = 10)
 ```
 
 ```{r}
@@ -904,9 +1131,9 @@ calculate_cutoffs <- function(input_df, fp_rates) {
     group_by(loci_set) %>%
     summarize(
       fixed_cutoff = 1.00,
-      cutoff_1 = quantile(combined_LR, probs = 1 - fp_rates[1] / 100, na.rm = TRUE),
-      cutoff_0_1 = quantile(combined_LR, probs = 1 - fp_rates[2] / 100, na.rm = TRUE),
-      cutoff_0_01 = quantile(combined_LR, probs = 1 - fp_rates[3] / 100, na.rm = TRUE)
+      cutoff_1 = quantile(LR, probs = 1 - fp_rates[1] / 100, na.rm = TRUE),
+      cutoff_0_1 = quantile(LR, probs = 1 - fp_rates[2] / 100, na.rm = TRUE),
+      cutoff_0_01 = quantile(LR, probs = 1 - fp_rates[3] / 100, na.rm = TRUE)
     ) %>%
     ungroup()
   
@@ -930,13 +1157,13 @@ calculate_proportions_exceeding_cutoffs <- function(input_df, cutoffs) {
   # Join the cut-offs with the original data frame
   df_with_cutoffs <- left_join(input_df, cutoffs, by = "loci_set")
   
-  # Calculate a flag indicating whether the combined_LR exceeds each cut-off
+  # Calculate a flag indicating whether the LR exceeds each cut-off
   df_with_cutoffs <- df_with_cutoffs %>%
     mutate(
-      exceeds_fixed_cutoff = combined_LR > fixed_cutoff,
-      exceeds_cutoff_1 = combined_LR > cutoff_1,
-      exceeds_cutoff_0_1 = combined_LR > cutoff_0_1,
-      exceeds_cutoff_0_01 = combined_LR > cutoff_0_01
+      exceeds_fixed_cutoff = LR > fixed_cutoff,
+      exceeds_cutoff_1 = LR > cutoff_1,
+      exceeds_cutoff_0_1 = LR > cutoff_0_1,
+      exceeds_cutoff_0_01 = LR > cutoff_0_01
     )
   
   # Aggregate to calculate the proportion of pairs exceeding the cut-offs by relationship type and loci set
@@ -962,7 +1189,6 @@ print(proportions_exceeding_cutoffs)
 ```
 
 ```{r}
-library(ggplot2)
 
 # Convert population to factor for plotting
 proportions_exceeding_cutoffs$population <- factor(proportions_exceeding_cutoffs$population, levels = population_order)
