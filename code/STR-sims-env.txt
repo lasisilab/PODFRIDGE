@@ -1,0 +1,5 @@
+tidyverse
+furrr
+progressr
+data.table
+ggplot2
