@@ -1,13 +1,17 @@
 # Load Required Libraries
-library(tidyverse)
-library(furrr)
-library(progressr)
-library(data.table)
-library(ggplot2)
-library(future)
+suppressMessages(suppressWarnings({
+  library(tidyverse)
+  library(furrr)
+  library(progressr)
+  library(data.table)
+  library(ggplot2)
+  library(future)
+}))
 
-plan(multicore, workers = availableCores() - 1)
+plan(multisession, workers = availableCores() - 1)
 
+# Set working directory
+setwd("../")
 
 # Read Command-Line Arguments
 args <- commandArgs(trailingOnly = TRUE)
