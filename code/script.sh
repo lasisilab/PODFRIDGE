@@ -35,7 +35,7 @@ source "$CONDA_HOME/etc/profile.d/conda.sh"
 conda activate rstats
 
 # Run the R script with command line arguments
-Rscript code/STR_sims.R 5 10 data/sim_processed_genotypes.csv data/sim_summary_genotypes.csv
+Rscript code/STR_sims.R 5000 10000 data/sim_processed_genotypes.csv data/sim_summary_genotypes.csv
 
 # Configure Git to use HTTPS and PAT
 git remote set-url origin https://github.com/lasisilab/PODFRIDGE.git
