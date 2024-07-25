@@ -9,44 +9,61 @@ suppressMessages(suppressWarnings({
   library(parallel)
 }))
 
-# Set up cluster
-cl <- makeCluster(availableCores())
-plan(cluster, workers = cl)
-
-# Ensure the cluster is stopped when the script exits
-on.exit(parallel::stopCluster(cl))
-
-# Define Order Variables
+# Define Global Variables
 relationship_order <- c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated")
 population_order <- c("all", "AfAm", "Cauc", "Hispanic", "Asian")
 loci_set_order <- c("core_13", "identifiler_15", "expanded_20", "supplementary", "autosomal_29")
 
+# Set up cluster with explicit global variables
+cl <- makeCluster(availableCores())
+plan(cluster, workers = cl, globals = c("relationship_order", "population_order", "loci_set_order"))
+
+# Ensure the cluster is stopped when the script exits
+on.exit(parallel::stopCluster(cl))
+
+# Helper function for logging
+log_message <- function(message) {
+  cat(paste0("[", Sys.time(), "] ", message, "\n"))
+}
+
 # Read Command-Line Arguments
 args <- commandArgs(trailingOnly = TRUE)
-n_sims_unrelated <- as.numeric(args[1])
-n_sims_related <- as.numeric(args[2])
+n_sims_related <- as.numeric(args[1])
+n_sims_unrelated <- as.numeric(args[2])
 output_file <- args[3]
 summary_output_file <- args[4]
 
+# Log the start of the process
+log_message("Starting simulation setup and processing...")
+
 # Load Allele Frequencies Data
-df_allelefreq <- fread("data/df_allelefreq_combined.csv")
-df_allelefreq[, allele := as.character(allele)]
+log_message("Loading allele frequencies data...")
+allele_freq_time <- system.time({
+  df_allelefreq <- fread("data/df_allelefreq_combined.csv")
+  df_allelefreq[, allele := as.character(allele)]
+})
+log_message(paste("Loaded allele frequencies data in", allele_freq_time["elapsed"], "seconds."))
 
 # Extract unique loci
-loci_list <- df_allelefreq %>%
-  pull(marker) %>%
+log_message("Extracting unique loci...")
+loci_list <- df_allelefreq |>
+  pull(marker) |>
   unique()
 
 # Load Core Loci Data
-core_loci <- fread("data/core_CODIS_loci.csv")
-columns <- c("core_13", "identifiler_15", "expanded_20", "supplementary")
-loci_lists <- lapply(columns, function(col) {
-  core_loci %>%
-    filter(get(col) == 1) %>%
-    pull(locus)
+log_message("Loading core loci data...")
+core_loci_time <- system.time({
+  core_loci <- fread("data/core_CODIS_loci.csv")
+  columns <- c("core_13", "identifiler_15", "expanded_20", "supplementary")
+  loci_lists <- lapply(columns, function(col) {
+    core_loci |>
+      filter(get(col) == 1) |>
+      pull(locus)
+  })
+  names(loci_lists) <- columns
+  loci_lists$autosomal_29 <- loci_list
 })
-names(loci_lists) <- columns
-loci_lists$autosomal_29 <- loci_list
+log_message(paste("Loaded core loci data in", core_loci_time["elapsed"], "seconds."))
 
 # Define Kinship Matrix
 kinship_matrix <- tibble(
@@ -148,7 +165,7 @@ simulate_genotypes <- function(row, df_allelefreq, kinship_matrix) {
   locus <- row$locus
   relationship <- row$relationship_type
 
-  allele_freqs <- df_allelefreq %>%
+  allele_freqs <- df_allelefreq |>
     filter(population == !!population, marker == !!locus, frequency > 0)
 
   if (nrow(allele_freqs) == 0) {
@@ -264,8 +281,8 @@ process_loci <- function(row, allele_frequency_data, kinship_matrix) {
 }
 
 process_individuals_genotypes <- function(individuals_genotypes, df_allelefreq, kinship_matrix) {
-  final_individuals_genotypes <- individuals_genotypes %>%
-    future_pmap(~ process_loci(list(...), df_allelefreq, kinship_matrix), seed = TRUE) %>%
+  final_individuals_genotypes <- individuals_genotypes |>
+    future_pmap(~ process_loci(list(...), df_allelefreq, kinship_matrix), seed = TRUE) |>
     bind_rows()
   return(final_individuals_genotypes)
 }
@@ -287,6 +304,9 @@ calculate_combined_lrs <- function(final_results, loci_lists) {
 }
 
 plot_and_save_results <- function(combined_lrs) {
+  # Ensure factor levels are set correctly for plotting
+  combined_lrs$relationship_type <- factor(combined_lrs$relationship_type, levels = relationship_order)
+
   ggplot(combined_lrs, aes(x = relationship_type, y = LR, fill = population, color = population)) +
     geom_boxplot() +
     facet_wrap(~ loci_set, scales = "fixed") +
@@ -308,13 +328,13 @@ plot_and_save_results <- function(combined_lrs) {
 
   ggsave("output/sim_log_lr_panel_plot.png", width = 12, height = 8)
 
-  summary_stats <- combined_lrs %>%
-    group_by(relationship_type, population, loci_set) %>%
+  summary_stats <- combined_lrs |>
+    group_by(relationship_type, population, loci_set) |>
     summarize(
       mean_LR = mean(LR),
       lower_95 = quantile(LR, 0.025),
       upper_95 = quantile(LR, 0.975)
-    ) %>%
+    ) |>
     ungroup()
 
   ggplot(summary_stats, aes(x = loci_set, y = mean_LR, group = population, color = population)) +
@@ -338,14 +358,11 @@ plot_and_save_results <- function(combined_lrs) {
 }
 
 plot_proportions_exceeding_cutoffs <- function(proportions_exceeding_cutoffs) {
-
-  relationship_order <- c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated")
-  population_order <- c("all", "AfAm", "Cauc", "Hispanic", "Asian")
-  loci_set_order <- c("core_13", "identifiler_15", "expanded_20", "supplementary", "autosomal_29")
-
+  # Ensure factor levels are set correctly for plotting
+  proportions_exceeding_cutoffs$relationship_type <- factor(proportions_exceeding_cutoffs$relationship_type, levels = relationship_order)
   proportions_exceeding_cutoffs$population <- factor(proportions_exceeding_cutoffs$population, levels = population_order)
 
-  proportions_long <- proportions_exceeding_cutoffs %>%
+  proportions_long <- proportions_exceeding_cutoffs |>
     pivot_longer(cols = starts_with("proportion_exceeding"),
                  names_to = "Cutoff_Type", values_to = "Proportion",
                  names_prefix = "proportion_exceeding_")
@@ -375,9 +392,9 @@ plot_proportions_exceeding_cutoffs <- function(proportions_exceeding_cutoffs) {
 
 # Function to calculate cut-off values for 1%, 0.1%, and 0.01% FPR
 calculate_cutoffs <- function(input_df, fp_rates) {
-  cutoffs <- input_df %>%
-    filter(relationship_type == "unrelated") %>%
-    group_by(population, loci_set) %>%
+  cutoffs <- input_df |>
+    filter(relationship_type == "unrelated") |>
+    group_by(population, loci_set) |>
     summarize(
       fixed_cutoff = 1.00,
       cutoff_1 = quantile(LR, probs = 1 - fp_rates[1] / 100, na.rm = TRUE),
@@ -391,15 +408,15 @@ calculate_cutoffs <- function(input_df, fp_rates) {
 
 calculate_proportions_exceeding_cutoffs <- function(input_df, cutoffs) {
   df_with_cutoffs <- left_join(input_df, cutoffs, by = c("population", "loci_set"))
-  df_with_cutoffs <- df_with_cutoffs %>%
+  df_with_cutoffs <- df_with_cutoffs |>
     mutate(
       exceeds_fixed_cutoff = LR > fixed_cutoff,
       exceeds_cutoff_1 = LR > cutoff_1,
       exceeds_cutoff_0_1 = LR > cutoff_0_1,
       exceeds_cutoff_0_01 = LR > cutoff_0_01
     )
-  proportions_exceeding <- df_with_cutoffs %>%
-    group_by(population, relationship_type, loci_set) %>%
+  proportions_exceeding <- df_with_cutoffs |>
+    group_by(population, relationship_type, loci_set) |>
     summarize(
       proportion_exceeding_fixed = sum(exceeds_fixed_cutoff, na.rm = TRUE) / n(),
       proportion_exceeding_1 = sum(exceeds_cutoff_1, na.rm = TRUE) / n(),
@@ -407,52 +424,51 @@ calculate_proportions_exceeding_cutoffs <- function(input_df, cutoffs) {
       proportion_exceeding_0_01 = sum(exceeds_cutoff_0_01, na.rm = TRUE) / n(),
       n_related = n(),
       .groups = 'drop'
-    ) %>%
+    ) |>
     filter(relationship_type != "unrelated")
   return(proportions_exceeding)
 }
 
 process_simulation_setup <- function(simulation_setup, df_allelefreq, kinship_matrix, loci_list, loci_lists, output_file, summary_output_file) {
-  final_results <- simulation_setup %>%
-    future_pmap_dfr(function(population, relationship_type, num_simulations) {
-      purrr::map_dfr(1:num_simulations, function(sim_id) {
-        individuals_genotypes <- initialize_individuals_pair(population, relationship_type, sim_id, loci_list)
-        processed_genotypes <- process_individuals_genotypes(individuals_genotypes, df_allelefreq, kinship_matrix)
-        return(processed_genotypes)
-      })
-    }, .progress = TRUE)
+  log_message("Processing simulation setup...")
+  process_time <- system.time({
+    final_results <- simulation_setup |>
+      future_pmap_dfr(function(population, relationship_type, num_simulations) {
+        purrr::map_dfr(1:num_simulations, function(sim_id) {
+          individuals_genotypes <- initialize_individuals_pair(population, relationship_type, sim_id, loci_list)
+          processed_genotypes <- process_individuals_genotypes(individuals_genotypes, df_allelefreq, kinship_matrix)
+          return(processed_genotypes)
+        })
+      }, .progress = TRUE)
 
-  if ("seed" %in% colnames(final_results)) {
-    final_results <- final_results %>% select(-seed)
-  }
+    if ("seed" %in% colnames(final_results)) {
+      final_results <- final_results |> select(-seed)
+    }
 
-  fwrite(final_results, output_file)
-  combined_lrs <- calculate_combined_lrs(final_results, loci_lists)
-  fwrite(combined_lrs, summary_output_file)
+    fwrite(final_results, output_file)
+    combined_lrs <- calculate_combined_lrs(final_results, loci_lists)
+    fwrite(combined_lrs, summary_output_file)
 
-  # Define Order Variables
-  relationship_order <- c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated")
-  population_order <- c("all", "AfAm", "Cauc", "Hispanic", "Asian")
-  loci_set_order <- c("core_13", "identifiler_15", "expanded_20", "supplementary", "autosomal_29")
+    # Create plots and save
+    plot_and_save_results(combined_lrs)
 
+    # Calculate and save cutoffs
+    cutoffs <- calculate_cutoffs(combined_lrs, c(1, 0.1, 0.01))
+    fwrite(cutoffs, "output/sim_cutoffs.csv")
 
-  # Create plots and save
-  plot_and_save_results(combined_lrs)
+    proportions_exceeding_cutoffs <- calculate_proportions_exceeding_cutoffs(combined_lrs, cutoffs)
+    fwrite(proportions_exceeding_cutoffs, "output/sim_proportions_exceeding_cutoffs.csv")
 
-  # Calculate and save cutoffs
-  cutoffs <- calculate_cutoffs(combined_lrs, c(1, 0.1, 0.01))
-  fwrite(cutoffs, "output/sim_cutoffs.csv")
+    # Convert population to factor for plotting
+    proportions_exceeding_cutoffs$population <- factor(proportions_exceeding_cutoffs$population, levels = population_order)
 
-  proportions_exceeding_cutoffs <- calculate_proportions_exceeding_cutoffs(combined_lrs, cutoffs)
-  fwrite(proportions_exceeding_cutoffs, "output/sim_proportions_exceeding_cutoffs.csv")
-
-  # Convert population to factor for plotting
-  proportions_exceeding_cutoffs$population <- factor(proportions_exceeding_cutoffs$population, levels = population_order)
-
-  # Plot proportions exceeding cutoffs
-  plot_proportions_exceeding_cutoffs(proportions_exceeding_cutoffs)
+    # Plot proportions exceeding cutoffs
+    plot_proportions_exceeding_cutoffs(proportions_exceeding_cutoffs)
+  })
+  log_message(paste("Processing completed in", process_time["elapsed"], "seconds."))
 }
 
 # Execute Simulation Setup and Processing
 simulation_setup <- generate_simulation_setup(kinship_matrix, populations_list, n_sims_related, n_sims_unrelated)
 process_simulation_setup(simulation_setup, df_allelefreq, kinship_matrix, loci_list, loci_lists, output_file, summary_output_file)
+log_message("Simulation setup and processing completed.")
