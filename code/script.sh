@@ -14,7 +14,7 @@
 # ----------------------------------------------
 # Ensure you export the SSH passphrase before running this script.
 # Example:
-# export SSH_PASSPHRASE="your-ssh-key-passphrase"
+# export SSH_PASSPHRASE='your-ssh-key-passphrase'
 # ----------------------------------------------
 
 # Get the unique username
@@ -36,7 +36,9 @@ Rscript /home/$UNIQNAME/$UNIQNAME/PODFRIDGE/code/STR_sims.R 10 50 /home/$UNIQNAM
 
 # Start the SSH agent and add the SSH key
 eval "$(ssh-agent -s)"
-ssh-add /home/$UNIQNAME/.ssh/id_rsa <<< "$SSH_PASSPHRASE"
+ssh-add /home/$UNIQNAME/.ssh/id_rsa <<EOF
+$SSH_PASSPHRASE
+EOF
 
 # Navigate to the directory
 cd /home/$UNIQNAME/$UNIQNAME/PODFRIDGE
