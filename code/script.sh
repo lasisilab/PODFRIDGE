@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=STR_sims
+#SBATCH --job-name=STR-sims
 #SBATCH --output=/home/%u/%u/slurm/%x-%j.log
 #SBATCH --time=14-00:00:00
 #SBATCH --account=tlasisi0
@@ -36,9 +36,11 @@ conda activate rstats
 # Run the R script with command line arguments
 Rscript code/STR_sims.R 2 5 data/sim_processed_genotypes.csv data/sim-summary_genotypes.csv
 
-# Add, commit, and push changes to GitHub
-eval $(ssh-agent)
-ssh-add <(echo "$SSH_PASSPHRASE")
+# Set up SSH agent and add SSH key
+eval "$(ssh-agent -s)"
+echo "$SSH_PASSPHRASE" | ssh-add -
+
+# Commit and push changes to GitHub
 git add .
 git commit -m "Automated commit of new results $(date)"
-git push
+git push origin main
