@@ -424,6 +424,12 @@ process_simulation_setup <- function(simulation_setup, df_allelefreq, kinship_ma
   combined_lrs <- calculate_combined_lrs(final_results, loci_lists)
   fwrite(combined_lrs, summary_output_file)
 
+  # Define Order Variables
+  relationship_order <- c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated")
+  population_order <- c("all", "AfAm", "Cauc", "Hispanic", "Asian")
+  loci_set_order <- c("core_13", "identifiler_15", "expanded_20", "supplementary", "autosomal_29")
+
+
   # Create plots and save
   plot_and_save_results(combined_lrs)
 
