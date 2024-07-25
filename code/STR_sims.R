@@ -426,6 +426,9 @@ process_simulation_setup <- function(simulation_setup, df_allelefreq, kinship_ma
   proportions_exceeding_cutoffs <- calculate_proportions_exceeding_cutoffs(combined_lrs, cutoffs)
   fwrite(proportions_exceeding_cutoffs, "output/proportions_exceeding_cutoffs.csv")
 
+  # Convert population to factor for plotting
+  proportions_exceeding_cutoffs$population <- factor(proportions_exceeding_cutoffs$population, levels = population_order)
+
   # Plot proportions exceeding cutoffs
   plot_proportions_exceeding_cutoffs(proportions_exceeding_cutoffs)
 }

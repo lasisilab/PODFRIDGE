@@ -14,6 +14,7 @@
 # Reminder: Please set your GitHub PAT using the following command     #
 # before running this script:                                          #
 # export GITHUB_PAT='your_personal_access_token'                       #
+# export GITHUB_USER='your_github_username'                            #
 ########################################################################
 
 # Get the unique username
@@ -34,7 +35,7 @@ source "$CONDA_HOME/etc/profile.d/conda.sh"
 conda activate rstats
 
 # Run the R script with command line arguments
-Rscript code/STR_sims.R 5000 10000 data/sim_processed_genotypes.csv data/sim-summary_genotypes.csv
+Rscript code/STR_sims.R 5 10 data/sim_processed_genotypes.csv data/sim_summary_genotypes.csv
 
 # Configure Git to use HTTPS and PAT
 git remote set-url origin https://github.com/lasisilab/PODFRIDGE.git
@@ -42,4 +43,4 @@ git remote set-url origin https://github.com/lasisilab/PODFRIDGE.git
 # Commit and push changes to GitHub
 git add .
 git commit -m "Automated commit of new results $(date)"
-echo $GITHUB_PAT | git push https://$(whoami):$GITHUB_PAT@github.com/lasisilab/PODFRIDGE.git main
+echo $GITHUB_PAT | git push https://$GITHUB_USER:$GITHUB_PAT@github.com/lasisilab/PODFRIDGE.git
