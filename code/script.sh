@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=STR-sims
+#SBATCH --job-name=STR_sims
 #SBATCH --output=/home/%u/%u/slurm/%x-%j.log
 #SBATCH --time=14-00:00:00
 #SBATCH --account=tlasisi0
@@ -39,6 +39,9 @@ Rscript code/STR_sims.R 2 5 data/sim_processed_genotypes.csv data/sim-summary_ge
 # Set up SSH agent and add SSH key
 eval "$(ssh-agent -s)"
 echo "$SSH_PASSPHRASE" | ssh-add -
+
+# Change Git remote URL to use SSH
+git remote set-url origin git@github.com:lasisilab/PODFRIDGE.git
 
 # Commit and push changes to GitHub
 git add .
