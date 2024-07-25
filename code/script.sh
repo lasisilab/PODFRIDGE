@@ -11,10 +11,9 @@
 #SBATCH --mail-user=$(whoami)@umich.edu
 
 ########################################################################
-# Reminder: Please set your SSH passphrase using the following command #
+# Reminder: Please set your GitHub PAT using the following command     #
 # before running this script:                                          #
-# eval "$(ssh-agent -s)"                                               #
-# ssh-add ~/.ssh/id_rsa                                                #
+# export GITHUB_PAT='your_personal_access_token'                       #
 ########################################################################
 
 # Get the unique username
@@ -37,10 +36,10 @@ conda activate rstats
 # Run the R script with command line arguments
 Rscript code/STR_sims.R 2 5 data/sim_processed_genotypes.csv data/sim-summary_genotypes.csv
 
-# Change Git remote URL to use SSH
-git remote set-url origin git@github.com:lasisilab/PODFRIDGE.git
+# Configure Git to use HTTPS and PAT
+git remote set-url origin https://github.com/lasisilab/PODFRIDGE.git
 
 # Commit and push changes to GitHub
 git add .
 git commit -m "Automated commit of new results $(date)"
-git push origin main
+echo $GITHUB_PAT | git push https://$(whoami):$GITHUB_PAT@github.com/lasisilab/PODFRIDGE.git main
