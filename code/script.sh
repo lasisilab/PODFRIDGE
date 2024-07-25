@@ -34,7 +34,7 @@ source "$CONDA_HOME/etc/profile.d/conda.sh"
 conda activate rstats
 
 # Run the R script with command line arguments
-Rscript code/STR_sims.R 10 50 data/sim_processed_genotypes.csv data/sim-summary_genotypes.csv
+Rscript code/STR_sims.R 2 5 data/sim_processed_genotypes.csv data/sim-summary_genotypes.csv
 
 # Add, commit, and push changes to GitHub
 eval $(ssh-agent)
