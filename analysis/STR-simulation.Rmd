@@ -932,7 +932,7 @@ calculate_proportions_exceeding_cutoffs <- function(input_df, cutoffs) {
       proportion_exceeding_1 = sum(exceeds_cutoff_1, na.rm = TRUE) / n(),
       proportion_exceeding_0_1 = sum(exceeds_cutoff_0_1, na.rm = TRUE) / n(),
       proportion_exceeding_0_01 = sum(exceeds_cutoff_0_01, na.rm = TRUE) / n(),
-      n_related = n(),
+      n_related = if_else(relationship_type != "unrelated", n(), NA_integer_),
       .groups = 'drop'
     ) %>%
     filter(relationship_type != "unrelated")

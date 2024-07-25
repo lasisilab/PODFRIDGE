@@ -6,9 +6,15 @@ suppressMessages(suppressWarnings({
   library(data.table)
   library(ggplot2)
   library(future)
+  library(parallel)
 }))
 
-plan(multisession, workers = availableCores() - 1)
+# Set up cluster
+cl <- makeCluster(availableCores())
+plan(cluster, workers = cl)
+
+# Ensure the cluster is stopped when the script exits
+on.exit(parallel::stopCluster(cl))
 
 # Define Order Variables
 relationship_order <- c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated")
