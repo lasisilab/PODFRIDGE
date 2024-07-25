@@ -10,9 +10,6 @@ suppressMessages(suppressWarnings({
 
 plan(multisession, workers = availableCores() - 1)
 
-# Set working directory
-setwd("../")
-
 # Read Command-Line Arguments
 args <- commandArgs(trailingOnly = TRUE)
 n_sims_unrelated <- as.numeric(args[1])
