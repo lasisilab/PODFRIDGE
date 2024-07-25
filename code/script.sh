@@ -8,7 +8,13 @@
 #SBATCH --cpus-per-task=36
 #SBATCH --mem-per-cpu=4000MB
 #SBATCH --mail-type=END,FAIL
-#SBATCH --mail-user=${USER}@umich.edu
+#SBATCH --mail-user=$(whoami)@umich.edu
+
+########################################################################
+# Reminder: Please set your SSH passphrase using the following command #
+# before running this script:                                          #
+# export SSH_PASSPHRASE='your_passphrase'                              #
+########################################################################
 
 # Get the unique username
 UNIQNAME=$(whoami)
@@ -17,6 +23,9 @@ UNIQNAME=$(whoami)
 mkdir -p /home/$UNIQNAME/$UNIQNAME/slurm
 mkdir -p /home/$UNIQNAME/$UNIQNAME/PODFRIDGE/logfiles
 
+# Change to the project directory
+cd /home/$UNIQNAME/$UNIQNAME/PODFRIDGE
+
 # Activate conda
 CONDA_HOME="/home/$UNIQNAME/$UNIQNAME/miniconda3"
 source "$CONDA_HOME/etc/profile.d/conda.sh"
@@ -24,15 +33,12 @@ source "$CONDA_HOME/etc/profile.d/conda.sh"
 # Activate the environment
 conda activate rstats
 
-# Start the SSH agent and add the SSH key
-eval "$(ssh-agent -s)"
-echo "$SSH_PASSPHRASE" | ssh-add /home/$UNIQNAME/.ssh/id_rsa
-
 # Run the R script with command line arguments
-Rscript /home/$UNIQNAME/$UNIQNAME/PODFRIDGE/code/STR_sims.R 10 50 /home/$UNIQNAME/$UNIQNAME/PODFRIDGE/data/sim_processed_genotypes.csv /home/$UNIQNAME/$UNIQNAME/PODFRIDGE/data/sim-summary_genotypes.csv
+Rscript code/STR_sims.R 10 50 data/sim_processed_genotypes.csv data/sim-summary_genotypes.csv
 
-# Commit and push the changes to GitHub
-cd /home/$UNIQNAME/$UNIQNAME/PODFRIDGE
+# Add, commit, and push changes to GitHub
+eval $(ssh-agent)
+ssh-add <(echo "$SSH_PASSPHRASE")
 git add .
-git commit -m "Auto commit: Updated results on $(date)"
-GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" git push origin main
+git commit -m "Automated commit of new results $(date)"
+git push
