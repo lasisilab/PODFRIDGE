@@ -10,6 +10,11 @@ suppressMessages(suppressWarnings({
 
 plan(multisession, workers = availableCores() - 1)
 
+# Define Order Variables
+relationship_order <- c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated")
+population_order <- c("all", "AfAm", "Cauc", "Hispanic", "Asian")
+loci_set_order <- c("core_13", "identifiler_15", "expanded_20", "supplementary", "autosomal_29")
+
 # Read Command-Line Arguments
 args <- commandArgs(trailingOnly = TRUE)
 n_sims_unrelated <- as.numeric(args[1])
@@ -275,51 +280,7 @@ calculate_combined_lrs <- function(final_results, loci_lists) {
   return(combined_lrs)
 }
 
-process_simulation_setup <- function(simulation_setup, df_allelefreq, kinship_matrix, loci_list, loci_lists, output_file, summary_output_file) {
-  final_results <- simulation_setup %>%
-    future_pmap_dfr(function(population, relationship_type, num_simulations) {
-      purrr::map_dfr(1:num_simulations, function(sim_id) {
-        individuals_genotypes <- initialize_individuals_pair(population, relationship_type, sim_id, loci_list)
-        processed_genotypes <- process_individuals_genotypes(individuals_genotypes, df_allelefreq, kinship_matrix)
-        return(processed_genotypes)
-      })
-    }, .progress = TRUE)
-
-  if ("seed" %in% colnames(final_results)) {
-    final_results <- final_results %>% select(-seed)
-  }
-
-  fwrite(final_results, output_file)
-  combined_lrs <- calculate_combined_lrs(final_results, loci_lists)
-  fwrite(combined_lrs, summary_output_file)
-
-  # Create plots and save
-  plot_and_save_results(combined_lrs)
-
-  # Calculate and save cutoffs
-  cutoffs <- calculate_cutoffs(combined_lrs, c(1, 0.1, 0.01))
-  fwrite(cutoffs, "output/cutoffs.csv")
-
-  proportions_exceeding_cutoffs <- calculate_proportions_exceeding_cutoffs(combined_lrs, cutoffs)
-  fwrite(proportions_exceeding_cutoffs, "output/proportions_exceeding_cutoffs.csv")
-
-  # Plot proportions exceeding cutoffs
-  plot_proportions_exceeding_cutoffs(proportions_exceeding_cutoffs, population_order)
-}
-
-# Function for Plotting and Saving Results
 plot_and_save_results <- function(combined_lrs) {
-  relationship_order <- c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated")
-  population_order <- c("all", "AfAm", "Cauc", "Hispanic", "Asian")
-  loci_set_order <- c("core_13", "identifiler_15", "expanded_20", "supplementary", "autosomal_29")
-
-  combined_lrs <- combined_lrs %>%
-    mutate(
-      relationship_type = factor(relationship_type, levels = relationship_order),
-      population = factor(population, levels = population_order),
-      loci_set = factor(loci_set, levels = loci_set_order)
-    )
-
   ggplot(combined_lrs, aes(x = relationship_type, y = LR, fill = population, color = population)) +
     geom_boxplot() +
     facet_wrap(~ loci_set, scales = "fixed") +
@@ -370,7 +331,37 @@ plot_and_save_results <- function(combined_lrs) {
   ggsave("output/line_chart_lr.png", width = 14, height = 10)
 }
 
-# Function to calculate cut-off values for 1%, 0.1%, and 0.01% FPR
+plot_proportions_exceeding_cutoffs <- function(proportions_exceeding_cutoffs) {
+  proportions_exceeding_cutoffs$population <- factor(proportions_exceeding_cutoffs$population, levels = population_order)
+
+  proportions_long <- proportions_exceeding_cutoffs %>%
+    pivot_longer(cols = starts_with("proportion_exceeding"),
+                 names_to = "Cutoff_Type", values_to = "Proportion",
+                 names_prefix = "proportion_exceeding_")
+
+  proportions_long$Cutoff_Type <- factor(proportions_long$Cutoff_Type, levels = c("fixed", "1", "0_1", "0_01"),
+                                         labels = c("Fixed Cutoff (1.00)", "1% FPR", "0.1% FPR", "0.01% FPR"))
+
+  ggplot(proportions_long, aes(x = relationship_type, y = Proportion, fill = population, color = population)) +
+    geom_bar(stat = "identity", position = position_dodge()) +
+    facet_wrap(~ Cutoff_Type + loci_set, scales = "fixed") +
+    labs(
+      title = "Proportions Exceeding Likelihood Cut-offs Across Relationship Types and Loci Sets",
+      x = "Relationship Type",
+      y = "Proportion Exceeding Cut-off",
+      fill = "Population",
+      color = "Population"
+    ) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1)
+    ) +
+    scale_fill_manual(values = c("all" = "yellow", "AfAm" = "red", "Cauc" = "blue", "Hispanic" = "green", "Asian" = "purple")) +
+    coord_flip()
+
+  ggsave("output/proportions_exceeding_cutoffs_combined.png", width = 12, height = 8)
+}
+
 calculate_cutoffs <- function(input_df, fp_rates) {
   cutoffs <- input_df %>%
     filter(relationship_type == "unrelated") %>%
@@ -385,7 +376,6 @@ calculate_cutoffs <- function(input_df, fp_rates) {
   return(cutoffs)
 }
 
-# Function to calculate proportions exceeding the cut-offs
 calculate_proportions_exceeding_cutoffs <- function(input_df, cutoffs) {
   df_with_cutoffs <- left_join(input_df, cutoffs, by = "loci_set")
   df_with_cutoffs <- df_with_cutoffs %>%
@@ -408,41 +398,36 @@ calculate_proportions_exceeding_cutoffs <- function(input_df, cutoffs) {
   return(proportions_exceeding)
 }
 
-# Function to plot and save proportions exceeding cut-offs
-plot_proportions_exceeding_cutoffs <- function(proportions_exceeding_cutoffs, population_order) {
-  # Convert population to factor for plotting
-  proportions_exceeding_cutoffs$population <- factor(proportions_exceeding_cutoffs$population, levels = population_order)
+process_simulation_setup <- function(simulation_setup, df_allelefreq, kinship_matrix, loci_list, loci_lists, output_file, summary_output_file) {
+  final_results <- simulation_setup %>%
+    future_pmap_dfr(function(population, relationship_type, num_simulations) {
+      purrr::map_dfr(1:num_simulations, function(sim_id) {
+        individuals_genotypes <- initialize_individuals_pair(population, relationship_type, sim_id, loci_list)
+        processed_genotypes <- process_individuals_genotypes(individuals_genotypes, df_allelefreq, kinship_matrix)
+        return(processed_genotypes)
+      })
+    }, .progress = TRUE)
 
-  # Pivot the data to long format for easier plotting
-  proportions_long <- proportions_exceeding_cutoffs %>%
-    pivot_longer(cols = starts_with("proportion_exceeding"),
-                 names_to = "Cutoff_Type", values_to = "Proportion",
-                 names_prefix = "proportion_exceeding_")
+  if ("seed" %in% colnames(final_results)) {
+    final_results <- final_results %>% select(-seed)
+  }
 
-  # Map Cutoff_Type to human-readable labels
-  proportions_long$Cutoff_Type <- factor(proportions_long$Cutoff_Type, levels = c("fixed", "1", "0_1", "0_01"),
-                                         labels = c("Fixed Cutoff (1.00)", "1% FPR", "0.1% FPR", "0.01% FPR"))
+  fwrite(final_results, output_file)
+  combined_lrs <- calculate_combined_lrs(final_results, loci_lists)
+  fwrite(combined_lrs, summary_output_file)
 
-  # Plot the proportions exceeding the cut-offs
-  ggplot(proportions_long, aes(x = relationship_type, y = Proportion, fill = population, color = population)) +
-    geom_bar(stat = "identity", position = position_dodge()) +
-    facet_wrap(~ Cutoff_Type + loci_set, scales = "fixed") +
-    labs(
-      title = "Proportions Exceeding Likelihood Cut-offs Across Relationship Types and Loci Sets",
-      x = "Relationship Type",
-      y = "Proportion Exceeding Cut-off",
-      fill = "Population",
-      color = "Population"
-    ) +
-    theme_minimal() +
-    theme(
-      axis.text.x = element_text(angle = 45, hjust = 1)
-    ) +
-    scale_fill_manual(values = c("all" = "yellow", "AfAm" = "red", "Cauc" = "blue", "Hispanic" = "green", "Asian" = "purple")) +
-    coord_flip()
+  # Create plots and save
+  plot_and_save_results(combined_lrs)
 
-  # Save the plot to a file
-  ggsave("output/proportions_exceeding_cutoffs_combined.png", width = 12, height = 8)
+  # Calculate and save cutoffs
+  cutoffs <- calculate_cutoffs(combined_lrs, c(1, 0.1, 0.01))
+  fwrite(cutoffs, "output/cutoffs.csv")
+
+  proportions_exceeding_cutoffs <- calculate_proportions_exceeding_cutoffs(combined_lrs, cutoffs)
+  fwrite(proportions_exceeding_cutoffs, "output/proportions_exceeding_cutoffs.csv")
+
+  # Plot proportions exceeding cutoffs
+  plot_proportions_exceeding_cutoffs(proportions_exceeding_cutoffs)
 }
 
 # Execute Simulation Setup and Processing
