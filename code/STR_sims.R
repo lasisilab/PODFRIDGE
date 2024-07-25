@@ -302,6 +302,9 @@ process_simulation_setup <- function(simulation_setup, df_allelefreq, kinship_ma
 
   proportions_exceeding_cutoffs <- calculate_proportions_exceeding_cutoffs(combined_lrs, cutoffs)
   fwrite(proportions_exceeding_cutoffs, "output/proportions_exceeding_cutoffs.csv")
+
+  # Plot proportions exceeding cutoffs
+  plot_proportions_exceeding_cutoffs(proportions_exceeding_cutoffs, population_order)
 }
 
 # Function for Plotting and Saving Results
@@ -403,6 +406,43 @@ calculate_proportions_exceeding_cutoffs <- function(input_df, cutoffs) {
     ) %>%
     filter(relationship_type != "unrelated")
   return(proportions_exceeding)
+}
+
+# Function to plot and save proportions exceeding cut-offs
+plot_proportions_exceeding_cutoffs <- function(proportions_exceeding_cutoffs, population_order) {
+  # Convert population to factor for plotting
+  proportions_exceeding_cutoffs$population <- factor(proportions_exceeding_cutoffs$population, levels = population_order)
+
+  # Pivot the data to long format for easier plotting
+  proportions_long <- proportions_exceeding_cutoffs %>%
+    pivot_longer(cols = starts_with("proportion_exceeding"),
+                 names_to = "Cutoff_Type", values_to = "Proportion",
+                 names_prefix = "proportion_exceeding_")
+
+  # Map Cutoff_Type to human-readable labels
+  proportions_long$Cutoff_Type <- factor(proportions_long$Cutoff_Type, levels = c("fixed", "1", "0_1", "0_01"),
+                                         labels = c("Fixed Cutoff (1.00)", "1% FPR", "0.1% FPR", "0.01% FPR"))
+
+  # Plot the proportions exceeding the cut-offs
+  ggplot(proportions_long, aes(x = relationship_type, y = Proportion, fill = population, color = population)) +
+    geom_bar(stat = "identity", position = position_dodge()) +
+    facet_wrap(~ Cutoff_Type + loci_set, scales = "fixed") +
+    labs(
+      title = "Proportions Exceeding Likelihood Cut-offs Across Relationship Types and Loci Sets",
+      x = "Relationship Type",
+      y = "Proportion Exceeding Cut-off",
+      fill = "Population",
+      color = "Population"
+    ) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1)
+    ) +
+    scale_fill_manual(values = c("all" = "yellow", "AfAm" = "red", "Cauc" = "blue", "Hispanic" = "green", "Asian" = "purple")) +
+    coord_flip()
+
+  # Save the plot to a file
+  ggsave("output/proportions_exceeding_cutoffs_combined.png", width = 12, height = 8)
 }
 
 # Execute Simulation Setup and Processing
