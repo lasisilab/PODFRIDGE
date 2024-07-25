@@ -1,26 +1,199 @@
 ---
-title: "Murphy Appendix"
-author: "Alec Yueh"
+title: "Murphy Data Cleaning"
+author: "Stella BooydeGraaff"
 date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
 output: workflowr::wflow_html
 editor_options:
   chunk_output_type: console
 ---
 
-## Database of Murphy Data
-```{r}
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_knit$set(root.dir = ".")
+knitr::opts_chunk$set(eval = TRUE, echo = FALSE, warning = FALSE, fig.width = 7, fig.height = 6)
+
 library(tidyverse)
-library(readr)
-library(knitr)
 ```
-
 
 ```{r}
-murphy_appendix <- read_csv("murphy_foia_cleaned.csv")
+data <- read_csv("data/Murphy_Appendix_all_data.csv") 
+
+head(data)
 ```
 
+```{r} 
+data <- data |>
+  select(-file) 
+
+head(data)
+```
 
 ```{r}
-kable(murphy_appendix)
+  data <- data %>%
+      mutate(
+          # Check if 'proportion' is in the variable_detailed
+          is_proportion = grepl("proportion", variable_detailed, ignore.case = TRUE),
+          
+          # Create value_type based on the presence of 'proportion'
+          value_type = ifelse(is_proportion, 
+                              "proportion", 
+                              "number"),
+          
+          # Remove 'proportion' text from variable_detailed
+          variable_detailed = ifelse(is_proportion, gsub("proportion", "", variable_detailed, ignore.case = TRUE), variable_detailed),
+          
+          # Trim whitespace
+          variable_detailed = trimws(variable_detailed),
+          
+          # cleaned variable_detailed to numeric
+          variable_detailed_numeric = suppressWarnings(as.numeric(variable_detailed)),
+          
+          # Update value_type to "number" if variable_detailed_numeric is greater than 1
+          value_type = ifelse(!is.na(variable_detailed_numeric) & variable_detailed_numeric > 1, 
+                              "number", 
+                              value_type)
+      ) %>%
+      # Drop temporary columns
+      select(-is_proportion, -variable_detailed_numeric)
+
 ```
 
+```{r}
+data <- data %>%
+    rename(variable_type = variatble_type)
+
+```
+
+```{r}
+#race
+data <- data %>%
+  mutate(
+    variable_detailed = case_when(
+      variable_type == "race" & grepl("asian", variable_detailed, ignore.case = TRUE) ~ "asian_total",
+      variable_type == "race" & grepl("black", variable_detailed, ignore.case = TRUE) ~ "black_total",
+      variable_type == "race" & grepl("hispanic", variable_detailed, ignore.case = TRUE) ~ "hispanic_total",
+      variable_type == "race" & grepl("native", variable_detailed, ignore.case = TRUE) ~ "native_american_total",
+      variable_type == "race" & grepl("white", variable_detailed, ignore.case = TRUE) ~ "white_total",
+      variable_type == "race" & grepl("other", variable_detailed, ignore.case = TRUE) ~ "other_total",
+      variable_type == "race" & grepl("asian_offender", variable_detailed, ignore.case = TRUE) ~ "asian_convicted_offender",
+      variable_type == "race" & grepl("black_offender", variable_detailed, ignore.case = TRUE) ~ "black_convicted_offender",
+      variable_type == "race" & grepl("hispanic_offender", variable_detailed, ignore.case = TRUE) ~ "hispanic_convicted_offender",
+      variable_type == "race" & grepl("native_american_offender", variable_detailed, ignore.case = TRUE) ~ "native_american_convicted_offender",
+      variable_type == "race" & grepl("white_offender", variable_detailed, ignore.case = TRUE) ~ "white_convicted_offender",
+      variable_type == "race" & grepl("other_offender", variable_detailed, ignore.case = TRUE) ~ "other_convicted_offender",
+      variable_type == "race" & grepl("african_american_offender", variable_detailed, ignore.case = TRUE) ~ "african_american_convicted_offender",
+      TRUE ~ variable_detailed
+    ))
+    
+#DNA collection breakdown
+data <- data %>%
+  mutate(
+    variable_detailed = case_when(
+      variable_type == "DNA_collection_breakdown" & grepl("asian", variable_detailed, ignore.case = TRUE) ~ "asian_annual",
+      variable_type == "DNA_collection_breakdown" & grepl("black", variable_detailed, ignore.case = TRUE) ~ "black_annual",
+      variable_type == "DNA_collection_breakdown" & grepl("hispanic", variable_detailed, ignore.case = TRUE) ~ "hispanic_annual",
+      variable_type == "DNA_collection_breakdown" & grepl("native", variable_detailed, ignore.case = TRUE) ~ "native_american_annual",
+      variable_type == "DNA_collection_breakdown" & grepl("white", variable_detailed, ignore.case = TRUE) ~ "white_annual",
+      variable_type == "DNA_collection_breakdown" & grepl("other", variable_detailed, ignore.case = TRUE) ~ "other_annual",
+      TRUE ~ variable_detailed
+    )
+  )
+    
+```
+
+```{r}
+# Update 'variable_type' to 'race' where it is 'DNA_collection_breakdown'
+
+data <- data %>%
+  mutate(
+    variable_type = ifelse(variable_type == "DNA_collection_breakdown", "race", variable_type))
+```
+
+```{r}
+#state demographic
+data <- data %>%
+  mutate(
+    variable_detailed = case_when(
+      variable_type == "state_demographic" & grepl("asian", variable_detailed, ignore.case = TRUE) ~ "asian_state",
+      variable_type == "state_demographic" & grepl("black", variable_detailed, ignore.case = TRUE) ~ "black_state",
+      variable_type == "state_demographic" & grepl("hispanic", variable_detailed, ignore.case = TRUE) ~ "hispanic_state",
+      variable_type == "state_demographic" & grepl("native", variable_detailed, ignore.case = TRUE) ~ "native_american_state",
+      variable_type == "state_demographic" & grepl("white", variable_detailed, ignore.case = TRUE) ~ "white_state",
+      variable_type == "state_demographic" & grepl("other", variable_detailed, ignore.case = TRUE) ~ "other_state",
+      TRUE ~ variable_detailed
+    )
+  )
+
+```
+
+```{r}
+# Update 'variable_type' to 'race' where it is 'state_demographic'
+
+data <- data %>%
+  mutate(
+    variable_type = ifelse(variable_type == "state_demographic", "race", variable_type))
+```
+
+```{r}
+#population data collected variables
+data <- data %>%
+  mutate(
+    variable_detailed = case_when(
+      variable_type == "population_data_collected" & grepl("asian", variable_detailed, ignore.case = TRUE) ~ "asian_pop_collected",
+      variable_type == "population_data_collected" & grepl("black", variable_detailed, ignore.case = TRUE) ~ "black_pop_collected",
+      variable_type == "population_data_collected" & grepl("hispanic", variable_detailed, ignore.case = TRUE) ~ "hispanic_pop_collected",
+      variable_type == "population_data_collected" & grepl("native", variable_detailed, ignore.case = TRUE) ~ "native_american_pop_collected",
+      variable_type == "population_data_collected" & grepl("white", variable_detailed, ignore.case = TRUE) ~ "white_pop_collected",
+      variable_type == "population_data_collected" & grepl("other", variable_detailed, ignore.case = TRUE) ~ "other_pop_collected",
+      TRUE ~ variable_detailed
+    )
+  )
+```
+
+```{r}
+# Update 'variable_type' to 'race' where it is 'population_data_collected'
+
+data <- data %>%
+  mutate(
+    variable_type = ifelse(variable_type == "population_data_collected", "race", variable_type))
+```
+
+```{r}
+#sex variable type
+data <- data %>%
+  mutate(
+    variable_detailed = case_when(
+      variable_type == "sex" & grepl("male", variable_detailed, ignore.case = TRUE) ~ "male_total",
+      variable_type == "sex" & grepl("male_", variable_detailed, ignore.case = TRUE) ~ "male_total",
+      variable_type == "sex" & grepl("males", variable_detailed, ignore.case = TRUE) ~ "male_total",
+      variable_type == "sex" & grepl("female", variable_detailed, ignore.case = TRUE) ~ "female_total",
+      variable_type == "sex" & grepl("female_", variable_detailed, ignore.case = TRUE) ~ "female_total",
+      variable_type == "sex" & grepl("females", variable_detailed, ignore.case = TRUE) ~ "female_total",
+      variable_type == "sex" & grepl("female_offender", variable_detailed, ignore.case = TRUE) ~ "female_convicted_offender",
+      TRUE ~ variable_detailed 
+    )
+  )
+```
+
+```{r}
+data <- data %>%
+  mutate(
+    variable_type = ifelse(variable_type == "gender", "sex", variable_type))
+```
+
+```{r}
+data <- data %>%
+  mutate(
+    variable_detailed = case_when(
+      variable_type == "offender_type" & grepl("arrestee", variable_detailed, ignore.case = TRUE) ~ "arrestee_total",
+      variable_type == "offender_type" & grepl("arrested_offender", variable_detailed, ignore.case = TRUE) ~ "arrestee_total",
+      variable_type == "offender_type" & grepl("convicted_offender", variable_detailed, ignore.case = TRUE) ~ "convicted_offender_total",
+      variable_type == "offender_type" & grepl("conviceted_offender", variable_detailed, ignore.case = TRUE) ~ "convicted_offender_total",
+      variable_type == "offender_type" & grepl("offender", variable_detailed, ignore.case = TRUE) ~ "convicted_offender_total",
+      TRUE ~ variable_detailed 
+    )
+  )
+```
+
+```{r}
+write.csv(data, "data/murphy_foia_cleaned.csv")
+```
