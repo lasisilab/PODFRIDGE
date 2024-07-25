@@ -10,13 +10,6 @@
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=${USER}@umich.edu
 
-# Instructions for exporting the SSH passphrase
-# ----------------------------------------------
-# Ensure you export the SSH passphrase before running this script.
-# Example:
-# export SSH_PASSPHRASE='your-ssh-key-passphrase'
-# ----------------------------------------------
-
 # Get the unique username
 UNIQNAME=$(whoami)
 
@@ -31,26 +24,15 @@ source "$CONDA_HOME/etc/profile.d/conda.sh"
 # Activate the environment
 conda activate rstats
 
+# Start the SSH agent and add the SSH key
+eval "$(ssh-agent -s)"
+echo "$SSH_PASSPHRASE" | ssh-add /home/$UNIQNAME/.ssh/id_rsa
+
 # Run the R script with command line arguments
 Rscript /home/$UNIQNAME/$UNIQNAME/PODFRIDGE/code/STR_sims.R 10 50 /home/$UNIQNAME/$UNIQNAME/PODFRIDGE/data/sim_processed_genotypes.csv /home/$UNIQNAME/$UNIQNAME/PODFRIDGE/data/sim-summary_genotypes.csv
 
-# Start the SSH agent and add the SSH key
-eval "$(ssh-agent -s)"
-ssh-add /home/$UNIQNAME/.ssh/id_rsa <<EOF
-$SSH_PASSPHRASE
-EOF
-
-# Navigate to the directory
+# Commit and push the changes to GitHub
 cd /home/$UNIQNAME/$UNIQNAME/PODFRIDGE
-
-# Add all changes to git
 git add .
-
-# Commit the changes with a timestamp message
 git commit -m "Auto commit: Updated results on $(date)"
-
-# Push the changes to the repository
-git push
-
-# Kill the SSH agent
-ssh-agent -k
+GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" git push origin main
