@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=known_vs_tested_simulation
+#SBATCH --job-name=STR_sims
 #SBATCH --output=/home/%u/%u/slurm/%x-%j.log
 #SBATCH --time=14-00:00:00
 #SBATCH --account=tlasisi0
