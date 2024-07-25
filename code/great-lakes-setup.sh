@@ -41,7 +41,10 @@ mamba create -n rstats -c r -c conda-forge r --verbose
 # Activate the environment
 conda activate rstats
 
-# Read the STR-sims-env.txt file and install each package
+# clone PODFRIDGE
+cd /home/$UNIQNAME/$UNIQNAME && git clone https://github.com/lasisilab/PODFRIDGE.git
+
+# Install packages from STR-sims-env.txt with verbose output
 while read -r package; do
-    conda install -n rstats -c r -c conda-forge "r-$package" -y
-done < data/STR-sims-env.txt
+    mamba install -n rstats -c r -c conda-forge "r-$package" --verbose
+done < code/STR-sims-env.txt

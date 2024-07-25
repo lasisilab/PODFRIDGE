@@ -3,3 +3,4 @@ furrr
 progressr
 data.table
 ggplot2
+future

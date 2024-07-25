@@ -4,6 +4,8 @@ library(furrr)
 library(progressr)
 library(data.table)
 library(ggplot2)
+library(future)
+
 
 # Read Command-Line Arguments
 args <- commandArgs(trailingOnly = TRUE)
