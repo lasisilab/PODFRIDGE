@@ -9,14 +9,9 @@ suppressMessages(suppressWarnings({
   library(parallel)
 }))
 
-# Define Global Variables
-relationship_order <- c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated")
-population_order <- c("all", "AfAm", "Cauc", "Hispanic", "Asian")
-loci_set_order <- c("core_13", "identifiler_15", "expanded_20", "supplementary", "autosomal_29")
-
-# Set up cluster with explicit global variables
+# Set up cluster
 cl <- makeCluster(availableCores())
-plan(cluster, workers = cl, globals = c("relationship_order", "population_order", "loci_set_order"))
+plan(cluster, workers = cl)
 
 # Ensure the cluster is stopped when the script exits
 on.exit(parallel::stopCluster(cl))
@@ -305,7 +300,7 @@ calculate_combined_lrs <- function(final_results, loci_lists) {
 
 plot_and_save_results <- function(combined_lrs) {
   # Ensure factor levels are set correctly for plotting
-  combined_lrs$relationship_type <- factor(combined_lrs$relationship_type, levels = relationship_order)
+  combined_lrs$relationship_type <- factor(combined_lrs$relationship_type, levels = c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated"))
 
   ggplot(combined_lrs, aes(x = relationship_type, y = LR, fill = population, color = population)) +
     geom_boxplot() +
@@ -323,8 +318,7 @@ plot_and_save_results <- function(combined_lrs) {
     ) +
     scale_y_log10() +
     scale_fill_manual(values = c("all" = "yellow", "AfAm" = "red", "Cauc" = "blue", "Hispanic" = "green", "Asian" = "purple")) +
-    coord_flip() +
-    scale_x_discrete(limits = rev(levels(combined_lrs$relationship_type)))
+    coord_flip()
 
   ggsave("output/sim_log_lr_panel_plot.png", width = 12, height = 8)
 
@@ -359,8 +353,8 @@ plot_and_save_results <- function(combined_lrs) {
 
 plot_proportions_exceeding_cutoffs <- function(proportions_exceeding_cutoffs) {
   # Ensure factor levels are set correctly for plotting
-  proportions_exceeding_cutoffs$relationship_type <- factor(proportions_exceeding_cutoffs$relationship_type, levels = relationship_order)
-  proportions_exceeding_cutoffs$population <- factor(proportions_exceeding_cutoffs$population, levels = population_order)
+  proportions_exceeding_cutoffs$relationship_type <- factor(proportions_exceeding_cutoffs$relationship_type, levels = c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated"))
+  proportions_exceeding_cutoffs$population <- factor(proportions_exceeding_cutoffs$population, levels = c("all", "AfAm", "Cauc", "Hispanic", "Asian"))
 
   proportions_long <- proportions_exceeding_cutoffs |>
     pivot_longer(cols = starts_with("proportion_exceeding"),
@@ -460,7 +454,7 @@ process_simulation_setup <- function(simulation_setup, df_allelefreq, kinship_ma
     fwrite(proportions_exceeding_cutoffs, "output/sim_proportions_exceeding_cutoffs.csv")
 
     # Convert population to factor for plotting
-    proportions_exceeding_cutoffs$population <- factor(proportions_exceeding_cutoffs$population, levels = population_order)
+    proportions_exceeding_cutoffs$population <- factor(proportions_exceeding_cutoffs$population, levels = c("all", "AfAm", "Cauc", "Hispanic", "Asian"))
 
     # Plot proportions exceeding cutoffs
     plot_proportions_exceeding_cutoffs(proportions_exceeding_cutoffs)
