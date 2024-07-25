@@ -205,8 +205,8 @@ data_gender <- data |>
   filter(variable_type == "sex")
 
 
-california_totals <- data_gender %>%
-  filter(State == "California") %>%
+california_totals <- data_gender |> 
+  filter(State == "California") |> 
   summarise(
     male_total = sum(value[grepl("male", variable_detailed, ignore.case = TRUE)]),
     female_total = sum(value[grepl("female", variable_detailed, ignore.case = TRUE)]),
@@ -216,8 +216,8 @@ california_totals <- data_gender %>%
 
 
 ```{r}
-california_totals <- california_totals%>% 
-  pivot_longer(cols = everything(), names_to = "variable_detailed", values_to = "value") %>%
+california_totals <- california_totals |>  
+  pivot_longer(cols = everything(), names_to = "variable_detailed", values_to = "value")|> 
   mutate(
     State = "California",
     variable_type = "sex",
