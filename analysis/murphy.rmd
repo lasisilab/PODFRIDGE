@@ -204,8 +204,24 @@ write.csv(data, "data/murphy_foia_cleaned.csv")
 data_gender <- data |> 
   filter(variable_type == "sex")
 
-data_gender <- data_gender |>
-  group_by(State, variable_detailed) |> 
-  summarise(total_value = sum(value))
 
+california_totals <- data_gender %>%
+  filter(State == "California") %>%
+  summarise(
+    male_total = sum(value[grepl("male", variable_detailed, ignore.case = TRUE)]),
+    female_total = sum(value[grepl("female", variable_detailed, ignore.case = TRUE)]),
+    unknown_total = sum(value[grepl("unknown", variable_detailed, ignore.case = TRUE)])
+  ) 
 ```
+
+
+```{r}
+california_totals <- california_totals%>% 
+  pivot_longer(cols = everything(), names_to = "variable_detailed", values_to = "value") %>%
+  mutate(
+    State = "California",
+    variable_type = "sex",
+    value_type = "proportion"
+  )
+```
+

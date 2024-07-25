@@ -334,3 +334,21 @@ ggplot(df_long_white2, aes(x = x_axis, y = frequency, fill = color_order)) +
         plot.title = element_text(size = 12, hjust = 0.5))
 ```
 
+
+```{r}
+ggplot(df_long_black2, aes(x = reorder(Age_bin, x_axis), y = frequency, fill = frequency_type)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  coord_flip() +
+  facet_grid(. ~ YEAR) +
+  theme_minimal() +
+  labs(title = "Distribution of Children Born and Number of Siblings across Age Bins",
+       x = "Age Bin",
+       y = "Frequency") +
+  scale_fill_manual(values = c("freq_mother" = "blue", "freq_n_sib" = "red")) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+```{r}
+#write.csv(df_long_black2, "/Users/linmatch/Desktop/data2.csv", row.names = FALSE)
+```
+
