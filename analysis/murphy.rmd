@@ -68,19 +68,19 @@ data <- data %>%
 data <- data %>%
   mutate(
     variable_detailed = case_when(
-      variable_type == "race" & grepl("asian", variable_detailed, ignore.case = TRUE) ~ "asian_total",
-      variable_type == "race" & grepl("black", variable_detailed, ignore.case = TRUE) ~ "black_total",
-      variable_type == "race" & grepl("hispanic", variable_detailed, ignore.case = TRUE) ~ "hispanic_total",
-      variable_type == "race" & grepl("native", variable_detailed, ignore.case = TRUE) ~ "native_american_total",
-      variable_type == "race" & grepl("white", variable_detailed, ignore.case = TRUE) ~ "white_total",
-      variable_type == "race" & grepl("other", variable_detailed, ignore.case = TRUE) ~ "other_total",
-      variable_type == "race" & grepl("asian_offender", variable_detailed, ignore.case = TRUE) ~ "asian_convicted_offender",
-      variable_type == "race" & grepl("black_offender", variable_detailed, ignore.case = TRUE) ~ "black_convicted_offender",
-      variable_type == "race" & grepl("hispanic_offender", variable_detailed, ignore.case = TRUE) ~ "hispanic_convicted_offender",
-      variable_type == "race" & grepl("native_american_offender", variable_detailed, ignore.case = TRUE) ~ "native_american_convicted_offender",
-      variable_type == "race" & grepl("white_offender", variable_detailed, ignore.case = TRUE) ~ "white_convicted_offender",
-      variable_type == "race" & grepl("other_offender", variable_detailed, ignore.case = TRUE) ~ "other_convicted_offender",
-      variable_type == "race" & grepl("african_american_offender", variable_detailed, ignore.case = TRUE) ~ "african_american_convicted_offender",
+      variable_type == "race" & grepl("\\basian\\b", variable_detailed, ignore.case = TRUE) ~ "asian_total",
+      variable_type == "race" & grepl("\\bblack\\b", variable_detailed, ignore.case = TRUE) ~ "black_total",
+      variable_type == "race" & grepl("\\bhispanic\\b", variable_detailed, ignore.case = TRUE) ~ "hispanic_total",
+      variable_type == "race" & grepl("\\bnative\\b", variable_detailed, ignore.case = TRUE) ~ "native_american_total",
+      variable_type == "race" & grepl("\\bwhite\\b", variable_detailed, ignore.case = TRUE) ~ "white_total",
+      variable_type == "race" & grepl("\\bother\\b", variable_detailed, ignore.case = TRUE) ~ "other_total",
+      variable_type == "race" & grepl("\\basian_offender\\b", variable_detailed, ignore.case = TRUE) ~ "asian_convicted_offender",
+      variable_type == "race" & grepl("\\bblack_offender\\b", variable_detailed, ignore.case = TRUE) ~ "black_convicted_offender",
+      variable_type == "race" & grepl("\\bhispanic_offender\\b", variable_detailed, ignore.case = TRUE) ~ "hispanic_convicted_offender",
+      variable_type == "race" & grepl("\\bnative_american_offender\\b", variable_detailed, ignore.case = TRUE) ~ "native_american_convicted_offender",
+      variable_type == "race" & grepl("\\bwhite_offender\\b", variable_detailed, ignore.case = TRUE) ~ "white_convicted_offender",
+      variable_type == "race" & grepl("\\bother_offender\\b", variable_detailed, ignore.case = TRUE) ~ "other_convicted_offender",
+      variable_type == "race" & grepl("\\bafrican_american_offender\\b", variable_detailed, ignore.case = TRUE) ~ "african_american_convicted_offender",
       TRUE ~ variable_detailed
     ))
     
@@ -162,13 +162,13 @@ data <- data %>%
 data <- data %>%
   mutate(
     variable_detailed = case_when(
-      variable_type == "sex" & grepl("male", variable_detailed, ignore.case = TRUE) ~ "male_total",
-      variable_type == "sex" & grepl("male_", variable_detailed, ignore.case = TRUE) ~ "male_total",
-      variable_type == "sex" & grepl("males", variable_detailed, ignore.case = TRUE) ~ "male_total",
-      variable_type == "sex" & grepl("female", variable_detailed, ignore.case = TRUE) ~ "female_total",
-      variable_type == "sex" & grepl("female_", variable_detailed, ignore.case = TRUE) ~ "female_total",
-      variable_type == "sex" & grepl("females", variable_detailed, ignore.case = TRUE) ~ "female_total",
-      variable_type == "sex" & grepl("female_offender", variable_detailed, ignore.case = TRUE) ~ "female_convicted_offender",
+      variable_type == "sex" & grepl("\\bfemale\\b", variable_detailed, ignore.case = TRUE) ~ "female_total",
+      variable_type == "sex" & grepl("\\bfemale_\\b", variable_detailed, ignore.case = TRUE) ~ "female_total",
+      variable_type == "sex" & grepl("\\bfemales\\b", variable_detailed, ignore.case = TRUE) ~ "female_total",
+      variable_type == "sex" & grepl("\\bfemale_offender\\b", variable_detailed, ignore.case = TRUE) ~ "female_convicted_offender",
+      variable_type == "sex" & grepl("\\bmale\\b", variable_detailed, ignore.case = TRUE) ~ "male_total",
+      variable_type == "sex" & grepl("\\bmale_\\b", variable_detailed, ignore.case = TRUE) ~ "male_total",
+      variable_type == "sex" & grepl("\\bmales\\b", variable_detailed, ignore.case = TRUE) ~ "male_total",
       TRUE ~ variable_detailed 
     )
   )
@@ -184,11 +184,11 @@ data <- data %>%
 data <- data %>%
   mutate(
     variable_detailed = case_when(
-      variable_type == "offender_type" & grepl("arrestee", variable_detailed, ignore.case = TRUE) ~ "arrestee_total",
-      variable_type == "offender_type" & grepl("arrested_offender", variable_detailed, ignore.case = TRUE) ~ "arrestee_total",
-      variable_type == "offender_type" & grepl("convicted_offender", variable_detailed, ignore.case = TRUE) ~ "convicted_offender_total",
-      variable_type == "offender_type" & grepl("conviceted_offender", variable_detailed, ignore.case = TRUE) ~ "convicted_offender_total",
-      variable_type == "offender_type" & grepl("offender", variable_detailed, ignore.case = TRUE) ~ "convicted_offender_total",
+      variable_type == "offender_type" & grepl("\\barrestee\\b", variable_detailed, ignore.case = TRUE) ~ "arrestee_total",
+      variable_type == "offender_type" & grepl("\\barrested_offender\\b", variable_detailed, ignore.case = TRUE) ~ "arrestee_total",
+      variable_type == "offender_type" & grepl("\\bconvicted_offender\\b", variable_detailed, ignore.case = TRUE) ~ "convicted_offender_total",
+      variable_type == "offender_type" & grepl("\\bconviceted_offender\\b", variable_detailed, ignore.case = TRUE) ~ "convicted_offender_total",
+      variable_type == "offender_type" & grepl("\\boffender\\b", variable_detailed, ignore.case = TRUE) ~ "convicted_offender_total",
       TRUE ~ variable_detailed 
     )
   )
@@ -196,4 +196,16 @@ data <- data %>%
 
 ```{r}
 write.csv(data, "data/murphy_foia_cleaned.csv")
+```
+
+
+```{r}
+#data visualizations
+data_gender <- data |> 
+  filter(variable_type == "sex")
+
+data_gender <- data_gender |>
+  group_by(State, variable_detailed) |> 
+  summarise(total_value = sum(value))
+
 ```
