@@ -16,7 +16,7 @@ library(knitr)
 
 
 ```{r}
-murphy_appendix <- read_csv("data/murphy_appendix.csv")
+murphy_appendix <- read_csv("murphy_foia_cleaned.csv")
 ```
 
 
