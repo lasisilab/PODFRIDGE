@@ -890,17 +890,18 @@ ggsave("output/line_chart_lr.png", width = 14, height = 10)
 calculate_cutoffs <- function(input_df, fp_rates) {
   cutoffs <- input_df %>%
     filter(relationship_type == "unrelated") %>%
-    group_by(loci_set) %>%
+    group_by(population, loci_set) %>%
     summarize(
       fixed_cutoff = 1.00,
       cutoff_1 = quantile(LR, probs = 1 - fp_rates[1] / 100, na.rm = TRUE),
       cutoff_0_1 = quantile(LR, probs = 1 - fp_rates[2] / 100, na.rm = TRUE),
-      cutoff_0_01 = quantile(LR, probs = 1 - fp_rates[3] / 100, na.rm = TRUE)
-    ) %>%
-    ungroup()
-  
+      cutoff_0_01 = quantile(LR, probs = 1 - fp_rates[3] / 100, na.rm = TRUE),
+      n_unrelated = n(),
+      .groups = 'drop'
+    )
   return(cutoffs)
 }
+
 
 # Define false positive rates as percentages
 fp_rates <- c(1, 0.1, 0.01)
@@ -916,10 +917,7 @@ print(cutoffs)
 ```{r}
 # Function to calculate proportions exceeding the cut-offs
 calculate_proportions_exceeding_cutoffs <- function(input_df, cutoffs) {
-  # Join the cut-offs with the original data frame
-  df_with_cutoffs <- left_join(input_df, cutoffs, by = "loci_set")
-  
-  # Calculate a flag indicating whether the LR exceeds each cut-off
+  df_with_cutoffs <- left_join(input_df, cutoffs, by = c("population", "loci_set"))
   df_with_cutoffs <- df_with_cutoffs %>%
     mutate(
       exceeds_fixed_cutoff = LR > fixed_cutoff,
@@ -927,19 +925,17 @@ calculate_proportions_exceeding_cutoffs <- function(input_df, cutoffs) {
       exceeds_cutoff_0_1 = LR > cutoff_0_1,
       exceeds_cutoff_0_01 = LR > cutoff_0_01
     )
-  
-  # Aggregate to calculate the proportion of pairs exceeding the cut-offs by relationship type and loci set
   proportions_exceeding <- df_with_cutoffs %>%
     group_by(population, relationship_type, loci_set) %>%
     summarize(
-      proportion_exceeding_fixed = mean(exceeds_fixed_cutoff, na.rm = TRUE),
-      proportion_exceeding_1 = mean(exceeds_cutoff_1, na.rm = TRUE),
-      proportion_exceeding_0_1 = mean(exceeds_cutoff_0_1, na.rm = TRUE),
-      proportion_exceeding_0_01 = mean(exceeds_cutoff_0_01, na.rm = TRUE),
+      proportion_exceeding_fixed = sum(exceeds_fixed_cutoff, na.rm = TRUE) / n(),
+      proportion_exceeding_1 = sum(exceeds_cutoff_1, na.rm = TRUE) / n(),
+      proportion_exceeding_0_1 = sum(exceeds_cutoff_0_1, na.rm = TRUE) / n(),
+      proportion_exceeding_0_01 = sum(exceeds_cutoff_0_01, na.rm = TRUE) / n(),
+      n_related = n(),
       .groups = 'drop'
     ) %>%
-    filter(relationship_type != "unrelated")  # Exclude unrelated relationship type
-  
+    filter(relationship_type != "unrelated")
   return(proportions_exceeding)
 }
 
@@ -967,7 +963,9 @@ proportions_long$Cutoff_Type <- factor(proportions_long$Cutoff_Type, levels = c(
 
 # Plot the proportions exceeding the cut-offs
 ggplot(proportions_long, aes(x = relationship_type, y = Proportion, fill = population, color = population)) +
-  geom_bar(stat = "identity", position = position_dodge()) +
+  # geom_bar(stat = "identity", position = position_dodge()) +
+  geom_bar(stat = "identity", position = position_dodge(width = 0.8), width = 0.6) +
+
   facet_wrap(~ Cutoff_Type + loci_set, scales = "fixed") +
   labs(
     title = "Proportions Exceeding Likelihood Cut-offs Across Relationship Types and Loci Sets",
@@ -980,8 +978,8 @@ ggplot(proportions_long, aes(x = relationship_type, y = Proportion, fill = popul
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1)
   ) +
-  scale_fill_manual(values = c("all" = "yellow", "AfAm" = "red", "Cauc" = "blue", "Hispanic" = "green", "Asian" = "purple")) +
-  coord_flip()
+  scale_fill_manual(values = c("all" = "yellow", "AfAm" = "red", "Cauc" = "blue", "Hispanic" = "green", "Asian" = "purple")) 
+  # coord_flip()
 
 # Save the plot to a file
 ggsave("output/proportions_exceeding_cutoffs_combined.png", width = 12, height = 8)
