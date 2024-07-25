@@ -13,7 +13,8 @@
 ########################################################################
 # Reminder: Please set your SSH passphrase using the following command #
 # before running this script:                                          #
-# export SSH_PASSPHRASE='your_passphrase'                              #
+# eval "$(ssh-agent -s)"                                               #
+# ssh-add ~/.ssh/id_rsa                                                #
 ########################################################################
 
 # Get the unique username
@@ -35,10 +36,6 @@ conda activate rstats
 
 # Run the R script with command line arguments
 Rscript code/STR_sims.R 2 5 data/sim_processed_genotypes.csv data/sim-summary_genotypes.csv
-
-# Set up SSH agent and add SSH key
-eval "$(ssh-agent -s)"
-echo "$SSH_PASSPHRASE" | ssh-add -
 
 # Change Git remote URL to use SSH
 git remote set-url origin git@github.com:lasisilab/PODFRIDGE.git
