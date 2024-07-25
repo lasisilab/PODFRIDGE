@@ -6,6 +6,8 @@ library(data.table)
 library(ggplot2)
 library(future)
 
+plan(multicore, workers = availableCores() - 1)
+
 
 # Read Command-Line Arguments
 args <- commandArgs(trailingOnly = TRUE)

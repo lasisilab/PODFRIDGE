@@ -44,7 +44,18 @@ conda activate rstats
 # clone PODFRIDGE
 cd /home/$UNIQNAME/$UNIQNAME && git clone https://github.com/lasisilab/PODFRIDGE.git
 
-# Install packages from STR-sims-env.txt with verbose output
+# Check and install packages from STR-sims-env.txt with verbose output
 while read -r package; do
-    mamba install -n rstats -c r -c conda-forge "r-$package" --verbose
+    echo "Processing package: r-$package"
+    if conda list -n rstats | grep -q "^r-$package"; then
+        echo "Package r-$package is already installed."
+    else
+        echo "Installing package r-$package..."
+        mamba install -n rstats -c r -c conda-forge "r-$package" --verbose || {
+            echo "Failed to install package r-$package"
+            exit 1
+        }
+    fi
 done < code/STR-sims-env.txt
+
+echo "All packages processed."
