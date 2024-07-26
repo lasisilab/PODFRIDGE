@@ -1,12 +1,11 @@
 #!/bin/bash
 #SBATCH --job-name=STR_sims
 #SBATCH --output=/home/%u/%u/slurm/%x-%j.log
-#SBATCH --time=5:00:00  # 5 hours max
+#SBATCH --time=1:00:00
 #SBATCH --account=tlasisi0
 #SBATCH --partition=standard
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=80
-#SBATCH --mem=500G  # Memory specified in gigabytes
+#SBATCH --mem=256G
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=$(whoami)@umich.edu
 
@@ -39,19 +38,19 @@ log_resource_usage() {
     squeue --job=$SLURM_JOB_ID --format="%.18i %.9P %.8j %.8u %.2t %.10M %.6D %R %C %m %N" | tee -a logfiles/resource_usage.log
 }
 
-# Log resource usage every hour in the background
+# Log resource usage periodically
 while true; do
     log_resource_usage
     sleep 3600  # Pause for 1 hour
 done &
 
 # Run the R script with command line arguments
-Rscript code/STR_sims.R 500 1000
+Rscript code/STR_sims.R 50 100
 
-# Kill the logging process
+# Kill the logging background process
 kill %1
 
-# Output the final resource usage
+# Final log of resource usage
 log_resource_usage
 
 # Configure Git to use HTTPS and PAT
