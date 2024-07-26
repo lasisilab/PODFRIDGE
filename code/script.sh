@@ -19,8 +19,13 @@ OUTPUT_DIR="/home/$UNIQNAME/$UNIQNAME/PODFRIDGE/output/simulation_${TIMESTAMP}_$
 mkdir -p $OUTPUT_DIR/slurm
 mkdir -p $OUTPUT_DIR/logfiles
 
-# Set the directory for slurm output
+# --- Key Changes: ---
+
+# Explicitly redirect stdout and stderr to a combined log file
 #SBATCH --output=$OUTPUT_DIR/slurm/%x-%j.log
+#SBATCH --error=$OUTPUT_DIR/slurm/%x-%j.log
+
+# --- End of Key Changes ---
 
 # Reminder to set GitHub PAT and username
 ########################################################################
