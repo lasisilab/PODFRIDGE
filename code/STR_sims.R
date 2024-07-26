@@ -22,25 +22,25 @@ log_message <- function(message) {
 }
 
 # Helper function to log function timings
-timing_log <- list()
+timing_log <- list()  # Initialize the timing_log list outside the function
 
 log_function_time <- function(func, name, ...) {
   start_time <- Sys.time()
-  result <- func(...)
+  result <- func(...)  # Call the wrapped function
   end_time <- Sys.time()
   duration <- as.numeric(difftime(end_time, start_time, units = "secs"))
 
+  # Update the timing_log
   if (!name %in% names(timing_log)) {
-    timing_log[[name]] <- list(total = 0, count = 0, min = Inf, max = -Inf, times = c())
+    timing_log[[name]] <<- list(total = 0, count = 0, min = Inf, max = -Inf, times = c())
   }
+  timing_log[[name]]$total <<- timing_log[[name]]$total + duration
+  timing_log[[name]]$count <<- timing_log[[name]]$count + 1
+  timing_log[[name]]$min <<- min(timing_log[[name]]$min, duration)
+  timing_log[[name]]$max <<- max(timing_log[[name]]$max, duration)
+  timing_log[[name]]$times <<- c(timing_log[[name]]$times, duration)
 
-  timing_log[[name]]$total <- timing_log[[name]]$total + duration
-  timing_log[[name]]$count <- timing_log[[name]]$count + 1
-  timing_log[[name]]$min <- min(timing_log[[name]]$min, duration)
-  timing_log[[name]]$max <- max(timing_log[[name]]$max, duration)
-  timing_log[[name]]$times <- c(timing_log[[name]]$times, duration)
-
-  return(result)
+  return(list(result = result, timings = timing_log)) # Return the result of func() and the timing_log
 }
 
 # Read Command-Line Arguments
@@ -503,4 +503,8 @@ timing_log_df <- tibble(
   avg_time = sapply(timing_log, function(x) x$total / x$count)
 )
 
+# Save timing log to CSV (modify this part based on the revised output)
+timing_log_df <- bind_rows(lapply(timing_log, as.data.frame))
+# Add the function names as a new column
+timing_log_df$function_name <- names(timing_log)
 write_csv(timing_log_df, timing_log_file)
