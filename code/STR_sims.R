@@ -47,7 +47,11 @@ log_function_time <- function(func, name, ...) {
 args <- commandArgs(trailingOnly = TRUE)
 n_sims_related <- as.numeric(args[1])
 n_sims_unrelated <- as.numeric(args[2])
-output_dir <- args[3] # Pass the output directory as an argument
+
+# Create output folder with timestamp
+timestamp <- format(Sys.time(), "%Y%m%d-%H%M%S")
+output_dir <- file.path("output", paste0("simulation_", timestamp))
+dir.create(output_dir, recursive = TRUE)
 
 output_file <- file.path(output_dir, "sim_processed_genotypes.csv")
 summary_output_file <- file.path(output_dir, "sim_summary_genotypes.csv")
@@ -64,7 +68,6 @@ allele_freq_time <- system.time({
   df_allelefreq[, allele := as.character(allele)]
 })
 log_message(paste("Loaded allele frequencies data in", allele_freq_time["elapsed"], "seconds."))
-
 
 # Extract unique loci
 log_message("Extracting unique loci...")
