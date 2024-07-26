@@ -12,9 +12,10 @@
 # Get the unique username
 UNIQNAME=$(whoami)
 
-# Create output folder with timestamp
+# Create output folder with timestamp and job ID
 TIMESTAMP=$(date +%Y%m%d-%H%M%S)
-OUTPUT_DIR="/home/$UNIQNAME/$UNIQNAME/PODFRIDGE/output/simulation_$TIMESTAMP"
+JOB_ID=$SLURM_JOB_ID
+OUTPUT_DIR="/home/$UNIQNAME/$UNIQNAME/PODFRIDGE/output/simulation_${TIMESTAMP}_${JOB_ID}"
 mkdir -p $OUTPUT_DIR/slurm
 mkdir -p $OUTPUT_DIR/logfiles
 
