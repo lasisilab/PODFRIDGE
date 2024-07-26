@@ -51,10 +51,10 @@ Rscript code/STR_sims.R 5 10
 # Configure Git to use HTTPS and PAT
 git remote set-url origin https://github.com/lasisilab/PODFRIDGE.git
 
+# Log memory and CPU usage after job completion
+sacct -j $SLURM_JOB_ID --format=JobID,JobName,Partition,AllocCPUs,Elapsed,MaxRSS,MaxVMSize,State > /home/$UNIQNAME/$UNIQNAME/PODFRIDGE/slurm/usage_$SLURM_JOB_ID.log
+
 # Commit and push changes to GitHub
 git add .
 git commit -m "Automated commit of new results $(date)"
 echo $GITHUB_PAT | git push https://$GITHUB_USER:$GITHUB_PAT@github.com/lasisilab/PODFRIDGE.git
-
-# Log memory and CPU usage after job completion
-sacct -j $SLURM_JOB_ID --format=JobID,JobName,Partition,AllocCPUs,Elapsed,MaxRSS,MaxVMSize,State > /home/$UNIQNAME/$UNIQNAME/PODFRIDGE/slurm/usage_$SLURM_JOB_ID.log
