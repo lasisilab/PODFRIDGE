@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=STR_sims
+#SBATCH --job-name=STR_sims-v2
 #SBATCH --output=/home/%u/%u/PODFRIDGE/slurm/%x-%j.log
 #SBATCH --time=07:00:00
 #SBATCH --account=tlasisi0
@@ -46,7 +46,7 @@ while true; do
 done &
 
 # Run the R script with command line arguments
-Rscript code/STR_sims.R 100 500
+Rscript code/STR_sims-v2.R 100 500
 
 # Configure Git to use HTTPS and PAT
 git remote set-url origin https://github.com/lasisilab/PODFRIDGE.git
