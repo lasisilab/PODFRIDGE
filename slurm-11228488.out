@@ -12,3 +12,10 @@
 Calls: log_function_time ... resolve.list -> signalConditionsASAP -> signalConditions
 Timing stopped at: 0.196 0.037 2.744
 Execution halted
+[main 91f957e] Automated commit of new results Fri Jul 26 16:20:58 EDT 2024
+ 3 files changed, 21 insertions(+)
+ create mode 100644 output/simulation_20240726-162034_11228488/slurm/resource_usage_11228488.log
+ create mode 100644 output/simulation_20240726-162034_11228488/slurm/usage_11228488.log
+ create mode 100644 slurm-11228488.out
+To https://github.com/lasisilab/PODFRIDGE.git
+   21d8664..91f957e  main -> main
