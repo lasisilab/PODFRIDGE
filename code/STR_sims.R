@@ -22,32 +22,32 @@ log_message <- function(message) {
 }
 
 # Helper function to log function timings
-timing_log <- list()  # Initialize the timing_log list outside the function
+timing_log <- list()
 
 log_function_time <- function(func, name, ...) {
   start_time <- Sys.time()
-  result <- func(...)  # Call the wrapped function
+  result <- func(...)
   end_time <- Sys.time()
   duration <- as.numeric(difftime(end_time, start_time, units = "secs"))
 
-  # Update the timing_log
   if (!name %in% names(timing_log)) {
-    timing_log[[name]] <<- list(total = 0, count = 0, min = Inf, max = -Inf, times = c())
+    timing_log[[name]] <- list(total = 0, count = 0, min = Inf, max = -Inf, times = c())
   }
-  timing_log[[name]]$total <<- timing_log[[name]]$total + duration
-  timing_log[[name]]$count <<- timing_log[[name]]$count + 1
-  timing_log[[name]]$min <<- min(timing_log[[name]]$min, duration)
-  timing_log[[name]]$max <<- max(timing_log[[name]]$max, duration)
-  timing_log[[name]]$times <<- c(timing_log[[name]]$times, duration)
 
-  return(list(result = result, timings = timing_log)) # Return the result of func() and the timing_log
+  timing_log[[name]]$total <- timing_log[[name]]$total + duration
+  timing_log[[name]]$count <- timing_log[[name]]$count + 1
+  timing_log[[name]]$min <- min(timing_log[[name]]$min, duration)
+  timing_log[[name]]$max <- max(timing_log[[name]]$max, duration)
+  timing_log[[name]]$times <- c(timing_log[[name]]$times, duration)
+
+  return(result)
 }
 
 # Read Command-Line Arguments
 args <- commandArgs(trailingOnly = TRUE)
 n_sims_related <- as.numeric(args[1])
 n_sims_unrelated <- as.numeric(args[2])
-output_dir <- args[3]  # Pass the output directory as an argument
+output_dir <- args[3] # Pass the output directory as an argument
 
 output_file <- file.path(output_dir, "sim_processed_genotypes.csv")
 summary_output_file <- file.path(output_dir, "sim_summary_genotypes.csv")
@@ -297,8 +297,8 @@ kinship_calculation <- function(row, allele_frequency_data, kinship_matrix) {
 }
 
 process_loci <- function(row, allele_frequency_data, kinship_matrix) {
-  simulated_row <- log_function_time(simulate_genotypes, "simulate_genotypes", row, allele_frequency_data, kinship_matrix)$result
-  final_row <- log_function_time(kinship_calculation, "kinship_calculation", simulated_row, allele_frequency_data, kinship_matrix)$result
+  simulated_row <- log_function_time(simulate_genotypes, "simulate_genotypes", row, allele_frequency_data, kinship_matrix)
+  final_row <- log_function_time(kinship_calculation, "kinship_calculation", simulated_row, allele_frequency_data, kinship_matrix)
   return(final_row)
 }
 
@@ -324,7 +324,6 @@ calculate_combined_lrs <- function(final_results, loci_lists) {
                        variable.name = "loci_set", value.name = "LR")
   return(combined_lrs)
 }
-
 
 plot_and_save_results <- function(combined_lrs) {
   # Ensure factor levels are set correctly for plotting
@@ -457,8 +456,7 @@ process_simulation_setup <- function(simulation_setup, df_allelefreq, kinship_ma
       future_pmap_dfr(function(population, relationship_type, num_simulations) {
         purrr::map_dfr(1:num_simulations, function(sim_id) {
           individuals_genotypes <- initialize_individuals_pair(population, relationship_type, sim_id, loci_list)
-          # Extract result from the wrapped function
-          processed_genotypes <- process_individuals_genotypes(individuals_genotypes, df_allelefreq, kinship_matrix)$result
+          processed_genotypes <- log_function_time(process_individuals_genotypes, "process_individuals_genotypes", individuals_genotypes, df_allelefreq, kinship_matrix)
           return(processed_genotypes)
         })
       }, .progress = TRUE)
@@ -468,47 +466,31 @@ process_simulation_setup <- function(simulation_setup, df_allelefreq, kinship_ma
     }
 
     fwrite(final_results, output_file)
-
-    # Extract result for further processing
-    combined_lrs_res <- log_function_time(calculate_combined_lrs, "calculate_combined_lrs", final_results, loci_lists)
-    combined_lrs <- combined_lrs_res$result  # Extract the combined_lrs data
-    timing_log[['calculate_combined_lrs']] <<- combined_lrs_res$timings[['calculate_combined_lrs']]  # Store the timings
-
+    combined_lrs <- log_function_time(calculate_combined_lrs, "calculate_combined_lrs", final_results, loci_lists)
     fwrite(combined_lrs, summary_output_file)
 
     # Create plots and save
-    plot_and_save_results_res <- log_function_time(plot_and_save_results, "plot_and_save_results", combined_lrs)
-    timing_log[['plot_and_save_results']] <<- plot_and_save_results_res$timings[['plot_and_save_results']]  # Store the timings
+    log_function_time(plot_and_save_results, "plot_and_save_results", combined_lrs)
 
     # Calculate and save cutoffs
-    cutoffs_res <- log_function_time(calculate_cutoffs, "calculate_cutoffs", combined_lrs, c(1, 0.1, 0.01))
-    cutoffs <- cutoffs_res$result
-    timing_log[['calculate_cutoffs']] <<- cutoffs_res$timings[['calculate_cutoffs']]  # Store the timings
-
+    cutoffs <- log_function_time(calculate_cutoffs, "calculate_cutoffs", combined_lrs, c(1, 0.1, 0.01))
     fwrite(cutoffs, file.path(output_dir, "sim_cutoffs.csv"))
 
-    proportions_exceeding_cutoffs_res <- log_function_time(calculate_proportions_exceeding_cutoffs, "calculate_proportions_exceeding_cutoffs", combined_lrs, cutoffs)
-    proportions_exceeding_cutoffs <- proportions_exceeding_cutoffs_res$result
-    timing_log[['calculate_proportions_exceeding_cutoffs']] <<- proportions_exceeding_cutoffs_res$timings[['calculate_proportions_exceeding_cutoffs']]  # Store the timings
-
+    proportions_exceeding_cutoffs <- log_function_time(calculate_proportions_exceeding_cutoffs, "calculate_proportions_exceeding_cutoffs", combined_lrs, cutoffs)
     fwrite(proportions_exceeding_cutoffs, file.path(output_dir, "sim_proportions_exceeding_cutoffs.csv"))
 
     # Convert population to factor for plotting
     proportions_exceeding_cutoffs$population <- factor(proportions_exceeding_cutoffs$population, levels = c("AfAm", "Cauc", "Hispanic", "Asian"))
 
     # Plot proportions exceeding cutoffs
-    plot_proportions_exceeding_cutoffs_res <- log_function_time(plot_proportions_exceeding_cutoffs, "plot_proportions_exceeding_cutoffs", proportions_exceeding_cutoffs)
-    timing_log[['plot_proportions_exceeding_cutoffs']] <<- plot_proportions_exceeding_cutoffs_res$timings[['plot_proportions_exceeding_cutoffs']]  # Store the timings
+    log_function_time(plot_proportions_exceeding_cutoffs, "plot_proportions_exceeding_cutoffs", proportions_exceeding_cutoffs)
   })
   log_message(paste("Processing completed in", process_time["elapsed"], "seconds."))
 }
 
 # Execute Simulation Setup and Processing
-simulation_setup_res <- log_function_time(generate_simulation_setup, "generate_simulation_setup", kinship_matrix, populations_list, n_sims_related, n_sims_unrelated)
-simulation_setup <- simulation_setup_res$result
-timing_log[["generate_simulation_setup"]] <<- simulation_setup_res$timings[["generate_simulation_setup"]]  # Store the timings
-
-process_simulation_setup(simulation_setup, df_allelefreq, kinship_matrix, loci_list, loci_lists, output_file, summary_output_file)
+simulation_setup <- log_function_time(generate_simulation_setup, "generate_simulation_setup", kinship_matrix, populations_list, n_sims_related, n_sims_unrelated)
+log_function_time(process_simulation_setup, "process_simulation_setup", simulation_setup, df_allelefreq, kinship_matrix, loci_list, loci_lists, output_file, summary_output_file)
 log_message("Simulation setup and processing completed.")
 
 # Save timing log to CSV
@@ -521,8 +503,4 @@ timing_log_df <- tibble(
   avg_time = sapply(timing_log, function(x) x$total / x$count)
 )
 
-# Save timing log to CSV (modify this part based on the revised output)
-timing_log_df <- bind_rows(lapply(timing_log, as.data.frame))
-# Add the function names as a new column
-timing_log_df$function_name <- names(timing_log)
 write_csv(timing_log_df, timing_log_file)
