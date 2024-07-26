@@ -9,6 +9,15 @@
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=$(whoami)@umich.edu
 
+# Reminder to set GitHub PAT and username
+########################################################################
+# Reminder: Please set your GitHub PAT using the following command     #
+# before running this script:                                          #
+# export GITHUB_PAT='your_personal_access_token'                       #
+# export GITHUB_USER='your_github_username'                            #
+########################################################################
+
+
 # Get the unique username
 UNIQNAME=$(whoami)
 
@@ -19,21 +28,9 @@ OUTPUT_DIR="/home/$UNIQNAME/$UNIQNAME/PODFRIDGE/output/simulation_${TIMESTAMP}_$
 mkdir -p $OUTPUT_DIR/slurm
 mkdir -p $OUTPUT_DIR/logfiles
 
-# --- Key Changes: ---
-
 # Explicitly redirect stdout and stderr to a combined log file
 #SBATCH --output=$OUTPUT_DIR/slurm/%x-%j.log
 #SBATCH --error=$OUTPUT_DIR/slurm/%x-%j.log
-
-# --- End of Key Changes ---
-
-# Reminder to set GitHub PAT and username
-########################################################################
-# Reminder: Please set your GitHub PAT using the following command     #
-# before running this script:                                          #
-# export GITHUB_PAT='your_personal_access_token'                       #
-# export GITHUB_USER='your_github_username'                            #
-########################################################################
 
 # Change to the project directory
 cd /home/$UNIQNAME/$UNIQNAME/PODFRIDGE
