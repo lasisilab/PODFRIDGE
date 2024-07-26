@@ -21,12 +21,41 @@ log_message <- function(message) {
   cat(paste0("[", Sys.time(), "] ", message, "\n"))
 }
 
+# Helper function to log function timings
+timing_log <- list()
+
+log_function_time <- function(func, name, ...) {
+  start_time <- Sys.time()
+  result <- func(...)
+  end_time <- Sys.time()
+  duration <- as.numeric(difftime(end_time, start_time, units = "secs"))
+
+  if (!name %in% names(timing_log)) {
+    timing_log[[name]] <- list(total = 0, count = 0, min = Inf, max = -Inf, times = c())
+  }
+
+  timing_log[[name]]$total <- timing_log[[name]]$total + duration
+  timing_log[[name]]$count <- timing_log[[name]]$count + 1
+  timing_log[[name]]$min <- min(timing_log[[name]]$min, duration)
+  timing_log[[name]]$max <- max(timing_log[[name]]$max, duration)
+  timing_log[[name]]$times <- c(timing_log[[name]]$times, duration)
+
+  return(result)
+}
+
 # Read Command-Line Arguments
 args <- commandArgs(trailingOnly = TRUE)
 n_sims_related <- as.numeric(args[1])
 n_sims_unrelated <- as.numeric(args[2])
-output_file <- args[3]
-summary_output_file <- args[4]
+
+# Create output folder with timestamp
+timestamp <- format(Sys.time(), "%Y%m%d-%H%M%S")
+output_dir <- file.path("output", paste0("simulation_", timestamp))
+dir.create(output_dir, recursive = TRUE)
+
+output_file <- file.path(output_dir, "sim_processed_genotypes.csv")
+summary_output_file <- file.path(output_dir, "sim_summary_genotypes.csv")
+timing_log_file <- file.path(output_dir, "timing_log.csv")
 
 # Log the start of the process
 log_message("Starting simulation setup and processing...")
@@ -35,6 +64,7 @@ log_message("Starting simulation setup and processing...")
 log_message("Loading allele frequencies data...")
 allele_freq_time <- system.time({
   df_allelefreq <- fread("data/df_allelefreq_combined.csv")
+  df_allelefreq <- df_allelefreq[population != "all"] # Filter out "all" population
   df_allelefreq[, allele := as.character(allele)]
 })
 log_message(paste("Loaded allele frequencies data in", allele_freq_time["elapsed"], "seconds."))
@@ -74,10 +104,10 @@ kinship_matrix <- tibble(
 # Define Populations
 population_labels <- tibble(
   population = factor(
-    c("all", "AfAm", "Cauc", "Hispanic", "Asian"),
-    levels = c("all", "AfAm", "Cauc", "Hispanic", "Asian")
+    c("AfAm", "Cauc", "Hispanic", "Asian"),
+    levels = c("AfAm", "Cauc", "Hispanic", "Asian")
   ),
-  label = c("All", "African American", "Caucasian", "Hispanic", "Asian")
+  label = c("African American", "Caucasian", "Hispanic", "Asian")
 )
 populations_list <- levels(population_labels$population)
 
@@ -270,14 +300,14 @@ kinship_calculation <- function(row, allele_frequency_data, kinship_matrix) {
 }
 
 process_loci <- function(row, allele_frequency_data, kinship_matrix) {
-  simulated_row <- simulate_genotypes(row, allele_frequency_data, kinship_matrix)
-  final_row <- kinship_calculation(simulated_row, allele_frequency_data, kinship_matrix)
+  simulated_row <- log_function_time(simulate_genotypes, "simulate_genotypes", row, allele_frequency_data, kinship_matrix)
+  final_row <- log_function_time(kinship_calculation, "kinship_calculation", simulated_row, allele_frequency_data, kinship_matrix)
   return(final_row)
 }
 
 process_individuals_genotypes <- function(individuals_genotypes, df_allelefreq, kinship_matrix) {
   final_individuals_genotypes <- individuals_genotypes |>
-    future_pmap(~ process_loci(list(...), df_allelefreq, kinship_matrix), seed = TRUE) |>
+    future_pmap(~ log_function_time(process_loci, "process_loci", list(...), df_allelefreq, kinship_matrix), seed = TRUE) |>
     bind_rows()
   return(final_individuals_genotypes)
 }
@@ -317,10 +347,9 @@ plot_and_save_results <- function(combined_lrs) {
       axis.text.x = element_text(angle = 45, hjust = 1)
     ) +
     scale_y_log10() +
-    scale_fill_manual(values = c("all" = "yellow", "AfAm" = "red", "Cauc" = "blue", "Hispanic" = "green", "Asian" = "purple")) +
     coord_flip()
 
-  ggsave("output/sim_log_lr_panel_plot.png", width = 12, height = 8)
+  ggsave(file.path(output_dir, "sim_log_lr_panel_plot.png"), width = 12, height = 8)
 
   summary_stats <- combined_lrs |>
     group_by(relationship_type, population, loci_set) |>
@@ -346,15 +375,15 @@ plot_and_save_results <- function(combined_lrs) {
       axis.text.x = element_text(angle = 45, hjust = 1),
       legend.position = "bottom"
     ) +
-    scale_color_manual(values = c("all" = "yellow", "AfAm" = "red", "Cauc" = "blue", "Hispanic" = "green", "Asian" = "purple"))
+    scale_color_manual(values = c("AfAm" = "red", "Cauc" = "blue", "Hispanic" = "green", "Asian" = "purple"))
 
-  ggsave("output/sim_line_chart_lr.png", width = 14, height = 10)
+  ggsave(file.path(output_dir, "sim_line_chart_lr.png"), width = 14, height = 10)
 }
 
 plot_proportions_exceeding_cutoffs <- function(proportions_exceeding_cutoffs) {
   # Ensure factor levels are set correctly for plotting
   proportions_exceeding_cutoffs$relationship_type <- factor(proportions_exceeding_cutoffs$relationship_type, levels = c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated"))
-  proportions_exceeding_cutoffs$population <- factor(proportions_exceeding_cutoffs$population, levels = c("all", "AfAm", "Cauc", "Hispanic", "Asian"))
+  proportions_exceeding_cutoffs$population <- factor(proportions_exceeding_cutoffs$population, levels = c("AfAm", "Cauc", "Hispanic", "Asian"))
 
   proportions_long <- proportions_exceeding_cutoffs |>
     pivot_longer(cols = starts_with("proportion_exceeding"),
@@ -378,10 +407,10 @@ plot_proportions_exceeding_cutoffs <- function(proportions_exceeding_cutoffs) {
     theme(
       axis.text.x = element_text(angle = 45, hjust = 1)
     ) +
-    scale_fill_manual(values = c("all" = "yellow", "AfAm" = "red", "Cauc" = "blue", "Hispanic" = "green", "Asian" = "purple")) +
+    scale_fill_manual(values = c("AfAm" = "red", "Cauc" = "blue", "Hispanic" = "green", "Asian" = "purple")) +
     coord_flip()
 
-  ggsave("output/sim_proportions_exceeding_cutoffs_combined.png", width = 12, height = 8)
+  ggsave(file.path(output_dir, "sim_proportions_exceeding_cutoffs_combined.png"), width = 12, height = 8)
 }
 
 # Function to calculate cut-off values for 1%, 0.1%, and 0.01% FPR
@@ -430,7 +459,7 @@ process_simulation_setup <- function(simulation_setup, df_allelefreq, kinship_ma
       future_pmap_dfr(function(population, relationship_type, num_simulations) {
         purrr::map_dfr(1:num_simulations, function(sim_id) {
           individuals_genotypes <- initialize_individuals_pair(population, relationship_type, sim_id, loci_list)
-          processed_genotypes <- process_individuals_genotypes(individuals_genotypes, df_allelefreq, kinship_matrix)
+          processed_genotypes <- log_function_time(process_individuals_genotypes, "process_individuals_genotypes", individuals_genotypes, df_allelefreq, kinship_matrix)
           return(processed_genotypes)
         })
       }, .progress = TRUE)
@@ -440,29 +469,41 @@ process_simulation_setup <- function(simulation_setup, df_allelefreq, kinship_ma
     }
 
     fwrite(final_results, output_file)
-    combined_lrs <- calculate_combined_lrs(final_results, loci_lists)
+    combined_lrs <- log_function_time(calculate_combined_lrs, "calculate_combined_lrs", final_results, loci_lists)
     fwrite(combined_lrs, summary_output_file)
 
     # Create plots and save
-    plot_and_save_results(combined_lrs)
+    log_function_time(plot_and_save_results, "plot_and_save_results", combined_lrs)
 
     # Calculate and save cutoffs
-    cutoffs <- calculate_cutoffs(combined_lrs, c(1, 0.1, 0.01))
-    fwrite(cutoffs, "output/sim_cutoffs.csv")
+    cutoffs <- log_function_time(calculate_cutoffs, "calculate_cutoffs", combined_lrs, c(1, 0.1, 0.01))
+    fwrite(cutoffs, file.path(output_dir, "sim_cutoffs.csv"))
 
-    proportions_exceeding_cutoffs <- calculate_proportions_exceeding_cutoffs(combined_lrs, cutoffs)
-    fwrite(proportions_exceeding_cutoffs, "output/sim_proportions_exceeding_cutoffs.csv")
+    proportions_exceeding_cutoffs <- log_function_time(calculate_proportions_exceeding_cutoffs, "calculate_proportions_exceeding_cutoffs", combined_lrs, cutoffs)
+    fwrite(proportions_exceeding_cutoffs, file.path(output_dir, "sim_proportions_exceeding_cutoffs.csv"))
 
     # Convert population to factor for plotting
-    proportions_exceeding_cutoffs$population <- factor(proportions_exceeding_cutoffs$population, levels = c("all", "AfAm", "Cauc", "Hispanic", "Asian"))
+    proportions_exceeding_cutoffs$population <- factor(proportions_exceeding_cutoffs$population, levels = c("AfAm", "Cauc", "Hispanic", "Asian"))
 
     # Plot proportions exceeding cutoffs
-    plot_proportions_exceeding_cutoffs(proportions_exceeding_cutoffs)
+    log_function_time(plot_proportions_exceeding_cutoffs, "plot_proportions_exceeding_cutoffs", proportions_exceeding_cutoffs)
   })
   log_message(paste("Processing completed in", process_time["elapsed"], "seconds."))
 }
 
 # Execute Simulation Setup and Processing
-simulation_setup <- generate_simulation_setup(kinship_matrix, populations_list, n_sims_related, n_sims_unrelated)
-process_simulation_setup(simulation_setup, df_allelefreq, kinship_matrix, loci_list, loci_lists, output_file, summary_output_file)
+simulation_setup <- log_function_time(generate_simulation_setup, "generate_simulation_setup", kinship_matrix, populations_list, n_sims_related, n_sims_unrelated)
+log_function_time(process_simulation_setup, "process_simulation_setup", simulation_setup, df_allelefreq, kinship_matrix, loci_list, loci_lists, output_file, summary_output_file)
 log_message("Simulation setup and processing completed.")
+
+# Save timing log to CSV
+timing_log_df <- tibble(
+  function_name = names(timing_log),
+  total_time = sapply(timing_log, function(x) x$total),
+  count = sapply(timing_log, function(x) x$count),
+  min_time = sapply(timing_log, function(x) x$min),
+  max_time = sapply(timing_log, function(x) x$max),
+  avg_time = sapply(timing_log, function(x) x$total / x$count)
+)
+
+write_csv(timing_log_df, timing_log_file)

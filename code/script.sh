@@ -1,13 +1,13 @@
 #!/bin/bash
 #SBATCH --job-name=STR_sims
 #SBATCH --output=/home/%u/%u/slurm/%x-%j.log
-#SBATCH --time=14-00:00:00
+#SBATCH --time=5:00:00  # 5 hours max
 #SBATCH --account=tlasisi0
 #SBATCH --partition=standard
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=36
-#SBATCH --mem-per-cpu=4000MB
-#SBATCH --mail-type=END,FAIL
+#SBATCH --cpus-per-task=80
+#SBATCH --mem=500G  # Memory specified in gigabytes
+#SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=$(whoami)@umich.edu
 
 ########################################################################
@@ -34,8 +34,25 @@ source "$CONDA_HOME/etc/profile.d/conda.sh"
 # Activate the environment
 conda activate rstats
 
+# Function to log resource usage
+log_resource_usage() {
+    squeue --job=$SLURM_JOB_ID --format="%.18i %.9P %.8j %.8u %.2t %.10M %.6D %R %C %m %N" | tee -a logfiles/resource_usage.log
+}
+
+# Log resource usage every hour in the background
+while true; do
+    log_resource_usage
+    sleep 3600  # Pause for 1 hour
+done &
+
 # Run the R script with command line arguments
-Rscript code/STR_sims.R 500 1000 data/sim_processed_genotypes.csv data/sim_summary_genotypes.csv
+Rscript code/STR_sims.R 500 1000
+
+# Kill the logging process
+kill %1
+
+# Output the final resource usage
+log_resource_usage
 
 # Configure Git to use HTTPS and PAT
 git remote set-url origin https://github.com/lasisilab/PODFRIDGE.git
