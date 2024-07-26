@@ -1,12 +1,12 @@
 #!/bin/bash
 #SBATCH --job-name=STR_sims
 #SBATCH --output=/home/%u/%u/slurm/%x-%j.log
-#SBATCH --time=14-00:00:00
+#SBATCH --time=1:00:00
 #SBATCH --account=tlasisi0
 #SBATCH --partition=standard
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=36
-#SBATCH --mem-per-cpu=7000MB
+#SBATCH --mem-per-cpu=4000MB
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=$(whoami)@umich.edu
 
@@ -34,8 +34,28 @@ source "$CONDA_HOME/etc/profile.d/conda.sh"
 # Activate the environment
 conda activate rstats
 
+# Log the start time
+echo "Job started at $(date)" > /home/$UNIQNAME/$UNIQNAME/slurm/job_$SLURM_JOB_ID.log
+
+# Function to log resource usage
+log_resource_usage() {
+    scontrol show job $SLURM_JOB_ID | grep -E "JobId|JobName|UserId|Partition|AllocCPUs|TotalCPU|ReqMem|ReqNodes|Nodes|EndTime" >> /home/$UNIQNAME/$UNIQNAME/slurm/job_$SLURM_JOB_ID.log
+}
+
+# Log resource usage periodically
+while true; do
+    log_resource_usage
+    sleep 3600  # Pause for 1 hour
+done &
+
 # Run the R script with command line arguments
-Rscript code/STR_sims.R 50 100
+Rscript code/STR_sims.R 50 10
+
+# Log memory and CPU usage after job completion
+sacct -j $SLURM_JOB_ID --format=JobID,JobName,Partition,AllocCPUs,Elapsed,MaxRSS,MaxVMSize,State >> /home/$UNIQNAME/$UNIQNAME/slurm/job_$SLURM_JOB_ID.log
+
+# Log the end time
+echo "Job ended at $(date)" >> /home/$UNIQNAME/$UNIQNAME/slurm/job_$SLURM_JOB_ID.log
 
 # Configure Git to use HTTPS and PAT
 git remote set-url origin https://github.com/lasisilab/PODFRIDGE.git
