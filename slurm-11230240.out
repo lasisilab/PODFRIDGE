@@ -2,3 +2,10 @@
           11230240  standard STR_sims  tlasisi  R       0:04      1 gl3163 36 4000M gl3163
 Error: unexpected input in "output_dir <- args[3] "
 Execution halted
+[main 8477e2d] Automated commit of new results Fri Jul 26 16:51:10 EDT 2024
+ 3 files changed, 11 insertions(+)
+ create mode 100644 output/simulation_20240726-165046_11230240/slurm/resource_usage_11230240.log
+ create mode 100644 output/simulation_20240726-165046_11230240/slurm/usage_11230240.log
+ create mode 100644 slurm-11230240.out
+To https://github.com/lasisilab/PODFRIDGE.git
+   a8c95fd..8477e2d  main -> main
