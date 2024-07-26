@@ -1,0 +1,2 @@
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON) CPUS MIN_MEMORY NODELIST
+          11226557  standard STR_sims  tlasisi  R       0:11      1 gl3244 36 4000M gl3244
