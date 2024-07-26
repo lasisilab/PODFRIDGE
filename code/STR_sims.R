@@ -329,11 +329,13 @@ calculate_combined_lrs <- function(final_results, loci_lists) {
 }
 
 plot_and_save_results <- function(combined_lrs) {
+  log_message("Starting to plot LR distributions...")
+
   # Ensure factor levels are set correctly for plotting
   combined_lrs$relationship_type <- factor(combined_lrs$relationship_type, levels = c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated"))
 
   ggplot(combined_lrs, aes(x = relationship_type, y = LR, fill = population, color = population)) +
-    geom_boxplot() +
+    geom_boxplot(position = position_dodge(width = 0.9)) +
     facet_wrap(~ loci_set, scales = "fixed") +
     labs(
       title = "LR Distributions Across Populations and Relationship Types",
@@ -346,10 +348,11 @@ plot_and_save_results <- function(combined_lrs) {
     theme(
       axis.text.x = element_text(angle = 45, hjust = 1)
     ) +
-    scale_y_log10() +
-    coord_flip()
+    scale_y_log10()
 
   ggsave(file.path(output_dir, "sim_log_lr_panel_plot.png"), width = 12, height = 8)
+
+  log_message("LR distributions plot saved.")
 
   summary_stats <- combined_lrs |>
     group_by(relationship_type, population, loci_set) |>
@@ -374,13 +377,16 @@ plot_and_save_results <- function(combined_lrs) {
     theme(
       axis.text.x = element_text(angle = 45, hjust = 1),
       legend.position = "bottom"
-    ) +
-    scale_color_manual(values = c("AfAm" = "red", "Cauc" = "blue", "Hispanic" = "green", "Asian" = "purple"))
+    )
 
   ggsave(file.path(output_dir, "sim_line_chart_lr.png"), width = 14, height = 10)
+
+  log_message("Mean LR plot saved.")
 }
 
 plot_proportions_exceeding_cutoffs <- function(proportions_exceeding_cutoffs) {
+  log_message("Starting to plot proportions exceeding cutoffs...")
+
   # Ensure factor levels are set correctly for plotting
   proportions_exceeding_cutoffs$relationship_type <- factor(proportions_exceeding_cutoffs$relationship_type, levels = c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated"))
   proportions_exceeding_cutoffs$population <- factor(proportions_exceeding_cutoffs$population, levels = c("AfAm", "Cauc", "Hispanic", "Asian"))
@@ -394,7 +400,7 @@ plot_proportions_exceeding_cutoffs <- function(proportions_exceeding_cutoffs) {
                                          labels = c("Fixed Cutoff (1.00)", "1% FPR", "0.1% FPR", "0.01% FPR"))
 
   ggplot(proportions_long, aes(x = relationship_type, y = Proportion, fill = population, color = population)) +
-    geom_bar(stat = "identity", position = position_dodge()) +
+    geom_bar(stat = "identity", position = position_dodge(width = 0.9)) +
     facet_wrap(~ Cutoff_Type + loci_set, scales = "fixed") +
     labs(
       title = "Proportions Exceeding Likelihood Cut-offs Across Relationship Types and Loci Sets",
@@ -406,12 +412,13 @@ plot_proportions_exceeding_cutoffs <- function(proportions_exceeding_cutoffs) {
     theme_minimal() +
     theme(
       axis.text.x = element_text(angle = 45, hjust = 1)
-    ) +
-    scale_fill_manual(values = c("AfAm" = "red", "Cauc" = "blue", "Hispanic" = "green", "Asian" = "purple")) +
-    coord_flip()
+    )
 
   ggsave(file.path(output_dir, "sim_proportions_exceeding_cutoffs_combined.png"), width = 12, height = 8)
+
+  log_message("Proportions exceeding cutoffs plot saved.")
 }
+
 
 # Function to calculate cut-off values for 1%, 0.1%, and 0.01% FPR
 calculate_cutoffs <- function(input_df, fp_rates) {
