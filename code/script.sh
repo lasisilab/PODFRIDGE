@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=STR_sims
-#SBATCH --output=/home/%u/%u/slurm/%x-%j.log
-#SBATCH --time=1:00:00
+#SBATCH --output=/home/%u/%u/PODFRIDGE/slurm/%x-%j.log
+#SBATCH --time=01:00:00  # 1 hour
 #SBATCH --account=tlasisi0
 #SBATCH --partition=standard
 #SBATCH --ntasks=1
@@ -21,7 +21,7 @@
 UNIQNAME=$(whoami)
 
 # Ensure the directory structure exists
-mkdir -p /home/$UNIQNAME/$UNIQNAME/slurm
+mkdir -p /home/$UNIQNAME/$UNIQNAME/PODFRIDGE/slurm
 mkdir -p /home/$UNIQNAME/$UNIQNAME/PODFRIDGE/logfiles
 
 # Change to the project directory
@@ -34,28 +34,19 @@ source "$CONDA_HOME/etc/profile.d/conda.sh"
 # Activate the environment
 conda activate rstats
 
-# Log the start time
-echo "Job started at $(date)" > /home/$UNIQNAME/$UNIQNAME/slurm/job_$SLURM_JOB_ID.log
-
 # Function to log resource usage
 log_resource_usage() {
-    scontrol show job $SLURM_JOB_ID | grep -E "JobId|JobName|UserId|Partition|AllocCPUs|TotalCPU|ReqMem|ReqNodes|Nodes|EndTime" >> /home/$UNIQNAME/$UNIQNAME/slurm/job_$SLURM_JOB_ID.log
+    squeue --job=$SLURM_JOB_ID --format="%.18i %.9P %.8j %.8u %.2t %.10M %.6D %R %C %m %N" | tee -a /home/$UNIQNAME/$UNIQNAME/PODFRIDGE/logfiles/resource_usage_$SLURM_JOB_ID.log
 }
 
 # Log resource usage periodically
 while true; do
     log_resource_usage
-    sleep 3600  # Pause for 1 hour
+    sleep 900  # Pause for 15 minutes
 done &
 
 # Run the R script with command line arguments
 Rscript code/STR_sims.R 50 10
-
-# Log memory and CPU usage after job completion
-sacct -j $SLURM_JOB_ID --format=JobID,JobName,Partition,AllocCPUs,Elapsed,MaxRSS,MaxVMSize,State >> /home/$UNIQNAME/$UNIQNAME/slurm/job_$SLURM_JOB_ID.log
-
-# Log the end time
-echo "Job ended at $(date)" >> /home/$UNIQNAME/$UNIQNAME/slurm/job_$SLURM_JOB_ID.log
 
 # Configure Git to use HTTPS and PAT
 git remote set-url origin https://github.com/lasisilab/PODFRIDGE.git
@@ -64,3 +55,6 @@ git remote set-url origin https://github.com/lasisilab/PODFRIDGE.git
 git add .
 git commit -m "Automated commit of new results $(date)"
 echo $GITHUB_PAT | git push https://$GITHUB_USER:$GITHUB_PAT@github.com/lasisilab/PODFRIDGE.git
+
+# Log memory and CPU usage after job completion
+sacct -j $SLURM_JOB_ID --format=JobID,JobName,Partition,AllocCPUs,Elapsed,MaxRSS,MaxVMSize,State > /home/$UNIQNAME/$UNIQNAME/PODFRIDGE/slurm/usage_$SLURM_JOB_ID.log
