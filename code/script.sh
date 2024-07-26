@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=STR_sims
 #SBATCH --output=/home/%u/%u/PODFRIDGE/slurm/%x-%j.log
-#SBATCH --time=01:00:00  # 1 hour
+#SBATCH --time=01:00:00
 #SBATCH --account=tlasisi0
 #SBATCH --partition=standard
 #SBATCH --ntasks=1
@@ -34,19 +34,19 @@ source "$CONDA_HOME/etc/profile.d/conda.sh"
 # Activate the environment
 conda activate rstats
 
-# Function to log resource usage
+# Log memory and CPU usage every 15 minutes
 log_resource_usage() {
-    squeue --job=$SLURM_JOB_ID --format="%.18i %.9P %.8j %.8u %.2t %.10M %.6D %R %C %m %N" | tee -a /home/$UNIQNAME/$UNIQNAME/PODFRIDGE/logfiles/resource_usage_$SLURM_JOB_ID.log
+    squeue --job=$SLURM_JOB_ID --format="%.18i %.9P %.8j %.8u %.2t %.10M %.6D %R %C %m %N" | tee -a /home/$UNIQNAME/$UNIQNAME/PODFRIDGE/slurm/resource_usage_$SLURM_JOB_ID.log
 }
 
-# Log resource usage periodically
+# Run the logging function every 15 minutes in the background
 while true; do
     log_resource_usage
     sleep 900  # Pause for 15 minutes
 done &
 
 # Run the R script with command line arguments
-Rscript code/STR_sims.R 50 10
+Rscript code/STR_sims.R 5 10
 
 # Configure Git to use HTTPS and PAT
 git remote set-url origin https://github.com/lasisilab/PODFRIDGE.git
