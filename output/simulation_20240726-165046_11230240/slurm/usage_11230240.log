@@ -1,0 +1,5 @@
+JobID           JobName  Partition  AllocCPUS    Elapsed     MaxRSS  MaxVMSize      State 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
+11230240       STR_sims   standard         36   00:00:23                          RUNNING 
+11230240.ba+      batch                    36   00:00:23                          RUNNING 
+11230240.ex+     extern                    36   00:00:23                          RUNNING 
