@@ -13,3 +13,18 @@ override using the `.groups` argument.
 NULL
 There were 50 or more warnings (use warnings() to see the first 50)
 [2024-07-26 17:00:16] Simulation setup and processing completed.
+[main ad95531] Automated commit of new results Fri Jul 26 17:00:17 EDT 2024
+ 11 files changed, 4907 insertions(+)
+ create mode 100644 output/simulation_20240726-165924/sim_cutoffs.csv
+ create mode 100644 output/simulation_20240726-165924/sim_line_chart_lr.png
+ create mode 100644 output/simulation_20240726-165924/sim_log_lr_panel_plot.png
+ create mode 100644 output/simulation_20240726-165924/sim_processed_genotypes.csv
+ create mode 100644 output/simulation_20240726-165924/sim_proportions_exceeding_cutoffs.csv
+ create mode 100644 output/simulation_20240726-165924/sim_proportions_exceeding_cutoffs_combined.png
+ create mode 100644 output/simulation_20240726-165924/sim_summary_genotypes.csv
+ create mode 100644 output/simulation_20240726-165924/timing_log.csv
+ create mode 100644 slurm/STR_sims-11233712.log
+ create mode 100644 slurm/resource_usage_11233712.log
+ create mode 100644 slurm/usage_11233712.log
+To https://github.com/lasisilab/PODFRIDGE.git
+   e6a6844..ad95531  main -> main
