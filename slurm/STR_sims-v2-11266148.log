@@ -7,3 +7,21 @@
 [2024-07-27 14:31:00] Loading core loci data...
 [2024-07-27 14:31:00] Loaded core loci data in 0.061000000000007 seconds.
 [2024-07-27 14:31:00] Processing simulation setup...
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON) CPUS MIN_MEMORY NODELIST
+          11266148  standard STR_sims  tlasisi  R      15:05      1 gl3128 36 4000M gl3128
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON) CPUS MIN_MEMORY NODELIST
+          11266148  standard STR_sims  tlasisi  R      30:05      1 gl3128 36 4000M gl3128
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON) CPUS MIN_MEMORY NODELIST
+          11266148  standard STR_sims  tlasisi  R      45:05      1 gl3128 36 4000M gl3128
+[2024-07-27 15:25:50] Starting to plot LR distributions...
+[2024-07-27 15:25:54] LR distributions plot saved.
+[2024-07-27 15:25:56] Mean LR plot saved.
+[2024-07-27 15:25:56] Starting to plot proportions exceeding cutoffs...
+[2024-07-27 15:25:57] Proportions exceeding cutoffs plot saved.
+[2024-07-27 15:25:57] Testing all pairs across all relationship types...
+Error in .(sim_id, population, ind1_allele1, ind1_allele2, ind2_allele1,  : 
+  could not find function "."
+Calls: log_function_time ... system.time -> log_function_time -> func -> [ -> [.tbl_df
+In addition: There were 50 or more warnings (use warnings() to see the first 50)
+Timing stopped at: 217.4 18.07 3297
+Execution halted

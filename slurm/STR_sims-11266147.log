@@ -4,3 +4,12 @@ Error in makePSOCKcluster(names = spec, ...) :
   Cluster setup failed. 1 worker of 36 failed to connect.
 Calls: makeCluster -> makePSOCKcluster
 Execution halted
+[main 4e7e6db] Automated commit of new results Sat Jul 27 14:32:38 EDT 2024
+ 5 files changed, 24 insertions(+)
+ create mode 100644 slurm/STR_sims-11266147.log
+ create mode 100644 slurm/STR_sims-v2-11266148.log
+ create mode 100644 slurm/resource_usage_11266147.log
+ create mode 100644 slurm/resource_usage_11266148.log
+ create mode 100644 slurm/usage_11266147.log
+To https://github.com/lasisilab/PODFRIDGE.git
+   b5ede60..4e7e6db  main -> main
