@@ -359,7 +359,8 @@ plot_and_save_results <- function(combined_lrs) {
     summarize(
       mean_LR = mean(LR),
       lower_95 = quantile(LR, 0.025),
-      upper_95 = quantile(LR, 0.975)
+      upper_95 = quantile(LR, 0.975),
+      .groups = 'drop'
     ) |>
     ungroup()
 
@@ -469,7 +470,7 @@ process_simulation_setup <- function(simulation_setup, df_allelefreq, kinship_ma
           processed_genotypes <- log_function_time(process_individuals_genotypes, "process_individuals_genotypes", individuals_genotypes, df_allelefreq, kinship_matrix)
           return(processed_genotypes)
         })
-      }, .progress = TRUE)
+      })
 
     if ("seed" %in% colnames(final_results)) {
       final_results <- final_results |> select(-seed)

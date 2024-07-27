@@ -2,7 +2,6 @@
 suppressMessages(suppressWarnings({
   library(tidyverse)
   library(furrr)
-  library(progressr)
   library(data.table)
   library(ggplot2)
   library(future)
@@ -329,7 +328,6 @@ calculate_combined_lrs <- function(final_results, loci_lists) {
   return(combined_lrs)
 }
 
-# New function to test all pairs across all relationship types and save results
 test_all_relationships <- function(final_results, kinship_matrix, df_allelefreq) {
   log_message("Testing all pairs across all relationship types...")
   results <- final_results[, .(
@@ -343,41 +341,22 @@ test_all_relationships <- function(final_results, kinship_matrix, df_allelefreq)
     relationship_type
   )]
 
-  all_relationship_tests <- expand.grid(
-    sim_id = unique(results$sim_id),
-    population = unique(results$population),
-    relationship_type_tested = kinship_matrix$relationship_type,
-    relationship_type_actual = kinship_matrix$relationship_type
-  )
-
-  all_relationship_tests <- merge(all_relationship_tests, results, by = c("sim_id", "population", "relationship_type_actual"))
+  all_relationship_tests <- results[, {
+    kinship_results <- list()
+    for (relationship_tested in setdiff(kinship_matrix$relationship_type, "unrelated")) {
+      kinship_results[[as.character(relationship_tested)]] <- kinship_calculation(.SD, df_allelefreq, kinship_matrix[relationship_type == relationship_tested])
+    }
+    rbindlist(kinship_results, idcol = "relationship_tested")
+  }, by = .(sim_id, population, locus, relationship_type)]
 
   all_relationship_tests <- all_relationship_tests[, .(
     population,
-    relationship_type_actual,
-    relationship_type_tested,
+    relationship_known = relationship_type,
+    relationship_tested,
     locus,
-    ind1_allele1,
-    ind1_allele2,
-    ind2_allele1,
-    ind2_allele2,
-    shared_alleles = pmin(
-      (ind1_allele1 == ind2_allele1) + (ind1_allele1 == ind2_allele2) +
-        (ind1_allele2 == ind2_allele1) + (ind1_allele2 == ind2_allele2), 2
-    )
-  ), by = .(sim_id, population, relationship_type_tested, relationship_type_actual, locus)]
-
-  all_relationship_tests <- all_relationship_tests[, .(
-    LR = calculate_likelihood_ratio(
-      shared_alleles = shared_alleles,
-      genotype_match = paste(sort(c(ind1_allele1, ind1_allele2)), collapse = "-"),
-      pA = df_allelefreq[population == population & marker == locus & allele == ind1_allele1, frequency],
-      pB = df_allelefreq[population == population & marker == locus & allele == ind2_allele1, frequency],
-      kinship_matrix[relationship_type == relationship_type_tested, k0],
-      kinship_matrix[relationship_type == relationship_type_tested, k1],
-      kinship_matrix[relationship_type == relationship_type_tested, k2]
-    )
-  ), by = .(sim_id, population, relationship_type_tested, relationship_type_actual)]
+    sim_id,
+    LR
+  )]
 
   fwrite(all_relationship_tests, relationship_test_file)
   return(all_relationship_tests)
@@ -414,9 +393,9 @@ plot_and_save_results <- function(combined_lrs) {
     summarize(
       mean_LR = mean(LR),
       lower_95 = quantile(LR, 0.025),
-      upper_95 = quantile(LR, 0.975)
-    ) |>
-    ungroup()
+      upper_95 = quantile(LR, 0.975),
+      .groups = 'drop'
+    )
 
   ggplot(summary_stats, aes(x = loci_set, y = mean_LR, group = population, color = population)) +
     geom_line(size = 1) +
@@ -442,9 +421,9 @@ plot_and_save_results <- function(combined_lrs) {
 plot_relationship_comparisons <- function(all_relationship_tests) {
   log_message("Starting to plot relationship comparisons...")
 
-  ggplot(all_relationship_tests, aes(x = relationship_type_tested, y = LR, fill = population)) +
+  ggplot(all_relationship_tests, aes(x = relationship_tested, y = LR, fill = population)) +
     geom_boxplot(position = position_dodge(width = 0.9)) +
-    facet_grid(relationship_type_actual ~ loci_set) +
+    facet_grid(relationship_known ~ loci_set) +
     labs(
       title = "LR Distributions for Relationship Comparisons",
       x = "Tested Relationship Type",
@@ -497,7 +476,6 @@ plot_proportions_exceeding_cutoffs <- function(proportions_exceeding_cutoffs) {
   log_message("Proportions exceeding cutoffs plot saved.")
 }
 
-# Function to calculate cut-off values for 1%, 0.1%, and 0.01% FPR
 calculate_cutoffs <- function(input_df, fp_rates) {
   cutoffs <- input_df |>
     filter(relationship_type == "unrelated") |>
@@ -546,7 +524,7 @@ process_simulation_setup <- function(simulation_setup, df_allelefreq, kinship_ma
           processed_genotypes <- log_function_time(process_individuals_genotypes, "process_individuals_genotypes", individuals_genotypes, df_allelefreq, kinship_matrix)
           return(processed_genotypes)
         })
-      }, .progress = TRUE)
+      })
 
     if ("seed" %in% colnames(final_results)) {
       final_results <- final_results |> select(-seed)
@@ -573,6 +551,7 @@ process_simulation_setup <- function(simulation_setup, df_allelefreq, kinship_ma
     log_function_time(plot_proportions_exceeding_cutoffs, "plot_proportions_exceeding_cutoffs", proportions_exceeding_cutoffs)
 
     # Plot relationship comparisons
+    all_relationship_tests <- log_function_time(test_all_relationships, "test_all_relationships", final_results, kinship_matrix, df_allelefreq)
     log_function_time(plot_relationship_comparisons, "plot_relationship_comparisons", all_relationship_tests)
   })
   log_message(paste("Processing completed in", process_time["elapsed"], "seconds."))
@@ -580,8 +559,7 @@ process_simulation_setup <- function(simulation_setup, df_allelefreq, kinship_ma
 
 # Execute Simulation Setup and Processing
 simulation_setup <- log_function_time(generate_simulation_setup, "generate_simulation_setup", kinship_matrix, populations_list, n_sims_related, n_sims_unrelated)
-final_results <- log_function_time(process_simulation_setup, "process_simulation_setup", simulation_setup, df_allelefreq, kinship_matrix, loci_list, loci_lists, output_file, summary_output_file)
-all_relationship_tests <- log_function_time(test_all_relationships, "test_all_relationships", final_results, kinship_matrix, df_allelefreq)
+log_function_time(process_simulation_setup, "process_simulation_setup", simulation_setup, df_allelefreq, kinship_matrix, loci_list, loci_lists, output_file, summary_output_file)
 log_message("Simulation setup and processing completed.")
 
 # Save timing log to CSV
