@@ -1,0 +1,6 @@
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON) CPUS MIN_MEMORY NODELIST
+          11266147  standard STR_sims  tlasisi  R       0:06      1 gl3112 36 4000M gl3112
+Error in makePSOCKcluster(names = spec, ...) : 
+  Cluster setup failed. 1 worker of 36 failed to connect.
+Calls: makeCluster -> makePSOCKcluster
+Execution halted
