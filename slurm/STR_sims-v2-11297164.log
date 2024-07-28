@@ -12,3 +12,11 @@ Calls: log_function_time ... log_function_time -> func -> [ -> [.data.table -> e
 In addition: There were 50 or more warnings (use warnings() to see the first 50)
 Timing stopped at: 41.15 2.688 787.6
 Execution halted
+[main ad6a11d] Automated commit of new results Sun Jul 28 14:46:19 EDT 2024
+ 4 files changed, 139222 insertions(+)
+ create mode 100644 output/simulation_11297164/sim_processed_genotypes.csv
+ create mode 100644 slurm/STR_sims-v2-11297164.log
+ create mode 100644 slurm/resource_usage_11297164.log
+ create mode 100644 slurm/usage_11297164.log
+To https://github.com/lasisilab/PODFRIDGE.git
+   6ce749e..ad6a11d  main -> main
