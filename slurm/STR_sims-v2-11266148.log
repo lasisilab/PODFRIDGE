@@ -25,3 +25,15 @@ Calls: log_function_time ... system.time -> log_function_time -> func -> [ -> [.
 In addition: There were 50 or more warnings (use warnings() to see the first 50)
 Timing stopped at: 217.4 18.07 3297
 Execution halted
+[main 3c1d41c] Automated commit of new results Sat Jul 27 15:25:59 EDT 2024
+ 11 files changed, 136162 insertions(+)
+ create mode 100644 output/simulation_20240727-143100/sim_cutoffs.csv
+ create mode 100644 output/simulation_20240727-143100/sim_line_chart_lr.png
+ create mode 100644 output/simulation_20240727-143100/sim_log_lr_panel_plot.png
+ create mode 100644 output/simulation_20240727-143100/sim_processed_genotypes.csv
+ create mode 100644 output/simulation_20240727-143100/sim_proportions_exceeding_cutoffs.csv
+ create mode 100644 output/simulation_20240727-143100/sim_proportions_exceeding_cutoffs_combined.png
+ create mode 100644 output/simulation_20240727-143100/sim_summary_genotypes.csv
+ create mode 100644 slurm/usage_11266148.log
+To https://github.com/lasisilab/PODFRIDGE.git
+   4e7e6db..3c1d41c  main -> main
