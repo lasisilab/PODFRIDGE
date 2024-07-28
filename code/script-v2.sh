@@ -46,7 +46,7 @@ while true; do
 done &
 
 # Run the R script with command line arguments
-Rscript code/STR_sims-v2.R 100 500
+Rscript code/STR_sims-v2.R 10 50 $SLURM_JOB_ID
 
 # Configure Git to use HTTPS and PAT
 git remote set-url origin https://github.com/lasisilab/PODFRIDGE.git

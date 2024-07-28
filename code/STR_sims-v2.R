@@ -46,16 +46,15 @@ log_function_time <- function(func, name, ...) {
 args <- commandArgs(trailingOnly = TRUE)
 n_sims_related <- as.numeric(args[1])
 n_sims_unrelated <- as.numeric(args[2])
+slurm_job_id <- as.character(args[3])
 
-# Create output folder with timestamp
-timestamp <- format(Sys.time(), "%Y%m%d-%H%M%S")
-output_dir <- file.path("output", paste0("simulation_", timestamp))
+# Create output folder with SLURM job ID
+output_dir <- file.path("output", paste0("simulation_", slurm_job_id))
 dir.create(output_dir, recursive = TRUE)
 
 output_file <- file.path(output_dir, "sim_processed_genotypes.csv")
 summary_output_file <- file.path(output_dir, "sim_summary_genotypes.csv")
 timing_log_file <- file.path(output_dir, "timing_log.csv")
-relationship_test_file <- file.path(output_dir, "relationship_test_results.csv")
 
 # Log the start of the process
 log_message("Starting simulation setup and processing...")
@@ -289,13 +288,18 @@ kinship_calculation <- function(row, allele_frequency_data, kinship_matrix) {
     stop("Allele frequency for B is missing.")
   }
 
-  k_values <- kinship_matrix[kinship_matrix$relationship_type == row$relationship_type, ]
-  LR <- calculate_likelihood_ratio(shared_alleles, genotype_match, pA, pB, k_values$k0, k_values$k1, k_values$k2)
+  kinship_calculations <- lapply(kinship_matrix$relationship_type, function(rel_type) {
+    k_values <- kinship_matrix[kinship_matrix$relationship_type == rel_type, ]
+    LR <- calculate_likelihood_ratio(shared_alleles, genotype_match, pA, pB, k_values$k0, k_values$k1, k_values$k2)
+    data.table(
+      relationship_known = row$relationship_type,
+      relationship_tested = rel_type,
+      LR = LR
+    )
+  })
 
-  row$shared_alleles <- shared_alleles
-  row$genotype_match <- genotype_match
-  row$LR <- LR
-
+  kinship_calculations <- rbindlist(kinship_calculations)
+  row <- cbind(row, kinship_calculations)
   return(row)
 }
 
@@ -320,60 +324,26 @@ calculate_combined_lrs <- function(final_results, loci_lists) {
     expanded_20 = prod(LR[locus %in% loci_lists$expanded_20], na.rm = TRUE),
     supplementary = prod(LR[locus %in% loci_lists$supplementary], na.rm = TRUE),
     autosomal_29 = prod(LR[locus %in% loci_lists$autosomal_29], na.rm = TRUE)
-  ), by = .(population, relationship_type, sim_id)]
+  ), by = .(population, relationship_known, relationship_tested, sim_id)]
   combined_lrs <- melt(combined_lrs,
-                       id.vars = c("population", "relationship_type", "sim_id"),
+                       id.vars = c("population", "relationship_known", "relationship_tested", "sim_id"),
                        measure.vars = c("core_13", "identifiler_15", "expanded_20", "supplementary", "autosomal_29"),
                        variable.name = "loci_set", value.name = "LR")
   return(combined_lrs)
-}
-
-test_all_relationships <- function(final_results, kinship_matrix, df_allelefreq) {
-  log_message("Testing all pairs across all relationship types...")
-  results <- final_results[, .(
-    sim_id,
-    population,
-    ind1_allele1,
-    ind1_allele2,
-    ind2_allele1,
-    ind2_allele2,
-    locus,
-    relationship_type
-  )]
-
-  all_relationship_tests <- results[, {
-    kinship_results <- list()
-    for (relationship_tested in setdiff(kinship_matrix$relationship_type, "unrelated")) {
-      kinship_results[[as.character(relationship_tested)]] <- kinship_calculation(.SD, df_allelefreq, kinship_matrix[relationship_type == relationship_tested])
-    }
-    rbindlist(kinship_results, idcol = "relationship_tested")
-  }, by = .(sim_id, population, locus, relationship_type)]
-
-  all_relationship_tests <- all_relationship_tests[, .(
-    population,
-    relationship_known = relationship_type,
-    relationship_tested,
-    locus,
-    sim_id,
-    LR
-  )]
-
-  fwrite(all_relationship_tests, relationship_test_file)
-  return(all_relationship_tests)
 }
 
 plot_and_save_results <- function(combined_lrs) {
   log_message("Starting to plot LR distributions...")
 
   # Ensure factor levels are set correctly for plotting
-  combined_lrs$relationship_type <- factor(combined_lrs$relationship_type, levels = c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated"))
+  combined_lrs$relationship_tested <- factor(combined_lrs$relationship_tested, levels = c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated"))
 
-  ggplot(combined_lrs, aes(x = relationship_type, y = LR, fill = population, color = population)) +
+  ggplot(combined_lrs, aes(x = relationship_tested, y = LR, fill = population, color = population)) +
     geom_boxplot(position = position_dodge(width = 0.9)) +
     facet_wrap(~ loci_set, scales = "fixed") +
     labs(
       title = "LR Distributions Across Populations and Relationship Types",
-      x = "Relationship Type",
+      x = "Relationship Tested",
       y = "LR",
       fill = "Population",
       color = "Population"
@@ -389,7 +359,7 @@ plot_and_save_results <- function(combined_lrs) {
   log_message("LR distributions plot saved.")
 
   summary_stats <- combined_lrs |>
-    group_by(relationship_type, population, loci_set) |>
+    group_by(relationship_tested, population, loci_set) |>
     summarize(
       mean_LR = mean(LR),
       lower_95 = quantile(LR, 0.025),
@@ -399,7 +369,7 @@ plot_and_save_results <- function(combined_lrs) {
 
   ggplot(summary_stats, aes(x = loci_set, y = mean_LR, group = population, color = population)) +
     geom_line(size = 1) +
-    facet_wrap(~ relationship_type, scales = "free_y", ncol = 2) +
+    facet_wrap(~ relationship_tested, scales = "free_y", ncol = 2) +
     scale_y_log10() +
     labs(
       title = "Mean LR Across Populations and Relationship Types",
@@ -418,10 +388,10 @@ plot_and_save_results <- function(combined_lrs) {
   log_message("Mean LR plot saved.")
 }
 
-plot_relationship_comparisons <- function(all_relationship_tests) {
+plot_relationship_comparisons <- function(combined_lrs) {
   log_message("Starting to plot relationship comparisons...")
 
-  ggplot(all_relationship_tests, aes(x = relationship_tested, y = LR, fill = population)) +
+  ggplot(combined_lrs, aes(x = relationship_tested, y = LR, fill = population)) +
     geom_boxplot(position = position_dodge(width = 0.9)) +
     facet_grid(relationship_known ~ loci_set) +
     labs(
@@ -445,7 +415,7 @@ plot_proportions_exceeding_cutoffs <- function(proportions_exceeding_cutoffs) {
   log_message("Starting to plot proportions exceeding cutoffs...")
 
   # Ensure factor levels are set correctly for plotting
-  proportions_exceeding_cutoffs$relationship_type <- factor(proportions_exceeding_cutoffs$relationship_type, levels = c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated"))
+  proportions_exceeding_cutoffs$relationship_tested <- factor(proportions_exceeding_cutoffs$relationship_tested, levels = c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated"))
   proportions_exceeding_cutoffs$population <- factor(proportions_exceeding_cutoffs$population, levels = c("AfAm", "Cauc", "Hispanic", "Asian"))
 
   proportions_long <- proportions_exceeding_cutoffs |>
@@ -456,12 +426,12 @@ plot_proportions_exceeding_cutoffs <- function(proportions_exceeding_cutoffs) {
   proportions_long$Cutoff_Type <- factor(proportions_long$Cutoff_Type, levels = c("fixed", "1", "0_1", "0_01"),
                                          labels = c("Fixed Cutoff (1.00)", "1% FPR", "0.1% FPR", "0.01% FPR"))
 
-  ggplot(proportions_long, aes(x = relationship_type, y = Proportion, fill = population, color = population)) +
+  ggplot(proportions_long, aes(x = relationship_tested, y = Proportion, fill = population, color = population)) +
     geom_bar(stat = "identity", position = position_dodge(width = 0.9)) +
     facet_wrap(~ Cutoff_Type + loci_set, scales = "fixed") +
     labs(
       title = "Proportions Exceeding Likelihood Cut-offs Across Relationship Types and Loci Sets",
-      x = "Relationship Type",
+      x = "Relationship Tested",
       y = "Proportion Exceeding Cut-off",
       fill = "Population",
       color = "Population"
@@ -476,9 +446,10 @@ plot_proportions_exceeding_cutoffs <- function(proportions_exceeding_cutoffs) {
   log_message("Proportions exceeding cutoffs plot saved.")
 }
 
+# Function to calculate cut-off values for 1%, 0.1%, and 0.01% FPR
 calculate_cutoffs <- function(input_df, fp_rates) {
   cutoffs <- input_df |>
-    filter(relationship_type == "unrelated") |>
+    filter(relationship_tested == "unrelated") |>
     group_by(population, loci_set) |>
     summarize(
       fixed_cutoff = 1.00,
@@ -501,7 +472,7 @@ calculate_proportions_exceeding_cutoffs <- function(input_df, cutoffs) {
       exceeds_cutoff_0_01 = LR > cutoff_0_01
     )
   proportions_exceeding <- df_with_cutoffs |>
-    group_by(population, relationship_type, loci_set) |>
+    group_by(population, relationship_tested, loci_set) |>
     summarize(
       proportion_exceeding_fixed = sum(exceeds_fixed_cutoff, na.rm = TRUE) / n(),
       proportion_exceeding_1 = sum(exceeds_cutoff_1, na.rm = TRUE) / n(),
@@ -510,7 +481,7 @@ calculate_proportions_exceeding_cutoffs <- function(input_df, cutoffs) {
       n_related = n(),
       .groups = 'drop'
     ) |>
-    filter(relationship_type != "unrelated")
+    filter(relationship_tested != "unrelated")
   return(proportions_exceeding)
 }
 
@@ -551,8 +522,7 @@ process_simulation_setup <- function(simulation_setup, df_allelefreq, kinship_ma
     log_function_time(plot_proportions_exceeding_cutoffs, "plot_proportions_exceeding_cutoffs", proportions_exceeding_cutoffs)
 
     # Plot relationship comparisons
-    all_relationship_tests <- log_function_time(test_all_relationships, "test_all_relationships", final_results, kinship_matrix, df_allelefreq)
-    log_function_time(plot_relationship_comparisons, "plot_relationship_comparisons", all_relationship_tests)
+    log_function_time(plot_relationship_comparisons, "plot_relationship_comparisons", combined_lrs)
   })
   log_message(paste("Processing completed in", process_time["elapsed"], "seconds."))
 }
