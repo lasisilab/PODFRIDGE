@@ -336,24 +336,7 @@ ggplot(df_long_white2, aes(x = x_axis, y = frequency, fill = color_order)) +
 ```
 
 
-## 7.Distribution of Number of Children/Siblings by Age and Year(Balck/African American)
-
-```{r}
-df_long_black2 <- df_long_black2 %>% mutate(freq = ifelse(frequency_type == "freq_n_sib", -frequency, frequency), freq_shifted = ifelse(frequency_type == "freq_mother", freq - 50, freq + 50))
-
-
-ggplot(df_long_black2, aes(x = freq, y = Age_bin, fill = color)) +
-  geom_bar(stat = "identity", position = "dodge", width = 0.8) +
-  geom_vline(xintercept = 0, color = "black", linetype = "dashed") +
-  facet_wrap(~YEAR, scales = "free_y") +
-  scale_fill_identity() +
-  scale_x_continuous(labels = abs, limits = c(-max(abs(df_long_black2$freq)), max(abs(df_long_black2$freq)))) +
-  labs(x = "Frequency", y = "Age Bin", title = "Distribution of Number of Children/Siblings by Age and Year(Black/African American)") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1), plot.title = element_text(size = 10, hjust = 0.5))
-
-```
-
+## 7.Distribution of Number of Children by Age and Year(Balck/African American)
 
 ```{r}
 df_long_black3 <- fert_df2_black %>%
