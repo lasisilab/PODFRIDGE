@@ -371,7 +371,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">CODIS Marker Allele Frequencies</h1>
 <h4 class="author">Tina Lasisi</h4>
-<h4 class="date">2024-03-03 20:01:51</h4>
+<h4 class="date">2024-07-29 10:45:03</h4>
 
 </div>
 
@@ -400,7 +400,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2024-03-03
+<strong>Last updated:</strong> 2024-07-29
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -531,15 +531,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtree2596546a55e9369c81787cb7f9f35c660272aa16targetblank2596546a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree873eb70f293309e6179fb98bc2f18143d1580153targetblank873eb70a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/tinalasisi/PODFRIDGE/tree/2596546a55e9369c81787cb7f9f35c660272aa16" target="_blank">2596546</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/873eb70f293309e6179fb98bc2f18143d1580153" target="_blank">873eb70</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiPODFRIDGEtree2596546a55e9369c81787cb7f9f35c660272aa16targetblank2596546a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree873eb70f293309e6179fb98bc2f18143d1580153targetblank873eb70a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -549,7 +549,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/tinalasisi/PODFRIDGE/tree/2596546a55e9369c81787cb7f9f35c660272aa16" target="_blank">2596546</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/873eb70f293309e6179fb98bc2f18143d1580153" target="_blank">873eb70</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -567,8 +567,7 @@ Ignored files:
     Ignored:    .DS_Store
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-    Ignored:    analysis/.DS_Store
-    Ignored:    output/.DS_Store
+    Ignored:    analysis/figure/
 
 </code></pre>
 <p>
@@ -619,7 +618,41 @@ Message
 Rmd
 </td>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/analysis/CODIS-STR-freqs.Rmd" target="_blank">da5eacd</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/fbdfcf1e0d6544306069114e6a1850d8311ef93d/analysis/CODIS-STR-freqs.Rmd" target="_blank">fbdfcf1</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2024-07-23
+</td>
+<td>
+Fixed allele frequency table and continued simulation development
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/cf281b698161b692f571b83e0d7a11f828eb6a91/docs/CODIS-STR-freqs.html" target="_blank">cf281b6</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2024-03-03
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/analysis/CODIS-STR-freqs.Rmd" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
@@ -636,7 +669,7 @@ wflow_rename("analysis/shortrange.Rmd", "analysis/CODIS-STR-freqs.Rmd")
 html
 </td>
 <td>
-<a href="https://rawcdn.githack.com/tinalasisi/PODFRIDGE/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/CODIS-STR-freqs.html" target="_blank">da5eacd</a>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/CODIS-STR-freqs.html" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
@@ -671,21 +704,109 @@ here.</p>
 specifically downloaded from the supplementary materials of Steffen et
 al 2017. These are 1036 unrelated individuals from the U.S.
 population.</p>
-<pre class="r"><code># Define the file paths
-file_paths &lt;- list.files(path = &quot;data&quot;, pattern = &quot;1036_.*\\.csv&quot;, full.names = TRUE)
+<pre class="r"><code>library(readxl)
+library(tidyverse)
+library(data.table)
 
-# Create a list of data frames
-df_list &lt;- lapply(file_paths, function(path) {
-  read_csv(path, col_types = cols(
-    marker = col_character(),
-    allele = col_double(),
-    frequency = col_double(),
-    population = col_character()
-  ))
-})
+# Define the file path
+file_path &lt;- &quot;data/1036_allelefreqs.xlsx&quot;
 
-# Bind all data frames into one
-df &lt;- bind_rows(df_list)</code></pre>
+# Function to map sheet names to population names
+map_population_name &lt;- function(sheet_name) {
+  case_when(
+    str_detect(sheet_name, &quot;all&quot;) ~ &quot;all&quot;,
+    str_detect(sheet_name, &quot;AfAm&quot;) ~ &quot;AfAm&quot;,
+    str_detect(sheet_name, &quot;Cauc&quot;) ~ &quot;Cauc&quot;,
+    str_detect(sheet_name, &quot;Hispanic&quot;) ~ &quot;Hispanic&quot;,
+    str_detect(sheet_name, &quot;Asian&quot;) ~ &quot;Asian&quot;,
+    TRUE ~ &quot;Unknown&quot;
+  )
+}
+
+# Function to read each sheet and process the data
+read_and_process_sheet &lt;- function(sheet) {
+  df &lt;- read_excel(file_path, sheet = sheet, range = &quot;A5:AD101&quot;, col_names = FALSE)
+  colnames(df) &lt;- c(&quot;allele&quot;, &quot;CSF1PO&quot;, &quot;D10S1248&quot;, &quot;D12S391&quot;, &quot;D13S317&quot;, &quot;D16S539&quot;, &quot;D18S51&quot;, &quot;D19S433&quot;, &quot;D1S1656&quot;, 
+                    &quot;D21S11&quot;, &quot;D22S1045&quot;, &quot;D2S1338&quot;, &quot;D2S441&quot;, &quot;D3S1358&quot;, &quot;D5S818&quot;, &quot;D6S1043&quot;, &quot;D7S820&quot;, &quot;D8S1179&quot;, 
+                    &quot;F13A01&quot;, &quot;F13B&quot;, &quot;FESFPS&quot;, &quot;FGA&quot;, &quot;LPL&quot;, &quot;Penta_C&quot;, &quot;Penta_D&quot;, &quot;Penta_E&quot;, &quot;SE33&quot;, &quot;TH01&quot;, &quot;TPOX&quot;, &quot;vWA&quot;)
+  
+  df &lt;- df %&gt;%
+    mutate(allele = as.character(allele)) %&gt;%
+    pivot_longer(-allele, names_to = &quot;marker&quot;, values_to = &quot;frequency&quot;) %&gt;%
+    mutate(population = map_population_name(sheet)) %&gt;%
+    replace_na(list(frequency = 0))
+  
+  return(df)
+}
+
+# Read all sheets into a list of dataframes and combine them
+sheet_names &lt;- excel_sheets(file_path)
+sheets_data &lt;- lapply(sheet_names, read_and_process_sheet)
+df_allelefreq &lt;- bind_rows(sheets_data)
+
+# Convert to data.table
+setDT(df_allelefreq)
+
+# Print the combined dataframe to check
+print(head(df_allelefreq))</code></pre>
+<pre><code>   allele   marker frequency population
+   &lt;char&gt;   &lt;char&gt;     &lt;num&gt;     &lt;char&gt;
+1:    2.2   CSF1PO         0        all
+2:    2.2 D10S1248         0        all
+3:    2.2  D12S391         0        all
+4:    2.2  D13S317         0        all
+5:    2.2  D16S539         0        all
+6:    2.2   D18S51         0        all</code></pre>
+<pre class="r"><code># Check if the population column is correct
+print(unique(df_allelefreq$population))</code></pre>
+<pre><code>[1] &quot;all&quot;      &quot;AfAm&quot;     &quot;Cauc&quot;     &quot;Hispanic&quot; &quot;Asian&quot;   </code></pre>
+<pre class="r"><code># Save the combined dataframe to a single CSV file
+fwrite(df_allelefreq, &quot;data/df_allelefreq_combined.csv&quot;)
+
+# Function to sort alleles numerically while treating them as characters
+sort_alleles &lt;- function(df) {
+  df %&gt;% 
+    mutate(allele = as.numeric(allele)) %&gt;%
+    arrange(allele) %&gt;%
+    mutate(allele = as.character(allele))
+}
+
+# Create and save a dataframe per population with alleles as the first column and markers as subsequent columns
+populations &lt;- unique(df_allelefreq$population)
+for (pop in populations) {
+  df_pop &lt;- df_allelefreq[population == pop] %&gt;%
+    pivot_wider(names_from = marker, values_from = frequency) %&gt;%
+    sort_alleles()
+  fwrite(df_pop, paste0(&quot;data/1036_&quot;, pop, &quot;_wide.csv&quot;))
+}
+
+# Create the wide-format dataframe for all populations
+df_allelefreq_wide &lt;- df_allelefreq %&gt;%
+  pivot_wider(names_from = population, values_from = frequency) %&gt;%
+  replace_na(list(all = 0, AfAm = 0, Cauc = 0, Hispanic = 0, Asian = 0))
+
+# Convert to data.table
+setDT(df_allelefreq_wide)
+
+# Sort the wide dataframe alleles numerically
+df_allelefreq_wide &lt;- sort_alleles(df_allelefreq_wide)
+
+# Print the wide dataframe to check
+# print(head(df_allelefreq_wide))
+
+# Save the wide-format dataframe to a CSV file
+fwrite(df_allelefreq_wide, &quot;data/df_allelefreq_wide.csv&quot;)
+
+# Convert allele to numeric in the df_allelefreq table
+df &lt;- copy(df_allelefreq)
+df[, allele := as.numeric(allele)]
+
+# Print the modified dataframe to check
+# print(head(df))
+# 
+# # Filter out rows where frequency is 0
+df&lt;- df %&gt;%
+  filter(frequency != 0)</code></pre>
 <div id="box-plot-of-allele-frequencies" class="section level3">
 <h3>Box plot of allele frequencies</h3>
 <p>Below we show a box plot of the distribution of allele frequencies
@@ -700,6 +821,43 @@ for each marker, grouped by population.</p>
   theme_classic() +
     theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
 <p><img src="figure/CODIS-STR-freqs.Rmd/plt-boxplot-all-group-allelefreqs-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-boxplot-all-group-allelefreqs-1">
+Past versions of plt-boxplot-all-group-allelefreqs-1.png
+</button>
+</p>
+<div id="fig-plt-boxplot-all-group-allelefreqs-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/cf281b698161b692f571b83e0d7a11f828eb6a91/docs/figure/CODIS-STR-freqs.Rmd/plt-boxplot-all-group-allelefreqs-1.png" target="_blank">cf281b6</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2024-03-03
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="histogram-of-allele-frequencies" class="section level3">
 <h3>Histogram of allele frequencies</h3>
@@ -724,7 +882,234 @@ for(i in seq_along(marker_chunks)) {
 
   print(p)
 }</code></pre>
-<p><img src="figure/CODIS-STR-freqs.Rmd/plt-histo-all-group-allelefreqs-1.png" width="1152" style="display: block; margin: auto;" /><img src="figure/CODIS-STR-freqs.Rmd/plt-histo-all-group-allelefreqs-2.png" width="1152" style="display: block; margin: auto;" /><img src="figure/CODIS-STR-freqs.Rmd/plt-histo-all-group-allelefreqs-3.png" width="1152" style="display: block; margin: auto;" /><img src="figure/CODIS-STR-freqs.Rmd/plt-histo-all-group-allelefreqs-4.png" width="1152" style="display: block; margin: auto;" /><img src="figure/CODIS-STR-freqs.Rmd/plt-histo-all-group-allelefreqs-5.png" width="1152" style="display: block; margin: auto;" /><img src="figure/CODIS-STR-freqs.Rmd/plt-histo-all-group-allelefreqs-6.png" width="1152" style="display: block; margin: auto;" /></p>
+<p><img src="figure/CODIS-STR-freqs.Rmd/plt-histo-all-group-allelefreqs-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-histo-all-group-allelefreqs-1">
+Past versions of plt-histo-all-group-allelefreqs-1.png
+</button>
+</p>
+<div id="fig-plt-histo-all-group-allelefreqs-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/cf281b698161b692f571b83e0d7a11f828eb6a91/docs/figure/CODIS-STR-freqs.Rmd/plt-histo-all-group-allelefreqs-1.png" target="_blank">cf281b6</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2024-03-03
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/CODIS-STR-freqs.Rmd/plt-histo-all-group-allelefreqs-2.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-histo-all-group-allelefreqs-2">
+Past versions of plt-histo-all-group-allelefreqs-2.png
+</button>
+</p>
+<div id="fig-plt-histo-all-group-allelefreqs-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/cf281b698161b692f571b83e0d7a11f828eb6a91/docs/figure/CODIS-STR-freqs.Rmd/plt-histo-all-group-allelefreqs-2.png" target="_blank">cf281b6</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2024-03-03
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/CODIS-STR-freqs.Rmd/plt-histo-all-group-allelefreqs-3.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-histo-all-group-allelefreqs-3">
+Past versions of plt-histo-all-group-allelefreqs-3.png
+</button>
+</p>
+<div id="fig-plt-histo-all-group-allelefreqs-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/cf281b698161b692f571b83e0d7a11f828eb6a91/docs/figure/CODIS-STR-freqs.Rmd/plt-histo-all-group-allelefreqs-3.png" target="_blank">cf281b6</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2024-03-03
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/CODIS-STR-freqs.Rmd/plt-histo-all-group-allelefreqs-4.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-histo-all-group-allelefreqs-4">
+Past versions of plt-histo-all-group-allelefreqs-4.png
+</button>
+</p>
+<div id="fig-plt-histo-all-group-allelefreqs-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/cf281b698161b692f571b83e0d7a11f828eb6a91/docs/figure/CODIS-STR-freqs.Rmd/plt-histo-all-group-allelefreqs-4.png" target="_blank">cf281b6</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2024-03-03
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/CODIS-STR-freqs.Rmd/plt-histo-all-group-allelefreqs-5.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-histo-all-group-allelefreqs-5">
+Past versions of plt-histo-all-group-allelefreqs-5.png
+</button>
+</p>
+<div id="fig-plt-histo-all-group-allelefreqs-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/cf281b698161b692f571b83e0d7a11f828eb6a91/docs/figure/CODIS-STR-freqs.Rmd/plt-histo-all-group-allelefreqs-5.png" target="_blank">cf281b6</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2024-03-03
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/CODIS-STR-freqs.Rmd/plt-histo-all-group-allelefreqs-6.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-histo-all-group-allelefreqs-6">
+Past versions of plt-histo-all-group-allelefreqs-6.png
+</button>
+</p>
+<div id="fig-plt-histo-all-group-allelefreqs-6" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/cf281b698161b692f571b83e0d7a11f828eb6a91/docs/figure/CODIS-STR-freqs.Rmd/plt-histo-all-group-allelefreqs-6.png" target="_blank">cf281b6</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2024-03-03
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="summary-of-allele-frequencies" class="section level3">
 <h3>Summary of allele frequencies</h3>
@@ -1539,7 +1924,7 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-1.png" target="_blank">da5eacd</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-1.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
@@ -1577,7 +1962,7 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-2.png" target="_blank">da5eacd</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-2.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
@@ -1615,7 +2000,7 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-3.png" target="_blank">da5eacd</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-3.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
@@ -1653,7 +2038,7 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-4.png" target="_blank">da5eacd</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-4.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
@@ -1691,7 +2076,7 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-5.png" target="_blank">da5eacd</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-5.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
@@ -1729,7 +2114,7 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-6.png" target="_blank">da5eacd</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-6.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
@@ -1767,7 +2152,7 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-7.png" target="_blank">da5eacd</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-7.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
@@ -1805,7 +2190,7 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-8.png" target="_blank">da5eacd</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-8.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
@@ -1843,7 +2228,7 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-9.png" target="_blank">da5eacd</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-9.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
@@ -1881,7 +2266,7 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-10.png" target="_blank">da5eacd</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-10.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
@@ -1919,7 +2304,7 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-11.png" target="_blank">da5eacd</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-11.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
@@ -1957,7 +2342,7 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-12.png" target="_blank">da5eacd</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-12.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
@@ -1995,7 +2380,7 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-13.png" target="_blank">da5eacd</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-13.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
@@ -2033,7 +2418,7 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-14.png" target="_blank">da5eacd</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-14.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
@@ -2071,7 +2456,7 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-15.png" target="_blank">da5eacd</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-15.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
@@ -2109,7 +2494,7 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-16.png" target="_blank">da5eacd</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-16.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
@@ -2147,7 +2532,7 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-17.png" target="_blank">da5eacd</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-17.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
@@ -2185,7 +2570,7 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-18.png" target="_blank">da5eacd</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-18.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
@@ -2223,7 +2608,7 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-19.png" target="_blank">da5eacd</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-19.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
@@ -2261,7 +2646,7 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/tinalasisi/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-20.png" target="_blank">da5eacd</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/da5eacd910c4d9bd7134018cea7d681479b5a98e/docs/figure/CODIS-STR-freqs.Rmd/plt-single-20.png" target="_blank">da5eacd</a>
 </td>
 <td>
 Tina Lasisi
@@ -2406,16 +2791,16 @@ multi_results</code></pre>
 <pre><code># A tibble: 30 × 4
    population relationship_type sum_relatedness sum_alleles
    &lt;fct&gt;      &lt;fct&gt;                       &lt;dbl&gt;       &lt;dbl&gt;
- 1 AfAm       parent_child                0.589          31
- 2 all        parent_child                0.843          32
- 3 Asian      parent_child                0.501          35
- 4 Cauc       parent_child                0.442          33
- 5 Hispanic   parent_child                0.489          31
- 6 AfAm       full_siblings               0.380          29
- 7 all        full_siblings               0.704          40
- 8 Asian      full_siblings               0.556          36
- 9 Cauc       full_siblings               0.237          26
-10 Hispanic   full_siblings               0.375          28
+ 1 all        parent_child                0.339          32
+ 2 AfAm       parent_child                0.255          31
+ 3 Cauc       parent_child                0.142          34
+ 4 Hispanic   parent_child                0.166          30
+ 5 Asian      parent_child                0.313          33
+ 6 all        full_siblings               0.339          35
+ 7 AfAm       full_siblings               0.325          39
+ 8 Cauc       full_siblings               0.401          39
+ 9 Hispanic   full_siblings               0.306          25
+10 Asian      full_siblings               0.223          27
 # ℹ 20 more rows</code></pre>
 <pre class="r"><code># Define the number of simulations
 n_sims &lt;- 10
@@ -2460,16 +2845,16 @@ multi_results</code></pre>
 <pre><code># A tibble: 300 × 5
    population relationship_type simulation sum_relatedness sum_alleles
    &lt;fct&gt;      &lt;fct&gt;                  &lt;int&gt;           &lt;dbl&gt;       &lt;dbl&gt;
- 1 AfAm       parent_child               1           0.532          31
- 2 all        parent_child               1           0.438          31
- 3 Asian      parent_child               1           0.388          32
- 4 Cauc       parent_child               1           0.368          30
- 5 Hispanic   parent_child               1           0.411          33
- 6 AfAm       full_siblings              1           0.373          25
- 7 all        full_siblings              1           0.717          35
- 8 Asian      full_siblings              1           0.681          29
- 9 Cauc       full_siblings              1           0.426          24
-10 Hispanic   full_siblings              1           0.516          32
+ 1 all        parent_child               1           0.581          35
+ 2 AfAm       parent_child               1           0.237          31
+ 3 Cauc       parent_child               1           0.239          31
+ 4 Hispanic   parent_child               1           0.263          32
+ 5 Asian      parent_child               1           0.224          29
+ 6 all        full_siblings              1           0.409          26
+ 7 AfAm       full_siblings              1           0.479          35
+ 8 Cauc       full_siblings              1           0.230          28
+ 9 Hispanic   full_siblings              1           0.280          26
+10 Asian      full_siblings              1           0.305          32
 # ℹ 290 more rows</code></pre>
 <pre class="r"><code>create_plot &lt;- function(df, variable_to_plot) {
   # Create the plot
@@ -2495,10 +2880,84 @@ df_plt_multi_results &lt;- multi_results %&gt;%
 p &lt;- create_plot(df_plt_multi_results, &quot;sum_relatedness&quot;)
 p</code></pre>
 <p><img src="figure/CODIS-STR-freqs.Rmd/unnamed-chunk-5-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-1">
+Past versions of unnamed-chunk-5-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-5-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/cf281b698161b692f571b83e0d7a11f828eb6a91/docs/figure/CODIS-STR-freqs.Rmd/unnamed-chunk-5-1.png" target="_blank">cf281b6</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2024-03-03
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>plt_allele &lt;- create_plot(df_plt_multi_results, &quot;sum_alleles&quot;)
 
 plt_allele</code></pre>
 <p><img src="figure/CODIS-STR-freqs.Rmd/unnamed-chunk-5-2.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-2">
+Past versions of unnamed-chunk-5-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-5-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/cf281b698161b692f571b83e0d7a11f828eb6a91/docs/figure/CODIS-STR-freqs.Rmd/unnamed-chunk-5-2.png" target="_blank">cf281b6</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2024-03-03
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>`</p>
 </div>
 </div>
@@ -2596,45 +3055,44 @@ Session information
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
 <pre><code>R version 4.3.2 (2023-10-31)
-Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Sonoma 14.3.1
+Platform: x86_64-apple-darwin20 (64-bit)
+Running under: macOS Monterey 12.7.4
 
 Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
 
 locale:
 [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 
-time zone: America/Detroit
+time zone: America/New_York
 tzcode source: internal
 
 attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] kableExtra_1.4.0 knitr_1.45       lubridate_1.9.3  forcats_1.0.0   
- [5] stringr_1.5.1    dplyr_1.1.4      purrr_1.0.2      readr_2.1.5     
- [9] tidyr_1.3.0      tibble_3.2.1     ggplot2_3.4.4    tidyverse_2.0.0 
-[13] readxl_1.4.3     workflowr_1.7.1 
+ [1] kableExtra_1.4.0  knitr_1.45        data.table_1.15.0 lubridate_1.9.3  
+ [5] forcats_1.0.0     stringr_1.5.1     dplyr_1.1.4       purrr_1.0.2      
+ [9] readr_2.1.5       tidyr_1.3.1       tibble_3.2.1      ggplot2_3.4.4    
+[13] tidyverse_2.0.0   readxl_1.4.3      workflowr_1.7.1  
 
 loaded via a namespace (and not attached):
  [1] gtable_0.3.4      xfun_0.41         bslib_0.6.1       processx_3.8.3   
  [5] callr_3.7.3       tzdb_0.4.0        vctrs_0.6.5       tools_4.3.2      
- [9] ps_1.7.5          generics_0.1.3    parallel_4.3.2    fansi_1.0.6      
-[13] highr_0.10        pkgconfig_2.0.3   lifecycle_1.0.4   compiler_4.3.2   
+ [9] ps_1.7.6          generics_0.1.3    fansi_1.0.6       highr_0.10       
+[13] pkgconfig_2.0.3   rematch_2.0.0     lifecycle_1.0.4   compiler_4.3.2   
 [17] farver_2.1.1      git2r_0.33.0      munsell_0.5.0     getPass_0.2-4    
-[21] httpuv_1.6.13     htmltools_0.5.7   sass_0.4.8        yaml_2.3.8       
-[25] later_1.3.2       pillar_1.9.0      crayon_1.5.2      jquerylib_0.1.4  
-[29] whisker_0.4.1     cachem_1.0.8      tidyselect_1.2.0  digest_0.6.34    
-[33] stringi_1.8.3     labeling_0.4.3    rprojroot_2.0.4   fastmap_1.1.1    
-[37] grid_4.3.2        colorspace_2.1-0  cli_3.6.2         magrittr_2.0.3   
-[41] utf8_1.2.4        withr_2.5.2       scales_1.3.0      promises_1.2.1   
-[45] bit64_4.0.5       timechange_0.2.0  rmarkdown_2.25    httr_1.4.7       
-[49] bit_4.0.5         cellranger_1.1.0  hms_1.1.3         evaluate_0.23    
-[53] viridisLite_0.4.2 rlang_1.1.3       Rcpp_1.0.12       glue_1.7.0       
-[57] xml2_1.3.6        svglite_2.1.3     rstudioapi_0.15.0 vroom_1.6.5      
-[61] jsonlite_1.8.8    R6_2.5.1          systemfonts_1.0.5 fs_1.6.3         </code></pre>
+[21] httpuv_1.6.14     htmltools_0.5.7   sass_0.4.8        yaml_2.3.8       
+[25] later_1.3.2       pillar_1.9.0      jquerylib_0.1.4   whisker_0.4.1    
+[29] cachem_1.0.8      tidyselect_1.2.1  digest_0.6.34     stringi_1.8.3    
+[33] labeling_0.4.3    rprojroot_2.0.4   fastmap_1.1.1     grid_4.3.2       
+[37] colorspace_2.1-0  cli_3.6.2         magrittr_2.0.3    utf8_1.2.4       
+[41] withr_3.0.0       scales_1.3.0      promises_1.2.1    timechange_0.3.0 
+[45] rmarkdown_2.25    httr_1.4.7        cellranger_1.1.0  hms_1.1.3        
+[49] evaluate_0.23     viridisLite_0.4.2 rlang_1.1.3       Rcpp_1.0.12      
+[53] glue_1.7.0        xml2_1.3.6        svglite_2.1.3     rstudioapi_0.15.0
+[57] jsonlite_1.8.8    R6_2.5.1          systemfonts_1.0.5 fs_1.6.3         </code></pre>
 </div>
 </div>
 </div>

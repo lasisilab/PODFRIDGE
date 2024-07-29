@@ -107,6 +107,7 @@ nice_table(
 )
 ```
 
+
 # Data Visualization
 
 ## 1.Distribution of Number of Children by Census Year for each Race
@@ -353,6 +354,7 @@ ggplot(df_long_black2, aes(x = freq, y = Age_bin, fill = color)) +
 
 ```
 
+
 ```{r}
 df_long_black3 <- fert_df2_black %>%
   group_by(Age_bin, YEAR) %>%
@@ -366,7 +368,7 @@ ggplot(df_long_black3, aes(x = normalized_freq, y = Age_bin, fill = normalized_f
   scale_fill_gradient2(low = "blue", high = "red", midpoint = median(df_long_black3$normalized_freq, na.rm = TRUE), 
                        name = "Normalized\nFrequency") +
   labs(x = "Normalized Frequency", y = "Age Bin", 
-       title = "Normalized Distribution of Number of Children/Siblings by Age and Year (Black/African American)") +
+       title = "Normalized Distribution of Number of Children by Age and Year (Black/African American)") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
         plot.title = element_text(size = 10, hjust = 0.5))

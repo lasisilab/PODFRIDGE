@@ -14,7 +14,7 @@
 
 <title>Murphy Data Cleaning</title>
 
-<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -369,7 +369,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Murphy Data Cleaning</h1>
 <h4 class="author">Stella BooydeGraaff</h4>
-<h4 class="date">2024-07-25 14:03:21</h4>
+<h4 class="date">2024-07-29 10:48:21</h4>
 
 </div>
 
@@ -377,7 +377,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+workflowr <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -388,8 +388,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> </a>
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -398,13 +398,13 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2024-07-25
+<strong>Last updated:</strong> 2024-07-29
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 1
+aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>PODFRIDGE/</code> <span
@@ -427,21 +427,18 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
-<span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
-changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges"
+<div id="strongRMarkdownfilestronguptodate"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes. To know which version of
-the R Markdown file created these results, you’ll want to first commit
-it to the Git repo. If you’re still working on the analysis, you can
-ignore this warning. When you’re finished, you can run
-<code>wflow_publish</code> to commit the R Markdown file and build the
-HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
 </div>
 </div>
 </div>
@@ -532,15 +529,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree5d0cc04046aa4a614e011ae826e896994413115ftargetblank5d0cc04a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree873eb70f293309e6179fb98bc2f18143d1580153targetblank873eb70a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/5d0cc04046aa4a614e011ae826e896994413115f" target="_blank">5d0cc04</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/873eb70f293309e6179fb98bc2f18143d1580153" target="_blank">873eb70</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree5d0cc04046aa4a614e011ae826e896994413115ftargetblank5d0cc04a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree873eb70f293309e6179fb98bc2f18143d1580153targetblank873eb70a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -550,7 +547,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/5d0cc04046aa4a614e011ae826e896994413115f" target="_blank">5d0cc04</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/873eb70f293309e6179fb98bc2f18143d1580153" target="_blank">873eb70</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -565,12 +562,9 @@ were generated:
 </p>
 <pre><code>
 Ignored files:
+    Ignored:    .DS_Store
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-    Ignored:    analysis/figure/
-
-Unstaged changes:
-    Modified:   analysis/murphy.rmd
 
 </code></pre>
 <p>
@@ -615,6 +609,91 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/5434bd463d7628a01c3b9ac506bccfc25db640dd/analysis/murphy.rmd" target="_blank">5434bd4</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-07-25
+</td>
+<td>
+fix pipe
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/6cc692104990e4c065b0614f09c5572459cdb51d/analysis/murphy.rmd" target="_blank">6cc6921</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-07-25
+</td>
+<td>
+calculate total by sex
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/19716852617175f52bbbac79e479f7424407be96/analysis/murphy.rmd" target="_blank">1971685</a>
+</td>
+<td>
+Stella-Joy
+</td>
+<td>
+2024-07-25
+</td>
+<td>
+fix male / female issue, start visualizing sex
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/66a01cbdc4de760f65724114ace7dad3fade906f/analysis/murphy.rmd" target="_blank">66a01cb</a>
+</td>
+<td>
+Stella-Joy
+</td>
+<td>
+2024-07-25
+</td>
+<td>
+Remove root.dir
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/66a01cbdc4de760f65724114ace7dad3fade906f/docs/murphy.html" target="_blank">66a01cb</a>
+</td>
+<td>
+Stella-Joy
+</td>
+<td>
+2024-07-25
+</td>
+<td>
+Remove root.dir
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -775,19 +854,16 @@ Session information
 </button>
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
-<pre><code>R version 4.4.1 (2024-06-14 ucrt)
-Platform: x86_64-w64-mingw32/x64
-Running under: Windows 11 x64 (build 22631)
+<pre><code>R version 4.3.2 (2023-10-31)
+Platform: x86_64-apple-darwin20 (64-bit)
+Running under: macOS Monterey 12.7.4
 
 Matrix products: default
-
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
 
 locale:
-[1] LC_COLLATE=English_United States.utf8 
-[2] LC_CTYPE=English_United States.utf8   
-[3] LC_MONETARY=English_United States.utf8
-[4] LC_NUMERIC=C                          
-[5] LC_TIME=English_United States.utf8    
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 
 time zone: America/New_York
 tzcode source: internal
@@ -798,24 +874,24 @@ attached base packages:
 other attached packages:
  [1] lubridate_1.9.3 forcats_1.0.0   stringr_1.5.1   dplyr_1.1.4    
  [5] purrr_1.0.2     readr_2.1.5     tidyr_1.3.1     tibble_3.2.1   
- [9] ggplot2_3.5.1   tidyverse_2.0.0 workflowr_1.7.1
+ [9] ggplot2_3.4.4   tidyverse_2.0.0 workflowr_1.7.1
 
 loaded via a namespace (and not attached):
- [1] sass_0.4.9        utf8_1.2.4        generics_0.1.3    stringi_1.8.4    
- [5] hms_1.1.3         digest_0.6.36     magrittr_2.0.3    timechange_0.3.0 
- [9] evaluate_0.24.0   grid_4.4.1        fastmap_1.2.0     rprojroot_2.0.4  
-[13] jsonlite_1.8.8    processx_3.8.4    whisker_0.4.1     ps_1.7.7         
-[17] promises_1.3.0    httr_1.4.7        fansi_1.0.6       scales_1.3.0     
-[21] jquerylib_0.1.4   cli_3.6.3         crayon_1.5.3      rlang_1.1.4      
-[25] bit64_4.0.5       munsell_0.5.1     withr_3.0.0       cachem_1.1.0     
-[29] yaml_2.3.9        parallel_4.4.1    tools_4.4.1       tzdb_0.4.0       
-[33] colorspace_2.1-0  httpuv_1.6.15     vctrs_0.6.5       R6_2.5.1         
-[37] lifecycle_1.0.4   git2r_0.33.0      bit_4.0.5         fs_1.6.4         
-[41] vroom_1.6.5       pkgconfig_2.0.3   callr_3.7.6       pillar_1.9.0     
-[45] bslib_0.7.0       later_1.3.2       gtable_0.3.5      glue_1.7.0       
-[49] Rcpp_1.0.12       xfun_0.45         tidyselect_1.2.1  rstudioapi_0.16.0
-[53] knitr_1.48        htmltools_0.5.8.1 rmarkdown_2.27    compiler_4.4.1   
-[57] getPass_0.2-4    </code></pre>
+ [1] sass_0.4.8        utf8_1.2.4        generics_0.1.3    stringi_1.8.3    
+ [5] hms_1.1.3         digest_0.6.34     magrittr_2.0.3    timechange_0.3.0 
+ [9] evaluate_0.23     grid_4.3.2        fastmap_1.1.1     rprojroot_2.0.4  
+[13] jsonlite_1.8.8    processx_3.8.3    whisker_0.4.1     ps_1.7.6         
+[17] promises_1.2.1    httr_1.4.7        fansi_1.0.6       scales_1.3.0     
+[21] jquerylib_0.1.4   cli_3.6.2         crayon_1.5.2      rlang_1.1.3      
+[25] bit64_4.0.5       munsell_0.5.0     withr_3.0.0       cachem_1.0.8     
+[29] yaml_2.3.8        parallel_4.3.2    tools_4.3.2       tzdb_0.4.0       
+[33] colorspace_2.1-0  httpuv_1.6.14     vctrs_0.6.5       R6_2.5.1         
+[37] lifecycle_1.0.4   git2r_0.33.0      bit_4.0.5         fs_1.6.3         
+[41] vroom_1.6.5       archive_1.1.7     pkgconfig_2.0.3   callr_3.7.3      
+[45] pillar_1.9.0      bslib_0.6.1       later_1.3.2       gtable_0.3.4     
+[49] glue_1.7.0        Rcpp_1.0.12       xfun_0.41         tidyselect_1.2.1 
+[53] rstudioapi_0.15.0 knitr_1.45        htmltools_0.5.7   rmarkdown_2.25   
+[57] compiler_4.3.2    getPass_0.2-4    </code></pre>
 </div>
 
 
