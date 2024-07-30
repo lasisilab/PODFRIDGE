@@ -281,11 +281,11 @@ df_age_black <- fert_df2_black %>%
   mutate(total_counts = sum(freq_mother),
          normalized_freq = freq_mother / total_counts)
 
-ggplot(df_long_black3, aes(x = normalized_freq, y = Age_bin, fill = normalized_freq)) +
+ggplot(df_age_black, aes(x = normalized_freq, y = Age_bin, fill = normalized_freq)) +
   geom_bar(stat = "identity", position = "dodge", width = 0.8) +
   geom_vline(xintercept = 0, color = "black", linetype = "dashed") +
   facet_wrap(~YEAR, scales = "free_y") +
-  scale_fill_gradient2(low = "blue", high = "red", midpoint = median(df_long_black3$normalized_freq, na.rm = TRUE), 
+  scale_fill_gradient2(low = "blue", high = "red", midpoint = median(df_age_black$normalized_freq, na.rm = TRUE), 
                        name = "Normalized\nFrequency") +
   labs(x = "Normalized Frequency", y = "Age Bin", 
        title = "Normalized Distribution of Number of Children by Age and Year (Black/African American)") +
