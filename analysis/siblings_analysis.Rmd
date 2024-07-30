@@ -246,7 +246,7 @@ ggplot(df_long_white, aes(x = x_axis, y = frequency, fill = color_order)) +
 ```
 
 
-## 5.Distribution of Number of Children/Siblings by Age (Balck/African American)
+## 5.Distribution of Number of Children by Age and Year(Balck/African American)
 
 ```{r}
 fert_df2 <- mother_data %>% mutate(Age_bin = case_when(
@@ -272,74 +272,11 @@ fert_df2 <- fert_df2 %>%count(RACE, chborn_num, Age_bin, YEAR) %>%
 ```{r}
 fert_df2_black <- fert_df2 %>% filter(RACE == "Black/African American")
 fert_df2_white <- fert_df2 %>% filter(RACE == "White")
-
-df_long_black2 <- fert_df2_black %>%
-  pivot_longer(cols = c(freq_mother, freq_n_sib),
-               names_to = "frequency_type",
-               values_to = "frequency") %>%
-  mutate(x_axis = ifelse(frequency_type == "freq_mother", chborn_num, n_sib), 
-         color.label = paste(chborn_num, "_kids"," ", n_sib, "_sibs", sep = ""), 
-         color_order = factor(chborn_num, levels = unique_chborn_num)
-  )
-
-df_long_white2 <- fert_df2_white %>%
-  pivot_longer(cols = c(freq_mother, freq_n_sib),
-               names_to = "frequency_type",
-               values_to = "frequency") %>%
-  mutate(x_axis = ifelse(frequency_type == "freq_mother", chborn_num, n_sib), 
-         color.label = paste(chborn_num, "_kids"," ", n_sib, "_sibs", sep = ""), 
-         color_order = factor(chborn_num, levels = unique_chborn_num)
-  )
-```
-
-```{r}
-ggplot(df_long_black2, aes(x = x_axis, y = frequency, fill = color_order)) +
-  geom_col() +
-  facet_grid(frequency_type ~ Age_bin, 
-             labeller = labeller(frequency_type = c("freq_mother" = "Number of Children Born", "freq_n_sib" = "Number of Siblings"), 
-                        Age_bin = function(x) paste("Age_bin", x))) +
-  scale_fill_manual(name = "Number of Children/Siblings",
-                    values = color_mapping,
-                    labels = unique(df_long_black2$color.label),
-                    guide = "legend") +
-  scale_y_continuous(labels = comma_format(scale = 1, big.mark = ",")) +
-  labs(title = "Distribution of Number of Children/Siblings by Age (Balck/African American)",
-       x = "Number of Children/Siblings",
-       y = "Frequency") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1),
-        legend.position = "right",
-        plot.title = element_text(size = 12, hjust = 0.5))
 ```
 
 
-## 6.Distribution of Number of Children/Siblings by Age (White)
-
 ```{r}
-ggplot(df_long_white2, aes(x = x_axis, y = frequency, fill = color_order)) +
-  geom_col() +
-  facet_grid(frequency_type ~ Age_bin, 
-             labeller = labeller(frequency_type = c("freq_mother" = "Number of Children Born", "freq_n_sib" = "Number of Siblings"), 
-                        Age_bin = function(x) paste("Age_bin", x))) +
-  scale_fill_manual(name = "Number of Children/Siblings",
-                    values = color_mapping,
-                    labels = unique(df_long_white2$color.label),
-                    guide = "legend") +
-  scale_y_continuous(labels = comma_format(scale = 1, big.mark = ",")) +
-  labs(title = "Distribution of Number of Children/Siblings by Age (White)",
-       x = "Number of Children/Siblings",
-       y = "Frequency") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1),
-        legend.position = "right",
-        plot.title = element_text(size = 12, hjust = 0.5))
-```
-
-
-## 7.Distribution of Number of Children by Age and Year(Balck/African American)
-
-```{r}
-df_long_black3 <- fert_df2_black %>%
+df_age_black <- fert_df2_black %>%
   group_by(Age_bin, YEAR) %>%
   mutate(total_counts = sum(freq_mother),
          normalized_freq = freq_mother / total_counts)
@@ -356,4 +293,23 @@ ggplot(df_long_black3, aes(x = normalized_freq, y = Age_bin, fill = normalized_f
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
         plot.title = element_text(size = 10, hjust = 0.5))
 ```
+
+## 6. Distribution of Number of Mother By Age and Census Year
+```{r}
+mother_df <- fert_df2 %>% 
+  mutate(freq_mother = if_else(RACE == "Black/African American", 
+                               -freq_mother, freq_mother))
+```
+
+
+```{r}
+ggplot(mother_df, aes(x = Age_bin, fill = RACE,
+                     y = freq_mother)) + 
+  geom_bar(stat = "identity")+
+  labs(y = "Number of Mother", title = "Distribution of Number of Mother By Age and Census Year") + 
+  coord_flip() +
+  facet_wrap(~YEAR) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
 
