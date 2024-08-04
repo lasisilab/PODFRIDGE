@@ -60,11 +60,14 @@ fert_df <- mother_data %>%
   mutate(chborn_num = chborn_num, 
     n_sib = as.integer(if_else(chborn_num == 0, 0, chborn_num - 1)),
     freq_n_sib = n * chborn_num) %>%
-  rename(freq_mother = n)
+  rename(freq_mother = n) 
+
+short_df_black <- fert_df[fert_df$RACE == "Black/African American", ] %>% slice(1:10) 
 
 nice_table(
-  fert_df[fert_df$RACE == "Black/African American", ],
-  title = c("Table 1", "Frequency of Number of Children & Siblings of Black/African American Population")
+  short_df_black,
+  title = c("Table 1", "Frequency of Number of Children & Siblings of Black/African American Population"), 
+  note = c("This table only displays the first 10 rows from the dataset")
 )
 ```
 
@@ -72,9 +75,12 @@ nice_table(
 ## 2.Frequency of Number of Children & Siblings of White Population
 
 ```{r}
+short_df_white <- fert_df[fert_df$RACE == "White", ] %>% slice(1:10) 
+
 nice_table(
-  fert_df[fert_df$RACE == "White", ],
-  title = c("Table 2", "Frequency of Number of Children & Siblings of White Population")
+  short_df_white,
+  title = c("Table 2", "Frequency of Number of Children & Siblings of White Population"), 
+  note = c("This table only displays the first 10 rows from the dataset")
 )
 ```
 
