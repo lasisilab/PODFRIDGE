@@ -69,7 +69,7 @@ nice_table(
 ```
 
 
-## 2.Frequency of Number of Children & Siblings of White Population by Census Year
+## 2.Frequency of Number of Children & Siblings of White Population
 
 ```{r}
 nice_table(
@@ -87,7 +87,7 @@ fert_df_sum <- fert_df%>%group_by(RACE, YEAR) %>%
   summarise(
     Mean = sum(freq_n_sib) / sum(freq_mother),
     Variance = sum(freq_mother * (n_sib - Mean)^2) / (sum(freq_mother) - 1), 
-    Std_Dev = sqrt(Variance)
+    Std_Dev = sqrt(Variance), .groups = "drop"
     )
 
 nice_table(
@@ -114,15 +114,14 @@ nice_table(
 ```{r chidren, results = FALSE,warning=FALSE,message=FALSE}
 ggplot(data = children_data,aes(x=chborn_num,y=proportion)) +
   geom_col(position = position_dodge()) + 
-  labs(title = "Distribution of Number of Children by Census Year for each Race") +
+  labs(title = "Distribution of Number of Children by Census Year for each Race", x = "Number of Children") +
   facet_grid(RACE~YEAR) + theme_classic()+
   theme(plot.margin = unit(c(1, 1, 1, 1), "cm"), 
-        plot.title = element_text(size = 10, hjust = 0.5))
+        plot.title = element_text(size = 12, hjust = 0.5))
 ```
 
 
 ## 2.Distribution of Number of Sibling by Census Year for each Race
-
 ```{r,warning=FALSE,out.width="100%"}
 mother_data <- mother_data %>% mutate(id = row_number())
 child_df = as.data.frame(rep(mother_data$id,mother_data$chborn_num))
@@ -132,14 +131,16 @@ child_df$nsib = child_df$chborn_num - 1
 
 child_df_gb = child_df %>%
   group_by(RACE,nsib, YEAR) %>%
-  summarise(count = n()) 
+  summarise(count = n(), .groups = "drop") 
 
 child_df_gb$prob = ifelse(child_df_gb$RACE == "White",child_df_gb$count/4380009, child_df_gb$count/547692)
 
 ggplot(data = child_df_gb, aes(x = nsib, y = prob)) +
   geom_col(position = position_dodge()) + 
-  labs(title = "Distribution of Number of Sibling by Census Year for each Race") +
-  facet_wrap(RACE~YEAR) + theme_classic()
+  labs(title = "Distribution of Number of Sibling by Census Year for each Race", x = "Number of Sibling", y = "Proportion") +
+  facet_grid(RACE~YEAR) + theme_classic()+
+  theme(plot.margin = unit(c(1, 1, 1, 1), "cm"), 
+        plot.title = element_text(size = 12, hjust = 0.5))
 ```
 
 
@@ -296,20 +297,27 @@ ggplot(df_age_black, aes(x = normalized_freq, y = Age_bin, fill = normalized_fre
 
 ## 6. Distribution of Number of Mother By Age and Census Year
 ```{r}
-mother_df <- fert_df2 %>% 
-  mutate(freq_mother = if_else(RACE == "Black/African American", 
-                               -freq_mother, freq_mother))
-```
+mother_df <- fert_df2 %>% group_by(Age_bin, YEAR, RACE) %>%
+  summarise(freq_mother = sum(freq_mother), .groups = "drop") %>%
+  mutate(freq_mother = ifelse(RACE == "Black/African American", -freq_mother, freq_mother))
 
+```
 
 ```{r}
-ggplot(mother_df, aes(x = Age_bin, fill = RACE,
-                     y = freq_mother)) + 
-  geom_bar(stat = "identity")+
-  labs(y = "Number of Mother", title = "Distribution of Number of Mother By Age and Census Year") + 
-  coord_flip() +
-  facet_wrap(~YEAR) +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+max_freq <- max(abs(mother_df$freq_mother))
+
+ggplot(mother_df, aes(x = freq_mother, y = Age_bin, fill = RACE)) +
+  geom_col() +
+  scale_fill_manual(values = c("Black/African American" = "#2E8B57", "White" = "#b2d8d8"), name = "Race") +
+  scale_x_continuous(labels = function(x) label_number()(abs(x)), 
+                     limits = c(-max_freq, max_freq)) +
+  facet_wrap(~ YEAR, scales = "free_y") +
+  labs(title = "Distribution of Mother by Census Year and Age Bin",
+       x = "Number of Mothers",
+       y = "Age Bin") +
+  theme_minimal() +
+  theme(legend.position = "right", axis.text.x = element_text(size = 7, angle = 45, hjust = 1), plot.title = element_text(size = 10, hjust = 0.5))
 ```
+
 
 
