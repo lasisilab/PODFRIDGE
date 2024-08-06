@@ -8,12 +8,25 @@ suppressMessages(suppressWarnings({
   library(parallel)
 }))
 
-# Set up cluster
-cl <- makeCluster(availableCores())
-plan(cluster, workers = cl)
+#Set options for run- this will ultimately be parameterised and sit in the primary run script
+#(The following lines to set variables are temporary for testing and will not remain in this script)
+use_remote_cluster<-1 #If sending to external cluster (use 0 for tests on one machine)
 
-# Ensure the cluster is stopped when the script exits
-on.exit(parallel::stopCluster(cl))
+# Set up cluster on one machine if required
+if(use_remote_cluster==0){
+  cl <- makeCluster(availableCores())
+  # Ensure the cluster is stopped when the script exits
+  on.exit(parallel::stopCluster(cl))
+  plan(cluster, workers = cl)
+} else {
+  plan(cluster, workers = c("clustername1", "clustername2", "server.remote.org- if using an online cluster", "etc"))  
+}  
+
+#use 'sequential' to run futures sequentially- NOT in parralel
+#use 'multisession' to run in parallel in separate R sessions on the same machine
+#use 'multicore' to run futures in parallel in forked processes on the same machine- Linux only
+#use 'cluster' to run in parallel on one or more machines
+
 
 # Helper function for logging
 log_message <- function(message) {
