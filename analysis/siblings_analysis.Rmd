@@ -72,7 +72,7 @@ nice_table(
 ```
 
 
-## 2.Frequency of Number of Children & Siblings of White Population
+## 2.Frequency Table of Number of Children & Siblings of White Population
 
 ```{r}
 short_df_white <- fert_df[fert_df$RACE == "White", ] %>% slice(1:10) 
@@ -253,7 +253,7 @@ ggplot(df_long_white, aes(x = x_axis, y = frequency, fill = color_order)) +
 ```
 
 
-## 5.Distribution of Number of Children by Age and Year(Balck/African American)
+## 5.Distribution of Number of Children by Age and Year(Black/African American)
 
 ```{r}
 fert_df2 <- mother_data %>% mutate(Age_bin = case_when(
@@ -281,25 +281,47 @@ fert_df2_black <- fert_df2 %>% filter(RACE == "Black/African American")
 fert_df2_white <- fert_df2 %>% filter(RACE == "White")
 ```
 
-
+### Version I
 ```{r}
 df_age_black <- fert_df2_black %>%
   group_by(Age_bin, YEAR) %>%
   mutate(total_counts = sum(freq_mother),
          normalized_freq = freq_mother / total_counts)
 
-ggplot(df_age_black, aes(x = normalized_freq, y = Age_bin, fill = normalized_freq)) +
+ggplot(df_age_black, aes(x = normalized_freq, y = Age_bin, fill = chborn_num)) +
   geom_bar(stat = "identity", position = "dodge", width = 0.8) +
   geom_vline(xintercept = 0, color = "black", linetype = "dashed") +
   facet_wrap(~YEAR, scales = "free_y") +
-  scale_fill_gradient2(low = "blue", high = "red", midpoint = median(df_age_black$normalized_freq, na.rm = TRUE), 
-                       name = "Normalized\nFrequency") +
+  scale_fill_gradientn(colors = c("#FFF5F0", "#FEE0D2", "#FCBBA1", "#FC9272", "#FB6A4A", "#EF3B2C", "#CB181D", "#99000D"),
+    name = "Number of Children") +
   labs(x = "Normalized Frequency", y = "Age Bin", 
        title = "Normalized Distribution of Number of Children by Age and Year (Black/African American)") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
         plot.title = element_text(size = 10, hjust = 0.5))
 ```
+
+
+### Version II
+```{r}
+df_age_black <- fert_df2_black %>%
+  group_by(Age_bin, YEAR) %>%
+  mutate(total_counts = sum(freq_mother),
+         normalized_freq = freq_mother / total_counts)
+
+ggplot(df_age_black, aes(x = normalized_freq, y = Age_bin, fill = chborn_num)) +
+  geom_bar(stat = "identity", position = "stack", width = 0.8, color = alpha("black", 0.3)) +
+  geom_vline(xintercept = 0, color = "black", linetype = "dashed") +
+  facet_wrap(~YEAR, scales = "free_y") +
+  scale_fill_gradientn(colors = c("#FFF5F0", "#FEE0D2", "#FCBBA1", "#FC9272", "#FB6A4A", "#EF3B2C", "#CB181D", "#99000D"),
+    name = "Number of Children") +
+  labs(x = "Normalized Frequency", y = "Age Bin", 
+       title = "Normalized Distribution of Number of Children by Age and Year (Black/African American)") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.title = element_text(size = 10, hjust = 0.5))
+```
+
 
 ## 6. Distribution of Number of Mother By Age and Census Year
 ```{r}
@@ -325,5 +347,8 @@ ggplot(mother_df, aes(x = freq_mother, y = Age_bin, fill = RACE)) +
   theme(legend.position = "right", axis.text.x = element_text(size = 7, angle = 45, hjust = 1), plot.title = element_text(size = 10, hjust = 0.5))
 ```
 
+```{r}
+
+```
 
 
