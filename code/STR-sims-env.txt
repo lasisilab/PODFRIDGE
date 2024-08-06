@@ -1,7 +1,7 @@
-tidyverse
+tidyverse #this already includes ggplot2,
 furrr
 progressr
 data.table
-ggplot2
+#ggplot2
 future
 parallel
