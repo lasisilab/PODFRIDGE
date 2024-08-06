@@ -324,7 +324,8 @@ process_loci <- function(row, allele_frequency_data, kinship_matrix) {
   final_row <- log_function_time(kinship_calculation, "kinship_calculation", simulated_row, allele_frequency_data, kinship_matrix)
   return(final_row)
 }
-
+                                 
+#This section is already parallelised effectively using purrr syntax so make sure not nested in further parallel processes
 process_individuals_genotypes <- function(individuals_genotypes, df_allelefreq, kinship_matrix) {
   final_individuals_genotypes <- individuals_genotypes |>
     future_pmap(~ log_function_time(process_loci, "process_loci", list(...), df_allelefreq, kinship_matrix), seed = TRUE) |>
@@ -500,6 +501,8 @@ calculate_proportions_exceeding_cutoffs <- function(input_df, cutoffs) {
     filter(relationship_tested != "unrelated")
   return(proportions_exceeding)
 }
+                                 
+#This section is already parallelised effectively using purrr syntax so make sure not nested in further parallel processes
 
 process_simulation_setup <- function(simulation_setup, df_allelefreq, kinship_matrix, loci_list, loci_lists, output_file, summary_output_file) {
   log_message("Processing simulation setup...")
