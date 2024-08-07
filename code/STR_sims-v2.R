@@ -10,7 +10,7 @@ suppressMessages(suppressWarnings({
 
 #Set options for run- this will ultimately be parameterised and sit in the primary run script
 #(The following lines to set variables are temporary for testing and will not remain in this script)
-use_remote_cluster<-1 #If sending to external cluster (use 0 for tests on one machine)
+use_remote_cluster<-0 #If sending to external cluster (use 0 for tests on one machine)
 
 # Set up cluster on one machine if required
 if(use_remote_cluster==0){
