@@ -143,17 +143,17 @@ initialize_individuals_pair <- function(population, relationship_type, sim_id, l
 }
 
 simulate_genotypes <- function(row, df_allelefreq, kinship_matrix) {
-  population <- row$population
+  population_type <- row$population
   locus <- row$locus
   relationship <- row$relationship_type
   
  # allele_freqs <- df_allelefreq |>
 #   filter(population == !!population, marker == !!locus, frequency > 0)
   
-  allele_freqs <- df_allelefreq[which(df_allelefreq$population == population & df_allelefreq$marker == locus),]
+  allele_freqs <- df_allelefreq[which(df_allelefreq$population == population_type & df_allelefreq$marker == locus),]
   
   if (nrow(allele_freqs) == 0) {
-    stop(paste("No valid alleles found for population", population, "and locus", locus))
+    stop(paste("No valid alleles found for population", population_type, "and locus", locus))
   }
   
   alleles <- allele_freqs$allele
