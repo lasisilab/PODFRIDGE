@@ -86,9 +86,7 @@ log_message(paste("Loaded allele frequencies data in", allele_freq_time["elapsed
 
 # Extract unique loci
 log_message("Extracting unique loci...")
-loci_list <- df_allelefreq |>
-  pull(marker) |>
-  unique()
+loci_list<-unique(df_allelefreq$marker)
 
 # Load Core Loci Data
 log_message("Loading core loci data...")
