@@ -29,7 +29,7 @@ library(knitr)
 library(scales)
 library(rempsyc)
 library(patchwork)
-
+library(ggnewscale)
 ```
 
 
@@ -403,25 +403,30 @@ ggplot(df_age2, aes(x = normalized_freq, y = factor(YEAR), fill = color)) +
 ```
 
 ```{r}
+colors_black <- c("#FFF5F0", "#FEE0D2", "#FCBBA1", "#FC9272", "#FB6A4A", "#EF3B2C", "#CB181D", "#99000D")
+colors_white <- c("#F7FBFF", "#DEEBF7", "#C6DBEF", "#9ECAE1", "#6BAED6", "#4292C6", "#2171B5", "#084594")
+
+# Create the ggplot
 ggplot() +
   # Layer for Black/African American
-  geom_bar(data = df_age %>% filter(RACE == "Black/African American"),
-           aes(x = normalized_freq, y = factor(YEAR), fill = chborn_num, alpha = chborn_num),
-           stat = "identity", position = "stack") +
-  scale_fill_gradientn(colors = c("#FFF5F0", "#FEE0D2", "#FCBBA1", "#FC9272", "#FB6A4A", "#EF3B2C", "#CB181D", "#99000D")) +
-  new_scale_fill() +
+  geom_col(data = filter(df_age, RACE == "Black/African American"), 
+           aes(x = as.numeric(factor(YEAR)) - 0.15, y = normalized_freq, fill = chborn_num), width = 0.3) +
+  scale_fill_gradientn(colors = colors_black, name = "Number of Children Born (Black)") +
+  
+  ggnewscale::new_scale_fill() +
+  
   # Layer for White
-  geom_bar(data = df_age %>% filter(RACE == "White"),
-           aes(x = normalized_freq, y = factor(YEAR), fill = chborn_num, alpha = chborn_num),
-           stat = "identity", position = "stack") +
-  scale_fill_gradientn(colors = c("#F7FBFF", "#DEEBF7", "#C6DBEF", "#9ECAE1", "#6BAED6", "#4292C6", "#2171B5", "#084594")) +
-  scale_alpha_continuous(range = c(0.3, 1)) +
+  geom_col(data = filter(df_age, RACE == "White"), 
+           aes(x = as.numeric(factor(YEAR)) + 0.15, y = normalized_freq, fill = chborn_num), width = 0.3) +
+  scale_fill_gradientn(colors = colors_white, name = "Number of Children Born (White)") +
+  
+  scale_x_continuous(breaks = unique(as.numeric(factor(df_age$YEAR))), labels = unique(df_age$YEAR)) +
+  
   facet_wrap(~Age_bin, scales = "free_y") +
-  labs(title = "Stacked Bar Chart with Transparency and Custom Colors",
-       x = "Normalized Frequency",
-       y = "Year",
-       fill = "Number of Children Born",
-       alpha = "Number of Children Born") +
+  labs(title = "Side-by-Side Bar Chart with Custom Colors and Transparency",
+       x = "Year",
+       y = "Normalized Frequency",
+       fill = "Number of Children Born") +
   theme_minimal()
 ```
 
