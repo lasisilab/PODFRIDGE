@@ -500,10 +500,10 @@ calculate_proportions_exceeding_cutoffs <- function(input_df, cutoffs) {
 process_simulation_setup <- function(simulation_setup, df_allelefreq, kinship_matrix, loci_list, loci_lists, output_file, summary_output_file) {
   log_message("Processing simulation setup...")
   process_time <- system.time({
-    final_results <- simulation_setup |>
+  final_results <- simulation_setup |>
       future_pmap_dfr(function(population, relationship_type, num_simulations) {
-        purrr::map_dfr(1:num_simulations, function(sim_id) {
-          individuals_genotypes <- initialize_individuals_pair(population, relationship_type, sim_id, loci_list)
+        purrr::map_dfr(.x=1:num_simulations, function(.x) {
+          individuals_genotypes <- initialize_individuals_pair(population, relationship_type, .x, loci_list)
           processed_genotypes <- log_function_time(process_individuals_genotypes, "process_individuals_genotypes", individuals_genotypes, df_allelefreq, kinship_matrix)
           return(processed_genotypes)
         })
