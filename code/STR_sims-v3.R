@@ -128,9 +128,7 @@ populations_list <- levels(population_labels$population)
 calculate_likelihood_ratio <- function(shared_alleles, genotype_match = NULL, pA = NULL, pB = NULL, k0, k1, k2) {
   if (shared_alleles == 0) {
     LR <- k0
-    return(LR)
-  }
-  if (shared_alleles == 1) {
+  } else if (shared_alleles == 1) {
     if (genotype_match == "AA-AA") {
       Rxp <- pA
     } else if (genotype_match == "AA-AB" | genotype_match == "AB-AA") {
@@ -143,9 +141,7 @@ calculate_likelihood_ratio <- function(shared_alleles, genotype_match = NULL, pA
       stop("Invalid genotype match for 1 shared allele.")
     }
     LR <- k0 + (k1 / Rxp)
-    return(LR)
-  }
-  if (shared_alleles == 2) {
+  } else if (shared_alleles == 2) {
     if (genotype_match == "AA-AA") {
       Rxp <- pA
       Rxu <- pA^2
@@ -155,9 +151,11 @@ calculate_likelihood_ratio <- function(shared_alleles, genotype_match = NULL, pA
     } else {
       stop("Invalid genotype match for 2 shared alleles.")
     }
-    LR <- k0 + (k1 / Rxp) + (k2 / Rxu)
-    return(LR)
-  }
+    LR <- k0 + (k1 / Rxp) + (k2 / Rxu)    
+  } else {
+    LR<- NA
+  }  
+  return(LR)
 }
 
 generate_simulation_setup <- function(kinship_matrix, population_list, num_related, num_unrelated) {
