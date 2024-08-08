@@ -10,7 +10,7 @@ suppressMessages(suppressWarnings({
 
 #Set options for run- this will ultimately be parameterised and sit in the primary run script
 #(The following lines to set variables are temporary for testing and will not remain in this script)
-use_remote_cluster<-1 #If sending to external cluster (use 0 for tests on one machine)
+use_remote_cluster<-0 #If sending to external cluster (use 0 for tests on one machine)
 
 # Set up cluster on one machine if required
 if(use_remote_cluster==0){
@@ -175,6 +175,23 @@ generate_simulation_setup <- function(kinship_matrix, population_list, num_relat
       ))
     }
   }
+  return(simulation_setup)
+}
+generate_simulation_setup2 <- function(kinship_matrix, population_list, num_related, num_unrelated) {
+  simulation_setup <- data.frame(
+    population = character(),
+    relationship_type = character(),
+    num_simulations = integer(),
+    stringsAsFactors = FALSE
+  )
+  simulation_setup<-foreach(population = population_list,.combine="rbind") %:% {
+    foreach (relationship = kinship_matrix$relationship_type) %dopar% {
+      num_simulations <- ifelse(relationship == "unrelated", num_unrelated, num_related)
+      simulation_setup <- data.frame(c(population,relationship,num_simulations))
+      ))
+    }
+  }  
+  names(simulation_setup)[2]<-relationship_type
   return(simulation_setup)
 }
 
@@ -543,7 +560,13 @@ process_simulation_setup <- function(simulation_setup, df_allelefreq, kinship_ma
 }
 
 # Execute Simulation Setup and Processing
+
+                                 bench::mark(
 simulation_setup <- log_function_time(generate_simulation_setup, "generate_simulation_setup", kinship_matrix, populations_list, n_sims_related, n_sims_unrelated)
+                                   )
+                                 bench::mark(
+simulation_setup2 <- log_function_time(generate_simulation_setup2, "generate_simulation_setup2", kinship_matrix, populations_list, n_sims_related, n_sims_unrelated)
+                                   )
 log_function_time(process_simulation_setup, "process_simulation_setup", simulation_setup, df_allelefreq, kinship_matrix, loci_list, loci_lists, output_file, summary_output_file)
 log_message("Simulation setup and processing completed.")
 
