@@ -107,9 +107,6 @@ calculate_likelihood_ratio <- function(shared_alleles, genotype_match = NULL, pA
     LR <- k0 + (k1 / Rxp)
     return(LR)
   }
-  k0 = 0 
-  k1 = 1 
-  k2 = 0
   if (shared_alleles == 2) {
     if (genotype_match == "AA-AA") {
       Rxp <- pA
