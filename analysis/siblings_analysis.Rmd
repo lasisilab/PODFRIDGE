@@ -282,7 +282,7 @@ fert_df2 <- fert_df2 %>%count(RACE, chborn_num, Age_bin, YEAR) %>%
 fert_df2_black <- fert_df2 %>% filter(RACE == "Black/African American")
 fert_df2_white <- fert_df2 %>% filter(RACE == "White")
 ```
-
+### plot for black
 ```{r}
 df_age_black <- fert_df2_black %>%
   group_by(Age_bin, YEAR, RACE) %>%
@@ -307,6 +307,7 @@ ggplot(df_age_black, aes(x = normalized_freq, y = factor(YEAR), fill = chborn_nu
         plot.title = element_text(size = 10, hjust = 0.5))
 ```
 
+###plot for white
 ```{r}
 #### plot for white population
 
@@ -331,9 +332,10 @@ ggplot(df_age_white, aes(x = normalized_freq, y = factor(YEAR), fill = chborn_nu
         plot.title = element_text(size = 10, hjust = 0.5))
 ```
 
+### combine black and white 1
 ```{r}
 df_age <- fert_df2 %>%
-  group_by(Age_bin, YEAR, RACE) %>%
+  group_by(Age_bin, RACE) %>%
   mutate(total_counts = sum(freq_mother),
          normalized_freq = freq_mother / total_counts)
 
@@ -342,20 +344,85 @@ df_age$RACE <- factor(df_age$RACE, levels = c("White", "Black/African American")
 ```
 
 ```{r}
-
 # Data visualization
 ggplot(df_age, aes(x = normalized_freq, y = factor(YEAR), fill = chborn_num, color = RACE)) +
   geom_bar(stat = "identity", position = position_dodge(width = 0.8), width = 0.7) +
   geom_vline(xintercept = 0, color = "black", linetype = "dashed") +
   facet_wrap(~Age_bin, scales = "free_y") +
   scale_fill_gradientn(colors = c("#FFF5F0", "#FEE0D2", "#FCBBA1", "#FC9272", "#FB6A4A", "#EF3B2C", "#CB181D", "#99000D"), name = "Number of Children") +
-  scale_color_manual(values = c("Black/African American" = "#2E8B57", "White" = "#b2d8d8"), name = "Race") +
+  scale_color_manual(values = c("blue", "red"), name = "Race") +
   labs(x = "Normalized Frequency", y = "Year", 
        title = "Normalized Distribution of Number of Children by Year, Age Bin, and Population") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
         plot.title = element_text(size = 10, hjust = 0.5))
 
+```
+
+### combine black and white 2
+```{r}
+ggplot(df_age, aes(x = normalized_freq, y = factor(YEAR), fill = RACE, alpha = chborn_num)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  facet_wrap(~Age_bin, scales = "free_y") +
+  scale_fill_manual(values = c("Black/African American" = "red", "White" = "blue")) +
+  scale_alpha_continuous(range = c(0.3, 1)) +
+  labs(x = "Normalized Frequency", y = "Year", 
+       title = "Normalized Distribution of Number of Children by Year, Age Bin, and Population", 
+       fill = "Race",
+       alpha = "Number of Children Born") +
+  theme_minimal()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.title = element_text(size = 10, hjust = 0.5))
+```
+
+### combine black and white 3
+```{r}
+black_colors <- c("#FFF5F0", "#FEE0D2", "#FCBBA1", "#FC9272", "#FB6A4A", "#EF3B2C", "#CB181D", "#99000D")
+white_colors <- c("#F7FBFF", "#DEEBF7", "#C6DBEF", "#9ECAE1", "#6BAED6", "#4292C6", "#2171B5", "#084594")
+
+# Map chborn_num to a color gradient within each race
+df_age2 <- df_age %>%
+  mutate(color = case_when(
+    RACE == "Black/African American" ~ cut(chborn_num, breaks = length(black_colors), labels = black_colors),
+    RACE == "White" ~ cut(chborn_num, breaks = length(white_colors), labels = white_colors)
+  ))
+```
+
+
+```{r}
+# Create the ggplot
+ggplot(df_age2, aes(x = normalized_freq, y = factor(YEAR), fill = color)) +
+  geom_bar(stat = "identity", alpha = 0.8) +
+  facet_wrap(~Age_bin, scales = "free_y") +
+  scale_fill_identity() +
+  labs(x = "Normalized Frequency", y = "Year", 
+       title = "Normalized Distribution of Number of Children by Year, Age Bin, and Population", 
+       fill = "Race") +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+```{r}
+ggplot() +
+  # Layer for Black/African American
+  geom_bar(data = df_age %>% filter(RACE == "Black/African American"),
+           aes(x = normalized_freq, y = factor(YEAR), fill = chborn_num, alpha = chborn_num),
+           stat = "identity", position = "stack") +
+  scale_fill_gradientn(colors = c("#FFF5F0", "#FEE0D2", "#FCBBA1", "#FC9272", "#FB6A4A", "#EF3B2C", "#CB181D", "#99000D")) +
+  new_scale_fill() +
+  # Layer for White
+  geom_bar(data = df_age %>% filter(RACE == "White"),
+           aes(x = normalized_freq, y = factor(YEAR), fill = chborn_num, alpha = chborn_num),
+           stat = "identity", position = "stack") +
+  scale_fill_gradientn(colors = c("#F7FBFF", "#DEEBF7", "#C6DBEF", "#9ECAE1", "#6BAED6", "#4292C6", "#2171B5", "#084594")) +
+  scale_alpha_continuous(range = c(0.3, 1)) +
+  facet_wrap(~Age_bin, scales = "free_y") +
+  labs(title = "Stacked Bar Chart with Transparency and Custom Colors",
+       x = "Normalized Frequency",
+       y = "Year",
+       fill = "Number of Children Born",
+       alpha = "Number of Children Born") +
+  theme_minimal()
 ```
 
 
