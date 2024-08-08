@@ -8,11 +8,10 @@ suppressMessages(suppressWarnings({
   library(parallel)
 }))
 
-#Set options for run- this will ultimately be parameterised and sit in the primary run script
-#(The following lines to set variables are temporary for testing and will not remain in this script)
-use_remote_cluster<-0 #If sending to external cluster (use 0 for tests on one machine)
-
-# Set up cluster on one machine if required
+# Set up cluster on one machine if not using cluster
+if(!exists("use_remote_cluster")){ #Add this parameter to run script
+  use_remote_cluster<-0
+} 
 if(use_remote_cluster==0){
   if( .Platform$OS.type == "windows" ){
     cl <- makeCluster(availableCores())  #specify how many cores to use
@@ -23,13 +22,11 @@ if(use_remote_cluster==0){
   on.exit(parallel::stopCluster(cl))
   plan(cluster, workers = cl)
 } else { #if sending to remote cluster(s)
-  plan(cluster, workers = c("clustername1", "clustername2", "server.remote.org- if using an online cluster", "etc"))  
+  plan(cluster, workers = clustername1) #use URL if using an online cluster, multiple clusters can also be specified here  
 }  
 
-#plan() options:
-#use 'multisession' to run in parallel in separate R sessions on the same machine
-#use 'multicore' to run futures in parallel in forked processes on the same machine- Linux only
-#use 'cluster' to run in parallel on one or more machines
+#plan() options: 'multisession' to run in parallel in separate R sessions on the same machine, 
+#'multicore' to run in parallel in forked processes on the same machine- Linux/Mac only, 'cluster' to run in parallel on one or more machines
 
 # Helper function for logging
 log_message <- function(message) {
@@ -86,9 +83,7 @@ log_message(paste("Loaded allele frequencies data in", allele_freq_time["elapsed
 
 # Extract unique loci
 log_message("Extracting unique loci...")
-loci_list <- df_allelefreq |>
-  pull(marker) |>
-  unique()
+loci_list<-unique(df_allelefreq$marker)
 
 # Load Core Loci Data
 log_message("Loading core loci data...")
@@ -130,9 +125,7 @@ populations_list <- levels(population_labels$population)
 calculate_likelihood_ratio <- function(shared_alleles, genotype_match = NULL, pA = NULL, pB = NULL, k0, k1, k2) {
   if (shared_alleles == 0) {
     LR <- k0
-    return(LR)
-  }
-  if (shared_alleles == 1) {
+  } else if (shared_alleles == 1) {
     if (genotype_match == "AA-AA") {
       Rxp <- pA
     } else if (genotype_match == "AA-AB" | genotype_match == "AB-AA") {
@@ -145,9 +138,7 @@ calculate_likelihood_ratio <- function(shared_alleles, genotype_match = NULL, pA
       stop("Invalid genotype match for 1 shared allele.")
     }
     LR <- k0 + (k1 / Rxp)
-    return(LR)
-  }
-  if (shared_alleles == 2) {
+  } else if (shared_alleles == 2) {
     if (genotype_match == "AA-AA") {
       Rxp <- pA
       Rxu <- pA^2
@@ -157,9 +148,11 @@ calculate_likelihood_ratio <- function(shared_alleles, genotype_match = NULL, pA
     } else {
       stop("Invalid genotype match for 2 shared alleles.")
     }
-    LR <- k0 + (k1 / Rxp) + (k2 / Rxu)
-    return(LR)
-  }
+    LR <- k0 + (k1 / Rxp) + (k2 / Rxu)    
+  } else {
+    LR<- NA
+  }  
+  return(LR)
 }
 
 generate_simulation_setup <- function(kinship_matrix, population_list, num_related, num_unrelated) {
