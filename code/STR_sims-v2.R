@@ -327,7 +327,7 @@ process_individuals_genotypes <- function(individuals_genotypes, df_allelefreq, 
 }
 
 calculate_combined_lrs <- function(final_results, loci_lists) {
-  final_results <- as.data.table(final_results)
+  class(final_results)<-"data.table"
   combined_lrs <- final_results[, .(
     core_13 = prod(LR[locus %in% loci_lists$core_13], na.rm = TRUE),
     identifiler_15 = prod(LR[locus %in% loci_lists$identifiler_15], na.rm = TRUE),
