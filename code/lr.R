@@ -21,6 +21,12 @@ if(use_remote_cluster==0){
 } else { #if sending to remote cluster(s)
   plan(cluster, workers = clustername1) #use URL if using an online cluster, multiple clusters can also be specified here  
 } 
+=======
+cl <- makeCluster(availableCores())
+plan(cluster, workers = cl)
+
+# Ensure the cluster is stopped when the script exits
+on.exit(parallel::stopCluster(cl))
 
 # Helper function for logging
 log_message <- function(message) {
@@ -29,7 +35,7 @@ log_message <- function(message) {
 
 # Read Command-Line Arguments
 args <- commandArgs(trailingOnly = TRUE)
-slurm_job_id <- as.character(args[1])
+slurm_job_id <-  as.character(args[1])
 
 # Create output folder with SLURM job ID
 output_dir <- file.path("output", paste0("simulation_", slurm_job_id))
@@ -55,6 +61,7 @@ log_message(paste("Loaded allele frequencies data in", allele_freq_time["elapsed
 log_message("Extracting unique loci...")
 loci_list <- unique(df_allelefreq$marker)
 
+
 # Load Core Loci Data
 log_message("Loading core loci data...")
 core_loci_time <- system.time({
@@ -71,133 +78,87 @@ core_loci_time <- system.time({
 log_message(paste("Loaded core loci data in", core_loci_time["elapsed"], "seconds."))
 
 # Load Individuals Genotypes Data
-individuals_genotypes <- read.csv("data/sims/processed_genotypes.csv")
+individuals_genotypes <- fread("data/sims/processed_genotypes.csv")
 
 # Define Kinship Matrix
-kinship_matrix <- tibble(
-  relationship_type = factor(
-    c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins"),
-    levels = c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins")
-  ),
+kinship_matrix <- data.table(
+  relationship_type = factor(c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins")),
   k0 = c(0, 1/4, 1/2, 7/8, 15/16),
   k1 = c(1, 1/2, 1/2, 1/8, 1/16),
   k2 = c(0, 1/4, 0, 0, 0)
 )
 
 # Define Populations
-population_labels <- tibble(
-  population = factor(
-    c("AfAm", "Cauc", "Hispanic", "Asian"),
-    levels = c("AfAm", "Cauc", "Hispanic", "Asian")
-  ),
+population_labels <- data.table(
+  population = factor(c("AfAm", "Cauc", "Hispanic", "Asian")),
   label = c("African American", "Caucasian", "Hispanic", "Asian")
 )
 populations_list <- levels(population_labels$population)
 
 # Functions
-calculate_likelihood_ratio <- function(shared_alleles, genotype_match = NULL, pA = NULL, pB = NULL, k0, k1, k2) {
+calculate_likelihood_ratio <- function(shared_alleles, genotype_match, pA, pB, k_values) {
   if (shared_alleles == 0) {
-    LR <- k0
+    return(k_values$k0)
   } else if (shared_alleles == 1) {
-    if (genotype_match == "AA-AA") {
-      Rxp <- pA
-    } else if (genotype_match == "AA-AB" | genotype_match == "AB-AA") {
-      Rxp <- 2 * pA
-    } else if (genotype_match == "AB-AC") {
-      Rxp <- 4 * pA
-    } else if (genotype_match == "AB-AB") {
-      Rxp <- (4 * (pA * pB)) / (pA + pB)
-    } else {
-      stop("Invalid genotype match for 1 shared allele.")
-    }
-    LR <- k0 + (k1 / Rxp)
+    Rxp <- switch(genotype_match,
+                  "AA-AA" = pA,
+                  "AA-AB" = 2 * pA,
+                  "AB-AA" = 2 * pA,
+                  "AB-AC" = 4 * pA,
+                  "AB-AB" = (4 * pA * pB) / (pA + pB),
+                  stop("Invalid genotype match for 1 shared allele.")
+    )
+    return(k_values$k0 + (k_values$k1 / Rxp))
   } else if (shared_alleles == 2) {
-    if (genotype_match == "AA-AA") {
-      Rxp <- pA
-      Rxu <- pA^2
-    } else if (genotype_match == "AB-AB") {
-      Rxp <- (4 * pA * pB) / (pA + pB)
-      Rxu <- 2 * pA * pB
-    } else {
-      stop("Invalid genotype match for 2 shared alleles.")
-    }
-    LR <- k0 + (k1 / Rxp) + (k2 / Rxu)    
+    Rxp <- switch(genotype_match,
+                  "AA-AA" = pA,
+                  "AB-AB" = (4 * pA * pB) / (pA + pB),
+                  stop("Invalid genotype match for 2 shared alleles.")
+    )
+    Rxu <- ifelse(genotype_match == "AA-AA", pA^2, 2 * pA * pB)
+    return(k_values$k0 + (k_values$k1 / Rxp) + (k_values$k2 / Rxu))
   } else {
-    LR<- NA
+    return(NA)
   }  
-  return(LR)
 }
+
 
 kinship_calculation <- function(row, allele_frequency_data, kinship_matrix) {
   alleles_ind1 <- as.character(c(row$ind1_allele1, row$ind1_allele2))
   alleles_ind2 <- as.character(c(row$ind2_allele1, row$ind2_allele2))
   
+  # Get shared alleles and their counts
   shared_alleles_vector <- intersect(alleles_ind1, alleles_ind2)
-  unique_alleles_ind1 <- setdiff(alleles_ind1, shared_alleles_vector)
-  unique_alleles_ind2 <- setdiff(alleles_ind2, shared_alleles_vector)
   
-  allele_map <- list()
-  next_label <- 1
+  # Get unique alleles by excluding shared alleles
+  unique_alleles_ind1 <- alleles_ind1[!alleles_ind1 %in% shared_alleles_vector]
+  unique_alleles_ind2 <- alleles_ind2[!alleles_ind2 %in% shared_alleles_vector]
   
-  for (allele in shared_alleles_vector) {
-    allele_map[[LETTERS[next_label]]] <- allele
-    next_label <- next_label + 1
-  }
+  # Create the allele_map using c() for combining alleles and setting names directly
+  allele_map <- setNames(c(shared_alleles_vector, unique_alleles_ind1, unique_alleles_ind2), 
+                         LETTERS[1:(length(shared_alleles_vector) + length(unique_alleles_ind1) + length(unique_alleles_ind2))])
   
-  for (allele in unique_alleles_ind1) {
-    if (!(allele %in% allele_map)) {
-      allele_map[[LETTERS[next_label]]] <- allele
-      next_label <- next_label + 1
-    }
-  }
+  # Use match to label alleles more efficiently
+  labeled_alleles_ind1 <- LETTERS[match(alleles_ind1, allele_map)]
+  labeled_alleles_ind2 <- LETTERS[match(alleles_ind2, allele_map)]
   
-  for (allele in unique_alleles_ind2) {
-    if (!(allele %in% allele_map)) {
-      allele_map[[LETTERS[next_label]]] <- allele
-      next_label <- next_label + 1
-    }
-  }
-  
-  allele_map <- unlist(allele_map)
-  labeled_alleles_ind1 <- sapply(as.character(alleles_ind1), function(x) names(allele_map)[which(allele_map == x)])
-  labeled_alleles_ind2 <- sapply(as.character(alleles_ind2), function(x) names(allele_map)[which(allele_map == x)])
-  
-  shared_alleles <- length(shared_alleles_vector)
+  # Generate genotype strings
   genotype_ind1 <- paste(sort(labeled_alleles_ind1), collapse = "")
   genotype_ind2 <- paste(sort(labeled_alleles_ind2), collapse = "")
   genotype_match <- paste(genotype_ind1, genotype_ind2, sep = "-")
+
+  # Count the shared alleles
+  shared_alleles <- length(shared_alleles_vector)
   
   allele_freqs <- dplyr::filter(allele_frequency_data, population == row$population, marker == row$locus)
-  if (nrow(allele_freqs) == 0) {
-    stop("No allele frequencies found for the given population and locus.")
-  }
+  pA <- allele_freqs$frequency[allele_freqs$allele == allele_map["A"]]
+  pB <- allele_freqs$frequency[allele_freqs$allele == allele_map["B"]]
   
-  A_allele <- ifelse("A" %in% names(allele_map), allele_map[["A"]], NA)
-  B_allele <- ifelse("B" %in% names(allele_map), allele_map[["B"]], NA)
+  kinship_calculations <- kinship_matrix[, .(relationship_known = row$relationship_type, 
+                                             relationship_tested = relationship_type,
+                                             LR = calculate_likelihood_ratio(shared_alleles, genotype_match, pA, pB, .SD))]
   
-  pA <- ifelse(any(allele_freqs$allele == A_allele), allele_freqs$frequency[allele_freqs$allele == A_allele], NA)
-  pB <- ifelse(any(allele_freqs$allele == B_allele), allele_freqs$frequency[allele_freqs$allele == B_allele], NA)
-  
-  if (is.na(pA)) {
-    stop("Allele frequency for A is missing.")
-  }
-  if (is.na(pB) && length(shared_alleles_vector) > 1) {
-    stop("Allele frequency for B is missing.")
-  }
-  
-  kinship_calculations <- lapply(kinship_matrix$relationship_type, function(rel_type) {
-    k_values <- kinship_matrix[kinship_matrix$relationship_type == rel_type, ]
-    LR <- calculate_likelihood_ratio(shared_alleles, genotype_match, pA, pB, k_values$k0, k_values$k1, k_values$k2)
-    data.table(
-      relationship_known = row$relationship_type,
-      relationship_tested = rel_type,
-      LR = LR
-    )
-  })
-  
-  kinship_calculations <- rbindlist(kinship_calculations)
-  row <- cbind(row, kinship_calculations)
-  return(row)
+  cbind(row, kinship_calculations)
 }
 
 process_loci <- function(row, allele_frequency_data, kinship_matrix) {
