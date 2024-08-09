@@ -278,7 +278,7 @@ fert_df2 <- fert_df2 %>%count(RACE, chborn_num, Age_bin, YEAR) %>%
 
 ```{r}
 df_age <- fert_df2 %>%
-  group_by(Age_bin, RACE) %>%
+  group_by(Age_bin, RACE, YEAR) %>%
   mutate(total_counts = sum(freq_mother),
          normalized_freq = freq_mother / total_counts)
 
