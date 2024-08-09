@@ -6,11 +6,21 @@ library(future)
 library(parallel)
 
 # Set up cluster
-cl <- makeCluster(availableCores())
-plan(cluster, workers = cl)
-
-# Ensure the cluster is stopped when the script exits
-on.exit(parallel::stopCluster(cl))
+# For on one machine if not using cluster
+if(!exists("use_remote_cluster")){ #Add this parameter to run script
+  use_remote_cluster<-0
+} 
+if(use_remote_cluster==0){
+  if( .Platform$OS.type == "windows" ){
+    cl <- makeCluster(availableCores())  #specify how many cores to use
+  } else { # use the fork cluster type on linux because its faster- not available for windows
+    cl <- makeCluster(availableCores(),type="FORK")  #specify how many cores to use
+  } 
+  # Ensure the cluster is stopped when the script exits
+  on.exit(parallel::stopCluster(cl))
+} else { #if sending to remote cluster(s)
+  plan(cluster, workers = clustername1) #use URL if using an online cluster, multiple clusters can also be specified here  
+} 
 
 # Helper function for logging
 log_message <- function(message) {
@@ -23,7 +33,7 @@ slurm_job_id <- as.character(args[1])
 
 # Create output folder with SLURM job ID
 output_dir <- file.path("output", paste0("simulation_", slurm_job_id))
-dir.create(output_dir, recursive = TRUE)
+dir.create(output_dir, recursive = TRUE, overwrite=FALSE)
 
 output_file <- file.path(output_dir, "sim_processed_genotypes.csv")
 summary_output_file <- file.path(output_dir, "sim_summary_genotypes.csv")
@@ -43,9 +53,7 @@ log_message(paste("Loaded allele frequencies data in", allele_freq_time["elapsed
 
 # Extract unique loci
 log_message("Extracting unique loci...")
-loci_list <- df_allelefreq |> 
-  pull(marker) |> 
-  unique()
+loci_list <- unique(df_allelefreq$marker)
 
 # Load Core Loci Data
 log_message("Loading core loci data...")
@@ -90,9 +98,7 @@ populations_list <- levels(population_labels$population)
 calculate_likelihood_ratio <- function(shared_alleles, genotype_match = NULL, pA = NULL, pB = NULL, k0, k1, k2) {
   if (shared_alleles == 0) {
     LR <- k0
-    return(LR)
-  }
-  if (shared_alleles == 1) {
+  } else if (shared_alleles == 1) {
     if (genotype_match == "AA-AA") {
       Rxp <- pA
     } else if (genotype_match == "AA-AB" | genotype_match == "AB-AA") {
@@ -105,9 +111,7 @@ calculate_likelihood_ratio <- function(shared_alleles, genotype_match = NULL, pA
       stop("Invalid genotype match for 1 shared allele.")
     }
     LR <- k0 + (k1 / Rxp)
-    return(LR)
-  }
-  if (shared_alleles == 2) {
+  } else if (shared_alleles == 2) {
     if (genotype_match == "AA-AA") {
       Rxp <- pA
       Rxu <- pA^2
@@ -117,9 +121,11 @@ calculate_likelihood_ratio <- function(shared_alleles, genotype_match = NULL, pA
     } else {
       stop("Invalid genotype match for 2 shared alleles.")
     }
-    LR <- k0 + (k1 / Rxp) + (k2 / Rxu)
-    return(LR)
-  }
+    LR <- k0 + (k1 / Rxp) + (k2 / Rxu)    
+  } else {
+    LR<- NA
+  }  
+  return(LR)
 }
 
 kinship_calculation <- function(row, allele_frequency_data, kinship_matrix) {
