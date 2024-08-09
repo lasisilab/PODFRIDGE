@@ -164,7 +164,7 @@ initialize_individuals_pair <- function(population, relationship_type, sim_id, l
 }
 
 simulate_genotypes <- function(row, df_allelefreq, kinship_matrix) {
-  population <- row$population
+
   population_type <- row$population
   locus <- row$locus
   relationship <- row$relationship_type
