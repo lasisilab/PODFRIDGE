@@ -9,7 +9,11 @@ suppressMessages(suppressWarnings({
 
 #Set options for run- this will ultimately be parameterised and sit in the primary run script
 #(The following lines to set variables are temporary for testing and will not remain in this script)
-use_remote_cluster<-1 #If sending to external cluster (use 0 for tests on one machine)
+
+if(!exists("use_remote_cluster")){ #Add this parameter to the run script
+  use_remote_cluster<-0
+} 
+use_remote_cluster<-0 #If sending to external cluster (use 0 for tests on one machine)
 
 # Set up cluster on one machine if required
 if(use_remote_cluster==0){
@@ -17,13 +21,13 @@ if(use_remote_cluster==0){
     cl <- makeCluster(availableCores())  #specify how many cores to use
   } else { # use the fork cluster type on linux because its faster- not available for windows
     cl <- makeCluster(availableCores(),type="FORK")  #specify how many cores to use
-  } 
+  }
   # Ensure the cluster is stopped when the script exits
-  on.exit(parallel::stopCluster(cl))
+ # on.exit(parallel::stopCluster(cl))
   plan(cluster, workers = cl)
-} else {
-  plan(cluster, workers = c("clustername1", "clustername2", "server.remote.org- if using an online cluster", "etc"))  
-}  
+} else { #if sending to remote cluster(s)
+  plan(cluster, workers = ("clustername1")) #use syntax "server.remote.org" in workers if using an online cluster
+} 
 
 #plan() options:
 #use 'multisession' to run in parallel in separate R sessions on the same machine
@@ -66,7 +70,7 @@ job_id <- as.character(args[3])
 
 # Create output folder with job ID
 output_dir <- file.path("data", "sims", paste0("simulation_", job_id))
-dir.create(output_dir, recursive = TRUE)
+dir.create(output_dir, recursive = TRUE, overwrite=FALSE)
 
 output_file <- file.path(output_dir, "processed_genotypes.csv")
 timing_log_file <- file.path(output_dir, "timing_log.csv")
