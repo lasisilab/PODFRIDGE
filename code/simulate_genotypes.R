@@ -70,7 +70,7 @@ job_id <- as.character(args[3])
 
 # Create output folder with job ID
 output_dir <- file.path("data", "sims", paste0("simulation_", job_id))
-dir.create(output_dir, recursive = TRUE, overwrite=FALSE)
+dir.create(output_dir, recursive = TRUE)
 
 output_file <- file.path(output_dir, "processed_genotypes.csv")
 timing_log_file <- file.path(output_dir, "timing_log.csv")
