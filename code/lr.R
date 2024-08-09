@@ -33,7 +33,7 @@ slurm_job_id <- as.character(args[1])
 
 # Create output folder with SLURM job ID
 output_dir <- file.path("output", paste0("simulation_", slurm_job_id))
-dir.create(output_dir, recursive = TRUE, overwrite=FALSE)
+dir.create(output_dir, recursive = TRUE)
 
 output_file <- file.path(output_dir, "sim_processed_genotypes.csv")
 summary_output_file <- file.path(output_dir, "sim_summary_genotypes.csv")
