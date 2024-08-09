@@ -71,17 +71,29 @@ data <- data %>%
     variable_detailed = case_when(
       variable_type == "race" & grepl("\\basian\\b", variable_detailed, ignore.case = TRUE) ~ "asian_total",
       variable_type == "race" & grepl("\\bblack\\b", variable_detailed, ignore.case = TRUE) ~ "black_total",
+      variable_type == "race" & grepl("\\bafrican_american\\b", variable_detailed, ignore.case = TRUE) ~ "black_total",
+      variable_type == "race" & grepl("\\bblack_\\b", variable_detailed, ignore.case = TRUE) ~ "black_total",
       variable_type == "race" & grepl("\\bhispanic\\b", variable_detailed, ignore.case = TRUE) ~ "hispanic_total",
+      variable_type == "race" & grepl("\\bhispanic_\\b", variable_detailed, ignore.case = TRUE) ~ "hispanic_total",
       variable_type == "race" & grepl("\\bnative\\b", variable_detailed, ignore.case = TRUE) ~ "native_american_total",
+      variable_type == "race" & grepl("\\bamerican_indian\\b", variable_detailed, ignore.case = TRUE) ~ "native_american_total",
+       variable_type == "race" & grepl("\\bnative_american\\b", variable_detailed, ignore.case = TRUE) ~ "native_american_total",
       variable_type == "race" & grepl("\\bwhite\\b", variable_detailed, ignore.case = TRUE) ~ "white_total",
+      variable_type == "race" & grepl("\\bcausasian\\b", variable_detailed, ignore.case = TRUE) ~ "white_total",
+      variable_type == "race" & grepl("\\bcausasian_\\b", variable_detailed, ignore.case = TRUE) ~ "white_total",
       variable_type == "race" & grepl("\\bother\\b", variable_detailed, ignore.case = TRUE) ~ "other_total",
       variable_type == "race" & grepl("\\basian_offender\\b", variable_detailed, ignore.case = TRUE) ~ "asian_convicted_offender",
       variable_type == "race" & grepl("\\bblack_offender\\b", variable_detailed, ignore.case = TRUE) ~ "black_convicted_offender",
       variable_type == "race" & grepl("\\bhispanic_offender\\b", variable_detailed, ignore.case = TRUE) ~ "hispanic_convicted_offender",
       variable_type == "race" & grepl("\\bnative_american_offender\\b", variable_detailed, ignore.case = TRUE) ~ "native_american_convicted_offender",
       variable_type == "race" & grepl("\\bwhite_offender\\b", variable_detailed, ignore.case = TRUE) ~ "white_convicted_offender",
+      variable_type == "race" & grepl("\\bcaucasian_offender\\b", variable_detailed, ignore.case = TRUE) ~ "white_convicted_offender",
+      variable_type == "race" & grepl("\\bcaucasian_convicted_offender\\b", variable_detailed, ignore.case = TRUE) ~ "white_convicted_offender",
       variable_type == "race" & grepl("\\bother_offender\\b", variable_detailed, ignore.case = TRUE) ~ "other_convicted_offender",
-      variable_type == "race" & grepl("\\bafrican_american_offender\\b", variable_detailed, ignore.case = TRUE) ~ "african_american_convicted_offender",
+      variable_type == "race" & grepl("\\bafrican_american__convicted_offender\\b", variable_detailed, ignore.case = TRUE) ~ "black_convicted_offender",
+      variable_type == "race" & grepl("\\bafrican_american_offender\\b", variable_detailed, ignore.case = TRUE) ~ "black_convicted_offender",
+      variable_type == "race" & grepl("\\bafrican_american_arrestee\\b", variable_detailed, ignore.case = TRUE) ~ "black_arrestee",
+      variable_type == "race" & grepl("\\bcaucasian_arrestee\\b", variable_detailed, ignore.case = TRUE) ~ "white_arrestee",
       TRUE ~ variable_detailed
     ))
     
@@ -196,6 +208,19 @@ data <- data %>%
 ```
 
 ```{r}
+incorrect_entries <- data_race |> 
+  filter(!variable_detailed %in% c("asian_total", "black_total", "hispanic_total", "native_american_total", "white_total", "other_total", "unknown",
+      "asian_convicted_offender", "black_convicted_offender", "hispanic_convicted_offender", "native_american_convicted_offender", "white_convicted_offender", "other_convicted_offender",
+      "asian_arrestee", "black_arrestee", "hispanic_arrestee", "native_american_arrestee", "white_arrestee", "other_arrestee",
+      "asian_annual", "black_annual", "hispanic_annual", "native_american_annual", "white_annual", "other_annual",
+      "asian_state", "black_state", "hispanic_state", "native_american_state", "white_state", "other_state",
+      "asian_pop_collected", "black_pop_collected", "hispanic_pop_collected", "native_american_pop_collected", "white_pop_collected", "other_pop_collected"))
+
+# View incorrect entries
+print(incorrect_entries)
+```
+
+```{r}
 write.csv(data, "data/murphy_foia_cleaned.csv")
 ```
 
@@ -260,7 +285,7 @@ selected_colors <- wes_palette("Moonrise3")[c(2, 3, 5)]
 ggplot(data_gender_simplified, aes(x = State, y = total_value, fill = simplified_sex)) +
   geom_bar(stat = "identity") +  # Stacked bar chart by default
   scale_fill_manual(values = selected_colors) +  # color palette
-  labs(y = "Proportion", x = "State", title = "Gender Distribution by State", fill = "Sex") +
+  labs(y = "Proportion", x = "State", title = "NDIS Gender Distribution by State", fill = "Sex") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
@@ -270,14 +295,17 @@ ggplot(data_gender_simplified, aes(x = State, y = total_value, fill = simplified
 data_race <- data |> 
   filter(variable_type == "race")
 
-data_race_proportions <- data_race  |> 
-  group_by(State, variable_type, value_type) |>   # Group by relevant columns
-  mutate(proportion = value / sum(value)) |>      # Calculate proportion
-  ungroup() |>                                    # Ungroup to prevent grouping in the output
-  select(-value, -value_type)|>                   # remove the value and value_type columns
-  rename(proportion_value = proportion)           # Rename the new proportion column
+data_race_proportions <- data_race |> 
+  group_by(State) |> 
+  mutate(proportion_value = ifelse(value_type == "number", value / sum(value), NA))
+
+# Combine original proportions with newly calculated ones
+data_race_proportions <- data_race_proportions |> 
+  mutate(proportion_value = ifelse(is.na(proportion_value), value, proportion_value)) |> 
+  select(-value_type)  
 
 ```
+
 
 ```{r}
 data_offender_type <- data |> 
@@ -314,7 +342,7 @@ data_offender_type_summarized <- data_offender_type_summarized |>
 ggplot(data_offender_type_summarized, aes(x = "", y = total_value, fill = variable_detailed)) +
   geom_bar(stat = "identity", width = 1) +
   coord_polar("y") +  # Converts bar chart to pie chart
-  labs(title = "Distribution of Offender Types", caption = "Data from California, Indiana, Texas, and Nevada", fill = "Offender Type") +
+  labs(title = "NDIS Distribution of Offender Types", caption = "Data from California, Indiana, Texas, and Nevada", fill = "Offender Type") +
   geom_text(aes(label = label), position = position_stack(vjust = 0.5)) +
   theme_minimal() +
   theme(axis.title.x = element_blank(),
