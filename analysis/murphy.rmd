@@ -12,6 +12,7 @@ editor_options:
 knitr::opts_chunk$set(eval = TRUE, echo = FALSE, warning = FALSE, fig.width = 7, fig.height = 6)
 
 library(tidyverse)
+library(wesanderson)
 ```
 
 ```{r}
@@ -224,4 +225,109 @@ california_totals <- california_totals |>
     value_type = "proportion"
   )
 ```
+
+```{r}
+#create a dataset with gender values as proportions only
+data_gender_proportions <- data_gender  |> 
+  group_by(State, variable_type, value_type) |>   # Group by relevant columns
+  mutate(proportion = value / sum(value)) |>      # Calculate proportion
+  ungroup() |>                                    # Ungroup to prevent grouping in the output
+  select(-value, -value_type)|>                   # remove the value and value_type columns
+  rename(proportion_value = proportion)           # Rename the new proportion column
+
+
+data_gender_simplified <- data_gender_proportions |> 
+  mutate(
+ simplified_sex = case_when(
+      str_detect(variable_detailed, "\\bmale\\b") ~ "male",
+      str_detect(variable_detailed, "\\bmale_total\\b") ~ "male",
+      str_detect(variable_detailed, "\\bmale_convicted_offender\\b") ~ "male",
+      str_detect(variable_detailed, "\\bmale_arrestee\\b") ~ "male",
+      str_detect(variable_detailed, "\\bfemale_total\\b") ~ "female",
+      str_detect(variable_detailed, "\\bfemale_convicted_offender\\b") ~ "female",
+      str_detect(variable_detailed, "\\bfemale_offender\\b") ~ "female",
+      str_detect(variable_detailed, "\\bfemale_arrestee\\b") ~ "female",
+      str_detect(variable_detailed, "\\bfemale\\b") ~ "female",
+      TRUE ~ "unknown"
+    )
+  ) |> 
+  group_by(State, simplified_sex) |> 
+  summarize(total_value = sum(proportion_value), .groups = 'drop')
+
+selected_colors <- wes_palette("Moonrise3")[c(2, 3, 5)]
+
+#stacked bar chart simplified
+ggplot(data_gender_simplified, aes(x = State, y = total_value, fill = simplified_sex)) +
+  geom_bar(stat = "identity") +  # Stacked bar chart by default
+  scale_fill_manual(values = selected_colors) +  # color palette
+  labs(y = "Proportion", x = "State", title = "Gender Distribution by State", fill = "Sex") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+```{r}
+data_race <- data |> 
+  filter(variable_type == "race")
+
+data_race_proportions <- data_race  |> 
+  group_by(State, variable_type, value_type) |>   # Group by relevant columns
+  mutate(proportion = value / sum(value)) |>      # Calculate proportion
+  ungroup() |>                                    # Ungroup to prevent grouping in the output
+  select(-value, -value_type)|>                   # remove the value and value_type columns
+  rename(proportion_value = proportion)           # Rename the new proportion column
+
+```
+
+```{r}
+data_offender_type <- data |> 
+  filter(variable_type == "offender_type")
+
+
+#pie chart of offender type
+
+palette <- wes_palette("GrandBudapest2", 3, type = "discrete")
+
+# Rename the offender types
+data_offender_type_renamed <- data_offender_type |> 
+  mutate(variable_detailed = case_when(
+    variable_detailed == "arrestee_total" ~ "Arrestee",
+    variable_detailed == "convicted_offender_total" ~ "Convicted Offender",
+    TRUE ~ variable_detailed
+  ))
+
+# Filter and group by offender type, then summarize
+data_offender_type_summarized <- data_offender_type_renamed |> 
+  filter(variable_detailed %in% c("Arrestee", "Convicted Offender")) |> 
+  group_by(variable_detailed) |> 
+  summarize(total_value = sum(value, na.rm = TRUE))
+
+# Calculate total sum of the summarized data
+full_value <- sum(data_offender_type_summarized$total_value, na.rm = TRUE)
+
+# Calculate percentages and create labels
+data_offender_type_summarized <- data_offender_type_summarized |> 
+  mutate(percentage = total_value / full_value * 100,
+         label = paste0(round(percentage, 1), "%"))
+
+# Create the pie chart
+ggplot(data_offender_type_summarized, aes(x = "", y = total_value, fill = variable_detailed)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar("y") +  # Converts bar chart to pie chart
+  labs(title = "Distribution of Offender Types", caption = "Data from California, Indiana, Texas, and Nevada", fill = "Offender Type") +
+  geom_text(aes(label = label), position = position_stack(vjust = 0.5)) +
+  theme_minimal() +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.ticks = element_blank(),
+        axis.text = element_blank()) +
+  scale_fill_manual(values = palette)
+
+```
+
+```{r}
+
+
+```
+
 
