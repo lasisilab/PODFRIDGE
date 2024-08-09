@@ -8,10 +8,11 @@ suppressMessages(suppressWarnings({
   library(parallel)
 }))
 
-# Set up cluster on one machine if not using cluster
-if(!exists("use_remote_cluster")){ #Add this parameter to run script
-  use_remote_cluster<-0
-} 
+#Set options for run- this will ultimately be parameterised and sit in the primary run script
+#(The following lines to set variables are temporary for testing and will not remain in this script)
+use_remote_cluster<-0 #If sending to external cluster (use 0 for tests on one machine)
+
+# Set up cluster on one machine if required
 if(use_remote_cluster==0){
   if( .Platform$OS.type == "windows" ){
     cl <- makeCluster(availableCores())  #specify how many cores to use
@@ -22,11 +23,13 @@ if(use_remote_cluster==0){
   on.exit(parallel::stopCluster(cl))
   plan(cluster, workers = cl)
 } else { #if sending to remote cluster(s)
-  plan(cluster, workers = clustername1) #use URL if using an online cluster, multiple clusters can also be specified here  
+  plan(cluster, workers = c("clustername1", "clustername2", "server.remote.org- if using an online cluster", "etc"))  
 }  
 
-#plan() options: 'multisession' to run in parallel in separate R sessions on the same machine, 
-#'multicore' to run in parallel in forked processes on the same machine- Linux/Mac only, 'cluster' to run in parallel on one or more machines
+#plan() options:
+#use 'multisession' to run in parallel in separate R sessions on the same machine
+#use 'multicore' to run futures in parallel in forked processes on the same machine- Linux only
+#use 'cluster' to run in parallel on one or more machines
 
 # Helper function for logging
 log_message <- function(message) {
@@ -172,6 +175,23 @@ generate_simulation_setup <- function(kinship_matrix, population_list, num_relat
       ))
     }
   }
+  return(simulation_setup)
+}
+generate_simulation_setup2 <- function(kinship_matrix, population_list, num_related, num_unrelated) {
+  simulation_setup <- data.frame(
+    population = character(),
+    relationship_type = character(),
+    num_simulations = integer(),
+    stringsAsFactors = FALSE
+  )
+  simulation_setup<-foreach(population = population_list,.combine="rbind") %:% {
+    foreach (relationship = kinship_matrix$relationship_type) %dopar% {
+      num_simulations <- ifelse(relationship == "unrelated", num_unrelated, num_related)
+      simulation_setup <- data.frame(c(population,relationship,num_simulations))
+      ))
+    }
+  }  
+  names(simulation_setup)[2]<-relationship_type
   return(simulation_setup)
 }
 
@@ -327,7 +347,7 @@ process_individuals_genotypes <- function(individuals_genotypes, df_allelefreq, 
 }
 
 calculate_combined_lrs <- function(final_results, loci_lists) {
-  class(final_results)<-"data.table"
+  final_results <- as.data.table(final_results)
   combined_lrs <- final_results[, .(
     core_13 = prod(LR[locus %in% loci_lists$core_13], na.rm = TRUE),
     identifiler_15 = prod(LR[locus %in% loci_lists$identifiler_15], na.rm = TRUE),
@@ -500,10 +520,10 @@ calculate_proportions_exceeding_cutoffs <- function(input_df, cutoffs) {
 process_simulation_setup <- function(simulation_setup, df_allelefreq, kinship_matrix, loci_list, loci_lists, output_file, summary_output_file) {
   log_message("Processing simulation setup...")
   process_time <- system.time({
-  final_results <- simulation_setup |>
+    final_results <- simulation_setup |>
       future_pmap_dfr(function(population, relationship_type, num_simulations) {
-        purrr::map_dfr(.x=1:num_simulations, function(.x) {
-          individuals_genotypes <- initialize_individuals_pair(population, relationship_type, .x, loci_list)
+        purrr::map_dfr(1:num_simulations, function(sim_id) {
+          individuals_genotypes <- initialize_individuals_pair(population, relationship_type, sim_id, loci_list)
           processed_genotypes <- log_function_time(process_individuals_genotypes, "process_individuals_genotypes", individuals_genotypes, df_allelefreq, kinship_matrix)
           return(processed_genotypes)
         })
@@ -540,7 +560,13 @@ process_simulation_setup <- function(simulation_setup, df_allelefreq, kinship_ma
 }
 
 # Execute Simulation Setup and Processing
+
+                                 bench::mark(
 simulation_setup <- log_function_time(generate_simulation_setup, "generate_simulation_setup", kinship_matrix, populations_list, n_sims_related, n_sims_unrelated)
+                                   )
+                                 bench::mark(
+simulation_setup2 <- log_function_time(generate_simulation_setup2, "generate_simulation_setup2", kinship_matrix, populations_list, n_sims_related, n_sims_unrelated)
+                                   )
 log_function_time(process_simulation_setup, "process_simulation_setup", simulation_setup, df_allelefreq, kinship_matrix, loci_list, loci_lists, output_file, summary_output_file)
 log_message("Simulation setup and processing completed.")
 

@@ -6,8 +6,23 @@ library(future)
 library(parallel)
 
 # Set up cluster
-cl <- makeCluster(availableCores())
-plan(cluster, workers = cl)
+
+# For on one machine if not using cluster
+if(!exists("use_remote_cluster")){ #Add this parameter to run script
+  use_remote_cluster<-0
+} 
+if(use_remote_cluster==0){
+  if( .Platform$OS.type == "windows" ){
+    cl <- makeCluster(availableCores())  #specify how many cores to use
+  } else { # use the fork cluster type on linux because its faster- not available for windows
+    cl <- makeCluster(availableCores(),type="FORK")  #specify how many cores to use
+  } 
+  plan(cluster, workers=cl)
+  # Ensure the cluster is stopped when the script exits
+  on.exit(parallel::stopCluster(cl))
+} else { #if sending to remote cluster(s)
+  plan(cluster, workers = clustername1) #use URL if using an online cluster, multiple clusters can also be specified here  
+} 
 
 # Ensure the cluster is stopped when the script exits
 on.exit(parallel::stopCluster(cl))
@@ -81,8 +96,11 @@ populations_list <- levels(population_labels$population)
 
 # Functions
 calculate_likelihood_ratio <- function(shared_alleles, genotype_match, pA, pB, k_values) {
-  if (shared_alleles == 0) return(k_values$k0)
-  if (shared_alleles == 1) {
+
+  if (shared_alleles == 0) {
+    return(k_values$k0)
+  } else if (shared_alleles == 1) {
+
     Rxp <- switch(genotype_match,
                   "AA-AA" = pA,
                   "AA-AB" = 2 * pA,
@@ -92,8 +110,8 @@ calculate_likelihood_ratio <- function(shared_alleles, genotype_match, pA, pB, k
                   stop("Invalid genotype match for 1 shared allele.")
     )
     return(k_values$k0 + (k_values$k1 / Rxp))
-  }
-  if (shared_alleles == 2) {
+
+  } else if (shared_alleles == 2) {
     Rxp <- switch(genotype_match,
                   "AA-AA" = pA,
                   "AB-AB" = (4 * pA * pB) / (pA + pB),
@@ -101,7 +119,12 @@ calculate_likelihood_ratio <- function(shared_alleles, genotype_match, pA, pB, k
     )
     Rxu <- ifelse(genotype_match == "AA-AA", pA^2, 2 * pA * pB)
     return(k_values$k0 + (k_values$k1 / Rxp) + (k_values$k2 / Rxu))
+  } else {
+    return(NA)
+  }  
+
   }
+
 }
 
 
