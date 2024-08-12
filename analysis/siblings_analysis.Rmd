@@ -340,7 +340,8 @@ p <- p + geom_col(data = df_50_60_1960_w, aes(x = x_axis, y = norm_freq, fill = 
        y = "Normalized frequency") +
   theme_minimal() +
   theme(legend.position = "right",
-        plot.title = element_text(size = 10, hjust = 0.5))
+        plot.title = element_text(size = 10, hjust = 0.5), 
+        legend.key.size = unit(4, "mm"))
 
 # Print the plot
 print(p)
