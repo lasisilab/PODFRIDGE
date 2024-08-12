@@ -313,19 +313,23 @@ df_50_60_1960_w <- filter(df_50_60_1960, RACE == "White")
 
 
 ```{r}
-# Base plot with Black/African American data
+# Define color gradients for Black and White populations
+black_color_mapping <- colorRampPalette(c("lightpink", "red", "darkred"))(length(unique(df_50_60_1960_b$color_order)))
+white_color_mapping <- colorRampPalette(c("lightblue", "blue", "darkblue"))(length(unique(df_50_60_1960_w$color_order)))
+
+# Base plot with Black/African American data using red gradient
 p <- ggplot(df_50_60_1960_b, aes(x = x_axis, y = norm_freq, fill = color_order)) +
-  geom_col(alpha = 0.5) +  # Make bars semi-transparent
+  geom_col(alpha = 0.7) +  # Adjust alpha for visibility
   scale_fill_manual(name = "Number of Children/Siblings (Black/African American)",
-                    values = color_mapping,
+                    values = black_color_mapping,
                     labels = unique(df_50_60_1960_b$color.label),
                     guide = "legend") +
   new_scale_fill()  # Initiate a new fill scale
 
-# Add overlaying bars for White data
+# Add overlaying bars for White data using blue gradient
 p <- p + geom_col(data = df_50_60_1960_w, aes(x = x_axis, y = norm_freq, fill = color_order), alpha = 0.5) +
   scale_fill_manual(name = "Number of Children/Siblings (White)",
-                    values = color_mapping,
+                    values = white_color_mapping,
                     labels = unique(df_50_60_1960_w$color.label),
                     guide = "legend") +
   facet_grid(frequency_type ~ .,  # Use only rows for faceting
@@ -333,18 +337,18 @@ p <- p + geom_col(data = df_50_60_1960_w, aes(x = x_axis, y = norm_freq, fill = 
              labeller = labeller(frequency_type = c("freq_mother" = "Number of Children Born", 
                                                     "freq_n_sib" = "Number of Siblings"))) +
   scale_y_continuous(labels = comma_format(scale = 1, big.mark = ",")) +
-  labs(title = "Distribution of Number of Children/Siblings by Census Year",
+  labs(title = "Distribution of Number of Children/Siblings by RACE",
        x = "Number of Children/Siblings",
-       y = "Frequency") +
+       y = "Normalized frequency") +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1),
-        legend.position = "right",
+  theme(legend.position = "right",
         plot.title = element_text(size = 10, hjust = 0.5))
 
 # Print the plot
 print(p)
 
 ```
+
 
 ### Plot for 1970
 
