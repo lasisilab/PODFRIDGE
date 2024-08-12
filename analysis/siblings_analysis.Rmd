@@ -309,33 +309,31 @@ df_50_60_1960 <- df_50_60 %>%
 ```{r}
 df_50_60_1960_b <- filter(df_50_60_1960, RACE == "Black/African American")
 df_50_60_1960_w <- filter(df_50_60_1960, RACE == "White")
+# Define color gradients for Black and White populations
+black_color_mapping <- colorRampPalette(c("lightpink", "red", "darkred"))(length(unique(df_50_60_1960_b$color_order)))
+white_color_mapping <- colorRampPalette(c("lightblue", "blue", "darkblue"))(length(unique(df_50_60_1960_w$color_order)))
 ```
 
 
 ```{r}
-# Define color gradients for Black and White populations
-black_color_mapping <- colorRampPalette(c("lightpink", "red", "darkred"))(length(unique(df_50_60_1960_b$color_order)))
-white_color_mapping <- colorRampPalette(c("lightblue", "blue", "darkblue"))(length(unique(df_50_60_1960_w$color_order)))
-
 # Base plot with Black/African American data using red gradient
 p <- ggplot(df_50_60_1960_b, aes(x = x_axis, y = norm_freq, fill = color_order)) +
   geom_col(alpha = 0.7) +  # Adjust alpha for visibility
-  scale_fill_manual(name = "Number of Children/Siblings (Black/African American)",
-                    values = black_color_mapping,
+  scale_fill_manual(name = "Number of Children/Siblings (Black/African American)", values = black_color_mapping,
                     labels = unique(df_50_60_1960_b$color.label),
                     guide = "legend") +
   new_scale_fill()  # Initiate a new fill scale
+```
 
+
+```{r}
 # Add overlaying bars for White data using blue gradient
 p <- p + geom_col(data = df_50_60_1960_w, aes(x = x_axis, y = norm_freq, fill = color_order), alpha = 0.5) +
   scale_fill_manual(name = "Number of Children/Siblings (White)",
                     values = white_color_mapping,
                     labels = unique(df_50_60_1960_w$color.label),
                     guide = "legend") +
-  facet_grid(frequency_type ~ .,  # Use only rows for faceting
-             scales = "free_y",   # Allow each plot to have its own y-axis scale
-             labeller = labeller(frequency_type = c("freq_mother" = "Number of Children Born", 
-                                                    "freq_n_sib" = "Number of Siblings"))) +
+  facet_grid(frequency_type ~ ., scales = "free_y", labeller = labeller(frequency_type = c("freq_mother" = "Number of Children Born", "freq_n_sib" = "Number of Siblings"))) +
   scale_y_continuous(labels = comma_format(scale = 1, big.mark = ",")) +
   labs(title = "Distribution of Number of Children/Siblings by RACE",
        x = "Number of Children/Siblings",
