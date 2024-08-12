@@ -7,13 +7,9 @@ suppressMessages(suppressWarnings({
   library(parallel)
 }))
 
-#Set options for run- this will ultimately be parameterised and sit in the primary run script
-#(The following lines to set variables are temporary for testing and will not remain in this script)
-
 if(!exists("use_remote_cluster")){ #Add this parameter to the run script
   use_remote_cluster<-0
-} 
-use_remote_cluster<-0 #If sending to external cluster (use 0 for tests on one machine)
+} #Use 0 if sending to external cluster (use 0 for tests on one machine)
 
 # Set up cluster on one machine if required
 if(use_remote_cluster==0){
@@ -23,12 +19,13 @@ if(use_remote_cluster==0){
     cl <- makeCluster(availableCores(),type="FORK")  #specify how many cores to use
   }
   # Ensure the cluster is stopped when the script exits
- # on.exit(parallel::stopCluster(cl))
+  on.exit(parallel::stopCluster(cl))
   plan(cluster, workers = cl)
 } else { #if sending to remote cluster(s)
   plan(cluster, workers = ("clustername1")) #use syntax "server.remote.org" in workers if using an online cluster
 } 
 
+#plan(sequential) #Use for time comparison purposes only
 #plan() options:
 #use 'multisession' to run in parallel in separate R sessions on the same machine
 #use 'multicore' to run futures in parallel in forked processes on the same machine- Linux only
@@ -117,12 +114,6 @@ populations_list <- levels(population_labels$population)
 
 # Functions
 generate_simulation_setup <- function(kinship_matrix, population_list, num_related, num_unrelated) {
-  #simulation_setup <- data.frame(
-  #  population = character(),
-  #  relationship_type = character(),
-  #  num_simulations = integer(),
-  #  stringsAsFactors = FALSE
-  #)
   simulation_setup <- data.table(
     population = character(),
     relationship_type = character(),
@@ -164,17 +155,19 @@ initialize_individuals_pair <- function(population, relationship_type, sim_id, l
 }
 
 simulate_genotypes <- function(row, df_allelefreq, kinship_matrix) {
-
+  population <- row$population
   population_type <- row$population
   locus <- row$locus
   relationship <- row$relationship_type
-
- # allele_freqs <- df_allelefreq |>
-#   filter(population == !!population, marker == !!locus, frequency > 0)
   
+  # allele_freqs <- df_allelefreq |>
+  #   filter(population == !!population, marker == !!locus, frequency > 0)
+  
+  allele_freqs <- df_allelefreq[which(df_allelefreq$population == population & df_allelefreq$marker == locus),]
   allele_freqs <- df_allelefreq[which(df_allelefreq$population == population_type & df_allelefreq$marker == locus),]
   
   if (nrow(allele_freqs) == 0) {
+    stop(paste("No valid alleles found for population", population, "and locus", locus))
     stop(paste("No valid alleles found for population", population_type, "and locus", locus))
   }
   
@@ -220,7 +213,7 @@ process_individuals_genotypes <- function(individuals_genotypes, df_allelefreq, 
       return(res$result)
     }, seed = TRUE) |>
     bind_rows()
-  
+ # print(head(final_individuals_genotypes))
   return(final_individuals_genotypes)
 }
 
@@ -261,4 +254,5 @@ timing_log_df <- tibble(
   avg_time = sapply(timing_log, function(x) x$total / x$count)
 )
 
-write_csv(timing_log_df, timing_log_file)
+readr::write_csv(timing_log_df, path=timing_log_file)
+print(paste0("Timing log written to ",timing_log_file))
