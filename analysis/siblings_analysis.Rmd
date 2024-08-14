@@ -322,23 +322,111 @@ ggplot(subset(df_50_60_1960, frequency_type == "freq_n_sib"), aes(x = n_sib, y =
 
 
 ### Plot for 1970
+```{r}
+df_50_60_1970 <- df_50_60 %>%
+  filter(YEAR == "1970")
+
+ggplot(subset(df_50_60_1970, frequency_type == "freq_mother"), aes(x = chborn_num, y = norm_freq, fill = RACE)) +
+  geom_bar(stat="identity",position = "identity",alpha = 0.4) + 
+  labs(title = "Comparison of Number of Children by RACE in 1970(Mother Aged 50-60)",
+       x = "Number of Children",
+       y = "Normalized Frequency")  +
+  theme_minimal()+
+  theme(plot.title = element_text(size = 10, hjust = 0.5))
+
+
+```
+
+```{r}
+ggplot(subset(df_50_60_1970, frequency_type == "freq_n_sib"), aes(x = n_sib, y = norm_freq, fill = RACE)) +
+  geom_bar(stat="identity",position = "identity",alpha = 0.4) + 
+  labs(title = "Comparison of Number of Siblings by RACE in 1970(Mother Aged 50-60)",
+       x = "Number of Siblings",
+       y = "Normalized Frequency")  +
+  theme_minimal()+
+  theme(plot.title = element_text(size = 10, hjust = 0.5))
+```
+
 
 ### Plot for 1980
+```{r}
+df_50_60_1980 <- df_50_60 %>%
+  filter(YEAR == "1980")
+
+ggplot(subset(df_50_60_1980, frequency_type == "freq_mother"), aes(x = chborn_num, y = norm_freq, fill = RACE)) +
+  geom_bar(stat="identity",position = "identity",alpha = 0.4) + 
+  labs(title = "Comparison of Number of Children by RACE in 1980(Mother Aged 50-60)",
+       x = "Number of Children",
+       y = "Normalized Frequency")  +
+  theme_minimal()+
+  theme(plot.title = element_text(size = 10, hjust = 0.5))
+
+
+```
+
+```{r}
+ggplot(subset(df_50_60_1980, frequency_type == "freq_n_sib"), aes(x = n_sib, y = norm_freq, fill = RACE)) +
+  geom_bar(stat="identity",position = "identity",alpha = 0.4) + 
+  labs(title = "Comparison of Number of Siblings by RACE in 1980(Mother Aged 50-60)",
+       x = "Number of Siblings",
+       y = "Normalized Frequency")  +
+  theme_minimal()+
+  theme(plot.title = element_text(size = 10, hjust = 0.5))
+```
+
 
 ### Plot for 1990
+```{r}
+df_50_60_1990 <- df_50_60 %>%
+  filter(YEAR == "1990")
+
+ggplot(subset(df_50_60_1990, frequency_type == "freq_mother"), aes(x = chborn_num, y = norm_freq, fill = RACE)) +
+  geom_bar(stat="identity",position = "identity",alpha = 0.4) + 
+  labs(title = "Comparison of Number of Children by RACE in 1990(Mother Aged 50-60)",
+       x = "Number of Children",
+       y = "Normalized Frequency")  +
+  theme_minimal()+
+  theme(plot.title = element_text(size = 10, hjust = 0.5))
+
+
+```
+
+```{r}
+ggplot(subset(df_50_60_1990, frequency_type == "freq_n_sib"), aes(x = n_sib, y = norm_freq, fill = RACE)) +
+  geom_bar(stat="identity",position = "identity",alpha = 0.4) + 
+  labs(title = "Comparison of Number of Siblings by RACE in 1990(Mother Aged 50-60)",
+       x = "Number of Siblings",
+       y = "Normalized Frequency")  +
+  theme_minimal()+
+  theme(plot.title = element_text(size = 10, hjust = 0.5))
+```
+
 
 ## 5.Distribution of Number of Children by Age, Year and RACE
 
 ```{r}
 df_age <- fert_df2 %>%
   group_by(Age_bin, RACE, YEAR) %>%
-  mutate(total_counts = sum(freq_mother),
-         normalized_freq = freq_mother / total_counts)
+  mutate(
+    total_chborn = sum(freq_mother),
+    norm_chborn_freq = freq_mother / total_chborn,
+    total_sibs = sum(freq_n_sib),
+    norm_sib_freq = freq_n_sib / total_sibs
+  ) %>%
+  pivot_longer(
+    cols = c(freq_mother, freq_n_sib),
+    names_to = "frequency_type",
+    values_to = "frequency"
+  ) %>%
+  mutate(
+    norm_freq = ifelse(frequency_type == "freq_mother", norm_chborn_freq, norm_sib_freq)) %>%
+  ungroup()  
 
 df_age$RACE <- factor(df_age$RACE, levels = c("White", "Black/African American"))
 
 ```
 
+### Plot for Number of Children
 ```{r}
 colors_black <- c("#FFF5F0", "#FEE0D2", "#FCBBA1", "#FC9272", "#FB6A4A", "#EF3B2C", "#CB181D", "#99000D")
 colors_white <- c("#F7FBFF", "#DEEBF7", "#C6DBEF", "#9ECAE1", "#6BAED6", "#4292C6", "#2171B5", "#084594")
@@ -346,19 +434,18 @@ colors_white <- c("#F7FBFF", "#DEEBF7", "#C6DBEF", "#9ECAE1", "#6BAED6", "#4292C
 # Create the ggplot
 ggplot() +
   # Layer for Black/African American
-  geom_col(data = filter(df_age, RACE == "Black/African American"), 
-           aes(x = as.numeric(factor(YEAR)) - 0.15, y = normalized_freq, fill = chborn_num), width = 0.3) +
+  geom_col(data = filter(df_age, RACE == "Black/African American" & frequency_type == "freq_mother"), 
+           aes(x = as.numeric(factor(YEAR)) - 0.15, y = norm_freq, fill = chborn_num), width = 0.3) +
   scale_fill_gradientn(colors = colors_black, name = "Number of Children Born (Black)") +
   
   ggnewscale::new_scale_fill() +
   
   # Layer for White
-  geom_col(data = filter(df_age, RACE == "White"), 
-           aes(x = as.numeric(factor(YEAR)) + 0.15, y = normalized_freq, fill = chborn_num), width = 0.3) +
+  geom_col(data = filter(df_age, RACE == "White"& frequency_type == "freq_mother"), 
+           aes(x = as.numeric(factor(YEAR)) + 0.15, y = norm_freq, fill = chborn_num), width = 0.3) +
   scale_fill_gradientn(colors = colors_white, name = "Number of Children Born (White)") +
   coord_flip() +
   scale_x_continuous(breaks = unique(as.numeric(factor(df_age$YEAR))), labels = unique(df_age$YEAR)) +
-  
   facet_wrap(~Age_bin, scales = "free_y") +
   labs(title = "Distribution of Number of Children by Age, Year and RACE",
        x = "Year",
@@ -371,35 +458,41 @@ ggplot() +
 ```
 
 
-## 6. Distribution of Number of Mother By Age and Census Year
+### Plot for Number of Siblings
 ```{r}
-mother_df <- fert_df2 %>% group_by(Age_bin, YEAR, RACE) %>%
-  summarise(freq_mother = sum(freq_mother), .groups = "drop") %>%
-  mutate(freq_mother = ifelse(RACE == "Black/African American", -freq_mother, freq_mother))
-
+ggplot() +
+  # Layer for Black/African American
+  geom_col(data = filter(df_age, RACE == "Black/African American" & frequency_type == "freq_n_sib"), 
+           aes(x = as.numeric(factor(YEAR)) - 0.15, y = norm_freq, fill = n_sib), width = 0.3) +
+  scale_fill_gradientn(colors = colors_black, name = "Number of Siblings (Black)", breaks = c(0, 3, 6, 9, 11)) +
+  
+  ggnewscale::new_scale_fill() +
+  
+  # Layer for White
+  geom_col(data = filter(df_age, RACE == "White"& frequency_type == "freq_n_sib"), 
+           aes(x = as.numeric(factor(YEAR)) + 0.15, y = norm_freq, fill = n_sib), width = 0.3) +
+  scale_fill_gradientn(colors = colors_white, name = "Number of Siblings (White)", breaks = c(0, 3, 6, 9, 11)) +
+  coord_flip() +
+  scale_x_continuous(breaks = unique(as.numeric(factor(df_age$YEAR))), labels = unique(df_age$YEAR)) +
+  facet_wrap(~Age_bin, scales = "free_y") +
+  labs(title = "Distribution of Number of Siblings by Age, Year and RACE",
+       x = "Year",
+       y = "Normalized Frequency",
+       fill = "Number of Siblings") +
+  theme_minimal()+
+  theme(axis.text.x = element_text(size = 8, angle = 45, hjust = 1),
+        legend.position = "right",
+        plot.title = element_text(size = 12, hjust = 0.5))
 ```
 
-```{r}
-max_freq <- max(abs(mother_df$freq_mother))
 
-ggplot(mother_df, aes(x = freq_mother, y = Age_bin, fill = RACE)) +
-  geom_col() +
-  scale_fill_manual(values = c("Black/African American" = "#2E8B57", "White" = "#b2d8d8"), name = "Race") +
-  scale_x_continuous(labels = function(x) label_number()(abs(x)), 
-                     limits = c(-max_freq, max_freq)) +
-  facet_wrap(~ YEAR, scales = "free_y") +
-  labs(title = "Distribution of Mother by Census Year and Age Bin",
-       x = "Number of Mothers",
-       y = "Age Bin") +
-  theme_minimal() +
-  theme(legend.position = "right", axis.text.x = element_text(size = 7, angle = 45, hjust = 1), plot.title = element_text(size = 10, hjust = 0.5))
-```
+## 6.Comparison of Frequency across YEAR for 50-60
 
-## 7.Comparison of Frequency across YEAR for 50-60
+### Plot for Number of Children
 ```{r}
 ggplot(subset(df_50_60, frequency_type == "freq_mother"), aes(x = chborn_num, y = frequency, fill = as.factor(YEAR))) +
   geom_col(position = "dodge")+ 
-  facet_wrap(~ RACE, ncol=1) +
+  facet_wrap(~ RACE, ncol=1, scales = "free_y") +
   scale_fill_manual(values=c("#999999", "#E69F00", "#56B4E9", "#009E73"), name = "YEAR") +
   scale_x_continuous(breaks = 0:12) + 
   labs(title = "Comparison of Frequencies by YEAR and RACE(Mother Aged 50-60)",
@@ -409,10 +502,12 @@ ggplot(subset(df_50_60, frequency_type == "freq_mother"), aes(x = chborn_num, y 
   theme(plot.title = element_text(size = 10, hjust = 0.5))
 ```
 
+
+### Plot for Number of Siblings
 ```{r}
 ggplot(subset(df_50_60, frequency_type == "freq_n_sib"), aes(x = n_sib, y = frequency, fill = as.factor(YEAR))) +
   geom_col(position = "dodge")+ 
-  facet_wrap(~ RACE, ncol=1) +
+  facet_wrap(~ RACE, ncol=1, scales = "free_y") +
   scale_fill_manual(values=c("#999999", "#E69F00", "#56B4E9", "#009E73"), name = "YEAR") +
   scale_x_continuous(breaks = 0:12) + 
   labs(title = "Comparison of Frequencies by YEAR and RACE(Mother Aged 50-60)",
