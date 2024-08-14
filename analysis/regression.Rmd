@@ -11,12 +11,19 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r data, results = FALSE,warning=FALSE,message=FALSE}
 # Load necessary libraries
-library(readr)
-library(tidycensus)
-library(tidyverse)
-library(knitr)
-library(jtools)
-library(sandwich)
+library(readr)        # read csv files
+library(tidyverse)    # census API
+library(knitr)        
+library(jtools) 
+library(sandwich)     # robust covariance estimator
+library(ggplot2)      # For plotting
+library(stats)        # For statistical functions
+library(tidycensus)   # For accessing US census data
+# Load additional libraries for combining plots
+library(cowplot)
+library(ggpubr) 
+library(viridis)
+library(sf)
 
 # Load prison data
 prison_data = read.csv("./data/populations_states.csv")
@@ -97,7 +104,7 @@ combined = merge(murphy.tong, inferred_data, by = c("state","race"), all.x = TRU
 combined$race_bin = ifelse(combined$race == "White",0,1)
 
 ```
-```{r regression, results = FALSE,warning=FALSE,message=FALSE}
+```{r proportion_regression, results = FALSE,warning=FALSE,message=FALSE}
 # Fit linear models for Black and White population proportions
 model.all <- lm(
     mt.percent ~           # Outcome: Murphy & Tong numbers for 7 states
@@ -172,4 +179,174 @@ ggplot(combined, aes(x = Avg, y = Dif)) +
         axis.title.x = element_text(color = "black", size = 16, angle = 0, hjust = .5, vjust = 0, face = "plain"),
         axis.title.y = element_text(color = "black", size = 16, angle = 90, hjust = .5, vjust = .5, face = "plain"),
         aspect.ratio=1) 
+```
+```{r SDIS_regression, results = FALSE,warning=FALSE,message=FALSE,out.width="100%"}
+# Read in CSV files
+NDIS = read.csv("./data/NDIS.csv")       # National DNA Index System data
+SDIS = read.csv("./data/SDIS.csv")       # State DNA Index System data
+
+# Merge NDIS and SDIS datasets by state
+NDIS_SDIS = merge(NDIS, SDIS, by = "State")
+
+# Rename columns to distinguish between NDIS and SDIS data
+colnames(NDIS_SDIS) <- gsub('.x','.NDIS', names(NDIS_SDIS))
+colnames(NDIS_SDIS) <- gsub('.y','.SDIS', names(NDIS_SDIS))
+
+# Merge NDIS_SDIS data with prison data
+colnames(prison_data_2022)[12] = "State"
+SDIS_states = merge(NDIS_SDIS, prison_data_2022, by = "State")
+
+# Merge census data with NDIS_SDIS_prison data
+colnames(us_state_density)[1] = "State"
+us_state_population= us_state_density[, c("State", "census.percent.black", "census.percent.white")]
+SDIS_regression = merge(SDIS_states, us_state_population, by = "State")
+
+# calculate percent of prison population
+SDIS_regression$percent.black.prison = SDIS_regression$incarcerated_black / SDIS_regression$incarcerated_total
+SDIS_regression$percent.white.prison = SDIS_regression$incarcerated_white / SDIS_regression$incarcerated_total
+
+# Calculate CODIS black and white proportions using previous regression
+SDIS_regression$CODIS.black = model.all$coeff[1] + model.all$coeff[2] * SDIS_regression$census.percent.black + model.all$coeff[3] * SDIS_regression$percent.black.prison + model.all$coeff[4] + model.all$coeff[5]* SDIS_regression$census.percent.black + model.all$coeff[6] * SDIS_regression$percent.black
+
+SDIS_regression$CODIS.white = model.all$coeff[1] + model.all$coeff[2] * SDIS_regression$census.percent.white + model.all$coeff[3] * SDIS_regression$percent.white.prison
+
+SDIS_regression$source = "Regression"
+SDIS_regression.trim = SDIS_regression[, c("State", "CODIS.black", "CODIS.white", "source")]
+
+# Prepare data for regression analysis for SDIS arrestees
+SDIS_arrestees = SDIS_regression[-c(which(is.na(SDIS_regression$N_arrestees.SDIS))),]
+SDIS_arrestees = SDIS_arrestees[, c("State", "N_arrestees.SDIS", "census.percent.black", "census.percent.white", "percent.black.prison", "percent.white.prison", "N_arrestees.NDIS")]
+
+# Linear model for SDIS arrestees using census percent, prison percent, and number of people in NDIS as predictors
+SDIS_arrestee = lm(N_arrestees.SDIS ~ census.percent.black + census.percent.white + percent.black.prison + percent.white.prison + N_arrestees.NDIS, data = SDIS_arrestees)
+summary(SDIS_arrestee)
+
+# Prepare data for regression analysis for SDIS offenders
+SDIS_offenders = SDIS_regression[-c(which(is.na(SDIS_regression$N_offenders.SDIS))),]
+SDIS_offenders = SDIS_offenders[, c("State", "N_offenders.SDIS", "census.percent.black", "census.percent.white", "percent.black.prison", "percent.white.prison", "N_offenders.NDIS")]
+
+# Perform regression analysis for SDIS offenders
+SDIS_offender = lm(N_offenders.SDIS ~ census.percent.black + census.percent.white + percent.black.prison + percent.white.prison + N_offenders.NDIS, data = SDIS_offenders)
+summary(SDIS_offender)
+
+# calculate regression prediction for each state
+SDIS_regression$SDIS.arrestee.prediction = SDIS_arrestee$coeff[1] + SDIS_arrestee$coeff[2] * SDIS_regression$census.percent.black +
+                                                             SDIS_arrestee$coeff[3] * SDIS_regression$census.percent.white +
+                                                             SDIS_arrestee$coeff[4] * SDIS_regression$percent.black.prison +
+                                                             SDIS_arrestee$coeff[5] * SDIS_regression$percent.white.prison +
+                                                             SDIS_arrestee$coeff[6] * SDIS_regression$N_arrestees.NDIS
+
+SDIS_regression$SDIS.offender.prediction = SDIS_offender$coeff[1] + SDIS_offender$coeff[2] * SDIS_regression$census.percent.black +
+                                                             SDIS_offender$coeff[3] * SDIS_regression$census.percent.white +
+                                                             SDIS_offender$coeff[4] * SDIS_regression$percent.black.prison +
+                                                             SDIS_offender$coeff[5] * SDIS_regression$percent.white.prison +
+                                                             SDIS_offender$coeff[6] * SDIS_regression$N_offenders.NDIS
+
+# make sure no predictions are less than 0
+SDIS_regression$SDIS.offender.prediction[SDIS_regression$SDIS.offender.prediction < 0] = 0
+SDIS_regression$SDIS.arrestee.prediction[SDIS_regression$SDIS.arrestee.prediction < 0] = 0
+
+all.arrestees.SDIS <- SDIS_regression[which(!is.na(SDIS_regression$N_arrestees.SDIS)),]
+all.offenders.SDIS <- SDIS_regression[which(!is.na(SDIS_regression$N_offenders.SDIS)),]
+
+# Plot predicted vs. actual SDIS arrestees
+p1 = ggplot(data = all.arrestees.SDIS) +
+  geom_point(aes(x = SDIS.arrestee.prediction, y = N_arrestees.SDIS, fill = State), size = 5, col = "black", shape = 21) +
+  geom_abline(intercept = 0, slope = 1, col = "grey30", linetype = "dashed", size = 1.5) +
+  theme_classic() + xlab("Estimated SDIS arrestees") + ylab("SDIS arrestees") +
+  guides(fill = guide_legend(override.aes = list(shape = 21))) +
+  theme(legend.position = "none")
+
+# Plot predicted vs. actual SDIS offenders
+p2 = ggplot(data = all.offenders.SDIS) +
+  geom_point(aes(x = SDIS.offender.prediction, y = N_offenders.SDIS, fill = State), size = 5, col = "black", shape = 21) +
+  geom_abline(intercept = 0, slope = 1, col = "grey30", linetype = "dashed", size = 1.5) +
+  theme_classic() + xlab("Estimated SDIS offenders") + ylab("SDIS offenders") +
+  guides(fill = guide_legend(override.aes = list(shape = 21))) +
+  theme(legend.position = "none")
+
+# Extract legend from one of the plots
+leg = get_legend(ggplot(data = all.offenders.SDIS) +
+  geom_point(aes(x = SDIS.offender.prediction, y = N_offenders.SDIS, fill = State), size = 5, col = "black", shape = 21) +
+  geom_abline(intercept = 0, slope = 1, col = "grey30", linetype = "dashed", size = 1.5) +
+  theme_classic() + xlab("Estimated SDIS offenders") + ylab("SDIS offenders") +
+  guides(fill = guide_legend(override.aes = list(shape = 21))) +
+  theme(legend.position = "bottom", axis.text.x = element_text(color = "black", size = 16, angle = 0, hjust = .5, vjust = .5, face = "plain"),
+        axis.text.y = element_text(color = "black", size = 16, angle = 0, hjust = 1, vjust = 0, face = "plain"),  
+        axis.title.x = element_text(color = "black", size = 16, angle = 0, hjust = .5, vjust = 0, face = "plain"),
+        axis.title.y = element_text(color = "black", size = 16, angle = 90, hjust = .5, vjust = .5, face = "plain"),
+        aspect.ratio = 1))
+
+# Combine plots a and b into a grid with legend
+p3 = plot_grid(p1, p2, ncol = 2)
+plot_grid(NULL, p3, NULL, leg, nrow = 4, rel_heights = c(0, 1.5, 0.2, 0.5))
+```
+
+```{r final_data, warning=FALSE,message=FALSE}
+Murphy = read.csv("./data/Murphy_FOIA.csv") # FOIA data from Murphy
+
+# Reshape Murphy data to wide format
+Murphy_wide = reshape(Murphy, idvar = "State", timevar = "pop", direction = "wide")
+Murphy_wide = Murphy_wide[, c("State", "value.Total", "value.White", "value.Black")]
+
+# Prepare final dataset 
+final.data = merge(SDIS_regression, Murphy_wide, by = "State", all.x = TRUE)
+
+# Calculate final estimates for Black and White populations in CODIS based on different sources
+final.data = final.data[-c(which(final.data$State == "Michigan")),]
+for (i in 1:nrow(final.data)) {
+  print(i)
+  if (!is.na(final.data$value.Total[i])) {
+    final.data$final.Black[i] = final.data$value.Total[i] * (final.data$value.Black[i] / 100)
+    final.data$final.White[i] = final.data$value.Total[i] * (final.data$value.White[i] / 100)
+    final.data$source[i] = "Murphy"
+  } else if (!is.na(final.data$N_total.SDIS[i])) {
+    final.data$final.Black[i] = (final.data$N_total.SDIS[i]) * final.data$CODIS.black[i]
+    final.data$final.White[i] = (final.data$N_total.SDIS[i]) * final.data$CODIS.white[i]
+    final.data$source[i] = "SDIS+regression"
+  } else {
+    final.data$final.Black[i] = (final.data$SDIS.arrestee.prediction[i] + final.data$SDIS.offender.prediction[i]) * final.data$CODIS.black[i]
+    final.data$final.White[i] = (final.data$SDIS.arrestee.prediction[i] + final.data$SDIS.offender.prediction[i]) * final.data$CODIS.white[i]
+    final.data$source[i] = "Regression only"
+  }
+}
+
+# Plot the final estimates for Black and White populations in CODIS
+ggplot(final.data) +
+  geom_point(aes(x = State, y = final.Black, fill = source, shape = "Black"), size = 2.5, col = "black") +
+  geom_point(aes(x = State, y = final.White, fill = source, shape = "White"), size = 2.5, col = "black") +
+  scale_fill_manual(name = "Source", labels = c("Murphy", "Regression only", "SDIS+regression"), values = c("#9A77CF", "#EC4176", "#FFA45E")) +
+  scale_shape_manual(name = "Race", labels = c("Black", "White"), values = c(21, 24)) +
+  theme_bw() +
+  guides(fill = guide_legend(override.aes = list(shape = 21))) +
+  theme(axis.text.x = element_text(size = 8, angle = 90, vjust = 0.5, hjust = 1)) +
+  ylab("Number of People in CODIS")
+
+# Ensuring data can be plotted as a map
+final.data.sf = st_as_sf(final.data)
+final.data.sf = final.data.sf %>%
+  tigris::shift_geometry()
+
+ggplot() +
+  geom_sf(data = final.data.sf$geometry, aes(fill = final.data.sf$final.Black),color = NA) + 
+  geom_sf(data = final.data.sf$geometry, color = "black",lwd = 0.1,alpha = 0) +
+  theme_void(base_size = 11) + 
+  scale_fill_viridis(option = "magma", direction = -1)+
+  labs(fill = "Number of Black people in CODIS") + 
+  theme(plot.margin = unit(rep(0.5, 4), "cm")) +
+  theme(legend.key.height= unit(0.2, 'cm'), legend.key.width= unit(0.2, 'cm'),
+        legend.title=element_text(size=6),  legend.text=element_text(size=6)) 
+
+ggplot() +
+  geom_sf(data = final.data.sf$geometry, aes(fill = final.data.sf$final.Black/(final.data.sf$final.Black + final.data.sf$final.White)),color = NA) + 
+  geom_sf(data = final.data.sf$geometry, color = "black",lwd = 0.1,alpha = 0) +
+  theme_void(base_size = 11) + 
+  scale_fill_viridis(option = "magma", direction = -1)+
+  labs(fill = "Percent of people in CODIS that are Black") + 
+  theme(plot.margin = unit(rep(0.5, 4), "cm")) +
+  theme(legend.key.height= unit(0.2, 'cm'), legend.key.width= unit(0.2, 'cm'),
+        legend.title=element_text(size=6),  legend.text=element_text(size=6)) 
+
+final.data[,c("State","final.Black","final.White","source")]
+write.csv(final.data, "./data/final_CODIS_data.csv")
 ```
