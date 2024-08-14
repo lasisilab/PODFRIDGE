@@ -280,7 +280,12 @@ leg = get_legend(ggplot(data = all.offenders.SDIS) +
 # Combine plots a and b into a grid with legend
 p3 = plot_grid(p1, p2, ncol = 2)
 plot_grid(NULL, p3, NULL, leg, nrow = 4, rel_heights = c(0, 1.5, 0.2, 0.5))
+
+
+
 ```
+
+
 
 ```{r final_data, warning=FALSE,message=FALSE}
 Murphy = read.csv("./data/Murphy_FOIA.csv") # FOIA data from Murphy
@@ -322,7 +327,6 @@ ggplot(final.data) +
   theme(axis.text.x = element_text(size = 8, angle = 90, vjust = 0.5, hjust = 1)) +
   ylab("Number of People in CODIS")
 
-# Ensuring data can be plotted as a map
 final.data.sf = st_as_sf(final.data)
 final.data.sf = final.data.sf %>%
   tigris::shift_geometry()
@@ -350,3 +354,7 @@ ggplot() +
 final.data[,c("State","final.Black","final.White","source")]
 write.csv(final.data, "./data/final_CODIS_data.csv")
 ```
+
+
+
+
