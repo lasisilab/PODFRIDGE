@@ -59,7 +59,7 @@ log_function_time <- function(func, name, ...) {
 }
 
 # Read Command-Line Arguments
-#args <- commandArgs(trailingOnly = TRUE)
+args <- commandArgs(trailingOnly = TRUE)
 n_sims_related <- as.numeric(args[1])
 n_sims_unrelated <- as.numeric(args[2])
 job_id <- as.character(args[3])
