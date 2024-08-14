@@ -1,0 +1,101 @@
+﻿State,info_type,pop,value_type,value,Murphy_NYU
+California,NDIS,Total,number,2768269,
+California,SDIS,Total,number,2771721,
+California,SDIS-NDIS,Total,proportion,16.5,16.3
+California,SDIS,White,proportion,29.6,
+California,Census,White,proportion,37,
+California,SDIS,Black,proportion,17.1,
+California,Census,Black,proportion,6.5,5.5
+California,SDIS,Hispanic,proportion,34.7,
+California,Census,Hispanic,proportion,39.3,39.2
+California,SDIS,Asian,proportion,0.99,
+California,Census,Asian,proportion,15.3,14.4
+California,Census,Native American,proportion,2.1,1.6
+California,Census,Other,proportion,3.9,
+Florida,NDIS,Total,number,1350667,
+Florida,SDIS,Total,number,1175391,
+Florida,SDIS-NDIS,Total,proportion,7,6.9
+Florida,SDIS,White,proportion,61.4,
+Florida,Census,White,proportion,53.5,54.1
+Florida,SDIS,Black,proportion,35.2,
+Florida,Census,Black,proportion,16.9,
+Florida,SDIS,Hispanic,proportion,2.4,
+Florida,Census,Hispanic,proportion,26.1,25.6
+Florida,SDIS,Asian,proportion,0.23,
+Florida,Census,Asian,proportion,3,2.9
+Florida,SDIS,Native American,proportion,0.06,
+Florida,Census,Native American,proportion,0.6,0.5
+Florida,SDIS,Other,proportion,0.1,
+Florida,Census,Other,proportion,2.2,
+Florida,SDIS,Unknown,proportion,0.61,
+Indiana,NDIS,Total,number,307714,
+Indiana,SDIS,Total,number,300741,
+Indiana,SDIS-NDIS,Total,proportion,1.8,
+Indiana,SDIS,White,proportion,70,
+Indiana,Census,White,proportion,78.9,79.2
+Indiana,SDIS,Black,proportion,26,
+Indiana,Census,Black,proportion,9.8,9.7
+Indiana,SDIS,Hispanic,proportion,4,
+Indiana,Census,Hispanic,proportion,7.1,7
+Indiana,Census,Asian,proportion,2.5,2.4
+Indiana,Census,Native American,proportion,0.5,0.4
+Indiana,Census,Other,proportion,2.1,
+Maine,NDIS,Total,number,32847,
+Maine,SDIS,Total,number,33711,
+Maine,SDIS-NDIS,Total,proportion,0.2,
+Maine,SDIS,White,proportion,92.8,
+Maine,Census,White,proportion,93.1,93.3
+Maine,SDIS,Black,proportion,3.9,
+Maine,Census,Black,proportion,1.6,
+Maine,SDIS,Hispanic,proportion,0.5,0
+Maine,Census,Hispanic,proportion,1.7,1.6
+Maine,SDIS,Asian,proportion,0.4,0.38
+Maine,Census,Asian,proportion,1.2,
+Maine,SDIS,Native American,proportion,1,1.02
+Maine,Census,Native American,proportion,0.7,
+Maine,Census,Other,proportion,1.8,
+Maine,SDIS,Unknown,proportion,1.4,
+Nevada,NDIS,Total,number,167726,
+Nevada,SDIS,Total,number,344097,
+Nevada,SDIS-NDIS,Total,proportion,2.1,2.02
+Nevada,SDIS,White,proportion,69.4,
+Nevada,Census,White,proportion,48.7,49.1
+Nevada,SDIS,Black,proportion,25.6,
+Nevada,Census,Black,proportion,10.1,9.8
+Nevada,Census,Hispanic,proportion,29,28.8
+Nevada,SDIS,Asian,proportion,2.3,
+Nevada,Census,Asian,proportion,8.7,8.8
+Nevada,SDIS,Native American,proportion,1.7,
+Nevada,Census,Native American,proportion,2.5,1.7
+Nevada,Census,Other,proportion,4.5,
+Nevada,SDIS,Unknown,proportion,1,
+South Dakota,NDIS,Total,number,67600,
+South Dakota,SDIS,Total,number,67753.4,67533
+South Dakota,SDIS-NDIS,Total,proportion,,0.4
+South Dakota,SDIS,White,proportion,66.8,67
+South Dakota,Census,White,proportion,81.4,82.2
+South Dakota,SDIS,Black,proportion,6,
+South Dakota,Census,Black,proportion,2.4,2.1
+South Dakota,SDIS,Hispanic,proportion,4.4,
+South Dakota,Census,Hispanic,proportion,4.1,3.8
+South Dakota,SDIS,Asian,proportion,0.08,
+South Dakota,Census,Asian,proportion,1.7,1.5
+South Dakota,SDIS,Native American,proportion,21.5,21.6
+South Dakota,Census,Native American,proportion,9.1,9
+South Dakota,SDIS,Other,proportion,1.3,
+South Dakota,Census,Other,proportion,2.4,
+Texas,NDIS,Total,number,960985,
+Texas,SDIS,Total,number,918953,854322
+Texas,SDIS-NDIS,Total,proportion,5.5,5.4
+Texas,SDIS,White,proportion,37.3,
+Texas,Census,White,proportion,41.5,42
+Texas,SDIS,Black,proportion,29.1,
+Texas,Census,Black,proportion,12.8,12.7
+Texas,SDIS,Hispanic,proportion,32.7,
+Texas,Census,Hispanic,proportion,39.6,39.4
+Texas,SDIS,Asian,proportion,0.42,
+Texas,Census,Asian,proportion,5.2,5
+Texas,SDIS,Native American,proportion,0.02,
+Texas,Census,Native American,proportion,1.1,1
+Texas,SDIS,Other,proportion,0.28,
+Texas,Census,Other,proportion,2,
