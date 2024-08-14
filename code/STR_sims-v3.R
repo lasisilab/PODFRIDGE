@@ -3,33 +3,29 @@ suppressMessages(suppressWarnings({
   library(tidyverse)
   library(furrr)
   library(data.table)
-  library(ggplot2)
   library(future)
   library(parallel)
 }))
 
-#Set options for run- this will ultimately be parameterised and sit in the primary run script
-#(The following lines to set variables are temporary for testing and will not remain in this script)
-use_remote_cluster<-0 #If sending to external cluster (use 0 for tests on one machine)
-
-# Set up cluster on one machine if required
+# Set up cluster on one machine if not using cluster
+if(!exists("use_remote_cluster")){ #Add this parameter to run script
+  use_remote_cluster<-0
+}
 if(use_remote_cluster==0){
   if( .Platform$OS.type == "windows" ){
     cl <- makeCluster(availableCores())  #specify how many cores to use
   } else { # use the fork cluster type on linux because its faster- not available for windows
     cl <- makeCluster(availableCores(),type="FORK")  #specify how many cores to use
-  } 
+  }
   # Ensure the cluster is stopped when the script exits
   on.exit(parallel::stopCluster(cl))
   plan(cluster, workers = cl)
 } else { #if sending to remote cluster(s)
-  plan(cluster, workers = c("clustername1", "clustername2", "server.remote.org- if using an online cluster", "etc"))  
-}  
+  plan(cluster, workers = clustername1) #use URL if using an online cluster, multiple clusters can also be specified here
+}
 
-#plan() options:
-#use 'multisession' to run in parallel in separate R sessions on the same machine
-#use 'multicore' to run futures in parallel in forked processes on the same machine- Linux only
-#use 'cluster' to run in parallel on one or more machines
+#plan() options: 'multisession' to run in parallel in separate R sessions on the same machine,
+#'multicore' to run in parallel in forked processes on the same machine- Linux/Mac only, 'cluster' to run in parallel on one or more machines
 
 # Helper function for logging
 log_message <- function(message) {
@@ -59,7 +55,8 @@ log_function_time <- function(func, name, ...) {
 }
 
 # Read Command-Line Arguments
-args <- commandArgs(trailingOnly = TRUE)
+#args <- commandArgs(trailingOnly = TRUE)
+args<-c(3,3,"test")
 n_sims_related <- as.numeric(args[1])
 n_sims_unrelated <- as.numeric(args[2])
 slurm_job_id <- as.character(args[3])
@@ -80,7 +77,7 @@ log_message("Loading allele frequencies data...")
 allele_freq_time <- system.time({
   df_allelefreq <- fread("data/df_allelefreq_combined.csv")
   df_allelefreq <- df_allelefreq[population != "all"] # Filter out "all" population
-  df_allelefreq[, allele := as.character(allele)]
+  df_allelefreq$allele<-as.character(df_allelefreq$allele)
 })
 log_message(paste("Loaded allele frequencies data in", allele_freq_time["elapsed"], "seconds."))
 
@@ -151,10 +148,10 @@ calculate_likelihood_ratio <- function(shared_alleles, genotype_match = NULL, pA
     } else {
       stop("Invalid genotype match for 2 shared alleles.")
     }
-    LR <- k0 + (k1 / Rxp) + (k2 / Rxu)    
+    LR <- k0 + (k1 / Rxp) + (k2 / Rxu)
   } else {
     LR<- NA
-  }  
+  }
   return(LR)
 }
 
@@ -175,23 +172,6 @@ generate_simulation_setup <- function(kinship_matrix, population_list, num_relat
       ))
     }
   }
-  return(simulation_setup)
-}
-generate_simulation_setup2 <- function(kinship_matrix, population_list, num_related, num_unrelated) {
-  simulation_setup <- data.frame(
-    population = character(),
-    relationship_type = character(),
-    num_simulations = integer(),
-    stringsAsFactors = FALSE
-  )
-  simulation_setup<-foreach(population = population_list,.combine="rbind") %:% {
-    foreach (relationship = kinship_matrix$relationship_type) %dopar% {
-      num_simulations <- ifelse(relationship == "unrelated", num_unrelated, num_related)
-      simulation_setup <- data.frame(c(population,relationship,num_simulations))
-      ))
-    }
-  }  
-  names(simulation_setup)[2]<-relationship_type
   return(simulation_setup)
 }
 
@@ -260,10 +240,9 @@ simulate_genotypes <- function(row, df_allelefreq, kinship_matrix) {
   return(row)
 }
 
-kinship_calculation <- function(row, allele_frequency_data, kinship_matrix) {
+kinship_calculation <- function(row, allele_frequency_data, kinship_matrix) { #simulated_row, allele_frequency_data, kinship_matrix
   alleles_ind1 <- as.character(c(row$ind1_allele1, row$ind1_allele2))
   alleles_ind2 <- as.character(c(row$ind2_allele1, row$ind2_allele2))
-
   shared_alleles_vector <- intersect(alleles_ind1, alleles_ind2)
   unique_alleles_ind1 <- setdiff(alleles_ind1, shared_alleles_vector)
   unique_alleles_ind2 <- setdiff(alleles_ind2, shared_alleles_vector)
@@ -275,6 +254,7 @@ kinship_calculation <- function(row, allele_frequency_data, kinship_matrix) {
     allele_map[[LETTERS[next_label]]] <- allele
     next_label <- next_label + 1
   }
+
 
   for (allele in unique_alleles_ind1) {
     if (!(allele %in% allele_map)) {
@@ -290,7 +270,8 @@ kinship_calculation <- function(row, allele_frequency_data, kinship_matrix) {
     }
   }
 
-  allele_map <- unlist(allele_map)
+  allele_map <- unlist(allele_map) #consists of one column per letter (can be any length) with numeric values
+
   labeled_alleles_ind1 <- sapply(as.character(alleles_ind1), function(x) names(allele_map)[which(allele_map == x)])
   labeled_alleles_ind2 <- sapply(as.character(alleles_ind2), function(x) names(allele_map)[which(allele_map == x)])
 
@@ -319,15 +300,22 @@ kinship_calculation <- function(row, allele_frequency_data, kinship_matrix) {
 
   kinship_calculations <- lapply(kinship_matrix$relationship_type, function(rel_type) {
     k_values <- kinship_matrix[kinship_matrix$relationship_type == rel_type, ]
+
     LR <- calculate_likelihood_ratio(shared_alleles, genotype_match, pA, pB, k_values$k0, k_values$k1, k_values$k2)
+
     data.table(
       relationship_known = row$relationship_type,
       relationship_tested = rel_type,
       LR = LR
     )
+
   })
 
   kinship_calculations <- rbindlist(kinship_calculations)
+
+  kinship_calculations <-data.frame(kinship_calculations)
+  row<-data.frame(row)
+
   row <- cbind(row, kinship_calculations)
   return(row)
 }
@@ -335,19 +323,21 @@ kinship_calculation <- function(row, allele_frequency_data, kinship_matrix) {
 process_loci <- function(row, allele_frequency_data, kinship_matrix) {
   simulated_row <- log_function_time(simulate_genotypes, "simulate_genotypes", row, allele_frequency_data, kinship_matrix)
   final_row <- log_function_time(kinship_calculation, "kinship_calculation", simulated_row, allele_frequency_data, kinship_matrix)
-  return(final_row)
+  final_row<-subset(final_row,select= -11) #The LR in the current output table is no longer taken from the 'row' input but from kinship_calculations- adjust this if retaining both 'LR' columns
+   return(final_row)
 }
-                                 
-#This section is already parallelised effectively using purrr syntax so make sure not nested in further parallel processes
+
+#This section is already parallelised so make sure not nested in further parallel processes
 process_individuals_genotypes <- function(individuals_genotypes, df_allelefreq, kinship_matrix) {
+
   final_individuals_genotypes <- individuals_genotypes |>
     future_pmap(~ log_function_time(process_loci, "process_loci", list(...), df_allelefreq, kinship_matrix), seed = TRUE) |>
     bind_rows()
-  return(final_individuals_genotypes)
+   return(final_individuals_genotypes)
 }
 
 calculate_combined_lrs <- function(final_results, loci_lists) {
-  final_results <- as.data.table(final_results)
+  class(final_results)<-"data.table"
   combined_lrs <- final_results[, .(
     core_13 = prod(LR[locus %in% loci_lists$core_13], na.rm = TRUE),
     identifiler_15 = prod(LR[locus %in% loci_lists$identifiler_15], na.rm = TRUE),
@@ -395,7 +385,8 @@ plot_and_save_results <- function(combined_lrs) {
       lower_95 = quantile(LR, 0.025),
       upper_95 = quantile(LR, 0.975),
       .groups = 'drop'
-    )
+    ) |>
+    ungroup()
 
   ggplot(summary_stats, aes(x = loci_set, y = mean_LR, group = population, color = population)) +
     geom_line(size = 1) +
@@ -514,19 +505,18 @@ calculate_proportions_exceeding_cutoffs <- function(input_df, cutoffs) {
     filter(relationship_tested != "unrelated")
   return(proportions_exceeding)
 }
-                                 
-#This section is already parallelised effectively using purrr syntax so make sure not nested in further parallel processes
 
 process_simulation_setup <- function(simulation_setup, df_allelefreq, kinship_matrix, loci_list, loci_lists, output_file, summary_output_file) {
   log_message("Processing simulation setup...")
   process_time <- system.time({
     final_results <- simulation_setup |>
       future_pmap_dfr(function(population, relationship_type, num_simulations) {
-        purrr::map_dfr(1:num_simulations, function(sim_id) {
-          individuals_genotypes <- initialize_individuals_pair(population, relationship_type, sim_id, loci_list)
+        purrr::map_dfr(.x=1:num_simulations, function(.x) {
+          individuals_genotypes <- initialize_individuals_pair(population, relationship_type, .x, loci_list)
           processed_genotypes <- log_function_time(process_individuals_genotypes, "process_individuals_genotypes", individuals_genotypes, df_allelefreq, kinship_matrix)
-          return(processed_genotypes)
-        })
+
+           return(processed_genotypes)
+        }, .id="sim_id")
       })
 
     if ("seed" %in% colnames(final_results)) {
@@ -556,17 +546,12 @@ process_simulation_setup <- function(simulation_setup, df_allelefreq, kinship_ma
     # Plot relationship comparisons
     log_function_time(plot_relationship_comparisons, "plot_relationship_comparisons", combined_lrs)
   })
+
   log_message(paste("Processing completed in", process_time["elapsed"], "seconds."))
 }
 
 # Execute Simulation Setup and Processing
-
-                                 bench::mark(
 simulation_setup <- log_function_time(generate_simulation_setup, "generate_simulation_setup", kinship_matrix, populations_list, n_sims_related, n_sims_unrelated)
-                                   )
-                                 bench::mark(
-simulation_setup2 <- log_function_time(generate_simulation_setup2, "generate_simulation_setup2", kinship_matrix, populations_list, n_sims_related, n_sims_unrelated)
-                                   )
 log_function_time(process_simulation_setup, "process_simulation_setup", simulation_setup, df_allelefreq, kinship_matrix, loci_list, loci_lists, output_file, summary_output_file)
 log_message("Simulation setup and processing completed.")
 
@@ -581,3 +566,4 @@ timing_log_df <- tibble(
 )
 
 write_csv(timing_log_df, timing_log_file)
+
