@@ -80,6 +80,7 @@ data <- data %>%
        variable_type == "race" & grepl("\\bnative_american\\b", variable_detailed, ignore.case = TRUE) ~ "native_american_total",
       variable_type == "race" & grepl("\\bwhite\\b", variable_detailed, ignore.case = TRUE) ~ "white_total",
       variable_type == "race" & grepl("\\bcausasian\\b", variable_detailed, ignore.case = TRUE) ~ "white_total",
+      variable_type == "race" & grepl("\\bcaucasian\\b", variable_detailed, ignore.case = TRUE) ~ "white_total",
       variable_type == "race" & grepl("\\bcausasian_\\b", variable_detailed, ignore.case = TRUE) ~ "white_total",
       variable_type == "race" & grepl("\\bother\\b", variable_detailed, ignore.case = TRUE) ~ "other_total",
       variable_type == "race" & grepl("\\basian_offender\\b", variable_detailed, ignore.case = TRUE) ~ "asian_convicted_offender",
@@ -91,6 +92,7 @@ data <- data %>%
       variable_type == "race" & grepl("\\bcaucasian_convicted_offender\\b", variable_detailed, ignore.case = TRUE) ~ "white_convicted_offender",
       variable_type == "race" & grepl("\\bother_offender\\b", variable_detailed, ignore.case = TRUE) ~ "other_convicted_offender",
       variable_type == "race" & grepl("\\bafrican_american__convicted_offender\\b", variable_detailed, ignore.case = TRUE) ~ "black_convicted_offender",
+      variable_type == "race" & grepl("\\bafrican_american_convicted_offender\\b", variable_detailed, ignore.case = TRUE) ~ "black_convicted_offender",
       variable_type == "race" & grepl("\\bafrican_american_offender\\b", variable_detailed, ignore.case = TRUE) ~ "black_convicted_offender",
       variable_type == "race" & grepl("\\bafrican_american_arrestee\\b", variable_detailed, ignore.case = TRUE) ~ "black_arrestee",
       variable_type == "race" & grepl("\\bcaucasian_arrestee\\b", variable_detailed, ignore.case = TRUE) ~ "white_arrestee",
@@ -208,19 +210,6 @@ data <- data %>%
 ```
 
 ```{r}
-incorrect_entries <- data_race |> 
-  filter(!variable_detailed %in% c("asian_total", "black_total", "hispanic_total", "native_american_total", "white_total", "other_total", "unknown",
-      "asian_convicted_offender", "black_convicted_offender", "hispanic_convicted_offender", "native_american_convicted_offender", "white_convicted_offender", "other_convicted_offender",
-      "asian_arrestee", "black_arrestee", "hispanic_arrestee", "native_american_arrestee", "white_arrestee", "other_arrestee",
-      "asian_annual", "black_annual", "hispanic_annual", "native_american_annual", "white_annual", "other_annual",
-      "asian_state", "black_state", "hispanic_state", "native_american_state", "white_state", "other_state",
-      "asian_pop_collected", "black_pop_collected", "hispanic_pop_collected", "native_american_pop_collected", "white_pop_collected", "other_pop_collected"))
-
-# View incorrect entries
-print(incorrect_entries)
-```
-
-```{r}
 write.csv(data, "data/murphy_foia_cleaned.csv")
 ```
 
@@ -279,12 +268,10 @@ data_gender_simplified <- data_gender_proportions |>
   group_by(State, simplified_sex) |> 
   summarize(total_value = sum(proportion_value), .groups = 'drop')
 
-selected_colors <- wes_palette("Moonrise3")[c(2, 3, 5)]
-
 #stacked bar chart simplified
 ggplot(data_gender_simplified, aes(x = State, y = total_value, fill = simplified_sex)) +
   geom_bar(stat = "identity") +  # Stacked bar chart by default
-  scale_fill_manual(values = selected_colors) +  # color palette
+  scale_fill_manual(values = c("#489C92", "#F38C79", "#D8DCDA")) +  # color palette
   labs(y = "Proportion", x = "State", title = "NDIS Gender Distribution by State", fill = "Sex") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
@@ -292,17 +279,103 @@ ggplot(data_gender_simplified, aes(x = State, y = total_value, fill = simplified
 ```
 
 ```{r}
+#create data set with variable_type "race"
 data_race <- data |> 
   filter(variable_type == "race")
 
-data_race_proportions <- data_race |> 
-  group_by(State) |> 
-  mutate(proportion_value = ifelse(value_type == "number", value / sum(value), NA))
+#create a data set with totals combining "convicted_offender" and "arrestee" data into totals by race
+convicted_arrestee_totals <- data_race |> 
+  filter(str_detect(variable_detailed, "_convicted_offender|_arrestee")) |> 
+  mutate(variable_detailed = str_replace(variable_detailed, "_convicted_offender|_arrestee", "_total")) |> 
+  group_by(State, variable_detailed) |> 
+  summarize(value = sum(value), .groups = 'drop') |>
+  mutate(value_type = "number")
 
-# Combine original proportions with newly calculated ones
-data_race_proportions <- data_race_proportions |> 
+# Combine and process race_totals
+race_totals <- data_race |> 
+  mutate(variable_detailed = case_when(
+    str_detect(variable_detailed, "other_total|unknown") ~ "other_or_unknown",
+    TRUE ~ variable_detailed
+  )) |> 
+  filter(str_detect(variable_detailed, "_total") | str_detect(variable_detailed, "other_or_unknown"))
+
+# Add convicted_arrestee_totals to race_totals
+race_totals <- race_totals |> 
+  bind_rows(convicted_arrestee_totals) |> 
+  group_by(State, variable_detailed) |> 
+  summarize(value = sum(value), value_type = first(value_type), .groups = 'drop') |> 
+  ungroup()
+
+# Calculate the proportion value within each state
+race_totals <- race_totals |> 
+  group_by(State) |> 
+  mutate(proportion_value = ifelse(value_type == "number", value / sum(value), NA)) |> 
+  ungroup()
+
+#keep already calculated proportions and remove value_type column
+race_totals <- race_totals |> 
   mutate(proportion_value = ifelse(is.na(proportion_value), value, proportion_value)) |> 
-  select(-value_type)  
+  select(-value_type)
+
+# Replace race category names for clarity
+race_totals <- race_totals |> 
+  mutate(variable_detailed = case_when(
+    variable_detailed == "white_total" ~ "White",
+    variable_detailed == "black_total" ~ "Black or African American",
+    variable_detailed == "asian_total" ~ "Asian",
+    variable_detailed == "hispanic_total" ~ "Hispanic",
+    variable_detailed == "native_american_total" ~ "Native American",
+    variable_detailed == "other_total" ~ "Other or Unknown",
+    variable_detailed == "other_or_unknown" ~ "Other or Unknown",
+    TRUE ~ variable_detailed
+  ))
+
+# Set the desired order for race categories
+desired_order <- c("Other or Unknown", "Native American", "Hispanic", "Asian", "Black or African American", "White")
+
+# Create the bar plot
+ggplot(race_totals |> 
+       mutate(variable_detailed = factor(variable_detailed, levels = desired_order)),
+       aes(x = State, y = proportion_value, fill = variable_detailed)) +
+  geom_bar(stat = "identity") + 
+  labs(title = "NDIS Race Totals by State",
+       x = "State",
+       y = "Proportion",
+       fill = "Race Category") +
+  scale_fill_manual(values = c("#BAD1DC", "#489C92","#59B8B2", "#91C8D0", "#05686D", "#F38C79")) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+For most states, the percentage of non-White people whose DNA is collected annually is greater than that of White people. This is most evident for the Black population, which consistently showed the greatest levels of disparity.
+```{r}
+#Graph showing stats of percent of population 
+
+data_pop_collected <- data_race |> 
+  filter(str_detect(variable_detailed, "_pop_collected")) |> 
+  mutate(race_category = case_when(
+    str_detect(variable_detailed, "black") ~ "Black",
+    str_detect(variable_detailed, "white") ~ "White",
+    TRUE ~ "Other"
+  )) |> 
+    group_by(State, race_category) |> 
+  summarise(total_value = sum(value, na.rm = TRUE))
+
+ggplot(data_pop_collected, aes(x ="", y = total_value, fill = race_category)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar("y") +
+  theme_void() +
+  labs(title = "Percentage of Each Race with DNA Collected Annually",
+       fill = "Race") +
+  scale_fill_manual(values = c("#05686D", "#BAD1DC", "#F38C79"))
+
+summary_pop_collected <- data_pop_collected %>%
+  group_by(race_category) %>%
+  summarise(avg_pop_collected = mean(total_value, na.rm = TRUE))
+
+# Print the result
+print(summary_pop_collected)
 
 ```
 
