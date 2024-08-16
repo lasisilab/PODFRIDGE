@@ -205,16 +205,35 @@ process_individuals_genotypes <- function(individuals_genotypes, df_allelefreq, 
   return(final_individuals_genotypes)
 }
 
+#purrr::map inside the future_pmap_dfr loop seems to slow this section
 process_simulation_setup <- function(simulation_setup, df_allelefreq, kinship_matrix, loci_list, output_file) {
-  process_time <- system.time({
-  class(simulation_setup)<-"data.frame"
-  final_results <- simulation_setup |>
-    furrr::future_pmap_dfr(.f=function(population, relationship_type, num_simulations) {
-         purrr::map_dfr(1:num_simulations, function(sim_id) {
-          individuals_genotypes <- initialize_individuals_pair(population, relationship_type, sim_id, loci_list)
+#  process_time <- system.time({
+#  class(simulation_setup)<-"data.frame"
+ # final_results <- simulation_setup |>
+ #   furrr::future_pmap_dfr(.f=function(population, relationship_type, num_simulations) {
+  #       purrr::map_dfr(1:num_simulations, function(sim_id) {
+   #       individuals_genotypes <- initialize_individuals_pair(population, relationship_type, sim_id, loci_list)
+    #      processed_genotypes <- log_function_time(process_individuals_genotypes, "process_individuals_genotypes", individuals_genotypes, df_allelefreq, kinship_matrix)
+     #     return(processed_genotypes$result)
+   #     })
+   #   })
+
+  #  fwrite(final_results, output_file)
+  #})
+    process_time <- system.time({
+    final_results <- simulation_setup |>
+      future_pmap_dfr(function(population, relationship_type, num_simulations) {
+        sim_id<-1:num_simulations
+        for(i in 1:length(sim_id)) {
+          individuals_genotypes <- initialize_individuals_pair(population, relationship_type, sim_id[i], loci_list)
           processed_genotypes <- log_function_time(process_individuals_genotypes, "process_individuals_genotypes", individuals_genotypes, df_allelefreq, kinship_matrix)
-          return(processed_genotypes$result)
-        })
+          if(exists("c2")){
+            c2<-rbind(c2,processed_genotypes$result)
+          } else {
+            c2<-processed_genotypes$result
+          }
+          return(c2)
+        }
       })
 
     fwrite(final_results, output_file)
