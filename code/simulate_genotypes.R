@@ -261,6 +261,6 @@ timing_log_df <- tibble(
   avg_time = sapply(timing_log, function(x) x$total / x$count)
 )
 
-readr::write_csv(timing_log_df, path=timing_log_file)
+fwrite(timing_log_df, timing_log_file)
 print(paste0("Timing log written to ",timing_log_file))
 gc()
