@@ -30,16 +30,13 @@ library(patchwork)
 ```
 
 ```{r}
-data <- read_csv("data/Murphy_Appendix_all_data.csv") 
+data <- read_csv("data/Murphy_Appendix_all_data.csv", show_col_types = FALSE) 
 
-head(data)
 ```
 
 ```{r} 
 data <- data |>
   select(-file) 
-
-head(data)
 ```
 
 ```{r}
@@ -226,8 +223,16 @@ data <- data %>%
 ```{r}
 write.csv(data, "data/murphy_foia_cleaned.csv")
 ```
-#Visualizations of State DNA Databases
-##Data on Sex
+
+# Visualizations of State DNA Databases
+Below is a small sample of the data set used to create these visualizations.
+
+```{r}
+data_sample <- data %>% sample_n(5)
+kable(data_sample, caption = "Sample of the Full Data")
+```
+
+## Data on Sex
 
 ```{r}
 #creating gender database
@@ -293,13 +298,21 @@ ggplot(data_gender_simplified, aes(x = State, y = total_value, fill = simplified
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ```
-##Data on Race
 
-###State Demographics
+## Data on Race
+
+### State Demographics
 Below are some summary statistics of the racial demographics in each state.
 
 ```{r}
+#create data set with variable_type "race"
+data_race <- data |> 
+  filter(variable_type == "race")
+
 #Summary stats
+data_state <- data_race |> 
+  filter(str_detect(variable_detailed, "_state"))
+
 black_state <- data_state |> 
   filter(variable_detailed == "black_state")
 
@@ -320,9 +333,6 @@ average_black <- black_state |>
   summarise(average_value = mean(value, na.rm = TRUE))
 
 # Output the results
-top_3_highest
-top_3_lowest
-average_black
 
 kable(top_3_highest, caption = "States with Highest Black Population", format = "markdown")
 
@@ -332,27 +342,10 @@ kable(top_3_lowest, caption = "States with Lowest Black Population", format = "m
 # Display the average value table
 kable(average_black, caption = "Average Black Population Proportion Across All States", format = "markdown")
 
+
 ```
 
 ```{r}
-average_black_database <- race_totals |> 
-  filter(variable_detailed == "Black") |> 
-  summarise(average_value = mean(proportion_value, na.rm = TRUE))
-
-#and calculate average proportion of black people in DNA databases (use race_totals)
-kable(average_black_database, caption = "Average Black Proportion In DNA Databases Across All States", format = "markdown")
-```
-
-On average, Black Americans make up 10.96% of their state, but 20.93% of their state's DNA database, displaying the racial disparities in these databases.
-
-###Race Totals
-The following bar chart displays the proportions of each race in a state's DNA database.
-
-```{r}
-#create data set with variable_type "race"
-data_race <- data |> 
-  filter(variable_type == "race")
-
 #create a data set with totals combining "convicted_offender" and "arrestee" data into totals by race
 convicted_arrestee_totals <- data_race |> 
   filter(str_detect(variable_detailed, "_convicted_offender|_arrestee")) |> 
@@ -400,6 +393,22 @@ race_totals <- race_totals |>
     TRUE ~ variable_detailed
   ))
 
+average_black_database <- race_totals |> 
+  filter(variable_detailed == "Black") |> 
+  summarise(average_value = mean(proportion_value, na.rm = TRUE))
+
+#and calculate average proportion of black people in DNA databases (use race_totals)
+kable(average_black_database, caption = "Average Black Proportion In DNA Databases Across All States", format = "markdown")
+```
+
+On average, Black Americans make up 10.96% of their state, but 20.93% of their state's DNA database, displaying the racial disparities in these databases.
+
+### Race Totals
+The following bar chart displays the proportions of each race in a state's DNA database.
+
+```{r}
+
+
 # Set the desired order for race categories
 desired_order <- c("Other or Unknown", "Native American", "Hispanic", "Asian", "Black", "White")
 
@@ -417,15 +426,13 @@ ggplot(race_totals |>
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ```
+
 Despite White Americans usually making up the majority of the population in the database, there is still a significant disparity present in this data. Comparing this to a graph of the racial breakdown of the total population in each of these states uncovers that Black Americans and other people of color are over represented in their state's database.
 
 
 ```{r}
 
 #bar plot of state totals
-
-data_state <- data_race |> 
-  filter(str_detect(variable_detailed, "_state"))
 
 selected_states <- c("California", "Florida", "Indiana", "Maine", "Nevada", "South_Dakota", "Texas")
 
@@ -461,7 +468,7 @@ plot1 <- ggplot(race_totals |>
        mutate(variable_detailed = factor(variable_detailed, levels = desired_order)),
        aes(x = State, y = proportion_value, fill = variable_detailed)) +
   geom_bar(stat = "identity") + 
-  labs(title = "Race Totals in DNA Database by State",
+  labs(title = "DNA Database",
        x = "State",
        y = "Proportion") +
   scale_fill_manual(values = c("#BAD1DC", "#489C92","#59B8B2", "#91C8D0", "#05686D", "#F38C79")) +
@@ -491,31 +498,43 @@ plot2 <- ggplot(select_states |>
        mutate(variable_detailed = factor(variable_detailed, levels = desired_order)),
        aes(x = State, y = value, fill = variable_detailed)) +
   geom_bar(stat = "identity") +
-  labs(title = "Racial Breakdown of State Populations", x = "State", y = "Proportion", fill = "Race Category") +
+  labs(title = "State Population", x = "State", y = "Proportion", fill = "Race Category") +
   scale_fill_manual(values = c("#489C92","#59B8B2", "#91C8D0", "#05686D", "#F38C79")) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
 
-combined_plot <- plot1 + plot2
+```{r}
+combined_plot <- plot1 + plot2 +
+  theme(plot.margin = margin(10, 10, 10, 10)) +
+  plot_annotation(title = "Racial Breakdown of DNA Database and Total Population in Texas") +
+  plot_spacer()
 combined_plot
 
 ```
+
 As you can see, the proportion of Black people in the population of Texas is much smaller than the proportion of Black people in the Texas DNA database. Conversely, the proportion of White people in the DNA database is smaller than the percent of the state's population that is White. This pattern is true for most other states shown, highlighting the over-representation of Black Americans in the DNA databases.
 
-###Annual DNA Collection
+### Annual DNA Collection
 These summary statistics describe the racial breakdown of DNA collected annually by state.
 [describe this data]
+
 ```{r}
 #Racial Breakdown of Annual DNA Collection - extremes and averages (states with highest collection and average for black people and white people)
+data_annual <- data_race |> 
+  filter(str_detect(variable_detailed, "_annual"))
+
+
 ```
 
-###Percent of Population Collected by Race
+### Percent of Population Collected by Race
 We can look at this data further and compare it to the racial breakdown of the total population in each state to explore the percentage of that population whose DNA has been collected.
 
 For most states, the percentage of non-White people whose DNA is collected annually is much greater compared to White people. This disparity is most apparent for the Black population, which consistently shows the highest proportion of DNA collected.
 
 Printed below are the average proportions across all states of people whose DNA is collected annually, divided by race. For example, the average percentage of Black Americans whose DNA is collected annually is 3.25%, meaning on average, 3.25% of the Black population has DNA collected annually. Other people of color have an average of 2.7% collected annually, compared to the White population, whose average percent of population with DNA collected is only 0.82%.
-```{r}
+
+```{r, warning = FALSE}
 #Graph showing stats of percent of population 
 
 data_pop_collected <- data_race |> 
@@ -548,7 +567,7 @@ ggplot(summary_pop_collected, aes(x ="", y = avg_pop_collected, fill = race_cate
 
 ```
 
-##Data on Offender Type
+## Data on Offender Type
 The following pie chart shows a summary of the proportions of arrestees and convicted offenders in the state DNA databases.
 
 ```{r}
