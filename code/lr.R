@@ -177,7 +177,7 @@ process_individuals_genotypes <- function(individuals_genotypes, df_allelefreq, 
       res <- process_loci(row, df_allelefreq, kinship_matrix)
       return(res)
     }, .progress = TRUE) %>% 
-    bind_rows()
+       data.table::rbindlist()
   
   return(final_individuals_genotypes)
 }
