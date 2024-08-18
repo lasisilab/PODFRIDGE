@@ -369,7 +369,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Murphy Data Cleaning</h1>
 <h4 class="author">Stella BooydeGraaff</h4>
-<h4 class="date">2024-08-17 01:59:11</h4>
+<h4 class="date">2024-08-18 14:58:29</h4>
 
 </div>
 
@@ -398,7 +398,7 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2024-08-17
+<strong>Last updated:</strong> 2024-08-18
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -532,15 +532,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree9acbfcf26482310a173b17fbf4f0d8698901ec65targetblank9acbfcfa">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreeece4a912e9683d0ebace37c8207d925a21af88e5targetblankece4a91a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/9acbfcf26482310a173b17fbf4f0d8698901ec65" target="_blank">9acbfcf</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/ece4a912e9683d0ebace37c8207d925a21af88e5" target="_blank">ece4a91</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree9acbfcf26482310a173b17fbf4f0d8698901ec65targetblank9acbfcfa"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreeece4a912e9683d0ebace37c8207d925a21af88e5targetblankece4a91a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -550,7 +550,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/9acbfcf26482310a173b17fbf4f0d8698901ec65" target="_blank">9acbfcf</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/ece4a912e9683d0ebace37c8207d925a21af88e5" target="_blank">ece4a91</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -614,6 +614,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/a7c07a375ebde03d47b6b75ef91f49d119d42331/analysis/murphy.rmd" target="_blank">a7c07a3</a>
+</td>
+<td>
+Stella-Joy
+</td>
+<td>
+2024-08-17
+</td>
+<td>
+Updates to murphy data visualizations
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/a7c07a375ebde03d47b6b75ef91f49d119d42331/docs/murphy.html" target="_blank">a7c07a3</a>
+</td>
+<td>
+Stella-Joy
+</td>
+<td>
+2024-08-17
+</td>
+<td>
+Updates to murphy data visualizations
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -914,46 +948,137 @@ created Murphy page
 <h1>Visualizations of State DNA Databases</h1>
 <p>Below is a small sample of the data set used to create these
 visualizations.</p>
-<pre><code># A tibble: 5 × 5
-  State        variable_detailed       variable_type       value value_type
-  &lt;chr&gt;        &lt;chr&gt;                   &lt;chr&gt;               &lt;dbl&gt; &lt;chr&gt;     
-1 Alabama      white_state             race                0.66  proportion
-2 California   male_convicted_offender sex           1603222     number    
-3 Rhode_Island white_annual            race                0.543 proportion
-4 Delaware     hispanic_annual         race                0.056 proportion
-5 South Dakota native_american_total   race            14593     number    </code></pre>
+<table>
+<caption>Sample of the Full Data</caption>
+<colgroup>
+<col width="17%" />
+<col width="32%" />
+<col width="18%" />
+<col width="16%" />
+<col width="14%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">State</th>
+<th align="left">variable_detailed</th>
+<th align="left">variable_type</th>
+<th align="right">value</th>
+<th align="left">value_type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Alabama</td>
+<td align="left">white_state</td>
+<td align="left">race</td>
+<td align="right">0.660</td>
+<td align="left">proportion</td>
+</tr>
+<tr class="even">
+<td align="left">California</td>
+<td align="left">male_convicted_offender</td>
+<td align="left">sex</td>
+<td align="right">1603222.000</td>
+<td align="left">number</td>
+</tr>
+<tr class="odd">
+<td align="left">Rhode_Island</td>
+<td align="left">white_annual</td>
+<td align="left">race</td>
+<td align="right">0.543</td>
+<td align="left">proportion</td>
+</tr>
+<tr class="even">
+<td align="left">Delaware</td>
+<td align="left">hispanic_annual</td>
+<td align="left">race</td>
+<td align="right">0.056</td>
+<td align="left">proportion</td>
+</tr>
+<tr class="odd">
+<td align="left">South Dakota</td>
+<td align="left">native_american_total</td>
+<td align="left">race</td>
+<td align="right">14593.000</td>
+<td align="left">number</td>
+</tr>
+</tbody>
+</table>
 <div id="data-on-sex" class="section level2">
 <h2>Data on Sex</h2>
 <p>The following bar chart shows the gender breakdown of the state DNA
 databases.</p>
 <p><img src="figure/murphy.rmd/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-18-1">
+Past versions of unnamed-chunk-18-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-18-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/a7c07a375ebde03d47b6b75ef91f49d119d42331/docs/figure/murphy.rmd/unnamed-chunk-18-1.png" target="_blank">a7c07a3</a>
+</td>
+<td>
+Stella-Joy
+</td>
+<td>
+2024-08-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="data-on-offender-type" class="section level2">
+<h2>Data on Offender Type</h2>
+<p>The following pie chart shows a summary of the proportions of
+arrestees and convicted offenders in the state DNA databases.</p>
+<p><img src="figure/murphy.rmd/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="data-on-race" class="section level2">
 <h2>Data on Race</h2>
 <div id="state-demographics" class="section level3">
 <h3>State Demographics</h3>
-<p>Below are some summary statistics of the racial demographics in each
-state.</p>
+<p>Below are some summary statistics of the racial demographics of each
+state’s total population.</p>
 <table>
 <caption>States with Highest Black Population</caption>
 <thead>
 <tr class="header">
 <th align="left">State</th>
-<th align="right">value</th>
+<th align="right">percentage</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td align="left">Mississippi</td>
-<td align="right">0.376</td>
+<td align="right">37.6</td>
 </tr>
 <tr class="even">
 <td align="left">Louisiana</td>
-<td align="right">0.325</td>
+<td align="right">32.5</td>
 </tr>
 <tr class="odd">
 <td align="left">Georgia</td>
-<td align="right">0.317</td>
+<td align="right">31.7</td>
 </tr>
 </tbody>
 </table>
@@ -962,34 +1087,36 @@ state.</p>
 <thead>
 <tr class="header">
 <th align="left">State</th>
-<th align="right">value</th>
+<th align="right">percentage</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td align="left">Montana</td>
-<td align="right">0.006</td>
+<td align="right">0.6</td>
 </tr>
 <tr class="even">
 <td align="left">Idaho</td>
-<td align="right">0.008</td>
+<td align="right">0.8</td>
 </tr>
 <tr class="odd">
 <td align="left">Utah</td>
-<td align="right">0.013</td>
+<td align="right">1.3</td>
 </tr>
 </tbody>
 </table>
+<p>And below is the average proportion of Black people in a state and
+the average proportion of Black people in a state’s DNA database.</p>
 <table>
 <caption>Average Black Population Proportion Across All States</caption>
 <thead>
 <tr class="header">
-<th align="right">average_value</th>
+<th align="right">average_proportion</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">0.1096</td>
+<td align="right">10.96</td>
 </tr>
 </tbody>
 </table>
@@ -998,12 +1125,12 @@ state.</p>
 States</caption>
 <thead>
 <tr class="header">
-<th align="right">average_value</th>
+<th align="right">average_proportion</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">0.2093658</td>
+<td align="right">20.93429</td>
 </tr>
 </tbody>
 </table>
@@ -1015,15 +1142,126 @@ these databases.</p>
 <h3>Race Totals</h3>
 <p>The following bar chart displays the proportions of each race in a
 state’s DNA database.</p>
-<p><img src="figure/murphy.rmd/unnamed-chunk-21-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/murphy.rmd/unnamed-chunk-23-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-23-1">
+Past versions of unnamed-chunk-23-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-23-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/a7c07a375ebde03d47b6b75ef91f49d119d42331/docs/figure/murphy.rmd/unnamed-chunk-23-1.png" target="_blank">a7c07a3</a>
+</td>
+<td>
+Stella-Joy
+</td>
+<td>
+2024-08-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Despite White Americans usually making up the majority of the
 population in the database, there is still a significant disparity
 present in this data. Comparing this to a graph of the racial breakdown
 of the total population in each of these states uncovers that Black
 Americans and other people of color are over represented in their
 state’s database.</p>
-<p><img src="figure/murphy.rmd/unnamed-chunk-22-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p><img src="figure/murphy.rmd/unnamed-chunk-23-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/murphy.rmd/unnamed-chunk-24-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-24-1">
+Past versions of unnamed-chunk-24-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-24-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/a7c07a375ebde03d47b6b75ef91f49d119d42331/docs/figure/murphy.rmd/unnamed-chunk-24-1.png" target="_blank">a7c07a3</a>
+</td>
+<td>
+Stella-Joy
+</td>
+<td>
+2024-08-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/murphy.rmd/unnamed-chunk-25-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-25-1">
+Past versions of unnamed-chunk-25-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-25-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/a7c07a375ebde03d47b6b75ef91f49d119d42331/docs/figure/murphy.rmd/unnamed-chunk-25-1.png" target="_blank">a7c07a3</a>
+</td>
+<td>
+Stella-Joy
+</td>
+<td>
+2024-08-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>As you can see, the proportion of Black people in the population of
 Texas is much smaller than the proportion of Black people in the Texas
 DNA database. Conversely, the proportion of White people in the DNA
@@ -1034,7 +1272,99 @@ the over-representation of Black Americans in the DNA databases.</p>
 <div id="annual-dna-collection" class="section level3">
 <h3>Annual DNA Collection</h3>
 <p>These summary statistics describe the racial breakdown of DNA
-collected annually by state. [describe this data]</p>
+collected annually by state.</p>
+<table>
+<caption>Average Proportion of DNA collected Annually that is from Black
+Americans (Across All States)</caption>
+<thead>
+<tr class="header">
+<th align="right">average_proportion</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">29.332</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>Average Proportion of DNA collected Annually from White
+Americans (Across All States)</caption>
+<thead>
+<tr class="header">
+<th align="right">average_proportion</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">29.332</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>State with Highest Proportion of Black American DNA Collected
+Annually</caption>
+<thead>
+<tr class="header">
+<th align="left">State</th>
+<th align="right">percentage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Delaware</td>
+<td align="right">79.9</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>State with Lowest Proportion of Black American DNA Collected
+Annually</caption>
+<thead>
+<tr class="header">
+<th align="left">State</th>
+<th align="right">percentage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Montana</td>
+<td align="right">1.9</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>State with Highest Proportion of White American DNA Collected
+Annually</caption>
+<thead>
+<tr class="header">
+<th align="left">State</th>
+<th align="right">percentage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">New_Hampshire</td>
+<td align="right">92.6</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>State with Lowest Proportion of White American DNA Collected
+Annually</caption>
+<thead>
+<tr class="header">
+<th align="left">State</th>
+<th align="right">percentage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">New_York</td>
+<td align="right">12.9</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="percent-of-population-collected-by-race"
 class="section level3">
@@ -1055,14 +1385,7 @@ collected annually, compared to the White population, whose average
 percent of population with DNA collected is only 0.82%.</p>
 <pre><code>`summarise()` has grouped output by &#39;State&#39;. You can override using the
 `.groups` argument.</code></pre>
-<p><img src="figure/murphy.rmd/unnamed-chunk-25-1.png" width="672" style="display: block; margin: auto;" /></p>
-</div>
-</div>
-<div id="data-on-offender-type" class="section level2">
-<h2>Data on Offender Type</h2>
-<p>The following pie chart shows a summary of the proportions of
-arrestees and convicted offenders in the state DNA databases.</p>
-<p><img src="figure/murphy.rmd/unnamed-chunk-26-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/murphy.rmd/unnamed-chunk-27-1.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1111,6 +1434,7 @@ loaded via a namespace (and not attached):
 [45] glue_1.7.0        Rcpp_1.0.12       highr_0.11        xfun_0.45        
 [49] tidyselect_1.2.1  rstudioapi_0.16.0 farver_2.1.2      htmltools_0.5.8.1
 [53] labeling_0.4.3    rmarkdown_2.27    compiler_4.4.1   </code></pre>
+</div>
 </div>
 </div>
 </div>
