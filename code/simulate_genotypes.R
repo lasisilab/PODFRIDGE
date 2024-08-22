@@ -4,6 +4,7 @@ suppressMessages(suppressWarnings({
   library(furrr)
   library(data.table)
   library(future)
+  library(parallel)
   library(doParallel)
 }))
 
