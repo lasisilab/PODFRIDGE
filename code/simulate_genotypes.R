@@ -4,7 +4,7 @@ suppressMessages(suppressWarnings({
   library(furrr)
   library(data.table)
   library(future)
-  library(parallel)
+  library(doParallel)
 }))
 
 if(!exists("use_remote_cluster")){ #Add this parameter to the run script
