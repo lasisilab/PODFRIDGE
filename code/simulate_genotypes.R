@@ -32,6 +32,9 @@ if(use_remote_cluster==0){
 #use 'cluster' to run in parallel on one or more machines
 #use 'sequential' to test in series (no parallel processing)
 
+# up the limit of memory available to future per core
+options('future.globals.maxSize' = 1014*1024^2)
+
 # Helper function for logging
 log_message <- function(message) {
   cat(paste0("[", Sys.time(), "] ", message, "\n"))
