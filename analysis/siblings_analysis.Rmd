@@ -123,11 +123,13 @@ nice_table(
 ```{r chidren, results = FALSE,warning=FALSE,message=FALSE}
 ggplot(data = children_data,aes(x=chborn_num,y=proportion)) +
   geom_col(position = position_dodge()) + 
-  labs(title = "Distribution of Number of Children by Census Year for each Race", x = "Number of Children") +
+  labs(title = "Distribution of Number of Children by Census Year for each Race", x = "Number of Children", y = "Proportion", caption = "Footnote: The category '12 Number of Children' includes families with 12 or more children.") +
   facet_grid(RACE~YEAR) + theme_classic()+
   theme(plot.margin = unit(c(1, 1, 1, 1), "cm"), 
-        plot.title = element_text(size = 12, hjust = 0.5))
+        plot.title = element_text(size = 12, hjust = 0.5), 
+        plot.caption = element_text(hjust=0))
 ```
+> Note: The graph shows racial disparities in family size. Black/African American families consistently have a higher proportion of larger families compared to White families across all census years.Larger family sizes, may result in a higher number of first-degree relatives (siblings). This can increase the probability of detecting individuals in forensic databases.
 
 
 ## 2.Distribution of Number of Sibling by Census Year for each Race
@@ -146,12 +148,13 @@ child_df_gb$prob = ifelse(child_df_gb$RACE == "White",child_df_gb$count/4380009,
 
 ggplot(data = child_df_gb, aes(x = nsib, y = prob)) +
   geom_col(position = position_dodge()) + 
-  labs(title = "Distribution of Number of Sibling by Census Year for each Race", x = "Number of Sibling", y = "Proportion") +
+  labs(title = "Distribution of Number of Sibling by Census Year for each Race", x = "Number of Sibling", y = "Proportion", caption = "Footnote: The category '11 Number of Siblings' includes individuals with 11 or more siblings.") +
   facet_grid(RACE~YEAR) + theme_classic()+
   theme(plot.margin = unit(c(1, 1, 1, 1), "cm"), 
-        plot.title = element_text(size = 12, hjust = 0.5))
+        plot.title = element_text(size = 12, hjust = 0.5), 
+        plot.caption = element_text(hjust=0))
 ```
-
+> Note: Both Black/African American and White populations has diminishing trend of having larger sibling groups over the decades. However, the graph indicates differences in sibling numbers between the two racial groups. Black/African American individuals are more likely to have larger numbers of siblings across all census years compared to White individuals.
 
 ## 3.Distribution of Number of Children/Siblings by Census Year 
 
@@ -490,30 +493,35 @@ ggplot() +
 
 ### Plot for Number of Children
 ```{r}
-ggplot(subset(df_50_60, frequency_type == "freq_mother"), aes(x = chborn_num, y = frequency, fill = as.factor(YEAR))) +
+ggplot(subset(df_50_60, frequency_type == "freq_mother"), aes(x = chborn_num, y = norm_freq, fill = as.factor(YEAR))) +
   geom_col(position = "dodge")+ 
   facet_wrap(~ RACE, ncol=1, scales = "free_y") +
   scale_fill_manual(values=c("#999999", "#E69F00", "#56B4E9", "#009E73"), name = "YEAR") +
   scale_x_continuous(breaks = 0:12) + 
-  labs(title = "Comparison of Frequencies by YEAR and RACE(Mother Aged 50-60)",
+  labs(title = "Comparison of Normalized Frequencies by YEAR and RACE(Mother Aged 50-60)",
        x = "Number of Children",
-       y = "Frequency")  +
+       y = "Normalized Frequency", 
+       caption = "Footnote: The category '12 Number of Children' includes families with 12 or more children.")  +
   theme_minimal()+
-  theme(plot.title = element_text(size = 10, hjust = 0.5))
+  theme(plot.title = element_text(size = 10, hjust = 0.5), 
+         plot.caption = element_text(hjust=0))
 ```
+> Note: Focusing on mothers in the 50-60 age range, the graph shows that family size in both racial group has generally decreased over time, with fewer families having a large number of children in the more recent years (1980 and 1990). In addition, it also shows a racial disparity between racial groups. Black/African American families consistently have a higher proportion of larger families compared to White families across all years.
 
 
 ### Plot for Number of Siblings
 ```{r}
-ggplot(subset(df_50_60, frequency_type == "freq_n_sib"), aes(x = n_sib, y = frequency, fill = as.factor(YEAR))) +
+ggplot(subset(df_50_60, frequency_type == "freq_n_sib"), aes(x = n_sib, y = norm_freq, fill = as.factor(YEAR))) +
   geom_col(position = "dodge")+ 
   facet_wrap(~ RACE, ncol=1, scales = "free_y") +
   scale_fill_manual(values=c("#999999", "#E69F00", "#56B4E9", "#009E73"), name = "YEAR") +
   scale_x_continuous(breaks = 0:12) + 
-  labs(title = "Comparison of Frequencies by YEAR and RACE(Mother Aged 50-60)",
+  labs(title = "Comparison of Normalized Frequencies by YEAR and RACE(Mother Aged 50-60)",
        x = "Number of Siblings",
-       y = "Frequency")  +
+       y = "Normalized Frequency", 
+       caption = "Footnote: The category '11 Number of Siblings' includes individuals with 11 or more siblings.")  +
   theme_minimal()+
-  theme(plot.title = element_text(size = 10, hjust = 0.5))
+  theme(plot.title = element_text(size = 10, hjust = 0.5), 
+         plot.caption = element_text(hjust=0))
 ```
-
+>Note: Focusing on mothers in the 50-60 age range, the graph shows a significant change in the distribution of number of siblings across decades. Particularly by 1990, there is a noticeable shift toward smaller sibling groups in both racial groups. The graph also shows a clear racial disparity in number of siblings. In the earlier census year, a higher proportion of Black/African American individuals have a larger number of siblings. However, individuals in white population display a steeper decline in the number of siblings as we move towards more recent years. 
