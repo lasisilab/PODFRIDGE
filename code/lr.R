@@ -171,19 +171,20 @@ process_loci <- function(row, allele_frequency_data, kinship_matrix) {
 
 process_individuals_genotypes <- function(individuals_genotypes, df_allelefreq, kinship_matrix) {
   # Map over rows of individuals_genotypes and process each row
-  final_individuals_genotypes <- individuals_genotypes %>%
+  final_individuals_genotypes <- individuals_genotypes |>
     future_pmap(function(...) {
       row <- tibble(...)
       res <- process_loci(row, df_allelefreq, kinship_matrix)
       return(res)
-    }, .progress = TRUE) %>% 
-       data.table::rbindlist()
+    }, .progress = TRUE) |> 
+       rbindlist()
   
   return(final_individuals_genotypes)
 }
 
 calculate_combined_lrs <- function(final_results, loci_lists) {
   final_results <- as.data.table(final_results)
+  final_results[sapply(final_results, is.infinite)] <- NA
   combined_lrs <- final_results[, .(
     core_13 = prod(LR[locus %in% loci_lists$core_13], na.rm = TRUE),
     identifiler_15 = prod(LR[locus %in% loci_lists$identifiler_15], na.rm = TRUE),

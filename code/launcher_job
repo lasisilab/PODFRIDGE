@@ -1,0 +1,5 @@
+r simulate_genotypes.R 40000 80000 "JOBNAME1"
+r simulate_genotypes.R 40000 80000 "JOBNAME2"
+r simulate_genotypes.R 40000 80000 "JOBNAME3"
+r simulate_genotypes.R 40000 80000 "JOBNAME4"
+r simulate_genotypes.R 40000 80000 "JOBNAME5"
