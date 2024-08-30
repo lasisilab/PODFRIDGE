@@ -111,7 +111,7 @@ nice_table(
   title = c("Table 4", "Summary Statistics of Number of Siblings of White Population")
 )
 ```
->Note: On average, individuals from White population have smaller number of siblings than Black/African American Population across all census year. 
+**Note:** On average, individuals from White population have smaller number of siblings than Black/African American Population across all census year. 
 
 
 # Data Visualization
@@ -132,7 +132,7 @@ ggplot(data = children_data,aes(x=chborn_num,y=proportion, fill = as.factor(chbo
         plot.caption = element_text(hjust=0))+
   scale_fill_manual(values = my_colors, name = "Number of Children")
 ```
-> Note: The graph shows racial disparities in family size. Black/African American families consistently have a higher proportion of larger families compared to White families across all census years.Larger family sizes, may result in a higher number of first-degree relatives (siblings). This can increase the probability of detecting individuals in forensic databases.
+**Note:** The graph shows racial disparities in family size. Black/African American families consistently have a higher proportion of larger families compared to White families across all census years.Larger family sizes, may result in a higher number of first-degree relatives (siblings). This can increase the probability of detecting individuals in forensic databases.
 
 
 ## 2.Distribution of Number of Sibling by Census Year for each Race
@@ -158,7 +158,7 @@ ggplot(data = child_df_gb, aes(x = nsib, y = prob, fill = as.factor(nsib)))+
         plot.caption = element_text(hjust=0))+
   scale_fill_manual(values = my_colors, name = "Number of Siblings")
 ```
-> Note: Both Black/African American and White populations has diminishing trend of having larger sibling groups over the decades. However, the graph indicates differences in sibling numbers between the two racial groups. Black/African American individuals are more likely to have larger numbers of siblings across all census years compared to White individuals.
+**Note:** Both Black/African American and White populations has diminishing trend of having larger sibling groups over the decades. However, the graph indicates differences in sibling numbers between the two racial groups. Black/African American individuals are more likely to have larger numbers of siblings across all census years compared to White individuals.
 
 
 ## 3.Comparison of Frequency across YEAR for 50-60
@@ -211,7 +211,7 @@ ggplot(subset(df_50_60, frequency_type == "freq_mother"), aes(x = chborn_num, y 
   theme(plot.title = element_text(size = 10, hjust = 0.5), 
          plot.caption = element_text(hjust=0))
 ```
-> Note: Focusing on mothers in the 50-60 age range, the graph shows that family size in both racial group has generally decreased over time, with fewer families having a large number of children in the more recent years (1980 and 1990). In addition, it also shows a racial disparity between racial groups. Black/African American families consistently have a higher proportion of larger families compared to White families across all years.
+**Note:** Focusing on mothers in the 50-60 age range, the graph shows that family size in both racial group has generally decreased over time, with fewer families having a large number of children in the more recent years (1980 and 1990). In addition, it also shows a racial disparity between racial groups. Black/African American families consistently have a higher proportion of larger families compared to White families across all years.
 
 
 ### Plot for Number of Siblings
@@ -229,4 +229,6 @@ ggplot(subset(df_50_60, frequency_type == "freq_n_sib"), aes(x = n_sib, y = norm
   theme(plot.title = element_text(size = 10, hjust = 0.5), 
          plot.caption = element_text(hjust=0))
 ```
->Note: Focusing on mothers in the 50-60 age range, the graph shows a significant change in the distribution of number of siblings across decades. Particularly by 1990, there is a noticeable shift toward smaller sibling groups in both racial groups. The graph also shows a clear racial disparity in number of siblings. In the earlier census year, a higher proportion of Black/African American individuals have a larger number of siblings. However, individuals in white population display a steeper decline in the number of siblings as we move towards more recent years. 
+**Note:** Focusing on mothers in the 50-60 age range, the graph shows a significant change in the distribution of number of siblings across decades. Particularly by 1990, there is a noticeable shift toward smaller sibling groups in both racial groups. The graph also shows a clear racial disparity in number of siblings. In the earlier census year, a higher proportion of Black/African American individuals have a larger number of siblings. However, individuals in white population display a steeper decline in the number of siblings as we move towards more recent years. 
+
+
