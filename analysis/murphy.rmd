@@ -292,7 +292,7 @@ data_gender_simplified <- data_gender_proportions |>
 #stacked bar chart simplified
 ggplot(data_gender_simplified, aes(x = State, y = total_value, fill = simplified_sex)) +
   geom_bar(stat = "identity") +  # Stacked bar chart by default
-  scale_fill_manual(values = c("#489C92", "#F38C79", "#D8DCDA")) +  # color palette
+  scale_fill_manual(values = c("#7253FF", "#f77A2E", "#D8DCDA")) +  # color palette
   labs(y = "Proportion", x = "State", title = "Gender Distribution of DNA Database by State", fill = "Sex") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
@@ -341,7 +341,7 @@ ggplot(data_offender_type_summarized, aes(x = "", y = total_value, fill = variab
         axis.title.y = element_blank(),
         axis.ticks = element_blank(),
         axis.text = element_blank()) +
-  scale_fill_manual(values = c("#59B8B2", "#F38C79"))
+  scale_fill_manual(values = c("#5E8BFF", "#DE3A8A"))
 
 ```
 
@@ -475,7 +475,7 @@ ggplot(race_totals |>
        x = "State",
        y = "Proportion",
        fill = "Race Category") +
-  scale_fill_manual(values = c("#BAD1DC", "#489C92","#59B8B2", "#91C8D0", "#05686D", "#F38C79")) +
+  scale_fill_manual(values = c("#5E8BFF26", "#5E8BFF3D", "#5E8BFF70", "#5E8BFFA6","#5E8BFFE8", "#5E8BFF", "#DE3A8A")) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
@@ -508,7 +508,7 @@ ggplot(select_states |>
        aes(x = State, y = value, fill = variable_detailed)) +
   geom_bar(stat = "identity") +
   labs(title = "Proportion of Races by State", x = "State", y = "Proportion", fill = "Race Category") +
-  scale_fill_manual(values = c("#489C92","#59B8B2", "#91C8D0", "#05686D", "#F38C79")) +
+  scale_fill_manual(values = c("#5E8BFF3D", "#5E8BFF70", "#5E8BFFA6","#5E8BFFE8", "#5E8BFF", "#DE3A8A")) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
@@ -525,7 +525,7 @@ plot1 <- ggplot(race_totals |>
   labs(title = "DNA Database",
        x = "State",
        y = "Proportion") +
-  scale_fill_manual(values = c("#BAD1DC", "#489C92","#59B8B2", "#91C8D0", "#05686D", "#F38C79")) +
+  scale_fill_manual(values = c("#5E8BFF3D", "#5E8BFF70", "#5E8BFFA6","#5E8BFFE8", "#5E8BFF", "#DE3A8A")) +
   theme_minimal() +
   theme(legend.position = "none") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
@@ -553,7 +553,7 @@ plot2 <- ggplot(select_states |>
        aes(x = State, y = value, fill = variable_detailed)) +
   geom_bar(stat = "identity") +
   labs(title = "State Population", x = "State", y = "Proportion", fill = "Race Category") +
-  scale_fill_manual(values = c("#489C92","#59B8B2", "#91C8D0", "#05686D", "#F38C79")) +
+  scale_fill_manual(values = c("#5E8BFF3D", "#5E8BFF70", "#5E8BFFA6","#5E8BFFE8", "#5E8BFF", "#DE3A8A")) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
@@ -622,10 +622,9 @@ ggplot(summary_data_annual_pie, aes(x ="", y = avg_data_annual, fill = race_cate
   coord_polar("y") +
    geom_text(aes(label = label), position = position_stack(vjust = 0.5), color = "white", size = 4) +
   theme_void() +
-  theme(legend.position = "none") +
   labs(title = "Average Proportion of DNA Collected Annually (Across All States)",
        fill = "Race") +
-  scale_fill_manual(values = c("#05686D", "#F38C79", "#BAD1DC"))
+  scale_fill_manual(values = c("#5E8BFF", "#DE3A8A", "#FFB000B5"))
 
 data_state <- data_state |> 
   mutate(race_category = case_when(
@@ -651,7 +650,7 @@ ggplot(summary_data_state, aes(x ="", y = avg_data_state, fill = race_category))
   theme_void() +
   labs(title = "Average Racial Breakdown (Across All States)",
        fill = "Race") +
-  scale_fill_manual(values = c("#05686D", "#F38C79", "#BAD1DC"))
+  scale_fill_manual(values = c("#5E8BFF", "#DE3A8A", "#FFB000B5"))
 
 #combined_plot <- plot1 + plot2 +
 #  plot_annotation(title = "Side by Side Pie Charts of Proportion of Races with DNA #Collected and Racial Breakdown of the Population Across All States") +
@@ -736,7 +735,7 @@ ggplot(summary_pop_collected, aes(x ="", y = avg_pop_collected, fill = race_cate
   theme_void() +
   labs(title = "Average Percentage of Each Race with DNA Collected Annually",
        fill = "Race") +
-  scale_fill_manual(values = c("#05686D", "#F38C79", "#BAD1DC"))
+  scale_fill_manual(values = c("#5E8BFF", "#DE3A8A", "#FFB000B5"))
 
 ```
 
