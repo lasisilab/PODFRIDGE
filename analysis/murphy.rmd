@@ -292,7 +292,7 @@ data_gender_simplified <- data_gender_proportions |>
 #stacked bar chart simplified
 ggplot(data_gender_simplified, aes(x = State, y = total_value, fill = simplified_sex)) +
   geom_bar(stat = "identity") +  # Stacked bar chart by default
-  scale_fill_manual(values = c("#7253FF", "#f77A2E", "#D8DCDA")) +  # color palette
+  scale_fill_manual(values = c("#DE3A8A", "#7253FF", "#D8DCDA")) +  # color palette
   labs(y = "Proportion", x = "State", title = "Gender Distribution of DNA Database by State", fill = "Sex") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
@@ -341,7 +341,7 @@ ggplot(data_offender_type_summarized, aes(x = "", y = total_value, fill = variab
         axis.title.y = element_blank(),
         axis.ticks = element_blank(),
         axis.text = element_blank()) +
-  scale_fill_manual(values = c("#5E8BFF", "#DE3A8A"))
+  scale_fill_manual(values = c("#7253FF", "#DE3A8A"))
 
 ```
 
@@ -475,10 +475,12 @@ ggplot(race_totals |>
        x = "State",
        y = "Proportion",
        fill = "Race Category") +
-  scale_fill_manual(values = c("#5E8BFF26", "#5E8BFF3D", "#5E8BFF70", "#5E8BFFA6","#5E8BFFE8", "#5E8BFF", "#DE3A8A")) +
+  scale_fill_manual(values = c("#5E8BFF3D", "#5E8BFF70", "#5E8BFFA6","#5E8BFFE8", "#5E8BFF", "#DE3A8A")) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
+
+#"#5E8BFF26", "#5E8BFF3D", "#5E8BFF70", "#5E8BFFA6","#5E8BFFE8", "#5E8BFF", "#DE3A8A"
 ```
 
 Despite White Americans usually making up the majority of the population in the database, there is still a significant disparity present in this data. Comparing this to a graph of the racial breakdown of the total population in each of these states uncovers that Black Americans and other people of color are over represented in their state's database.
@@ -508,61 +510,136 @@ ggplot(select_states |>
        aes(x = State, y = value, fill = variable_detailed)) +
   geom_bar(stat = "identity") +
   labs(title = "Proportion of Races by State", x = "State", y = "Proportion", fill = "Race Category") +
-  scale_fill_manual(values = c("#5E8BFF3D", "#5E8BFF70", "#5E8BFFA6","#5E8BFFE8", "#5E8BFF", "#DE3A8A")) +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-#side by side plots
-desired_order <- c("Other or Unknown", "Native American", "Hispanic", "Asian", "Black", "White")
-
-selected_states <- c("Texas")
-
-plot1 <- ggplot(race_totals |> 
-        filter(State %in% selected_states) |> 
-       mutate(variable_detailed = factor(variable_detailed, levels = desired_order)),
-       aes(x = State, y = proportion_value, fill = variable_detailed)) +
-  geom_bar(stat = "identity") + 
-  labs(title = "DNA Database",
-       x = "State",
-       y = "Proportion") +
-  scale_fill_manual(values = c("#5E8BFF3D", "#5E8BFF70", "#5E8BFFA6","#5E8BFFE8", "#5E8BFF", "#DE3A8A")) +
-  theme_minimal() +
-  theme(legend.position = "none") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-data_state <- data_race |> 
-  filter(str_detect(variable_detailed, "_state"))
-
-selected_states <- c("Texas")
-
-select_states <- data_state |> 
-  filter(State %in% selected_states) |> 
-  mutate(variable_detailed = case_when(
-    variable_detailed == "white_state" ~ "White",
-    variable_detailed == "black_state" ~ "Black",
-    variable_detailed == "asian_state" ~ "Asian",
-    variable_detailed == "hispanic_state" ~ "Hispanic",
-    variable_detailed == "native_american_state" ~ "Native American",
-    TRUE ~ variable_detailed
-  ))
-
-desired_order <- c("Native American", "Hispanic", "Asian", "Black", "White")
-
-plot2 <- ggplot(select_states |>
-       mutate(variable_detailed = factor(variable_detailed, levels = desired_order)),
-       aes(x = State, y = value, fill = variable_detailed)) +
-  geom_bar(stat = "identity") +
-  labs(title = "State Population", x = "State", y = "Proportion", fill = "Race Category") +
-  scale_fill_manual(values = c("#5E8BFF3D", "#5E8BFF70", "#5E8BFFA6","#5E8BFFE8", "#5E8BFF", "#DE3A8A")) +
+  scale_fill_manual(values = c("#5E8BFF3D", "#5E8BFF70", "#5E8BFFA6", "#5E8BFF", "#DE3A8A")) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
 ```{r}
-combined_plot <- plot1 + plot2 +
-  theme(plot.margin = margin(10, 10, 10, 10)) +
-  plot_annotation(title = "Racial Breakdown of DNA Database and Total Population in Texas") +
-  plot_spacer()
+
+#side by side plots
+#desired_order <- c("Other or Unknown", "Native American", "Hispanic", "Asian", "Black", "White")
+
+#selected_states <- c("Texas")
+
+#plot1 <- ggplot(race_totals |> 
+#        filter(State %in% selected_states) |> 
+#       mutate(variable_detailed = factor(variable_detailed, levels = #desired_order)),
+#       aes(x = State, y = proportion_value, fill = #variable_detailed)) +
+#  geom_bar(stat = "identity") + 
+#  labs(title = "DNA Database",
+#       x = NULL,
+#       y = "Proportion") +
+#  scale_fill_manual(values = c("#5E8BFF26", "#5E8BFF3D", #"#5E8BFF70", "#5E8BFFA6", "#5E8BFF", "#DE3A8A")) +
+#  theme_minimal() +
+#  theme(legend.position = "none") +
+#  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+#data_state <- data_race |> 
+#  filter(str_detect(variable_detailed, "_state"))
+
+#selected_states <- c("Texas")
+
+#select_states <- data_state |> 
+#  filter(State %in% selected_states) |> 
+#  mutate(variable_detailed = case_when(
+#    variable_detailed == "white_state" ~ "White",
+#    variable_detailed == "black_state" ~ "Black",
+#    variable_detailed == "asian_state" ~ "Asian",
+#    variable_detailed == "hispanic_state" ~ "Hispanic",
+#    variable_detailed == "native_american_state" ~ "Native American",
+#    TRUE ~ variable_detailed
+#  ))
+
+#desired_order <- c("Native American", "Hispanic", "Asian", "Black", #"White")
+
+#plot2 <- ggplot(select_states |>
+#       mutate(variable_detailed = factor(variable_detailed, levels = #desired_order)),
+#       aes(x = State, y = value, fill = variable_detailed)) +
+#  geom_bar(stat = "identity") +
+#  labs(title = "State Population", x = NULL, y = "Proportion", fill #= "Race Category") +
+#  scale_fill_manual(values = c("#5E8BFF3D", "#5E8BFF70", #"#5E8BFFA6", "#5E8BFF", "#DE3A8A")) +
+#  theme_minimal() +
+#  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+#combined_plot <- plot1 + plot2 +
+#  theme(plot.margin = margin(10, 10, 10, 10)) +
+#  plot_annotation(title = "Racial Breakdown of DNA Database and Total Population in Texas") +
+#  plot_spacer()
+#combined_plot
+```
+
+```{r}
+combined_data <- race_totals |> 
+  mutate(dataset = "DNA Database",
+         variable_detailed = factor(variable_detailed, levels = desired_order),
+         proportion_value = proportion_value) |>
+  select(State, variable_detailed, proportion_value, dataset) |> 
+  rename(value = proportion_value) |>
+  bind_rows(
+    data_race |> 
+      filter(str_detect(variable_detailed, "_state")) |> 
+      mutate(
+        variable_detailed = case_when(
+          variable_detailed == "white_state" ~ "White",
+          variable_detailed == "black_state" ~ "Black",
+          variable_detailed == "asian_state" ~ "Asian",
+          variable_detailed == "hispanic_state" ~ "Hispanic",
+          variable_detailed == "native_american_state" ~ "Native American",
+          TRUE ~ variable_detailed
+        ),
+        dataset = "State Population",
+        variable_detailed = factor(variable_detailed, levels = desired_order)
+      ) |> 
+      select(State, variable_detailed, value, dataset)
+  )
+
+combined_data <- combined_data |> 
+  mutate(
+    State = case_when(
+      State == "South_Dakota" ~ "South Dakota",
+      TRUE ~ State)
+  )
+
+combined_data <- combined_data |> 
+  filter(State %in% unique(combined_data$State[combined_data$dataset == "DNA Database"]))|>
+  filter(!is.na(variable_detailed))
+
+label_data <- combined_data  |> 
+  group_by(State, dataset, variable_detailed)  |> 
+  summarize(value = sum(value))  |> 
+  ungroup()
+
+```
+
+```{r}
+
+# Plot using facet_wrap
+combined_plot <- ggplot(combined_data, aes(x = dataset, y = value, fill = variable_detailed)) +
+  geom_bar(stat = "identity", position = "stack") +
+  geom_text(data = label_data, aes(x = dataset, y = -0.05, label = dataset),
+            size = 2.25,  # Make the text smaller
+            vjust = 1, 
+            hjust = 0.5, 
+            fontface = "plain") + 
+  labs(title = "Racial Breakdown of DNA Database and Total Population by State",
+       x = "Dataset",
+       y = "Proportion",
+       fill = "Race Category",
+       caption = "*Other or Unknown races not included") +
+  scale_fill_manual(values = c("#5E8BFF3D", "#5E8BFF70", "#5E8BFFA6", "#5E8BFF", "#DE3A8A")) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    axis.text.x = element_blank(),
+    axis.title.x = element_blank(),
+    strip.text.y = element_blank(),  # Removes y-axis strip labels if necessary
+    axis.title.y = element_blank(),    # Removes y-axis title if it's not needed
+    panel.spacing = unit(1, "lines")
+  ) +
+  facet_wrap(~ State, scales = "free_y", ncol = 3)
+
+# Display the combined plot
 combined_plot
 
 ```
@@ -624,7 +701,7 @@ ggplot(summary_data_annual_pie, aes(x ="", y = avg_data_annual, fill = race_cate
   theme_void() +
   labs(title = "Average Proportion of DNA Collected Annually (Across All States)",
        fill = "Race") +
-  scale_fill_manual(values = c("#5E8BFF", "#DE3A8A", "#FFB000B5"))
+  scale_fill_manual(values = c("#5E8BFF", "#DE3A8A", "#5E8BFF3D"))
 
 data_state <- data_state |> 
   mutate(race_category = case_when(
@@ -650,7 +727,7 @@ ggplot(summary_data_state, aes(x ="", y = avg_data_state, fill = race_category))
   theme_void() +
   labs(title = "Average Racial Breakdown (Across All States)",
        fill = "Race") +
-  scale_fill_manual(values = c("#5E8BFF", "#DE3A8A", "#FFB000B5"))
+  scale_fill_manual(values = c("#5E8BFF", "#DE3A8A", "#5E8BFF3D"))
 
 #combined_plot <- plot1 + plot2 +
 #  plot_annotation(title = "Side by Side Pie Charts of Proportion of Races with DNA #Collected and Racial Breakdown of the Population Across All States") +
@@ -735,7 +812,7 @@ ggplot(summary_pop_collected, aes(x ="", y = avg_pop_collected, fill = race_cate
   theme_void() +
   labs(title = "Average Percentage of Each Race with DNA Collected Annually",
        fill = "Race") +
-  scale_fill_manual(values = c("#5E8BFF", "#DE3A8A", "#FFB000B5"))
+  scale_fill_manual(values = c("#5E8BFF", "#DE3A8A", "#5E8BFF3D"))
 
 ```
 
