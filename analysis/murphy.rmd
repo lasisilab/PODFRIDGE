@@ -518,56 +518,57 @@ ggplot(select_states |>
 ```{r}
 
 #side by side plots
-#desired_order <- c("Other or Unknown", "Native American", "Hispanic", "Asian", "Black", "White")
+desired_order <- c("Other or Unknown", "Native American", "Hispanic", "Asian", "Black", "White")
 
-#selected_states <- c("Texas")
+selected_states <- c("Texas")
 
-#plot1 <- ggplot(race_totals |> 
-#        filter(State %in% selected_states) |> 
-#       mutate(variable_detailed = factor(variable_detailed, levels = #desired_order)),
-#       aes(x = State, y = proportion_value, fill = #variable_detailed)) +
-#  geom_bar(stat = "identity") + 
-#  labs(title = "DNA Database",
-#       x = NULL,
-#       y = "Proportion") +
-#  scale_fill_manual(values = c("#5E8BFF26", "#5E8BFF3D", #"#5E8BFF70", "#5E8BFFA6", "#5E8BFF", "#DE3A8A")) +
-#  theme_minimal() +
-#  theme(legend.position = "none") +
-#  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+plot1 <- ggplot(race_totals |> 
+        filter(State %in% selected_states) |> 
+       mutate(variable_detailed = factor(variable_detailed, levels = desired_order)),
+       aes(x = State, y = proportion_value, fill = variable_detailed)) +
+  geom_bar(stat = "identity") + 
+  labs(title = "DNA Database",
+       x = NULL,
+       y = "Proportion") +
+  scale_fill_manual(values = c("#5E8BFF26", "#5E8BFF3D", "#5E8BFF70", "#5E8BFFA6", "#5E8BFF", "#DE3A8A")) +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-#data_state <- data_race |> 
-#  filter(str_detect(variable_detailed, "_state"))
+data_state <- data_race |> 
+  filter(str_detect(variable_detailed, "_state"))
 
-#selected_states <- c("Texas")
+selected_states <- c("Texas")
 
-#select_states <- data_state |> 
-#  filter(State %in% selected_states) |> 
-#  mutate(variable_detailed = case_when(
-#    variable_detailed == "white_state" ~ "White",
-#    variable_detailed == "black_state" ~ "Black",
-#    variable_detailed == "asian_state" ~ "Asian",
-#    variable_detailed == "hispanic_state" ~ "Hispanic",
-#    variable_detailed == "native_american_state" ~ "Native American",
-#    TRUE ~ variable_detailed
-#  ))
+select_states <- data_state |> 
+  filter(State %in% selected_states) |> 
+  mutate(variable_detailed = case_when(
+    variable_detailed == "white_state" ~ "White",
+    variable_detailed == "black_state" ~ "Black",
+    variable_detailed == "asian_state" ~ "Asian",
+    variable_detailed == "hispanic_state" ~ "Hispanic",
+    variable_detailed == "native_american_state" ~ "Native American",
+    TRUE ~ variable_detailed
+  ))
 
-#desired_order <- c("Native American", "Hispanic", "Asian", "Black", #"White")
+desired_order <- c("Native American", "Hispanic", "Asian", "Black", "White")
 
-#plot2 <- ggplot(select_states |>
-#       mutate(variable_detailed = factor(variable_detailed, levels = #desired_order)),
-#       aes(x = State, y = value, fill = variable_detailed)) +
-#  geom_bar(stat = "identity") +
-#  labs(title = "State Population", x = NULL, y = "Proportion", fill #= "Race Category") +
-#  scale_fill_manual(values = c("#5E8BFF3D", "#5E8BFF70", #"#5E8BFFA6", "#5E8BFF", "#DE3A8A")) +
-#  theme_minimal() +
-#  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+plot2 <- ggplot(select_states |>
+       mutate(variable_detailed = factor(variable_detailed, levels = desired_order)),
+       aes(x = State, y = value, fill = variable_detailed)) +
+  geom_bar(stat = "identity") +
+  labs(title = "State Population", x = NULL, y = "Proportion", fill = "Race Category") +
+  scale_fill_manual(values = c("#5E8BFF3D", "#5E8BFF70", "#5E8BFFA6", "#5E8BFF", "#DE3A8A")) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-#combined_plot <- plot1 + plot2 +
-#  theme(plot.margin = margin(10, 10, 10, 10)) +
-#  plot_annotation(title = "Racial Breakdown of DNA Database and Total Population in Texas") +
-#  plot_spacer()
-#combined_plot
+combined_plot <- plot1 + plot2 +
+  theme(plot.margin = margin(10, 10, 10, 10)) +
+  plot_annotation(title = "Racial Breakdown of DNA Database and Total Population in Texas") +
+  plot_spacer()
+combined_plot
 ```
+As you can see, the proportion of Black people in the population of Texas is much smaller than the proportion of Black people in the Texas DNA database. Conversely, the proportion of White people in the DNA database is smaller than the percent of the state's population that is White. This pattern is true for most other states shown below, highlighting the over-representation of Black Americans in the DNA databases.
 
 ```{r}
 combined_data <- race_totals |> 
@@ -607,7 +608,7 @@ combined_data <- combined_data |>
 
 label_data <- combined_data  |> 
   group_by(State, dataset, variable_detailed)  |> 
-  summarize(value = sum(value))  |> 
+  summarize(value = sum(value), .groups = "keep")  |> 
   ungroup()
 
 ```
@@ -644,7 +645,6 @@ combined_plot
 
 ```
 
-As you can see, the proportion of Black people in the population of Texas is much smaller than the proportion of Black people in the Texas DNA database. Conversely, the proportion of White people in the DNA database is smaller than the percent of the state's population that is White. This pattern is true for most other states shown, highlighting the over-representation of Black Americans in the DNA databases.
 
 ### Annual DNA Collection
 These summary statistics describe the racial breakdown of DNA collected annually by state. On average, the percentage of DNA collected annually that is from Black Americans is 29.33% and the percentage of DNA collected annually that is from White Americans is 56.3%.
@@ -697,7 +697,7 @@ summary_data_annual_pie <- summary_data_annual_pie |>
 ggplot(summary_data_annual_pie, aes(x ="", y = avg_data_annual, fill = race_category)) +
   geom_bar(stat = "identity", width = 1) +
   coord_polar("y") +
-   geom_text(aes(label = label), position = position_stack(vjust = 0.5), color = "white", size = 4) +
+   geom_text(aes(label = label), position = position_stack(vjust = 0.5), color = "black", size = 4) +
   theme_void() +
   labs(title = "Average Proportion of DNA Collected Annually (Across All States)",
        fill = "Race") +
@@ -723,7 +723,7 @@ summary_data_state <- summary_data_state |>
 ggplot(summary_data_state, aes(x ="", y = avg_data_state, fill = race_category)) +
   geom_bar(stat = "identity", width = 1) +
   coord_polar("y") +
-   geom_text(aes(label = label), position = position_stack(vjust = 0.5), color = "white", size = 4) +
+   geom_text(aes(label = label), position = position_stack(vjust = 0.5), color = "black", size = 4) +
   theme_void() +
   labs(title = "Average Racial Breakdown (Across All States)",
        fill = "Race") +
@@ -776,7 +776,7 @@ kable(state_lowest_white_annual, caption = "State with Lowest Proportion of Whit
 
 ```
 
-### Percent of Population Collected by Race
+### Percent of Population Collected (by Race)
 We can look at this data further and compare it to the racial breakdown of the total population in each state to explore the percentage of that population whose DNA has been collected.
 
 For most states, the percentage of non-White people whose DNA is collected annually is much greater compared to White people. This disparity is most apparent for the Black population, which consistently shows the highest proportion of DNA collected.
@@ -808,7 +808,7 @@ summary_pop_collected <- summary_pop_collected |>
 ggplot(summary_pop_collected, aes(x ="", y = avg_pop_collected, fill = race_category)) +
   geom_bar(stat = "identity", width = 1) +
   coord_polar("y") +
-   geom_text(aes(label = label), position = position_stack(vjust = 0.5), color = "white", size = 4) +
+   geom_text(aes(label = label), position = position_stack(vjust = 0.5), color = "black", size = 4) +
   theme_void() +
   labs(title = "Average Percentage of Each Race with DNA Collected Annually",
        fill = "Race") +
