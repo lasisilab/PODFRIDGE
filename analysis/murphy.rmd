@@ -1,5 +1,5 @@
 ---
-title: "Murphy Data Cleaning"
+title: "Murphy Data Cleaning and Visualization"
 author: "Stella BooydeGraaff"
 date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
 output: workflowr::wflow_html
@@ -475,12 +475,12 @@ ggplot(race_totals |>
        x = "State",
        y = "Proportion",
        fill = "Race Category") +
-  scale_fill_manual(values = c("#5E8BFF3D", "#5E8BFF70", "#5E8BFFA6","#5E8BFFE8", "#5E8BFF", "#DE3A8A")) +
+  scale_fill_manual(values = c("#5E8BFF1A", "#5E8BFF33", "#5E8BFF66","#5E8BFF80", "#5E8BFF", "#DE3A8A")) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 
-#"#5E8BFF26", "#5E8BFF3D", "#5E8BFF70", "#5E8BFFA6","#5E8BFFE8", "#5E8BFF", "#DE3A8A"
+#"#5E8BFF1A", "#5E8BFF33", "#5E8BFF66","#5E8BFF80", "#5E8BFF", "#DE3A8A"
 ```
 
 Despite White Americans usually making up the majority of the population in the database, there is still a significant disparity present in this data. Comparing this to a graph of the racial breakdown of the total population in each of these states uncovers that Black Americans and other people of color are over represented in their state's database.
@@ -510,7 +510,7 @@ ggplot(select_states |>
        aes(x = State, y = value, fill = variable_detailed)) +
   geom_bar(stat = "identity") +
   labs(title = "Proportion of Races by State", x = "State", y = "Proportion", fill = "Race Category") +
-  scale_fill_manual(values = c("#5E8BFF3D", "#5E8BFF70", "#5E8BFFA6", "#5E8BFF", "#DE3A8A")) +
+  scale_fill_manual(values = c("#5E8BFF33", "#5E8BFF66","#5E8BFF80", "#5E8BFF", "#DE3A8A")) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
@@ -530,7 +530,7 @@ plot1 <- ggplot(race_totals |>
   labs(title = "DNA Database",
        x = NULL,
        y = "Proportion") +
-  scale_fill_manual(values = c("#5E8BFF26", "#5E8BFF3D", "#5E8BFF70", "#5E8BFFA6", "#5E8BFF", "#DE3A8A")) +
+  scale_fill_manual(values = c("#5E8BFF1A", "#5E8BFF33", "#5E8BFF66","#5E8BFF80", "#5E8BFF", "#DE3A8A")) +
   theme_minimal() +
   theme(legend.position = "none") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
@@ -558,7 +558,7 @@ plot2 <- ggplot(select_states |>
        aes(x = State, y = value, fill = variable_detailed)) +
   geom_bar(stat = "identity") +
   labs(title = "State Population", x = NULL, y = "Proportion", fill = "Race Category") +
-  scale_fill_manual(values = c("#5E8BFF3D", "#5E8BFF70", "#5E8BFFA6", "#5E8BFF", "#DE3A8A")) +
+  scale_fill_manual(values = c("#5E8BFF33", "#5E8BFF66","#5E8BFF80", "#5E8BFF", "#DE3A8A")) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
@@ -628,7 +628,7 @@ combined_plot <- ggplot(combined_data, aes(x = dataset, y = value, fill = variab
        y = "Proportion",
        fill = "Race Category",
        caption = "*Other or Unknown races not included") +
-  scale_fill_manual(values = c("#5E8BFF3D", "#5E8BFF70", "#5E8BFFA6", "#5E8BFF", "#DE3A8A")) +
+  scale_fill_manual(values = c("#5E8BFF33", "#5E8BFF66","#5E8BFF80", "#5E8BFF", "#DE3A8A")) +
   theme_minimal() +
   theme(
     plot.title = element_text(hjust = 0.5),
@@ -701,7 +701,7 @@ ggplot(summary_data_annual_pie, aes(x ="", y = avg_data_annual, fill = race_cate
   theme_void() +
   labs(title = "Average Proportion of DNA Collected Annually (Across All States)",
        fill = "Race") +
-  scale_fill_manual(values = c("#5E8BFF", "#DE3A8A", "#5E8BFF3D"))
+  scale_fill_manual(values = c("#5E8BFF", "#DE3A8A", "#5E8BFF66"))
 
 data_state <- data_state |> 
   mutate(race_category = case_when(
@@ -727,7 +727,7 @@ ggplot(summary_data_state, aes(x ="", y = avg_data_state, fill = race_category))
   theme_void() +
   labs(title = "Average Racial Breakdown (Across All States)",
        fill = "Race") +
-  scale_fill_manual(values = c("#5E8BFF", "#DE3A8A", "#5E8BFF3D"))
+  scale_fill_manual(values = c("#5E8BFF", "#DE3A8A", "#5E8BFF66"))
 
 #combined_plot <- plot1 + plot2 +
 #  plot_annotation(title = "Side by Side Pie Charts of Proportion of Races with DNA #Collected and Racial Breakdown of the Population Across All States") +
@@ -812,7 +812,7 @@ ggplot(summary_pop_collected, aes(x ="", y = avg_pop_collected, fill = race_cate
   theme_void() +
   labs(title = "Average Percentage of Each Race with DNA Collected Annually",
        fill = "Race") +
-  scale_fill_manual(values = c("#5E8BFF", "#DE3A8A", "#5E8BFF3D"))
+  scale_fill_manual(values = c("#5E8BFF", "#DE3A8A", "#5E8BFF66"))
 
 ```
 
