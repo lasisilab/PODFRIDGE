@@ -159,3 +159,49 @@ ggplot(data, aes(y=PROPS, fill=POPULATION)) +
 
 ```
 
+# Direct-To-Consumer Database Statistics
+
+```{r}
+dtc_race <- read_csv("data/DTC_race_export.csv", show_col_types = FALSE) 
+dtc_access <- read_csv("data/DTC_access_export.csv", show_col_types = FALSE) 
+
+```
+
+```{r}
+dtc_access_cleaned <- dtc_access |> 
+  select(-Source_Link, -Comments) |> 
+  drop_na() |> 
+  mutate(summary = case_when(
+    pub_access == "yes" ~ "Public Access",
+    law_access == "yes" ~ "Law Enforcement Access",
+    pub_access == "no" & law_access == "no" ~ "Neither"
+  ))
+
+```
+
+Each Direct-to-Consumer company has different policies on whether their databases are accessible to law enforcement or to the public. The following chart shows the ratio of which of the six main companies allow for which group to access them.
+
+```{r}
+
+ggplot(dtc_access_cleaned, aes(x = "", fill = summary)) +
+  geom_bar(width = 1, stat = "count") +  # Use 'count' to plot the frequencies
+  coord_polar(theta = "y") +  # Convert bar chart into a pie chart
+  labs(title = "Access Summary Distribution", fill = "Access Summary") +
+  theme_void() +  # Remove background and axis
+  scale_fill_manual(values = c("Public Access" = "#DE3A8A", 
+                               "Law Enforcement Access" = "#FFB000",
+                               "Neither" = "#7253FF"))
+
+```
+
+
+The companies that law enforcement can access are FamilyTreeDNA and GEDmatch. FamilyTreeDNA allows users to opt out but have a history of violating their Terms of Service. GEDmatch also sells access to law enforcement and has a history of violating their Terms of Service, but since the law enforcement used this database to find the Golden State Killer in 2018, they have created an opt-in option for sharing data with law enforcement.
+
+The company whose database is open to the public is MyHeritage. Genetic data is not publicly available, but records such as birth, marriage, death, burial, census, military, immigration, yearbooks are. Family sites and certain settings can allow for publicly accessible genetic data as well.
+
+The other Direct-To-Consumer companies are characterized as allowing access to neither law enforcement or the public. Ancestry DNA requires valid legal reasoning to share data with law enforcement. 23andMe has an opt-in option for scientific researcher that 81% of users do. Living DNA shares anonymous data with third parties, and has an opt-in option to share data with researchers, however, they do not sell data to law enforcement unless feel they are legally compelled.
+
+```{r}
+
+```
+
