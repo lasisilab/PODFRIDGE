@@ -475,7 +475,7 @@ ggplot(race_totals |>
        x = "State",
        y = "Proportion",
        fill = "Race Category") +
-  scale_fill_manual(values = c("#5E8BFF1A", "#5E8BFF33", "#5E8BFF66","#5E8BFF80", "#5E8BFF", "#DE3A8A")) +
+  scale_fill_manual(values = c("#5E8BFF1A", "#5E8BFF52", "#5E8BFF85","#5E8BFFC4", "#5E8BFF", "#DE3A8A")) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
@@ -510,7 +510,7 @@ ggplot(select_states |>
        aes(x = State, y = value, fill = variable_detailed)) +
   geom_bar(stat = "identity") +
   labs(title = "Proportion of Races by State", x = "State", y = "Proportion", fill = "Race Category") +
-  scale_fill_manual(values = c("#5E8BFF33", "#5E8BFF66","#5E8BFF80", "#5E8BFF", "#DE3A8A")) +
+  scale_fill_manual(values = c("#5E8BFF52", "#5E8BFF85","#5E8BFFC4", "#5E8BFF", "#DE3A8A")) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
@@ -530,7 +530,7 @@ plot1 <- ggplot(race_totals |>
   labs(title = "DNA Database",
        x = NULL,
        y = "Proportion") +
-  scale_fill_manual(values = c("#5E8BFF1A", "#5E8BFF33", "#5E8BFF66","#5E8BFF80", "#5E8BFF", "#DE3A8A")) +
+  scale_fill_manual(values = c("#5E8BFF1A", "#5E8BFF52", "#5E8BFF85","#5E8BFFC4", "#5E8BFF", "#DE3A8A")) +
   theme_minimal() +
   theme(legend.position = "none") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
@@ -558,7 +558,7 @@ plot2 <- ggplot(select_states |>
        aes(x = State, y = value, fill = variable_detailed)) +
   geom_bar(stat = "identity") +
   labs(title = "State Population", x = NULL, y = "Proportion", fill = "Race Category") +
-  scale_fill_manual(values = c("#5E8BFF33", "#5E8BFF66","#5E8BFF80", "#5E8BFF", "#DE3A8A")) +
+  scale_fill_manual(values = c("#5E8BFF52", "#5E8BFF85","#5E8BFFC4", "#5E8BFF", "#DE3A8A")) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
@@ -628,7 +628,7 @@ combined_plot <- ggplot(combined_data, aes(x = dataset, y = value, fill = variab
        y = "Proportion",
        fill = "Race Category",
        caption = "*Other or Unknown races not included") +
-  scale_fill_manual(values = c("#5E8BFF33", "#5E8BFF66","#5E8BFF80", "#5E8BFF", "#DE3A8A")) +
+  scale_fill_manual(values = c("#5E8BFF1A", "#5E8BFF52", "#5E8BFF85","#5E8BFFC4", "#5E8BFF", "#DE3A8A")) +
   theme_minimal() +
   theme(
     plot.title = element_text(hjust = 0.5),

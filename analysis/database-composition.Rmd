@@ -266,7 +266,7 @@ ggplot(dtc_23andMe, aes(x = Database, y = proportion, fill = pop)) +
        y = "Proportion",
        fill = "Race Category") +
   theme_minimal() +
-  scale_fill_manual(values = c("#5E8BFF1A", "#5E8BFF33", "#5E8BFF66","#5E8BFF80", "#5E8BFF", "#DE3A8A")) +
+  scale_fill_manual(values = c("#5E8BFF1A", "#5E8BFF52", "#5E8BFF85","#5E8BFFC4", "#5E8BFF", "#DE3A8A")) +
   theme(plot.title = element_text(hjust = 0.5))
 
 ```
