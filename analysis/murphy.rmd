@@ -1,5 +1,5 @@
 ---
-title: "Murphy Data Cleaning"
+title: "Murphy Data Cleaning and Visualization"
 author: "Stella BooydeGraaff"
 date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
 output: workflowr::wflow_html
@@ -11,33 +11,44 @@ editor_options:
 
 knitr::opts_chunk$set(eval = TRUE, echo = FALSE, warning = FALSE, fig.width = 7, fig.height = 6)
 
+if (!requireNamespace("tidyverse", quietly = TRUE)) {
+  install.packages("tidyverse")
+}
+
+if (!requireNamespace("knitr", quietly = TRUE)) {
+  install.packages("knitr")
+}
+
+if (!requireNamespace("patchwork", quietly = TRUE)) {
+  install.packages("patchwork")
+}
+
+
 library(tidyverse)
-library(wesanderson)
+library(knitr)
+library(patchwork)
 ```
 
 ```{r}
-data <- read_csv("data/Murphy_Appendix_all_data.csv") 
+data <- read_csv("data/Murphy_Appendix_all_data.csv", show_col_types = FALSE) 
 
-head(data)
 ```
 
 ```{r} 
 data <- data |>
   select(-file) 
-
-head(data)
 ```
 
 ```{r}
-  data <- data %>%
+  data <- data |> 
       mutate(
-          # Check if 'proportion' is in the variable_detailed
-          is_proportion = grepl("proportion", variable_detailed, ignore.case = TRUE),
-          
-          # Create value_type based on the presence of 'proportion'
-          value_type = ifelse(is_proportion, 
-                              "proportion", 
-                              "number"),
+        # Check if 'proportion' is in the variable_detailed
+        is_proportion = grepl("proportion", variable_detailed, ignore.case = TRUE),
+         
+        # Create value_type based on the presence of 'proportion'
+        value_type = ifelse(is_proportion, 
+                          "proportion", 
+                          "number"),
           
           # Remove 'proportion' text from variable_detailed
           variable_detailed = ifelse(is_proportion, gsub("proportion", "", variable_detailed, ignore.case = TRUE), variable_detailed),
@@ -52,21 +63,21 @@ head(data)
           value_type = ifelse(!is.na(variable_detailed_numeric) & variable_detailed_numeric > 1, 
                               "number", 
                               value_type)
-      ) %>%
+      ) |> 
       # Drop temporary columns
       select(-is_proportion, -variable_detailed_numeric)
 
 ```
 
 ```{r}
-data <- data %>%
+data <- data |> 
     rename(variable_type = variatble_type)
 
 ```
 
 ```{r}
 #race
-data <- data %>%
+data <- data |> 
   mutate(
     variable_detailed = case_when(
       variable_type == "race" & grepl("\\basian\\b", variable_detailed, ignore.case = TRUE) ~ "asian_total",
@@ -80,6 +91,7 @@ data <- data %>%
        variable_type == "race" & grepl("\\bnative_american\\b", variable_detailed, ignore.case = TRUE) ~ "native_american_total",
       variable_type == "race" & grepl("\\bwhite\\b", variable_detailed, ignore.case = TRUE) ~ "white_total",
       variable_type == "race" & grepl("\\bcausasian\\b", variable_detailed, ignore.case = TRUE) ~ "white_total",
+      variable_type == "race" & grepl("\\bcaucasian\\b", variable_detailed, ignore.case = TRUE) ~ "white_total",
       variable_type == "race" & grepl("\\bcausasian_\\b", variable_detailed, ignore.case = TRUE) ~ "white_total",
       variable_type == "race" & grepl("\\bother\\b", variable_detailed, ignore.case = TRUE) ~ "other_total",
       variable_type == "race" & grepl("\\basian_offender\\b", variable_detailed, ignore.case = TRUE) ~ "asian_convicted_offender",
@@ -91,6 +103,7 @@ data <- data %>%
       variable_type == "race" & grepl("\\bcaucasian_convicted_offender\\b", variable_detailed, ignore.case = TRUE) ~ "white_convicted_offender",
       variable_type == "race" & grepl("\\bother_offender\\b", variable_detailed, ignore.case = TRUE) ~ "other_convicted_offender",
       variable_type == "race" & grepl("\\bafrican_american__convicted_offender\\b", variable_detailed, ignore.case = TRUE) ~ "black_convicted_offender",
+      variable_type == "race" & grepl("\\bafrican_american_convicted_offender\\b", variable_detailed, ignore.case = TRUE) ~ "black_convicted_offender",
       variable_type == "race" & grepl("\\bafrican_american_offender\\b", variable_detailed, ignore.case = TRUE) ~ "black_convicted_offender",
       variable_type == "race" & grepl("\\bafrican_american_arrestee\\b", variable_detailed, ignore.case = TRUE) ~ "black_arrestee",
       variable_type == "race" & grepl("\\bcaucasian_arrestee\\b", variable_detailed, ignore.case = TRUE) ~ "white_arrestee",
@@ -98,7 +111,7 @@ data <- data %>%
     ))
     
 #DNA collection breakdown
-data <- data %>%
+data <- data |> 
   mutate(
     variable_detailed = case_when(
       variable_type == "DNA_collection_breakdown" & grepl("asian", variable_detailed, ignore.case = TRUE) ~ "asian_annual",
@@ -116,14 +129,14 @@ data <- data %>%
 ```{r}
 # Update 'variable_type' to 'race' where it is 'DNA_collection_breakdown'
 
-data <- data %>%
+data <- data |> 
   mutate(
     variable_type = ifelse(variable_type == "DNA_collection_breakdown", "race", variable_type))
 ```
 
 ```{r}
 #state demographic
-data <- data %>%
+data <- data |> 
   mutate(
     variable_detailed = case_when(
       variable_type == "state_demographic" & grepl("asian", variable_detailed, ignore.case = TRUE) ~ "asian_state",
@@ -141,14 +154,14 @@ data <- data %>%
 ```{r}
 # Update 'variable_type' to 'race' where it is 'state_demographic'
 
-data <- data %>%
+data <- data |> 
   mutate(
     variable_type = ifelse(variable_type == "state_demographic", "race", variable_type))
 ```
 
 ```{r}
 #population data collected variables
-data <- data %>%
+data <- data |> 
   mutate(
     variable_detailed = case_when(
       variable_type == "population_data_collected" & grepl("asian", variable_detailed, ignore.case = TRUE) ~ "asian_pop_collected",
@@ -165,14 +178,14 @@ data <- data %>%
 ```{r}
 # Update 'variable_type' to 'race' where it is 'population_data_collected'
 
-data <- data %>%
+data <- data |> 
   mutate(
     variable_type = ifelse(variable_type == "population_data_collected", "race", variable_type))
 ```
 
 ```{r}
 #sex variable type
-data <- data %>%
+data <- data |> 
   mutate(
     variable_detailed = case_when(
       variable_type == "sex" & grepl("\\bfemale\\b", variable_detailed, ignore.case = TRUE) ~ "female_total",
@@ -188,13 +201,13 @@ data <- data %>%
 ```
 
 ```{r}
-data <- data %>%
+data <- data |> 
   mutate(
     variable_type = ifelse(variable_type == "gender", "sex", variable_type))
 ```
 
 ```{r}
-data <- data %>%
+data <- data |> 
   mutate(
     variable_detailed = case_when(
       variable_type == "offender_type" & grepl("\\barrestee\\b", variable_detailed, ignore.case = TRUE) ~ "arrestee_total",
@@ -208,29 +221,28 @@ data <- data %>%
 ```
 
 ```{r}
-incorrect_entries <- data_race |> 
-  filter(!variable_detailed %in% c("asian_total", "black_total", "hispanic_total", "native_american_total", "white_total", "other_total", "unknown",
-      "asian_convicted_offender", "black_convicted_offender", "hispanic_convicted_offender", "native_american_convicted_offender", "white_convicted_offender", "other_convicted_offender",
-      "asian_arrestee", "black_arrestee", "hispanic_arrestee", "native_american_arrestee", "white_arrestee", "other_arrestee",
-      "asian_annual", "black_annual", "hispanic_annual", "native_american_annual", "white_annual", "other_annual",
-      "asian_state", "black_state", "hispanic_state", "native_american_state", "white_state", "other_state",
-      "asian_pop_collected", "black_pop_collected", "hispanic_pop_collected", "native_american_pop_collected", "white_pop_collected", "other_pop_collected"))
-
-# View incorrect entries
-print(incorrect_entries)
-```
-
-```{r}
 write.csv(data, "data/murphy_foia_cleaned.csv")
 ```
 
+# Visualizations of State DNA Databases
+Below is a small sample of the data set used to create these visualizations.
 
 ```{r}
-#data visualizations
+data_sample <- data |> sample_n(5)
+kable(data_sample, caption = "Sample of the Full Data")
+```
+
+## Data on Sex
+
+```{r}
+#creating gender database
 data_gender <- data |> 
   filter(variable_type == "sex")
+```
 
+```{r}
 
+#California totals
 california_totals <- data_gender |> 
   filter(State == "California") |> 
   summarise(
@@ -238,10 +250,7 @@ california_totals <- data_gender |>
     female_total = sum(value[grepl("female", variable_detailed, ignore.case = TRUE)]),
     unknown_total = sum(value[grepl("unknown", variable_detailed, ignore.case = TRUE)])
   ) 
-```
 
-
-```{r}
 california_totals <- california_totals |>  
   pivot_longer(cols = everything(), names_to = "variable_detailed", values_to = "value")|> 
   mutate(
@@ -251,15 +260,16 @@ california_totals <- california_totals |>
   )
 ```
 
-```{r}
-#create a dataset with gender values as proportions only
-data_gender_proportions <- data_gender  |> 
-  group_by(State, variable_type, value_type) |>   # Group by relevant columns
-  mutate(proportion = value / sum(value)) |>      # Calculate proportion
-  ungroup() |>                                    # Ungroup to prevent grouping in the output
-  select(-value, -value_type)|>                   # remove the value and value_type columns
-  rename(proportion_value = proportion)           # Rename the new proportion column
+The following bar chart shows the gender breakdown of the state DNA databases.
 
+```{r}
+#create dataset with gender values as proportions only
+data_gender_proportions <- data_gender  |> 
+  group_by(State, variable_type, value_type) |>   # group by columns
+  mutate(proportion = value / sum(value)) |>      # calculate proportion
+  ungroup() |>                                    # Ungroup
+  select(-value, -value_type)|>                   # remove value and value_type
+  rename(proportion_value = proportion)           # Rename new column
 
 data_gender_simplified <- data_gender_proportions |> 
   mutate(
@@ -279,42 +289,24 @@ data_gender_simplified <- data_gender_proportions |>
   group_by(State, simplified_sex) |> 
   summarize(total_value = sum(proportion_value), .groups = 'drop')
 
-selected_colors <- wes_palette("Moonrise3")[c(2, 3, 5)]
-
 #stacked bar chart simplified
 ggplot(data_gender_simplified, aes(x = State, y = total_value, fill = simplified_sex)) +
   geom_bar(stat = "identity") +  # Stacked bar chart by default
-  scale_fill_manual(values = selected_colors) +  # color palette
-  labs(y = "Proportion", x = "State", title = "NDIS Gender Distribution by State", fill = "Sex") +
+  scale_fill_manual(values = c("#DE3A8A", "#7253FF", "#D8DCDA")) +  # color palette
+  labs(y = "Proportion", x = "State", title = "Gender Distribution of DNA Database by State", fill = "Sex") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ```
 
-```{r}
-data_race <- data |> 
-  filter(variable_type == "race")
-
-data_race_proportions <- data_race |> 
-  group_by(State) |> 
-  mutate(proportion_value = ifelse(value_type == "number", value / sum(value), NA))
-
-# Combine original proportions with newly calculated ones
-data_race_proportions <- data_race_proportions |> 
-  mutate(proportion_value = ifelse(is.na(proportion_value), value, proportion_value)) |> 
-  select(-value_type)  
-
-```
-
+## Data on Offender Type
+The following pie chart shows a summary of the proportions of arrestees and convicted offenders in the state DNA databases.
 
 ```{r}
 data_offender_type <- data |> 
   filter(variable_type == "offender_type")
 
-
 #pie chart of offender type
-
-palette <- wes_palette("GrandBudapest2", 3, type = "discrete")
 
 # Rename the offender types
 data_offender_type_renamed <- data_offender_type |> 
@@ -342,14 +334,485 @@ data_offender_type_summarized <- data_offender_type_summarized |>
 ggplot(data_offender_type_summarized, aes(x = "", y = total_value, fill = variable_detailed)) +
   geom_bar(stat = "identity", width = 1) +
   coord_polar("y") +  # Converts bar chart to pie chart
-  labs(title = "NDIS Distribution of Offender Types", caption = "Data from California, Indiana, Texas, and Nevada", fill = "Offender Type") +
+  labs(title = "Distribution of Offender Types across State DNA Databases", caption = "Data from California, Indiana, Texas, and Nevada", fill = "Offender Type") +
   geom_text(aes(label = label), position = position_stack(vjust = 0.5)) +
   theme_minimal() +
   theme(axis.title.x = element_blank(),
         axis.title.y = element_blank(),
         axis.ticks = element_blank(),
         axis.text = element_blank()) +
-  scale_fill_manual(values = palette)
+  scale_fill_manual(values = c("#7253FF", "#DE3A8A"))
+
+```
+
+## Data on Race
+
+### State Demographics
+Below are some summary statistics of the racial demographics of each state's total population.
+
+```{r}
+#create data set with variable_type "race"
+data_race <- data |> 
+  filter(variable_type == "race")
+
+#Summary stats
+data_state <- data_race |> 
+  filter(str_detect(variable_detailed, "_state"))
+
+black_state <- data_state |> 
+  filter(variable_detailed == "black_state") |>
+  mutate(percentage = round(value * 100, 2))
+
+# Top 3 states with the highest value for "black_state"
+top_3_highest <- black_state |> 
+  arrange(desc(percentage)) |> 
+  slice_head(n = 3) |> 
+  select(State, percentage)
+
+# Top 3 states with the lowest value for "black_state"
+top_3_lowest <- black_state |> 
+  arrange(percentage) |> 
+  slice_head(n = 3) |> 
+  select(State, percentage)
+
+# Average value for "black_state" across all states
+average_black <- black_state |> 
+  summarise(average_proportion = mean(value, na.rm = TRUE) * 100)
+
+# Output the results
+
+kable(top_3_highest, caption = "States with Highest Black Population", format = "markdown")
+
+# Display the top 3 lowest states table
+kable(top_3_lowest, caption = "States with Lowest Black Population", format = "markdown")
+```
+
+And below is the average proportion of Black people in a state and the average proportion of Black people in a state's DNA database.
+
+```{r}
+# Display the average value table
+kable(average_black, caption = "Average Black Population Proportion Across All States", format = "markdown")
+
+
+```
+
+```{r}
+#create a data set with totals combining "convicted_offender" and "arrestee" data into totals by race
+convicted_arrestee_totals <- data_race |> 
+  filter(str_detect(variable_detailed, "_convicted_offender|_arrestee")) |> 
+  mutate(variable_detailed = str_replace(variable_detailed, "_convicted_offender|_arrestee", "_total")) |> 
+  group_by(State, variable_detailed) |> 
+  summarize(value = sum(value), .groups = 'drop') |>
+  mutate(value_type = "number")
+
+# Combine and process race_totals
+race_totals <- data_race |> 
+  mutate(variable_detailed = case_when(
+    str_detect(variable_detailed, "other_total|unknown") ~ "other_or_unknown",
+    TRUE ~ variable_detailed
+  )) |> 
+  filter(str_detect(variable_detailed, "_total") | str_detect(variable_detailed, "other_or_unknown"))
+
+# Add convicted_arrestee_totals to race_totals
+race_totals <- race_totals |> 
+  bind_rows(convicted_arrestee_totals) |> 
+  group_by(State, variable_detailed) |> 
+  summarize(value = sum(value), value_type = first(value_type), .groups = 'drop') |> 
+  ungroup()
+
+# Calculate the proportion value within each state
+race_totals <- race_totals |> 
+  group_by(State) |> 
+  mutate(proportion_value = ifelse(value_type == "number", value / sum(value), NA)) |> 
+  ungroup()
+
+#keep already calculated proportions and remove value_type column
+race_totals <- race_totals |> 
+  mutate(proportion_value = ifelse(is.na(proportion_value), value, proportion_value)) |> 
+  select(-value_type)
+
+race_totals <- race_totals |> 
+  mutate(percentage = round(proportion_value * 100, 2))
+
+# Replace race category names for clarity
+race_totals <- race_totals |> 
+  mutate(variable_detailed = case_when(
+    variable_detailed == "white_total" ~ "White",
+    variable_detailed == "black_total" ~ "Black",
+    variable_detailed == "asian_total" ~ "Asian",
+    variable_detailed == "hispanic_total" ~ "Hispanic",
+    variable_detailed == "native_american_total" ~ "Native American",
+    variable_detailed == "other_total" ~ "Other or Unknown",
+    variable_detailed == "other_or_unknown" ~ "Other or Unknown",
+    TRUE ~ variable_detailed
+  ))
+
+average_black_database <- race_totals |> 
+  filter(variable_detailed == "Black") |> 
+  summarise(average_proportion = mean(percentage, na.rm = TRUE))
+
+#and calculate average proportion of black people in DNA databases (use race_totals)
+kable(average_black_database, caption = "Average Black Proportion In DNA Databases Across All States", format = "markdown")
+```
+
+On average, Black Americans make up 10.96% of their state, but 20.93% of their state's DNA database, displaying the racial disparities in these databases.
+
+### Race Totals
+The following bar chart displays the proportions of each race in a state's DNA database.
+
+```{r}
+
+
+# Set the desired order for race categories
+desired_order <- c("Other or Unknown", "Native American", "Hispanic", "Asian", "Black", "White")
+
+# Create the bar plot
+ggplot(race_totals |> 
+       mutate(variable_detailed = factor(variable_detailed, levels = desired_order)),
+       aes(x = State, y = proportion_value, fill = variable_detailed)) +
+  geom_bar(stat = "identity") + 
+  labs(title = "Race Totals in DNA Database by State",
+       x = "State",
+       y = "Proportion",
+       fill = "Race Category") +
+  scale_fill_manual(values = c("#5E8BFF1A", "#5E8BFF52", "#5E8BFF85","#5E8BFFC4", "#5E8BFF", "#DE3A8A")) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+#"#5E8BFF1A", "#5E8BFF33", "#5E8BFF66","#5E8BFF80", "#5E8BFF", "#DE3A8A"
+```
+
+Despite White Americans usually making up the majority of the population in the database, there is still a significant disparity present in this data. Comparing this to a graph of the racial breakdown of the total population in each of these states uncovers that Black Americans and other people of color are over represented in their state's database.
+
+
+```{r}
+
+#bar plot of state totals
+
+selected_states <- c("California", "Florida", "Indiana", "Maine", "Nevada", "South_Dakota", "Texas")
+
+select_states <- data_state |> 
+  filter(State %in% selected_states) |> 
+  mutate(variable_detailed = case_when(
+    variable_detailed == "white_state" ~ "White",
+    variable_detailed == "black_state" ~ "Black",
+    variable_detailed == "asian_state" ~ "Asian",
+    variable_detailed == "hispanic_state" ~ "Hispanic",
+    variable_detailed == "native_american_state" ~ "Native American",
+    TRUE ~ variable_detailed
+  ))
+
+desired_order <- c("Native American", "Hispanic", "Asian", "Black", "White")
+
+ggplot(select_states |>
+       mutate(variable_detailed = factor(variable_detailed, levels = desired_order)),
+       aes(x = State, y = value, fill = variable_detailed)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Proportion of Races by State", x = "State", y = "Proportion", fill = "Race Category") +
+  scale_fill_manual(values = c("#5E8BFF52", "#5E8BFF85","#5E8BFFC4", "#5E8BFF", "#DE3A8A")) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r}
+
+#side by side plots
+desired_order <- c("Other or Unknown", "Native American", "Hispanic", "Asian", "Black", "White")
+
+selected_states <- c("Texas")
+
+plot1 <- ggplot(race_totals |> 
+        filter(State %in% selected_states) |> 
+       mutate(variable_detailed = factor(variable_detailed, levels = desired_order)),
+       aes(x = State, y = proportion_value, fill = variable_detailed)) +
+  geom_bar(stat = "identity") + 
+  labs(title = "DNA Database",
+       x = NULL,
+       y = "Proportion") +
+  scale_fill_manual(values = c("#5E8BFF1A", "#5E8BFF52", "#5E8BFF85","#5E8BFFC4", "#5E8BFF", "#DE3A8A")) +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+data_state <- data_race |> 
+  filter(str_detect(variable_detailed, "_state"))
+
+selected_states <- c("Texas")
+
+select_states <- data_state |> 
+  filter(State %in% selected_states) |> 
+  mutate(variable_detailed = case_when(
+    variable_detailed == "white_state" ~ "White",
+    variable_detailed == "black_state" ~ "Black",
+    variable_detailed == "asian_state" ~ "Asian",
+    variable_detailed == "hispanic_state" ~ "Hispanic",
+    variable_detailed == "native_american_state" ~ "Native American",
+    TRUE ~ variable_detailed
+  ))
+
+desired_order <- c("Native American", "Hispanic", "Asian", "Black", "White")
+
+plot2 <- ggplot(select_states |>
+       mutate(variable_detailed = factor(variable_detailed, levels = desired_order)),
+       aes(x = State, y = value, fill = variable_detailed)) +
+  geom_bar(stat = "identity") +
+  labs(title = "State Population", x = NULL, y = "Proportion", fill = "Race Category") +
+  scale_fill_manual(values = c("#5E8BFF52", "#5E8BFF85","#5E8BFFC4", "#5E8BFF", "#DE3A8A")) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+combined_plot <- plot1 + plot2 +
+  theme(plot.margin = margin(10, 10, 10, 10)) +
+  plot_annotation(title = "Racial Breakdown of DNA Database and Total Population in Texas") +
+  plot_spacer()
+combined_plot
+```
+As you can see, the proportion of Black people in the population of Texas is much smaller than the proportion of Black people in the Texas DNA database. Conversely, the proportion of White people in the DNA database is smaller than the percent of the state's population that is White. This pattern is true for most other states shown below, highlighting the over-representation of Black Americans in the DNA databases.
+
+```{r}
+combined_data <- race_totals |> 
+  mutate(dataset = "DNA Database",
+         variable_detailed = factor(variable_detailed, levels = desired_order),
+         proportion_value = proportion_value) |>
+  select(State, variable_detailed, proportion_value, dataset) |> 
+  rename(value = proportion_value) |>
+  bind_rows(
+    data_race |> 
+      filter(str_detect(variable_detailed, "_state")) |> 
+      mutate(
+        variable_detailed = case_when(
+          variable_detailed == "white_state" ~ "White",
+          variable_detailed == "black_state" ~ "Black",
+          variable_detailed == "asian_state" ~ "Asian",
+          variable_detailed == "hispanic_state" ~ "Hispanic",
+          variable_detailed == "native_american_state" ~ "Native American",
+          TRUE ~ variable_detailed
+        ),
+        dataset = "State Population",
+        variable_detailed = factor(variable_detailed, levels = desired_order)
+      ) |> 
+      select(State, variable_detailed, value, dataset)
+  )
+
+combined_data <- combined_data |> 
+  mutate(
+    State = case_when(
+      State == "South_Dakota" ~ "South Dakota",
+      TRUE ~ State)
+  )
+
+combined_data <- combined_data |> 
+  filter(State %in% unique(combined_data$State[combined_data$dataset == "DNA Database"]))|>
+  filter(!is.na(variable_detailed))
+
+label_data <- combined_data  |> 
+  group_by(State, dataset, variable_detailed)  |> 
+  summarize(value = sum(value), .groups = "keep")  |> 
+  ungroup()
+
+```
+
+```{r}
+
+# Plot using facet_wrap
+combined_plot <- ggplot(combined_data, aes(x = dataset, y = value, fill = variable_detailed)) +
+  geom_bar(stat = "identity", position = "stack") +
+  geom_text(data = label_data, aes(x = dataset, y = -0.05, label = dataset),
+            size = 2.25,  # Make the text smaller
+            vjust = 1, 
+            hjust = 0.5, 
+            fontface = "plain") + 
+  labs(title = "Racial Breakdown of DNA Database and Total Population by State",
+       x = "Dataset",
+       y = "Proportion",
+       fill = "Race Category",
+       caption = "*Other or Unknown races not included") +
+  scale_fill_manual(values = c("#5E8BFF1A", "#5E8BFF52", "#5E8BFF85","#5E8BFFC4", "#5E8BFF", "#DE3A8A")) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    axis.text.x = element_blank(),
+    axis.title.x = element_blank(),
+    strip.text.y = element_blank(),  # Removes y-axis strip labels if necessary
+    axis.title.y = element_blank(),    # Removes y-axis title if it's not needed
+    panel.spacing = unit(1, "lines")
+  ) +
+  facet_wrap(~ State, scales = "free_y", ncol = 3)
+
+# Display the combined plot
+combined_plot
+
+```
+
+
+### Annual DNA Collection
+These summary statistics describe the racial breakdown of DNA collected annually by state. On average, the percentage of DNA collected annually that is from Black Americans is 29.33% and the percentage of DNA collected annually that is from White Americans is 56.3%.
+
+```{r}
+#Racial Breakdown of Annual DNA Collection - extremes and averages (states with highest collection and average for black people and white people)
+data_annual <- data_race |> 
+  filter(value_type == "proportion" & str_detect(variable_detailed, "_annual"))
+
+# Filter for Black annual data
+black_annual <- data_annual |> 
+  filter(str_detect(variable_detailed, "black_annual"))
+
+avg_black_annual <- black_annual |> 
+  summarise(percentage = round(mean(value, na.rm = TRUE) * 100, 2))
+
+#and calculate average proportion of black people with DNA collected annually
+kable(avg_black_annual, caption = "Average Proportion of DNA collected Annually that is from Black Americans (Across All States)", format = "markdown")
+
+white_annual <- data_annual |> 
+  filter(str_detect(variable_detailed, "white_annual"))
+
+avg_white_annual <- white_annual |> 
+  summarise(percentage = round(mean(value, na.rm = TRUE) * 100, 2))
+
+#and calculate average proportion of black people with DNA collected annually
+kable(avg_white_annual, caption = "Average Proportion of DNA collected Annually from White Americans (Across All States)", format = "markdown")
+```
+
+These pie charts show the comparison of the proportion of races with DNA collected and the racial breakdown of the population across all states. We can clearly see from these charts the overwhelming over representation of Black Americans with DNA collected annually compared to the percentage of the population that they make up. The same thing is true for other people of color, and the opposite is true for White Americans, whose DNA is less likely to be collected.
+
+```{r}
+data_annual_pie <- data_annual |> 
+  mutate(race_category = case_when(
+    str_detect(variable_detailed, "black_annual") ~ "Black",
+    str_detect(variable_detailed, "white_annual") ~ "White",
+    TRUE ~ "Other")) |> 
+    group_by(State, race_category) |> 
+  summarise(total_value = sum(value, na.rm = TRUE), .groups = "keep")
+
+summary_data_annual_pie <- data_annual_pie |> 
+  group_by(race_category) |> 
+  summarise(avg_data_annual = mean(total_value, na.rm = TRUE))
+
+summary_data_annual_pie <- summary_data_annual_pie |> 
+  mutate(label = paste0(round(avg_data_annual * 100, 2), "%")) |> 
+  mutate(race_category = factor(race_category, levels = c("Black", "White", "Other")))
+
+# Create the pie chart
+ggplot(summary_data_annual_pie, aes(x ="", y = avg_data_annual, fill = race_category)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar("y") +
+   geom_text(aes(label = label), position = position_stack(vjust = 0.5), color = "black", size = 4) +
+  theme_void() +
+  labs(title = "Average Proportion of DNA Collected Annually (Across All States)",
+       fill = "Race") +
+  scale_fill_manual(values = c("#5E8BFF", "#DE3A8A", "#5E8BFF66"))
+
+data_state <- data_state |> 
+  mutate(race_category = case_when(
+    str_detect(variable_detailed, "black_state") ~ "Black",
+    str_detect(variable_detailed, "white_state") ~ "White",
+    TRUE ~ "Other")) |> 
+    group_by(State, race_category) |> 
+  summarise(total_value = sum(value, na.rm = TRUE), .groups = "keep")
+
+summary_data_state <- data_state |> 
+  group_by(race_category) |> 
+  summarise(avg_data_state = mean(total_value, na.rm = TRUE))
+
+summary_data_state <- summary_data_state |> 
+  mutate(label = paste0(round(avg_data_state * 100, 2), "%")) |> 
+  mutate(race_category = factor(race_category, levels = c("Black", "White", "Other")))
+
+# Create the pie chart
+ggplot(summary_data_state, aes(x ="", y = avg_data_state, fill = race_category)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar("y") +
+   geom_text(aes(label = label), position = position_stack(vjust = 0.5), color = "black", size = 4) +
+  theme_void() +
+  labs(title = "Average Racial Breakdown (Across All States)",
+       fill = "Race") +
+  scale_fill_manual(values = c("#5E8BFF", "#DE3A8A", "#5E8BFF66"))
+
+#combined_plot <- plot1 + plot2 +
+#  plot_annotation(title = "Side by Side Pie Charts of Proportion of Races with DNA #Collected and Racial Breakdown of the Population Across All States") +
+#  plot_layout(ncol = 2) & theme(plot.margin = unit(c(1, 2, 1, 2), "cm")) +
+#  plot_spacer()
+#combined_plot
+```
+
+The state with the highest proportion of their DNA database containing Black Americans is Delaware (79.9%) and the state with the lowest proportion of their DNA database containing Black Americans is Montana (1.6%).
+
+```{r}
+# Find the state with the highest value of black_annual
+state_highest_black_annual <- black_annual |> 
+  filter(value == max(value, na.rm = TRUE)) |> 
+  mutate(percentage = value * 100) |> 
+  select(State, percentage)
+
+# Find the state with the lowest value of black_annual
+state_lowest_black_annual <- black_annual |> 
+  filter(value == min(value, na.rm = TRUE)) |> 
+  mutate(percentage = value * 100) |> 
+  select(State, percentage)
+
+# Print the results
+kable(state_highest_black_annual, caption = "State with Highest Proportion of Black American DNA Collected Annually", format = "markdown")
+kable(state_lowest_black_annual, caption = "State with Lowest Proportion of Black American DNA Collected Annually", format = "markdown")
+
+
+# Find the state with the highest value of white_annual
+state_highest_white_annual <- white_annual |> 
+  filter(value == max(value, na.rm = TRUE)) |> 
+  mutate(percentage = value * 100) |> 
+  select(State, percentage)
+
+# Find the state with the lowest value of white_annual
+state_lowest_white_annual <- white_annual |> 
+  filter(value == min(value, na.rm = TRUE)) |> 
+  mutate(percentage = value * 100) |> 
+  select(State, percentage)
+
+# Print the results
+kable(state_highest_white_annual, caption = "State with Highest Proportion of White American DNA Collected Annually", format = "markdown")
+kable(state_lowest_white_annual, caption = "State with Lowest Proportion of White American DNA Collected Annually", format = "markdown")
+
+
+
+```
+
+### Percent of Population Collected (by Race)
+We can look at this data further and compare it to the racial breakdown of the total population in each state to explore the percentage of that population whose DNA has been collected.
+
+For most states, the percentage of non-White people whose DNA is collected annually is much greater compared to White people. This disparity is most apparent for the Black population, which consistently shows the highest proportion of DNA collected.
+
+Printed below are the average proportions across all states of people whose DNA is collected annually, divided by race. For example, the average percentage of Black Americans whose DNA is collected annually is 3.25%, meaning on average, 3.25% of the Black population has DNA collected annually. Other people of color have an average of 2.7% collected annually, compared to the White population, whose average percent of population with DNA collected is only 0.82%.
+
+```{r}
+#Graph showing stats of percent of population 
+
+data_pop_collected <- data_race |> 
+  filter(str_detect(variable_detailed, "_pop_collected")) |> 
+  mutate(race_category = case_when(
+    str_detect(variable_detailed, "black") ~ "Black",
+    str_detect(variable_detailed, "white") ~ "White",
+    TRUE ~ "Other"
+  )) |> 
+    group_by(State, race_category) |> 
+  summarise(total_value = sum(value, na.rm = TRUE), .groups = "keep")
+
+summary_pop_collected <- data_pop_collected |> 
+  group_by(race_category) |> 
+  summarise(avg_pop_collected = mean(total_value, na.rm = TRUE))
+
+summary_pop_collected <- summary_pop_collected |> 
+  mutate(label = paste0(round(avg_pop_collected * 100, 2), "%")) |> 
+  mutate(race_category = factor(race_category, levels = c("Black", "White", "Other")))
+
+# Create the pie chart
+ggplot(summary_pop_collected, aes(x ="", y = avg_pop_collected, fill = race_category)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar("y") +
+   geom_text(aes(label = label), position = position_stack(vjust = 0.5), color = "black", size = 4) +
+  theme_void() +
+  labs(title = "Average Percentage of Each Race with DNA Collected Annually",
+       fill = "Race") +
+  scale_fill_manual(values = c("#5E8BFF", "#DE3A8A", "#5E8BFF66"))
 
 ```
 

@@ -77,7 +77,8 @@ core_loci_time <- system.time({
 log_message(paste("Loaded core loci data in", core_loci_time["elapsed"], "seconds."))
 
 # Load Individuals Genotypes Data
-individuals_genotypes <- fread("data/sims/processed_genotypes.csv")
+input_dir <- file.path("data", "sims", paste0("simulation_", job_id))
+individuals_genotypes <- fread(paste0(input_dir,"/processed_genotypes.csv"))
 
 # Define Kinship Matrix
 kinship_matrix <- data.table(
@@ -96,11 +97,11 @@ populations_list <- levels(population_labels$population)
 
 # Functions
 calculate_likelihood_ratio <- function(shared_alleles, genotype_match, pA, pB, k_values) {
-
+  
   if (shared_alleles == 0) {
     return(k_values$k0)
   } else if (shared_alleles == 1) {
-
+    
     Rxp <- switch(genotype_match,
                   "AA-AA" = pA,
                   "AA-AB" = 2 * pA,
@@ -110,7 +111,7 @@ calculate_likelihood_ratio <- function(shared_alleles, genotype_match, pA, pB, k
                   stop("Invalid genotype match for 1 shared allele.")
     )
     return(k_values$k0 + (k_values$k1 / Rxp))
-
+    
   } else if (shared_alleles == 2) {
     Rxp <- switch(genotype_match,
                   "AA-AA" = pA,
@@ -122,11 +123,8 @@ calculate_likelihood_ratio <- function(shared_alleles, genotype_match, pA, pB, k
   } else {
     return(NA)
   }  
-
-  }
-
+  
 }
-
 
 kinship_calculation <- function(row, allele_frequency_data, kinship_matrix) {
   alleles_ind1 <- as.character(c(row$ind1_allele1, row$ind1_allele2))
@@ -151,7 +149,7 @@ kinship_calculation <- function(row, allele_frequency_data, kinship_matrix) {
   genotype_ind1 <- paste(sort(labeled_alleles_ind1), collapse = "")
   genotype_ind2 <- paste(sort(labeled_alleles_ind2), collapse = "")
   genotype_match <- paste(genotype_ind1, genotype_ind2, sep = "-")
-
+  
   # Count the shared alleles
   shared_alleles <- length(shared_alleles_vector)
   
@@ -173,19 +171,20 @@ process_loci <- function(row, allele_frequency_data, kinship_matrix) {
 
 process_individuals_genotypes <- function(individuals_genotypes, df_allelefreq, kinship_matrix) {
   # Map over rows of individuals_genotypes and process each row
-  final_individuals_genotypes <- individuals_genotypes %>%
+  final_individuals_genotypes <- individuals_genotypes |>
     future_pmap(function(...) {
       row <- tibble(...)
       res <- process_loci(row, df_allelefreq, kinship_matrix)
       return(res)
-    }, .progress = TRUE) %>% 
-    bind_rows()
+    }, .progress = TRUE) |> 
+       rbindlist()
   
   return(final_individuals_genotypes)
 }
 
 calculate_combined_lrs <- function(final_results, loci_lists) {
   final_results <- as.data.table(final_results)
+  final_results[sapply(final_results, is.infinite)] <- NA
   combined_lrs <- final_results[, .(
     core_13 = prod(LR[locus %in% loci_lists$core_13], na.rm = TRUE),
     identifiler_15 = prod(LR[locus %in% loci_lists$identifiler_15], na.rm = TRUE),
@@ -216,13 +215,13 @@ log_message(paste("Calculated combined likelihood ratios in", combined_lrs_time[
 
 # Save results to CSV
 log_message("Saving results to CSV files...")
-write.csv(processed_genotypes, output_file, row.names = FALSE)
-write.csv(combined_lrs, summary_output_file, row.names = FALSE)
+fwrite(processed_genotypes, output_file)
+fwrite(combined_lrs, summary_output_file)
 
 # Save timing log to CSV
 timing_log_df <- as.data.frame(rbind(c("combined_lrs",combined_lrs_time), 
                                      c("genotype_processing",processing_time)))
 
-write_csv(timing_log_df, timing_log_file)
+fwrite(timing_log_df, timing_log_file)
 
 log_message("Simulation processing completed.")
