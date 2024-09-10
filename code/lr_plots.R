@@ -19,7 +19,7 @@ slurm_job_id <- as.character(args[1])
 if(length(args)>3){
   file_type<-args[4]
 } else {
-  file_type<-"png" #option to toggle between pdf or png outputs, pdf being faster
+  file_type<-"pdf" #option to toggle between pdf or png outputs, pdf being faster
 }
 output_dir <- file.path("output", paste0("simulation_", slurm_job_id))
 
@@ -95,6 +95,56 @@ plot_and_save_results <- function(combined_lrs,file_type) {
     } else {
       ggsave(plot=plot2,path=paste0(output_dir, "/"),filename="sim_line_chart_lr.png", width = 14, height = 10)
     }
+    
+    
+    sib_cutoffs = proportions_exceeding_cutoffs[which(proportions_exceeding_cutoffs$relationship_tested == "full_siblings" & proportions_exceeding_cutoffs$loci_set == "core_13"),]
+    combined_lrs_no_unrelated = combined_lrs[which(combined_lrs$relationship_known != "unrelated"),]
+    combined_all = merge(combined_lrs_no_unrelated, sib_cutoffs, by = c("population"))
+    
+    combined_all = combined_all %>%
+      mutate(relationship_known_label = case_when(relationship_known == "cousins" ~ "Cousins",
+                                                  relationship_known == "full_siblings" ~ "Full Siblings",
+                                                  relationship_known == "half_siblings" ~ "Half Siblings",
+                                                  relationship_known == "parent_child" ~ "Parent-Child",
+                                                  relationship_known == "second_cousins" ~ "Second Cousins"))
+    
+    plot6 <- ggplot(data = combined_all) +
+      geom_histogram(aes(x = log(LR), fill =relationship_known_label),alpha = 0.5) + 
+      geom_vline(aes(xintercept = proportion_exceeding_0_1, col = "0.1% FPR"),linetype = "dashed") +
+      geom_vline(aes(xintercept = proportion_exceeding_0_01, col = "0.01% FPR"),linetype = "dashed") +
+      geom_vline(aes(xintercept = proportion_exceeding_1, col = "1% FPR"),linetype = "dashed") +
+      scale_color_manual(name = "", labels = c("0.1% FPR", "0.01% FPR","1% FPR"), values = c("red","blue","forestgreen")) +
+      facet_wrap(.~population) +
+      guides(fill=guide_legend(title="Known Relationship")) +
+      xlab("Log Likelihood Ratio (LLR)") + ylab("Frequency") +
+      theme_minimal()
+    
+    if(!file_type=="png"){
+      pdf(paste(output_dir, "/log_likelihood_histogram.pdf", sep = ""))
+      invisible(print(plot6))
+      dev.off()
+    } else {
+      ggsave(plot=plot6,path=paste0(output_dir, "/"),filename="log_likelihood_histogram.png", width = 14, height = 10)
+    }
+    
+    plot7 <- ggplot(data = combined_all) +
+      geom_density(aes(x = log(LR), fill =relationship_known_label),alpha = 0.5) + 
+      geom_vline(aes(xintercept = proportion_exceeding_0_1, col = "0.1% FPR"),linetype = "dashed") +
+      geom_vline(aes(xintercept = proportion_exceeding_0_01, col = "0.01% FPR"),linetype = "dashed") +
+      geom_vline(aes(xintercept = proportion_exceeding_1, col = "1% FPR"),linetype = "dashed") +
+      scale_color_manual(name = "", labels = c("0.1% FPR", "0.01% FPR","1% FPR"), values = c("red","blue","forestgreen")) +
+      facet_wrap(.~population) +
+      guides(fill=guide_legend(title="Known Relationship")) +
+      xlab("Log Likelihood Ratio (LLR)") + ylab("Frequency") +
+      theme_minimal()
+    
+    if(!file_type=="png"){
+      pdf(paste(output_dir, "/log_likelihood_density.pdf", sep = ""))
+      invisible(print(plot7))
+      dev.off()
+    } else {
+      ggsave(plot=plot7,path=paste0(output_dir, "/"),filename="log_likelihood_density.png", width = 14, height = 10)
+    }
 
     log_message("Mean LR plot saved.")
 }
@@ -168,7 +218,45 @@ plot_proportions_exceeding_cutoffs <- function(proportions_exceeding_cutoffs,fil
     ggsave(plot=plot4,path=paste0(output_dir, "/"),filename="sim_proportions_exceeding_cutoffs_combined.png", width = 12, height = 8)
   }
 
-  log_message("Proportions exceeding cutoffs plot saved.")
+  
+  proportions_exceeding_cutoffs_long = proportions_exceeding_cutoffs %>%
+    pivot_longer(
+      cols = c(proportion_exceeding_1,proportion_exceeding_0_1,proportion_exceeding_0_01),
+      names_to = c("Cutoff"),
+      values_to = "Value")
+  
+  proportions_exceeding_cutoffs_long = proportions_exceeding_cutoffs_long %>%
+    mutate(relationship_tested_label = case_when(relationship_tested == "cousins" ~ "Cousins",
+                                                 relationship_tested == "full_siblings" ~ "Full Siblings",
+                                                 relationship_tested == "half_siblings" ~ "Half Siblings",
+                                                 relationship_tested == "parent_child" ~ "Parent-Child",
+                                                 relationship_tested == "second_cousins" ~ "Second Cousins"))
+  
+  proportions_exceeding_cutoffs_long = proportions_exceeding_cutoffs_long %>%
+    mutate(cutoff_label = case_when(Cutoff == "proportion_exceeding_0_01" ~ "0.01% FPR",
+                                    Cutoff == "proportion_exceeding_0_1" ~ "0.1% FPR",
+                                    Cutoff == "proportion_exceeding_1" ~ "1% FPR"))
+  
+  
+  plot5<-ggplot(data = proportions_exceeding_cutoffs_long, aes(x = Value, y = relationship_tested_label, fill = population)) +
+    geom_bar(position = "dodge", stat = "identity") +
+    scale_color_manual(name = "", labels = c("0.1% FPR", "0.01% FPR","1% FPR"), values = c("red","blue","forestgreen")) +
+    facet_grid(cutoff_label~loci_set) +
+    ylab(c("Relationship Type")) + xlab("Proportion Exceeding Cutoff") +
+    guides(fill=guide_legend(title="Relationship Tested")) +
+    theme_minimal()
+  
+  if(!file_type=="png"){
+    pdf(paste(output_dir, "/proportions_exceeding_cutoffs.pdf", sep = ""),width = 12, height = 8)
+    print(plot5)
+    dev.off()
+  } else {
+    ggsave(plot=plot5,path=paste0(output_dir, "/"),filename="proportions_exceeding_cutoffs.png", width = 12, height = 8)
+  }
+  
+  
+  log_message("Proportions exceeding cutoffs plots saved.")
+  
 }
 
 plot_and_save_results(combined_lrs,file_type)
