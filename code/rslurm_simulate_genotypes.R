@@ -9,6 +9,16 @@ suppressMessages(suppressWarnings({
   library(rslurm)
 }))
 
+# Read Command-Line Arguments
+args <- commandArgs(trailingOnly = TRUE)
+n_sims_related <- as.numeric(args[1])
+n_sims_unrelated <- as.numeric(args[2])
+job_id <- as.character(args[3])
+
+if(length(args)>3){
+  use_remote_cluster<-as.numeric(args[4])
+}
+
 if(!exists("use_remote_cluster")){ #Add this parameter to the run script
   use_remote_cluster<-0
 } #Use 0 if sending to external cluster (use 0 for tests on one machine)
@@ -60,12 +70,6 @@ log_function_time <- function(func, name, ...) {
   return(list(result = result, timing_log = timing_log))
 }
 
-# Read Command-Line Arguments
-#args <- commandArgs(trailingOnly = TRUE)
-#args<-c("100,000","100,000","Full_runthrough")
-n_sims_related <- as.numeric(args[1])
-n_sims_unrelated <- as.numeric(args[2])
-job_id <- as.character(args[3])
 
 # Create output folder with job ID
 output_dir <- file.path("data", "sims", paste0("simulation_", job_id))
@@ -80,8 +84,8 @@ log_message("Starting genotype simulation...")
 # Load Allele Frequencies Data
 log_message("Loading allele frequencies data...")
 allele_freq_time <- system.time({
- # df_allelefreq <- fread("data/df_allelefreq_combined.csv")
-  df_allelefreq <- fread("data/syn_data.csv")
+  df_allelefreq <- fread("data/df_allelefreq_combined.csv")
+#  df_allelefreq <- fread("data/syn_data.csv")
   df_allelefreq <- df_allelefreq[population != "all"] # Filter out "all" population
   df_allelefreq[, allele := as.character(allele)]
   df_allelefreq = as.data.table(df_allelefreq)
@@ -125,11 +129,6 @@ generate_simulation_setup <- function(kinship_matrix, population_list, num_relat
   for (population in population_list) {
     for (relationship in kinship_matrix$relationship_type) {
       num_simulations <- ifelse(relationship == "unrelated", num_unrelated, num_related)
-      #simulation_setup <- rbind(simulation_setup, data.frame(
-      #  population = population,
-      #  relationship_type = relationship,
-      #  num_simulations = num_simulations
-      #))
       l = list(simulation_setup, data.table(
         population = population,
         relationship_type = relationship,
@@ -196,8 +195,6 @@ simulate_genotypes <- function(row, df_allelefreq, kinship_matrix) {
   row$ind1_allele2 <- ind1_alleles[2]
   row$ind2_allele1 <- ind2_alleles[1]
   row$ind2_allele2 <- ind2_alleles[2]
-  print("row completed")
-  print(head(row))
   return(row)
 }
 
@@ -208,8 +205,7 @@ process_individuals_genotypes <- function(sim_id,individuals_genotypes, df_allel
       return(res$result)
     }, seed = TRUE) |>
     data.table::rbindlist()
-  print(2)
-  print(sim_id)
+
   final_individuals_genotypes$sim_id<- sim_id
   return(final_individuals_genotypes)
 }
@@ -237,18 +233,17 @@ int_results <- function(population, relationship_type, num_simulations){
     f_results <- simulation_setup |>
       future_pmap_dfr(function(population, relationship_type, num_simulations){
         cs<-seq(from=1,to=num_simulations,by=1)
-       # tibble(
+
         foreach(i = cs, .combine="rbind") %dopar% {
           sim_id = cs[i]
           individuals_genotypes <- initialize_individuals_pair(population, relationship_type, sim_id, loci_list)
 
           processed_genotypes <- log_function_time(process_individuals_genotypes, "process_individuals_genotypes", sim_id,individuals_genotypes, df_allelefreq, kinship_matrix)
           return(processed_genotypes$result)
-        }#)
+        }
       }, .options = furrr::furrr_options(seed = NULL))
     return(f_results)
   })
-#  class(final_results)<-"data.table"
 
   log_message(paste("Processing completed in", process_time["elapsed"], "seconds."))
 
@@ -258,22 +253,19 @@ int_results <- function(population, relationship_type, num_simulations){
 
 setup_res <- log_function_time(generate_simulation_setup, "generate_simulation_setup", kinship_matrix, populations_list, n_sims_related, n_sims_unrelated)
 simulation_setup <- setup_res$result
-#simulation_setup is a table of all possible relationship and population combinations and the number of simulations to assign to each.
-#Is this necessary as all unrelated will be assigned the same number of simulations etc
 
-print("Start slurm")
+##########################################################################################################################################
 
 if(use_remote_cluster==1){
-    s_job<-slurm_apply(f=final_results, data.frame(simulation_setup), jobname = job_id,
-                                          nodes = 1, cpus_per_node = 36, submit = FALSE)
-    final_results<-get_slurm_out(s_job,"table")
-    fwrite(final_results, output_file,append=TRUE)
+  s_job<-slurm_apply(f=int_results, params=data.frame(simulation_setup), jobname = job_id,
+                                          nodes = 1, cpus_per_node = 36, submit = TRUE,global_objects = c("initialize_individuals_pair","log_function_time","log_message"))
 } else {
-    tic()
-    s_job<-local_slurm_array(slurm_apply(f=final_results, data.frame(simulation_setup), submit = FALSE))
-    toc()
-    final_results<-get_slurm_out(s_job,"table")
-    fwrite(final_results, output_file,append=TRUE)
+  job1<-slurm_apply(int_results, data.frame(simulation_setup), submit = FALSE,global_objects = c("initialize_individuals_pair","log_function_time","log_message"))
+  s_job<-local_slurm_array(job1)
 }
+
+final_results<-get_slurm_out(s_job,"table",wait=TRUE)
+fwrite(final_results, output_file,append=TRUE)
+cleanup_files(s_job)
 
 gc()
