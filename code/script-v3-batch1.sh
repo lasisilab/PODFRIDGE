@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=STR_sims-v2
+#SBATCH --job-name=STR_sims-v3-1
 #SBATCH --output=/home/%u/%u/PODFRIDGE/slurm/%x-%j.log
 #SBATCH --time=07:00:00
 #SBATCH --account=tlasisi0
@@ -9,7 +9,7 @@
 #SBATCH --mem-per-cpu=4000MB
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=$(whoami)@umich.edu
-#SBATCH --dependency=afterok:STR_sims-v3-1
+# Not to be used until second job (job STR_sims-v3-2 onwards): SBATCH --dependency=afterok:STR_sims-v3-1
 
 ########################################################################
 # Reminder: Please set your GitHub PAT using the following command     #
@@ -40,14 +40,15 @@ log_resource_usage() {
     squeue --job=$SLURM_JOB_ID --format="%.18i %.9P %.8j %.8u %.2t %.10M %.6D %R %C %m %N" | tee -a /home/$UNIQNAME/$UNIQNAME/PODFRIDGE/slurm/resource_usage_$SLURM_JOB_ID.log
 }
 
-# Run the logging function every 15 minutes in the background
-while true; do
-    log_resource_usage
-    sleep 900  # Pause for 15 minutes
-done &
+# Run the logging function every 15 minutes in the background (Lets try without this temporarily to check the sleep command isn't interfering)
+#while true; do
+#    log_resource_usage
+#    sleep 900  # Pause for 15 minutes
+#done &
 
-# Run the R script with command line arguments
-Rscript code/lr.R $SLURM_JOB_ID
+# Run the R script(s) with command line arguments
+Rscript code/rslurm_simulate_genotypes.R 100 50 $SLURM_JOB_ID 1
+#where command line arguments are n_related,n_unrelated,job_id,use_remote_cluster
 
 # Configure Git to use HTTPS and PAT
 git remote set-url origin https://github.com/lasisilab/PODFRIDGE.git
