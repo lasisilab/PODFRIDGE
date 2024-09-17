@@ -14,7 +14,7 @@
 
 <title>Simulation of STR Pairs and Calculation of Likelihood Ratios</title>
 
-<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -336,25 +336,10 @@ div.tocify {
         <li>
   <a href="index.html">Home</a>
 </li>
-<li>
-  <a href="methods.html">Methods</a>
-</li>
-<li>
-  <a href="demo-data.html">Demographic Data</a>
-</li>
-<li>
-  <a href="database-composition.html">Database composition</a>
-</li>
-<li>
-  <a href="STR-simulation.html">STR simulations</a>
-</li>
-<li>
-  <a href="CODIS-STR-freqs.html">CODIS STRs</a>
-</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/tinalasisi/PODFRIDGE">
+  <a href="https://github.com/lasisilab/PODFRIDGE">
     <span class="fab fa-github"></span>
      
     Source code
@@ -372,7 +357,7 @@ div.tocify {
 <h1 class="title toc-ignore">Simulation of STR Pairs and Calculation of
 Likelihood Ratios</h1>
 <h4 class="author">Tina Lasisi</h4>
-<h4 class="date">2024-08-30 10:50:00</h4>
+<h4 class="date">2024-09-16 21:06:39</h4>
 
 </div>
 
@@ -401,7 +386,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2024-08-30
+<strong>Last updated:</strong> 2024-09-16
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -532,15 +517,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree585d1bb4a8bb30c1d1da8b7d94f4645c030f99b7targetblank585d1bba">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree6176bd3cc0400782a5b4b50da2b1be2be44cf972targetblank6176bd3a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/585d1bb4a8bb30c1d1da8b7d94f4645c030f99b7" target="_blank">585d1bb</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/6176bd3cc0400782a5b4b50da2b1be2be44cf972" target="_blank">6176bd3</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree585d1bb4a8bb30c1d1da8b7d94f4645c030f99b7targetblank585d1bba"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree6176bd3cc0400782a5b4b50da2b1be2be44cf972targetblank6176bd3a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -550,7 +535,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/585d1bb4a8bb30c1d1da8b7d94f4645c030f99b7" target="_blank">585d1bb</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/6176bd3cc0400782a5b4b50da2b1be2be44cf972" target="_blank">6176bd3</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -568,10 +553,8 @@ Ignored files:
     Ignored:    .DS_Store
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-
-Unstaged changes:
-    Modified:   analysis/index.Rmd
-    Modified:   analysis/siblings_analysis.Rmd
+    Ignored:    data/.DS_Store
+    Ignored:    output/.DS_Store
 
 </code></pre>
 <p>
@@ -617,6 +600,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/b98be9778d2e820b4bc587f3596d68fa71e5a53b/docs/STR-simulation.html" target="_blank">b98be97</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-08-30
+</td>
+<td>
+update color figure 1,2
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1373,8 +1373,8 @@ must be initialized as its own dataframe.</p>
 29:                                        0                    0
     ind2_allele1 ind2_allele2 shared_alleles genotype_match    LR</code></pre>
 <pre><code>Unit: microseconds
-       expr     min       lq     mean  median       uq      max neval
- initialize 132.709 134.9175 179.6556 135.917 137.2925 4439.501   100</code></pre>
+       expr     min     lq     mean  median       uq      max neval
+ initialize 260.584 283.23 458.0166 300.751 329.9385 10365.62   100</code></pre>
 </div>
 </div>
 <div id="step-3-simulate-genotypes" class="section level3">
@@ -1382,9 +1382,9 @@ must be initialized as its own dataframe.</p>
 <p>Next, we define a function to simulate the genotypes for each pair of
 individuals based on the allele frequencies and kinship
 coefficients.</p>
-<pre><code>Unit: microseconds
-     expr     min     lq     mean  median       uq      max neval
- geno_sim 728.126 750.73 1000.939 772.834 842.1465 17214.04   100</code></pre>
+<pre><code>Unit: milliseconds
+     expr     min       lq     mean   median       uq      max neval
+ geno_sim 1.48575 1.607876 2.380161 1.718417 2.025397 36.81046   100</code></pre>
 </div>
 <div id="step-4-calculate-kinship" class="section level3">
 <h3>Step 4: Calculate Kinship</h3>
@@ -1479,15 +1479,89 @@ loci for a pair of individuals:</p>
 initialize and process the pairs of individuals for each simulation
 scenario.</p>
 <pre><code>Unit: seconds
-          expr     min       lq     mean   median       uq      max neval
- dplyr_version 5.24808 5.586227 5.682499 5.642114 5.704687 6.296129    10</code></pre>
+          expr      min       lq     mean   median       uq      max neval
+ dplyr_version 26.04715 34.56299 57.82076 51.10803 80.76572 97.97174    10</code></pre>
 </div>
 <div id="plotting" class="section level3">
 <h3>Plotting</h3>
 <p><img src="figure/STR-simulation.Rmd/unnamed-chunk-20-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-20-1">
+Past versions of unnamed-chunk-20-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-20-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/b98be9778d2e820b4bc587f3596d68fa71e5a53b/docs/figure/STR-simulation.Rmd/unnamed-chunk-20-1.png" target="_blank">b98be97</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-08-30
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>`summarise()` has grouped output by &#39;relationship_type&#39;, &#39;population&#39;. You can
 override using the `.groups` argument.</code></pre>
 <p><img src="figure/STR-simulation.Rmd/unnamed-chunk-22-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-22-1">
+Past versions of unnamed-chunk-22-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-22-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/b98be9778d2e820b4bc587f3596d68fa71e5a53b/docs/figure/STR-simulation.Rmd/unnamed-chunk-22-1.png" target="_blank">b98be97</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-08-30
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code># A tibble: 25 × 7
    population loci_set  fixed_cutoff cutoff_1 cutoff_0_1 cutoff_0_01 n_unrelated
    &lt;fct&gt;      &lt;fct&gt;            &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;       &lt;int&gt;
@@ -1520,6 +1594,43 @@ override using the `.groups` argument.</code></pre>
 #   proportion_exceeding_0_1 &lt;dbl&gt;, proportion_exceeding_0_01 &lt;dbl&gt;,
 #   n_related &lt;int&gt;</code></pre>
 <p><img src="figure/STR-simulation.Rmd/unnamed-chunk-25-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-25-1">
+Past versions of unnamed-chunk-25-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-25-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/b98be9778d2e820b4bc587f3596d68fa71e5a53b/docs/figure/STR-simulation.Rmd/unnamed-chunk-25-1.png" target="_blank">b98be97</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-08-30
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="simulation-results" class="section level2">
@@ -1548,6 +1659,43 @@ likelihood cut-off</h2>
 <pre><code>`summarise()` has grouped output by &#39;population&#39;. You can override using the
 `.groups` argument.</code></pre>
 <p><img src="figure/STR-simulation.Rmd/unnamed-chunk-29-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-29-1">
+Past versions of unnamed-chunk-29-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-29-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/b98be9778d2e820b4bc587f3596d68fa71e5a53b/docs/figure/STR-simulation.Rmd/unnamed-chunk-29-1.png" target="_blank">b98be97</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-08-30
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="cut-offs-for-each-fpr" class="section level2">
 <h2>Cut-offs for each FPR</h2>
@@ -1705,7 +1853,81 @@ Hispanic
 </tbody>
 </table>
 <p><img src="figure/STR-simulation.Rmd/unnamed-chunk-37-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-37-1">
+Past versions of unnamed-chunk-37-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-37-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/b98be9778d2e820b4bc587f3596d68fa71e5a53b/docs/figure/STR-simulation.Rmd/unnamed-chunk-37-1.png" target="_blank">b98be97</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-08-30
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p><img src="figure/STR-simulation.Rmd/unnamed-chunk-39-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-39-1">
+Past versions of unnamed-chunk-39-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-39-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/b98be9778d2e820b4bc587f3596d68fa71e5a53b/docs/figure/STR-simulation.Rmd/unnamed-chunk-39-1.png" target="_blank">b98be97</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-08-30
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1714,13 +1936,13 @@ Session information
 </button>
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
-<pre><code>R version 4.3.2 (2023-10-31)
-Platform: x86_64-apple-darwin20 (64-bit)
-Running under: macOS Sonoma 14.5
+<pre><code>R version 4.4.1 (2024-06-14)
+Platform: x86_64-apple-darwin20
+Running under: macOS Sonoma 14.6.1
 
 Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+BLAS:   /Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
 
 locale:
 [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -1732,7 +1954,7 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] data.table_1.15.0     dtplyr_1.3.1          furrr_0.3.1          
+ [1] data.table_1.15.4     dtplyr_1.3.1          furrr_0.3.1          
  [4] future_1.33.2         kableExtra_1.4.0      microbenchmark_1.4.10
  [7] patchwork_1.2.0       lubridate_1.9.3       forcats_1.0.0        
 [10] stringr_1.5.1         dplyr_1.1.4           purrr_1.0.2          
@@ -1741,24 +1963,24 @@ other attached packages:
 [19] wesanderson_0.3.7     workflowr_1.7.1      
 
 loaded via a namespace (and not attached):
- [1] gtable_0.3.4      xfun_0.41         bslib_0.6.1       processx_3.8.3   
- [5] callr_3.7.3       tzdb_0.4.0        vctrs_0.6.5       tools_4.3.2      
- [9] ps_1.7.6          generics_0.1.3    parallel_4.3.2    fansi_1.0.6      
-[13] highr_0.10        pkgconfig_2.0.3   lifecycle_1.0.4   farver_2.1.1     
-[17] compiler_4.3.2    git2r_0.33.0      textshaping_0.3.7 munsell_0.5.0    
-[21] codetools_0.2-19  getPass_0.2-4     httpuv_1.6.14     htmltools_0.5.7  
-[25] sass_0.4.8        yaml_2.3.8        crayon_1.5.2      later_1.3.2      
-[29] pillar_1.9.0      jquerylib_0.1.4   whisker_0.4.1     cachem_1.0.8     
-[33] parallelly_1.38.0 tidyselect_1.2.1  digest_0.6.34     stringi_1.8.3    
-[37] listenv_0.9.1     labeling_0.4.3    rprojroot_2.0.4   fastmap_1.1.1    
-[41] grid_4.3.2        archive_1.1.7     colorspace_2.1-0  cli_3.6.2        
-[45] magrittr_2.0.3    utf8_1.2.4        withr_3.0.0       scales_1.3.0     
-[49] promises_1.2.1    bit64_4.0.5       timechange_0.3.0  rmarkdown_2.25   
-[53] httr_1.4.7        globals_0.16.3    bit_4.0.5         ragg_1.2.7       
-[57] hms_1.1.3         evaluate_0.23     knitr_1.45        viridisLite_0.4.2
-[61] rlang_1.1.3       Rcpp_1.0.12       glue_1.7.0        xml2_1.3.6       
-[65] vroom_1.6.5       svglite_2.1.3     rstudioapi_0.15.0 jsonlite_1.8.8   
-[69] R6_2.5.1          systemfonts_1.0.5 fs_1.6.3         </code></pre>
+ [1] gtable_0.3.5      xfun_0.45         bslib_0.7.0       processx_3.8.4   
+ [5] callr_3.7.6       tzdb_0.4.0        vctrs_0.6.5       tools_4.4.1      
+ [9] ps_1.7.7          generics_0.1.3    parallel_4.4.1    fansi_1.0.6      
+[13] highr_0.11        pkgconfig_2.0.3   lifecycle_1.0.4   farver_2.1.2     
+[17] compiler_4.4.1    git2r_0.33.0      textshaping_0.4.0 munsell_0.5.1    
+[21] codetools_0.2-20  getPass_0.2-4     httpuv_1.6.15     htmltools_0.5.8.1
+[25] sass_0.4.9        yaml_2.3.9        crayon_1.5.3      later_1.3.2      
+[29] pillar_1.9.0      jquerylib_0.1.4   whisker_0.4.1     cachem_1.1.0     
+[33] parallelly_1.37.1 tidyselect_1.2.1  digest_0.6.36     stringi_1.8.4    
+[37] listenv_0.9.1     labeling_0.4.3    rprojroot_2.0.4   fastmap_1.2.0    
+[41] grid_4.4.1        colorspace_2.1-0  cli_3.6.3         magrittr_2.0.3   
+[45] utf8_1.2.4        withr_3.0.0       scales_1.3.0      promises_1.3.0   
+[49] bit64_4.0.5       timechange_0.3.0  rmarkdown_2.27    httr_1.4.7       
+[53] globals_0.16.3    bit_4.0.5         ragg_1.3.2        hms_1.1.3        
+[57] evaluate_0.24.0   knitr_1.48        viridisLite_0.4.2 rlang_1.1.4      
+[61] Rcpp_1.0.12       glue_1.7.0        xml2_1.3.6        vroom_1.6.5      
+[65] svglite_2.1.3     rstudioapi_0.16.0 jsonlite_1.8.8    R6_2.5.1         
+[69] systemfonts_1.1.0 fs_1.6.4         </code></pre>
 </div>
 </div>
 </div>
