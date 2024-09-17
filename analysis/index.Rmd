@@ -8,37 +8,6 @@ editor_options:
   chunk_output_type: console
 ---
 
-[Background](background.html)
-
-[Method](methods.html)
-
-[Analyses](analyses.html)
-
-[Demographic Data](demo-data.html)
-
-[Database Composition](database-composition.html)
-
-[CODIS Database Composition](CODIS_DB_composition.html)
-
-[STR](STR.html)
-
-[STR Simulation](STR-simulation.html)
-
-[CODIS STR Frequency](CODIS-STR-freqs.html)
-
-[IBD](IBD.html)
-
-[Manuscript Figures](manuscript_figures.html)
-
-[Representation-Risk](representation-risk.html)
-
-[Siblings Analysis](siblings_analysis.html)
-
-[Final Equation](final_equation.html)
-
-[Murphy Analysis](murphy.html)
-
-
 The use of genetic data to identify individuals has become increasingly prevalent with the rise of consumer genomics databases and forensic genetic genealogy. Recent studies have shown that long-range familial searches can implicate the majority of US individuals of European descent (see [Erlich et al 2018](https://www.science.org/doi/10.1126/science.aau4832) and [Coop & Edge 2019](https://www.biorxiv.org/content/10.1101/531384v1)). These findings have motivated us to carry out further investigations into the disparities between populations in the likelihood of identifying individuals through genetic relatives. 
 
 African-Americans are overrepresented in forensic databases (see [Murphy and Tong, 2019](https://californialawreview.org/print/racial-composition-forensic-dna-databases/)
@@ -51,7 +20,20 @@ The PODFRIDGE (**Po**pulation **D**ifferences in **F**orensic **R**elative **Id*
 Our study aims to provide insight into the implications of these techniques for different populations and contribute to the ongoing discussions around genetic privacy and ethics.
 
 
+### Database Representation
+[Murphy & Tong FOIA Data](murphy.html)
+[DTC Database Composition](database-composition.html)
+[Estimation of Forensic Database Representation](regression.html)
 
+### Family Structure
+[Differences in Distribution of Close Relatives](siblings_analysis.html)
 
+### STR Likelihood Ratio Effects 
+[CODIS Allele Frequencies](CODIS-STR-freqs.html)
+[Likelihood Ratio Calculation](lr.html)
+[Simulation Framework for STR loci](STR-simulation.html)
 
+### Genetic Surveillance Burden
+[Long-range Familial Searching Reach Estimation Methods](methods.html)
 
+[Population Estimation of Genetic Surveillance Equation](final_equation.html)

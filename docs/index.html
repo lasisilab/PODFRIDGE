@@ -13,7 +13,7 @@
 
 <title>PODFRIDGE</title>
 
-<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -257,25 +257,10 @@ $(document).ready(function () {
         <li>
   <a href="index.html">Home</a>
 </li>
-<li>
-  <a href="methods.html">Methods</a>
-</li>
-<li>
-  <a href="demo-data.html">Demographic Data</a>
-</li>
-<li>
-  <a href="database-composition.html">Database composition</a>
-</li>
-<li>
-  <a href="STR-simulation.html">STR simulations</a>
-</li>
-<li>
-  <a href="CODIS-STR-freqs.html">CODIS STRs</a>
-</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/tinalasisi/PODFRIDGE">
+  <a href="https://github.com/lasisilab/PODFRIDGE">
     <span class="fab fa-github"></span>
      
     Source code
@@ -319,7 +304,7 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2024-08-30
+<strong>Last updated:</strong> 2024-09-16
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -369,15 +354,15 @@ HTML.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree585d1bb4a8bb30c1d1da8b7d94f4645c030f99b7targetblank585d1bba">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree2479f41e092c583d03a0ac0ebf554c0bfd60625etargetblank2479f41a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/585d1bb4a8bb30c1d1da8b7d94f4645c030f99b7" target="_blank">585d1bb</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/2479f41e092c583d03a0ac0ebf554c0bfd60625e" target="_blank">2479f41</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree585d1bb4a8bb30c1d1da8b7d94f4645c030f99b7targetblank585d1bba"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree2479f41e092c583d03a0ac0ebf554c0bfd60625etargetblank2479f41a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -387,7 +372,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/585d1bb4a8bb30c1d1da8b7d94f4645c030f99b7" target="_blank">585d1bb</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/2479f41e092c583d03a0ac0ebf554c0bfd60625e" target="_blank">2479f41</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -405,10 +390,33 @@ Ignored files:
     Ignored:    .DS_Store
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
+    Ignored:    data/.DS_Store
+    Ignored:    output/.DS_Store
+
+Untracked files:
+    Untracked:  data/final_CODIS_data.csv
 
 Unstaged changes:
+    Deleted:    analysis/CODIS_DB_composition.Rmd
+    Deleted:    analysis/IBD.Rmd
+    Deleted:    analysis/STR.Rmd
+    Modified:   analysis/_site.yml
+    Deleted:    analysis/analyses.Rmd
+    Deleted:    analysis/background.Rmd
+    Deleted:    analysis/demo-data.Rmd
+    Modified:   analysis/final_equation.Rmd
     Modified:   analysis/index.Rmd
-    Modified:   analysis/siblings_analysis.Rmd
+    Modified:   analysis/license.Rmd
+    Deleted:    analysis/manuscript_figures.Rmd
+    Modified:   analysis/regression.Rmd
+    Deleted:    analysis/representation-risk.Rmd
+    Deleted:    slurm-11226865.out
+    Deleted:    slurm-11226959.out
+    Deleted:    slurm-11227723.out
+    Deleted:    slurm-11228488.out
+    Deleted:    slurm-11228791.out
+    Deleted:    slurm-11229998.out
+    Deleted:    slurm-11230240.out
 
 </code></pre>
 <p>
@@ -453,6 +461,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/b98be9778d2e820b4bc587f3596d68fa71e5a53b/analysis/index.Rmd" target="_blank">b98be97</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-08-30
+</td>
+<td>
+update color figure 1,2
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/b98be9778d2e820b4bc587f3596d68fa71e5a53b/docs/index.html" target="_blank">b98be97</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-08-30
+</td>
+<td>
+update color figure 1,2
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -970,22 +1012,6 @@ Start workflowr project.
 </div>
 </div>
 </div>
-<p><a href="background.html">Background</a></p>
-<p><a href="methods.html">Method</a></p>
-<p><a href="analyses.html">Analyses</a></p>
-<p><a href="demo-data.html">Demographic Data</a></p>
-<p><a href="database-composition.html">Database Composition</a></p>
-<p><a href="CODIS_DB_composition.html">CODIS Database
-Composition</a></p>
-<p><a href="STR.html">STR</a></p>
-<p><a href="STR-simulation.html">STR Simulation</a></p>
-<p><a href="CODIS-STR-freqs.html">CODIS STR Frequency</a></p>
-<p><a href="IBD.html">IBD</a></p>
-<p><a href="manuscript_figures.html">Manuscript Figures</a></p>
-<p><a href="representation-risk.html">Representation-Risk</a></p>
-<p><a href="siblings_analysis.html">Siblings Analysis</a></p>
-<p><a href="final_equation.html">Final Equation</a></p>
-<p><a href="murphy.html">Murphy Analysis</a></p>
 <p>The use of genetic data to identify individuals has become
 increasingly prevalent with the rise of consumer genomics databases and
 forensic genetic genealogy. Recent studies have shown that long-range
@@ -1018,6 +1044,31 @@ information on European and African Americans.</p>
 <p>Our study aims to provide insight into the implications of these
 techniques for different populations and contribute to the ongoing
 discussions around genetic privacy and ethics.</p>
+<div id="database-representation" class="section level3">
+<h3>Database Representation</h3>
+<p><a href="murphy.html">Murphy &amp; Tong FOIA Data</a> <a
+href="database-composition.html">DTC Database Composition</a> <a
+href="regression.html">Estimation of Forensic Database
+Representation</a></p>
+</div>
+<div id="family-structure" class="section level3">
+<h3>Family Structure</h3>
+<p><a href="siblings_analysis.html">Differences in Distribution of Close
+Relatives</a></p>
+</div>
+<div id="str-likelihood-ratio-effects" class="section level3">
+<h3>STR Likelihood Ratio Effects</h3>
+<p><a href="CODIS-STR-freqs.html">CODIS Allele Frequencies</a> <a
+href="lr.html">Likelihood Ratio Calculation</a> <a
+href="STR-simulation.html">Simulation Framework for STR loci</a></p>
+</div>
+<div id="genetic-surveillance-burden" class="section level3">
+<h3>Genetic Surveillance Burden</h3>
+<p><a href="methods.html">Long-range Familial Searching Reach Estimation
+Methods</a></p>
+<p><a href="final_equation.html">Population Estimation of Genetic
+Surveillance Equation</a></p>
+</div>
 
 
 <!-- Adjust MathJax settings so that all math formulae are shown using

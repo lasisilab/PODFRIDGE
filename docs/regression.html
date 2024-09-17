@@ -14,7 +14,7 @@
 
 <title>Regression to predict CODIS database proportions</title>
 
-<script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -367,16 +367,19 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Regression to predict CODIS database proportions</h1>
+<h1 class="title toc-ignore">Regression to predict CODIS database
+proportions</h1>
 <h4 class="author">Hannah Van Wyk</h4>
-<h4 class="date">2024-09-06 15:09:11</h4>
+<h4 class="date">2024-09-16 20:46:23</h4>
 
 </div>
 
 
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -385,7 +388,9 @@ div.tocify {
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
 <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -394,17 +399,27 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2024-09-06
+<strong>Last updated:</strong> 2024-09-16
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 1
 </p>
 <p>
-<strong>Knit directory:</strong> <code>PODFRIDGE/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+<strong>Knit directory:</strong> <code>PODFRIDGE/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
 </p>
 <p>
-This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
-  href="https://github.com/workflowr/workflowr">workflowr</a> (version 1.7.1). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
 </p>
 <hr>
 </div>
@@ -413,155 +428,177 @@ This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a> analysi
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguncommittedchanges"
+class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
 </p>
 </div>
 <div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20230302code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20230302)</code> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20230302code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20230302)</code> </a>
 </p>
 </div>
-<div id="strongSeedstrongcodesetseed20230302code" class="panel-collapse collapse">
+<div id="strongSeedstrongcodesetseed20230302code"
+class="panel-collapse collapse">
 <div class="panel-body">
-<p>The command <code>set.seed(20230302)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+<p>The command <code>set.seed(20230302)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
 </p>
 </div>
-<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
 </p>
 </div>
 <div id="strongCachestrongnone" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongabsolute"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>File paths:</strong> absolute </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
 </p>
 </div>
-<div id="strongFilepathsstrongabsolute" class="panel-collapse collapse">
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
 <div class="panel-body">
-<p>
-Using absolute paths to the files within your workflowr project makes it difficult for you and others to run your code on a different machine. Change the absolute path(s) below to the suggested relative path(s) to make your code more reproducible.
-</p>
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th style="text-align:left;">
-absolute
-</th>
-<th style="text-align:left;">
-relative
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-/home/hannah/git/PODFRIDGE/data/populations_states.csv
-</td>
-<td style="text-align:left;">
-data/populations_states.csv
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-/home/hannah/git/PODFRIDGE/data/CODIS_data.csv
-</td>
-<td style="text-align:left;">
-data/CODIS_data.csv
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-/home/hannah/git/PODFRIDGE/data/NDIS.csv
-</td>
-<td style="text-align:left;">
-data/NDIS.csv
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-/home/hannah/git/PODFRIDGE/data/SDIS.csv
-</td>
-<td style="text-align:left;">
-data/SDIS.csv
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-/home/hannah/git/PODFRIDGE/data/Murphy_FOIA.csv
-</td>
-<td style="text-align:left;">
-data/Murphy_FOIA.csv
-</td>
-</tr>
-</tbody>
-</table>
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreea492d9c2eb93155b9fce49c5bfbe653f8c5f8aa4targetblanka492d9ca"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/lasisilab/PODFRIDGE/tree/a492d9c2eb93155b9fce49c5bfbe653f8c5f8aa4" target="_blank">a492d9c</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree2479f41e092c583d03a0ac0ebf554c0bfd60625etargetblank2479f41a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/2479f41e092c583d03a0ac0ebf554c0bfd60625e" target="_blank">2479f41</a>
+</a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreea492d9c2eb93155b9fce49c5bfbe653f8c5f8aa4targetblanka492d9ca" class="panel-collapse collapse">
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree2479f41e092c583d03a0ac0ebf554c0bfd60625etargetblank2479f41a"
+class="panel-collapse collapse">
 <div class="panel-body">
 <p>
-Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/lasisilab/PODFRIDGE/tree/a492d9c2eb93155b9fce49c5bfbe653f8c5f8aa4" target="_blank">a492d9c</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/2479f41e092c583d03a0ac0ebf554c0bfd60625e" target="_blank">2479f41</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
 </p>
 <p>
-Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
 </p>
 <pre><code>
+Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    data/.DS_Store
+    Ignored:    output/.DS_Store
+
 Untracked files:
     Untracked:  data/final_CODIS_data.csv
 
+Unstaged changes:
+    Deleted:    analysis/CODIS_DB_composition.Rmd
+    Deleted:    analysis/IBD.Rmd
+    Deleted:    analysis/STR.Rmd
+    Deleted:    analysis/analyses.Rmd
+    Deleted:    analysis/background.Rmd
+    Deleted:    analysis/demo-data.Rmd
+    Modified:   analysis/index.Rmd
+    Deleted:    analysis/manuscript_figures.Rmd
+    Modified:   analysis/regression.Rmd
+    Deleted:    analysis/representation-risk.Rmd
+    Deleted:    slurm-11226865.out
+    Deleted:    slurm-11226959.out
+    Deleted:    slurm-11227723.out
+    Deleted:    slurm-11228488.out
+    Deleted:    slurm-11228791.out
+    Deleted:    slurm-11229998.out
+    Deleted:    slurm-11230240.out
+
 </code></pre>
 <p>
-Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
 </p>
 </div>
 </div>
@@ -572,7 +609,12 @@ Note that any generated files, e.g. HTML, png, CSS, etc., are not included in t
 <div id="versions" class="tab-pane fade">
 
 <p>
-These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/regression.Rmd</code>) and HTML (<code>docs/regression.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/regression.Rmd</code>) and HTML
+(<code>docs/regression.html</code>) files. If you’ve configured a remote
+Git repository (see <code>?wflow_git_remote</code>), click on the
+hyperlinks in the table below to view the files as they were in that
+past version.
 </p>
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
@@ -596,6 +638,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/5d7baf243e60768bb7adc3e7f4bc7fb88b90f538/docs/regression.html" target="_blank">5d7baf2</a>
+</td>
+<td>
+hcvw
+</td>
+<td>
+2024-09-06
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -644,7 +703,7 @@ hcvw
 2024-09-05
 </td>
 <td>
-wflow_publish(c(“analysis/regression.Rmd”))
+wflow_publish(c("analysis/regression.Rmd"))
 </td>
 </tr>
 <tr>
@@ -678,7 +737,7 @@ hcvw
 2024-08-14
 </td>
 <td>
-wflow_publish(c(“analysis/regression.Rmd”))
+wflow_publish(c("analysis/regression.Rmd"))
 </td>
 </tr>
 <tr>
@@ -763,7 +822,7 @@ hcvw
 2024-06-25
 </td>
 <td>
-wflow_publish(c(“analysis/regression.Rmd”))
+wflow_publish(c("analysis/regression.Rmd"))
 </td>
 </tr>
 </tbody>
@@ -773,114 +832,83 @@ wflow_publish(c(“analysis/regression.Rmd”))
 </div>
 </div>
 </div>
-<p>To estimate the number of people in CODIS by state and race, we need information on (1) the number of people in CODIS in each state, and (2) the racial composition of this number. We have several data sources, each of which provide different information for different states:</p>
+<p>To estimate the number of people in CODIS by state and race, we need
+information on (1) the number of people in CODIS in each state, and (2)
+the racial composition of this number. We have several data sources,
+each of which provide different information for different states:</p>
 <ul>
-<li>Direct data on the number of Black and White people in CODIS, from a Freedom of Information Act (FOIA) request conducted by Muprhy and Tong (2020) for the following states: California, Florida, Indiana, Maine, Nevada, South Dakota, and Texas. [1]</li>
-<li>The number of people of each racial group in prison in each state. This data was pulled from a variety of sources and is available in Klein et al. (2023). [2]</li>
-<li>The number of people in the State DNA Indexing System (SDIS) and the National DNA Indexing System (NDIS). NDIS data is publicly available for all 50 states [3], whereas SDIS data is only available on a state-by-state basis and is obtained from internet searches. Within each DNA indexing system, both the number of offenders and the number of arrestees are recorded.</li>
+<li>Direct data on the number of Black and White people in CODIS, from a
+Freedom of Information Act (FOIA) request conducted by Muprhy and Tong
+(2020) for the following states: California, Florida, Indiana, Maine,
+Nevada, South Dakota, and Texas. [1]</li>
+<li>The number of people of each racial group in prison in each state.
+This data was pulled from a variety of sources and is available in Klein
+et al. (2023). [2]</li>
+<li>The number of people in the State DNA Indexing System (SDIS) and the
+National DNA Indexing System (NDIS). NDIS data is publicly available for
+all 50 states [3], whereas SDIS data is only available on a
+state-by-state basis and is obtained from internet searches. Within each
+DNA indexing system, both the number of offenders and the number of
+arrestees are recorded.</li>
 </ul>
-<p>To leverage this data to make estimates on the number of people in CODIS by state, we separate states into three categories:<br />
-1. States who have data available in the Murphy &amp; Tong dataset. For these states, no calculations are needed to estimate the number of people in CODIS.<br />
-2. States who have NDIS and SDIS data available but are not in the Murphy &amp; Tong dataset.<br />
+<p>To leverage this data to make estimates on the number of people in
+CODIS by state, we separate states into three categories:<br />
+1. States who have data available in the Murphy &amp; Tong dataset. For
+these states, no calculations are needed to estimate the number of
+people in CODIS.<br />
+2. States who have NDIS and SDIS data available but are not in the
+Murphy &amp; Tong dataset.<br />
 3. States with only NDIS data available.<br />
 </p>
 <p>The plot below shows the data that is available for each state:</p>
-<p><img src="figure/regression.Rmd/data_wrangling-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-data_wrangling-1">
-Past versions of data_wrangling-1.png
-</button>
-</p>
-<div id="fig-data_wrangling-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/a60d24302ce84b4e885c0d6e20aad64bba781448/docs/figure/regression.Rmd/data_wrangling-1.png" target="_blank">a60d243</a>
-</td>
-<td>
-hcvw
-</td>
-<td>
-2024-09-05
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p>For states in categories (2) and (3), we need to generate an estimation of the racial composition of the SDIS profiles. To generate this estimation, we use the Murphy &amp; Tong FOIA data to create a regression model of proportion of Black and White people in the data set with the following independent variables: the U.S. census proportion of each state for each rate, the percent of the state’s prison population that is each race, an indicator variable for Black/White race, and interaction variables for census proportion by race and prison racial population by race. We use the coefficients from the regression model to make predictions for the remaining states that do not have data available on the racial composition of the DNA databases.</p>
-<p><span class="math display">\[Proportion_{race} = \beta_0 + \beta_1census_{proportion} + \beta_2prison_{proportion} + \beta_3race + \beta_4race*census_{proportion} + \beta_5race*prison_{proportion}\]</span></p>
-<p>For states in category (3) we need both an estimation of the number of people in SDIS, and an estimation of the number of the racial composition of the datasets. To estimate the racial composition of the database, we use the regression model described above. To generate predictions of the number of people in SDIS for these states, we create an additional regression model with dependent variable the number of people in SDIS and independent variables for the U.S. census proportion of the population that is each race, the proportion of the state’s prison population that is each race, and the number of people in NDIS for that state. We create separate regression models for arrests and offenders to obtain more accurate predictions:</p>
-<p><span class="math display">\[N_{arrestee} = \beta_0 + \beta_1census_{black} + \beta_2census_{white} + \beta_3prison_{black} + \beta_4prison_{white} + \beta_5NDIS_{arrestees} \]</span> and</p>
-<p><span class="math display">\[N_{offender} = \beta_0 + \beta_1census_{black} + \beta_2census_{white} + \beta_3prison_{black} + \beta_4prison_{white} + \beta_5NDIS_{offenders} \]</span></p>
-<div id="part-1-regression-to-estimate-the-racial-composition-of-each-database." class="section level1">
-<h1>Part 1: regression to estimate the racial composition of each database.</h1>
-<p>The following plot shows the coefficient estimates for the regression model that estimates the racial composition of the CODIS dataset using the Murphy &amp; Tong states.</p>
-<p><img src="figure/regression.Rmd/proportion_regression-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-proportion_regression-1">
-Past versions of proportion_regression-1.png
-</button>
-</p>
-<div id="fig-proportion_regression-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/a60d24302ce84b4e885c0d6e20aad64bba781448/docs/figure/regression.Rmd/proportion_regression-1.png" target="_blank">a60d243</a>
-</td>
-<td>
-hcvw
-</td>
-<td>
-2024-09-05
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/0cc6e3ab0a056bfd2b49fa51849c76e39e6efaa4/docs/figure/regression.Rmd/proportion_regression-1.png" target="_blank">0cc6e3a</a>
-</td>
-<td>
-hcvw
-</td>
-<td>
-2024-08-14
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p>While none of the coefficients were significant in the regression, our model had an <span class="math inline">\(R^2\)</span> value of 0.93, demonstrating a good fit. The following plot showing the estimated racial composition using the regression model vs. the true values for the states with available data. We also plot a difference plot (also known as a Bland-Altman plot).</p>
+<p><img src="figure/regression.Rmd/data-wrangling-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>For states in categories (2) and (3), we need to generate an
+estimation of the racial composition of the SDIS profiles. To generate
+this estimation, we use the Murphy &amp; Tong FOIA data to create a
+regression model of proportion of Black and White people in the data set
+with the following independent variables: the U.S. census proportion of
+each state for each rate, the percent of the state’s prison population
+that is each race, an indicator variable for Black/White race, and
+interaction variables for census proportion by race and prison racial
+population by race. We use the coefficients from the regression model to
+make predictions for the remaining states that do not have data
+available on the racial composition of the DNA databases.</p>
+<p><span class="math display">\[Proportion_{race} = \beta_0 +
+\beta_1census_{proportion} + \beta_2prison_{proportion} + \beta_3race +
+\beta_4race*census_{proportion} +
+\beta_5race*prison_{proportion}\]</span></p>
+<p>For states in category (3) we need both an estimation of the number
+of people in SDIS, and an estimation of the number of the racial
+composition of the datasets. To estimate the racial composition of the
+database, we use the regression model described above. To generate
+predictions of the number of people in SDIS for these states, we create
+an additional regression model with dependent variable the number of
+people in SDIS and independent variables for the U.S. census proportion
+of the population that is each race, the proportion of the state’s
+prison population that is each race, and the number of people in NDIS
+for that state. We create separate regression models for arrests and
+offenders to obtain more accurate predictions:</p>
+<p><span class="math display">\[N_{arrestee} = \beta_0 +
+\beta_1census_{black} + \beta_2census_{white} + \beta_3prison_{black} +
+\beta_4prison_{white} + \beta_5NDIS_{arrestees} \]</span> and</p>
+<p><span class="math display">\[N_{offender} = \beta_0 +
+\beta_1census_{black} + \beta_2census_{white} + \beta_3prison_{black} +
+\beta_4prison_{white} + \beta_5NDIS_{offenders} \]</span></p>
+<div
+id="part-1-regression-to-estimate-the-racial-composition-of-each-database."
+class="section level1">
+<h1>Part 1: regression to estimate the racial composition of each
+database.</h1>
+<p>The following plot shows the coefficient estimates for the regression
+model that estimates the racial composition of the CODIS dataset using
+the Murphy &amp; Tong states.</p>
+<p><img src="figure/regression.Rmd/proportion-regression-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>While none of the coefficients were significant in the regression,
+our model had an <span class="math inline">\(R^2\)</span> value of 0.93,
+demonstrating a good fit. The following plot showing the estimated
+racial composition using the regression model vs. the true values for
+the states with available data. We also plot a difference plot (also
+known as a Bland-Altman plot).</p>
 <p><img src="figure/regression.Rmd/plots-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plots-1">
@@ -971,132 +999,22 @@ hcvw
 </div>
 <div id="part-2-sdis-regression" class="section level1">
 <h1>Part 2: SDIS regression</h1>
-<p>The following plots show the results of the SDIS regression for both arrestees (left) and offenders (right):</p>
-<p><img src="figure/regression.Rmd/SDIS_regression-1.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-SDIS_regression-1">
-Past versions of SDIS_regression-1.png
-</button>
-</p>
-<div id="fig-SDIS_regression-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/a492d9c2eb93155b9fce49c5bfbe653f8c5f8aa4/docs/figure/regression.Rmd/SDIS_regression-1.png" target="_blank">a492d9c</a>
-</td>
-<td>
-hcvw
-</td>
-<td>
-2024-09-06
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/a60d24302ce84b4e885c0d6e20aad64bba781448/docs/figure/regression.Rmd/SDIS_regression-1.png" target="_blank">a60d243</a>
-</td>
-<td>
-hcvw
-</td>
-<td>
-2024-09-05
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/0cc6e3ab0a056bfd2b49fa51849c76e39e6efaa4/docs/figure/regression.Rmd/SDIS_regression-1.png" target="_blank">0cc6e3a</a>
-</td>
-<td>
-hcvw
-</td>
-<td>
-2024-08-14
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p>The following plots show the results of the SDIS regression for both
+arrestees (left) and offenders (right):</p>
+<p><img src="figure/regression.Rmd/SDIS-regression-1.png" width="100%" style="display: block; margin: auto;" /></p>
 </div>
 <div id="part-3-final-data" class="section level1">
 <h1>Part 3: final data</h1>
-<p>Using the above regression models, we make predictions of the number of Black and White people in CODIS by state. The plot below shows our estimates for each state, colored by the data source used for each state. The number of Black people in the database are indicated with circles and the number of White people is indicated by triangles.</p>
-<p><img src="figure/regression.Rmd/final_data-1.png" width="1920" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-final_data-1">
-Past versions of final_data-1.png
-</button>
-</p>
-<div id="fig-final_data-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/a492d9c2eb93155b9fce49c5bfbe653f8c5f8aa4/docs/figure/regression.Rmd/final_data-1.png" target="_blank">a492d9c</a>
-</td>
-<td>
-hcvw
-</td>
-<td>
-2024-09-06
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/a60d24302ce84b4e885c0d6e20aad64bba781448/docs/figure/regression.Rmd/final_data-1.png" target="_blank">a60d243</a>
-</td>
-<td>
-hcvw
-</td>
-<td>
-2024-09-05
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/0cc6e3ab0a056bfd2b49fa51849c76e39e6efaa4/docs/figure/regression.Rmd/final_data-1.png" target="_blank">0cc6e3a</a>
-</td>
-<td>
-hcvw
-</td>
-<td>
-2024-08-14
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p>We additionally generate a plot showing the difference in the percent of people in CODIS that are Black versus the U.S. census percent of the population that is Black in each state. <img src="figure/regression.Rmd/maps-1.png" width="1920" style="display: block; margin: auto;" /></p>
+<p>Using the above regression models, we make predictions of the number
+of Black and White people in CODIS by state. The plot below shows our
+estimates for each state, colored by the data source used for each
+state. The number of Black people in the database are indicated with
+circles and the number of White people is indicated by triangles.</p>
+<p><img src="figure/regression.Rmd/final-data-1.png" width="1920" style="display: block; margin: auto;" /></p>
+<p>We additionally generate a plot showing the difference in the percent
+of people in CODIS that are Black versus the U.S. census percent of the
+population that is Black in each state.
+<img src="figure/regression.Rmd/maps-1.png" width="1920" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-maps-1">
 Past versions of maps-1.png
@@ -1145,7 +1063,8 @@ hcvw
 </table>
 </div>
 </div>
-<p>The table containing the estimates for the number of people of each race in CODIS by state, along with the source of the data is below:</p>
+<p>The table containing the estimates for the number of people of each
+race in CODIS by state, along with the source of the data is below:</p>
 <pre><code>            State Black Profiles White Profiles          Source
 1         Alabama    181118.5149     217600.769 SDIS+regression
 2          Alaska      5549.5882      39296.292 Regression only
@@ -1197,129 +1116,86 @@ hcvw
 48  West Virginia      4234.0180      47855.252 SDIS+regression
 49      Wisconsin     95752.7058     279276.555 Regression only
 50        Wyoming       668.1218      18897.896 Regression only</code></pre>
-<p>Finally, we generate side-by-side pie charts for each state showing the racial composition according to the census (left) versus the estimated racial composition of CODIS (right) for each state. Note that groups not identifying as Black or White are omitted for easy comparison.</p>
-<p><img src="figure/regression.Rmd/pie_charts_final-1.png" width="1920" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pie_charts_final-1">
-Past versions of pie_charts_final-1.png
-</button>
-</p>
-<div id="fig-pie_charts_final-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/a492d9c2eb93155b9fce49c5bfbe653f8c5f8aa4/docs/figure/regression.Rmd/pie_charts_final-1.png" target="_blank">a492d9c</a>
-</td>
-<td>
-hcvw
-</td>
-<td>
-2024-09-06
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/a60d24302ce84b4e885c0d6e20aad64bba781448/docs/figure/regression.Rmd/pie_charts_final-1.png" target="_blank">a60d243</a>
-</td>
-<td>
-hcvw
-</td>
-<td>
-2024-09-05
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p>Finally, we generate side-by-side pie charts for each state showing
+the racial composition according to the census (left) versus the
+estimated racial composition of CODIS (right) for each state. Note that
+groups not identifying as Black or White are omitted for easy
+comparison.</p>
+<p><img src="figure/regression.Rmd/pie-charts-final-1.png" width="1920" style="display: block; margin: auto;" /></p>
 </div>
 <div id="references" class="section level1">
 <h1>References</h1>
-<p>[1] Murphy, Erin, and Jun H. Tong. “The racial composition of forensic DNA databases.” Calif. L. Rev. 108 (2020): 1847.</p>
-<p>[2] Klein, Brennan, et al. “COVID-19 amplified racial disparities in the US criminal legal system.” Nature 617.7960 (2023): 344-350.</p>
-<p>[3] <a href="https://le.fbi.gov/science-and-lab/biometrics-and-fingerprints/codis/codis-ndis-statistics" class="uri">https://le.fbi.gov/science-and-lab/biometrics-and-fingerprints/codis/codis-ndis-statistics</a></p>
+<p>[1] Murphy, Erin, and Jun H. Tong. “The racial composition of
+forensic DNA databases.” Calif. L. Rev. 108 (2020): 1847.</p>
+<p>[2] Klein, Brennan, et al. “COVID-19 amplified racial disparities in
+the US criminal legal system.” Nature 617.7960 (2023): 344-350.</p>
+<p>[3] <a
+href="https://le.fbi.gov/science-and-lab/biometrics-and-fingerprints/codis/codis-ndis-statistics"
+class="uri">https://le.fbi.gov/science-and-lab/biometrics-and-fingerprints/codis/codis-ndis-statistics</a></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
-<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
 </button>
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
 <pre><code>R version 4.4.1 (2024-06-14)
-Platform: x86_64-pc-linux-gnu
-Running under: Ubuntu 22.04.4 LTS
+Platform: x86_64-apple-darwin20
+Running under: macOS Sonoma 14.6.1
 
 Matrix products: default
-BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
-LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so;  LAPACK version 3.10.0
+BLAS:   /Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
 
 locale:
- [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
- [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
- [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
- [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
- [9] LC_ADDRESS=C               LC_TELEPHONE=C            
-[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 
-time zone: America/New_York
-tzcode source: system (glibc)
+time zone: America/Detroit
+tzcode source: internal
 
 attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] sf_1.0-16         viridis_0.6.5     viridisLite_0.4.2 cowplot_1.1.3    
- [5] tidycensus_1.6.5  sandwich_3.1-0    ggpubr_0.6.0      jtools_2.3.0     
+ [1] sf_1.0-17         viridis_0.6.5     viridisLite_0.4.2 cowplot_1.1.3    
+ [5] tidycensus_1.6.5  sandwich_3.1-1    ggpubr_0.6.0      jtools_2.3.0     
  [9] knitr_1.48        lubridate_1.9.3   forcats_1.0.0     stringr_1.5.1    
 [13] dplyr_1.1.4       purrr_1.0.2       tidyr_1.3.1       tibble_3.2.1     
-[17] ggplot2_3.5.1     tidyverse_2.0.0   readr_2.1.5      
+[17] ggplot2_3.5.1     tidyverse_2.0.0   readr_2.1.5       workflowr_1.7.1  
 
 loaded via a namespace (and not attached):
  [1] tidyselect_1.2.1    farver_2.1.2        fastmap_1.2.0      
- [4] promises_1.3.0      digest_0.6.37       timechange_0.3.0   
- [7] lifecycle_1.0.4     magrittr_2.0.3      compiler_4.4.1     
-[10] rlang_1.1.4         sass_0.4.9          tools_4.4.1        
-[13] utf8_1.2.4          yaml_2.3.10         ggsignif_0.6.4     
-[16] labeling_0.4.3      curl_5.2.2          classInt_0.4-10    
-[19] xml2_1.3.6          KernSmooth_2.23-24  abind_1.4-5        
-[22] workflowr_1.7.1     withr_3.0.1         grid_4.4.1         
+ [4] promises_1.3.0      digest_0.6.36       timechange_0.3.0   
+ [7] lifecycle_1.0.4     processx_3.8.4      magrittr_2.0.3     
+[10] compiler_4.4.1      rlang_1.1.4         sass_0.4.9         
+[13] tools_4.4.1         utf8_1.2.4          yaml_2.3.9         
+[16] ggsignif_0.6.4      labeling_0.4.3      curl_5.2.1         
+[19] classInt_0.4-10     xml2_1.3.6          KernSmooth_2.23-24 
+[22] abind_1.4-8         withr_3.0.0         grid_4.4.1         
 [25] fansi_1.0.6         git2r_0.33.0        e1071_1.7-14       
-[28] colorspace_2.1-1    future_1.34.0       globals_0.16.3     
+[28] colorspace_2.1-0    future_1.33.2       globals_0.16.3     
 [31] scales_1.3.0        cli_3.6.3           crayon_1.5.3       
-[34] rmarkdown_2.28      generics_0.1.3      httr_1.4.7         
-[37] tzdb_0.4.0          DBI_1.2.3           cachem_1.1.0       
-[40] proxy_0.4-27        pander_0.6.5        splines_4.4.1      
-[43] rvest_1.0.4         parallel_4.4.1      tigris_2.1         
-[46] vctrs_0.6.5         jsonlite_1.8.8      carData_3.0-5      
-[49] car_3.1-2           hms_1.1.3           rstatix_0.7.2      
-[52] listenv_0.9.1       jquerylib_0.1.4     units_0.8-5        
-[55] glue_1.7.0          parallelly_1.38.0   codetools_0.2-19   
-[58] stringi_1.8.4       gtable_0.3.5        later_1.3.2        
-[61] broom.mixed_0.2.9.5 munsell_0.5.1       furrr_0.3.1        
-[64] pillar_1.9.0        rappdirs_0.3.3      htmltools_0.5.8.1  
-[67] R6_2.5.1            rprojroot_2.0.4     evaluate_0.24.0    
-[70] lattice_0.22-5      highr_0.11          backports_1.5.0    
-[73] broom_1.0.6         httpuv_1.6.15       bslib_0.8.0        
-[76] class_7.3-22        uuid_1.2-1          Rcpp_1.0.13        
-[79] gridExtra_2.3       nlme_3.1-165        whisker_0.4.1      
-[82] xfun_0.47           fs_1.6.4            zoo_1.8-12         
-[85] pkgconfig_2.0.3    </code></pre>
+[34] rmarkdown_2.27      generics_0.1.3      rstudioapi_0.16.0  
+[37] httr_1.4.7          tzdb_0.4.0          proxy_0.4-27       
+[40] DBI_1.2.3           cachem_1.1.0        pander_0.6.5       
+[43] splines_4.4.1       rvest_1.0.4         parallel_4.4.1     
+[46] tigris_2.1          vctrs_0.6.5         jsonlite_1.8.8     
+[49] carData_3.0-5       car_3.1-2           callr_3.7.6        
+[52] hms_1.1.3           rstatix_0.7.2       listenv_0.9.1      
+[55] jquerylib_0.1.4     units_0.8-5         glue_1.7.0         
+[58] parallelly_1.37.1   codetools_0.2-20    ps_1.7.7           
+[61] stringi_1.8.4       gtable_0.3.5        later_1.3.2        
+[64] broom.mixed_0.2.9.5 munsell_0.5.1       furrr_0.3.1        
+[67] pillar_1.9.0        rappdirs_0.3.3      htmltools_0.5.8.1  
+[70] R6_2.5.1            rprojroot_2.0.4     evaluate_0.24.0    
+[73] lattice_0.22-6      highr_0.11          backports_1.5.0    
+[76] broom_1.0.6         httpuv_1.6.15       bslib_0.7.0        
+[79] class_7.3-22        uuid_1.2-0          Rcpp_1.0.12        
+[82] gridExtra_2.3       nlme_3.1-164        whisker_0.4.1      
+[85] xfun_0.45           fs_1.6.4            zoo_1.8-12         
+[88] getPass_0.2-4       pkgconfig_2.0.3    </code></pre>
 </div>
 </div>
 

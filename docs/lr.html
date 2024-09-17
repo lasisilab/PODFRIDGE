@@ -14,7 +14,7 @@
 
 <title>Likelihood Ratio</title>
 
-<script src="site_libs/header-attrs-2.26/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -334,25 +334,10 @@ div.tocify {
         <li>
   <a href="index.html">Home</a>
 </li>
-<li>
-  <a href="methods.html">Methods</a>
-</li>
-<li>
-  <a href="demo-data.html">Demographic Data</a>
-</li>
-<li>
-  <a href="database-composition.html">Database composition</a>
-</li>
-<li>
-  <a href="STR-simulation.html">STR simulations</a>
-</li>
-<li>
-  <a href="CODIS-STR-freqs.html">CODIS STRs</a>
-</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/tinalasisi/PODFRIDGE">
+  <a href="https://github.com/lasisilab/PODFRIDGE">
     <span class="fab fa-github"></span>
      
     Source code
@@ -369,7 +354,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Likelihood Ratio</h1>
 <h4 class="author">Sam Muller</h4>
-<h4 class="date">2024-07-11 15:35:57</h4>
+<h4 class="date">2024-09-16 20:56:47</h4>
 
 </div>
 
@@ -398,7 +383,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2024-07-11
+<strong>Last updated:</strong> 2024-09-16
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -529,15 +514,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree9ce56263ac96bf626e274bd67beff7283fbd76e4targetblank9ce5626a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree2479f41e092c583d03a0ac0ebf554c0bfd60625etargetblank2479f41a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/9ce56263ac96bf626e274bd67beff7283fbd76e4" target="_blank">9ce5626</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/2479f41e092c583d03a0ac0ebf554c0bfd60625e" target="_blank">2479f41</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree9ce56263ac96bf626e274bd67beff7283fbd76e4targetblank9ce5626a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree2479f41e092c583d03a0ac0ebf554c0bfd60625etargetblank2479f41a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -547,7 +532,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/9ce56263ac96bf626e274bd67beff7283fbd76e4" target="_blank">9ce5626</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/2479f41e092c583d03a0ac0ebf554c0bfd60625e" target="_blank">2479f41</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -562,8 +547,36 @@ were generated:
 </p>
 <pre><code>
 Ignored files:
+    Ignored:    .DS_Store
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
+    Ignored:    data/.DS_Store
+    Ignored:    output/.DS_Store
+
+Untracked files:
+    Untracked:  data/final_CODIS_data.csv
+
+Unstaged changes:
+    Deleted:    analysis/CODIS_DB_composition.Rmd
+    Deleted:    analysis/IBD.Rmd
+    Deleted:    analysis/STR.Rmd
+    Modified:   analysis/_site.yml
+    Deleted:    analysis/analyses.Rmd
+    Deleted:    analysis/background.Rmd
+    Deleted:    analysis/demo-data.Rmd
+    Modified:   analysis/final_equation.Rmd
+    Modified:   analysis/index.Rmd
+    Modified:   analysis/license.Rmd
+    Deleted:    analysis/manuscript_figures.Rmd
+    Modified:   analysis/regression.Rmd
+    Deleted:    analysis/representation-risk.Rmd
+    Deleted:    slurm-11226865.out
+    Deleted:    slurm-11226959.out
+    Deleted:    slurm-11227723.out
+    Deleted:    slurm-11228488.out
+    Deleted:    slurm-11228791.out
+    Deleted:    slurm-11229998.out
+    Deleted:    slurm-11230240.out
 
 </code></pre>
 <p>
@@ -608,6 +621,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/9a85666490b7d01f6566d3c038676d8e95182038/docs/lr.html" target="_blank">9a85666</a>
+</td>
+<td>
+sammuller917
+</td>
+<td>
+2024-07-11
+</td>
+<td>
+Update lr.html
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -931,13 +961,13 @@ Session information
 </button>
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
-<pre><code>R version 4.4.0 (2024-04-24)
-Platform: aarch64-apple-darwin20
-Running under: macOS Sonoma 14.5
+<pre><code>R version 4.4.1 (2024-06-14)
+Platform: x86_64-apple-darwin20
+Running under: macOS Sonoma 14.6.1
 
 Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+BLAS:   /Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
 
 locale:
 [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -948,17 +978,21 @@ tzcode source: internal
 attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
+other attached packages:
+[1] workflowr_1.7.1
+
 loaded via a namespace (and not attached):
- [1] vctrs_0.6.5       cli_3.6.2         knitr_1.46        rlang_1.1.3      
- [5] xfun_0.43         stringi_1.8.4     promises_1.3.0    jsonlite_1.8.8   
- [9] workflowr_1.7.1   glue_1.7.0        rprojroot_2.0.4   git2r_0.33.0     
-[13] htmltools_0.5.8.1 httpuv_1.6.15     sass_0.4.9        fansi_1.0.6      
-[17] rmarkdown_2.26    jquerylib_0.1.4   evaluate_0.23     tibble_3.2.1     
-[21] fastmap_1.1.1     yaml_2.3.8        lifecycle_1.0.4   whisker_0.4.1    
-[25] stringr_1.5.1     compiler_4.4.0    fs_1.6.4          Rcpp_1.0.12      
-[29] pkgconfig_2.0.3   rstudioapi_0.16.0 later_1.3.2       digest_0.6.35    
-[33] R6_2.5.1          utf8_1.2.4        pillar_1.9.0      magrittr_2.0.3   
-[37] bslib_0.7.0       tools_4.4.0       cachem_1.0.8     </code></pre>
+ [1] vctrs_0.6.5       httr_1.4.7        cli_3.6.3         knitr_1.48       
+ [5] rlang_1.1.4       xfun_0.45         stringi_1.8.4     processx_3.8.4   
+ [9] promises_1.3.0    jsonlite_1.8.8    glue_1.7.0        rprojroot_2.0.4  
+[13] git2r_0.33.0      htmltools_0.5.8.1 httpuv_1.6.15     ps_1.7.7         
+[17] sass_0.4.9        fansi_1.0.6       rmarkdown_2.27    jquerylib_0.1.4  
+[21] tibble_3.2.1      evaluate_0.24.0   fastmap_1.2.0     yaml_2.3.9       
+[25] lifecycle_1.0.4   whisker_0.4.1     stringr_1.5.1     compiler_4.4.1   
+[29] fs_1.6.4          pkgconfig_2.0.3   Rcpp_1.0.12       rstudioapi_0.16.0
+[33] later_1.3.2       digest_0.6.36     R6_2.5.1          utf8_1.2.4       
+[37] pillar_1.9.0      callr_3.7.6       magrittr_2.0.3    bslib_0.7.0      
+[41] tools_4.4.1       cachem_1.1.0      getPass_0.2-4    </code></pre>
 </div>
 </div>
 

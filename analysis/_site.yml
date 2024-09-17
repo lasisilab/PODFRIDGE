@@ -5,20 +5,10 @@ navbar:
   left:
   - text: Home
     href: index.html
-  - text: Methods
-    href: methods.html
-  - text: Demographic Data
-    href: demo-data.html
-  - text: Database composition
-    href: database-composition.html
-  - text: STR simulations
-    href: STR-simulation.html
-  - text: CODIS STRs
-    href: CODIS-STR-freqs.html
   right:
   - icon: fab fa-github
     text: Source code
-    href: https://github.com/tinalasisi/PODFRIDGE
+    href: https://github.com/lasisilab/PODFRIDGE
 output:
   workflowr::wflow_html:
     toc: yes

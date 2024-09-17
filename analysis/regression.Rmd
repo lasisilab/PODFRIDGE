@@ -24,7 +24,7 @@ The plot below shows the data that is available for each state:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r data, results = FALSE,warning=FALSE,message=FALSE, echo = FALSE}
+```{r data, results =FALSE,warning=FALSE,message=FALSE, echo = FALSE}
 # Load necessary libraries
 library(readr)        # read csv files
 library(tidyverse)    # census API
@@ -42,10 +42,10 @@ library(viridis)
 library(sf)
 
 # Load prison data
-prison_data = read.csv("/home/hannah/git/PODFRIDGE/data/populations_states.csv")
+prison_data = read.csv("data/populations_states.csv")
 
 # Load CODIS data
-codis_data = read.csv("/home/hannah/git/PODFRIDGE/data/CODIS_data.csv")
+codis_data = read.csv("data/CODIS_data.csv")
 
 # Create a data frame for Murphy and Tong profiles
 murphy.tong = data.frame(
@@ -68,7 +68,7 @@ data.sources = data.frame(
 )
 ```
 
-```{r data_wrangling, results = FALSE,warning=FALSE,message=FALSE, echo = FALSE}
+```{r data-wrangling, results = FALSE,warning=FALSE, message=FALSE, echo = FALSE}
 # Load necessary libraries
 
 # Calculate the number of White and Black profiles in Murphy and Tong data
@@ -169,7 +169,7 @@ $$N_{offender} = \beta_0 + \beta_1census_{black} + \beta_2census_{white} + \beta
 
 The following plot shows the coefficient estimates for the regression model that estimates the racial composition of the CODIS dataset using the Murphy & Tong states. 
 
-```{r proportion_regression, results = FALSE,warning=FALSE,message=FALSE, echo = FALSE}
+```{r proportion-regression, results = FALSE,warning=FALSE,message=FALSE, echo = FALSE}
 
 combined$race_census = combined$race_bin * combined$census.percent
 combined$race_prison = combined$race_bin * combined$percent.incar
@@ -260,10 +260,10 @@ ggplot(combined, aes(x = Avg, y = Dif)) +
 The following plots show the results of the SDIS regression for both  arrestees (left) and offenders (right):
 
 
-```{r SDIS_regression, results = FALSE,warning=FALSE,message=FALSE,out.width="100%", echo = FALSE}
+```{r SDIS-regression, results = FALSE,warning=FALSE,message=FALSE,out.width="100%", echo = FALSE}
 # Read in CSV files
-NDIS = read.csv("/home/hannah/git/PODFRIDGE/data/NDIS.csv")       # National DNA Index System data
-SDIS = read.csv("/home/hannah/git/PODFRIDGE/data/SDIS.csv")       # State DNA Index System data
+NDIS = read.csv("data/NDIS.csv")       # National DNA Index System data
+SDIS = read.csv("data/SDIS.csv")       # State DNA Index System data
 
 # Merge NDIS and SDIS datasets by state
 NDIS_SDIS = merge(NDIS, SDIS, by = "State")
@@ -366,8 +366,8 @@ plot_grid(NULL, p3, NULL, leg, nrow = 4, rel_heights = c(0, 1.5, 0.2, 0.5))
 
 Using the above regression models, we make predictions of the number of Black and White people in CODIS by state. The plot below shows our estimates for each state, colored by the data source used for each state. The number of Black people in the database are indicated with circles and the number of White people is indicated by triangles.  
 
-```{r final_data, warning=FALSE,message=FALSE,fig.width = 20, fig.height = 10, echo = FALSE}
-Murphy = read.csv("/home/hannah/git/PODFRIDGE/data/Murphy_FOIA.csv") # FOIA data from Murphy
+```{r final-data, warning=FALSE,message=FALSE,fig.width = 20, fig.height = 10, echo = FALSE}
+Murphy = read.csv("data/Murphy_FOIA.csv") # FOIA data from Murphy
 
 # Reshape Murphy data to wide format
 Murphy_wide = reshape(Murphy, idvar = "State", timevar = "pop", direction = "wide")
@@ -437,7 +437,7 @@ write.csv(final.data, "./data/final_CODIS_data.csv")
 
 Finally, we generate side-by-side pie charts for each state showing the  racial composition according to the census (left) versus the estimated racial composition of CODIS (right) for each state. Note that groups not identifying as Black or White are omitted for easy comparison.
 
-```{r pie_charts, warning=FALSE,message=FALSE,fig.width = 20,fig.height = 10, echo = FALSE}
+```{r pie-charts, warning=FALSE,message=FALSE,fig.width = 20,fig.height = 10, echo = FALSE}
 # final.data.sf$census.percent.other = 1 - (final.data.sf$census.percent.white + final.data.sf$census.percent.black)
 final.data.long = final.data.sf %>%
   pivot_longer(
@@ -499,7 +499,7 @@ plot1 =
 ```
 
 
-```{r pie_charts_final, echo = FALSE, warning=FALSE,message=FALSE,fig.width = 20,fig.height = 12}
+```{r pie-charts-final, echo = FALSE, warning=FALSE,message=FALSE,fig.width = 20,fig.height = 12}
 g_legend <- function(a.gplot){ 
     tmp <- ggplot_gtable(ggplot_build(a.gplot)) 
     leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box") 
