@@ -1,0 +1,233 @@
+---
+title: "Likelihood Ratio Distribution"
+output: html_document
+author: "Hannah Van Wyk"
+date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
+site: workflowr::wflow_site
+---
+
+<style type="text/css">
+
+body, td {
+   font-size: 14px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 12px
+}
+</style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r data, results =FALSE,warning=FALSE,message=FALSE, echo = FALSE}
+# Load Required Libraries
+library(tidyverse)
+library(furrr)
+library(data.table)
+library(future)
+library(parallel)
+
+file_type<-"pdf" #option to toggle between pdf or png outputs, pdf being faster
+
+output_dir <- file.path("output/example_plots")
+#output_dir <- file.path("output", paste0("simulation_", slurm_job_id))
+#dir.create(output_dir, recursive = TRUE)
+
+# load combined_lrs
+setwd("/home/hannah/git/PODFRIDGE/")
+#combined_lrs = fread(paste0("output/simulation_",slurm_job_id,"/sim_summary_genotypes.csv"))
+combined_lrs = fread(paste0("./data/example_data/sim_summary_genotypes.csv"))
+
+combined_lrs$LR<-as.numeric(combined_lrs$LR)
+combined_lrs$relationship_tested <- factor(combined_lrs$relationship_tested, levels = c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated"))
+combined_lrs$population<-as.factor(combined_lrs$population)
+
+# load proportions_exceeding_cutoffs
+setwd("/home/hannah/git/PODFRIDGE/")
+#proportions_exceeding_cutoffs = fread(paste0("output/simulation_",slurm_job_id,"/sim_proportions_exceeding_cutoffs.csv"))
+proportions_exceeding_cutoffs = fread(paste0("./data/example_data/sim_proportions_exceeding_cutoffs.csv"))
+```
+
+```{r cutoff_functions, results =FALSE,warning=FALSE,message=FALSE, echo = FALSE,fig.width = 20,fig.height = 15}
+# Function to calculate cut-off values for 1%, 0.1%, and 0.01% FPR
+calculate_cutoffs <- function(input_df, fp_rates, hypothesis) {
+  cutoffs <- input_df[relationship_tested == hypothesis,
+                                  list(
+      fixed_cutoff = 1.00,
+      cutoff_1 = quantile(LR, probs = 1 - fp_rates[1] / 100, na.rm = TRUE),
+      cutoff_0_1 = quantile(LR, probs = 1 - fp_rates[2] / 100, na.rm = TRUE),
+      cutoff_0_01 = quantile(LR, probs = 1 - fp_rates[3] / 100, na.rm = TRUE),
+      n_unrelated = .N),
+    by=c("population", "loci_set")]
+  return(cutoffs)
+}
+
+calculate_proportions_exceeding_cutoffs <- function(input_df, cutoffs) {
+  df_with_cutoffs <- left_join(input_df, cutoffs, by = c("population", "loci_set"))
+  df_with_cutoffs <- df_with_cutoffs [,list(
+      population=population,
+      relationship_tested = relationship_tested,
+      loci_set = loci_set,
+      exceeds_fixed_cutoff = LR > fixed_cutoff,
+      exceeds_cutoff_1 = LR > cutoff_1,
+      exceeds_cutoff_0_1 = LR > cutoff_0_1,
+      exceeds_cutoff_0_01 = LR > cutoff_0_01
+    )]
+
+  df_no_cutoffs<-df_with_cutoffs[!df_with_cutoffs$relationship_tested == "unrelated",]
+  proportions_exceeding <- df_no_cutoffs[,    list(
+      proportion_exceeding_fixed = sum(exceeds_fixed_cutoff) / .N,
+      proportion_exceeding_1 = sum(exceeds_cutoff_1, na.rm = TRUE) / .N,
+      proportion_exceeding_0_1 = sum(exceeds_cutoff_0_1, na.rm = TRUE) / .N,
+      proportion_exceeding_0_01 = sum(exceeds_cutoff_0_01, na.rm = TRUE) / .N,
+      n_related = .N),
+      by=c("population","relationship_tested","loci_set")]
+  return(proportions_exceeding)
+}
+```
+
+Likelihood ratio summary plots
+
+```{r summary_states, results =FALSE,warning=FALSE,message=FALSE, echo = FALSE,fig.width = 20,fig.height = 15}
+summary_stats <- combined_lrs[,    list(
+  mean_LR = mean(LR),
+  lower_95 = quantile(LR, 0.025),
+  upper_95 = quantile(LR, 0.975)#,
+),
+by=c("relationship_tested","population","loci_set")]
+
+ggplot(summary_stats, aes(x = loci_set, y = mean_LR, group = population, color = population)) +
+      geom_line(size = 1) +
+      facet_wrap(~ relationship_tested, scales = "free_y", ncol = 2) +
+      scale_y_log10() +
+      labs(
+        title = "Mean LR Across Populations and Relationship Types",
+        x = "Loci Set",
+        y = "Combined LR",
+        color = "Population"
+      ) +
+      theme_minimal(base_size = 18) +
+      theme(
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "bottom"
+      )
+
+
+ggplot(combined_lrs, aes(x = relationship_tested, y = LR, fill = population, color = population)) +
+    geom_boxplot(position = position_dodge(width = 0.9)) +
+    facet_wrap(~ loci_set, scales = "fixed") +
+    labs(
+      title = "LR Distributions Across Populations and Relationship Types",
+      x = "Relationship Tested",
+      y = "LR",
+      fill = "Population",
+      color = "Population"
+    ) +
+    theme_minimal(base_size = 18) +
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1)
+    ) +
+    scale_y_log10()
+
+ggplot(combined_lrs, aes(x = relationship_tested, y = LR, fill = population)) +
+    geom_boxplot(position = position_dodge(width = 0.9)) +
+    facet_grid(relationship_known ~ loci_set) +
+    labs(
+      title = "LR Distributions for Relationship Comparisons",
+      x = "Tested Relationship Type",
+      y = "LR",
+      fill = "Population"
+    ) +
+    theme_minimal(base_size = 18) +
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1)
+    ) +
+    scale_y_log10()
+
+ggplot(combined_lrs, aes(x = relationship_known, y = log(LR), fill = population)) +
+    geom_boxplot(position = position_dodge(width = 0.9)) +
+    facet_wrap(.~relationship_tested,nrow = 5) +
+    labs(
+      title = "LR Distributions by Tested Realtionship Type and Population",
+      x = "Known Relationship Type",
+      y = "LR",
+      fill = "Population"
+    ) +
+    theme_minimal(base_size = 18) +
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1)
+    )
+```
+Plots showing the distribution of likelihood ratios relative to the cutoffs for each hypothesis type (cousins, full siblings, half siblings, parent_child, and second cousins)
+```{r lr_distributions, results =FALSE,warning=FALSE,message=FALSE, echo = FALSE,fig.width = 20,fig.height = 15}
+
+hypotheses = c("parent_child","full_siblings","cousins","half_siblings","second_cousins")
+plot_list = c()
+i=1
+for(hypothesis in hypotheses){
+  cutoffs <- calculate_cutoffs(combined_lrs, c(1, 0.1, 0.01), hypothesis = hypothesis)
+  combined_lrs_hyp_cutoffs = merge(combined_lrs, cutoffs, by = c("population","loci_set"), all.x = TRUE)
+
+  combined_lrs_hyp_cutoffs = combined_lrs_hyp_cutoffs %>%
+      mutate(relationship_known_label = case_when(relationship_known == "cousins" ~ "Cousins",
+                                                  relationship_known == "full_siblings" ~ "Full Siblings",
+                                                  relationship_known == "half_siblings" ~ "Half Siblings",
+                                                  relationship_known == "parent_child" ~ "Parent-Child",
+                                                  relationship_known == "second_cousins" ~ "Second Cousins",
+                                                  relationship_known == "unrelated" ~ "Unrelated"))
+    
+  plot1 = ggplot(data = combined_lrs_hyp_cutoffs) +
+      geom_density(aes(x = log(LR), fill =relationship_known_label),alpha = 0.5) + 
+      geom_vline(aes(xintercept = log(fixed_cutoff), col = "Fixed cutoff (1)"),linetype = "dashed") +
+      geom_vline(aes(xintercept = log(cutoff_0_1), col = "0.1% FPR"),linetype = "dashed") +
+      geom_vline(aes(xintercept = log(cutoff_0_01), col = "0.01% FPR"),linetype = "dashed") +
+      geom_vline(aes(xintercept = log(cutoff_1), col = "1% FPR"),linetype = "dashed") +
+      ggtitle(paste0("Log Likelihood Ratios for the ", hypothesis,  " hypothesis")) +
+      scale_color_manual(name = paste0("Hypothesis: ",hypothesis), labels = c("0.1% FPR", "0.01% FPR","1% FPR","Fixed cutoff (1)"), values = c("red","blue","forestgreen","black")) +
+      facet_grid(loci_set~population, scales = "free") +
+      theme(axis.text = element_text(size = 28), axis.title = element_text(size = 28)) +
+      guides(fill=guide_legend(title="Known Relationship")) +
+      xlab("Log Likelihood Ratio (LLR)") + ylab("Frequency") +
+      theme_minimal(base_size = 18)
+
+  plot2 = ggplot(data = combined_lrs_hyp_cutoffs) +
+      geom_histogram(aes(x = log(LR), fill =relationship_known_label),alpha = 0.5) + 
+      geom_vline(aes(xintercept = log(fixed_cutoff), col = "Fixed cutoff (1)"),linetype = "dashed") +
+      geom_vline(aes(xintercept = log(cutoff_0_1), col = "0.1% FPR"),linetype = "dashed") +
+      geom_vline(aes(xintercept = log(cutoff_0_01), col = "0.01% FPR"),linetype = "dashed") +
+      geom_vline(aes(xintercept = log(cutoff_1), col = "1% FPR"),linetype = "dashed") +
+      ggtitle(paste0("Log Likelihood Ratios for the ", hypothesis,  " hypothesis")) +
+      scale_color_manual(name = paste0("Hypothesis: ",hypothesis), labels = c("0.1% FPR", "0.01% FPR","1% FPR","Fixed cutoff (1)"), values = c("red","blue","forestgreen","black")) +
+      facet_grid(loci_set~population, scales = "free") +
+      theme(axis.text = element_text(size = 28), axis.title = element_text(size = 28)) +
+      guides(fill=guide_legend(title="Known Relationship")) +
+      xlab("Log Likelihood Ratio (LLR)") + ylab("Frequency") +
+      theme_minimal(base_size = 18)
+  
+  plot_list[[i]] = plot1
+  plot_list[[i+1]] = plot2
+
+  i = i+2
+
+}
+
+plot_list[[1]]
+plot_list[[2]]
+
+plot_list[[3]]
+plot_list[[4]]
+
+plot_list[[5]]
+plot_list[[6]]
+
+plot_list[[7]]
+plot_list[[8]]
+
+plot_list[[9]]
+plot_list[[10]]
+```
+
