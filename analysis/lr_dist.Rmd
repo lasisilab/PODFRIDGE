@@ -38,18 +38,16 @@ output_dir <- file.path("output/example_plots")
 #dir.create(output_dir, recursive = TRUE)
 
 # load combined_lrs
-setwd("/home/hannah/git/PODFRIDGE/")
 #combined_lrs = fread(paste0("output/simulation_",slurm_job_id,"/sim_summary_genotypes.csv"))
-combined_lrs = fread(paste0("./data/example_data/sim_summary_genotypes.csv"))
+combined_lrs = fread(paste0("data/example_data/sim_summary_genotypes.csv"))
 
 combined_lrs$LR<-as.numeric(combined_lrs$LR)
 combined_lrs$relationship_tested <- factor(combined_lrs$relationship_tested, levels = c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated"))
 combined_lrs$population<-as.factor(combined_lrs$population)
 
 # load proportions_exceeding_cutoffs
-setwd("/home/hannah/git/PODFRIDGE/")
 #proportions_exceeding_cutoffs = fread(paste0("output/simulation_",slurm_job_id,"/sim_proportions_exceeding_cutoffs.csv"))
-proportions_exceeding_cutoffs = fread(paste0("./data/example_data/sim_proportions_exceeding_cutoffs.csv"))
+proportions_exceeding_cutoffs = fread(paste0("data/example_data/sim_proportions_exceeding_cutoffs.csv"))
 ```
 
 ```{r cutoff_functions, results =FALSE,warning=FALSE,message=FALSE, echo = FALSE,fig.width = 20,fig.height = 15}
