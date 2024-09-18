@@ -8,6 +8,15 @@ suppressMessages(suppressWarnings({
   library(doParallel)
 }))
 
+
+# Read Command-Line Arguments
+args <- commandArgs(trailingOnly = TRUE)
+n_sims_related <- as.numeric(args[1])
+n_sims_unrelated <- as.numeric(args[2])
+job_id <- as.character(args[3])
+if(length(args)>3){
+  use_remote_cluster<-as.numeric(args[4])
+}
 if(!exists("use_remote_cluster")){ #Add this parameter to the run script
   use_remote_cluster<-0
 } #Use 0 if sending to external cluster (use 0 for tests on one machine)
@@ -62,11 +71,6 @@ log_function_time <- function(func, name, ...) {
   return(list(result = result, timing_log = timing_log))
 }
 
-# Read Command-Line Arguments
-args <- commandArgs(trailingOnly = TRUE)
-n_sims_related <- as.numeric(args[1])
-n_sims_unrelated <- as.numeric(args[2])
-job_id <- as.character(args[3])
 
 # Create output folder with job ID- if using batch submission:
 output_dir <- file.path("data", "sims", paste0("simulation_", job_id))
