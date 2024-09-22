@@ -9,7 +9,7 @@ editor_options:
 
 # Introduction
 
-Understanding family size differences across populations is crucial for assessing disparities in genetic surveillance. Larger family sizes increase the number of first-degree relatives, enhancing the probability of an individual being identified through familial DNA searches. This supplementary text provides a detailed analysis of family size distributions among African American and European American populations using U.S. Census data from 1960 to 1990, highlighting key findings such as the paradoxical bimodal distribution in the number of children among African American women.
+Understanding family size differences across populations is crucial for assessing disparities in genetic surveillance. Larger family sizes increase the number of first-degree relatives, increasing the probability of an individual being identified through familial DNA searches. This supplementary text provides a detailed analysis of family size distributions among African American and European American populations using U.S. Census data from 1960 to 1990, highlighting key findings such as the paradoxical bimodal distribution in the number of children among African American women.
 
 ## Data Sources
 We utilized publicly available data from the Integrated Public Use Microdata Series (IPUMS) for the U.S. Census years 1960, 1970, 1980, and 1990. The datasets include information on the number of children ever born to women (chborn_num), their age (AGE), and race (RACE).
