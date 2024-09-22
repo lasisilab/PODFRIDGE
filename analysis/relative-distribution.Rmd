@@ -1,6 +1,6 @@
 ---
-title: "Sibling analysis"
-author: "Manqing Lin"
+title: "Estimating Differences in the Distribution of First-degree Relatives"
+author: "Manqing Lin, Tina Lasisi"
 date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
 output: workflowr::wflow_html
 editor_options:
@@ -9,7 +9,16 @@ editor_options:
 
 # Introduction
 
-Our sibling analysis provides an overview of family size, examining the number of children a mother has and its relationship with the number of sibling each individual has. This tells us the number of first degree relatives each individual has, helping to predict the probability that an individual will be detected in the forensic database.
+Understanding family size differences across populations is crucial for assessing disparities in genetic surveillance. Larger family sizes increase the number of first-degree relatives, enhancing the probability of an individual being identified through familial DNA searches. This supplementary text provides a detailed analysis of family size distributions among African American and European American populations using U.S. Census data from 1960 to 1990, highlighting key findings such as the paradoxical bimodal distribution in the number of children among African American women.
+
+## Data Sources
+We utilized publicly available data from the Integrated Public Use Microdata Series (IPUMS) for the U.S. Census years 1960, 1970, 1980, and 1990. The datasets include information on the number of children ever born to women (chborn_num), their age (AGE), and race (RACE).
+
+Due to the terms of agreement for using this data, we cannot share the full dataset but our repo contains the subset that was used to calculate the mean number of offspring and variance.
+
+“STANDARD REDISTRIBUTION TERM You will not redistribute the data without permission. You may publish a subset of the data to meet journal requirements for accessing data related to a particular publication. Contact us for permission for any other redistribution; we will consider requests for free and commercial redistribution.”
+
+citation: Steven Ruggles, Sarah Flood, Matthew Sobek, Daniel Backman, Annie Chen, Grace Cooper, Stephanie Richards, Renae Rogers, and Megan Schouweiler. IPUMS USA: Version 14.0 [dataset]. Minneapolis, MN: IPUMS, 2023. https://doi.org/10.18128/D010.V14.0
 
 # Data Exploration
 
@@ -35,9 +44,17 @@ library(gridExtra)
 
 
 ```{r data, results = FALSE,warning=FALSE,message=FALSE}
-children_data = read.csv("./data/proportions_table_by_race_year.csv")
+# children_data = read.csv("./data/proportions_table_by_race_year.csv")
 mother_data = read.csv("./data/data_filtered_recoded.csv")
 ```
+
+```{r}
+# Filter data for women aged 40 and above
+mother_data_over40 <- mother_data %>%
+  filter(AGE >= 40)
+
+```
+
 
 
 Here are the frequency tables for each race to show the number of children born, the number of mother who has "chborn_num" children, the number of sibling, and the number of individuals who has "n_sib" siblings. 
