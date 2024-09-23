@@ -9,10 +9,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Manqing Lin" />
+<meta name="author" content="Manqing Lin, Tina Lasisi" />
 
 
-<title>Sibling analysis</title>
+<title>Estimating Differences in the Distribution of First-degree Relatives</title>
 
 <script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -36,8 +36,6 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/tabwid-1.1.3/tabwid.css" rel="stylesheet" />
-<script src="site_libs/tabwid-1.1.3/tabwid.js"></script>
 <link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
 
@@ -354,9 +352,10 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Sibling analysis</h1>
-<h4 class="author">Manqing Lin</h4>
-<h4 class="date">2024-09-16 21:01:18</h4>
+<h1 class="title toc-ignore">Estimating Differences in the Distribution
+of First-degree Relatives</h1>
+<h4 class="author">Manqing Lin, Tina Lasisi</h4>
+<h4 class="date">2024-09-22 21:41:22</h4>
 
 </div>
 
@@ -364,7 +363,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -375,8 +374,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -385,13 +384,13 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2024-09-16
+<strong>Last updated:</strong> 2024-09-22
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>PODFRIDGE/</code> <span
@@ -414,18 +413,21 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
@@ -516,15 +518,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree6176bd3cc0400782a5b4b50da2b1be2be44cf972targetblank6176bd3a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree78c162184b484b2c22526171033ab3dc7235d2detargetblank78c1621a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/6176bd3cc0400782a5b4b50da2b1be2be44cf972" target="_blank">6176bd3</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/78c162184b484b2c22526171033ab3dc7235d2de" target="_blank">78c1621</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree6176bd3cc0400782a5b4b50da2b1be2be44cf972targetblank6176bd3a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree78c162184b484b2c22526171033ab3dc7235d2detargetblank78c1621a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -534,7 +536,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/6176bd3cc0400782a5b4b50da2b1be2be44cf972" target="_blank">6176bd3</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/78c162184b484b2c22526171033ab3dc7235d2de" target="_blank">78c1621</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -553,7 +555,14 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
     Ignored:    data/.DS_Store
+    Ignored:    data/sims/.DS_Store
     Ignored:    output/.DS_Store
+    Ignored:    output/simulation_20240726-155743/.DS_Store
+    Ignored:    output/simulation_20240726-162034_11228488/.DS_Store
+    Ignored:    output/simulation_20240726-163235_11228791/.DS_Store
+
+Unstaged changes:
+    Modified:   analysis/relative-distribution.Rmd
 
 </code></pre>
 <p>
@@ -571,8 +580,8 @@ have uncommitted changes.
 
 <p>
 These are the previous versions of the repository in which changes were
-made to the R Markdown (<code>analysis/siblings_analysis.Rmd</code>) and
-HTML (<code>docs/siblings_analysis.html</code>) files. If you’ve
+made to the R Markdown (<code>analysis/relative-distribution.Rmd</code>)
+and HTML (<code>docs/relative-distribution.html</code>) files. If you’ve
 configured a remote Git repository (see <code>?wflow_git_remote</code>),
 click on the hyperlinks in the table below to view the files as they
 were in that past version.
@@ -604,169 +613,16 @@ Message
 Rmd
 </td>
 <td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/6e28fed594efc1ffe79039103d6886cac6463c42/analysis/siblings_analysis.Rmd" target="_blank">6e28fed</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-08-30
-</td>
-<td>
-update page
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/6e28fed594efc1ffe79039103d6886cac6463c42/docs/siblings_analysis.html" target="_blank">6e28fed</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-08-30
-</td>
-<td>
-update page
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/b98be9778d2e820b4bc587f3596d68fa71e5a53b/analysis/siblings_analysis.Rmd" target="_blank">b98be97</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-08-30
-</td>
-<td>
-update color figure 1,2
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/b98be9778d2e820b4bc587f3596d68fa71e5a53b/docs/siblings_analysis.html" target="_blank">b98be97</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-08-30
-</td>
-<td>
-update color figure 1,2
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/585d1bb4a8bb30c1d1da8b7d94f4645c030f99b7/analysis/siblings_analysis.Rmd" target="_blank">585d1bb</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-08-30
-</td>
-<td>
-Delete figure3,4,5
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/d75ffa43f0c5f2251c0e30cf546fdbd06a3a29d7/analysis/siblings_analysis.Rmd" target="_blank">d75ffa4</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-08-29
-</td>
-<td>
-add notes to graph
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/d75ffa43f0c5f2251c0e30cf546fdbd06a3a29d7/docs/siblings_analysis.html" target="_blank">d75ffa4</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-08-29
-</td>
-<td>
-add notes to graph
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/601938e60767c3e28e72167760dfadbc0f5889bb/docs/siblings_analysis.html" target="_blank">601938e</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/78c162184b484b2c22526171033ab3dc7235d2de/analysis/relative-distribution.Rmd" target="_blank">78c1621</a>
 </td>
 <td>
 Tina Lasisi
 </td>
 <td>
-2024-08-20
+2024-09-21
 </td>
 <td>
-Update siblings analysis
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/2a6a0782351223d273ffe12790c9da35764004a2/analysis/siblings_analysis.Rmd" target="_blank">2a6a078</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-08-14
-</td>
-<td>
-updates all drafts
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/2a6a0782351223d273ffe12790c9da35764004a2/docs/siblings_analysis.html" target="_blank">2a6a078</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-08-14
-</td>
-<td>
-updates all drafts
+Update relative-distribution.Rmd
 </td>
 </tr>
 <tr>
@@ -774,544 +630,16 @@ updates all drafts
 Rmd
 </td>
 <td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/6e250bcc31e0c2c00be50971a37334bf346101b4/analysis/siblings_analysis.Rmd" target="_blank">6e250bc</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-08-13
-</td>
-<td>
-draft for part 1&amp;3
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/6e250bcc31e0c2c00be50971a37334bf346101b4/docs/siblings_analysis.html" target="_blank">6e250bc</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-08-13
-</td>
-<td>
-draft for part 1&amp;3
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/b54560dbb2cb2576aebc8e65cb8bdb3528a05381/analysis/siblings_analysis.Rmd" target="_blank">b54560d</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-08-12
-</td>
-<td>
-legend size
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/113b785f2c52d95b2bfe3e06c4bf2a4ea02578eb/analysis/siblings_analysis.Rmd" target="_blank">113b785</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-08-12
-</td>
-<td>
-legend size
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/113b785f2c52d95b2bfe3e06c4bf2a4ea02578eb/docs/siblings_analysis.html" target="_blank">113b785</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-08-12
-</td>
-<td>
-legend size
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/ca72653ede45acb978f3fe40dc4fcb86000c1dee/docs/siblings_analysis.html" target="_blank">ca72653</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-08-12
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/4279c63efdd5a17168626fd688496877cdbfa57a/analysis/siblings_analysis.Rmd" target="_blank">4279c63</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-08-12
-</td>
-<td>
-update plot for 1960
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/2bcdccb08f75b45fd3ba1557655d989a066ebc4e/analysis/siblings_analysis.Rmd" target="_blank">2bcdccb</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-08-12
-</td>
-<td>
-comparison plot
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/34a9fab9a407e69e5562d137f8863859bf1a4683/analysis/siblings_analysis.Rmd" target="_blank">34a9fab</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-08-09
-</td>
-<td>
-update plot 5
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/cc19d5f91f70936be6ee0c8c3d351f885115867f/analysis/siblings_analysis.Rmd" target="_blank">cc19d5f</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-08-09
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/6ed8da81d476195515b80fdf7a1aa432ac243960/analysis/siblings_analysis.Rmd" target="_blank">6ed8da8</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-08-08
-</td>
-<td>
-use ggnewscale
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/2a57e9f7d74a6b030acca3b02275f2bf2f198020/analysis/siblings_analysis.Rmd" target="_blank">2a57e9f</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-08-08
-</td>
-<td>
-add different version of plot 5
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/2a57e9f7d74a6b030acca3b02275f2bf2f198020/docs/siblings_analysis.html" target="_blank">2a57e9f</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-08-08
-</td>
-<td>
-add different version of plot 5
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/78ddf9a98c58f12160a30ceabfe06df16a0f18d9/analysis/siblings_analysis.Rmd" target="_blank">78ddf9a</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-08-07
-</td>
-<td>
-Update siblings_analysis.Rmd
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/fd89258cb9cda592da8c66337b06c67eaf7f7c7a/analysis/siblings_analysis.Rmd" target="_blank">fd89258</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-08-06
-</td>
-<td>
-create 2 version of ##5
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/ee1cf753b02bd2c48a2f53f7aa367de518d01c21/docs/siblings_analysis.html" target="_blank">ee1cf75</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-08-04
-</td>
-<td>
-Update siblings_analysis.html
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/a218f3178a0d92f4474dcdaf44ab593e4e4f2fb1/analysis/siblings_analysis.Rmd" target="_blank">a218f31</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-08-04
-</td>
-<td>
-shorten table
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/a11dce58e34bf96898b33f39137c34d6266ceeaa/analysis/siblings_analysis.Rmd" target="_blank">a11dce5</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-08-04
-</td>
-<td>
-update mother plot
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/a11dce58e34bf96898b33f39137c34d6266ceeaa/docs/siblings_analysis.html" target="_blank">a11dce5</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-08-04
-</td>
-<td>
-update mother plot
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/f219714cc4caedf9719c0f0acd80f615e0ba6098/analysis/siblings_analysis.Rmd" target="_blank">f219714</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-07-30
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/f219714cc4caedf9719c0f0acd80f615e0ba6098/docs/siblings_analysis.html" target="_blank">f219714</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-07-30
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/7420af3b3d12eeb41ca11743d260f601c4e6b002/analysis/siblings_analysis.Rmd" target="_blank">7420af3</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-07-30
-</td>
-<td>
-create distribution mother
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/0ef69c6093f2f6a820adb1d6d60c98ff23b661b0/docs/siblings_analysis.html" target="_blank">0ef69c6</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-07-29
-</td>
-<td>
-remove odd plot
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/d4d9636f4932b1147a2c6544a61c4bd3fbf94e5c/analysis/siblings_analysis.Rmd" target="_blank">d4d9636</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-07-29
-</td>
-<td>
-remove old ##7 plot
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/bdc3293eeaebf22383f8cbcdb34c31a1f21e4b89/analysis/siblings_analysis.Rmd" target="_blank">bdc3293</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-07-29
-</td>
-<td>
-update child_distribution plot
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/bdc3293eeaebf22383f8cbcdb34c31a1f21e4b89/docs/siblings_analysis.html" target="_blank">bdc3293</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-07-29
-</td>
-<td>
-update child_distribution plot
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/4bce25e11d1fa00ecb0533e9f46a4e0f10def60c/analysis/siblings_analysis.Rmd" target="_blank">4bce25e</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-07-26
-</td>
-<td>
-new plot
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/ce2d91627b6257fb007603da3333197e8a647bc1/analysis/siblings_analysis.Rmd" target="_blank">ce2d916</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-07-26
-</td>
-<td>
-distribution by age and year
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/6cc692104990e4c065b0614f09c5572459cdb51d/analysis/siblings_analysis.Rmd" target="_blank">6cc6921</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-07-25
-</td>
-<td>
-calculate total by sex
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/2283b451113bd67df93f3577b70c90b7a211c239/analysis/siblings_analysis.Rmd" target="_blank">2283b45</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-07-24
-</td>
-<td>
-resolve conflict
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/fbdfcf1e0d6544306069114e6a1850d8311ef93d/docs/siblings_analysis.html" target="_blank">fbdfcf1</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/f4c2830d4e6d627e954221b90ac013605f417de2/analysis/relative-distribution.Rmd" target="_blank">f4c2830</a>
 </td>
 <td>
 Tina Lasisi
 </td>
 <td>
-2024-07-23
+2024-09-21
 </td>
 <td>
-Fixed allele frequency table and continued simulation development
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/f8f2147df7588068aa5d8068464921663fd0a67e/analysis/siblings_analysis.Rmd" target="_blank">f8f2147</a>
-</td>
-<td>
-Stella-Joy
-</td>
-<td>
-2024-07-20
-</td>
-<td>
-Merge branch ‘main’ of <a href="https://github.com/lasisilab/PODFRIDGE"
-class="uri">https://github.com/lasisilab/PODFRIDGE</a>
+Update relative-distribution.Rmd
 </td>
 </tr>
 <tr>
@@ -1319,222 +647,16 @@ class="uri">https://github.com/lasisilab/PODFRIDGE</a>
 Rmd
 </td>
 <td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/d9b1cc7e4191785ee3c9e5aa8cd07f6d0d72602e/analysis/siblings_analysis.Rmd" target="_blank">d9b1cc7</a>
-</td>
-<td>
-Stella-Joy
-</td>
-<td>
-2024-07-20
-</td>
-<td>
-Update siblings_analysis.Rmd
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/228ec95af84e26efd40b7bb8e3c9b9ea05b99bf5/analysis/siblings_analysis.Rmd" target="_blank">228ec95</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-07-19
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/069b9a9a4fdbcc1d6425f1d5e6d1d6e93934c441/analysis/siblings_analysis.Rmd" target="_blank">069b9a9</a>
-</td>
-<td>
-Stella-Joy
-</td>
-<td>
-2024-07-19
-</td>
-<td>
-Update siblings_analysis.Rmd
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/f8e47e643b1555b8598ac2661c5a2b18dba6bdbb/analysis/siblings_analysis.Rmd" target="_blank">f8e47e6</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-07-19
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/32ce10ea6c9825ef45c59223f8463b33cdd22692/analysis/siblings_analysis.Rmd" target="_blank">32ce10e</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-07-18
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/32ce10ea6c9825ef45c59223f8463b33cdd22692/docs/siblings_analysis.html" target="_blank">32ce10e</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-07-18
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/24bd6473e185e8de2dcd8200fe9c383b76cba6c0/analysis/siblings_analysis.Rmd" target="_blank">24bd647</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-07-18
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/d2e1c178413a1fcdaafa43b76cba59acbc96f5ee/analysis/siblings_analysis.Rmd" target="_blank">d2e1c17</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-07-18
-</td>
-<td>
-Merge branch ‘main’ of <a href="https://github.com/lasisilab/PODFRIDGE"
-class="uri">https://github.com/lasisilab/PODFRIDGE</a>
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/e64bcded10221b376e9978cebb38542ed0ebda08/analysis/siblings_analysis.Rmd" target="_blank">e64bcde</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-07-18
-</td>
-<td>
-com
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/635de08209d7930a6436c8693341cf7793cdaf84/docs/siblings_analysis.html" target="_blank">635de08</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/28513857e94c801ed7d27e62bb34ff8098d08107/analysis/relative-distribution.Rmd" target="_blank">2851385</a>
 </td>
 <td>
 Tina Lasisi
 </td>
 <td>
-2024-07-18
+2024-09-21
 </td>
 <td>
-Updating html for sibling analysis and STR simulations
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/52f208e6cd800891479045604ddbd571f9c67ae4/analysis/siblings_analysis.Rmd" target="_blank">52f208e</a>
-</td>
-<td>
-Stella-Joy
-</td>
-<td>
-2024-07-12
-</td>
-<td>
-Merge branch ‘main’ of <a href="https://github.com/lasisilab/PODFRIDGE"
-class="uri">https://github.com/lasisilab/PODFRIDGE</a>
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/c0debe3d435ee91df43504701ee6cff8ad53d7a7/analysis/siblings_analysis.Rmd" target="_blank">c0debe3</a>
-</td>
-<td>
-Stella-Joy
-</td>
-<td>
-2024-07-12
-</td>
-<td>
-Update siblings_analysis.Rmd
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/99618c9750dd370274f24ad3c6bb3e0e89ddb468/analysis/siblings_analysis.Rmd" target="_blank">99618c9</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-07-12
-</td>
-<td>
-new com
+rename old analysis
 </td>
 </tr>
 <tr>
@@ -1542,391 +664,16 @@ new com
 html
 </td>
 <td>
-<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/99618c9750dd370274f24ad3c6bb3e0e89ddb468/docs/siblings_analysis.html" target="_blank">99618c9</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-07-12
-</td>
-<td>
-new com
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/5284e15468b63d0d19d0aff094447df016d091ed/docs/siblings_analysis.html" target="_blank">5284e15</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-07-03
-</td>
-<td>
-new com
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/73a6b6a5e7340afaa9cedc67439b710c92a8e2dc/analysis/siblings_analysis.Rmd" target="_blank">73a6b6a</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-07-03
-</td>
-<td>
-new com
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/2c460cf0b9e64eda25cb093b857b38fbd3851d9d/analysis/siblings_analysis.Rmd" target="_blank">2c460cf</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-07-03
-</td>
-<td>
-new com
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/2c460cf0b9e64eda25cb093b857b38fbd3851d9d/docs/siblings_analysis.html" target="_blank">2c460cf</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-07-03
-</td>
-<td>
-new com
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/b71e11f832df192746780574bf1647081c8c0efe/analysis/siblings_analysis.Rmd" target="_blank">b71e11f</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-07-03
-</td>
-<td>
-new com
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/7e507f5f1b7adebe950574f0c7b3f91f497aaf9e/docs/siblings_analysis.html" target="_blank">7e507f5</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-07-02
-</td>
-<td>
-new com
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/f67a1dba6416e97776d8e3ad49b07f41fd0f3e1e/analysis/siblings_analysis.Rmd" target="_blank">f67a1db</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-06-28
-</td>
-<td>
-Update siblings_analysis.Rmd
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/0dd5acaaadaec6e2f115ae1ecb84b6bdee16be59/analysis/siblings_analysis.Rmd" target="_blank">0dd5aca</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-06-27
-</td>
-<td>
-Update siblings_analysis.Rmd
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/a7125e6e3618a92a46131703e4c45060288b0d1e/analysis/siblings_analysis.Rmd" target="_blank">a7125e6</a>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/28513857e94c801ed7d27e62bb34ff8098d08107/docs/relative-distribution.html" target="_blank">2851385</a>
 </td>
 <td>
 Tina Lasisi
 </td>
 <td>
-2024-06-27
+2024-09-21
 </td>
 <td>
-Update siblings_analysis.Rmd
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/5136c40b7ebf4e71031ae83ea2ef4859cbc05a1d/analysis/siblings_analysis.Rmd" target="_blank">5136c40</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2024-06-27
-</td>
-<td>
-Update siblings_analysis.Rmd
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/58d549c58f32b867c25524729450663041f31fe3/analysis/siblings_analysis.Rmd" target="_blank">58d549c</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2024-06-27
-</td>
-<td>
-Update text
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/b021a16be7c2fec103dbf001a8cbfccd731393d9/analysis/siblings_analysis.Rmd" target="_blank">b021a16</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-06-27
-</td>
-<td>
-fert ana
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/19aab9943cce7f4c7c7284c2b3e3609df6f43bb7/analysis/siblings_analysis.Rmd" target="_blank">19aab99</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-06-26
-</td>
-<td>
-fert dis7
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/19aab9943cce7f4c7c7284c2b3e3609df6f43bb7/docs/siblings_analysis.html" target="_blank">19aab99</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-06-26
-</td>
-<td>
-fert dis7
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/cc5fc63c1f1bfa15ae20c27160118ed55f2e3e1c/docs/siblings_analysis.html" target="_blank">cc5fc63</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-06-26
-</td>
-<td>
-fert_dis6
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/cdc3bd0825c5e3f403fe12e9a18333b695619c43/analysis/siblings_analysis.Rmd" target="_blank">cdc3bd0</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-06-26
-</td>
-<td>
-fer_dis
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/326ad11168c06cf98858991389c21abc82a24451/analysis/siblings_analysis.Rmd" target="_blank">326ad11</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-06-26
-</td>
-<td>
-fert distribution
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/892720fa615adc12132f20091ab0e82ee5f9b85d/analysis/siblings_analysis.Rmd" target="_blank">892720f</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-06-23
-</td>
-<td>
-fert dis3
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/c865baa127467c97d73a9e769b6bc1c0a8935cbd/analysis/siblings_analysis.Rmd" target="_blank">c865baa</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-06-23
-</td>
-<td>
-fertility dis2
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/f2c131dc9c78b7c8e02b2068ec16dfe7c856681d/analysis/siblings_analysis.Rmd" target="_blank">f2c131d</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-06-23
-</td>
-<td>
-fertility distribution
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/bce5e2eef5fa3b97eae5b6643fadd5f8626724d7/docs/siblings_analysis.html" target="_blank">bce5e2e</a>
-</td>
-<td>
-hcvw
-</td>
-<td>
-2024-05-27
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/332d5a271a93905642914c17d72bd09027f81afc/analysis/siblings_analysis.Rmd" target="_blank">332d5a2</a>
-</td>
-<td>
-hcvw
-</td>
-<td>
-2024-05-27
-</td>
-<td>
-wflow_publish(c("analysis/CODIS_DB_composition.Rmd",
-"analysis/final_equation.Rmd",
+rename old analysis
 </td>
 </tr>
 </tbody>
@@ -1936,23 +683,1205 @@ wflow_publish(c("analysis/CODIS_DB_composition.Rmd",
 </div>
 </div>
 </div>
-<div id="introduction" class="section level1">
-<h1>Introduction</h1>
-<p>Our sibling analysis provides an overview of family size, examining
-the number of children a mother has and its relationship with the number
-of sibling each individual has. This tells us the number of first degree
-relatives each individual has, helping to predict the probability that
-an individual will be detected in the forensic database.</p>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>The relative genetic surveillance of a population is influenced by
+the number of genetically detectable relatives individuals have.
+First-degree relatives (parents, siblings, and children) are especially
+relevant in forensic analyses using short tandem repeat (STR) loci,
+where close familial searches are commonly employed. To explore
+potential disparities in genetic detectability between African American
+and European American populations, we examined U.S. Census data from
+four census years (1960, 1970, 1980, and 1990) focusing on the number of
+children born to women over the age of 40.</p>
 </div>
-<div id="data-exploration" class="section level1">
-<h1>Data Exploration</h1>
-<p>Here are the frequency tables for each race to show the number of
-children born, the number of mother who has “chborn_num” children, the
-number of sibling, and the number of individuals who has “n_sib”
-siblings.</p>
+<div id="data-sources" class="section level2">
+<h2>Data Sources</h2>
+<p>We used publicly available data from the Integrated Public Use
+Microdata Series (IPUMS) for the U.S. Census years 1960, 1970, 1980, and
+1990. The datasets include information on:</p>
+<ul>
+<li>AGE: Age of the respondent.</li>
+<li>RACE: Self-identified race of the respondent.</li>
+<li>chborn_num: Number of children ever born to the respondent.</li>
+</ul>
+<p>Data citation: Steven Ruggles, Sarah Flood, Matthew Sobek, Daniel
+Backman, Annie Chen, Grace Cooper, Stephanie Richards, Renae Rogers, and
+Megan Schouweiler. IPUMS USA: Version 14.0 [dataset]. Minneapolis, MN:
+IPUMS, 2023. <a href="https://doi.org/10.18128/D010.V14.0"
+class="uri">https://doi.org/10.18128/D010.V14.0</a></p>
+</div>
+<div id="data-preparation" class="section level2">
+<h2>Data Preparation</h2>
+<p>Filtering Criteria: We selected women aged 40 and above to ensure
+that most had completed childbearing.</p>
+<p>Due to the terms of agreement for using this data, we cannot share
+the full dataset but our repo contains the subset that was used to
+calculate the mean number of offspring and variance.</p>
+<p>Race Classification: We categorized individuals into two groups:</p>
+<ul>
+<li>African American: Those who identified as “Black” or “African
+American”.</li>
+<li>European American: Those who identified as “White”.</li>
+</ul>
+<p>Calculating Number of Siblings: For each child of these women, the
+number of siblings (n_sib) is one less than the number of children born
+to the mother:</p>
 <p><span class="math display">\[
 n_{sib} = chborn_{num} - 1
 \]</span></p>
+<pre class="r"><code># children_data = read.csv(&quot;./data/proportions_table_by_race_year.csv&quot;)
+mother_data = read.csv(&quot;./data/data_filtered_recoded.csv&quot;)</code></pre>
+<pre class="r"><code>df &lt;- mother_data %&gt;%
+  # Filter for women aged 40 and above
+  filter(AGE &gt;= 40) %&gt;%
+  mutate(
+    # Create new age ranges
+    AGE_RANGE = case_when(
+      AGE &gt;= 70 ~ &quot;70+&quot;,
+      AGE &gt;= 60 ~ &quot;60-69&quot;,
+      AGE &gt;= 50 ~ &quot;50-59&quot;,
+      AGE &gt;= 40 ~ &quot;40-49&quot;,
+      TRUE ~ as.character(AGE_RANGE)  # This shouldn&#39;t occur due to the filter, but included for completeness
+    ),
+    # Convert CHBORN to ordered factor
+    CHBORN = factor(case_when(
+      chborn_num == 0 ~ &quot;No children&quot;,
+      chborn_num == 1 ~ &quot;1 child&quot;,
+      chborn_num == 2 ~ &quot;2 children&quot;,
+      chborn_num == 3 ~ &quot;3 children&quot;,
+      chborn_num == 4 ~ &quot;4 children&quot;,
+      chborn_num == 5 ~ &quot;5 children&quot;,
+      chborn_num == 6 ~ &quot;6 children&quot;,
+      chborn_num == 7 ~ &quot;7 children&quot;,
+      chborn_num == 8 ~ &quot;8 children&quot;,
+      chborn_num == 9 ~ &quot;9 children&quot;,
+      chborn_num == 10 ~ &quot;10 children&quot;,
+      chborn_num == 11 ~ &quot;11 children&quot;,
+      chborn_num &gt;= 12 ~ &quot;12+ children&quot;
+    ), levels = c(&quot;No children&quot;, &quot;1 child&quot;, &quot;2 children&quot;, &quot;3 children&quot;, 
+                  &quot;4 children&quot;, &quot;5 children&quot;, &quot;6 children&quot;, &quot;7 children&quot;, 
+                  &quot;8 children&quot;, &quot;9 children&quot;, &quot;10 children&quot;, &quot;11 children&quot;, 
+                  &quot;12+ children&quot;), ordered = TRUE),
+    
+    # Ensure RACE variable is correctly formatted and filtered
+    RACE = factor(RACE, levels = c(&quot;White&quot;, &quot;Black/African American&quot;))
+  ) %&gt;%
+  # Filter for African American and European American women
+  filter(RACE %in% c(&quot;Black/African American&quot;, &quot;White&quot;)) %&gt;%
+  # Select and reorder columns
+  select(YEAR, SEX, AGE, BIRTHYR, RACE, CHBORN, AGE_RANGE, chborn_num)
+
+# Display the first few rows of the processed data
+head(df)</code></pre>
+<pre><code>  YEAR    SEX AGE BIRTHYR  RACE      CHBORN AGE_RANGE chborn_num
+1 1960 Female  65    1894 White No children     60-69          0
+2 1960 Female  49    1911 White  2 children     40-49          2
+3 1960 Female  54    1905 White No children     50-59          0
+4 1960 Female  56    1903 White     1 child     50-59          1
+5 1960 Female  54    1905 White     1 child     50-59          1
+6 1960 Female  50    1910 White No children     50-59          0</code></pre>
+<pre class="r"><code># Summary of the processed data
+summary(df)</code></pre>
+<pre><code>      YEAR          SEX                 AGE            BIRTHYR    
+ Min.   :1960   Length:1917477     Min.   : 41.00   Min.   :1859  
+ 1st Qu.:1970   Class :character   1st Qu.: 49.00   1st Qu.:1905  
+ Median :1970   Mode  :character   Median : 58.00   Median :1916  
+ Mean   :1976                      Mean   : 59.24   Mean   :1916  
+ 3rd Qu.:1980                      3rd Qu.: 68.00   3rd Qu.:1926  
+ Max.   :1990                      Max.   :100.00   Max.   :1949  
+                                                                  
+                     RACE                 CHBORN        AGE_RANGE        
+ White                 :1740755   2 children :452594   Length:1917477    
+ Black/African American: 176722   No children:343319   Class :character  
+                                  3 children :335119   Mode  :character  
+                                  1 child    :292001                     
+                                  4 children :204983                     
+                                  5 children :113593                     
+                                  (Other)    :175868                     
+   chborn_num   
+ Min.   : 0.00  
+ 1st Qu.: 1.00  
+ Median : 2.00  
+ Mean   : 2.57  
+ 3rd Qu.: 4.00  
+ Max.   :12.00  
+                </code></pre>
+<pre class="r"><code># Check the levels of the RACE factor
+levels(df$RACE)</code></pre>
+<pre><code>[1] &quot;White&quot;                  &quot;Black/African American&quot;</code></pre>
+<pre class="r"><code># Count of observations by RACE
+table(df$RACE)</code></pre>
+<pre><code>
+                 White Black/African American 
+               1740755                 176722 </code></pre>
+<pre class="r"><code># Count of observations by AGE_RANGE
+table(df$AGE_RANGE)</code></pre>
+<pre><code>
+ 40-49  50-59  60-69    70+ 
+529160 517620 436829 433868 </code></pre>
+</div>
+<div id="distribution-of-number-of-children-across-census-years"
+class="section level1">
+<h1>Distribution of Number of Children Across Census Years</h1>
+<p>First we visualize the general trends in the frequency of the number
+of children for African American and European American mothers across
+the Census years by age group.</p>
+<pre class="r"><code># Calculate proportions within each group, ensuring proper normalization
+df_proportions &lt;- df %&gt;%
+  group_by(YEAR, RACE, AGE_RANGE, chborn_num) %&gt;%
+  summarise(count = n(), .groups = &quot;drop&quot;) %&gt;%
+  group_by(YEAR, RACE, AGE_RANGE) %&gt;%
+  mutate(proportion = count / sum(count)) %&gt;%
+  ungroup()
+
+# Reshape data for the mirror plot
+df_mirror &lt;- df_proportions %&gt;%
+  mutate(proportion = if_else(RACE == &quot;White&quot;, -proportion, proportion))
+
+# Create color palette
+my_colors &lt;- colorRampPalette(c(&quot;#FFB000&quot;, &quot;#F77A2E&quot;, &quot;#DE3A8A&quot;, &quot;#7253FF&quot;, &quot;#5E8BFF&quot;))(13)
+
+# Create the plot
+ggplot(df_mirror, aes(x = chborn_num, y = proportion, fill = as.factor(chborn_num))) +
+  geom_col(aes(alpha = RACE)) +
+  geom_hline(yintercept = 0, color = &quot;black&quot;, size = 0.5) +
+  facet_grid(AGE_RANGE ~ YEAR, scales = &quot;free_y&quot;) +
+  coord_flip() +
+  scale_y_continuous(
+    labels = function(x) abs(x),
+    limits = function(x) c(-max(abs(x)), max(abs(x)))
+  ) +
+  scale_x_continuous(breaks = 0:12, labels = c(0:11, &quot;12+&quot;)) +
+  scale_fill_manual(values = my_colors) +
+  scale_alpha_manual(values = c(&quot;White&quot; = 0.7, &quot;Black/African American&quot; = 1)) +
+  labs(
+    title = &quot;Distribution of Number of Children by Census Year, Race, and Age Range&quot;,
+    x = &quot;Number of Children&quot;,
+    y = &quot;Proportion&quot;,
+    fill = &quot;Number of Children&quot;,
+    caption = &quot;White population shown on left (negative values), Black/African American on right (positive values)\nProportions normalized within each age range, race, and census year\nFootnote: The category &#39;12+&#39; includes families with 12 or more children.&quot;
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 14, hjust = 0.5),
+    axis.text.y = element_text(size = 8),
+    strip.text = element_text(size = 10),
+    legend.position = &quot;none&quot;,
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank()
+  )</code></pre>
+<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-2-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-1">
+Past versions of unnamed-chunk-2-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/28513857e94c801ed7d27e62bb34ff8098d08107/docs/figure/relative-distribution.Rmd/unnamed-chunk-2-1.png" target="_blank">2851385</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2024-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre class="r"><code># Save the plot (optional)
+# ggsave(&quot;children_distribution_mirror_plot.png&quot;, width = 20, height = 25, units = &quot;in&quot;, dpi = 300)
+
+# Print summary to check age ranges and normalization
+print(df_proportions %&gt;%
+  group_by(YEAR, RACE, AGE_RANGE) %&gt;%
+  summarise(total_proportion = sum(proportion), .groups = &quot;drop&quot;) %&gt;%
+  arrange(YEAR, RACE, AGE_RANGE))</code></pre>
+<pre><code># A tibble: 32 × 4
+    YEAR RACE                   AGE_RANGE total_proportion
+   &lt;int&gt; &lt;fct&gt;                  &lt;chr&gt;                &lt;dbl&gt;
+ 1  1960 White                  40-49                    1
+ 2  1960 White                  50-59                    1
+ 3  1960 White                  60-69                    1
+ 4  1960 White                  70+                      1
+ 5  1960 Black/African American 40-49                    1
+ 6  1960 Black/African American 50-59                    1
+ 7  1960 Black/African American 60-69                    1
+ 8  1960 Black/African American 70+                      1
+ 9  1970 White                  40-49                    1
+10  1970 White                  50-59                    1
+# ℹ 22 more rows</code></pre>
+<p>With this visualization of the distribution of the data, we can see
+that there are differences between White and Black Americans.</p>
+<p>We will now test for differences in 1) the mean and variance, and 2)
+zero-inflation.</p>
+<div id="instructions-for-manqing-model-fit-across-census-years"
+class="section level2">
+<h2>[instructions for Manqing] Model Fit Across Census Years</h2>
+<p><strong>Question 1) What is the best model for the distribution of
+the data in each of these subsets of data (by race, by census year, by
+age range combined)?</strong></p>
+<div id="step-1-fit-models-across-all-subsets" class="section level3">
+<h3>Step 1: Fit Models Across All Subsets</h3>
+<p>For each combination of race, census year, and age range, fit your
+candidate models:</p>
+<ul>
+<li><strong>Poisson Model</strong></li>
+<li><strong>Negative Binomial (NB) Model</strong></li>
+<li><strong>Zero-Inflated Poisson (ZIP) Model</strong></li>
+<li><strong>Zero-Inflated Negative Binomial (ZINB) Model</strong></li>
+</ul>
+<p>This should be done for each subset of the data (race × census year ×
+age range).</p>
+<p><strong>Understanding the Data:</strong></p>
+<ul>
+<li><strong>Data Type:</strong> Count data representing the number of
+children per woman.</li>
+<li><strong>Characteristics:</strong>
+<ul>
+<li>Potential overdispersion (variance greater than the mean).</li>
+<li>Possible zero-inflation (excess zeros) in some subsets.</li>
+<li>Different distributions across races, census years, and age
+ranges.</li>
+</ul></li>
+</ul>
+<p><strong>Candidate Models for Count Data:</strong></p>
+<ol style="list-style-type: decimal">
+<li><strong>Poisson Distribution:</strong>
+<ul>
+<li>Assumes mean equals variance.</li>
+<li>Not suitable if overdispersion is present.</li>
+</ul></li>
+<li><strong>Negative Binomial Distribution:</strong>
+<ul>
+<li>Handles overdispersion by introducing a dispersion parameter.</li>
+<li>Suitable when variance exceeds the mean.</li>
+</ul></li>
+<li><strong>Zero-Inflated Models:</strong>
+<ul>
+<li><strong>Zero-Inflated Poisson (ZIP):</strong>
+<ul>
+<li>Combines a Poisson distribution with a point mass at zero.</li>
+<li>Suitable if there’s an excess of zeros.</li>
+</ul></li>
+<li><strong>Zero-Inflated Negative Binomial (ZINB):</strong>
+<ul>
+<li>Combines a negative binomial distribution with a point mass at
+zero.</li>
+<li>Handles both overdispersion and excess zeros.</li>
+</ul></li>
+</ul></li>
+<li><strong>Hurdle Models: (optional)</strong>
+<ul>
+<li>Similar to zero-inflated models but model zeros and positive counts
+separately.</li>
+</ul></li>
+</ol>
+<p><strong>Recommended Approach:</strong></p>
+<p><strong>1: Exploratory Data Analysis (EDA)</strong></p>
+<ul>
+<li><strong>Compute Mean and Variance:</strong>
+<ul>
+<li>For each subset (race, census year, age range), calculate the mean
+and variance of the number of children.</li>
+<li>Check for overdispersion: If variance &gt; mean, overdispersion is
+present.</li>
+</ul></li>
+<li><strong>Check for Zero-Inflation:</strong>
+<ul>
+<li>Calculate the proportion of zeros in each subset.</li>
+<li>If the proportion of zeros is significantly higher than expected
+under a standard Poisson or negative binomial model, consider
+zero-inflated models.</li>
+</ul></li>
+</ul>
+<p><strong>2: Model Selection</strong></p>
+<p><strong>Scenario 1: Overdispersion Without Excess Zeros</strong></p>
+<ul>
+<li><strong>Model:</strong> Negative Binomial Distribution</li>
+<li><strong>Justification:</strong> Handles overdispersion
+effectively.</li>
+</ul>
+<p><strong>Scenario 2: Overdispersion With Excess Zeros</strong></p>
+<ul>
+<li><strong>Model:</strong> Zero-Inflated Negative Binomial (ZINB)
+Distribution</li>
+<li><strong>Justification:</strong> Accounts for both overdispersion and
+excess zeros.</li>
+</ul>
+<p><strong>Scenario 3: No Overdispersion, No Excess Zeros</strong></p>
+<ul>
+<li><strong>Model:</strong> Poisson Distribution</li>
+<li><strong>Justification:</strong> Appropriate if mean equals variance
+and no excess zeros.</li>
+</ul>
+<p><strong>3: Fit Models to Each Subset</strong></p>
+<ul>
+<li><strong>For Each Subset:</strong>
+<ul>
+<li>Fit a Poisson model.</li>
+<li>Fit a Negative Binomial model.</li>
+<li>If necessary, fit a Zero-Inflated Poisson (ZIP) and Zero-Inflated
+Negative Binomial (ZINB) model.</li>
+</ul></li>
+<li><strong>Compare Models:</strong>
+<ul>
+<li>Use goodness-of-fit measures such as Akaike Information Criterion
+(AIC) or Bayesian Information Criterion (BIC).</li>
+<li>Lower AIC/BIC indicates a better-fitting model.</li>
+<li>Perform likelihood ratio tests where appropriate.</li>
+</ul></li>
+</ul>
+</div>
+<div id="step-2-model-comparison-using-aic-or-bic"
+class="section level3">
+<h3>Step 2: Model Comparison Using AIC or BIC</h3>
+<p>Once the models are fitted, compare them using goodness-of-fit
+criteria like <strong>AIC</strong> or <strong>BIC</strong> for each
+subset. The model with the <strong>lowest AIC/BIC</strong> is the best
+fit for that subset.</p>
+<ul>
+<li><strong>Assess Model Fit:</strong>
+<ul>
+<li>Check residuals for patterns.</li>
+<li>Use diagnostic plots.</li>
+</ul></li>
+<li><strong>Check Dispersion Parameter:</strong>
+<ul>
+<li>For negative binomial models, examine the estimated dispersion
+parameter.</li>
+</ul></li>
+<li><strong>Vuong Test:</strong>
+<ul>
+<li>Compare zero-inflated models to standard models to assess if
+zero-inflation significantly improves the fit.</li>
+</ul></li>
+</ul>
+<pre class="r"><code># example code to start you off. edit and comment appropriately
+
+# Load necessary libraries
+library(MASS)   # For negative binomial
+library(pscl)   # For zero-inflated models
+
+# Suppose &#39;df&#39; is your dataset
+
+# Subset data for each race
+df_black &lt;- subset(df, RACE == &quot;Black/African American&quot;)
+df_white &lt;- subset(df, RACE == &quot;White&quot;)
+
+# Example for Black women over 40 in 1990 census
+
+# Calculate mean and variance
+mean_black &lt;- mean(df_black$chborn_num)
+var_black &lt;- var(df_black$chborn_num)
+
+# Check for overdispersion
+if (var_black &gt; mean_black) {
+  # Overdispersion present
+}
+
+# Check for zero-inflation
+prop_zero &lt;- sum(df_black$chborn_num == 0) / nrow(df_black)
+# Compare prop_zero to expected under Poisson or NB
+
+# Fit Negative Binomial Model
+nb_model_black &lt;- glm.nb(chborn_num ~ AGE_RANGE + YEAR, data = df_black)
+
+# Fit Zero-Inflated Negative Binomial Model if necessary
+zinb_model_black &lt;- zeroinfl(chborn_num ~ AGE_RANGE + YEAR | 1, data = df_black, dist = &quot;negbin&quot;)
+
+# Compare models using AIC
+AIC(nb_model_black, zinb_model_black)
+
+# Repeat for White women and other subsets</code></pre>
+</div>
+<div id="step-3-record-the-best-model-for-each-subset"
+class="section level3">
+<h3>Step 3: Record the Best Model for Each Subset</h3>
+<p>Create a table or data frame where you store the best model for each
+combination of race, census year, and age range based on AIC/BIC. For
+example:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Race</th>
+<th>Census Year</th>
+<th>Age Range</th>
+<th>Best Model</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Black/African Am.</td>
+<td>1990</td>
+<td>40-49</td>
+<td>Negative Binomial</td>
+</tr>
+<tr class="even">
+<td>White</td>
+<td>1990</td>
+<td>40-49</td>
+<td>Zero-Inflated NB</td>
+</tr>
+<tr class="odd">
+<td>White</td>
+<td>1980</td>
+<td>50-59</td>
+<td>Poisson</td>
+</tr>
+<tr class="even">
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody>
+</table>
+<p>(but obviously do this as a dataframe so we can analyze it)</p>
+</div>
+<div id="step-4-analyze-the-effect-of-race-census-year-and-age-range"
+class="section level3">
+<h3>Step 4: Analyze the Effect of Race, Census Year, and Age Range</h3>
+<p>Once you’ve gathered the best model for each subset, you can analyze
+which factor (race, census year, or age range) is most influential in
+determining the best-fitting model.</p>
+<p><strong>Options for statistical analysis:</strong></p>
+<ol style="list-style-type: decimal">
+<li><strong>Chi-Square Test of Independence</strong>: You can use a
+chi-square test to determine whether there is a significant association
+between race and the best-fitting model, or census year/age group and
+the best-fitting model. This test will help you see if certain races or
+age ranges are more likely to have a particular model as the best
+fit.</li>
+</ol>
+<pre class="r"><code>#example
+#
+## Create a contingency table
+table_model_race &lt;- table(best_model_data$Race, best_model_data$Best_Model)
+
+# Perform chi-square test
+chisq.test(table_model_race)</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li><p><strong>Logistic Regression</strong>: You could fit a logistic
+regression model where the response variable is the best-fitting model
+(binary or multinomial) and the predictor variables are race, census
+year, and age range. This will allow you to quantify the effect of each
+variable on the model choice.</p>
+<p><strong>Example in R</strong> (assuming binary outcome: Poisson
+vs. NB):</p></li>
+</ol>
+<pre class="r"><code># Fit logistic regression model
+model_logistic &lt;- glm(Best_Model ~ Race + Census_Year + Age_Range, family = binomial(), data = best_model_data)
+
+# Summary of results
+summary(model_logistic)</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li><p><strong>Multinomial Logistic Regression</strong> (if more than
+two models): If you have multiple possible best-fitting models (Poisson,
+NB, ZIP, ZINB), you can use multinomial logistic regression to assess
+the impact of race, census year, and age range on model selection.</p>
+<p><strong>Example in R using the <code>nnet</code>
+package</strong>:</p></li>
+</ol>
+<pre class="r"><code>library(nnet)
+
+# Fit multinomial logistic regression
+model_multinom &lt;- multinom(Best_Model ~ Race + Census_Year + Age_Range, data = best_model_data)
+
+# Summary of results
+summary(model_multinom)</code></pre>
+</div>
+<div id="step-5-summarize-the-results" class="section level3">
+<h3>Step 5: Summarize the Results</h3>
+<ul>
+<li><strong>Significance of Each Variable</strong>: From the regression
+analysis (or chi-square tests), you can determine which variable (race,
+census year, or age range) has the most significant impact on the model
+choice.</li>
+<li><strong>Effect Sizes</strong>: Logistic regression will provide
+coefficients that describe how much each variable influences the
+probability of choosing a particular model.</li>
+<li><strong>Best Model by Race</strong>: You can summarize which model
+tends to fit best for each race across years and age groups. For
+example, you might find that the <strong>Negative Binomial</strong>
+model consistently fits the best for a specific race or age group,
+indicating more overdispersion in that subset.</li>
+</ul>
+</div>
+<div id="visualize-the-results" class="section level3">
+<h3>Visualize the Results</h3>
+<p>Finally, visualize the distribution of the best-fitting models across
+races, census years, and age groups.</p>
+<ul>
+<li><strong>Bar Plots</strong>: Show the proportion of each model for
+different races or age groups.</li>
+<li><strong>Heatmap</strong>: Use a heatmap to visualize how the best
+model varies across race, census year, and age range.</li>
+</ul>
+<p><strong>Example of a simple bar plot in R</strong>:</p>
+<pre class="r"><code>library(ggplot2)
+
+# Bar plot showing the distribution of best models across races
+ggplot(best_model_data, aes(x = Race, fill = Best_Model)) +
+  geom_bar(position = &quot;dodge&quot;) +
+  labs(title = &quot;Best-Fitting Models by Race&quot;, x = &quot;Race&quot;, y = &quot;Count&quot;, fill = &quot;Best Model&quot;)</code></pre>
+</div>
+<div id="conclusion" class="section level3">
+<h3>Conclusion:</h3>
+<ul>
+<li><strong>Best Model Analysis</strong>: The best-fitting model can be
+assessed across different races, census years, and age ranges by
+comparing models using AIC/BIC.</li>
+<li><strong>Significance Testing</strong>: Use chi-square or logistic
+regression to assess which variable most influences the model
+selection.</li>
+<li><strong>Summarizing Across Years</strong>: After analyzing the data,
+you’ll be able to conclude which model fits each race best across
+different years, and whether race, census year, or age group is the
+dominant factor.</li>
+</ul>
+</div>
+</div>
+<div id="instructions-for-manqing-cohort-stability-analysis"
+class="section level2">
+<h2>[Instructions for Manqing] Cohort Stability Analysis</h2>
+<p>For Question 2: <strong>Cohort Stability Analysis</strong>, the goal
+is to determine if there is a significant change in <strong>zero
+inflation</strong>, <strong>family size</strong>, or <strong>model
+fit</strong> for the same cohort across different census years, given
+race.</p>
+<div id="step-1-add-a-birth-year-cohort-variable"
+class="section level3">
+<h3>Step 1: Add a Birth-Year “Cohort” Variable</h3>
+<p>Using the existing table of model summaries, calculate the
+<strong>birth-year cohort</strong> based on the <strong>Census
+Year</strong> and <strong>Age Range</strong>. For example, if a woman is
+in the 40-49 age range in the 1990 Census, her birth cohort would be
+<strong>1941-1950</strong>.</p>
+<ul>
+<li><strong>Formula to Calculate Cohort:</strong> For each row in the
+table, subtract the age range from the census year to get the cohort.
+For example:
+<ul>
+<li>Census Year: 1990</li>
+<li>Age Range: 40-49</li>
+<li>Cohort: 1990 - (40 to 49) → <strong>Cohort: 1941-1950</strong></li>
+</ul></li>
+<li>Add a new column to the summary table called
+<code>Cohort</code>.</li>
+</ul>
+<p><strong>Example Table:</strong></p>
+<table>
+<colgroup>
+<col width="24%" />
+<col width="16%" />
+<col width="14%" />
+<col width="24%" />
+<col width="19%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Race</th>
+<th>Census Year</th>
+<th>Age Range</th>
+<th>Best Model</th>
+<th>Cohort</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Black/African Am.</td>
+<td>1990</td>
+<td>40-49</td>
+<td>Negative Binomial</td>
+<td>1941-1950</td>
+</tr>
+<tr class="even">
+<td>White</td>
+<td>1990</td>
+<td>40-49</td>
+<td>Zero-Inflated NB</td>
+<td>1941-1950</td>
+</tr>
+<tr class="odd">
+<td>White</td>
+<td>1980</td>
+<td>50-59</td>
+<td>Poisson</td>
+<td>1921-1930</td>
+</tr>
+<tr class="even">
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="step-2-compute-summary-statistics-for-each-subset"
+class="section level3">
+<h3>Step 2: Compute Summary Statistics for Each Subset</h3>
+<p>For each combination of <strong>Race</strong>,
+<strong>Cohort</strong>, and <strong>Census Year</strong>, compute
+additional summary statistics for family size distributions: -
+<strong>Mean</strong>, <strong>Variance</strong>, <strong>Mode</strong>
+of the number of children. - <strong>Probability</strong> of having 0,
+1, 2, …, 12+ children (empirical or from the best-fitting model).</p>
+<p>These statistics will help quantify family size changes over
+time.</p>
+<p><strong>Example Summary Table:</strong></p>
+<table style="width:100%;">
+<colgroup>
+<col width="14%" />
+<col width="11%" />
+<col width="9%" />
+<col width="14%" />
+<col width="5%" />
+<col width="7%" />
+<col width="4%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="3%" />
+<col width="8%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Race</th>
+<th>Cohort</th>
+<th>Census Year</th>
+<th>Best Model</th>
+<th>Mean</th>
+<th>Variance</th>
+<th>Mode</th>
+<th>Prob(0)</th>
+<th>Prob(1)</th>
+<th>Prob(2)</th>
+<th>…</th>
+<th>Prob(12+)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Black/African Am.</td>
+<td>1941-1950</td>
+<td>1990</td>
+<td>Negative Binomial</td>
+<td>2.5</td>
+<td>1.2</td>
+<td>2</td>
+<td>0.20</td>
+<td>0.30</td>
+<td>0.25</td>
+<td>…</td>
+<td>0.01</td>
+</tr>
+<tr class="even">
+<td>White</td>
+<td>1941-1950</td>
+<td>1990</td>
+<td>Zero-Inflated NB</td>
+<td>2.1</td>
+<td>1.0</td>
+<td>2</td>
+<td>0.35</td>
+<td>0.28</td>
+<td>0.20</td>
+<td>…</td>
+<td>0.01</td>
+</tr>
+<tr class="odd">
+<td>White</td>
+<td>1921-1930</td>
+<td>1980</td>
+<td>Poisson</td>
+<td>3.0</td>
+<td>1.5</td>
+<td>3</td>
+<td>0.15</td>
+<td>0.25</td>
+<td>0.30</td>
+<td>…</td>
+<td>0.05</td>
+</tr>
+<tr class="even">
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div
+id="step-3-test-for-significant-changes-over-time-within-each-cohort"
+class="section level3">
+<h3>Step 3: Test for Significant Changes Over Time Within Each
+Cohort</h3>
+<p>Once the cohort information and summary statistics are available, the
+goal is to determine if there is a <strong>significant change</strong>
+in any of the following across census years for the same cohort:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Zero Inflation</strong>: Check if the proportion of women
+with zero children changes significantly over time for the same
+cohort.</li>
+<li><strong>Family Size</strong>: Test if the mean or variance in the
+number of children changes for the same cohort over time.</li>
+<li><strong>Model Fit</strong>: Analyze if the best-fitting model for
+the cohort changes over time.</li>
+</ol>
+<div id="a.-zero-inflation-analysis" class="section level4">
+<h4>a. <strong>Zero-Inflation Analysis</strong></h4>
+<ul>
+<li><p>Use a <strong>logistic regression</strong> model to assess if the
+probability of having zero children changes significantly over time for
+the same cohort.</p>
+<p><strong>Example Code</strong>:</p></li>
+</ul>
+<pre class="r"><code># Fit logistic regression to check if zero-inflation changes over time
+zero_inflation_model &lt;- glm(Zero_Children ~ Census_Year + Race + Cohort, 
+                            family = binomial(), data = cohort_data)
+
+# Summary of the model
+summary(zero_inflation_model)</code></pre>
+</div>
+<div id="b.-family-size-analysis" class="section level4">
+<h4>b. <strong>Family Size Analysis</strong></h4>
+<ul>
+<li><p>Use an <strong>ANOVA</strong> or <strong>linear
+regression</strong> to test if the mean or variance in family size
+changes over census years for the same cohort.</p>
+<p><strong>Example Code</strong>:</p></li>
+</ul>
+<pre class="r"><code>  # Fit linear model to check for changes in family size over time
+  family_size_model &lt;- lm(Number_of_Children ~ Census_Year + Race + Cohort, data = cohort_data)
+
+  # ANOVA to check for significant differences
+  anova(family_size_model)</code></pre>
+</div>
+<div id="c.-model-fit-analysis" class="section level4">
+<h4>c. <strong>Model Fit Analysis</strong></h4>
+<ul>
+<li><p>If the best-fitting model changes for the same cohort over time,
+this suggests that the distribution of family sizes has shifted. Use
+<strong>multinomial logistic regression</strong> to test if the model
+fit differs across census years for the same cohort.</p>
+<p><strong>Example Code</strong>:</p></li>
+</ul>
+<pre class="r"><code>library(nnet)
+
+# Fit multinomial logistic regression to test changes in best-fitting model
+model_fit_analysis &lt;- multinom(Best_Model ~ Census_Year + Race + Cohort, data = cohort_data)
+
+# Summary of the model
+summary(model_fit_analysis)</code></pre>
+</div>
+</div>
+<div id="step-4-interpret-the-results" class="section level3">
+<h3>Step 4: Interpret the Results</h3>
+<p>For each cohort, you will assess whether: -
+<strong>Zero-inflation</strong> changes significantly over time (i.e.,
+whether the probability of having no children decreases or increases
+across census years). - <strong>Family size</strong> (mean, variance,
+mode) changes significantly over time. - The <strong>best-fitting
+model</strong> changes over time, indicating a shift in family size
+distributions.</p>
+<p>If significant changes are detected for a cohort (e.g., the same
+cohort switches from a zero-inflated model to a non-zero-inflated model,
+or family sizes decrease), this indicates a shift in the demographic
+pattern for that group.</p>
+</div>
+<div id="conclusion-1" class="section level3">
+<h3>Conclusion</h3>
+<p>This analysis will allow you to evaluate <strong>cohort
+stability</strong> by testing whether demographic patterns (e.g.,
+zero-inflation, family size) are consistent over time for the same
+cohort or if there are notable shifts. If the patterns change
+significantly, you will be able to identify when and how the demographic
+trends for each cohort begin to deviate from their earlier
+distribution.</p>
+</div>
+</div>
+<div
+id="instructions-for-manqing-question-3-analyzing-and-visualizing-significant-fertility-shifts"
+class="section level2">
+<h2>[Instructions for Manqing] Question 3: Analyzing and Visualizing
+Significant Fertility Shifts</h2>
+<p>For Question 3: <strong>Significant Fertility shifts</strong>, the
+goal is to summarize the information in the top 2 questions and create a
+comprehensive analysis and visualization that illustrates significant
+fertility shifts in cohorts, compares fertility patterns of 40-49
+year-olds to 50-59 year-olds in the 1990 census so we can pick the set
+of fertility distributions we want to use to visualize the sibling
+distribution and do the math on the genetic surveillance.</p>
+<div id="objective" class="section level3">
+<h3>Objective</h3>
+<p>Create a comprehensive analysis and visualization that:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Illustrates significant fertility shifts in cohorts</strong>
+based on the stability analysis from Question 2.</li>
+<li><strong>Compares fertility patterns of 40-49 year-olds to 50-59
+year-olds in the 1990 census</strong>, highlighting any significant
+differences.</li>
+<li><strong>Synthesizes the findings</strong> to discuss overall trends
+and their implications.</li>
+</ol>
+<p>The steps below are suggestions: use critical thinking and your
+judgement to complete this task and answer the question</p>
+</div>
+<div id="step-1-prepare-the-data" class="section level3">
+<h3>Step 1: Prepare the Data</h3>
+<div id="use-results-from-stability-analysis-question-2"
+class="section level4">
+<h4>1.1 Use Results from Stability Analysis (Question 2)</h4>
+<ul>
+<li><strong>Identify Cohorts with Significant Shifts</strong>:
+<ul>
+<li>Review the results from your stability analysis in Question 2.</li>
+<li>List the cohorts where significant shifts in fertility distributions
+were observed for 40-49 year-olds.</li>
+<li>Note the nature of these shifts for each cohort, such as changes in
+mean number of children, variance, or zero inflation (proportion of
+women with zero children).</li>
+</ul></li>
+</ul>
+</div>
+<div id="extract-data-for-age-groups-in-1990-census"
+class="section level4">
+<h4>1.2 Extract Data for Age Groups in 1990 Census</h4>
+<ul>
+<li><strong>Filter Data for 1990 Census</strong>:
+<ul>
+<li>Use your existing dataset to extract data specifically from the 1990
+census year.</li>
+</ul></li>
+<li><strong>Select Age Groups</strong>:
+<ul>
+<li>Focus on women in the age ranges of <strong>40-49</strong> and
+<strong>50-59</strong>.</li>
+<li>Ensure the data includes necessary variables:
+<ul>
+<li>Number of children (<code>chborn_num</code>)</li>
+<li>Age range (<code>AGE_RANGE</code>)</li>
+<li>Race (<code>RACE</code>)</li>
+<li>Any other relevant variables used in previous analyses</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="step-2-create-visualizations" class="section level3">
+<h3>Step 2: Create Visualizations</h3>
+<p>Design visualizations that effectively communicate your findings.</p>
+<div id="panel-a-fertility-distribution-shifts-across-cohorts"
+class="section level4">
+<h4>2.1 Panel A: Fertility Distribution Shifts Across Cohorts</h4>
+<ul>
+<li><strong>Use Existing Fertility Distribution Plots</strong>:
+<ul>
+<li>Leverage the fertility distribution plots you created in Question
+1.</li>
+</ul></li>
+<li><strong>Highlight Significant Cohorts</strong>:
+<ul>
+<li>Emphasize the cohorts identified in Step 1.1 where significant
+shifts occurred.
+<ul>
+<li>This could be done by using distinct colors, markers, or
+annotations.</li>
+</ul></li>
+</ul></li>
+<li><strong>Annotate the Plots</strong>:
+<ul>
+<li>Include text or labels that describe the nature of the significant
+shifts for each highlighted cohort.
+<ul>
+<li>For example, indicate if there was a decrease in mean number of
+children or an increase in childlessness.</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+<div id="panel-b-comparison-of-40-49-and-50-59-age-groups-in-1990"
+class="section level4">
+<h4>2.2 Panel B: Comparison of 40-49 and 50-59 Age Groups in 1990</h4>
+<ul>
+<li><strong>Create Comparative Distribution Plots</strong>:
+<ul>
+<li>Generate side-by-side or overlaid histograms or density plots for
+the 40-49 and 50-59 age groups within each racial group.</li>
+</ul></li>
+<li><strong>Include Summary Statistics</strong>:
+<ul>
+<li>On each plot or in accompanying tables, provide:
+<ul>
+<li>Mean number of children</li>
+<li>Variance</li>
+<li>Proportion of women with zero children (zero inflation)</li>
+</ul></li>
+</ul></li>
+<li><strong>Ensure Clarity in Visuals</strong>:
+<ul>
+<li>Properly label axes, legends, and titles.</li>
+<li>Use consistent color schemes for easy comparison between
+groups.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="step-3-perform-statistical-comparisons" class="section level3">
+<h3>Step 3: Perform Statistical Comparisons</h3>
+<p>Conduct statistical tests to determine if observed differences are
+significant.</p>
+<div id="t-test-for-difference-in-means" class="section level4">
+<h4>3.1 T-Test for Difference in Means</h4>
+<ul>
+<li><strong>Compare Means Between Age Groups</strong>:
+<ul>
+<li>For each racial group, perform a t-test to compare the mean number
+of children between the 40-49 and 50-59 age groups.</li>
+</ul></li>
+<li><strong>Check Assumptions</strong>:
+<ul>
+<li>Ensure that the data meets the assumptions of the t-test (normality,
+equal variances).</li>
+<li>If assumptions are violated, consider using a non-parametric test
+like the Mann-Whitney U test.</li>
+</ul></li>
+</ul>
+</div>
+<div id="f-test-for-difference-in-variances" class="section level4">
+<h4>3.2 F-Test for Difference in Variances</h4>
+<ul>
+<li><strong>Assess Variance Differences</strong>:
+<ul>
+<li>Perform an F-test or Levene’s test to compare the variances of the
+number of children between the two age groups within each racial
+group.</li>
+</ul></li>
+</ul>
+</div>
+<div id="chi-square-test-for-difference-in-zero-inflation"
+class="section level4">
+<h4>3.3 Chi-Square Test for Difference in Zero Inflation</h4>
+<ul>
+<li><strong>Analyze Zero Inflation</strong>:
+<ul>
+<li>Create contingency tables showing the counts of women with zero
+children and those with one or more children for each age group.</li>
+<li>Perform a chi-square test to determine if the proportion of
+childlessness differs significantly between the age groups within each
+racial group.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="step-4-summarize-findings" class="section level3">
+<h3>Step 4: Summarize Findings</h3>
+<p>Write a clear and concise summary addressing the following
+points.</p>
+<div id="significant-fertility-shifts-across-cohorts"
+class="section level4">
+<h4>4.1 Significant Fertility Shifts Across Cohorts</h4>
+<ul>
+<li><strong>Identify Timing of Shifts</strong>:
+<ul>
+<li>Specify when significant fertility shifts occurred for each racial
+group based on your analysis in Question 2.</li>
+</ul></li>
+<li><strong>Describe Nature of Shifts</strong>:
+<ul>
+<li>Detail the characteristics of the shifts, such as:
+<ul>
+<li>Decrease in mean number of children</li>
+<li>Increase in childlessness (zero inflation)</li>
+<li>Changes in variance or distribution shape</li>
+</ul></li>
+</ul></li>
+<li><strong>Highlight Differences Between Racial Groups</strong>:
+<ul>
+<li>Compare the timing and nature of shifts between African American and
+European American women.</li>
+<li>Discuss any patterns or discrepancies observed.</li>
+</ul></li>
+</ul>
+</div>
+<div id="comparison-of-40-49-and-50-59-age-groups-in-1990"
+class="section level4">
+<h4>4.2 Comparison of 40-49 and 50-59 Age Groups in 1990</h4>
+<ul>
+<li><strong>Summarize Key Differences</strong>:
+<ul>
+<li>Present the differences in fertility patterns between the two age
+groups for each racial group.</li>
+<li>Include comparisons of:
+<ul>
+<li>Distribution shapes</li>
+<li>Mean number of children</li>
+<li>Variance</li>
+<li>Zero inflation</li>
+</ul></li>
+</ul></li>
+<li><strong>Report Statistical Test Results</strong>:
+<ul>
+<li>Provide the results of the t-tests, F-tests, and chi-square
+tests.</li>
+<li>Interpret the significance of these results in the context of your
+analysis.</li>
+</ul></li>
+<li><strong>Discuss Implications</strong>:
+<ul>
+<li>Consider what these differences suggest about fertility trends and
+behaviors.</li>
+<li>Reflect on whether the older age group represents completed
+fertility patterns.</li>
+</ul></li>
+</ul>
+</div>
+<div id="synthesis-and-implications" class="section level4">
+<h4>4.3 Synthesis and Implications</h4>
+<ul>
+<li><strong>Integrate Findings</strong>:
+<ul>
+<li>Connect the insights from the cohort analysis with the age group
+comparison.</li>
+<li>Discuss how the patterns observed in the 1990 census relate to the
+shifts identified across cohorts.</li>
+</ul></li>
+<li><strong>Consider Contributing Factors</strong>:
+<ul>
+<li>Explore potential social, economic, or policy factors that may have
+contributed to the observed fertility shifts.
+<ul>
+<li>For example, changes in access to education, employment
+opportunities, or family planning resources.</li>
+</ul></li>
+</ul></li>
+<li><strong>Reflect on Broader Implications</strong>:
+<ul>
+<li>Discuss how these fertility trends might impact your broader
+research topic, such as genetic surveillance disparities.</li>
+<li>Consider the implications for future demographic research or policy
+development.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="additional-considerations" class="section level3">
+<h3>Additional Considerations</h3>
+<ul>
+<li><strong>Visual Clarity</strong>:
+<ul>
+<li>Ensure all visualizations are easy to interpret.</li>
+<li>Use clear labels, legends, and annotations.</li>
+</ul></li>
+<li><strong>Contextualize Statistical Significance</strong>:
+<ul>
+<li>Explain not just whether results are statistically significant, but
+also what they mean in practical terms.</li>
+</ul></li>
+<li><strong>Acknowledge Data Limitations</strong>:
+<ul>
+<li>Discuss any limitations or biases in the data that could affect your
+findings.
+<ul>
+<li>For instance, sample size constraints or missing data.</li>
+</ul></li>
+</ul></li>
+<li><strong>Ethical Considerations</strong>:
+<ul>
+<li>Approach discussions of race and fertility sensitively and
+responsibly.</li>
+<li>Avoid drawing causal conclusions without robust evidence.</li>
+</ul></li>
+</ul>
+</div>
+<div id="integration-with-previous-work" class="section level3">
+<h3>Integration with Previous Work</h3>
+<ul>
+<li><strong>Leverage Previous Analyses</strong>:
+<ul>
+<li>Use the visualizations and statistical summaries from Questions 1
+and 2 as foundations for this analysis.</li>
+</ul></li>
+<li><strong>Create a Cohesive Narrative</strong>:
+<ul>
+<li>Ensure that your findings from all questions are connected and build
+upon each other.</li>
+<li>Tell a comprehensive story about fertility trends across cohorts and
+racial groups.</li>
+</ul></li>
+</ul>
+</div>
+<div id="final-deliverables" class="section level3">
+<h3>Final Deliverables</h3>
+<ul>
+<li><strong>Multi-Panel Visualization</strong>:
+<ul>
+<li>Panel A: Fertility distribution shifts across cohorts with
+highlighted significant shifts.</li>
+<li>Panel B: Comparative distribution plots for 40-49 and 50-59 age
+groups in 1990, including summary statistics.</li>
+</ul></li>
+<li><strong>Written Summary</strong>:
+<ul>
+<li>A concise report that addresses the points outlined in Step 4.</li>
+<li>Include interpretations of statistical analyses and discuss broader
+implications.</li>
+</ul></li>
+<li><strong>Statistical Analysis Documentation</strong>:
+<ul>
+<li>Provide details of the statistical tests conducted, including test
+assumptions, results, and interpretations.</li>
+</ul></li>
+<li><strong>Annotated Code (if applicable)</strong>:
+<ul>
+<li>While not the focus, include any new code used for this analysis
+with appropriate comments.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="distribution-of-number-of-siblings-across-census-years"
+class="section level1">
+<h1>Distribution of Number of Siblings Across Census Years</h1>
+<p>Having analyzed the distribution of the number of children, we now
+turn our attention to the distribution of the number of siblings. We
+will explore the trends in the frequency of the number of siblings for
+African American and European American mothers across the Census years
+by age group.</p>
+<p>Frequency of siblings is calculated as follows.</p>
 <p><span class="math display">\[
 \text{freq}_{n_{\text{sib}}} = \text{freq}_{\text{mother}} \cdot
 \text{chborn}_{\text{num}}
@@ -1960,372 +1889,264 @@ n_{sib} = chborn_{num} - 1
 <p>For example, suppose 10 mothers (generation 0) have 7 children, then
 there will be 70 children (generation 1) in total who each have 6
 siblings.</p>
-<div
-id="frequency-table-of-number-of-children-siblings-of-blackafrican-american-population"
+<p>We take our original data and calculate the frequency of siblings for
+each mother based on the number of children they have. We then aggregate
+this data to get the frequency of siblings for each generation along
+with details on the birthyears of the relevant children to visualize the
+distribution of the number of siblings across generations.</p>
+<div id="instructions-for-manqing-plot-across-census-years-for-children"
 class="section level2">
-<h2>1.Frequency Table of Number of Children &amp; Siblings of
-Black/African American Population</h2>
-<div class="tabwid"><style>.cl-5f4c9bea{table-layout:auto;}.cl-5f442eec{font-family:'Times New Roman';font-size:12pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-5f442f28{font-family:'Times New Roman';font-size:12pt;font-weight:normal;font-style:italic;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-5f442f32{font-family:'Times New Roman';font-size:12pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-5f47c6ec{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 2;background-color:transparent;}.cl-5f47c6f6{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 2;background-color:transparent;}.cl-5f47c6f7{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-5f47e122{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5f47e123{background-color:transparent;vertical-align: middle;border-bottom: 0.5pt solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5f47e124{background-color:transparent;vertical-align: middle;border-bottom: 0.5pt solid rgba(0, 0, 0, 1.00);border-top: 0.5pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5f47e12c{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5f47e12d{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5f47e136{background-color:transparent;vertical-align: middle;border-bottom: 0.5pt solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5f47e137{background-color:transparent;vertical-align: middle;border-bottom: 0.5pt solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5f47e138{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table data-quarto-disable-processing='true' class='cl-5f4c9bea'><thead><tr style="overflow-wrap:break-word;"><th  colspan="6"class="cl-5f47e122"><p class="cl-5f47c6ec"><span class="cl-5f442eec">Table 1</span></p></th></tr><tr style="overflow-wrap:break-word;"><th  colspan="6"class="cl-5f47e123"><p class="cl-5f47c6ec"><span class="cl-5f442f28">Frequency of Number of Children &amp; Siblings of Black/African American Population</span></p></th></tr><tr style="overflow-wrap:break-word;"><th class="cl-5f47e124"><p class="cl-5f47c6f6"><span class="cl-5f442f32">RACE</span></p></th><th class="cl-5f47e124"><p class="cl-5f47c6f6"><span class="cl-5f442f32">YEAR</span></p></th><th class="cl-5f47e124"><p class="cl-5f47c6f6"><span class="cl-5f442f32">chborn_num</span></p></th><th class="cl-5f47e124"><p class="cl-5f47c6f6"><span class="cl-5f442f32">freq_mother</span></p></th><th class="cl-5f47e124"><p class="cl-5f47c6f6"><span class="cl-5f442f32">n_sib</span></p></th><th class="cl-5f47e124"><p class="cl-5f47c6f6"><span class="cl-5f442f32">freq_n_sib</span></p></th></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-5f47e12c"><p class="cl-5f47c6ec"><span class="cl-5f442f32">Black/African American</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">1,960</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">0</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">6,697</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">0</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">0</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-5f47e12c"><p class="cl-5f47c6ec"><span class="cl-5f442f32">Black/African American</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">1,960</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">1</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">4,698</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">0</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">4,698</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-5f47e12c"><p class="cl-5f47c6ec"><span class="cl-5f442f32">Black/African American</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">1,960</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">2</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">3,411</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">1</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">6,822</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-5f47e12c"><p class="cl-5f47c6ec"><span class="cl-5f442f32">Black/African American</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">1,960</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">3</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">2,445</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">2</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">7,335</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-5f47e12c"><p class="cl-5f47c6ec"><span class="cl-5f442f32">Black/African American</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">1,960</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">4</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">1,949</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">3</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">7,796</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-5f47e12c"><p class="cl-5f47c6ec"><span class="cl-5f442f32">Black/African American</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">1,960</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">5</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">1,361</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">4</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">6,805</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-5f47e12c"><p class="cl-5f47c6ec"><span class="cl-5f442f32">Black/African American</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">1,960</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">6</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">1,162</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">5</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">6,972</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-5f47e12c"><p class="cl-5f47c6ec"><span class="cl-5f442f32">Black/African American</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">1,960</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">7</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">932</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">6</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">6,524</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-5f47e12c"><p class="cl-5f47c6ec"><span class="cl-5f442f32">Black/African American</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">1,960</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">8</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">810</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">7</span></p></td><td class="cl-5f47e12d"><p class="cl-5f47c6f6"><span class="cl-5f442f32">6,480</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-5f47e136"><p class="cl-5f47c6ec"><span class="cl-5f442f32">Black/African American</span></p></td><td class="cl-5f47e137"><p class="cl-5f47c6f6"><span class="cl-5f442f32">1,960</span></p></td><td class="cl-5f47e137"><p class="cl-5f47c6f6"><span class="cl-5f442f32">9</span></p></td><td class="cl-5f47e137"><p class="cl-5f47c6f6"><span class="cl-5f442f32">588</span></p></td><td class="cl-5f47e137"><p class="cl-5f47c6f6"><span class="cl-5f442f32">8</span></p></td><td class="cl-5f47e137"><p class="cl-5f47c6f6"><span class="cl-5f442f32">5,292</span></p></td></tr></tbody><tfoot><tr style="overflow-wrap:break-word;"><td  colspan="6"class="cl-5f47e138"><p class="cl-5f47c6f7"><span class="cl-5f442f28">Note. </span><span class="cl-5f442f32">This table only displays the first 10 rows from the original dataset</span></p></td></tr></tfoot></table></div>
+<h2>[Instructions for Manqing] Plot Across Census Years for
+Children</h2>
+<div id="objective-1" class="section level3">
+<h3>Objective</h3>
+<p>Create a mirror plot for the distribution of siblings across census
+years, races, and birth ranges, similar to the one created for the
+number of children.</p>
 </div>
-<div
-id="frequency-table-of-number-of-children-siblings-of-white-population"
+<div id="step-1-calculate-sibling-frequencies" class="section level3">
+<h3>Step 1: Calculate Sibling Frequencies</h3>
+<ol style="list-style-type: decimal">
+<li><p>Start with your dataframe that includes the
+<code>birth_range</code> column.</p></li>
+<li><p>Create a new column for the number of siblings:</p></li>
+</ol>
+<pre class="r"><code>df &lt;- df %&gt;%
+ mutate(n_siblings = chborn_num - 1)</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>Calculate the frequency of siblings:</li>
+</ol>
+<pre class="r"><code>df &lt;- df %&gt;%
+mutate(sibling_freq = n_siblings * 1)  # Assuming each mother represents 1 in frequency</code></pre>
+</div>
+<div id="step-2-aggregate-sibling-data" class="section level3">
+<h3>Step 2: Aggregate Sibling Data</h3>
+<ol style="list-style-type: decimal">
+<li>Group the data and calculate sibling frequencies:</li>
+</ol>
+<pre class="r"><code>df_siblings &lt;- df %&gt;%
+ group_by(YEAR, RACE, birth_range, n_siblings) %&gt;%
+ summarise(
+   sibling_count = sum(sibling_freq),
+   .groups = &quot;drop&quot;
+ )</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Calculate proportions within each group:</li>
+</ol>
+<pre class="r"><code>df_sibling_proportions &lt;- df_siblings %&gt;%
+ group_by(YEAR, RACE, birth_range) %&gt;%
+ mutate(proportion = sibling_count / sum(sibling_count)) %&gt;%
+ ungroup()</code></pre>
+</div>
+<div id="step-3-check-normalization" class="section level3">
+<h3>Step 3: Check Normalization</h3>
+<p>Before creating the plot, verify that the proportions are correctly
+normalized:</p>
+<pre class="r"><code>normalization_check &lt;- df_sibling_proportions %&gt;%
+  group_by(YEAR, RACE, birth_range) %&gt;%
+  summarise(total_proportion = sum(proportion), .groups = &quot;drop&quot;) %&gt;%
+  arrange(YEAR, RACE, birth_range)
+
+print(normalization_check)</code></pre>
+<p>Ensure that the <code>total_proportion</code> for each group is very
+close to 1.0. If not, revisit your calculations in Step 2.</p>
+</div>
+<div id="step-4-prepare-data-for-mirror-plot" class="section level3">
+<h3>Step 4: Prepare Data for Mirror Plot</h3>
+<p>Reshape data for the mirror plot:</p>
+<pre class="r"><code>df_sibling_mirror &lt;- df_sibling_proportions %&gt;%
+  mutate(proportion = if_else(RACE == &quot;White&quot;, -proportion, proportion))</code></pre>
+</div>
+<div id="step-5-create-the-mirror-plot" class="section level3">
+<h3>Step 5: Create the Mirror Plot</h3>
+<ol style="list-style-type: decimal">
+<li>Create the color palette:</li>
+</ol>
+<pre class="r"><code>my_colors &lt;- colorRampPalette(c(&quot;#FFB000&quot;, &quot;#F77A2E&quot;, &quot;#DE3A8A&quot;, &quot;#7253FF&quot;, &quot;#5E8BFF&quot;))(13)</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Create the plot:</li>
+</ol>
+<pre class="r"><code>ggplot(df_sibling_mirror, aes(x = n_siblings, y = proportion, fill = as.factor(n_siblings))) +
+ geom_col(aes(alpha = RACE)) +
+ geom_hline(yintercept = 0, color = &quot;black&quot;, size = 0.5) +
+ facet_grid(birth_range ~ YEAR, scales = &quot;free_y&quot;) +
+ coord_flip() +
+ scale_y_continuous(
+   labels = function(x) abs(x),
+   limits = function(x) c(-max(abs(x)), max(abs(x)))
+ ) +
+ scale_x_continuous(breaks = 0:12, labels = c(0:11, &quot;12+&quot;)) +
+ scale_fill_manual(values = my_colors) +
+ scale_alpha_manual(values = c(&quot;White&quot; = 0.7, &quot;Black/African American&quot; = 1)) +
+ labs(
+   title = &quot;Distribution of Number of Siblings by Census Year, Race, and Birth Range&quot;,
+   x = &quot;Number of Siblings&quot;,
+   y = &quot;Proportion&quot;,
+   fill = &quot;Number of Siblings&quot;,
+   caption = &quot;White population shown on left (negative values), Black/African American on right (positive values)\nProportions normalized within each birth range, race, and census year\nFootnote: The category &#39;12+&#39; includes individuals with 12 or more siblings.&quot;
+ ) +
+ theme_minimal() +
+ theme(
+   plot.title = element_text(size = 14, hjust = 0.5),
+   axis.text.y = element_text(size = 8),
+   strip.text = element_text(size = 10),
+   legend.position = &quot;none&quot;,
+   panel.grid.major.y = element_blank(),
+   panel.grid.minor.y = element_blank()
+ )</code></pre>
+</div>
+<div id="step-6-interpret-the-plot" class="section level3">
+<h3>Step 6: Interpret the Plot</h3>
+<p>After creating the plot, examine it carefully:</p>
+<ol style="list-style-type: decimal">
+<li>Look for patterns in sibling distribution across different census
+years and birth ranges.</li>
+<li>Compare the distributions between White and Black/African American
+populations.</li>
+<li>Note any significant changes or trends in the number of siblings
+over time.</li>
+<li>Consider how these sibling distributions might differ from the
+children distributions you analyzed earlier, and think about potential
+reasons for these differences.</li>
+</ol>
+</div>
+</div>
+<div id="instructions-for-manqing-model-fit-across-census-years-1"
 class="section level2">
-<h2>2.Frequency Table of Number of Children &amp; Siblings of White
-Population</h2>
-<div class="tabwid"><style>.cl-5f733c82{table-layout:auto;}.cl-5f6bf454{font-family:'Times New Roman';font-size:12pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-5f6bf468{font-family:'Times New Roman';font-size:12pt;font-weight:normal;font-style:italic;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-5f6bf469{font-family:'Times New Roman';font-size:12pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-5f6ede30{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 2;background-color:transparent;}.cl-5f6ede3a{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 2;background-color:transparent;}.cl-5f6ede44{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-5f6ef294{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5f6ef295{background-color:transparent;vertical-align: middle;border-bottom: 0.5pt solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5f6ef29e{background-color:transparent;vertical-align: middle;border-bottom: 0.5pt solid rgba(0, 0, 0, 1.00);border-top: 0.5pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5f6ef29f{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5f6ef2a8{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5f6ef2a9{background-color:transparent;vertical-align: middle;border-bottom: 0.5pt solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5f6ef2b2{background-color:transparent;vertical-align: middle;border-bottom: 0.5pt solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5f6ef2b3{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table data-quarto-disable-processing='true' class='cl-5f733c82'><thead><tr style="overflow-wrap:break-word;"><th  colspan="6"class="cl-5f6ef294"><p class="cl-5f6ede30"><span class="cl-5f6bf454">Table 2</span></p></th></tr><tr style="overflow-wrap:break-word;"><th  colspan="6"class="cl-5f6ef295"><p class="cl-5f6ede30"><span class="cl-5f6bf468">Frequency of Number of Children &amp; Siblings of White Population</span></p></th></tr><tr style="overflow-wrap:break-word;"><th class="cl-5f6ef29e"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">RACE</span></p></th><th class="cl-5f6ef29e"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">YEAR</span></p></th><th class="cl-5f6ef29e"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">chborn_num</span></p></th><th class="cl-5f6ef29e"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">freq_mother</span></p></th><th class="cl-5f6ef29e"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">n_sib</span></p></th><th class="cl-5f6ef29e"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">freq_n_sib</span></p></th></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-5f6ef29f"><p class="cl-5f6ede30"><span class="cl-5f6bf469">White</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">1,960</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">0</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">46,202</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">0</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">0</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-5f6ef29f"><p class="cl-5f6ede30"><span class="cl-5f6bf469">White</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">1,960</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">1</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">47,433</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">0</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">47,433</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-5f6ef29f"><p class="cl-5f6ede30"><span class="cl-5f6bf469">White</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">1,960</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">2</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">60,732</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">1</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">121,464</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-5f6ef29f"><p class="cl-5f6ede30"><span class="cl-5f6bf469">White</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">1,960</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">3</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">41,272</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">2</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">123,816</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-5f6ef29f"><p class="cl-5f6ede30"><span class="cl-5f6bf469">White</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">1,960</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">4</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">25,666</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">3</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">102,664</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-5f6ef29f"><p class="cl-5f6ede30"><span class="cl-5f6bf469">White</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">1,960</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">5</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">15,327</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">4</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">76,635</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-5f6ef29f"><p class="cl-5f6ede30"><span class="cl-5f6bf469">White</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">1,960</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">6</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">9,697</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">5</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">58,182</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-5f6ef29f"><p class="cl-5f6ede30"><span class="cl-5f6bf469">White</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">1,960</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">7</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">6,347</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">6</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">44,429</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-5f6ef29f"><p class="cl-5f6ede30"><span class="cl-5f6bf469">White</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">1,960</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">8</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">4,518</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">7</span></p></td><td class="cl-5f6ef2a8"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">36,144</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-5f6ef2a9"><p class="cl-5f6ede30"><span class="cl-5f6bf469">White</span></p></td><td class="cl-5f6ef2b2"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">1,960</span></p></td><td class="cl-5f6ef2b2"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">9</span></p></td><td class="cl-5f6ef2b2"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">2,990</span></p></td><td class="cl-5f6ef2b2"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">8</span></p></td><td class="cl-5f6ef2b2"><p class="cl-5f6ede3a"><span class="cl-5f6bf469">26,910</span></p></td></tr></tbody><tfoot><tr style="overflow-wrap:break-word;"><td  colspan="6"class="cl-5f6ef2b3"><p class="cl-5f6ede44"><span class="cl-5f6bf468">Note. </span><span class="cl-5f6bf469">This table only displays the first 10 rows from the original dataset</span></p></td></tr></tfoot></table></div>
-<p>The following summary statistics tables describe the racial breakdown
-of average number of siblings that individuals have across census
-year.</p>
+<h2>[Instructions for Manqing] Model Fit Across Census Years</h2>
+<div id="objective-2" class="section level3">
+<h3>Objective</h3>
+<p>Repeat the model fitting process we performed for the children
+distribution, this time using the sibling distribution data.</p>
 </div>
-<div
-id="summary-statistics-of-number-of-siblings-of-blackafrican-american-population"
+<div id="steps" class="section level3">
+<h3>Steps</h3>
+<ol style="list-style-type: decimal">
+<li><p>Prepare the Sibling Data Use the sibling distribution data you
+calculated earlier (<code>df_sibling_proportions</code>).</p></li>
+<li><p>Fit Models For each combination of RACE, YEAR, and birth_range,
+fit the following distributions:</p>
+<ul>
+<li>Poisson</li>
+<li>Negative Binomial</li>
+<li>Zero-Inflated Poisson</li>
+<li>Zero-Inflated Negative Binomial</li>
+</ul>
+<p>Use the same R functions and packages as in the children distribution
+analysis.</p></li>
+<li><p>Compare Model Fits Use AIC (Akaike Information Criterion) to
+compare the fits of different models for each group.</p></li>
+<li><p>Identify Best-Fitting Models Determine which model fits best for
+each combination of RACE, YEAR, and birth_range.</p></li>
+<li><p>Analyze Patterns</p>
+<ul>
+<li>Examine how the best-fitting model changes across years and birth
+ranges for each race.</li>
+<li>Compare these patterns to those observed in the children
+distribution analysis.</li>
+</ul></li>
+<li><p>Visualize Results Create a summary plot showing the best-fitting
+models across years and birth ranges for each race, similar to the one
+created for the children distribution.</p></li>
+<li><p>Interpret Findings</p>
+<ul>
+<li>Discuss any differences in the best-fitting models between the
+sibling and children distributions.</li>
+<li>Consider the implications of these differences for understanding
+family structures and fertility patterns.</li>
+</ul></li>
+</ol>
+</div>
+</div>
+<div id="instructions-for-manqing-cohort-stability-analysis-siblings"
 class="section level2">
-<h2>3.Summary Statistics of Number of Siblings of Black/African American
-Population</h2>
-<div class="tabwid"><style>.cl-5f9044b2{table-layout:auto;}.cl-5f8981b8{font-family:'Times New Roman';font-size:12pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-5f8981c2{font-family:'Times New Roman';font-size:12pt;font-weight:normal;font-style:italic;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-5f8981cc{font-family:'Times New Roman';font-size:12pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-5f8c3868{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 2;background-color:transparent;}.cl-5f8c387c{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 2;background-color:transparent;}.cl-5f8c4ce0{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5f8c4cea{background-color:transparent;vertical-align: middle;border-bottom: 0.5pt solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5f8c4ceb{background-color:transparent;vertical-align: middle;border-bottom: 0.5pt solid rgba(0, 0, 0, 1.00);border-top: 0.5pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5f8c4cf4{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5f8c4cf5{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5f8c4cfe{background-color:transparent;vertical-align: middle;border-bottom: 0.5pt solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5f8c4cff{background-color:transparent;vertical-align: middle;border-bottom: 0.5pt solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table data-quarto-disable-processing='true' class='cl-5f9044b2'><thead><tr style="overflow-wrap:break-word;"><th  colspan="5"class="cl-5f8c4ce0"><p class="cl-5f8c3868"><span class="cl-5f8981b8">Table 3</span></p></th></tr><tr style="overflow-wrap:break-word;"><th  colspan="5"class="cl-5f8c4cea"><p class="cl-5f8c3868"><span class="cl-5f8981c2">Summary Statistics of Number of Siblings of Black/African American Population</span></p></th></tr><tr style="overflow-wrap:break-word;"><th class="cl-5f8c4ceb"><p class="cl-5f8c387c"><span class="cl-5f8981cc">RACE</span></p></th><th class="cl-5f8c4ceb"><p class="cl-5f8c387c"><span class="cl-5f8981cc">YEAR</span></p></th><th class="cl-5f8c4ceb"><p class="cl-5f8c387c"><span class="cl-5f8981cc">Mean</span></p></th><th class="cl-5f8c4ceb"><p class="cl-5f8c387c"><span class="cl-5f8981cc">Variance</span></p></th><th class="cl-5f8c4ceb"><p class="cl-5f8c387c"><span class="cl-5f8981cc">Std_Dev</span></p></th></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-5f8c4cf4"><p class="cl-5f8c3868"><span class="cl-5f8981cc">Black/African American</span></p></td><td class="cl-5f8c4cf5"><p class="cl-5f8c387c"><span class="cl-5f8981cc">1,960</span></p></td><td class="cl-5f8c4cf5"><p class="cl-5f8c387c"><span class="cl-5f8981cc">3.02</span></p></td><td class="cl-5f8c4cf5"><p class="cl-5f8c387c"><span class="cl-5f8981cc">9.69</span></p></td><td class="cl-5f8c4cf5"><p class="cl-5f8c387c"><span class="cl-5f8981cc">3.11</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-5f8c4cf4"><p class="cl-5f8c3868"><span class="cl-5f8981cc">Black/African American</span></p></td><td class="cl-5f8c4cf5"><p class="cl-5f8c387c"><span class="cl-5f8981cc">1,970</span></p></td><td class="cl-5f8c4cf5"><p class="cl-5f8c387c"><span class="cl-5f8981cc">3.00</span></p></td><td class="cl-5f8c4cf5"><p class="cl-5f8c387c"><span class="cl-5f8981cc">8.86</span></p></td><td class="cl-5f8c4cf5"><p class="cl-5f8c387c"><span class="cl-5f8981cc">2.98</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-5f8c4cf4"><p class="cl-5f8c3868"><span class="cl-5f8981cc">Black/African American</span></p></td><td class="cl-5f8c4cf5"><p class="cl-5f8c387c"><span class="cl-5f8981cc">1,980</span></p></td><td class="cl-5f8c4cf5"><p class="cl-5f8c387c"><span class="cl-5f8981cc">3.21</span></p></td><td class="cl-5f8c4cf5"><p class="cl-5f8c387c"><span class="cl-5f8981cc">8.66</span></p></td><td class="cl-5f8c4cf5"><p class="cl-5f8c387c"><span class="cl-5f8981cc">2.94</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-5f8c4cfe"><p class="cl-5f8c3868"><span class="cl-5f8981cc">Black/African American</span></p></td><td class="cl-5f8c4cff"><p class="cl-5f8c387c"><span class="cl-5f8981cc">1,990</span></p></td><td class="cl-5f8c4cff"><p class="cl-5f8c387c"><span class="cl-5f8981cc">3.20</span></p></td><td class="cl-5f8c4cff"><p class="cl-5f8c387c"><span class="cl-5f8981cc">7.62</span></p></td><td class="cl-5f8c4cff"><p class="cl-5f8c387c"><span class="cl-5f8981cc">2.76</span></p></td></tr></tbody></table></div>
+<h2>[Instructions for Manqing] Cohort Stability Analysis Siblings</h2>
+<div id="objective-3" class="section level3">
+<h3>Objective</h3>
+<p>Analyze the stability of sibling distributions across cohorts,
+similar to the analysis performed for children.</p>
 </div>
-<div id="summary-statistics-of-number-of-siblings-of-white-population"
+<div id="steps-1" class="section level3">
+<h3>Steps</h3>
+<ol style="list-style-type: decimal">
+<li><p>Use the sibling distribution data
+(<code>df_sibling_proportions</code>).</p></li>
+<li><p>For each combination of RACE and birth_range:</p>
+<ul>
+<li>Compare the sibling distributions across different census
+years.</li>
+<li>Use statistical tests (e.g., Kolmogorov-Smirnov test) to assess if
+distributions are significantly different.</li>
+</ul></li>
+<li><p>Create a summary table showing:</p>
+<ul>
+<li>RACE</li>
+<li>birth_range</li>
+<li>Whether the distribution is stable across census years</li>
+<li>Any significant changes observed</li>
+</ul></li>
+<li><p>Visualize stability:</p>
+<ul>
+<li>Create a heatmap or similar plot showing stability/changes across
+cohorts and races.</li>
+</ul></li>
+<li><p>Interpret results:</p>
+<ul>
+<li>Identify which cohorts show stable sibling distributions.</li>
+<li>Compare stability patterns to those observed in the children
+distribution analysis.</li>
+<li>Discuss implications of stability or lack thereof for understanding
+family structure changes over time.</li>
+</ul></li>
+</ol>
+</div>
+</div>
+<div id="instructions-for-manqing-plot-across-census-years-siblings"
 class="section level2">
-<h2>4.Summary Statistics of Number of Siblings of White Population</h2>
-<div class="tabwid"><style>.cl-5facf184{table-layout:auto;}.cl-5fa63402{font-family:'Times New Roman';font-size:12pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-5fa63416{font-family:'Times New Roman';font-size:12pt;font-weight:normal;font-style:italic;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-5fa63417{font-family:'Times New Roman';font-size:12pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-5fa8ec24{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 2;background-color:transparent;}.cl-5fa8ec2e{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 2;background-color:transparent;}.cl-5fa9006a{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5fa90074{background-color:transparent;vertical-align: middle;border-bottom: 0.5pt solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5fa90075{background-color:transparent;vertical-align: middle;border-bottom: 0.5pt solid rgba(0, 0, 0, 1.00);border-top: 0.5pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5fa90076{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5fa9007e{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5fa9007f{background-color:transparent;vertical-align: middle;border-bottom: 0.5pt solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5fa90088{background-color:transparent;vertical-align: middle;border-bottom: 0.5pt solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table data-quarto-disable-processing='true' class='cl-5facf184'><thead><tr style="overflow-wrap:break-word;"><th  colspan="5"class="cl-5fa9006a"><p class="cl-5fa8ec24"><span class="cl-5fa63402">Table 4</span></p></th></tr><tr style="overflow-wrap:break-word;"><th  colspan="5"class="cl-5fa90074"><p class="cl-5fa8ec24"><span class="cl-5fa63416">Summary Statistics of Number of Siblings of White Population</span></p></th></tr><tr style="overflow-wrap:break-word;"><th class="cl-5fa90075"><p class="cl-5fa8ec2e"><span class="cl-5fa63417">RACE</span></p></th><th class="cl-5fa90075"><p class="cl-5fa8ec2e"><span class="cl-5fa63417">YEAR</span></p></th><th class="cl-5fa90075"><p class="cl-5fa8ec2e"><span class="cl-5fa63417">Mean</span></p></th><th class="cl-5fa90075"><p class="cl-5fa8ec2e"><span class="cl-5fa63417">Variance</span></p></th><th class="cl-5fa90075"><p class="cl-5fa8ec2e"><span class="cl-5fa63417">Std_Dev</span></p></th></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-5fa90076"><p class="cl-5fa8ec24"><span class="cl-5fa63417">White</span></p></td><td class="cl-5fa9007e"><p class="cl-5fa8ec2e"><span class="cl-5fa63417">1,960</span></p></td><td class="cl-5fa9007e"><p class="cl-5fa8ec2e"><span class="cl-5fa63417">2.62</span></p></td><td class="cl-5fa9007e"><p class="cl-5fa8ec2e"><span class="cl-5fa63417">5.39</span></p></td><td class="cl-5fa9007e"><p class="cl-5fa8ec2e"><span class="cl-5fa63417">2.32</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-5fa90076"><p class="cl-5fa8ec24"><span class="cl-5fa63417">White</span></p></td><td class="cl-5fa9007e"><p class="cl-5fa8ec2e"><span class="cl-5fa63417">1,970</span></p></td><td class="cl-5fa9007e"><p class="cl-5fa8ec2e"><span class="cl-5fa63417">2.45</span></p></td><td class="cl-5fa9007e"><p class="cl-5fa8ec2e"><span class="cl-5fa63417">4.51</span></p></td><td class="cl-5fa9007e"><p class="cl-5fa8ec2e"><span class="cl-5fa63417">2.12</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-5fa90076"><p class="cl-5fa8ec24"><span class="cl-5fa63417">White</span></p></td><td class="cl-5fa9007e"><p class="cl-5fa8ec2e"><span class="cl-5fa63417">1,980</span></p></td><td class="cl-5fa9007e"><p class="cl-5fa8ec2e"><span class="cl-5fa63417">2.55</span></p></td><td class="cl-5fa9007e"><p class="cl-5fa8ec2e"><span class="cl-5fa63417">4.08</span></p></td><td class="cl-5fa9007e"><p class="cl-5fa8ec2e"><span class="cl-5fa63417">2.02</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-5fa9007f"><p class="cl-5fa8ec24"><span class="cl-5fa63417">White</span></p></td><td class="cl-5fa90088"><p class="cl-5fa8ec2e"><span class="cl-5fa63417">1,990</span></p></td><td class="cl-5fa90088"><p class="cl-5fa8ec2e"><span class="cl-5fa63417">2.53</span></p></td><td class="cl-5fa90088"><p class="cl-5fa8ec2e"><span class="cl-5fa63417">3.59</span></p></td><td class="cl-5fa90088"><p class="cl-5fa8ec2e"><span class="cl-5fa63417">1.89</span></p></td></tr></tbody></table></div>
-<p><strong>Note:</strong> On average, individuals from White population
-have smaller number of siblings than Black/African American Population
-across all census year.</p>
+<h2>[Instructions for Manqing] Plot Across Census Years Siblings</h2>
+<div id="objective-4" class="section level3">
+<h3>Objective</h3>
+<p>Create a visualization showing how sibling distributions change
+across census years for different races and birth ranges.</p>
 </div>
-</div>
-<div id="data-visualization" class="section level1">
-<h1>Data Visualization</h1>
-<div
-id="distribution-of-number-of-children-by-census-year-for-each-race"
-class="section level2">
-<h2>1.Distribution of Number of Children by Census Year for each
-Race</h2>
-<p><img src="figure/siblings_analysis.Rmd/chidren-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-chidren-1">
-Past versions of chidren-1.png
-</button>
-</p>
-<div id="fig-chidren-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/6e28fed594efc1ffe79039103d6886cac6463c42/docs/figure/siblings_analysis.Rmd/chidren-1.png" target="_blank">6e28fed</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-08-30
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/d75ffa43f0c5f2251c0e30cf546fdbd06a3a29d7/docs/figure/siblings_analysis.Rmd/chidren-1.png" target="_blank">d75ffa4</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-08-29
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/a11dce58e34bf96898b33f39137c34d6266ceeaa/docs/figure/siblings_analysis.Rmd/chidren-1.png" target="_blank">a11dce5</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-08-04
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/fbdfcf1e0d6544306069114e6a1850d8311ef93d/docs/figure/siblings_analysis.Rmd/chidren-1.png" target="_blank">fbdfcf1</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2024-07-23
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/7e507f5f1b7adebe950574f0c7b3f91f497aaf9e/docs/figure/siblings_analysis.Rmd/chidren-1.png" target="_blank">7e507f5</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-07-02
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/cc5fc63c1f1bfa15ae20c27160118ed55f2e3e1c/docs/figure/siblings_analysis.Rmd/chidren-1.png" target="_blank">cc5fc63</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-06-26
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/bce5e2eef5fa3b97eae5b6643fadd5f8626724d7/docs/figure/siblings_analysis.Rmd/chidren-1.png" target="_blank">bce5e2e</a>
-</td>
-<td>
-hcvw
-</td>
-<td>
-2024-05-27
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><strong>Note:</strong> The graph shows racial disparities in family
-size. Black/African American families consistently have a higher
-proportion of larger families compared to White families across all
-census years.Larger family sizes, may result in a higher number of
-first-degree relatives (siblings). This can increase the probability of
-detecting individuals in forensic databases.</p>
-</div>
-<div id="distribution-of-number-of-sibling-by-census-year-for-each-race"
-class="section level2">
-<h2>2.Distribution of Number of Sibling by Census Year for each
-Race</h2>
-<p><img src="figure/siblings_analysis.Rmd/unnamed-chunk-6-1.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-6-1">
-Past versions of unnamed-chunk-6-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-6-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/6e28fed594efc1ffe79039103d6886cac6463c42/docs/figure/siblings_analysis.Rmd/unnamed-chunk-6-1.png" target="_blank">6e28fed</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-08-30
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/7e507f5f1b7adebe950574f0c7b3f91f497aaf9e/docs/figure/siblings_analysis.Rmd/unnamed-chunk-6-1.png" target="_blank">7e507f5</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-07-02
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/cc5fc63c1f1bfa15ae20c27160118ed55f2e3e1c/docs/figure/siblings_analysis.Rmd/unnamed-chunk-6-1.png" target="_blank">cc5fc63</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-06-26
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><strong>Note:</strong> Both Black/African American and White
-populations has diminishing trend of having larger sibling groups over
-the decades. However, the graph indicates differences in sibling numbers
-between the two racial groups. Black/African American individuals are
-more likely to have larger numbers of siblings across all census years
-compared to White individuals.</p>
-</div>
-<div id="comparison-of-frequency-across-year-for-50-60"
-class="section level2">
-<h2>3.Comparison of Frequency across YEAR for 50-60</h2>
-<div id="plot-for-number-of-children" class="section level3">
-<h3>Plot for Number of Children</h3>
-<p><img src="figure/siblings_analysis.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-1">
-Past versions of unnamed-chunk-8-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-8-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/6e28fed594efc1ffe79039103d6886cac6463c42/docs/figure/siblings_analysis.Rmd/unnamed-chunk-8-1.png" target="_blank">6e28fed</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-08-30
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/b98be9778d2e820b4bc587f3596d68fa71e5a53b/docs/figure/siblings_analysis.Rmd/unnamed-chunk-8-1.png" target="_blank">b98be97</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-08-30
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/fbdfcf1e0d6544306069114e6a1850d8311ef93d/docs/figure/siblings_analysis.Rmd/unnamed-chunk-8-1.png" target="_blank">fbdfcf1</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2024-07-23
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/32ce10ea6c9825ef45c59223f8463b33cdd22692/docs/figure/siblings_analysis.Rmd/unnamed-chunk-8-1.png" target="_blank">32ce10e</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-07-18
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/7e507f5f1b7adebe950574f0c7b3f91f497aaf9e/docs/figure/siblings_analysis.Rmd/unnamed-chunk-8-1.png" target="_blank">7e507f5</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-07-02
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><strong>Note:</strong> Focusing on mothers in the 50-60 age range,
-the graph shows that family size in both racial group has generally
-decreased over time, with fewer families having a large number of
-children in the more recent years (1980 and 1990). In addition, it also
-shows a racial disparity between racial groups. Black/African American
-families consistently have a higher proportion of larger families
-compared to White families across all years.</p>
-</div>
-<div id="plot-for-number-of-siblings" class="section level3">
-<h3>Plot for Number of Siblings</h3>
-<p><img src="figure/siblings_analysis.Rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-1">
-Past versions of unnamed-chunk-9-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-9-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/6e28fed594efc1ffe79039103d6886cac6463c42/docs/figure/siblings_analysis.Rmd/unnamed-chunk-9-1.png" target="_blank">6e28fed</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-08-30
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><strong>Note:</strong> Focusing on mothers in the 50-60 age range,
-the graph shows a significant change in the distribution of number of
-siblings across decades. Particularly by 1990, there is a noticeable
-shift toward smaller sibling groups in both racial groups. The graph
-also shows a clear racial disparity in number of siblings. In the
-earlier census year, a higher proportion of Black/African American
-individuals have a larger number of siblings. However, individuals in
-white population display a steeper decline in the number of siblings as
-we move towards more recent years.</p>
+<div id="steps-2" class="section level3">
+<h3>Steps</h3>
+<ol style="list-style-type: decimal">
+<li><p>Use the sibling distribution data
+(<code>df_sibling_proportions</code>).</p></li>
+<li><p>Create a multi-panel plot:</p>
+<ul>
+<li>X-axis: Number of siblings (0 to 12+)</li>
+<li>Y-axis: Proportion</li>
+<li>Color: Census Year</li>
+<li>Facet by: RACE and birth_range</li>
+</ul></li>
+<li><p>Use <code>ggplot2</code> to create the plot:</p></li>
+</ol>
+<pre class="r"><code>ggplot(df_sibling_proportions, aes(x = n_siblings, y = proportion, color = factor(YEAR))) +
+ geom_line() +
+ facet_grid(RACE ~ birth_range) +
+ labs(title = &quot;Sibling Distribution Across Census Years&quot;,
+      x = &quot;Number of Siblings&quot;, y = &quot;Proportion&quot;, color = &quot;Census Year&quot;) +
+ theme_minimal() +
+ theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>Analyze the plot:
+<ul>
+<li>Identify trends in sibling distribution changes over time.</li>
+<li>Compare patterns between races and across birth ranges.</li>
+<li>Note any significant shifts or stable periods.</li>
+</ul></li>
+<li>Compare with children distribution plot:
+<ul>
+<li>Highlight similarities and differences in trends.</li>
+<li>Discuss what these comparisons reveal about changing family
+structures.</li>
+</ul></li>
+</ol>
+<p>Remember to reference your findings from the children distribution
+analysis when discussing the results, highlighting any notable
+similarities or differences between the two analyses.</p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -2334,54 +2155,7 @@ Session information
 </button>
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
-<pre><code>R version 4.4.1 (2024-06-14)
-Platform: x86_64-apple-darwin20
-Running under: macOS Sonoma 14.6.1
-
-Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
-
-locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-
-time zone: America/Detroit
-tzcode source: internal
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-other attached packages:
- [1] gridExtra_2.3     ggnewscale_0.5.0  patchwork_1.2.0   rempsyc_0.1.8    
- [5] scales_1.3.0      knitr_1.48        viridis_0.6.5     viridisLite_0.4.2
- [9] lubridate_1.9.3   forcats_1.0.0     stringr_1.5.1     dplyr_1.1.4      
-[13] purrr_1.0.2       tidyr_1.3.1       tibble_3.2.1      ggplot2_3.5.1    
-[17] tidyverse_2.0.0   readr_2.1.5       workflowr_1.7.1  
-
-loaded via a namespace (and not attached):
- [1] gtable_0.3.5            xfun_0.45               bslib_0.7.0            
- [4] processx_3.8.4          callr_3.7.6             tzdb_0.4.0             
- [7] vctrs_0.6.5             tools_4.4.1             ps_1.7.7               
-[10] generics_0.1.3          fansi_1.0.6             highr_0.11             
-[13] pkgconfig_2.0.3         data.table_1.15.4       uuid_1.2-0             
-[16] lifecycle_1.0.4         flextable_0.9.6         farver_2.1.2           
-[19] compiler_4.4.1          git2r_0.33.0            textshaping_0.4.0      
-[22] munsell_0.5.1           getPass_0.2-4           fontLiberation_0.1.0   
-[25] fontquiver_0.2.1        httpuv_1.6.15           htmltools_0.5.8.1      
-[28] sass_0.4.9              yaml_2.3.9              later_1.3.2            
-[31] pillar_1.9.0            jquerylib_0.1.4         whisker_0.4.1          
-[34] openssl_2.2.0           cachem_1.1.0            fontBitstreamVera_0.1.1
-[37] zip_2.3.1               tidyselect_1.2.1        digest_0.6.36          
-[40] stringi_1.8.4           labeling_0.4.3          rprojroot_2.0.4        
-[43] fastmap_1.2.0           grid_4.4.1              colorspace_2.1-0       
-[46] cli_3.6.3               magrittr_2.0.3          utf8_1.2.4             
-[49] withr_3.0.0             gdtools_0.4.0           promises_1.3.0         
-[52] timechange_0.3.0        officer_0.6.6           rmarkdown_2.27         
-[55] httr_1.4.7              ragg_1.3.2              askpass_1.2.0          
-[58] hms_1.1.3               evaluate_0.24.0         rlang_1.1.4            
-[61] Rcpp_1.0.12             glue_1.7.0              xml2_1.3.6             
-[64] rstudioapi_0.16.0       jsonlite_1.8.8          R6_2.5.1               
-[67] systemfonts_1.1.0       fs_1.6.4               </code></pre>
+<pre class="r"><code>sessionInfo()</code></pre>
 </div>
 </div>
 </div>
