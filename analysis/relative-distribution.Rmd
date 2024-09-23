@@ -55,8 +55,14 @@ $$
 
 
 ```{r data, echo=TRUE, eval=TRUE}
-# children_data = read.csv("./data/proportions_table_by_race_year.csv")
-mother_data = read.csv("./data/data_filtered_recoded.csv")
+path <- file.path(".", "data")
+savepath <- file.path(".", "output")
+
+prop_race_year <- file.path(path, "proportions_table_by_race_year.csv")
+data_filter <- file.path(path, "data_filtered_recoded.csv")
+
+children_data = read.csv(prop_race_year)
+mother_data = read.csv(data_filter)
 ```
 
 ```{r, echo=TRUE, eval=TRUE}
@@ -230,6 +236,18 @@ This should be done for each subset of the data (race × census year × age rang
 - **Check for Zero-Inflation:**
     - Calculate the proportion of zeros in each subset.
     - If the proportion of zeros is significantly higher than expected under a standard Poisson or negative binomial model, consider zero-inflated models.
+```{r}
+## EDA for White population
+result <- df %>%
+  group_by(RACE, YEAR, AGE_RANGE) %>% 
+  summarize(mean = mean(chborn_num, na.rm = TRUE),
+            variance = var(chborn_num, na.rm = TRUE), 
+            total = n(),
+            zero_count = sum(chborn_num == 0, na.rm = TRUE),
+            zero_proportion = zero_count / total) %>%
+  mutate(overdispersion = ifelse(variance > mean, TRUE, FALSE), zero_inflation = ifelse(zero_proportion > 0.5, TRUE, FALSE)) 
+```
+
 
 **2: Model Selection**
 
@@ -247,6 +265,25 @@ This should be done for each subset of the data (race × census year × age rang
 
 - **Model:** Poisson Distribution
 - **Justification:** Appropriate if mean equals variance and no excess zeros.
+```{r}
+result$model <- NA  # Create an empty column for the model
+
+for(i in 1:nrow(result)) {
+  if(result$overdispersion[i] & result$zero_inflation[i]) {
+    result$model[i] <- "Zero-Inflated Negative Binomial (ZINB)"
+  } else if(result$overdispersion[i] & !result$zero_inflation[i]) {
+    result$model[i] <- "Negative Binomial"
+  } else if(!result$overdispersion[i] & !result$zero_inflation[i]) {
+    result$model[i] <- "Poisson"
+  } else {
+    result$model[i] <- "Check conditions"  # Add fallback condition if needed
+  }
+}
+
+model_select <- result %>% select(RACE, YEAR, AGE_RANGE, overdispersion, zero_inflation, model)
+
+kable(model_select, caption = "Overdispersion and Zero-Inflation for Different Groups")
+```
 
 **3: Fit Models to Each Subset**
 
