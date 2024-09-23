@@ -47,7 +47,6 @@ combined_lrs$population<-as.factor(combined_lrs$population)
 
 # load proportions_exceeding_cutoffs
 #proportions_exceeding_cutoffs = fread(paste0("output/simulation_",slurm_job_id,"/sim_proportions_exceeding_cutoffs.csv"))
-proportions_exceeding_cutoffs = fread(paste0("data/example_data/sim_proportions_exceeding_cutoffs.csv"))
 ```
 
 ```{r cutoff_functions, results =FALSE,warning=FALSE,message=FALSE, echo = FALSE,fig.width = 20,fig.height = 15}
@@ -69,6 +68,7 @@ calculate_proportions_exceeding_cutoffs <- function(input_df, cutoffs) {
   df_with_cutoffs <- df_with_cutoffs [,list(
       population=population,
       relationship_tested = relationship_tested,
+      relationship_known = relationship_known,
       loci_set = loci_set,
       exceeds_fixed_cutoff = LR > fixed_cutoff,
       exceeds_cutoff_1 = LR > cutoff_1,
@@ -83,7 +83,7 @@ calculate_proportions_exceeding_cutoffs <- function(input_df, cutoffs) {
       proportion_exceeding_0_1 = sum(exceeds_cutoff_0_1, na.rm = TRUE) / .N,
       proportion_exceeding_0_01 = sum(exceeds_cutoff_0_01, na.rm = TRUE) / .N,
       n_related = .N),
-      by=c("population","relationship_tested","loci_set")]
+      by=c("population","relationship_tested","loci_set", "relationship_known")]
   return(proportions_exceeding)
 }
 ```
@@ -91,16 +91,22 @@ calculate_proportions_exceeding_cutoffs <- function(input_df, cutoffs) {
 Likelihood ratio summary plots
 
 ```{r summary_states, results =FALSE,warning=FALSE,message=FALSE, echo = FALSE,fig.width = 20,fig.height = 15}
+# make sure loci set is in the order we want
+combined_lrs$loci_set_factor <- factor(combined_lrs$loci_set, levels=c("core_13", "identifiler_15", "expanded_20", "supplementary", "autosomal_29"))
+
+# make sure relationships are in the order we want
+combined_lrs$relationship_known_factor <- factor(combined_lrs$relationship_known, levels=c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated"))
+
 summary_stats <- combined_lrs[,    list(
   mean_LR = mean(LR),
   lower_95 = quantile(LR, 0.025),
   upper_95 = quantile(LR, 0.975)#,
 ),
-by=c("relationship_tested","population","loci_set")]
+by=c("relationship_tested","population","loci_set_factor")]
 
-ggplot(summary_stats, aes(x = loci_set, y = mean_LR, group = population, color = population)) +
+ggplot(summary_stats, aes(x = loci_set_factor, y = mean_LR, group = population, color = population)) +
       geom_line(size = 1) +
-      facet_wrap(~ relationship_tested, scales = "free_y", ncol = 2) +
+      facet_wrap(~ relationship_tested,  ncol = 2) +
       scale_y_log10() +
       labs(
         title = "Mean LR Across Populations and Relationship Types",
@@ -108,7 +114,7 @@ ggplot(summary_stats, aes(x = loci_set, y = mean_LR, group = population, color =
         y = "Combined LR",
         color = "Population"
       ) +
-      theme_minimal(base_size = 18) +
+      theme_minimal(base_size = 24) +
       theme(
         axis.text.x = element_text(angle = 45, hjust = 1),
         legend.position = "bottom"
@@ -117,7 +123,7 @@ ggplot(summary_stats, aes(x = loci_set, y = mean_LR, group = population, color =
 
 ggplot(combined_lrs, aes(x = relationship_tested, y = LR, fill = population, color = population)) +
     geom_boxplot(position = position_dodge(width = 0.9)) +
-    facet_wrap(~ loci_set, scales = "fixed") +
+    facet_wrap(~ loci_set_factor, scales = "fixed") +
     labs(
       title = "LR Distributions Across Populations and Relationship Types",
       x = "Relationship Tested",
@@ -125,7 +131,7 @@ ggplot(combined_lrs, aes(x = relationship_tested, y = LR, fill = population, col
       fill = "Population",
       color = "Population"
     ) +
-    theme_minimal(base_size = 18) +
+    theme_minimal(base_size = 24) +
     theme(
       axis.text.x = element_text(angle = 45, hjust = 1)
     ) +
@@ -133,20 +139,20 @@ ggplot(combined_lrs, aes(x = relationship_tested, y = LR, fill = population, col
 
 ggplot(combined_lrs, aes(x = relationship_tested, y = LR, fill = population)) +
     geom_boxplot(position = position_dodge(width = 0.9)) +
-    facet_grid(relationship_known ~ loci_set) +
+    facet_grid(relationship_known_factor ~ loci_set_factor) +
     labs(
       title = "LR Distributions for Relationship Comparisons",
       x = "Tested Relationship Type",
       y = "LR",
       fill = "Population"
     ) +
-    theme_minimal(base_size = 18) +
+    theme_minimal(base_size = 24) +
     theme(
       axis.text.x = element_text(angle = 45, hjust = 1)
     ) +
     scale_y_log10()
 
-ggplot(combined_lrs, aes(x = relationship_known, y = log(LR), fill = population)) +
+ggplot(combined_lrs, aes(x = relationship_known_factor, y = log(LR), fill = population)) +
     geom_boxplot(position = position_dodge(width = 0.9)) +
     facet_wrap(.~relationship_tested,nrow = 5) +
     labs(
@@ -155,7 +161,7 @@ ggplot(combined_lrs, aes(x = relationship_known, y = log(LR), fill = population)
       y = "LR",
       fill = "Population"
     ) +
-    theme_minimal(base_size = 18) +
+    theme_minimal(base_size = 24) +
     theme(
       axis.text.x = element_text(angle = 45, hjust = 1)
     )
@@ -190,7 +196,7 @@ for(hypothesis in hypotheses){
       theme(axis.text = element_text(size = 28), axis.title = element_text(size = 28)) +
       guides(fill=guide_legend(title="Known Relationship")) +
       xlab("Log Likelihood Ratio (LLR)") + ylab("Frequency") +
-      theme_minimal(base_size = 18)
+      theme_minimal(base_size = 24)
 
   plot2 = ggplot(data = combined_lrs_hyp_cutoffs) +
       geom_histogram(aes(x = log(LR), fill =relationship_known_label),alpha = 0.5) + 
@@ -204,7 +210,7 @@ for(hypothesis in hypotheses){
       theme(axis.text = element_text(size = 28), axis.title = element_text(size = 28)) +
       guides(fill=guide_legend(title="Known Relationship")) +
       xlab("Log Likelihood Ratio (LLR)") + ylab("Frequency") +
-      theme_minimal(base_size = 18)
+      theme_minimal(base_size = 24)
   
   plot_list[[i]] = plot1
   plot_list[[i+1]] = plot2
@@ -229,3 +235,69 @@ plot_list[[9]]
 plot_list[[10]]
 ```
 
+Plots showing the proportion exceeding cutoffs for the parent-child and full siblings hypotheses:
+
+```{r cutoffs_results =FALSE,warning=FALSE,message=FALSE, echo = FALSE, fig.width = 20,fig.height = 15}
+
+cutoffs <- calculate_cutoffs(combined_lrs, c(1, 0.1, 0.01), hypothesis = "parent_child")
+proportion_exceeding = calculate_proportions_exceeding_cutoffs(input_df = combined_lrs, cutoffs = cutoffs) 
+
+proportions_exceeding_cutoffs_long = proportion_exceeding %>%
+  pivot_longer(
+    cols = c(proportion_exceeding_1,proportion_exceeding_0_1,proportion_exceeding_0_01,proportion_exceeding_fixed),
+    names_to = c("Cutoff"),
+    values_to = "Value")
+
+proportions_exceeding_cutoffs_long = proportions_exceeding_cutoffs_long %>%
+  mutate(relationship_tested_label = case_when(relationship_tested == "cousins" ~ "Cousins",
+                                               relationship_tested == "full_siblings" ~ "Full Siblings",
+                                               relationship_tested == "half_siblings" ~ "Half Siblings",
+                                               relationship_tested == "parent_child" ~ "Parent-Child",
+                                               relationship_tested == "second_cousins" ~ "Second Cousins"))
+
+proportions_exceeding_cutoffs_long = proportions_exceeding_cutoffs_long %>%
+  mutate(cutoff_label = case_when(Cutoff == "proportion_exceeding_0_01" ~ "0.01% FPR",
+                                  Cutoff == "proportion_exceeding_0_1" ~ "0.1% FPR",
+                                  Cutoff == "proportion_exceeding_1" ~ "1% FPR",
+                                  Cutoff == "proportion_exceeding_fixed" ~ "Fixed (1)"))
+
+proportions_exceeding_cutoffs_long$loci_set_factor <- factor(proportions_exceeding_cutoffs_long$loci_set, levels=c("core_13", "identifiler_15", "expanded_20", "supplementary", "autosomal_29"))
+
+# make sure relationships are in the order we want
+proportions_exceeding_cutoffs_long$relationship_known_factor <- factor(proportions_exceeding_cutoffs_long$relationship_known, levels=c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated"))
+
+proportions_exceeding_cutoffs_long_parent_child = proportions_exceeding_cutoffs_long[proportions_exceeding_cutoffs_long$relationship_tested == "parent_child",]
+
+ggplot(proportions_exceeding_cutoffs_long_parent_child, aes(x = relationship_known_factor, y = Value, fill = population, color = population)) +
+  geom_bar(stat = "identity", position = position_dodge(width = 0.9)) +
+  facet_grid(cutoff_label ~ loci_set_factor, scales = "fixed") +
+  labs(
+    title = "Proportions Exceeding Likelihood Cut-offs (Parent-Child hypothesis)",
+    x = "Relationship Tested",
+    y = "Proportion Exceeding Cut-off",
+    fill = "Population",
+    color = "Population"
+  ) +
+  theme_minimal(base_size = 24) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+
+
+proportions_exceeding_cutoffs_siblings = proportions_exceeding_cutoffs_long[proportions_exceeding_cutoffs_long$relationship_tested == "full_siblings",]
+
+ggplot(proportions_exceeding_cutoffs_siblings, aes(x = relationship_known_factor, y = Value, fill = population, color = population)) +
+  geom_bar(stat = "identity", position = position_dodge(width = 0.9)) +
+  facet_grid(cutoff_label ~ loci_set_factor, scales = "fixed") +
+  labs(
+    title = "Proportions Exceeding Likelihood Cut-offs (Full siblings hypothesis)",
+    x = "Relationship Tested",
+    y = "Proportion Exceeding Cut-off",
+    fill = "Population",
+    color = "Population"
+  ) +
+  theme_minimal(base_size = 24) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+```
