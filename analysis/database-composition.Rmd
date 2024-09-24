@@ -11,19 +11,75 @@ editor_options:
 # Load required packages
 library(tidyverse)
 library(patchwork)
+library(knitr)
+library(kableExtra)
 
-knitr::opts_knit$set(root.dir = "..")
+#knitr::opts_knit$set(root.dir = "..")
 knitr::opts_chunk$set(eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 6)
 
 ```
 
+# Introduction : Direct-to-Consumer Database Statistics
 
-# Direct-to-Consumer Database Statistics
+In this analysis, we present our estimates regarding direct-to-consumer (DTC) genetic testing databases. Our approach consists of three main components:
+
+1. We use published data from 23andMe as a foundation to estimate the proportions of African Americans (or Black Americans) and European Americans (or White Americans) in DTC databases. These proportions form the basis for our subsequent analyses.
+
+2. We compile and present data on major DTC companies, including their reported database sizes and policies on law enforcement accessibility. This information helps us estimate the total size of DTC databases and the portion that might be accessible to law enforcement, which is crucial for the analyses in our manuscript.
+
+3. Finally, we synthesize this information to estimate the number and proportion of African Americans and European Americans represented across all DTC databases, as well as those accessible to law enforcement.
+
+## Data Sources
+
+Our analysis draws on several key sources:
+
+1. Bryc et al. (2014) and Zhang et al. (2024): These studies utilized 23andMe databases and provide information on the self-identified ethnic and racial groups of participants.
+
+2. Tung et al. (2011) "Characteristics of an Online Consumer Genetic Research Cohort": This poster, presented at the 2011 American Society of Human Genetics (ASHG) meeting by 23andMe representatives, forms the basis for our assumption of 80% European American representation in DTC databases. We use this assumption to calibrate relative proportions of other demographic groups.
+
+3. Publicly available information from DTC companies regarding their database sizes and law enforcement access policies.
+
+By combining these sources, we aim to provide a comprehensive overview of the demographic composition of DTC genetic databases and their potential implications for genetic research and forensic applications.
 
 ## Accessibility of Direct-to-Consumer Databases
 
 ```{r}
-dtc_access <- read_csv("data/DTC_access_export.csv", show_col_types = FALSE) 
+# Import the comprehensive demographics data
+demographics_data <- read_csv("data/dtc_demographics.csv")
+
+# Separate the data into different dataframes
+bryc_data <- demographics_data |>
+  filter(Source == "Bryc2014")
+zhang_data <- demographics_data |>
+  filter(Source == "Zhang2024")
+census_data <- demographics_data|>
+  filter(Source == "Census2020")
+
+# Calculate totals and proportions for each dataset
+calculate_proportions <- function(df) {
+  df |> 
+    mutate(Total = sum(Number_of_Customers),
+           Proportion = Number_of_Customers / Total * 100)
+}
+
+bryc_data <- calculate_proportions(bryc_data)
+zhang_data <- calculate_proportions(zhang_data)
+census_data <- calculate_proportions(census_data)
+
+# Display the processed data
+kable(bryc_data, caption = "Bryc et al. (2014) Data") %>%
+  kable_styling(bootstrap_options = c("striped", "hover"))
+
+kable(zhang_data, caption = "Zhang et al. (2024) Data") %>%
+  kable_styling(bootstrap_options = c("striped", "hover"))
+
+kable(census_data, caption = "U.S. Census Data (2020)") %>%
+  kable_styling(bootstrap_options = c("striped", "hover"))
+```
+
+
+```{r}
+#dtc_access <- read_csv("data/DTC_access_export.csv", show_col_types = FALSE) 
 ```
 
 ```{r}
