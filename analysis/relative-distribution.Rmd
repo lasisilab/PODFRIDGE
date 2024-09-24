@@ -237,15 +237,40 @@ This should be done for each subset of the data (race × census year × age rang
     - Calculate the proportion of zeros in each subset.
     - If the proportion of zeros is significantly higher than expected under a standard Poisson or negative binomial model, consider zero-inflated models.
 ```{r}
-## EDA for White population
-result <- df %>%
-  group_by(RACE, YEAR, AGE_RANGE) %>% 
+## By RACE
+result_race <- df %>%
+  group_by(RACE) %>% 
   summarize(mean = mean(chborn_num, na.rm = TRUE),
             variance = var(chborn_num, na.rm = TRUE), 
             total = n(),
             zero_count = sum(chborn_num == 0, na.rm = TRUE),
             zero_proportion = zero_count / total) %>%
   mutate(overdispersion = ifelse(variance > mean, TRUE, FALSE), zero_inflation = ifelse(zero_proportion > 0.5, TRUE, FALSE)) 
+```
+
+```{r}
+## By Census YEAR
+result_year <- df %>%
+  group_by(YEAR) %>% 
+  summarize(mean = mean(chborn_num, na.rm = TRUE),
+            variance = var(chborn_num, na.rm = TRUE), 
+            total = n(),
+            zero_count = sum(chborn_num == 0, na.rm = TRUE),
+            zero_proportion = zero_count / total) %>%
+  mutate(overdispersion = ifelse(variance > mean, TRUE, FALSE), zero_inflation = ifelse(zero_proportion > 0.5, TRUE, FALSE))
+```
+
+
+```{r}
+## By Age range
+result_age <- df %>%
+  group_by(AGE_RANGE) %>% 
+  summarize(mean = mean(chborn_num, na.rm = TRUE),
+            variance = var(chborn_num, na.rm = TRUE), 
+            total = n(),
+            zero_count = sum(chborn_num == 0, na.rm = TRUE),
+            zero_proportion = zero_count / total) %>%
+  mutate(overdispersion = ifelse(variance > mean, TRUE, FALSE), zero_inflation = ifelse(zero_proportion > 0.5, TRUE, FALSE))
 ```
 
 
@@ -266,7 +291,7 @@ result <- df %>%
 - **Model:** Poisson Distribution
 - **Justification:** Appropriate if mean equals variance and no excess zeros.
 ```{r}
-result$model <- NA  # Create an empty column for the model
+result_race$model <- NA  # Create an empty column for the model
 
 for(i in 1:nrow(result)) {
   if(result$overdispersion[i] & result$zero_inflation[i]) {
@@ -276,13 +301,53 @@ for(i in 1:nrow(result)) {
   } else if(!result$overdispersion[i] & !result$zero_inflation[i]) {
     result$model[i] <- "Poisson"
   } else {
-    result$model[i] <- "Check conditions"  # Add fallback condition if needed
+    result$model[i] <- "Check conditions"
   }
 }
 
-model_select <- result %>% select(RACE, YEAR, AGE_RANGE, overdispersion, zero_inflation, model)
+model_select_race <- result %>% select(RACE, YEAR, AGE_RANGE, overdispersion, zero_inflation, model)
 
-kable(model_select, caption = "Overdispersion and Zero-Inflation for Different Groups")
+kable(model_select_race, caption = "Overdispersion and Zero-Inflation for Different Groups")
+```
+
+```{r}
+result_year$model <- NA  # Create an empty column for the model
+
+for(i in 1:nrow(result)) {
+  if(result$overdispersion[i] & result$zero_inflation[i]) {
+    result$model[i] <- "Zero-Inflated Negative Binomial (ZINB)"
+  } else if(result$overdispersion[i] & !result$zero_inflation[i]) {
+    result$model[i] <- "Negative Binomial"
+  } else if(!result$overdispersion[i] & !result$zero_inflation[i]) {
+    result$model[i] <- "Poisson"
+  } else {
+    result$model[i] <- "Check conditions"
+  }
+}
+
+model_select_year <- result %>% select(RACE, YEAR, AGE_RANGE, overdispersion, zero_inflation, model)
+
+kable(model_select_year, caption = "Overdispersion and Zero-Inflation for Different Groups")
+```
+
+```{r}
+result_age$model <- NA  # Create an empty column for the model
+
+for(i in 1:nrow(result)) {
+  if(result$overdispersion[i] & result$zero_inflation[i]) {
+    result$model[i] <- "Zero-Inflated Negative Binomial (ZINB)"
+  } else if(result$overdispersion[i] & !result$zero_inflation[i]) {
+    result$model[i] <- "Negative Binomial"
+  } else if(!result$overdispersion[i] & !result$zero_inflation[i]) {
+    result$model[i] <- "Poisson"
+  } else {
+    result$model[i] <- "Check conditions"
+  }
+}
+
+model_select_age <- result %>% select(RACE, YEAR, AGE_RANGE, overdispersion, zero_inflation, model)
+
+kable(model_select_age, caption = "Overdispersion and Zero-Inflation for Different Groups")
 ```
 
 **3: Fit Models to Each Subset**
@@ -295,6 +360,20 @@ kable(model_select, caption = "Overdispersion and Zero-Inflation for Different G
     - Use goodness-of-fit measures such as Akaike Information Criterion (AIC) or Bayesian Information Criterion (BIC).
     - Lower AIC/BIC indicates a better-fitting model.
     - Perform likelihood ratio tests where appropriate.
+```{r}
+## Fit a Poisson model
+poisson_models <- df %>%
+  group_by(RACE, YEAR, AGE_RANGE) %>%
+  group_split() %>%
+  map(~ glm(chborn_num ~ RACE+YEAR+AGE_RANGE, data = ., family = poisson()))
+
+## Fit a negative binomial model
+nb_model <- df %>%
+  group_by(RACE, YEAR, AGE_RANGE) %>%
+  group_split() %>%
+  map(~ glm.nb(chborn_num ~ RACE + YEAR + AGE_RANGE, data = .))
+
+```
 
 
 ### Step 2: Model Comparison Using AIC or BIC
