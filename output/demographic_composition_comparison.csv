@@ -1,0 +1,22 @@
+"Source","Ethnicity","Number_of_Customers","Proportion"
+"23andMe (2024)","European American",2050678,78.5085549860569
+"23andMe (2024)","Latino",355660,13.6161565425391
+"23andMe (2024)","African American",98618,3.77551067286769
+"23andMe (2024)","East Asian",84912,3.25078750587662
+"23andMe (2024)","South Asian",22176,0.848990292659695
+"Calibrated Estimate","European American",80000,80
+"Calibrated Estimate","Latino",13874.8257893243,13.8748257893243
+"Calibrated Estimate","African American",3847.23491450145,3.84723491450145
+"Calibrated Estimate","Other",2277.93929617424,2.27793929617424
+"Estimated LE Accessible","European American",2560000,80
+"Estimated LE Accessible","Latino",443994.425258378,13.8748257893243
+"Estimated LE Accessible","African American",123111.517264046,3.84723491450145
+"Estimated LE Accessible","Other",72894.0574775757,2.27793929617424
+"Estimated Total DTC","European American",3.6e+07,80
+"Estimated Total DTC","Latino",6243671.60519594,13.8748257893243
+"Estimated Total DTC","African American",1731255.71152565,3.84723491450145
+"Estimated Total DTC","Other",1025072.68327841,2.27793929617424
+"U.S. Census","European American",191697647,57.8361933450687
+"U.S. Census","Latino",62080044,18.7298774076991
+"U.S. Census","African American",39940338,12.0502110849352
+"U.S. Census","Other",37731252,11.3837181622971

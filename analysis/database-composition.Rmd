@@ -67,16 +67,85 @@ zhang_data <- calculate_proportions(zhang_data)
 census_data <- calculate_proportions(census_data)
 
 # Display the processed data
-kable(bryc_data, caption = "Bryc et al. (2014) Data") %>%
+kable(bryc_data, caption = "Bryc et al. (2014) Data") |> 
   kable_styling(bootstrap_options = c("striped", "hover"))
 
-kable(zhang_data, caption = "Zhang et al. (2024) Data") %>%
+kable(zhang_data, caption = "Zhang et al. (2024) Data") |> 
   kable_styling(bootstrap_options = c("striped", "hover"))
 
-kable(census_data, caption = "U.S. Census Data (2020)") %>%
+kable(census_data, caption = "U.S. Census Data (2020)") |> 
   kable_styling(bootstrap_options = c("striped", "hover"))
 ```
 
+
+```{r}
+# Calculate total customers for each source
+totals <- demographics_data |> 
+  filter(Source != "Census2020") |> 
+  group_by(Source) |> 
+  summarise(Total_Customers = sum(Number_of_Customers), .groups = "drop")
+
+# Merge totals back to the main data
+data_23andMe <- demographics_data |> 
+  filter(Source != "Census2020") |> 
+  left_join(totals, by = "Source")
+
+# Calculate proportions for each ethnicity
+data_23andMe <- data_23andMe |> 
+  mutate(Proportion = (Number_of_Customers / Total_Customers) * 100)
+
+# Calculate ratios for European American to African American and Latino
+ratios <- data_23andMe |> 
+  filter(Ethnicity %in% c("European American", "African American", "Latino")) |> 
+  select(Source, Ethnicity, Number_of_Customers) |> 
+  pivot_wider(names_from = Ethnicity, values_from = Number_of_Customers) |> 
+  mutate(
+    EA_AA_Ratio = `European American` / `African American`,
+    EA_Latino_Ratio = `European American` / `Latino`
+  )
+
+# Display the calculated proportions and ratios
+kable(data_23andMe, caption = "23andMe Demographics: Customer Numbers and Proportions") |> 
+  kable_styling(bootstrap_options = c("striped", "hover"))
+
+kable(ratios, caption = "Ratios of European American to African American and Latino Customers") |> 
+  kable_styling(bootstrap_options = c("striped", "hover"))
+
+```
+
+```{r}
+# Set total sample size and European American proportion
+T <- 100000
+EA <- 0.80 * T  # 80% European American
+
+# Use ratios from the more recent study (Zhang2024)
+EA_AA_Ratio <- ratios$EA_AA_Ratio[ratios$Source == "Zhang2024"]
+EA_Latino_Ratio <- ratios$EA_Latino_Ratio[ratios$Source == "Zhang2024"]
+
+# Calculate other ethnicities based on the ratios
+AA <- EA / EA_AA_Ratio
+Latino <- EA / EA_Latino_Ratio
+Other <- T - (EA + AA + Latino)
+
+# Calculate proportions
+AA_Prop <- (AA / T) * 100
+Latino_Prop <- (Latino / T) * 100
+Other_Prop <- (Other / T) * 100
+
+# Create a tibble with calibrated data
+calibrated_data <- tibble(
+  Ethnicity = c("European American", "African American", "Latino", "Other"),
+  Number_of_Customers = c(EA, AA, Latino, Other),
+  Proportion = c(80, AA_Prop, Latino_Prop, Other_Prop)
+)
+
+# Display the calibrated data
+kable(calibrated_data, caption = "Calibrated Estimates Assuming 80% European American") |> 
+  kable_styling(bootstrap_options = c("striped", "hover"))
+
+```
+
+We're creating a calibrated estimate assuming European Americans represent 80% of the samples. This assumption is based on [a poster presented at ASHG 2011](, which can be found at this link). We use the ratios from [the more recent Zhang 2024 study](https://www.nature.com/articles/s41467-024-47357-7#MOESM4) to estimate the proportions of other ethnicities.
 
 ```{r}
 #dtc_access <- read_csv("data/DTC_access_export.csv", show_col_types = FALSE) 
