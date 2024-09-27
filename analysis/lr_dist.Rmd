@@ -154,6 +154,28 @@ ggplot(combined_lrs, aes(x = relationship_tested, y = LR, fill = population_labe
     ) +
     scale_y_log10()
 
+gb_df = combined_lrs %>% 
+    group_by(relationship_known, relationship_tested, loci_set) %>%
+    summarize(mean = mean(LR))
+
+gb_df$indicator = ifelse(gb_df$mean == 0, "*", "")
+
+ann_text1 <- tribble(
+  ~relationship_tested, ~LR, ~relationship_known, ~loci_set, ~population_label,
+  "parent_child", 0, "cousins", "expanded_20", "African-American",
+  "parent_child", 0, "cousins", "supplementary", "African-American",
+  "parent_child", 0, "cousins", "autosomal_29", "African-American",
+  "parent_child", 0, "second_cousins", "expanded_20", "African-American",
+  "parent_child", 0, "second_cousins", "supplementary", "African-American",
+  "parent_child", 0, "second_cousins", "autosomal_29", "African-American",
+  "parent_child", 0, "unrelated", "expanded_20", "African-American",
+  "parent_child", 0, "unrelated", "supplementary", "African-American",
+  "parent_child", 0, "unrelated", "autosomal_29", "African-American",
+  "parent_child", 0, "unrelated", "identifiler_15", "African-American"
+)
+ann_text1$loci_set_factor <- factor(ann_text1$loci_set, levels=c("core_13", "identifiler_15", "expanded_20", "supplementary", "autosomal_29"))
+ann_text1$relationship_known_factor <- factor(ann_text1$relationship_known, levels=c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated"))
+
 ggplot(combined_lrs, aes(x = relationship_tested, y = LR, fill = population_label)) +
     geom_boxplot(position = position_dodge(width = 0.9)) +
     facet_grid(relationship_known_factor ~ loci_set_factor, scales = "free_y") +
@@ -163,29 +185,14 @@ ggplot(combined_lrs, aes(x = relationship_tested, y = LR, fill = population_labe
       y = "LR",
       fill = "Population"
     ) +
+    geom_text(data = ann_text1, aes(y = LR), label = "*", size = 10) +
     theme_minimal(base_size = 24) +
     scale_fill_manual(values = color_palette_race) +
     theme(
       axis.text.x = element_text(angle = 45, hjust = 1)
     ) +
-  scale_y_log10()
+    scale_y_log10()
 
-
-ggplot(combined_lrs, aes(x = relationship_tested, y = LR, fill = population_label)) +
-    geom_boxplot(position = position_dodge(width = 0.9)) +
-    facet_grid(relationship_known_factor ~ loci_set_factor, scales = "free_y") +
-    labs(
-      title = "LR Distributions for Relationship Comparisons",
-      x = "Tested Relationship Type",
-      y = "LR",
-      fill = "Population"
-    ) +
-    theme_minimal(base_size = 24) +
-    scale_fill_manual(values = color_palette_race) +
-    theme(
-      axis.text.x = element_text(angle = 45, hjust = 1)
-    ) +
-  scale_y_log10()
 
 #ggplot(combined_lrs, aes(x = relationship_known_factor, y = LR, fill = population)) +
 #    geom_boxplot(position = position_dodge(width = 0.9)) +
