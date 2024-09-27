@@ -27,7 +27,7 @@ knitr::opts_chunk$set(eval = FALSE, echo = TRUE, warning = FALSE, fig.width = 9,
 
 
 # load necessary libraries
-library(tidyverse)
+library(dplyr)
 library(viridis)
 library(knitr)
 library(scales)
@@ -35,6 +35,9 @@ library(rempsyc)
 library(patchwork)
 library(ggnewscale)
 library(gridExtra)
+library(purrr)
+library(MASS)
+library(pscl)
 ```
 
 ## Data Preparation
@@ -102,9 +105,9 @@ df <- mother_data %>%
     RACE = factor(RACE, levels = c("White", "Black/African American"))
   ) %>%
   # Filter for African American and European American women
-  filter(RACE %in% c("Black/African American", "White")) %>%
+  filter(RACE %in% c("Black/African American", "White")) 
   # Select and reorder columns
-  select(YEAR, SEX, AGE, BIRTHYR, RACE, CHBORN, AGE_RANGE, chborn_num)
+df <- select(mother_data, YEAR, SEX, AGE, BIRTHYR, RACE, CHBORN, AGE_RANGE, chborn_num)
 
 # Display the first few rows of the processed data
 head(df)
@@ -121,6 +124,7 @@ table(df$RACE)
 # Count of observations by AGE_RANGE
 table(df$AGE_RANGE)
 ```
+
 
 # Distribution of Number of Children Across Census Years
 First we visualize the general trends in the frequency of the number of children for African American and European American mothers across the Census years by age group. 
@@ -236,42 +240,6 @@ This should be done for each subset of the data (race × census year × age rang
 - **Check for Zero-Inflation:**
     - Calculate the proportion of zeros in each subset.
     - If the proportion of zeros is significantly higher than expected under a standard Poisson or negative binomial model, consider zero-inflated models.
-```{r}
-## By RACE
-result_race <- df %>%
-  group_by(RACE) %>% 
-  summarize(mean = mean(chborn_num, na.rm = TRUE),
-            variance = var(chborn_num, na.rm = TRUE), 
-            total = n(),
-            zero_count = sum(chborn_num == 0, na.rm = TRUE),
-            zero_proportion = zero_count / total) %>%
-  mutate(overdispersion = ifelse(variance > mean, TRUE, FALSE), zero_inflation = ifelse(zero_proportion > 0.5, TRUE, FALSE)) 
-```
-
-```{r}
-## By Census YEAR
-result_year <- df %>%
-  group_by(YEAR) %>% 
-  summarize(mean = mean(chborn_num, na.rm = TRUE),
-            variance = var(chborn_num, na.rm = TRUE), 
-            total = n(),
-            zero_count = sum(chborn_num == 0, na.rm = TRUE),
-            zero_proportion = zero_count / total) %>%
-  mutate(overdispersion = ifelse(variance > mean, TRUE, FALSE), zero_inflation = ifelse(zero_proportion > 0.5, TRUE, FALSE))
-```
-
-
-```{r}
-## By Age range
-result_age <- df %>%
-  group_by(AGE_RANGE) %>% 
-  summarize(mean = mean(chborn_num, na.rm = TRUE),
-            variance = var(chborn_num, na.rm = TRUE), 
-            total = n(),
-            zero_count = sum(chborn_num == 0, na.rm = TRUE),
-            zero_proportion = zero_count / total) %>%
-  mutate(overdispersion = ifelse(variance > mean, TRUE, FALSE), zero_inflation = ifelse(zero_proportion > 0.5, TRUE, FALSE))
-```
 
 
 **2: Model Selection**
@@ -290,66 +258,8 @@ result_age <- df %>%
 
 - **Model:** Poisson Distribution
 - **Justification:** Appropriate if mean equals variance and no excess zeros.
-```{r}
-result_race$model <- NA  # Create an empty column for the model
 
-for(i in 1:nrow(result)) {
-  if(result$overdispersion[i] & result$zero_inflation[i]) {
-    result$model[i] <- "Zero-Inflated Negative Binomial (ZINB)"
-  } else if(result$overdispersion[i] & !result$zero_inflation[i]) {
-    result$model[i] <- "Negative Binomial"
-  } else if(!result$overdispersion[i] & !result$zero_inflation[i]) {
-    result$model[i] <- "Poisson"
-  } else {
-    result$model[i] <- "Check conditions"
-  }
-}
-
-model_select_race <- result %>% select(RACE, YEAR, AGE_RANGE, overdispersion, zero_inflation, model)
-
-kable(model_select_race, caption = "Overdispersion and Zero-Inflation for Different Groups")
-```
-
-```{r}
-result_year$model <- NA  # Create an empty column for the model
-
-for(i in 1:nrow(result)) {
-  if(result$overdispersion[i] & result$zero_inflation[i]) {
-    result$model[i] <- "Zero-Inflated Negative Binomial (ZINB)"
-  } else if(result$overdispersion[i] & !result$zero_inflation[i]) {
-    result$model[i] <- "Negative Binomial"
-  } else if(!result$overdispersion[i] & !result$zero_inflation[i]) {
-    result$model[i] <- "Poisson"
-  } else {
-    result$model[i] <- "Check conditions"
-  }
-}
-
-model_select_year <- result %>% select(RACE, YEAR, AGE_RANGE, overdispersion, zero_inflation, model)
-
-kable(model_select_year, caption = "Overdispersion and Zero-Inflation for Different Groups")
-```
-
-```{r}
-result_age$model <- NA  # Create an empty column for the model
-
-for(i in 1:nrow(result)) {
-  if(result$overdispersion[i] & result$zero_inflation[i]) {
-    result$model[i] <- "Zero-Inflated Negative Binomial (ZINB)"
-  } else if(result$overdispersion[i] & !result$zero_inflation[i]) {
-    result$model[i] <- "Negative Binomial"
-  } else if(!result$overdispersion[i] & !result$zero_inflation[i]) {
-    result$model[i] <- "Poisson"
-  } else {
-    result$model[i] <- "Check conditions"
-  }
-}
-
-model_select_age <- result %>% select(RACE, YEAR, AGE_RANGE, overdispersion, zero_inflation, model)
-
-kable(model_select_age, caption = "Overdispersion and Zero-Inflation for Different Groups")
-```
-
+  
 **3: Fit Models to Each Subset**
 
 - **For Each Subset:**
@@ -360,21 +270,6 @@ kable(model_select_age, caption = "Overdispersion and Zero-Inflation for Differe
     - Use goodness-of-fit measures such as Akaike Information Criterion (AIC) or Bayesian Information Criterion (BIC).
     - Lower AIC/BIC indicates a better-fitting model.
     - Perform likelihood ratio tests where appropriate.
-```{r}
-## Fit a Poisson model
-poisson_models <- df %>%
-  group_by(RACE, YEAR, AGE_RANGE) %>%
-  group_split() %>%
-  map(~ glm(chborn_num ~ RACE+YEAR+AGE_RANGE, data = ., family = poisson()))
-
-## Fit a negative binomial model
-nb_model <- df %>%
-  group_by(RACE, YEAR, AGE_RANGE) %>%
-  group_split() %>%
-  map(~ glm.nb(chborn_num ~ RACE + YEAR + AGE_RANGE, data = .))
-
-```
-
 
 ### Step 2: Model Comparison Using AIC or BIC
 Once the models are fitted, compare them using goodness-of-fit criteria like **AIC** or **BIC** for each subset. The model with the **lowest AIC/BIC** is the best fit for that subset.
@@ -388,19 +283,11 @@ Once the models are fitted, compare them using goodness-of-fit criteria like **A
     - Compare zero-inflated models to standard models to assess if zero-inflation significantly improves the fit.
 
 ```{r}
-# example code to start you off. edit and comment appropriately
-
-# Load necessary libraries
-library(MASS)   # For negative binomial
-library(pscl)   # For zero-inflated models
-
-# Suppose 'df' is your dataset
-
-# Subset data for each race
+### Subset of race
 df_black <- subset(df, RACE == "Black/African American")
 df_white <- subset(df, RACE == "White")
 
-# Example for Black women over 40 in 1990 census
+## Subset of Black population
 
 # Calculate mean and variance
 mean_black <- mean(df_black$chborn_num)
@@ -408,12 +295,33 @@ var_black <- var(df_black$chborn_num)
 
 # Check for overdispersion
 if (var_black > mean_black) {
-  # Overdispersion present
+  print("Overdispersion is present in the Black population data.")
+} else {
+  print("No overdispersion detected.")
 }
 
 # Check for zero-inflation
-prop_zero <- sum(df_black$chborn_num == 0) / nrow(df_black)
-# Compare prop_zero to expected under Poisson or NB
+prop_zero_black <- sum(df_black$chborn_num == 0) / nrow(df_black)
+
+# Compare prop_zero to expected under Poisson
+exp_poisson_black <- exp(-mean_black)
+
+# Compare prop_zero to expected under Negative Binomial
+standard_nb_black <- glm.nb(chborn_num ~ 1, data = df_black)
+theta_nb_black <- standard_nb$theta
+exp_zero_nb_black <- (theta_nb / (theta_nb_black + mean_black))^theta_nb_black
+
+if (prop_zero_black > exp_poisson_black | prop_zero_black > exp_zero_nb_black){
+  print("Zero-inflation is present in the Black population data.")
+} else {
+  print("No evidence of zero-inflation.")
+}
+
+# Fit a Poisson model
+poisson_model_black <- glm(chborn_num ~ AGE_RANGE + YEAR, data = df_black, family = poisson())
+
+# Fit a Zero-Inflated Poisson (ZIP) and  model
+zip_model_black <- zeroinfl(chborn_num ~ AGE_RANGE + YEAR | 1, data = df_black, dist = "poisson")
 
 # Fit Negative Binomial Model
 nb_model_black <- glm.nb(chborn_num ~ AGE_RANGE + YEAR, data = df_black)
@@ -422,12 +330,23 @@ nb_model_black <- glm.nb(chborn_num ~ AGE_RANGE + YEAR, data = df_black)
 zinb_model_black <- zeroinfl(chborn_num ~ AGE_RANGE + YEAR | 1, data = df_black, dist = "negbin")
 
 # Compare models using AIC
-AIC(nb_model_black, zinb_model_black)
+aic_values_black <- AIC(poisson_model_black,zip_model_black,nb_model_black,zinb_model_black)
+print(aic_values_black)
+```
 
-# Repeat for White women and other subsets
+```{r}
 
 ```
 
+```{r}
+### Subset for YEAR
+
+```
+
+```{r}
+### Subset for Age
+
+```
 
 ### Step 3: Record the Best Model for Each Subset
 Create a table or data frame where you store the best model for each combination of race, census year, and age range based on AIC/BIC. For example:

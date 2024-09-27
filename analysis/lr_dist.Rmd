@@ -30,6 +30,8 @@ library(furrr)
 library(data.table)
 library(future)
 library(parallel)
+library(dichromat)
+library(MASS)
 
 file_type<-"pdf" #option to toggle between pdf or png outputs, pdf being faster
 
@@ -76,7 +78,7 @@ calculate_proportions_exceeding_cutoffs <- function(input_df, cutoffs) {
       exceeds_cutoff_0_01 = LR > cutoff_0_01
     )]
 
-  df_no_cutoffs<-df_with_cutoffs[!df_with_cutoffs$relationship_tested == "unrelated",]
+  df_no_cutoffs<-df_with_cutoffs#[!df_with_cutoffs$relationship_tested == "unrelated",]
   proportions_exceeding <- df_no_cutoffs[,    list(
       proportion_exceeding_fixed = sum(exceeds_fixed_cutoff) / .N,
       proportion_exceeding_1 = sum(exceeds_cutoff_1, na.rm = TRUE) / .N,
@@ -97,15 +99,26 @@ combined_lrs$loci_set_factor <- factor(combined_lrs$loci_set, levels=c("core_13"
 # make sure relationships are in the order we want
 combined_lrs$relationship_known_factor <- factor(combined_lrs$relationship_known, levels=c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated"))
 
+# race labels (can be changed)
+combined_lrs <- combined_lrs %>%
+                     mutate(population_label = case_when(population == "AfAm" ~ "African-American",
+                                                         population == "Asian" ~ "Asian",
+                                                         population == "Cauc" ~ "Caucasian",
+                                                         population == "Hispanic" ~ "Hispanic"))
+
 summary_stats <- combined_lrs[,    list(
   mean_LR = mean(LR),
   lower_95 = quantile(LR, 0.025),
   upper_95 = quantile(LR, 0.975)#,
 ),
-by=c("relationship_tested","population","loci_set_factor")]
+by=c("relationship_tested","population_label","loci_set_factor")]
 
-ggplot(summary_stats, aes(x = loci_set_factor, y = mean_LR, group = population, color = population)) +
-      geom_line(size = 1) +
+color_palette_race = c("#AA4499", "#DDCC77", "#88CCEE", "#117733")
+
+ggplot(summary_stats, aes(x = loci_set_factor, y = mean_LR, group = population_label, color = population_label)) +
+      geom_line(size = 2) +
+      # geom_errorbar(aes(x = loci_set_factor, ymin=lower_95, ymax=upper_95, group = population, color = population), width=.2,
+      #            position=position_dodge(.1))  +
       facet_wrap(~ relationship_tested,  ncol = 2) +
       scale_y_log10() +
       labs(
@@ -114,14 +127,16 @@ ggplot(summary_stats, aes(x = loci_set_factor, y = mean_LR, group = population, 
         y = "Combined LR",
         color = "Population"
       ) +
+      scale_color_manual(values = color_palette_race) +
       theme_minimal(base_size = 24) +
       theme(
         axis.text.x = element_text(angle = 45, hjust = 1),
         legend.position = "bottom"
       )
 
+#combined_lrs$LR = ifelse(combined_lrs$LR < 1e-32, 1e-32, combined_lrs$LR)
 
-ggplot(combined_lrs, aes(x = relationship_tested, y = LR, fill = population, color = population)) +
+ggplot(combined_lrs, aes(x = relationship_tested, y = LR, fill = population_label, color = population_label)) +
     geom_boxplot(position = position_dodge(width = 0.9)) +
     facet_wrap(~ loci_set_factor, scales = "fixed") +
     labs(
@@ -131,43 +146,72 @@ ggplot(combined_lrs, aes(x = relationship_tested, y = LR, fill = population, col
       fill = "Population",
       color = "Population"
     ) +
+    scale_color_manual(values = color_palette_race) +
+    scale_fill_manual(values = color_palette_race) +
     theme_minimal(base_size = 24) +
     theme(
       axis.text.x = element_text(angle = 45, hjust = 1)
     ) +
     scale_y_log10()
 
-ggplot(combined_lrs, aes(x = relationship_tested, y = LR, fill = population)) +
+gb_df = combined_lrs %>% 
+    group_by(relationship_known, relationship_tested, loci_set) %>%
+    summarize(mean = mean(LR))
+
+gb_df$indicator = ifelse(gb_df$mean == 0, "*", "")
+
+ann_text1 <- tribble(
+  ~relationship_tested, ~LR, ~relationship_known, ~loci_set, ~population_label,
+  "parent_child", 0, "cousins", "expanded_20", "African-American",
+  "parent_child", 0, "cousins", "supplementary", "African-American",
+  "parent_child", 0, "cousins", "autosomal_29", "African-American",
+  "parent_child", 0, "second_cousins", "expanded_20", "African-American",
+  "parent_child", 0, "second_cousins", "supplementary", "African-American",
+  "parent_child", 0, "second_cousins", "autosomal_29", "African-American",
+  "parent_child", 0, "unrelated", "expanded_20", "African-American",
+  "parent_child", 0, "unrelated", "supplementary", "African-American",
+  "parent_child", 0, "unrelated", "autosomal_29", "African-American",
+  "parent_child", 0, "unrelated", "identifiler_15", "African-American"
+)
+ann_text1$loci_set_factor <- factor(ann_text1$loci_set, levels=c("core_13", "identifiler_15", "expanded_20", "supplementary", "autosomal_29"))
+ann_text1$relationship_known_factor <- factor(ann_text1$relationship_known, levels=c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated"))
+
+ggplot(combined_lrs, aes(x = relationship_tested, y = LR, fill = population_label)) +
     geom_boxplot(position = position_dodge(width = 0.9)) +
-    facet_grid(relationship_known_factor ~ loci_set_factor) +
+    facet_grid(relationship_known_factor ~ loci_set_factor, scales = "free_y") +
     labs(
       title = "LR Distributions for Relationship Comparisons",
       x = "Tested Relationship Type",
       y = "LR",
       fill = "Population"
     ) +
+    geom_text(data = ann_text1, aes(y = LR), label = "*", size = 10) +
     theme_minimal(base_size = 24) +
+    scale_fill_manual(values = color_palette_race) +
     theme(
       axis.text.x = element_text(angle = 45, hjust = 1)
     ) +
     scale_y_log10()
 
-ggplot(combined_lrs, aes(x = relationship_known_factor, y = log(LR), fill = population)) +
-    geom_boxplot(position = position_dodge(width = 0.9)) +
-    facet_wrap(.~relationship_tested,nrow = 5) +
-    labs(
-      title = "LR Distributions by Tested Realtionship Type and Population",
-      x = "Known Relationship Type",
-      y = "LR",
-      fill = "Population"
-    ) +
-    theme_minimal(base_size = 24) +
-    theme(
-      axis.text.x = element_text(angle = 45, hjust = 1)
-    )
+
+#ggplot(combined_lrs, aes(x = relationship_known_factor, y = LR, fill = population)) +
+#    geom_boxplot(position = position_dodge(width = 0.9)) +
+#    facet_wrap(.~relationship_tested,nrow = 5, scales = "free_y") +
+#    labs(
+#      title = "LR Distributions by Tested Realtionship Type and Population",
+#      x = "Known Relationship Type",
+#      y = "LR",
+#      fill = "Population"
+#    ) +
+#    theme_minimal(base_size = 24) +
+#    theme(
+#      axis.text.x = element_text(angle = 45, hjust = 1)
+#    )
 ```
 Plots showing the distribution of likelihood ratios relative to the cutoffs for each hypothesis type (cousins, full siblings, half siblings, parent_child, and second cousins)
 ```{r lr_distributions, results =FALSE,warning=FALSE,message=FALSE, echo = FALSE,fig.width = 20,fig.height = 15}
+# color palettte
+my_colors = colorRampPalette(c("#FFB000","#F77A2E","#DE3A8A","#7253FF","#5E8BFF"))(6)
 
 hypotheses = c("parent_child","full_siblings","cousins","half_siblings","second_cousins")
 plot_list = c()
@@ -175,38 +219,35 @@ i=1
 for(hypothesis in hypotheses){
   cutoffs <- calculate_cutoffs(combined_lrs, c(1, 0.1, 0.01), hypothesis = hypothesis)
   combined_lrs_hyp_cutoffs = merge(combined_lrs, cutoffs, by = c("population","loci_set"), all.x = TRUE)
-
-  combined_lrs_hyp_cutoffs = combined_lrs_hyp_cutoffs %>%
-      mutate(relationship_known_label = case_when(relationship_known == "cousins" ~ "Cousins",
-                                                  relationship_known == "full_siblings" ~ "Full Siblings",
-                                                  relationship_known == "half_siblings" ~ "Half Siblings",
-                                                  relationship_known == "parent_child" ~ "Parent-Child",
-                                                  relationship_known == "second_cousins" ~ "Second Cousins",
-                                                  relationship_known == "unrelated" ~ "Unrelated"))
-    
+  combined_lrs_hyp_cutoffs$relationship_known_factor <- factor(combined_lrs_hyp_cutoffs$relationship_known, levels=c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated"))
+  
+  combined_lrs_hyp_cutoffs$loci_set_factor <- factor(combined_lrs_hyp_cutoffs$loci_set, levels=c("core_13", "identifiler_15", "expanded_20", "supplementary", "autosomal_29"))
+  
   plot1 = ggplot(data = combined_lrs_hyp_cutoffs) +
-      geom_density(aes(x = log(LR), fill =relationship_known_label),alpha = 0.5) + 
+      geom_density(aes(x = log(LR), fill =relationship_known_factor),alpha = 0.5) + 
       geom_vline(aes(xintercept = log(fixed_cutoff), col = "Fixed cutoff (1)"),linetype = "dashed") +
       geom_vline(aes(xintercept = log(cutoff_0_1), col = "0.1% FPR"),linetype = "dashed") +
       geom_vline(aes(xintercept = log(cutoff_0_01), col = "0.01% FPR"),linetype = "dashed") +
       geom_vline(aes(xintercept = log(cutoff_1), col = "1% FPR"),linetype = "dashed") +
       ggtitle(paste0("Log Likelihood Ratios for the ", hypothesis,  " hypothesis")) +
+      scale_fill_manual(values = my_colors, labels = c("parent_child","full_siblings","half_siblings","cousins","second_cousins","unrelated")) +
       scale_color_manual(name = paste0("Hypothesis: ",hypothesis), labels = c("0.1% FPR", "0.01% FPR","1% FPR","Fixed cutoff (1)"), values = c("red","blue","forestgreen","black")) +
-      facet_grid(loci_set~population, scales = "free") +
+      facet_grid(loci_set_factor~population_label, scales = "free") +
       theme(axis.text = element_text(size = 28), axis.title = element_text(size = 28)) +
       guides(fill=guide_legend(title="Known Relationship")) +
       xlab("Log Likelihood Ratio (LLR)") + ylab("Frequency") +
       theme_minimal(base_size = 24)
 
   plot2 = ggplot(data = combined_lrs_hyp_cutoffs) +
-      geom_histogram(aes(x = log(LR), fill =relationship_known_label),alpha = 0.5) + 
+      geom_histogram(aes(x = log(LR), fill =relationship_known_factor),alpha = 0.5) + 
       geom_vline(aes(xintercept = log(fixed_cutoff), col = "Fixed cutoff (1)"),linetype = "dashed") +
       geom_vline(aes(xintercept = log(cutoff_0_1), col = "0.1% FPR"),linetype = "dashed") +
       geom_vline(aes(xintercept = log(cutoff_0_01), col = "0.01% FPR"),linetype = "dashed") +
       geom_vline(aes(xintercept = log(cutoff_1), col = "1% FPR"),linetype = "dashed") +
       ggtitle(paste0("Log Likelihood Ratios for the ", hypothesis,  " hypothesis")) +
+      scale_fill_manual(values = my_colors, labels = c("parent_child","full_siblings","half_siblings","cousins","second_cousins","unrelated")) +
       scale_color_manual(name = paste0("Hypothesis: ",hypothesis), labels = c("0.1% FPR", "0.01% FPR","1% FPR","Fixed cutoff (1)"), values = c("red","blue","forestgreen","black")) +
-      facet_grid(loci_set~population, scales = "free") +
+      facet_grid(loci_set_factor~population_label, scales = "free") +
       theme(axis.text = element_text(size = 28), axis.title = element_text(size = 28)) +
       guides(fill=guide_legend(title="Known Relationship")) +
       xlab("Log Likelihood Ratio (LLR)") + ylab("Frequency") +
@@ -242,11 +283,20 @@ Plots showing the proportion exceeding cutoffs for the parent-child and full sib
 cutoffs <- calculate_cutoffs(combined_lrs, c(1, 0.1, 0.01), hypothesis = "parent_child")
 proportion_exceeding = calculate_proportions_exceeding_cutoffs(input_df = combined_lrs, cutoffs = cutoffs) 
 
+# race labels (can be changed)
+proportion_exceeding <- proportion_exceeding %>%
+                     mutate(population_label = case_when(population == "AfAm" ~ "African-American",
+                                                         population == "Asian" ~ "Asian",
+                                                         population == "Cauc" ~ "Caucasian",
+                                                         population == "Hispanic" ~ "Hispanic"))
+
 proportions_exceeding_cutoffs_long = proportion_exceeding %>%
   pivot_longer(
     cols = c(proportion_exceeding_1,proportion_exceeding_0_1,proportion_exceeding_0_01,proportion_exceeding_fixed),
     names_to = c("Cutoff"),
     values_to = "Value")
+
+proportions_exceeding_cutoffs_long$loci_set_factor <- factor(proportions_exceeding_cutoffs_long$loci_set, levels=c("core_13", "identifiler_15", "expanded_20", "supplementary", "autosomal_29"))
 
 proportions_exceeding_cutoffs_long = proportions_exceeding_cutoffs_long %>%
   mutate(relationship_tested_label = case_when(relationship_tested == "cousins" ~ "Cousins",
@@ -268,7 +318,7 @@ proportions_exceeding_cutoffs_long$relationship_known_factor <- factor(proportio
 
 proportions_exceeding_cutoffs_long_parent_child = proportions_exceeding_cutoffs_long[proportions_exceeding_cutoffs_long$relationship_tested == "parent_child",]
 
-ggplot(proportions_exceeding_cutoffs_long_parent_child, aes(x = relationship_known_factor, y = Value, fill = population, color = population)) +
+ggplot(proportions_exceeding_cutoffs_long_parent_child, aes(x = relationship_known_factor, y = Value, fill = population_label, color = population_label)) +
   geom_bar(stat = "identity", position = position_dodge(width = 0.9)) +
   facet_grid(cutoff_label ~ loci_set_factor, scales = "fixed") +
   labs(
@@ -278,6 +328,8 @@ ggplot(proportions_exceeding_cutoffs_long_parent_child, aes(x = relationship_kno
     fill = "Population",
     color = "Population"
   ) +
+  scale_color_manual(values = color_palette_race) +
+  scale_fill_manual(values = color_palette_race) +
   theme_minimal(base_size = 24) +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1)
@@ -286,7 +338,7 @@ ggplot(proportions_exceeding_cutoffs_long_parent_child, aes(x = relationship_kno
 
 proportions_exceeding_cutoffs_siblings = proportions_exceeding_cutoffs_long[proportions_exceeding_cutoffs_long$relationship_tested == "full_siblings",]
 
-ggplot(proportions_exceeding_cutoffs_siblings, aes(x = relationship_known_factor, y = Value, fill = population, color = population)) +
+ggplot(proportions_exceeding_cutoffs_siblings, aes(x = relationship_known_factor, y = Value, fill = population_label, color = population_label)) +
   geom_bar(stat = "identity", position = position_dodge(width = 0.9)) +
   facet_grid(cutoff_label ~ loci_set_factor, scales = "fixed") +
   labs(
@@ -296,6 +348,8 @@ ggplot(proportions_exceeding_cutoffs_siblings, aes(x = relationship_known_factor
     fill = "Population",
     color = "Population"
   ) +
+  scale_color_manual(values = color_palette_race) +
+  scale_fill_manual(values = color_palette_race) +
   theme_minimal(base_size = 24) +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1)
