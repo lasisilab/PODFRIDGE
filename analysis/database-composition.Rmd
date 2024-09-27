@@ -67,7 +67,7 @@ zhang_data <- calculate_proportions(zhang_data)
 census_data <- calculate_proportions(census_data)
 ```
 
-Here is the data from Bryc et al. and Zhang et al., estimating the self-identified ethnic and racial groups of participants in the 23andMe database. [DESCRIBE HERE THE DIFFERENCE BETWEEN THE TWO]
+Here is the data from Bryc et al. and Zhang et al., estimating the self-identified ethnic and racial groups of participants in the 23andMe database.
 
 ```{r}
 # Display the processed data
