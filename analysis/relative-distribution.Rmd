@@ -28,6 +28,7 @@ knitr::opts_chunk$set(eval = FALSE, echo = TRUE, warning = FALSE, fig.width = 9,
 
 # load necessary libraries
 library(dplyr)
+library(tidyverse)
 library(viridis)
 library(knitr)
 library(scales)
@@ -38,6 +39,8 @@ library(gridExtra)
 library(purrr)
 library(MASS)
 library(pscl)
+library(ggplot2)
+
 ```
 
 ## Data Preparation
@@ -105,9 +108,9 @@ df <- mother_data %>%
     RACE = factor(RACE, levels = c("White", "Black/African American"))
   ) %>%
   # Filter for African American and European American women
-  filter(RACE %in% c("Black/African American", "White")) 
+  filter(RACE %in% c("Black/African American", "White")) %>%
   # Select and reorder columns
-df <- select(mother_data, YEAR, SEX, AGE, BIRTHYR, RACE, CHBORN, AGE_RANGE, chborn_num)
+  dplyr::select(YEAR, SEX, AGE, BIRTHYR, RACE, CHBORN, AGE_RANGE, chborn_num)
 
 # Display the first few rows of the processed data
 head(df)
@@ -281,12 +284,80 @@ Once the models are fitted, compare them using goodness-of-fit criteria like **A
     - For negative binomial models, examine the estimated dispersion parameter.
 - **Vuong Test:**
     - Compare zero-inflated models to standard models to assess if zero-inflation significantly improves the fit.
+```{r}
+# Get the list of unique races
+races <- unique(df$RACE)
 
+# Create an empty list to store AIC results for each race
+aic_results_race <- list()
+
+# Loop through each race
+for (race in races) {
+  
+  # Subset data for the current race
+  df_race <- subset(df, RACE == race)
+  
+  # Calculate mean and variance
+  mean_race <- mean(df_race$chborn_num)
+  var_race <- var(df_race$chborn_num)
+  
+  # Check for overdispersion
+  if (var_race > mean_race) {
+    print(paste("Overdispersion is present in the", race, "population data."))
+  } else {
+    print(paste("No overdispersion detected in the", race, "data."))
+  }
+  
+  # Check for zero-inflation
+  prop_zero_race <- sum(df_race$chborn_num == 0) / nrow(df_race)
+  
+  # Compare prop_zero to expected under Poisson
+  exp_poisson_race <- exp(-mean_race)
+  
+  # Compare prop_zero to expected under Negative Binomial
+  standard_nb_race <- glm.nb(chborn_num ~ 1, data = df_race)
+  theta_nb_race <- standard_nb_race$theta
+  exp_zero_nb_race <- (theta_nb_race / (theta_nb_race + mean_race))^theta_nb_race
+  
+  if (prop_zero_race > exp_poisson_race | prop_zero_race > exp_zero_nb_race) {
+    print(paste("Zero-inflation is present in the", race, "population data."))
+  } else {
+    print(paste("No evidence of zero-inflation in the", race, "data."))
+  }
+  
+  # Fit a Poisson model
+  poisson_model_race <- glm(chborn_num ~ AGE_RANGE + YEAR, data = df_race, family = poisson())
+  
+  # Fit a Zero-Inflated Poisson (ZIP) model
+  zip_model_race <- zeroinfl(chborn_num ~ AGE_RANGE + YEAR | 1, data = df_race, dist = "poisson")
+  
+  # Fit Negative Binomial Model
+  nb_model_race <- glm.nb(chborn_num ~ AGE_RANGE + YEAR, data = df_race)
+  
+  # Fit Zero-Inflated Negative Binomial Model
+  zinb_model_race <- zeroinfl(chborn_num ~ AGE_RANGE + YEAR | 1, data = df_race, dist = "negbin")
+  
+  # Compare models using AIC
+  aic_values_race <- AIC(poisson_model_race, zip_model_race, nb_model_race, zinb_model_race)
+  
+  # Store the AIC results in the list, using the race as the key
+  aic_results_race[[as.character(race)]] <- aic_values_race
+}
+
+# Print the AIC results for each race
+print(aic_results_race)
+
+```
+
+    
 ```{r}
 ### Subset of race
 df_black <- subset(df, RACE == "Black/African American")
 df_white <- subset(df, RACE == "White")
+```
 
+
+```{r}
 ## Subset of Black population
 
 # Calculate mean and variance
@@ -308,8 +379,8 @@ exp_poisson_black <- exp(-mean_black)
 
 # Compare prop_zero to expected under Negative Binomial
 standard_nb_black <- glm.nb(chborn_num ~ 1, data = df_black)
-theta_nb_black <- standard_nb$theta
-exp_zero_nb_black <- (theta_nb / (theta_nb_black + mean_black))^theta_nb_black
+theta_nb_black <- standard_nb_black$theta
+exp_zero_nb_black <- (theta_nb_black / (theta_nb_black + mean_black))^theta_nb_black
 
 if (prop_zero_black > exp_poisson_black | prop_zero_black > exp_zero_nb_black){
   print("Zero-inflation is present in the Black population data.")
@@ -335,16 +406,340 @@ print(aic_values_black)
 ```
 
 ```{r}
+## Subset of White population
 
+# Calculate mean and variance
+mean_white <- mean(df_white$chborn_num)
+var_white <- var(df_white$chborn_num)
+
+# Check for overdispersion
+if (var_white > mean_white) {
+  print("Overdispersion is present in the white population data.")
+} else {
+  print("No overdispersion detected.")
+}
+
+# Check for zero-inflation
+prop_zero_white <- sum(df_white$chborn_num == 0) / nrow(df_white)
+
+# Compare prop_zero to expected under Poisson
+exp_poisson_white <- exp(-mean_white)
+
+# Compare prop_zero to expected under Negative Binomial
+standard_nb_white <- glm.nb(chborn_num ~ 1, data = df_white)
+theta_nb_white <- standard_nb_white$theta
+exp_zero_nb_white <- (theta_nb_white / (theta_nb_white + mean_white))^theta_nb_white
+
+if (prop_zero_white > exp_poisson_white | prop_zero_white > exp_zero_nb_white){
+  print("Zero-inflation is present in the white population data.")
+} else {
+  print("No evidence of zero-inflation.")
+}
+
+# Fit a Poisson model
+poisson_model_white <- glm(chborn_num ~ AGE_RANGE + YEAR, data = df_white, family = poisson())
+
+# Fit a Zero-Inflated Poisson (ZIP) and  model
+zip_model_white <- zeroinfl(chborn_num ~ AGE_RANGE + YEAR | 1, data = df_white, dist = "poisson")
+
+# Fit Negative Binomial Model
+nb_model_white <- glm.nb(chborn_num ~ AGE_RANGE + YEAR, data = df_white)
+
+# Fit Zero-Inflated Negative Binomial Model if necessary
+zinb_model_white <- zeroinfl(chborn_num ~ AGE_RANGE + YEAR | 1, data = df_white, dist = "negbin")
+
+# Compare models using AIC
+aic_values_white <- AIC(poisson_model_white,zip_model_white,nb_model_white,zinb_model_white)
+print(aic_values_white)
 ```
 
 ```{r}
-### Subset for YEAR
+# List of years
+years <- c(1960, 1970, 1980, 1990)
 
+# Create an empty list to store AIC results for each year
+aic_results <- list()
+
+# Loop through each year
+for (year in years) {
+  
+  # Subset data for the current year
+  df_year <- subset(df, YEAR == as.character(year))
+  
+  # Calculate mean and variance
+  mean_year <- mean(df_year$chborn_num)
+  var_year <- var(df_year$chborn_num)
+  
+  # Check for overdispersion
+  if (var_year > mean_year) {
+    print(paste("Overdispersion is present in the", year, "population data."))
+  } else {
+    print(paste("No overdispersion detected in the", year, "data."))
+  }
+  
+  # Check for zero-inflation
+  prop_zero_year <- sum(df_year$chborn_num == 0) / nrow(df_year)
+  
+  # Compare prop_zero to expected under Poisson
+  exp_poisson_year <- exp(-mean_year)
+  
+  # Compare prop_zero to expected under Negative Binomial
+  standard_nb_year <- glm.nb(chborn_num ~ 1, data = df_year)
+  theta_nb_year <- standard_nb_year$theta
+  exp_zero_nb_year <- (theta_nb_year / (theta_nb_year + mean_year))^theta_nb_year
+  
+  if (prop_zero_year > exp_poisson_year | prop_zero_year > exp_zero_nb_year) {
+    print(paste("Zero-inflation is present in the", year, "population data."))
+  } else {
+    print(paste("No evidence of zero-inflation in the", year, "data."))
+  }
+  
+  # Fit a Poisson model
+  poisson_model_year <- glm(chborn_num ~ AGE_RANGE + RACE, data = df_year, family = poisson())
+  
+  # Fit a Zero-Inflated Poisson (ZIP) model
+  zip_model_year <- zeroinfl(chborn_num ~ AGE_RANGE + RACE | 1, data = df_year, dist = "poisson")
+  
+  # Fit Negative Binomial Model
+  nb_model_year <- glm.nb(chborn_num ~ AGE_RANGE + RACE, data = df_year)
+  
+  # Fit Zero-Inflated Negative Binomial Model
+  zinb_model_year <- zeroinfl(chborn_num ~ AGE_RANGE + RACE | 1, data = df_year, dist = "negbin")
+  
+  # Compare models using AIC
+  aic_values_year <- AIC(poisson_model_year, zip_model_year, nb_model_year, zinb_model_year)
+  
+  # Store the AIC results in the list, using the year as the key
+  aic_results[[as.character(year)]] <- aic_values_year
+}
+
+# Print the AIC results for each year
+print(aic_results)
+
+```
+
+
+```{r}
+### Subset for YEAR
+df_1960 <- subset(df, YEAR == "1960")
+df_1970 <- subset(df, YEAR == "1970")
+df_1980 <- subset(df, YEAR == "1980")
+df_1990 <- subset(df, YEAR == "1990")
+```
+
+```{r}
+## subset of 1960
+# Calculate mean and variance
+mean_1960 <- mean(df_1960$chborn_num)
+var_1960 <- var(df_1960$chborn_num)
+
+# Check for overdispersion
+if (var_1960 > mean_1960) {
+  print("Overdispersion is present in the 1960 population data.")
+} else {
+  print("No overdispersion detected.")
+}
+
+# Check for zero-inflation
+prop_zero_1960 <- sum(df_1960$chborn_num == 0) / nrow(df_1960)
+
+# Compare prop_zero to expected under Poisson
+exp_poisson_1960 <- exp(-mean_1960)
+
+# Compare prop_zero to expected under Negative Binomial
+standard_nb_1960 <- glm.nb(chborn_num ~ 1, data = df_1960)
+theta_nb_1960 <- standard_nb_1960$theta
+exp_zero_nb_1960 <- (theta_nb_1960 / (theta_nb_1960 + mean_1960))^theta_nb_1960
+
+if (prop_zero_1960 > exp_poisson_1960 | prop_zero_1960 > exp_zero_nb_1960){
+  print("Zero-inflation is present in the 1960 population data.")
+} else {
+  print("No evidence of zero-inflation.")
+}
+
+# Fit a Poisson model
+poisson_model_1960 <- glm(chborn_num ~ AGE_RANGE + RACE, data = df_1960, family = poisson())
+
+# Fit a Zero-Inflated Poisson (ZIP) and  model
+zip_model_1960 <- zeroinfl(chborn_num ~ AGE_RANGE + RACE | 1, data = df_1960, dist = "poisson")
+
+# Fit Negative Binomial Model
+nb_model_1960 <- glm.nb(chborn_num ~ AGE_RANGE + RACE, data = df_1960)
+
+# Fit Zero-Inflated Negative Binomial Model if necessary
+zinb_model_1960 <- zeroinfl(chborn_num ~ AGE_RANGE + RACE | 1, data = df_1960, dist = "negbin")
+
+# Compare models using AIC
+aic_values_1960 <- AIC(poisson_model_1960,zip_model_1960,nb_model_1960,zinb_model_1960)
+print(aic_values_1960)
+```
+
+```{r}
+## subset of 1970
+# Calculate mean and variance
+mean_1970 <- mean(df_1970$chborn_num)
+var_1970 <- var(df_1970$chborn_num)
+
+# Check for overdispersion
+if (var_1970 > mean_1970) {
+  print("Overdispersion is present in the 1970 population data.")
+} else {
+  print("No overdispersion detected.")
+}
+
+# Check for zero-inflation
+prop_zero_1970 <- sum(df_1970$chborn_num == 0) / nrow(df_1970)
+
+# Compare prop_zero to expected under Poisson
+exp_poisson_1970 <- exp(-mean_1970)
+
+# Compare prop_zero to expected under Negative Binomial
+standard_nb_1970 <- glm.nb(chborn_num ~ 1, data = df_1970)
+theta_nb_1970 <- standard_nb_1970$theta
+exp_zero_nb_1970 <- (theta_nb_1970 / (theta_nb_1970 + mean_1970))^theta_nb_1970
+
+if (prop_zero_1970 > exp_poisson_1970 | prop_zero_1970 > exp_zero_nb_1970){
+  print("Zero-inflation is present in the 1970 population data.")
+} else {
+  print("No evidence of zero-inflation.")
+}
+
+# Fit a Poisson model
+poisson_model_1970 <- glm(chborn_num ~ AGE_RANGE + RACE, data = df_1970, family = poisson())
+
+# Fit a Zero-Inflated Poisson (ZIP) and  model
+zip_model_1970 <- zeroinfl(chborn_num ~ AGE_RANGE + RACE | 1, data = df_1970, dist = "poisson")
+
+# Fit Negative Binomial Model
+nb_model_1970 <- glm.nb(chborn_num ~ AGE_RANGE + RACE, data = df_1970)
+
+# Fit Zero-Inflated Negative Binomial Model if necessary
+zinb_model_1970 <- zeroinfl(chborn_num ~ AGE_RANGE + RACE | 1, data = df_1970, dist = "negbin")
+
+# Compare models using AIC
+aic_values_1970 <- AIC(poisson_model_1970,zip_model_1970,nb_model_1970,zinb_model_1970)
+print(aic_values_1970)
+```
+
+```{r}
+## subset of 1980
+# Calculate mean and variance
+mean_1980 <- mean(df_1980$chborn_num)
+var_1980 <- var(df_1980$chborn_num)
+
+# Check for overdispersion
+if (var_1980 > mean_1980) {
+  print("Overdispersion is present in the 1980 population data.")
+} else {
+  print("No overdispersion detected.")
+}
+
+# Check for zero-inflation
+prop_zero_1980 <- sum(df_1980$chborn_num == 0) / nrow(df_1980)
+
+# Compare prop_zero to expected under Poisson
+exp_poisson_1980 <- exp(-mean_1980)
+
+# Compare prop_zero to expected under Negative Binomial
+standard_nb_1980 <- glm.nb(chborn_num ~ 1, data = df_1980)
+theta_nb_1980 <- standard_nb_1980$theta
+exp_zero_nb_1980 <- (theta_nb_1980 / (theta_nb_1980 + mean_1980))^theta_nb_1980
+
+if (prop_zero_1980 > exp_poisson_1980 | prop_zero_1980 > exp_zero_nb_1980){
+  print("Zero-inflation is present in the 1980 population data.")
+} else {
+  print("No evidence of zero-inflation.")
+}
+
+# Fit a Poisson model
+poisson_model_1980 <- glm(chborn_num ~ AGE_RANGE + RACE, data = df_1980, family = poisson())
+
+# Fit a Zero-Inflated Poisson (ZIP) and  model
+zip_model_1980 <- zeroinfl(chborn_num ~ AGE_RANGE + RACE | 1, data = df_1980, dist = "poisson")
+
+# Fit Negative Binomial Model
+nb_model_1980 <- glm.nb(chborn_num ~ AGE_RANGE + RACE, data = df_1980)
+
+# Fit Zero-Inflated Negative Binomial Model if necessary
+zinb_model_1980 <- zeroinfl(chborn_num ~ AGE_RANGE + RACE | 1, data = df_1980, dist = "negbin")
+
+# Compare models using AIC
+aic_values_1980 <- AIC(poisson_model_1980,zip_model_1980,nb_model_1980,zinb_model_1980)
+print(aic_values_1980)
+```
+
+```{r}
+## subset of 1990
+# Calculate mean and variance
+mean_1990 <- mean(df_1990$chborn_num)
+var_1990 <- var(df_1990$chborn_num)
+
+# Check for overdispersion
+if (var_1990 > mean_1990) {
+  print("Overdispersion is present in the 1990 population data.")
+} else {
+  print("No overdispersion detected.")
+}
+
+# Check for zero-inflation
+prop_zero_1990 <- sum(df_1990$chborn_num == 0) / nrow(df_1990)
+
+# Compare prop_zero to expected under Poisson
+exp_poisson_1990 <- exp(-mean_1990)
+
+# Compare prop_zero to expected under Negative Binomial
+standard_nb_1990 <- glm.nb(chborn_num ~ 1, data = df_1990)
+theta_nb_1990 <- standard_nb_1990$theta
+exp_zero_nb_1990 <- (theta_nb_1990 / (theta_nb_1990 + mean_1990))^theta_nb_1990
+
+if (prop_zero_1990 > exp_poisson_1990 | prop_zero_1990 > exp_zero_nb_1990){
+  print("Zero-inflation is present in the 1990 population data.")
+} else {
+  print("No evidence of zero-inflation.")
+}
+
+# Fit a Poisson model
+poisson_model_1990 <- glm(chborn_num ~ AGE_RANGE + RACE, data = df_1990, family = poisson())
+
+# Fit a Zero-Inflated Poisson (ZIP) and  model
+zip_model_1990 <- zeroinfl(chborn_num ~ AGE_RANGE + RACE | 1, data = df_1990, dist = "poisson")
+
+# Fit Negative Binomial Model
+nb_model_1990 <- glm.nb(chborn_num ~ AGE_RANGE + RACE, data = df_1990)
+
+# Fit Zero-Inflated Negative Binomial Model if necessary
+zinb_model_1990 <- zeroinfl(chborn_num ~ AGE_RANGE + RACE | 1, data = df_1990, dist = "negbin")
+
+# Compare models using AIC
+aic_values_1990 <- AIC(poisson_model_1990,zip_model_1990,nb_model_1990,zinb_model_1990)
+print(aic_values_1990)
 ```
 
 ```{r}
 ### Subset for Age
+df_40_49 <- subset(df, AGE_RANGE == "40-49")
+df_50_59 <- subset(df, AGE_RANGE == "50-59")
+df_60_69 <- subset(df, AGE_RANGE == "60-69")
+df_70 <- subset(df, AGE_RANGE == "70+")
+```
+
+```{r}
+## subset of 40-49
+
+```
+
+```{r}
+## subset of 50-59
+
+```
+
+```{r}
+## subset of 60-69
+
+```
+
+```{r}
+## subset of 70+
 
 ```
 
