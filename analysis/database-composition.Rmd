@@ -179,7 +179,7 @@ ggplot(plot_data, aes(x = Ethnicity, y = Proportion, fill = Source)) +
        fill = "Data Source") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
-        plot.title = element_text(size = 16, face = "bold")) +
+        plot.title = element_text(size = 14, face = "bold")) +
   scale_fill_manual(values = c("#F77A2E", "#FFB000", "#DE3A8A", "#7253FF"))
 
 ```
@@ -208,6 +208,8 @@ dtc_race_cleaned <- dtc_race |>
   select(-Source_link, -Comments) |> 
   drop_na()
 
+options(scipen = 999)
+
 dtc_race_totals <- dtc_race_cleaned |> 
   filter(pop == "Total")
 
@@ -221,7 +223,8 @@ The following bar chart displays both law enforcement accessibility and total nu
 # Combine DTC database sizes and law enforcement accessibility
 dtc_combined <- dtc_race_totals |> 
   left_join(dtc_access, by = "Database") |> 
-  mutate(Law_Enforcement_Access = ifelse(law_access == "yes", "Yes", "No"),
+  mutate(value = as.numeric(value),
+         Law_Enforcement_Access = ifelse(law_access == "yes", "Yes", "No"),
          Law_Enforcement_Access = factor(Law_Enforcement_Access, levels = c("Yes", "No")))
 
 # Calculate total customers and LE accessible customers
@@ -241,8 +244,8 @@ ggplot(dtc_combined, aes(x = reorder(Database, -value), y = value, fill = Law_En
        fill = "Law Enforcement Access") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
-        plot.title = element_text(size = 16, face = "bold"),
-        plot.subtitle = element_text(size = 14, color = "dimgray")) +
+        plot.title = element_text(size = 14, face = "bold"),
+        plot.subtitle = element_text(size = 12, color = "dimgray")) +
   scale_fill_manual(values = c("#DE3A8A", "#5E8BFF"))
 
 
@@ -280,6 +283,7 @@ plot_data <- estimated_demographics |>
   mutate(Database_Type = ifelse(Database_Type == "Total_Estimated", "Total", "LE Accessible"))
 
 # Visualize the estimates
+# FIX - IS CUT OFF
 ggplot(plot_data, aes(x = Ethnicity, y = Estimated_Customers, fill = Database_Type)) +
   geom_bar(stat = "identity", position = "dodge") +
   geom_text(aes(label = scales::comma(round(Estimated_Customers))),
@@ -293,8 +297,8 @@ ggplot(plot_data, aes(x = Ethnicity, y = Estimated_Customers, fill = Database_Ty
        fill = "Database Type") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
-        plot.title = element_text(size = 16, face = "bold"),
-        plot.subtitle = element_text(size = 14, color = "dimgray")) +
+        plot.title = element_text(size = 14, face = "bold"),
+        plot.subtitle = element_text(size = 12, color = "dimgray")) +
   scale_fill_manual(values = c("#DE3A8A", "#7253FF"))
 
 ```
@@ -337,7 +341,10 @@ estimated_le <- calibrated_data |>
   )
 
 # Combine all data
+source_order <- c("U.S. Census", "23andMe (2024)", "Calibrated Estimate", "Estimated Total DTC", "Estimated LE Accessible")
+
 final_table <- bind_rows(final_table_data, estimated_dtc, estimated_le) |> 
+  mutate(Source = factor(Source, levels = source_order)) |>
   arrange(Source, desc(Number_of_Customers))
 
 # Display the table
@@ -368,7 +375,8 @@ p1 <- ggplot(dtc_combined, aes(x = reorder(Database, -value), y = value, fill = 
   labs(title = "DTC Database Sizes and LE Accessibility",
        x = "Database", y = "Number of Customers") +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1), plot.title = element_text(size = 10, face = "bold")) +
+  scale_fill_manual(values = c("#DE3A8A", "#5E8BFF"))
 
 # Panel 2: Proportion of ethnicities based on 23andMe data
 p2 <- ggplot(data_23andMe |> 
@@ -379,7 +387,9 @@ p2 <- ggplot(data_23andMe |>
   geom_text(aes(label = sprintf("%.1f%%", Proportion)),
             position = position_stack(vjust = 0.5)) +
   labs(title = "Estimated Ethnic Composition (based on 23andMe)") +
-  theme_void()
+  theme_void() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1), plot.title = element_text(size = 10, face = "bold")) +
+  scale_fill_manual(values = c("#DE3A8A", "#7253FF99", "#F77A2E", "#FFB000", "#5E8BFF99"))
 
 # Combine panels
 final_figure <- p1 + p2 +
@@ -388,7 +398,10 @@ final_figure <- p1 + p2 +
     title = "DTC Database Demographics and Accessibility",
     subtitle = paste("Total Customers:", scales::comma(total_dtc),
                      "| LE Accessible:", scales::comma(le_accessible))
-  )
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.title = element_text(size = 14, face = "bold"),
+        plot.subtitle = element_text(size = 12, color = "dimgray"))
 
 print(final_figure)
 
