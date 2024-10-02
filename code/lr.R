@@ -74,11 +74,6 @@ input_dir <- file.path("data", paste0("simulation_", job_name))
 individuals_genotypes <- fread(paste0(getwd(),"/",input_dir,"/processed_genotypes_",slurm_job_id,".csv"))
 individuals_genotypes[,5:8] <- lapply(individuals_genotypes[,5:8],as.character)
 
-#  dup_df<-duplicated(individuals_genotypes) #specify rows
- # individuals_genotypes2 <- individuals_genotypes[!dup_df,]
-#df_allelefreq2$gen_id<-1:nrow(df_allelefreq2) #gen_id is a key that later can be used to rejoin LRs to individual records
-#log_message("Extracting unique loci...")
-
 # Define Kinship Matrix
 kinship_matrix <- data.table(
   relationship_type = factor(c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins")),
@@ -91,12 +86,6 @@ kinship_matrix <- data.table(
 calculate_likelihood_ratio <- function(allele_frequency_data) {
   allele_frequency_data$LR<-ifelse(allele_frequency_data$shared_alleles == 0, allele_frequency_data$k0,NA)
 
-  Rxp_df <- data.table(
-    genotype_match = c("AA-AA", "AA-AB", "AB-AA", "AB-AC", "AB-AB"),
-    Rxp_factor = c(1, 2, 2, 4, 4)
-  )
-
-  allele_frequency_data<-left_join(allele_frequency_data,Rxp_df)
   allele_frequency_data$Rxp<-ifelse(allele_frequency_data$shared_alleles==1,allele_frequency_data$pA,NA)
   allele_frequency_data$Rxp<-ifelse(allele_frequency_data$shared_alleles==1 & allele_frequency_data$genotype_match=="AB-AA"|allele_frequency_data$genotype_match=="AA-AB",allele_frequency_data$Rxp*2,allele_frequency_data$Rxp)
   allele_frequency_data$Rxp<-ifelse(allele_frequency_data$shared_alleles==1 & allele_frequency_data$genotype_match=="AB-AC"|allele_frequency_data$genotype_match=="AB-AB",allele_frequency_data$Rxp*4,allele_frequency_data$Rxp)
