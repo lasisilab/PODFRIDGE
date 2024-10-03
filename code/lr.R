@@ -108,7 +108,7 @@ calculate_likelihood_ratio <- function(allele_frequency_data) {
 
 
 
-kinship_calculation <- function(allele_frequency_data, kinship_matrix) {
+kinship_calculation <- function(allele_frequency_data, kinship_matrix,df_allelefreq) {
   print("starting kinship_calculation")
 
   allele_frequency_data$alleles_ind1<- apply( allele_frequency_data[ , c('ind1_allele1','ind1_allele2') ] , 1 , paste , collapse = "_" )
@@ -205,11 +205,6 @@ print("kinship_calculations")
   return(kinship_calculations)
 }
 
-process_individuals_genotypes <- function(individuals_genotypes, df_allelefreq, kinship_matrix) {
-  res <- kinship_calculation(individuals_genotypes, kinship_matrix)
-  return(res)
-}
-
 calculate_combined_lrs <- function(final_results, loci_lists) {
   final_results[sapply(final_results, is.infinite)] <- NA
   combined_lrs <- final_results[, .(
@@ -229,7 +224,7 @@ calculate_combined_lrs <- function(final_results, loci_lists) {
 log_message("Processing individuals genotypes...")
 
 processing_time <- system.time({
-  processed_genotypes <- process_individuals_genotypes(individuals_genotypes, df_allelefreq, kinship_matrix)
+  processed_genotypes <- kinship_calculation(individuals_genotypes, kinship_matrix,df_allelefreq)
 })
 
 log_message(paste("Processed individuals genotypes in", processing_time["elapsed"], "seconds."))
