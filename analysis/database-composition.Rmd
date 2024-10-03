@@ -12,8 +12,8 @@ editor_options:
 library(tidyverse)
 library(patchwork)
 library(knitr)
-library(kableExtra)wflow_build("analysis/database_composition.Rmd")
-library(workflowr)
+library(kableExtra)
+
 
 #knitr::opts_knit$set(root.dir = "..")
 knitr::opts_chunk$set(eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 6)
