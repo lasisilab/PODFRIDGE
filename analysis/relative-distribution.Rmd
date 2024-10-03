@@ -41,6 +41,7 @@ library(MASS)
 library(pscl)
 library(ggplot2)
 library(nnet)
+library(car)
 
 ```
 
@@ -639,8 +640,10 @@ summary_table <- merged_data %>% group_by(Race, Cohort, Census_Year) %>%
     Prob_10 = mean(chborn_num == 10),
     Prob_11 = mean(chborn_num == 11),
     Prob_12plus = mean(chborn_num >= 12)
+    #Total_Prob = Prob_0 + Prob_1 + Prob_2 + Prob_3 + Prob_4 + Prob_5 + Prob_6 + 
+                # Prob_7 + Prob_8 + Prob_9 + Prob_10 + Prob_11 + Prob_12plus
   ) %>%
-  ungroup()
+  ungroup() %>% as.data.frame()
 
 # View the summary table
 print(summary_table)
@@ -659,14 +662,13 @@ Once the cohort information and summary statistics are available, the goal is to
   **Example Code**:
 ```{r}
 # Fit logistic regression to check if zero-inflation changes over time
-zero_inflation_model <- glm(Zero_Children ~ Census_Year + Race + Cohort, 
-                            family = binomial(), data = cohort_data)
+zero_inflation_model <- glm(Prob_0 ~ Census_Year + Race + Cohort, 
+                            family = binomial(), data = summary_table)
 
 # Summary of the model
 summary(zero_inflation_model)
-
 ```
-
+Result: The p-value of "Census_Year" is greater than 0.05, suggesting no statistically significance. Therefore, the probability of having zero children does not change significantly over time for the same cohort. 
 
 #### b. **Family Size Analysis**
 - Use an **ANOVA** or **linear regression** to test if the mean or variance in family size changes over census years for the same cohort.
@@ -674,12 +676,12 @@ summary(zero_inflation_model)
   **Example Code**:
 ```{r}
   # Fit linear model to check for changes in family size over time
-  family_size_model <- lm(Number_of_Children ~ Census_Year + Race + Cohort, data = cohort_data)
-
-  # ANOVA to check for significant differences
+  family_size_model <- lm(Mean ~ Census_Year + Race + Cohort, data = summary_table)
+  
+  # ANOVA to check for significant differences in mean
   anova(family_size_model)
 ```
-
+Result: The p-value of "Census_Year" is greater than 0.05, suggesting no statistically significance. Therefore, the mean in family size does not change over census years for the same cohort.
 
 #### c. **Model Fit Analysis**
 - If the best-fitting model changes for the same cohort over time, this suggests that the distribution of family sizes has shifted. Use **multinomial logistic regression** to test if the model fit differs across census years for the same cohort.
@@ -687,14 +689,18 @@ summary(zero_inflation_model)
 
   **Example Code**:
 ```{r}
-library(nnet)
+cohort_data <- summary_table %>%
+  left_join(best_models, by = c("Race", "Census_Year", "Cohort")) %>%
+    mutate(Best_Model_Binary = ifelse(Best_Model == "Zero_Inflated_NB", 1, 0))
+
 
 # Fit multinomial logistic regression to test changes in best-fitting model
-model_fit_analysis <- multinom(Best_Model ~ Census_Year + Race + Cohort, data = cohort_data)
+model_fit_analysis <- glm(Best_Model_Binary ~ Census_Year + Race + Cohort, data = cohort_data)
 
 # Summary of the model
 summary(model_fit_analysis)
 ```
+Result: The p-value of "Census_Year" is greater than 0.05, suggesting no statistically significant effect on choice between best models. 
 
 ### Step 4: Interpret the Results
 For each cohort, you will assess whether:
