@@ -226,7 +226,6 @@ calculate_combined_lrs <- function(final_results, loci_lists) {
   return(combined_lrs)
 }
 
-# Process the individuals genotypes - functions carried out for each row independently- nothing seems to be returned?
 log_message("Processing individuals genotypes...")
 
 processing_time <- system.time({
