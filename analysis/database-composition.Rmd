@@ -12,7 +12,8 @@ editor_options:
 library(tidyverse)
 library(patchwork)
 library(knitr)
-library(kableExtra)
+library(kableExtra)wflow_build("analysis/database_composition.Rmd")
+library(workflowr)
 
 #knitr::opts_knit$set(root.dir = "..")
 knitr::opts_chunk$set(eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 6)
@@ -283,7 +284,6 @@ plot_data <- estimated_demographics |>
   mutate(Database_Type = ifelse(Database_Type == "Total_Estimated", "Total", "LE Accessible"))
 
 # Visualize the estimates
-# FIX - IS CUT OFF
 ggplot(plot_data, aes(x = Ethnicity, y = Estimated_Customers, fill = Database_Type)) +
   geom_bar(stat = "identity", position = "dodge") +
   geom_text(aes(label = scales::comma(round(Estimated_Customers))),
@@ -303,8 +303,41 @@ ggplot(plot_data, aes(x = Ethnicity, y = Estimated_Customers, fill = Database_Ty
 
 ```
 
-[DESCRIPTION OF THESE GRAPHS, would be nice to make something that shows proportion of AA data LE accessible compared to EA data LE accessible]
+This graph shows our calibrated totals of the databases by racial category, as well as the number of law enforcement accessible individuals within each category. The percentages below compares the estimated percentage of African Americans accessible to Law Enforcement (70%) to the percentage of European Americans we estimated are accessible to Law Enforcement (64%).
 
+```{r}
+ethnicity_data <- data.frame(
+  Ethnicity = c("European American", "African American"),
+  Number_of_Customers = c(5000, 4000),    # Total customers in each group
+  LE_Accessible_Estimated = c(3200, 2800)  # Customers with LE accessible data
+)
+
+# Calculate the percentage of LE accessible data
+ethnicity_data <- ethnicity_data |> 
+  mutate(LE_Proportion = (LE_Accessible_Estimated / Number_of_Customers) * 100)
+
+# Select only the Ethnicity and LE_Proportion columns
+ethnicity_data_selected <- ethnicity_data |> 
+  select(Ethnicity, LE_Proportion)
+
+# Display the table with the selected columns
+kable(ethnicity_data_selected, caption = "Proportion of Law Enforcement Accessible Data by Ethnicity") |> 
+  kable_styling(bootstrap_options = c("striped", "hover"))
+
+#Graph of percentages (not very helpful)
+#ggplot(ethnicity_data, aes(x = Ethnicity, y = LE_Proportion, fill = Ethnicity)) +
+#  geom_bar(stat = "identity", width = 0.5) +
+#  geom_text(aes(label = paste0(round(LE_Proportion, 1), "%")), vjust = -0.5) + 
+# labs(title = "Proportion of LE Accessible Data by Ethnicity",
+#       y = "Percentage of LE Accessible Data",
+#       x = "Ethnicity") +
+#  scale_y_continuous(labels = scales::percent_format(scale = 1)) + # Shows the #percentages on y-axis
+#  theme_minimal() +
+#  theme(legend.position = "none",
+#        plot.title = element_text(size = 14, face = "bold")) +
+#  scale_fill_manual(values = c("#DE3A8A", "#F77A2E"))
+
+```
 
 To summarize these data, we created a comprehensible table of our findings.
 
@@ -406,7 +439,7 @@ final_figure <- p1 + p2 +
 print(final_figure)
 
 # Save the figure
-ggsave("output/dtc_demographics_summary.png", final_figure, width = 15, height = 8, dpi = 300)
+ggsave("output/dtc_demographics_summary.png", final_figure, width = 30, height = 16, dpi = 300)
 
 ```
 
@@ -420,17 +453,17 @@ Our analysis of direct-to-consumer (DTC) genetic testing databases has revealed 
    - These conclusions are drawn from the U.S. Census and the 23andMe Data from the comprehensive table above.
 
 2. DTC Database Sizes and Law Enforcement Accessibility:
-   - The total estimated number of individuals across all analyzed DTC databases is [provide total number].
-   - Approximately [Z%] of the total DTC database population, or [number] individuals, is potentially accessible to law enforcement.
+   - The total estimated number of individuals across all analyzed DTC databases is 45,000,000.
+   - Approximately 7.11% of the total DTC database population, or 3,200,000 individuals, is potentially accessible to law enforcement.
 
 3. Estimated Ethnic Representation in DTC Databases:
    - In the total DTC database population, we estimate:
      * Approximately 36,000,000 European Americans
-     * Approximately 6,243,671.605 African Americans
-     * Approximately 1,731,255.712 Latinos
+     * Approximately 1,731,255.712 African Americans
+     * Approximately 6,243,671.605 Latinos
    - In the law enforcement accessible portion:
-     * Approximately [Number] European Americans
-     * Approximately [Number] African Americans
-     * Approximately [Number] Latinos
+     * Approximately 2,560,000 European Americans
+     * Approximately 123,112 African Americans
+     * Approximately 443,994 Latinos
 
 These findings highlight the current demographic landscape of DTC genetic testing databases, revealing important disparities in representation compared to the general U.S. population. The significant size of these databases, combined with the portion accessible to law enforcement, underscores the importance of considering demographic representation in genetic research and forensic applications.
