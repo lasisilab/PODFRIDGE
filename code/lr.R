@@ -20,14 +20,10 @@ job_name<-as.character(args[2])
 # up the limit of memory available to future per core
 options('future.globals.maxSize' = 1014*1024^2)
 
-# Ensure the cluster is stopped when the script exits
-on.exit(parallel::stopCluster(cl))
-
 # Helper function for logging
 log_message <- function(message) {
   cat(paste0("[", Sys.time(), "] ", message, "\n"))
 }
-
 
 # Create output folder with SLURM job ID
 output_dir <- file.path("output", paste0("simulation_", job_name))
