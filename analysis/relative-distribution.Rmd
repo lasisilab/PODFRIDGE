@@ -919,16 +919,21 @@ Create a mirror plot for the distribution of siblings across census years, races
 ### Step 1: Calculate Sibling Frequencies
 
 1. Start with your dataframe that includes the `birth_range` column.
+```{r}
+df2 <- df %>%
+  mutate(birth_range = mapply(calculate_cohort, YEAR, AGE_RANGE)) %>% 
+  dplyr::select(RACE, YEAR, AGE_RANGE, birth_range, chborn_num)
+```
 
 2. Create a new column for the number of siblings:
 ```{r}
-df <- df %>%
+df2 <- df2 %>%
  mutate(n_siblings = chborn_num - 1)
 ```
 
 3. Calculate the frequency of siblings:
 ```{r}
-df <- df %>%
+df2 <- df2 %>%
 mutate(sibling_freq = n_siblings * 1)  # Assuming each mother represents 1 in frequency
 ```
 
@@ -936,7 +941,7 @@ mutate(sibling_freq = n_siblings * 1)  # Assuming each mother represents 1 in fr
 
 1. Group the data and calculate sibling frequencies:
 ```{r}
-df_siblings <- df %>%
+df_siblings <- df2 %>%
  group_by(YEAR, RACE, birth_range, n_siblings) %>%
  summarise(
    sibling_count = sum(sibling_freq),
@@ -1019,9 +1024,21 @@ ggplot(df_sibling_mirror, aes(x = n_siblings, y = proportion, fill = as.factor(n
 After creating the plot, examine it carefully:
 
 1. Look for patterns in sibling distribution across different census years and birth ranges.
+Result:
+-By Census Year: We can observe a decrease in family size over time. The distribution of centered toward smaller number of siblings. By 1990, most of the distribution are more compact, with a peak around 2–4 siblings, and the tail of the distribution (larger numbers of siblings) has reduced significantly.
+-By birth range:For individuals born in earlier periods like pre-1900 or 1910, the distribution is skewed toward larger families, with more people having a larger number of siblings.As we move to more recent birth ranges, the distributions shift toward smaller family sizes.
+
 2. Compare the distributions between White and Black/African American populations.
+Result: In general, the White population tends to have a more concentrated distribution around 2–4 siblings in later census years, while the Black/African American population often shows a slightly more spread-out distribution. However, the trend of decreasing family size over time is visible in both populations, though it appears more pronounced for the White population.
+
 3. Note any significant changes or trends in the number of siblings over time.
+Result:
+-Decrease in Family Size: Both distribution of children and siblings indicate a clear societal trend toward smaller family sizes over time, with fewer people having a large number of siblings or children.
+-Cohort Effects: Individuals born earlier (pre-1900 or early 1900s) tend to come from larger families, while those born later (1930s-1950s) tend to have fewer siblings and children.
+
 4. Consider how these sibling distributions might differ from the children distributions you analyzed earlier, and think about potential reasons for these differences.
+Result: While both distributions show a trend toward smaller families, the sibling distribution is more spread out across different sibling counts. This might be due to the calculation difference in proportion between number of children and number of siblings. For example, if a family have 12 children, then all of these 12 children have 11 siblings, leading to 
+
 
 
 ## [Instructions for Manqing] Model Fit Across Census Years
