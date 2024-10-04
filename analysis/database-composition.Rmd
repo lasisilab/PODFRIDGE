@@ -44,9 +44,9 @@ By combining these sources, we aim to provide a comprehensive overview of the de
 
 ## Direct-to-Consumer Databases Demographics
 
-```{r, show_col_types = FALSE}
+```{r}
 # Import the comprehensive demographics data
-demographics_data <- read_csv("data/dtc_demographics.csv")
+demographics_data <- read_csv("data/dtc_demographics.csv", show_col_types = FALSE)
 
 # Separate the data into different dataframes
 bryc_data <- demographics_data |>
@@ -408,21 +408,44 @@ p1 <- ggplot(dtc_combined, aes(x = reorder(Database, -value), y = value, fill = 
   labs(title = "DTC Database Sizes and LE Accessibility",
        x = "Database", y = "Number of Customers") +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1), plot.title = element_text(size = 10, face = "bold")) +
+   theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.title = element_text(size = 14, face = "bold")) +
   scale_fill_manual(values = c("#DE3A8A", "#5E8BFF"))
 
 # Panel 2: Proportion of ethnicities based on 23andMe data
-p2 <- ggplot(data_23andMe |> 
-               filter(Source == "Zhang2024"),
-             aes(x = "", y = Proportion, fill = Ethnicity)) +
+zhang_data <- data_23andMe |> 
+  filter(Source == "Zhang2024") |>
+  mutate(Ethnicity = factor(Ethnicity, levels = c("European American", "African American", "Latino", "East Asian", "South Asian")))
+
+# Define the specific colors in the exact order matching the factor levels
+ethnicity_colors <- c("European American" = "#F77A2E", 
+                      "African American" = "#DE3A8A", 
+                      "Latino" = "#FFB000", 
+                      "East Asian" = "#7253FF99", 
+                      "South Asian" = "#5E8BFF99"
+                      )
+
+# Create the pie chart
+p2 <- ggplot(zhang_data, aes(x = "", y = Proportion, fill = Ethnicity)) +
   geom_bar(stat = "identity", width = 1) +
   coord_polar("y", start = 0) +
-  geom_text(aes(label = sprintf("%.1f%%", Proportion)),
-            position = position_stack(vjust = 0.5)) +
   labs(title = "Estimated Ethnic Composition (based on 23andMe)") +
-  theme_void() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1), plot.title = element_text(size = 10, face = "bold")) +
-  scale_fill_manual(values = c("#DE3A8A", "#7253FF99", "#F77A2E", "#FFB000", "#5E8BFF99"))
+  theme_void() +  # Base theme that removes background elements
+  theme(
+    plot.title = element_text(size = 14, face = "bold"),  # Adjust title styling
+    axis.text.x = element_blank(),   # Remove x-axis text (outside the pie chart)
+    axis.ticks = element_blank()     # Remove axis tick marks
+  ) +
+  scale_fill_manual(values = ethnicity_colors, 
+                    labels = paste0(zhang_data$Ethnicity, 
+                                    " (", sprintf("%.1f%%", zhang_data$Proportion), ")")) +
+  geom_text(aes(label = ifelse(Ethnicity %in% c("European American", "African American", "Latino"), 
+                                sprintf("%.1f%%", Proportion), 
+                                "")), 
+            position = position_stack(vjust = 0.5))
+
+print(p1)
+print(p2)
 
 # Combine panels
 final_figure <- p1 + p2 +
@@ -435,8 +458,6 @@ final_figure <- p1 + p2 +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
         plot.title = element_text(size = 14, face = "bold"),
         plot.subtitle = element_text(size = 12, color = "dimgray"))
-
-print(final_figure)
 
 # Save the figure
 ggsave("output/dtc_demographics_summary.png", final_figure, width = 30, height = 16, dpi = 300)
