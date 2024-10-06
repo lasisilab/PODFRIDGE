@@ -179,7 +179,7 @@ ann_text1$loci_set_factor <- factor(ann_text1$loci_set, levels=c("core_13", "ide
 ann_text1$relationship_known_factor <- factor(ann_text1$relationship_known, levels=c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated"))
 
 ggplot(combined_lrs, aes(x = relationship_tested, y = LR, fill = population_label)) +
-    geom_boxplot(position = position_dodge(width = 0.9), outlier.shape = NA) +
+    geom_boxplot(position = position_dodge(width = 0.9)) +
     facet_grid(relationship_known_factor ~ loci_set_factor, scales = "free_y") +
     labs(
       title = "LR Distributions for Relationship Comparisons",
@@ -193,7 +193,8 @@ ggplot(combined_lrs, aes(x = relationship_tested, y = LR, fill = population_labe
     theme(
       axis.text.x = element_text(angle = 45, hjust = 1)
     ) +
-     scale_y_continuous(trans=scales::pseudo_log_trans(base = 10))
+    scale_y_log10()
+
 ```
 Plots showing the distribution of likelihood ratios relative to the cutoffs for each hypothesis type (cousins, full siblings, half siblings, parent_child, and second cousins)
 ```{r lr_distributions, results =FALSE,warning=FALSE,message=FALSE, echo = FALSE,fig.width = 20,fig.height = 15}
