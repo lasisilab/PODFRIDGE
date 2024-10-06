@@ -6,19 +6,6 @@ date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
 site: workflowr::wflow_site
 ---
 
-<style type="text/css">
-
-body, td {
-   font-size: 14px;
-}
-code.r{
-  font-size: 12px;
-}
-pre {
-  font-size: 12px
-}
-</style>
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -228,10 +215,10 @@ for(hypothesis in hypotheses){
       theme(axis.text = element_text(size = 28), axis.title = element_text(size = 28)) +
       guides(fill=guide_legend(title="Known Relationship")) +
       xlab("Log Likelihood Ratio (LLR)") + ylab("Frequency") +
-      theme_minimal(base_size = 24)
+      theme_minimal(base_size = 24) 
 
   plot2 = ggplot(data = combined_lrs_hyp_cutoffs) +
-      geom_histogram(aes(x = log(LR), fill =relationship_known_factor),alpha = 0.5) + 
+      geom_histogram(aes(x = log(LR), fill =relationship_known_factor),position="identity", alpha = 0.5) + 
       geom_vline(aes(xintercept = log(fixed_cutoff), col = "Fixed cutoff (1)"),linetype = "dashed") +
       geom_vline(aes(xintercept = log(cutoff_0_1), col = "0.1% FPR"),linetype = "dashed") +
       geom_vline(aes(xintercept = log(cutoff_0_01), col = "0.01% FPR"),linetype = "dashed") +
@@ -244,7 +231,8 @@ for(hypothesis in hypotheses){
       guides(fill=guide_legend(title="Known Relationship")) +
       xlab("Log Likelihood Ratio (LLR)") + ylab("Frequency") +
       theme_minimal(base_size = 24)
-  
+
+
   plot_list[[i]] = plot1
   plot_list[[i+1]] = plot2
 
