@@ -178,7 +178,8 @@ ann_text1 <- tribble(
 ann_text1$loci_set_factor <- factor(ann_text1$loci_set, levels=c("core_13", "identifiler_15", "expanded_20", "supplementary", "autosomal_29"))
 ann_text1$relationship_known_factor <- factor(ann_text1$relationship_known, levels=c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated"))
 
-ggplot(combined_lrs, aes(x = relationship_tested, y = LR, fill = population_label)) +
+combined_lrs$trunc <- ifelse(combined_lrs$LR == 0, 1e-16, combined_lrs$LR)
+ggplot(combined_lrs, aes(x = relationship_tested, y = trunc, fill = population_label)) +
     geom_boxplot(position = position_dodge(width = 0.9)) +
     facet_grid(relationship_known_factor ~ loci_set_factor, scales = "free_y") +
     labs(
@@ -193,7 +194,8 @@ ggplot(combined_lrs, aes(x = relationship_tested, y = LR, fill = population_labe
     theme(
       axis.text.x = element_text(angle = 45, hjust = 1)
     ) +
-    scale_y_log10()
+    scale_y_log10()+
+    coord_cartesian(ylim=c(1e-15,NA))
 
 ```
 Plots showing the distribution of likelihood ratios relative to the cutoffs for each hypothesis type (cousins, full siblings, half siblings, parent_child, and second cousins)
