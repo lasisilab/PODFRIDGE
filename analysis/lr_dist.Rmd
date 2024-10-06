@@ -54,7 +54,8 @@ combined_lrs$population<-as.factor(combined_lrs$population)
 ```{r cutoff_functions, results =FALSE,warning=FALSE,message=FALSE, echo = FALSE,fig.width = 20,fig.height = 15}
 # Function to calculate cut-off values for 1%, 0.1%, and 0.01% FPR
 calculate_cutoffs <- function(input_df, fp_rates, hypothesis) {
-  cutoffs <- input_df[relationship_tested == hypothesis,
+  input_df<-input_df[input_df$relationship_known == "unrelated" & input_df$relationship_tested == hypothesis,]
+  cutoffs <- input_df[,
                                   list(
       fixed_cutoff = 1.00,
       cutoff_1 = quantile(LR, probs = 1 - fp_rates[1] / 100, na.rm = TRUE),
@@ -65,7 +66,8 @@ calculate_cutoffs <- function(input_df, fp_rates, hypothesis) {
   return(cutoffs)
 }
 
-calculate_proportions_exceeding_cutoffs <- function(input_df, cutoffs) {
+calculate_proportions_exceeding_cutoffs <- function(input_df, cutoffs, hypothesis) {
+  input_df<-input_df[input_df$relationship_tested == hypothesis,]
   df_with_cutoffs <- left_join(input_df, cutoffs, by = c("population", "loci_set"))
   df_with_cutoffs <- df_with_cutoffs [,list(
       population=population,
@@ -78,7 +80,7 @@ calculate_proportions_exceeding_cutoffs <- function(input_df, cutoffs) {
       exceeds_cutoff_0_01 = LR > cutoff_0_01
     )]
 
-  df_no_cutoffs<-df_with_cutoffs#[!df_with_cutoffs$relationship_tested == "unrelated",]
+  df_no_cutoffs<-df_with_cutoffs[!df_with_cutoffs$relationship_tested == "unrelated",]
   proportions_exceeding <- df_no_cutoffs[,    list(
       proportion_exceeding_fixed = sum(exceeds_fixed_cutoff) / .N,
       proportion_exceeding_1 = sum(exceeds_cutoff_1, na.rm = TRUE) / .N,
@@ -177,7 +179,7 @@ ann_text1$loci_set_factor <- factor(ann_text1$loci_set, levels=c("core_13", "ide
 ann_text1$relationship_known_factor <- factor(ann_text1$relationship_known, levels=c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated"))
 
 ggplot(combined_lrs, aes(x = relationship_tested, y = LR, fill = population_label)) +
-    geom_boxplot(position = position_dodge(width = 0.9)) +
+    geom_boxplot(position = position_dodge(width = 0.9), outlier.shape = NA) +
     facet_grid(relationship_known_factor ~ loci_set_factor, scales = "free_y") +
     labs(
       title = "LR Distributions for Relationship Comparisons",
@@ -185,28 +187,13 @@ ggplot(combined_lrs, aes(x = relationship_tested, y = LR, fill = population_labe
       y = "LR",
       fill = "Population"
     ) +
-    geom_text(data = ann_text1, aes(y = LR), label = "*", size = 10) +
+    #geom_text(data = ann_text1, aes(y = LR), label = "*", size = 10) +
     theme_minimal(base_size = 24) +
     scale_fill_manual(values = color_palette_race) +
     theme(
       axis.text.x = element_text(angle = 45, hjust = 1)
     ) +
-    scale_y_log10()
-
-
-#ggplot(combined_lrs, aes(x = relationship_known_factor, y = LR, fill = population)) +
-#    geom_boxplot(position = position_dodge(width = 0.9)) +
-#    facet_wrap(.~relationship_tested,nrow = 5, scales = "free_y") +
-#    labs(
-#      title = "LR Distributions by Tested Realtionship Type and Population",
-#      x = "Known Relationship Type",
-#      y = "LR",
-#      fill = "Population"
-#    ) +
-#    theme_minimal(base_size = 24) +
-#    theme(
-#      axis.text.x = element_text(angle = 45, hjust = 1)
-#    )
+     scale_y_continuous(trans=scales::pseudo_log_trans(base = 10))
 ```
 Plots showing the distribution of likelihood ratios relative to the cutoffs for each hypothesis type (cousins, full siblings, half siblings, parent_child, and second cousins)
 ```{r lr_distributions, results =FALSE,warning=FALSE,message=FALSE, echo = FALSE,fig.width = 20,fig.height = 15}
@@ -223,6 +210,8 @@ for(hypothesis in hypotheses){
   
   combined_lrs_hyp_cutoffs$loci_set_factor <- factor(combined_lrs_hyp_cutoffs$loci_set, levels=c("core_13", "identifiler_15", "expanded_20", "supplementary", "autosomal_29"))
   
+  combined_lrs_hyp_cutoffs = combined_lrs_hyp_cutoffs[which(relationship_tested == hypothesis),]
+
   plot1 = ggplot(data = combined_lrs_hyp_cutoffs) +
       geom_density(aes(x = log(LR), fill =relationship_known_factor),alpha = 0.5) + 
       geom_vline(aes(xintercept = log(fixed_cutoff), col = "Fixed cutoff (1)"),linetype = "dashed") +
@@ -281,7 +270,7 @@ Plots showing the proportion exceeding cutoffs for the parent-child and full sib
 ```{r cutoffs_results =FALSE,warning=FALSE,message=FALSE, echo = FALSE, fig.width = 20,fig.height = 15}
 
 cutoffs <- calculate_cutoffs(combined_lrs, c(1, 0.1, 0.01), hypothesis = "parent_child")
-proportion_exceeding = calculate_proportions_exceeding_cutoffs(input_df = combined_lrs, cutoffs = cutoffs) 
+proportion_exceeding = calculate_proportions_exceeding_cutoffs(input_df = combined_lrs, cutoffs = cutoffs, hypothesis = "parent_child") 
 
 # race labels (can be changed)
 proportion_exceeding <- proportion_exceeding %>%
@@ -316,33 +305,13 @@ proportions_exceeding_cutoffs_long$loci_set_factor <- factor(proportions_exceedi
 # make sure relationships are in the order we want
 proportions_exceeding_cutoffs_long$relationship_known_factor <- factor(proportions_exceeding_cutoffs_long$relationship_known, levels=c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated"))
 
-proportions_exceeding_cutoffs_long_parent_child = proportions_exceeding_cutoffs_long[proportions_exceeding_cutoffs_long$relationship_tested == "parent_child",]
+#proportions_exceeding_cutoffs_long_parent_child = proportions_exceeding_cutoffs_long[proportions_exceeding_cutoffs_long$relationship_tested == "parent_child",]
 
-ggplot(proportions_exceeding_cutoffs_long_parent_child, aes(x = relationship_known_factor, y = Value, fill = population_label, color = population_label)) +
+ggplot(proportions_exceeding_cutoffs_long, aes(x = relationship_known_factor, y = Value, fill = population_label, color = population_label)) +
   geom_bar(stat = "identity", position = position_dodge(width = 0.9)) +
   facet_grid(cutoff_label ~ loci_set_factor, scales = "fixed") +
   labs(
     title = "Proportions Exceeding Likelihood Cut-offs (Parent-Child hypothesis)",
-    x = "Relationship Tested",
-    y = "Proportion Exceeding Cut-off",
-    fill = "Population",
-    color = "Population"
-  ) +
-  scale_color_manual(values = color_palette_race) +
-  scale_fill_manual(values = color_palette_race) +
-  theme_minimal(base_size = 24) +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1)
-  )
-
-
-proportions_exceeding_cutoffs_siblings = proportions_exceeding_cutoffs_long[proportions_exceeding_cutoffs_long$relationship_tested == "full_siblings",]
-
-ggplot(proportions_exceeding_cutoffs_siblings, aes(x = relationship_known_factor, y = Value, fill = population_label, color = population_label)) +
-  geom_bar(stat = "identity", position = position_dodge(width = 0.9)) +
-  facet_grid(cutoff_label ~ loci_set_factor, scales = "fixed") +
-  labs(
-    title = "Proportions Exceeding Likelihood Cut-offs (Full siblings hypothesis)",
     x = "Relationship Tested",
     y = "Proportion Exceeding Cut-off",
     fill = "Population",
