@@ -454,12 +454,12 @@ Once you’ve gathered the best model for each subset, you can analyze which fac
 
 ```{r}
 #example
-#
+# Need large sample size, warning message "Chi-squared approximation may be incorrect," usually occurs when some of the expected counts in the contingency table are too small (typically less than 5)
 ## Create a contingency table
-table_model_race <- table(best_model_data$Race, best_model_data$Best_Model)
+#table_model_race <- table(best_models$Race, best_models$Best_Model)
 
 # Perform chi-square test
-chisq.test(table_model_race)
+#chisq.test(table_model_race)
 
 ```
 
@@ -485,12 +485,12 @@ summary(model_logistic)
 
    **Example in R using the `nnet` package**:
 ```{r}
-
+## Not appropriate since only 2 levels in best_model
 # Fit multinomial logistic regression
-model_multinom <- multinom(Best_Model ~ Race + Census_Year + Age_Range, data = best_model_data)
+#model_multinom <- multinom(Best_Model ~ Race + Census_Year + Age_Range, data = best_model_data)
 
 # Summary of results
-summary(model_multinom)
+#summary(model_multinom)
 
 ```
 
@@ -525,6 +525,25 @@ ggplot(best_models, aes(x = Census_Year, fill = Best_Model)) +
 ggplot(best_models, aes(x = Age_Range, fill = Best_Model)) +
   geom_bar(position = "dodge") +
   labs(title = "Best-Fitting Models by Age Range", x = "Age Range", y = "Count", fill = "Best Model")
+```
+
+```{r}
+ggplot(best_models, aes(x = Census_Year, y = Age_Range, fill = Best_Model)) +
+  geom_tile(color = "white", lwd = 0.5, linetype = 1) + # Create the tiles
+  facet_wrap(~Race, nrow = 2) + # Facet by Race
+  scale_fill_manual(values = c("Zero_Inflated_Poisson" = "#0072B2", "Zero_Inflated_NB" = "#F0E442")) + 
+  labs(
+    title = "Best Model by Race, Census Year, and Age Range",
+    x = "Census Year",
+    y = "Age Range",
+    fill = "Best Model"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1), # Rotate x-axis labels for readability
+    plot.title = element_text(size = 14, face = "bold"),
+    legend.position = "bottom"
+  )
 ```
 
 ### Conclusion:
@@ -661,14 +680,71 @@ Once the cohort information and summary statistics are available, the goal is to
   
   **Example Code**:
 ```{r}
-# Fit logistic regression to check if zero-inflation changes over time
-zero_inflation_model <- glm(Prob_0 ~ Census_Year + Race + Cohort, 
-                            family = binomial(), data = summary_table)
-
-# Summary of the model
-summary(zero_inflation_model)
+## divided the corhort by race
+merged_df_black <- merged_data %>% filter(Race == "Black/African American")
+merged_df_white <- merged_data %>% filter(Race == "White")
 ```
-Result: The p-value of "Census_Year" is greater than 0.05, suggesting no statistically significance. Therefore, the probability of having zero children does not change significantly over time for the same cohort. 
+
+```{r}
+# List of unique cohorts in the dataset
+cohorts1 <- unique(merged_df_black$Cohort)
+
+# Loop over each cohort and perform the Chi-Square test
+for (cohort in cohorts1) {
+  
+  # Filter data for the specific cohort
+  cohort_data <- merged_df_black[merged_df_black$Cohort == cohort, ]
+  
+  # Calculate the observed counts for women with zero children and with children
+  observed <- table(cohort_data$chborn_num == 0)  # TRUE: no children, FALSE: have children
+  
+  # Skip cohorts that don't have both TRUE and FALSE values
+  if (length(observed) < 2) {
+    next
+  }
+  
+  # Expected counts assuming no change (proportions remain constant)
+  expected <- rep(mean(observed), length(observed))
+  
+  # Perform the Chi-Square test
+  chi_square_test <- chisq.test(observed, p = expected/sum(expected))
+  
+  # Print the results for each cohort
+  cat("\nChi-Square Test Results for Cohort:", cohort, "\n")
+  print(chi_square_test)
+}
+```
+
+```{r}
+# List of unique cohorts in the dataset
+cohorts2 <- unique(merged_df_white$Cohort)
+
+# Loop over each cohort and perform the Chi-Square test
+for (cohort in cohorts2) {
+  
+  # Filter data for the specific cohort
+  cohort_data2 <- merged_df_white[merged_df_white$Cohort == cohort, ]
+  
+  # Calculate the observed counts for women with zero children and with children
+  observed2 <- table(cohort_data2$chborn_num == 0)  # TRUE: no children, FALSE: have children
+  
+  # Skip cohorts that don't have both TRUE and FALSE values
+  if (length(observed2) < 2) {
+    next
+  }
+  
+  # Expected counts assuming no change (proportions remain constant)
+  expected2 <- rep(mean(observed2), length(observed2))
+  
+  # Perform the Chi-Square test
+  chi_square_test2 <- chisq.test(observed2, p = expected2/sum(expected2))
+  
+  # Print the results for each cohort
+  cat("\nChi-Square Test Results for Cohort:", cohort, "\n")
+  print(chi_square_test2)
+}
+```
+ 
 
 #### b. **Family Size Analysis**
 - Use an **ANOVA** or **linear regression** to test if the mean or variance in family size changes over census years for the same cohort.
@@ -676,12 +752,46 @@ Result: The p-value of "Census_Year" is greater than 0.05, suggesting no statist
   **Example Code**:
 ```{r}
   # Fit linear model to check for changes in family size over time
-  family_size_model <- lm(Mean ~ Census_Year + Race + Cohort, data = summary_table)
+  #family_size_model <- lm(Mean ~ Census_Year, data = summary_table)
   
   # ANOVA to check for significant differences in mean
-  anova(family_size_model)
+  #anova(family_size_model)
 ```
-Result: The p-value of "Census_Year" is greater than 0.05, suggesting no statistically significance. Therefore, the mean in family size does not change over census years for the same cohort.
+
+```{r}
+merged_data2 <- left_join(merged_data, summary_table, by = c("Race","Cohort","Census_Year")) %>% dplyr::select(Race, Cohort, Census_Year, Mean, Variance)
+
+cohort_b <- merged_data2 %>% filter(Race == "Black/African American")
+cohort_w <- merged_data2 %>% filter(Race == "White")
+```
+
+
+```{r}
+cohorts1 <- unique(cohort_b$Cohort)
+
+# Loop through each cohort and apply ANOVA for Mean and Variance
+for (cohort in cohorts1) {
+  
+  # Filter data for the specific cohort
+  cohort_data_b <- cohort_b[cohort_b$Cohort == cohort, ]
+  
+  # Perform ANOVA for Mean
+  anova_mean_result <- aov(Mean ~ factor(Census_Year), data = cohort_data_b)
+  
+  # Perform ANOVA for Variance
+  anova_variance_result <- aov(Variance ~ factor(Census_Year), data = cohort_data_b)
+  
+  # Output the results
+  cat("\nCohort:", cohort)
+  cat("\nANOVA for Mean Family Size:\n")
+  print(summary(anova_mean_result))
+  cat("\nANOVA for Variance in Family Size:\n")
+  print(summary(anova_variance_result))
+}
+
+```
+
+
 
 #### c. **Model Fit Analysis**
 - If the best-fitting model changes for the same cohort over time, this suggests that the distribution of family sizes has shifted. Use **multinomial logistic regression** to test if the model fit differs across census years for the same cohort.
