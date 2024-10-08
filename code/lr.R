@@ -11,8 +11,6 @@ library(stringr)
 args <- commandArgs(trailingOnly = TRUE)
 str(args)
 cat(args, sep = "\n")
-print(args)
-#population<-c("AfAm", "Cauc", "Hispanic", "Asian")
 
 slurm_job_id <-  as.numeric(args[1])
 job_name<-as.character(args[2])
@@ -27,12 +25,17 @@ log_message <- function(message) {
   cat(paste0("[", Sys.time(), "] ", message, "\n"))
 }
 
+print("Creating directories, function 2")
+print(getwd())
+
 # Create output folder with SLURM job ID
-output_dir <- file.path("output", paste0("simulation_", job_name))
+t<-getwd()
+output_dir <- file.path(paste0(t,"/temp"))
 dir.create(output_dir, recursive = TRUE)
 print(output_dir)
 
 output_file <- file.path(output_dir, paste0("sim_processed_genotypes_",slurm_job_id,".csv"))
+output_file2 <- file.path(output_dir, paste0("sim_combined_genotypes_",slurm_job_id,".csv"))
 timing_log_file <- file.path(output_dir, "timing_log.csv")
 
 # Log the start of the process
@@ -248,9 +251,7 @@ processing_time <- system.time({
 })
 
 log_message(paste("Processed individuals genotypes in", processing_time["elapsed"], "seconds."))
-processed_genotypes <- as.data.table(processed_genotypes[, c("alleles_ind1","alleles_ind2","which_1st","A","B","C","D","marker","Rxp_factor"):=NULL])
-processed_genotypes<-processed_genotypes[lapply(processed_genotypes$LR, is.infinite)] <- 0 #Remove infinite and NaN values caused by dividing by zero
-processed_genotypes<-processed_genotypes[lapply(processed_genotypes$LR, is.na)] <- 0
+processed_genotypes <- as.data.table(processed_genotypes[, c("alleles_ind1","alleles_ind2","which_1st","A","B","C","D","marker"):=NULL])
 
 # Calculate combined likelihood ratios
 log_message("Calculating combined likelihood ratios...")
@@ -264,5 +265,6 @@ combined_lrs$LR<-as.numeric(combined_lrs$LR)
 # Save results to CSV
 log_message("Saving results to CSV files...")
 fwrite(processed_genotypes, output_file)
+fwrite(combined_lrs,output_file2)
 
 log_message("LR calculations completed.")
