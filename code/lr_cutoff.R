@@ -1,20 +1,51 @@
 # Load Required Libraries
 suppressMessages(suppressWarnings({
-  library(tidyverse)
+  library(dplyr)
   library(furrr)
   library(data.table)
-  library(future)
-  library(parallel)
 }))
 
 # Read Command-Line Arguments
 args <- commandArgs(trailingOnly = TRUE)
 slurm_job_id <-  as.character(args[1])
 
+# Helper function for logging
+log_message <- function(message) {
+  cat(paste0("[", Sys.time(), "] ", message, "\n"))
+}
+
 output_dir <- file.path("output", paste0("simulation_", slurm_job_id))
 
-# load combined lrs
-combined_lrs = fread(paste0("output/simulation_",slurm_job_id,"/sim_summary_genotypes.csv"))
+# load individual lrs and assemble
+t<-getwd()
+setwd(paste0(t,"/temp"))
+tabs<-list.files(pattern = "sim_processed_genotypes", recursive = TRUE)
+final_results<-do.call(rbind, lapply(tabs, read.csv))
+
+# Define Populations
+population_labels <- tibble(
+  population = factor(
+    c("AfAm", "Cauc", "Hispanic", "Asian"),
+    levels = c("AfAm", "Cauc", "Hispanic", "Asian")
+  ),
+  label = c("African American", "Caucasian", "Hispanic", "Asian"),
+  population_number = c(1:4)
+)
+
+#Assemble individual genotypes
+final_results<-left_join(final_results,as.data.frame(population_labels))
+setwd(output_dir)
+fwrite(final_results,"sim_processed_genotypes.csv")
+rm(final_results)
+
+# load combined lrs and assemble
+# Assemble summary genotypes
+setwd(paste0(t,"/temp"))
+tabs<-list.files(pattern = "sim_combined_genotypes", recursive = TRUE)
+combined_lrs<-do.call(rbind, lapply(tabs, read.csv))
+
+#To load if pre-assembled:
+#combined_lrs = fread(paste0("output/simulation_",slurm_job_id,"/sim_summary_genotypes.csv"))
 
 # Function to calculate cut-off values for 1%, 0.1%, and 0.01% FPR
 calculate_cutoffs <- function(input_df, fp_rates) {
@@ -61,3 +92,4 @@ fwrite(cutoffs, file.path(output_dir, "sim_cutoffs.csv"))
     
 proportions_exceeding_cutoffs <- calculate_proportions_exceeding_cutoffs(combined_lrs, cutoffs)
 fwrite(proportions_exceeding_cutoffs, file.path(output_dir, "sim_proportions_exceeding_cutoffs.csv"))
+log_message("Cutoffs applied.")
