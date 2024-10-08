@@ -1,27 +1,16 @@
-#This is a script for an array submission in which multiple identical jobs are run on the cluster at the same time
-#The outputs will write to folders with suffixes named after each of the array tasks
-#They can then be joined into one big table before moving on to subsequent tasks
-
 #!/bin/bash
-#SBATCH --job-name=simulate_genotypes_0923
-#SBATCH --output=/home/%u/%u/PODFRIDGE/slurm/%x-%j.log
+#SBATCH --output=/home/%u/PODFRIDGE/slurm/%x-%j.log
 #SBATCH --time=07:00:00
 #SBATCH --partition=standard
 #SBATCH --account=tlasisi0
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=36
-#SBATCH --mem-per-cpu=1000m
+#SBATCH --cpus-per-task=30
+#SBATCH --mem-per-cpu=1g
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=robheath@umich.edu
 #SBATCH --verbose
-#SBATCH --array=0-5
-
-########################################################################
-# Reminder: If pushing to github automatically, please set your GitHub PAT using the following command before running this script:                                          #
-#export GITHUB_PAT='pat'                       #
-#export GITHUB_USER='username'                            #
-########################################################################
+#SBATCH --array=0-50
 
 current_dir=${PWD##*/}
 echo "Current dir: $current_dir"
@@ -48,7 +37,7 @@ conda activate rstats #where rstats is the environment name
 
 # Log memory and CPU usage every 15 minutes
 log_resource_usage() {
-    squeue --job=$SLURM_JOB_ID --format="%.18i %.9P %.8j %.8u %.2t %.10M %.6D %R %C %m %N" | tee -a /home/$UNIQNAME/$UNIQNAME/PODFRIDGE/slurm/resource_usage_$SLURM_JOB_ID.log
+    squeue --job=$SLURM_JOB_ID --format="%.18i %.9P %.8j %.8u %.2t %.10M %.6D %R %C %m %N" | tee -a /home/$UNIQNAME/PODFRIDGE/slurm/resource_usage_$SLURM_JOB_ID.log
 }
 
 # Run the logging function every 15 minutes in the background
@@ -61,17 +50,12 @@ done &
 i=${SLURM_ARRAY_TASK_ID}
 
 # Run the R script with command line arguments
-#R CMD BATCH --no-save --no-restore simulate_genotypes.R 200 400 script_$SLURM_ARRAY_TASK_ID.out 1
-Rscript --vanilla simulate_genotypes.R 4000 8000 script_${i}.out 0
 
-#If automatically pushing to github:
-# Configure Git to use HTTPS and PAT
-#git remote set-url origin https://github.com/lasisilab/PODFRIDGE.git
+current_dir=${PWD##*/}
+echo "Current dir: $current_dir"
 
-# Commit and push changes to GitHub
-#git add .
-#git commit -m "Automated commit of new results $(date)"
-#echo $GITHUB_PAT | git push https://$GITHUB_USER:$GITHUB_PAT@github.com/lasisilab/PODFRIDGE.git
+Rscript --vanilla PODFRIDGE/code/simulate_genotypes.R 400 800 script_${i}.out $SLURM_JOB_NAME 0
+Rscript --vanilla PODFRIDGE/code/lr.R ${SLURM_ARRAY_TASK_ID} $SLURM_JOB_NAME
 
 # Log memory and CPU usage after job completion
-sacct -j $SLURM_JOB_ID --format=JobID,JobName,Partition,AllocCPUs,Elapsed,MaxRSS,MaxVMSize,State > /home/$UNIQNAME/$UNIQNAME/PODFRIDGE/slurm/usage_$SLURM_JOB_ID.log
+sacct -j $SLURM_JOB_ID --format=JobID,JobName,Partition,AllocCPUs,Elapsed,MaxRSS,MaxVMSize,State > /home/$UNIQNAME/PODFRIDGE/slurm/usage_$SLURM_JOB_ID.log
