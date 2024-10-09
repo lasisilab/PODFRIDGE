@@ -169,7 +169,7 @@ simulate_genotypes <- function(row, df_allelefreq, kinship_matrix) {
   locus <- row$locus
   relationship <- row$relationship_type
 
-  allele_freqs <- df_allelefreq[which(df_allelefreq$population == population & df_allelefreq$marker == locus),]
+  allele_freqs <- df_allelefreq[which(df_allelefreq$population == population & df_allelefreq$marker == locus & df_allelefreq$frequency>0),]
 
   if (nrow(allele_freqs) == 0) {
     stop(paste("No valid alleles found for population", population, "and locus", locus))
