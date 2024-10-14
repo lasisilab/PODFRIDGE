@@ -1,3 +1,3 @@
 
 This folder contains summary table outputs based on 600,000 simulated individuals. 
-It also contains sim_processed_genotypes.csv and sim_summary_genotypes.csv, which are subsets of 1000 unrelated pairs and 500 related pairs of simulated individuals from the original 600,000, to be used to test plots and other outputs.
+It also contains sim_processed_genotypes.csv and sim_summary_genotypes.csv in a zip folder, these tables represent subsets of 1000 unrelated pairs and 500 related pairs of simulated individuals from the original 600,000, to be used to test plots and other outputs.
