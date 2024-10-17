@@ -151,7 +151,7 @@ df_mirror <- df_proportions %>%
 my_colors <- colorRampPalette(c("#FFB000", "#F77A2E", "#DE3A8A", "#7253FF", "#5E8BFF"))(13)
 
 # Create the plot
-ggplot(df_mirror, aes(x = chborn_num, y = proportion, fill = as.factor(chborn_num))) +
+child_plot <- ggplot(df_mirror, aes(x = chborn_num, y = proportion, fill = as.factor(chborn_num))) +
   geom_col(aes(alpha = RACE)) +
   geom_hline(yintercept = 0, color = "black", size = 0.5) +
   facet_grid(AGE_RANGE ~ YEAR, scales = "free_y") +
@@ -180,6 +180,7 @@ ggplot(df_mirror, aes(x = chborn_num, y = proportion, fill = as.factor(chborn_nu
     panel.grid.minor.y = element_blank()
   )
 
+print(child_plot)
 # Save the plot (optional)
 # ggsave("children_distribution_mirror_plot.png", width = 20, height = 25, units = "in", dpi = 300)
 
@@ -816,7 +817,9 @@ ggplot(combined_result, aes(x = Census_Year, y = P_Value, group = interaction(Co
 
 
 ```
-Result:In some cohorts (-Inf-1900, -Inf-1920, 1891-1900, 1911-1920, 1921-1930, 1931-1940, 1941-1950), the p-values for Black women tend to be similar to those for White women, even across census year, suggesting no significant difference in the probability of having zero children between the two groups. By contrast, cohorts -Inf-1890, -Inf-1910 present a large difference in p-value, indicating a discrepancy between two groups. 
+Result:
+-In some cohorts (-Inf-1900, -Inf-1920, 1891-1900, 1911-1920, 1921-1930, 1931-1940, 1941-1950), the p-values for Black women tend to be similar to those for White women, even across census year, suggesting no significant difference in the probability of having zero children between the two groups. By contrast, cohorts -Inf-1890, -Inf-1910 present a difference in p-value, indicating a discrepancy between two groups. Specially, there is a increase in the p-value for balck population in cohort 1901-1910. 
+-Since the p-values are plotted on a log scale, the extremely small values (e.g., 1e-300) suggest that there are significant differences between the observed and expected proportions of women with zero children across all census years for both populations.
 
 ```{r}
 ggplot(combined_result, aes(x = Census_Year, y = Test_Statistic, group = interaction(Cohort, Population), color = Population)) +
@@ -828,7 +831,15 @@ ggplot(combined_result, aes(x = Census_Year, y = Test_Statistic, group = interac
   theme_minimal() +
   theme(legend.position = "bottom")
 ```
-Result: The test statistic graph shows that Black women have lower test statistics compared to White women in all cohorts, meaning the magnitude of difference in having zero children is not as extreme for Black women compared to White women in those cohorts. We can also observe a change in test statistics in certain cohort(1901-1910, 1911-1920, 1921-1930, 1931-1940) over census year. 
+Result: 
+-Black Population: The test statistics for the Black population are relatively stable across most cohorts, with moderate test statistics in the range of 5,000–10,000 for most census years.
+-White Population: The test statistics are much higher for the White population, especially in cohorts like 1911-1920, 1921-1930, and 1931-1940, where they reach values as high as 100,000.
+-For cohorts like 1891-1900, 1901-1910, and 1921-1930, the test statistics for the White population are significantly higher than for the Black population, indicating greater differences between the observed and expected proportions of women with zero children in the White population.
+-In the cohort 1941-1950, there’s a large test statistic spike for the White population, but the Black population remains much lower, suggesting less variation in the observed and expected values for the Black population.
+
+CONCLUSION:
+-Based on the p-value comparison, both Black and White women show statistically significant differences in the number of children over time. However, the larger test statistics for the White population suggest that there might be more variability or greater differences in childbearing patterns among White women compared to Black women. So while both populations show significant patterns, White women appear to have more pronounced differences over time.
+-The probability of having zero children does change over time for Black women. This is evidenced by the consistently low p-values across all census years, suggesting that the number of children born to Black women differs significantly from the expected proportions. The test statistics for Black women are stable but moderate, indicating that while there are significant differences, they are less pronounced compared to the White population.
 
 #### b. **Family Size Analysis**
 - Use an **ANOVA** or **linear regression** to test if the mean or variance in family size changes over census years for the same cohort.
@@ -935,9 +946,9 @@ The steps below are suggestions: use critical thinking and your judgement to com
   - List the cohorts where significant shifts in fertility distributions were observed for 40-49 year-olds.
   - Note the nature of these shifts for each cohort, such as changes in mean number of children, variance, or zero inflation (proportion of women with zero children).
 
--change in prob_0 children:
+-change in prob_0 children: 1901-1910, 1911-1920, 1921-1930, 1931-1940 
 -change in mean & variance: 1901-1910, 1911-1920, 1921-1930, 1931-1940 
--change in best model fit
+-change in best model fit: none
 
 #### 1.2 Extract Data for Age Groups in 1990 Census
 
@@ -952,7 +963,7 @@ The steps below are suggestions: use critical thinking and your judgement to com
     - Race (`RACE`)
     - Any other relevant variables used in previous analyses
 ```{r}
-filter_df <- merged_data %>% filter(Census_Year == "1990", Age_Range %in% c("40-49", "50-59"))
+filter_df <- df_proportions %>% filter(YEAR == "1990", AGE_RANGE %in% c("40-49", "50-59"))
 ```
 
 ### Step 2: Create Visualizations
@@ -971,6 +982,34 @@ Design visualizations that effectively communicate your findings.
 - **Annotate the Plots**:
   - Include text or labels that describe the nature of the significant shifts for each highlighted cohort.
     - For example, indicate if there was a decrease in mean number of children or an increase in childlessness.
+```{r}
+# Adding annotations and highlighting significant shifts
+child_plot +
+  # Adjust the rectangle to fit within the proportion and number of children ranges
+  annotate("rect", xmin = -0.45, xmax = 0.45, ymin = -0.3, ymax = 0.3, alpha = 0.3, color = "blue", fill = "blue") 
+  labs(title = "Fertility Distribution Shifts Across Cohorts",
+       subtitle = "Highlighted shifts in fertility and childlessness",
+       caption = "Annotations indicate key shifts in fertility distribution across census years") +
+  
+  # Optional: Adjust the theme for better visibility
+  theme_minimal() 
+```
+
+```{r}
+child_plot +
+  # Add the transparent rectangle annotation only to the facet where YEAR is 1960 and AGE_RANGE is 40-49
+  geom_rect(data = df_mirror %>% filter(YEAR == 1960 & AGE_RANGE == "40-49"),
+            aes(xmin = -0.45, xmax = 0.45, ymin = -0.3, ymax = 0.3), 
+            fill = "blue", alpha = 0.1) +  # Apply transparency
+  
+  # Update the title, subtitle, and caption
+  labs(title = "Fertility Distribution Shifts Across Cohorts",
+       subtitle = "Highlighted shifts in fertility and childlessness",
+       caption = "Annotations indicate key shifts in fertility distribution across census years") +
+  theme_minimal()
+
+```
+
 
 #### 2.2 Panel B: Comparison of 40-49 and 50-59 Age Groups in 1990
 
@@ -986,6 +1025,32 @@ Design visualizations that effectively communicate your findings.
 - **Ensure Clarity in Visuals**:
   - Properly label axes, legends, and titles.
   - Use consistent color schemes for easy comparison between groups.
+
+```{r}
+ggplot(filter_df, aes(x = chborn_num, y = proportion, fill = AGE_RANGE)) +
+  geom_col(position = "identity", alpha = 0.5) +  # Use geom_col() for pre-summarized data
+  facet_wrap(~ RACE) +  # Create separate plots by Race
+  labs(
+    title = "Comparison of Children Born Between 40-49 and 50-59 Age Groups in 1990",
+    x = "Number of Children",
+    y = "Proportion",
+    fill = "Age Range"
+  ) 
+```
+
+
+```{r}
+summary_stats <- filter_df %>%
+  group_by(AGE_RANGE, RACE) %>%
+  summarise(
+    mean_children = mean(chborn_num, na.rm = TRUE),
+    variance_children = var(chborn_num, na.rm = TRUE),
+    zero_inflation = mean(chborn_num == 0, na.rm = TRUE)
+  )
+
+# Print summary statistics table
+summary_stats
+```
 
 ### Step 3: Perform Statistical Comparisons
 
