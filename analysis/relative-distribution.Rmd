@@ -42,7 +42,7 @@ library(pscl)
 library(ggplot2)
 library(nnet)
 library(car)
-
+library(rstatix)
 ```
 
 ## Data Preparation
@@ -962,9 +962,6 @@ The steps below are suggestions: use critical thinking and your judgement to com
     - Age range (`AGE_RANGE`)
     - Race (`RACE`)
     - Any other relevant variables used in previous analyses
-```{r}
-filter_df <- df_proportions %>% filter(YEAR == "1990", AGE_RANGE %in% c("40-49", "50-59"))
-```
 
 ### Step 2: Create Visualizations
 
@@ -982,23 +979,20 @@ Design visualizations that effectively communicate your findings.
 - **Annotate the Plots**:
   - Include text or labels that describe the nature of the significant shifts for each highlighted cohort.
     - For example, indicate if there was a decrease in mean number of children or an increase in childlessness.
-```{r}
-# Adding annotations and highlighting significant shifts
-child_plot +
-  # Adjust the rectangle to fit within the proportion and number of children ranges
-  annotate("rect", xmin = -0.45, xmax = 0.45, ymin = -0.3, ymax = 0.3, alpha = 0.3, color = "blue", fill = "blue") 
-  labs(title = "Fertility Distribution Shifts Across Cohorts",
-       subtitle = "Highlighted shifts in fertility and childlessness",
-       caption = "Annotations indicate key shifts in fertility distribution across census years") +
-  
-  # Optional: Adjust the theme for better visibility
-  theme_minimal() 
-```
 
 ```{r}
 child_plot +
   # Add the transparent rectangle annotation only to the facet where YEAR is 1960 and AGE_RANGE is 40-49
-  geom_rect(data = df_mirror %>% filter(YEAR == 1960 & AGE_RANGE == "40-49"),
+  geom_rect(data = df_mirror %>% filter((YEAR == 1960 & AGE_RANGE == "40-49")|
+                                        (YEAR == 1960 & AGE_RANGE == "50-59")|
+                                        (YEAR == 1970 & AGE_RANGE == "40-49")|
+                                        (YEAR == 1970 & AGE_RANGE == "50-59")|
+                                        (YEAR == 1970 & AGE_RANGE == "60-69")|
+                                        (YEAR == 1980 & AGE_RANGE == "40-49")|
+                                        (YEAR == 1980 & AGE_RANGE == "50-59")|
+                                        (YEAR == 1980 & AGE_RANGE == "60-69")|
+                                        (YEAR == 1990 & AGE_RANGE == "50-59")|
+                                        (YEAR == 1990 & AGE_RANGE == "60-69")),
             aes(xmin = -0.45, xmax = 0.45, ymin = -0.3, ymax = 0.3), 
             fill = "blue", alpha = 0.1) +  # Apply transparency
   
@@ -1010,6 +1004,26 @@ child_plot +
 
 ```
 
+```{r}
+limits <- df_mirror %>%
+  filter(YEAR == 1960 & AGE_RANGE == "40-49") %>%
+  summarize(
+    xmin = -0.45,
+    xmax = 0.45,
+    ymin = -0.3,
+    ymax = 0.3
+  )
+
+# Add the annotation using the calculated limits
+child_plot +
+  annotate("rect", xmin = limits$xmin, xmax = limits$xmax, 
+           ymin = limits$ymin, ymax = limits$ymax, 
+           alpha = 0.3, color = "blue", fill = "blue") +
+  labs(title = "Fertility Distribution Shifts Across Cohorts",
+       subtitle = "Highlighted shifts in fertility and childlessness",
+       caption = "Annotations indicate key shifts in fertility distribution across census years") +
+  theme_minimal()
+```
 
 #### 2.2 Panel B: Comparison of 40-49 and 50-59 Age Groups in 1990
 
@@ -1025,6 +1039,11 @@ child_plot +
 - **Ensure Clarity in Visuals**:
   - Properly label axes, legends, and titles.
   - Use consistent color schemes for easy comparison between groups.
+```{r}
+filter_df <- df_proportions %>% 
+  filter(YEAR == "1990", AGE_RANGE %in% c("40-49", "50-59")) 
+```
+
 
 ```{r}
 ggplot(filter_df, aes(x = chborn_num, y = proportion, fill = AGE_RANGE)) +
@@ -1043,9 +1062,9 @@ ggplot(filter_df, aes(x = chborn_num, y = proportion, fill = AGE_RANGE)) +
 summary_stats <- filter_df %>%
   group_by(AGE_RANGE, RACE) %>%
   summarise(
-    mean_children = mean(chborn_num, na.rm = TRUE),
-    variance_children = var(chborn_num, na.rm = TRUE),
-    zero_inflation = mean(chborn_num == 0, na.rm = TRUE)
+    mean_children = weighted.mean(chborn_num, count),  # Mean number of children
+    variance_children = sum(count * (chborn_num - weighted.mean(chborn_num, count))^2) / sum(count),  # Variance
+    zero_inflation = sum(count[chborn_num == 0]) / sum(count)  # Proportion of women with 0 children
   )
 
 # Print summary statistics table
@@ -1064,17 +1083,108 @@ Conduct statistical tests to determine if observed differences are significant.
 - **Check Assumptions**:
   - Ensure that the data meets the assumptions of the t-test (normality, equal variances).
   - If assumptions are violated, consider using a non-parametric test like the Mann-Whitney U test.
+```{r}
+## Check the normality assumption for black population
+# Subset data for the 40-49 and 50-59 age groups
+data_40_49_b <- df %>% filter(AGE_RANGE == "40-49", RACE == "Black/African American")
+data_50_59_b <- df %>% filter(AGE_RANGE == "50-59", RACE == "Black/African American")
 
+qqnorm(data_40_49_b$chborn_num, main = "QQ Plot: 40-49 Age Group (Black/African American)")
+qqline(data_40_49_b$chborn_num)
+
+# QQ plot for the 50-59 age group
+qqnorm(data_50_59_b$chborn_num, main = "QQ Plot: 50-59 Age Group (Black/African American)")
+qqline(data_50_59_b$chborn_num)
+```
+
+```{r}
+## Check equal variance for black population
+df_b <- df %>% filter(RACE == "Black/African American")
+
+# Levene's test for equal variances
+levene_test_result <- leveneTest(chborn_num ~ as.factor(AGE_RANGE), data = df_b)
+
+levene_test_result
+```
+
+```{r}
+## Check the normality assumption for white population
+data_40_49_w <- df %>% filter(AGE_RANGE == "40-49", RACE == "White")
+data_50_59_w <- df %>% filter(AGE_RANGE == "50-59", RACE == "White")
+
+qqnorm(data_40_49_w$chborn_num, main = "QQ Plot: 40-49 Age Group (White)")
+qqline(data_40_49_w$chborn_num)
+
+# QQ plot for the 50-59 age group
+qqnorm(data_50_59_w$chborn_num, main = "QQ Plot: 50-59 Age Group (White)")
+qqline(data_50_59_w$chborn_num)
+```
+
+```{r}
+## Check equal variance for white population
+df_w <- df %>% filter(RACE == "White")
+
+# Levene's test for equal variances
+levene_test_result2 <- leveneTest(chborn_num ~ as.factor(AGE_RANGE), data = df_w)
+
+levene_test_result2
+```
+
+Since the data violate both assumption, we perform a Mann-Whitney U test in the follwoing:
+```{r}
+wilcox_test_result <- wilcox.test(data_40_49_b$chborn_num, data_50_59_b$chborn_num)$p.value
+wilcox_test_result2 <- wilcox.test(data_40_49_w$chborn_num, data_50_59_w$chborn_num)$p.value
+print(c(wilcox_test_result, wilcox_test_result2))
+```
+Result: These p-values are both extremely small (close to zero), meaning there is a very strong statistical difference between the two age groups (40-49 and 50-59) in terms of the number of children they have for both the Black/African American and White racial groups. 
 #### 3.2 F-Test for Difference in Variances
 
 - **Assess Variance Differences**:
   - Perform an F-test or Levene's test to compare the variances of the number of children between the two age groups within each racial group.
-  
+```{r}
+## Apply Levene's test since non-normality
+levene_test_b <- leveneTest(chborn_num ~ as.factor(AGE_RANGE), data = df_b)
+
+# Levene's test for White group
+levene_test_w <- leveneTest(chborn_num ~ as.factor(AGE_RANGE), data = df_w)
+
+# Print results
+print(levene_test_b)
+print(levene_test_w)
+```
+Result: Since the p values are smaller than 0.05 for both racial group, we have enough evidence to reject the null hypothesis, indicating that the variances of the number of children between the two age groups within each racial group are significantly different.
+
 #### 3.3 Chi-Square Test for Difference in Zero Inflation
 
 - **Analyze Zero Inflation**:
   - Create contingency tables showing the counts of women with zero children and those with one or more children for each age group.
   - Perform a chi-square test to determine if the proportion of childlessness differs significantly between the age groups within each racial group.
+```{r}
+ZI_table <- df %>% 
+  mutate(childlessness = ifelse(chborn_num == 0, "Zero Children", "One or More")) %>%       group_by(RACE, AGE_RANGE, childlessness) %>%
+  summarise(count = n())
+
+ZI_table
+```
+
+```{r}
+ZI_table_b <- ZI_table %>%
+  filter(RACE == "Black/African American")
+
+cont_table_b <- xtabs(count ~ AGE_RANGE + childlessness, data = ZI_table_b)
+chi_test_b <- chisq.test(cont_table_b)
+chi_test_b
+```
+
+```{r}
+ZI_table_w <- ZI_table %>%
+  filter(RACE == "White")
+
+cont_table_w <- xtabs(count ~ AGE_RANGE + childlessness, data = ZI_table_w)
+chi_test_w <- chisq.test(cont_table_w)
+chi_test_w
+```
+Result: The p-values for both tests are extremely low, suggests that there is a significant difference in the proportion of women with zero children versus those with one or more children across different age ranges for both the Black/African American and White racial groups. The results imply that childlessness is not uniformly distributed across age groups. Some age groups may have a higher proportion of women with zero children compared to others. 
 
 ### Step 4: Summarize Findings
 
