@@ -711,7 +711,7 @@ for (cohort in cohorts) {
     cohort_year_data <- cohort_data[cohort_data$Census_Year == year, ]
     
     # Calculate the observed counts for women with zero children and with children
-    observed <- table(cohort_year_data$chborn_num == 0)  # TRUE: no children, FALSE: have children
+    observed <- table(cohort_year_data$chborn_num == 0)  
     
     # Skip if there are not both TRUE and FALSE values
     if (length(observed) >= 2) {
@@ -1002,27 +1002,6 @@ child_plot +
        caption = "Annotations indicate key shifts in fertility distribution across census years") +
   theme_minimal()
 
-```
-
-```{r}
-limits <- df_mirror %>%
-  filter(YEAR == 1960 & AGE_RANGE == "40-49") %>%
-  summarize(
-    xmin = -0.45,
-    xmax = 0.45,
-    ymin = -0.3,
-    ymax = 0.3
-  )
-
-# Add the annotation using the calculated limits
-child_plot +
-  annotate("rect", xmin = limits$xmin, xmax = limits$xmax, 
-           ymin = limits$ymin, ymax = limits$ymax, 
-           alpha = 0.3, color = "blue", fill = "blue") +
-  labs(title = "Fertility Distribution Shifts Across Cohorts",
-       subtitle = "Highlighted shifts in fertility and childlessness",
-       caption = "Annotations indicate key shifts in fertility distribution across census years") +
-  theme_minimal()
 ```
 
 #### 2.2 Panel B: Comparison of 40-49 and 50-59 Age Groups in 1990

@@ -355,7 +355,7 @@ div.tocify {
 <h1 class="title toc-ignore">Estimating Differences in the Distribution
 of First-degree Relatives</h1>
 <h4 class="author">Manqing Lin, Tina Lasisi</h4>
-<h4 class="date">2024-10-04 13:31:25</h4>
+<h4 class="date">2024-10-22 09:36:17</h4>
 
 </div>
 
@@ -363,7 +363,7 @@ of First-degree Relatives</h1>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+workflowr <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -374,8 +374,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> </a>
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -384,13 +384,13 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2024-10-04
+<strong>Last updated:</strong> 2024-10-22
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 1
+aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>PODFRIDGE/</code> <span
@@ -413,21 +413,18 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
-<span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
-changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges"
+<div id="strongRMarkdownfilestronguptodate"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes. To know which version of
-the R Markdown file created these results, you’ll want to first commit
-it to the Git repo. If you’re still working on the analysis, you can
-ignore this warning. When you’re finished, you can run
-<code>wflow_publish</code> to commit the R Markdown file and build the
-HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
 </div>
 </div>
 </div>
@@ -518,15 +515,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree7ec169f19f763fa4ae4cc479e001d89c48eac353targetblank7ec169fa">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreebb2c61b7f74db6bd5d5499c3a5769fe950aa670etargetblankbb2c61ba">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/7ec169f19f763fa4ae4cc479e001d89c48eac353" target="_blank">7ec169f</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/bb2c61b7f74db6bd5d5499c3a5769fe950aa670e" target="_blank">bb2c61b</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree7ec169f19f763fa4ae4cc479e001d89c48eac353targetblank7ec169fa"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreebb2c61b7f74db6bd5d5499c3a5769fe950aa670etargetblankbb2c61ba"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -536,7 +533,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/7ec169f19f763fa4ae4cc479e001d89c48eac353" target="_blank">7ec169f</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/bb2c61b7f74db6bd5d5499c3a5769fe950aa670e" target="_blank">bb2c61b</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -554,9 +551,8 @@ Ignored files:
     Ignored:    .DS_Store
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-
-Unstaged changes:
-    Modified:   analysis/relative-distribution.Rmd
+    Ignored:    analysis/.Rhistory
+    Ignored:    data/.DS_Store
 
 </code></pre>
 <p>
@@ -602,6 +598,108 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/bb2c61b7f74db6bd5d5499c3a5769fe950aa670e/analysis/relative-distribution.Rmd" target="_blank">bb2c61b</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-10-21
+</td>
+<td>
+complete fertility shift analysis
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/842d935f1027fd858cabf2fd48684e824c1699b3/analysis/relative-distribution.Rmd" target="_blank">842d935</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-10-17
+</td>
+<td>
+update fertility shift
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/2ae84609413327192cca951dc7e71dcc4000f910/analysis/relative-distribution.Rmd" target="_blank">2ae8460</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-10-16
+</td>
+<td>
+fix the chisq-test
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/9632ae1f7420addbaec02a4b92ea9258b6e67e22/analysis/relative-distribution.Rmd" target="_blank">9632ae1</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-10-12
+</td>
+<td>
+update cohort stability
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/9852339ae0eb8c21fbeff0dd60f78482a2a51982/analysis/relative-distribution.Rmd" target="_blank">9852339</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-10-08
+</td>
+<td>
+update cohort stability
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/9852339ae0eb8c21fbeff0dd60f78482a2a51982/docs/relative-distribution.html" target="_blank">9852339</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-10-08
+</td>
+<td>
+update cohort stability
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -996,7 +1094,7 @@ df_mirror &lt;- df_proportions %&gt;%
 my_colors &lt;- colorRampPalette(c(&quot;#FFB000&quot;, &quot;#F77A2E&quot;, &quot;#DE3A8A&quot;, &quot;#7253FF&quot;, &quot;#5E8BFF&quot;))(13)
 
 # Create the plot
-ggplot(df_mirror, aes(x = chborn_num, y = proportion, fill = as.factor(chborn_num))) +
+child_plot &lt;- ggplot(df_mirror, aes(x = chborn_num, y = proportion, fill = as.factor(chborn_num))) +
   geom_col(aes(alpha = RACE)) +
   geom_hline(yintercept = 0, color = &quot;black&quot;, size = 0.5) +
   facet_grid(AGE_RANGE ~ YEAR, scales = &quot;free_y&quot;) +
@@ -1023,7 +1121,9 @@ ggplot(df_mirror, aes(x = chborn_num, y = proportion, fill = as.factor(chborn_nu
     legend.position = &quot;none&quot;,
     panel.grid.major.y = element_blank(),
     panel.grid.minor.y = element_blank()
-  )</code></pre>
+  )
+
+print(child_plot)</code></pre>
 <p><img src="figure/relative-distribution.Rmd/unnamed-chunk-2-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-1">
@@ -1816,16 +1916,175 @@ probability of having zero children changes significantly over time for
 the same cohort.</p>
 <p><strong>Example Code</strong>:</p></li>
 </ul>
-<pre class="r"><code># Fit logistic regression to check if zero-inflation changes over time
-zero_inflation_model &lt;- glm(Prob_0 ~ Census_Year + Race + Cohort, 
-                            family = binomial(), data = summary_table)
+<pre class="r"><code>## divided the corhort by race
+merged_df_black &lt;- merged_data %&gt;% filter(Race == &quot;Black/African American&quot;)
+merged_df_white &lt;- merged_data %&gt;% filter(Race == &quot;White&quot;)</code></pre>
+<pre class="r"><code># Initialize an empty data frame to store the results
+results_df_black &lt;- data.frame(Cohort = character(),
+                               Census_Year = integer(),
+                               P_Value = numeric(),
+                               Test_Statistic = numeric(),
+                               stringsAsFactors = FALSE)
 
-# Summary of the model
-summary(zero_inflation_model)</code></pre>
-<p>Result: The p-value of “Census_Year” is greater than 0.05, suggesting
-no statistically significance. Therefore, the probability of having zero
-children does not change significantly over time for the same
-cohort.</p>
+# Get a list of unique cohorts
+cohorts &lt;- unique(merged_df_black$Cohort)
+
+# Loop through each cohort
+for (cohort in cohorts) {
+  
+  # Filter data for the specific cohort
+  cohort_data &lt;- merged_df_black[merged_df_black$Cohort == cohort, ]
+  
+  # Loop through each unique Census Year for this cohort
+  for (year in unique(cohort_data$Census_Year)) {
+    
+    # Filter for the specific census year
+    cohort_year_data &lt;- cohort_data[cohort_data$Census_Year == year, ]
+    
+    # Calculate the observed counts for women with zero children and with children
+    observed &lt;- table(cohort_year_data$chborn_num == 0)  # TRUE: no children, FALSE: have children
+    
+    # Skip if there are not both TRUE and FALSE values
+    if (length(observed) &gt;= 2) {
+      
+      # Expected counts assuming no change (proportions remain constant)
+      expected &lt;- rep(mean(observed), length(observed))
+      
+      # Perform the Chi-Square test
+      chi_square_test &lt;- chisq.test(observed, p = expected/sum(expected))
+      
+      # Extract p-value and test statistic
+      p_value &lt;- chi_square_test$p.value
+      test_stat &lt;- chi_square_test$statistic
+      
+      # Store the results in the data frame
+      results_df_black &lt;- rbind(results_df_black, data.frame(Cohort = cohort,
+                                                             Census_Year = year,
+                                                             P_Value = p_value,
+                                                             Test_Statistic = test_stat))
+    }
+  }
+}
+
+# Print the final results
+print(results_df_black)</code></pre>
+<pre class="r"><code>results_df_white &lt;- data.frame(Cohort = character(),
+                               Census_Year = integer(),
+                               P_Value = numeric(),
+                               Test_Statistic = numeric(),
+                               stringsAsFactors = FALSE)
+
+# Loop through white population
+cohorts_white &lt;- unique(merged_df_white$Cohort)
+
+for (cohort in cohorts_white) {
+  
+  # Filter data for the specific cohort
+  cohort_data &lt;- merged_df_white[merged_df_white$Cohort == cohort, ]
+  
+  # Loop through each unique Census Year for this cohort
+  for (year in unique(cohort_data$Census_Year)) {
+    
+    # Filter for the specific census year
+    cohort_year_data &lt;- cohort_data[cohort_data$Census_Year == year, ]
+    
+    # Calculate the observed counts for women with zero children and with children
+    observed &lt;- table(cohort_year_data$chborn_num == 0)  # TRUE: no children, FALSE: have children
+    
+    # Skip if there are not both TRUE and FALSE values
+    if (length(observed) &gt;= 2) {
+      
+      # Expected counts assuming no change (proportions remain constant)
+      expected &lt;- rep(mean(observed), length(observed))
+      
+      # Perform the Chi-Square test
+      chi_square_test &lt;- chisq.test(observed, p = expected/sum(expected))
+      
+      # Extract p-value and test statistic
+      p_value &lt;- chi_square_test$p.value
+      test_stat &lt;- chi_square_test$statistic
+      
+      # Store the results in the data frame
+      results_df_white &lt;- rbind(results_df_white, data.frame(Cohort = cohort,
+                                                             Census_Year = year,
+                                                             P_Value = p_value,
+                                                             Test_Statistic = test_stat
+                                                             ))
+    }
+  }
+}
+print(results_df_white)</code></pre>
+<pre class="r"><code>results_df_black$Population &lt;- &quot;Black&quot;
+results_df_white$Population &lt;- &quot;White&quot;
+
+# Combine the two data frames
+combined_result &lt;- rbind(results_df_black, results_df_white)
+combined_result$P_Value[combined_result$P_Value == 0] &lt;- 1e-300
+
+# Get the minimum and maximum p-values for the log scale
+min_p_value &lt;- min(combined_result$P_Value, na.rm = TRUE)
+max_p_value &lt;- max(combined_result$P_Value, na.rm = TRUE)
+
+# Adjust plot with dynamic limits based on the p-value range
+ggplot(combined_result, aes(x = Census_Year, y = P_Value, group = interaction(Cohort, Population), color = Population)) +
+  geom_line(aes(linetype = Population), size = 1) +
+  geom_point(aes(shape = Population), size = 2) +  # Different shapes for Population
+  facet_wrap(~ Cohort, scales = &quot;free_y&quot;) +
+  labs(title = &quot;P-Value Comparison between Black and White Populations&quot;,
+       x = &quot;Census Year&quot;, y = &quot;P-Value&quot;) +
+  theme_minimal() +
+  theme(legend.position = &quot;bottom&quot;) +
+  scale_y_log10(breaks = scales::trans_breaks(&quot;log10&quot;, function(x) 10^x),
+                labels = scales::trans_format(&quot;log10&quot;, scales::math_format(10^.x)),
+                limits = c(min_p_value, max_p_value))  # Dynamically set limits</code></pre>
+<p>Result: -In some cohorts (-Inf-1900, -Inf-1920, 1891-1900, 1911-1920,
+1921-1930, 1931-1940, 1941-1950), the p-values for Black women tend to
+be similar to those for White women, even across census year, suggesting
+no significant difference in the probability of having zero children
+between the two groups. By contrast, cohorts -Inf-1890, -Inf-1910
+present a difference in p-value, indicating a discrepancy between two
+groups. Specially, there is a increase in the p-value for balck
+population in cohort 1901-1910. -Since the p-values are plotted on a log
+scale, the extremely small values (e.g., 1e-300) suggest that there are
+significant differences between the observed and expected proportions of
+women with zero children across all census years for both
+populations.</p>
+<pre class="r"><code>ggplot(combined_result, aes(x = Census_Year, y = Test_Statistic, group = interaction(Cohort, Population), color = Population)) +
+  geom_line(aes(linetype = Population), size = 1) +
+  geom_point(aes(shape = Population), size = 2) +  # Different shapes for Population
+  facet_wrap(~ Cohort, scales = &quot;free_y&quot;) +
+  labs(title = &quot;Test_Statistics Comparison between Black and White Populations&quot;,
+       x = &quot;Census Year&quot;, y = &quot;Test_Statistics&quot;) +
+  theme_minimal() +
+  theme(legend.position = &quot;bottom&quot;)</code></pre>
+<p>Result: -Black Population: The test statistics for the Black
+population are relatively stable across most cohorts, with moderate test
+statistics in the range of 5,000–10,000 for most census years. -White
+Population: The test statistics are much higher for the White
+population, especially in cohorts like 1911-1920, 1921-1930, and
+1931-1940, where they reach values as high as 100,000. -For cohorts like
+1891-1900, 1901-1910, and 1921-1930, the test statistics for the White
+population are significantly higher than for the Black population,
+indicating greater differences between the observed and expected
+proportions of women with zero children in the White population. -In the
+cohort 1941-1950, there’s a large test statistic spike for the White
+population, but the Black population remains much lower, suggesting less
+variation in the observed and expected values for the Black
+population.</p>
+<p>CONCLUSION: -Based on the p-value comparison, both Black and White
+women show statistically significant differences in the number of
+children over time. However, the larger test statistics for the White
+population suggest that there might be more variability or greater
+differences in childbearing patterns among White women compared to Black
+women. So while both populations show significant patterns, White women
+appear to have more pronounced differences over time. -The probability
+of having zero children does change over time for Black women. This is
+evidenced by the consistently low p-values across all census years,
+suggesting that the number of children born to Black women differs
+significantly from the expected proportions. The test statistics for
+Black women are stable but moderate, indicating that while there are
+significant differences, they are less pronounced compared to the White
+population.</p>
 </div>
 <div id="b.-family-size-analysis" class="section level4">
 <h4>b. <strong>Family Size Analysis</strong></h4>
@@ -1836,13 +2095,45 @@ changes over census years for the same cohort.</p>
 <p><strong>Example Code</strong>:</p></li>
 </ul>
 <pre class="r"><code>  # Fit linear model to check for changes in family size over time
-  family_size_model &lt;- lm(Mean ~ Census_Year + Race + Cohort, data = summary_table)
+  #family_size_model &lt;- lm(Mean ~ Census_Year, data = summary_table)
   
   # ANOVA to check for significant differences in mean
-  anova(family_size_model)</code></pre>
-<p>Result: The p-value of “Census_Year” is greater than 0.05, suggesting
-no statistically significance. Therefore, the mean in family size does
-not change over census years for the same cohort.</p>
+  #anova(family_size_model)</code></pre>
+<pre class="r"><code>merged_data2 &lt;- left_join(merged_data, summary_table, by = c(&quot;Race&quot;,&quot;Cohort&quot;,&quot;Census_Year&quot;)) %&gt;% dplyr::select(Race, Cohort, Census_Year, Mean, Variance)</code></pre>
+<pre class="r"><code>cohorts1 &lt;- unique(merged_data2$Cohort)
+
+# Loop through each cohort and apply ANOVA for Mean and Variance
+for (cohort in cohorts1) {
+  
+  # Filter data for the specific cohort
+  cohort_data_b &lt;- merged_data2[merged_data2$Cohort == cohort, ]
+  
+  # Check if there are at least two unique Census_Year values
+  if (length(unique(cohort_data_b$Census_Year)) &lt; 2) {
+    cat(&quot;\nCohort:&quot;, cohort, &quot;has only one Census Year. Skipping ANOVA.\n&quot;)
+    next
+  }
+  
+  # Perform ANOVA for Mean
+  anova_mean_result &lt;- aov(Mean ~ factor(Census_Year), data = cohort_data_b)
+  
+  # Perform ANOVA for Variance
+  anova_variance_result &lt;- aov(Variance ~ factor(Census_Year), data = cohort_data_b)
+  
+  # Output the results
+  cat(&quot;\nCohort:&quot;, cohort)
+  cat(&quot;\nANOVA for Mean Family Size:\n&quot;)
+  print(summary(anova_mean_result))
+  cat(&quot;\nANOVA for Variance in Family Size:\n&quot;)
+  print(summary(anova_variance_result))
+}</code></pre>
+<p>Result: 1.The ANOVA is not applicable for the following cohort since
+there is only one census year available in the dataset for those
+cohorts:-Inf-1910, 1941-1950, -Inf-1920, -Inf-1890, -Inf-1900, and
+1891-1900 2.By looking at the ANOVA for mean and variance family size,
+the p-value of the rest cohorts are smaller than 0.05, indicating mean
+and variance family size for these cohort has significantly changed over
+different census years.</p>
 </div>
 <div id="c.-model-fit-analysis" class="section level4">
 <h4>c. <strong>Model Fit Analysis</strong></h4>
@@ -1859,12 +2150,13 @@ fit differs across census years for the same cohort.</p>
 
 
 # Fit multinomial logistic regression to test changes in best-fitting model
-model_fit_analysis &lt;- glm(Best_Model_Binary ~ Census_Year + Race + Cohort, data = cohort_data)
+model_fit_analysis &lt;- glm(Best_Model_Binary ~ factor(Census_Year), data = cohort_data)
 
 # Summary of the model
 summary(model_fit_analysis)</code></pre>
-<p>Result: The p-value of “Census_Year” is greater than 0.05, suggesting
-no statistically significant effect on choice between best models.</p>
+<p>Result: The p-value of all the “Census_Year” is greater than 0.05,
+suggesting no statistically significant effect on choice between best
+models.</p>
 </div>
 </div>
 <div id="step-4-interpret-the-results" class="section level3">
@@ -1935,6 +2227,9 @@ mean number of children, variance, or zero inflation (proportion of
 women with zero children).</li>
 </ul></li>
 </ul>
+<p>-change in prob_0 children: 1901-1910, 1911-1920, 1921-1930,
+1931-1940 -change in mean &amp; variance: 1901-1910, 1911-1920,
+1921-1930, 1931-1940 -change in best model fit: none</p>
 </div>
 <div id="extract-data-for-age-groups-in-1990-census"
 class="section level4">
@@ -1991,6 +2286,44 @@ children or an increase in childlessness.</li>
 </ul></li>
 </ul></li>
 </ul>
+<pre class="r"><code>child_plot +
+  # Add the transparent rectangle annotation only to the facet where YEAR is 1960 and AGE_RANGE is 40-49
+  geom_rect(data = df_mirror %&gt;% filter((YEAR == 1960 &amp; AGE_RANGE == &quot;40-49&quot;)|
+                                        (YEAR == 1960 &amp; AGE_RANGE == &quot;50-59&quot;)|
+                                        (YEAR == 1970 &amp; AGE_RANGE == &quot;40-49&quot;)|
+                                        (YEAR == 1970 &amp; AGE_RANGE == &quot;50-59&quot;)|
+                                        (YEAR == 1970 &amp; AGE_RANGE == &quot;60-69&quot;)|
+                                        (YEAR == 1980 &amp; AGE_RANGE == &quot;40-49&quot;)|
+                                        (YEAR == 1980 &amp; AGE_RANGE == &quot;50-59&quot;)|
+                                        (YEAR == 1980 &amp; AGE_RANGE == &quot;60-69&quot;)|
+                                        (YEAR == 1990 &amp; AGE_RANGE == &quot;50-59&quot;)|
+                                        (YEAR == 1990 &amp; AGE_RANGE == &quot;60-69&quot;)),
+            aes(xmin = -0.45, xmax = 0.45, ymin = -0.3, ymax = 0.3), 
+            fill = &quot;blue&quot;, alpha = 0.1) +  # Apply transparency
+  
+  # Update the title, subtitle, and caption
+  labs(title = &quot;Fertility Distribution Shifts Across Cohorts&quot;,
+       subtitle = &quot;Highlighted shifts in fertility and childlessness&quot;,
+       caption = &quot;Annotations indicate key shifts in fertility distribution across census years&quot;) +
+  theme_minimal()</code></pre>
+<pre class="r"><code>limits &lt;- df_mirror %&gt;%
+  filter(YEAR == 1960 &amp; AGE_RANGE == &quot;40-49&quot;) %&gt;%
+  summarize(
+    xmin = -0.45,
+    xmax = 0.45,
+    ymin = -0.3,
+    ymax = 0.3
+  )
+
+# Add the annotation using the calculated limits
+child_plot +
+  annotate(&quot;rect&quot;, xmin = limits$xmin, xmax = limits$xmax, 
+           ymin = limits$ymin, ymax = limits$ymax, 
+           alpha = 0.3, color = &quot;blue&quot;, fill = &quot;blue&quot;) +
+  labs(title = &quot;Fertility Distribution Shifts Across Cohorts&quot;,
+       subtitle = &quot;Highlighted shifts in fertility and childlessness&quot;,
+       caption = &quot;Annotations indicate key shifts in fertility distribution across census years&quot;) +
+  theme_minimal()</code></pre>
 </div>
 <div id="panel-b-comparison-of-40-49-and-50-59-age-groups-in-1990"
 class="section level4">
@@ -2017,6 +2350,27 @@ the 40-49 and 50-59 age groups within each racial group.</li>
 groups.</li>
 </ul></li>
 </ul>
+<pre class="r"><code>filter_df &lt;- df_proportions %&gt;% 
+  filter(YEAR == &quot;1990&quot;, AGE_RANGE %in% c(&quot;40-49&quot;, &quot;50-59&quot;)) </code></pre>
+<pre class="r"><code>ggplot(filter_df, aes(x = chborn_num, y = proportion, fill = AGE_RANGE)) +
+  geom_col(position = &quot;identity&quot;, alpha = 0.5) +  # Use geom_col() for pre-summarized data
+  facet_wrap(~ RACE) +  # Create separate plots by Race
+  labs(
+    title = &quot;Comparison of Children Born Between 40-49 and 50-59 Age Groups in 1990&quot;,
+    x = &quot;Number of Children&quot;,
+    y = &quot;Proportion&quot;,
+    fill = &quot;Age Range&quot;
+  ) </code></pre>
+<pre class="r"><code>summary_stats &lt;- filter_df %&gt;%
+  group_by(AGE_RANGE, RACE) %&gt;%
+  summarise(
+    mean_children = weighted.mean(chborn_num, count),  # Mean number of children
+    variance_children = sum(count * (chborn_num - weighted.mean(chborn_num, count))^2) / sum(count),  # Variance
+    zero_inflation = sum(count[chborn_num == 0]) / sum(count)  # Proportion of women with 0 children
+  )
+
+# Print summary statistics table
+summary_stats</code></pre>
 </div>
 </div>
 <div id="step-3-perform-statistical-comparisons" class="section level3">
@@ -2039,9 +2393,51 @@ equal variances).</li>
 like the Mann-Whitney U test.</li>
 </ul></li>
 </ul>
-</div>
-<div id="f-test-for-difference-in-variances" class="section level4">
-<h4>3.2 F-Test for Difference in Variances</h4>
+<pre class="r"><code>## Check the normality assumption for black population
+# Subset data for the 40-49 and 50-59 age groups
+data_40_49_b &lt;- df %&gt;% filter(AGE_RANGE == &quot;40-49&quot;, RACE == &quot;Black/African American&quot;)
+data_50_59_b &lt;- df %&gt;% filter(AGE_RANGE == &quot;50-59&quot;, RACE == &quot;Black/African American&quot;)
+
+qqnorm(data_40_49_b$chborn_num, main = &quot;QQ Plot: 40-49 Age Group (Black/African American)&quot;)
+qqline(data_40_49_b$chborn_num)
+
+# QQ plot for the 50-59 age group
+qqnorm(data_50_59_b$chborn_num, main = &quot;QQ Plot: 50-59 Age Group (Black/African American)&quot;)
+qqline(data_50_59_b$chborn_num)</code></pre>
+<pre class="r"><code>## Check equal variance for black population
+df_b &lt;- df %&gt;% filter(RACE == &quot;Black/African American&quot;)
+
+# Levene&#39;s test for equal variances
+levene_test_result &lt;- leveneTest(chborn_num ~ as.factor(AGE_RANGE), data = df_b)
+
+levene_test_result</code></pre>
+<pre class="r"><code>## Check the normality assumption for white population
+data_40_49_w &lt;- df %&gt;% filter(AGE_RANGE == &quot;40-49&quot;, RACE == &quot;White&quot;)
+data_50_59_w &lt;- df %&gt;% filter(AGE_RANGE == &quot;50-59&quot;, RACE == &quot;White&quot;)
+
+qqnorm(data_40_49_w$chborn_num, main = &quot;QQ Plot: 40-49 Age Group (White)&quot;)
+qqline(data_40_49_w$chborn_num)
+
+# QQ plot for the 50-59 age group
+qqnorm(data_50_59_w$chborn_num, main = &quot;QQ Plot: 50-59 Age Group (White)&quot;)
+qqline(data_50_59_w$chborn_num)</code></pre>
+<pre class="r"><code>## Check equal variance for white population
+df_w &lt;- df %&gt;% filter(RACE == &quot;White&quot;)
+
+# Levene&#39;s test for equal variances
+levene_test_result2 &lt;- leveneTest(chborn_num ~ as.factor(AGE_RANGE), data = df_w)
+
+levene_test_result2</code></pre>
+<p>Since the data violate both assumption, we perform a Mann-Whitney U
+test in the follwoing:</p>
+<pre class="r"><code>wilcox_test_result &lt;- wilcox.test(data_40_49_b$chborn_num, data_50_59_b$chborn_num)$p.value
+wilcox_test_result2 &lt;- wilcox.test(data_40_49_w$chborn_num, data_50_59_w$chborn_num)$p.value
+print(c(wilcox_test_result, wilcox_test_result2))</code></pre>
+<p>Result: These p-values are both extremely small (close to zero),
+meaning there is a very strong statistical difference between the two
+age groups (40-49 and 50-59) in terms of the number of children they
+have for both the Black/African American and White racial groups. ####
+3.2 F-Test for Difference in Variances</p>
 <ul>
 <li><strong>Assess Variance Differences</strong>:
 <ul>
@@ -2050,6 +2446,19 @@ number of children between the two age groups within each racial
 group.</li>
 </ul></li>
 </ul>
+<pre class="r"><code>## Apply Levene&#39;s test since non-normality
+levene_test_b &lt;- leveneTest(chborn_num ~ as.factor(AGE_RANGE), data = df_b)
+
+# Levene&#39;s test for White group
+levene_test_w &lt;- leveneTest(chborn_num ~ as.factor(AGE_RANGE), data = df_w)
+
+# Print results
+print(levene_test_b)
+print(levene_test_w)</code></pre>
+<p>Result: Since the p values are smaller than 0.05 for both racial
+group, we have enough evidence to reject the null hypothesis, indicating
+that the variances of the number of children between the two age groups
+within each racial group are significantly different.</p>
 </div>
 <div id="chi-square-test-for-difference-in-zero-inflation"
 class="section level4">
@@ -2064,6 +2473,30 @@ childlessness differs significantly between the age groups within each
 racial group.</li>
 </ul></li>
 </ul>
+<pre class="r"><code>ZI_table &lt;- df %&gt;% 
+  mutate(childlessness = ifelse(chborn_num == 0, &quot;Zero Children&quot;, &quot;One or More&quot;)) %&gt;%       group_by(RACE, AGE_RANGE, childlessness) %&gt;%
+  summarise(count = n())
+
+ZI_table</code></pre>
+<pre class="r"><code>ZI_table_b &lt;- ZI_table %&gt;%
+  filter(RACE == &quot;Black/African American&quot;)
+
+cont_table_b &lt;- xtabs(count ~ AGE_RANGE + childlessness, data = ZI_table_b)
+chi_test_b &lt;- chisq.test(cont_table_b)
+chi_test_b</code></pre>
+<pre class="r"><code>ZI_table_w &lt;- ZI_table %&gt;%
+  filter(RACE == &quot;White&quot;)
+
+cont_table_w &lt;- xtabs(count ~ AGE_RANGE + childlessness, data = ZI_table_w)
+chi_test_w &lt;- chisq.test(cont_table_w)
+chi_test_w</code></pre>
+<p>Result: The p-values for both tests are extremely low, suggests that
+there is a significant difference in the proportion of women with zero
+children versus those with one or more children across different age
+ranges for both the Black/African American and White racial groups. The
+results imply that childlessness is not uniformly distributed across age
+groups. Some age groups may have a higher proportion of women with zero
+children compared to others.</p>
 </div>
 </div>
 <div id="step-4-summarize-findings" class="section level3">
