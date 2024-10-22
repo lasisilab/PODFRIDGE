@@ -1349,7 +1349,7 @@ my_colors <- colorRampPalette(c("#FFB000", "#F77A2E", "#DE3A8A", "#7253FF", "#5E
 
 2. Create the plot:
 ```{r}
-ggplot(df_sibling_mirror, aes(x = n_siblings, y = proportion, fill = as.factor(n_siblings))) +
+ggplot(data = df_sibling_mirror %>% filter(n_siblings != "-1"), aes(x = n_siblings, y = proportion, fill = as.factor(n_siblings))) +
  geom_col(aes(alpha = RACE)) +
  geom_hline(yintercept = 0, color = "black", size = 0.5) +
  facet_grid(birth_range ~ YEAR, scales = "free_y") +
@@ -1358,7 +1358,7 @@ ggplot(df_sibling_mirror, aes(x = n_siblings, y = proportion, fill = as.factor(n
    labels = function(x) abs(x),
    limits = function(x) c(-max(abs(x)), max(abs(x)))
  ) +
- scale_x_continuous(breaks = 0:12, labels = c(0:11, "12+")) +
+ scale_x_continuous(breaks = 0:11, labels = c(0:10, "11+")) +
  scale_fill_manual(values = my_colors) +
  scale_alpha_manual(values = c("White" = 0.7, "Black/African American" = 1)) +
  labs(
@@ -1366,7 +1366,7 @@ ggplot(df_sibling_mirror, aes(x = n_siblings, y = proportion, fill = as.factor(n
    x = "Number of Siblings",
    y = "Proportion",
    fill = "Number of Siblings",
-   caption = "White population shown on left (negative values), Black/African American on right (positive values)\nProportions normalized within each birth range, race, and census year\nFootnote: The category '12+' includes individuals with 12 or more siblings."
+   caption = "White population shown on left (negative values), Black/African American on right (positive values)\nProportions normalized within each birth range, race, and census year\nFootnote: The category '11+' includes individuals with 11 or more siblings."
  ) +
  theme_minimal() +
  theme(
@@ -1397,7 +1397,7 @@ Result:
 -Cohort Effects: Individuals born earlier (pre-1900 or early 1900s) tend to come from larger families, while those born later (1930s-1950s) tend to have fewer siblings and children.
 
 4. Consider how these sibling distributions might differ from the children distributions you analyzed earlier, and think about potential reasons for these differences.
-Result: While both distributions show a trend toward smaller families, the sibling distribution is more spread out across different sibling counts. This might be due to the calculation difference in proportion between number of children and number of siblings. For example, if a family have 12 children, then all of these 12 children have 11 siblings, leading to 
+Result: While both distributions show a trend toward smaller families, the sibling distribution is more spread out across different sibling counts.
 
 
 
@@ -1423,19 +1423,131 @@ Repeat the model fitting process we performed for the children distribution, thi
 3. Compare Model Fits
    Use AIC (Akaike Information Criterion) to compare the fits of different models for each group.
 
+```{r}
+combinations2 <- df2 %>%
+  filter(n_siblings != -1) %>%
+  group_by(YEAR, RACE, birth_range) %>%
+  group_split()
+
+# Initialize the data frame to store results
+best_models_sib <- data.frame(
+  Race = character(),
+  Census_Year = numeric(),
+  birth_range = character(),
+  AIC_poisson = numeric(),
+  AIC_nb = numeric(),
+  AIC_zip = numeric(),
+  AIC_zinb = numeric(),
+  stringsAsFactors = FALSE
+)
+
+# Loop through each subset of data
+for (i in seq_along(combinations2)) {
+  subset_data <- combinations2[[i]]
+  
+  # Fit Poisson model
+  poisson_model <- glm(n_siblings ~ 1, family = poisson, data = subset_data)
+  # Fit Negative Binomial model
+  nb_model <- glm.nb(n_siblings ~ 1, data = subset_data)
+
+  # Fit Zero-Inflated Poisson model
+  zip_model <- zeroinfl(n_siblings ~ 1 | 1, data = subset_data, dist = "poisson",control = zeroinfl.control(maxit = 100))
+  
+  # Fit Zero-Inflated Negative Binomial model with increased max iterations
+  zinb_model <- zeroinfl(n_siblings ~ 1 | 1, data = subset_data, dist = "negbin",control = zeroinfl.control(maxit = 100))
+  
+  # Append the result to the best_models data frame
+  best_models_sib <- rbind(
+    best_models_sib,
+    data.frame(
+      Race = unique(subset_data$RACE),
+      Census_Year = unique(subset_data$YEAR),
+      birth_range = unique(subset_data$birth_range),
+      AIC_poisson = AIC(poisson_model),
+      AIC_nb = AIC(nb_model),
+      AIC_zip = AIC(zip_model),
+      AIC_zinb = AIC(zinb_model),
+      stringsAsFactors = FALSE
+    )
+  )
+}
+
+```
+
+
 4. Identify Best-Fitting Models
    Determine which model fits best for each combination of RACE, YEAR, and birth_range.
+```{r}
+# Add a Best_Model column to store the best model based on minimum AIC
+best_models_sib$Best_Model <- apply(best_models_sib, 1, function(row) {
+  # Get AIC values for Poisson, NB, ZIP, and ZINB models
+  aic_values <- c(Poisson = as.numeric(row['AIC_poisson']),
+                  Negative_Binomial = as.numeric(row['AIC_nb']),
+                  Zero_Inflated_Poisson = as.numeric(row['AIC_zip']),
+                  Zero_Inflated_NB= as.numeric(row['AIC_zinb']))
+  
+  # Find the name of the model with the minimum AIC value
+  best_models_sib <- names(which.min(aic_values))
+  
+  return(best_models_sib)
+})
+
+best_models_sib <- best_models_sib %>% dplyr::select(Race, Census_Year, birth_range, Best_Model)
+# View the updated table with the Best_Model column
+print(best_models_sib)
+```
 
 5. Analyze Patterns
    - Examine how the best-fitting model changes across years and birth ranges for each race.
    - Compare these patterns to those observed in the children distribution analysis.
-
+   
 6. Visualize Results
    Create a summary plot showing the best-fitting models across years and birth ranges for each race, similar to the one created for the children distribution.
+
+```{r}
+# Bar plot showing the distribution of best models across races
+ggplot(best_models_sib, aes(x = Race, fill = Best_Model)) +
+  geom_bar(position = "dodge") +
+  labs(title = "Best-Fitting Models (siblings) by Race", x = "Race", y = "Count", fill = "Best Model")
+```
+
+```{r}
+# Bar plot showing the distribution of best models across races
+ggplot(best_models_sib, aes(x = Census_Year, fill = Best_Model)) +
+  geom_bar(position = "dodge") +
+  labs(title = "Best-Fitting Models (siblings) by Census Year", x = "Census Year", y = "Count", fill = "Best Model")
+```
+
+```{r}
+# Bar plot showing the distribution of best models across races
+ggplot(best_models_sib, aes(x = birth_range, fill = Best_Model)) +
+  geom_bar(position = "dodge") +
+  labs(title = "Best-Fitting Models (siblings) by Birth Range)", x = "Age Range", y = "Count", fill = "Best Model")
+```
+
+```{r}
+ggplot(best_models_sib, aes(x = Census_Year, y = birth_range, fill = Best_Model)) +
+  geom_tile(color = "white", lwd = 0.5, linetype = 1) + # Create the tiles
+  facet_wrap(~Race, nrow = 2) + # Facet by Race
+  scale_fill_manual(values = c("Poisson" = "#0072B2", "Zero_Inflated_NB" = "#F0E442", "Negative_Binomial" = "grey")) + 
+  labs(
+    title = "Best Model(siblings) by Race, Census Year, and Birth Range",
+    x = "Census Year",
+    y = "Age Range",
+    fill = "Best Model"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1), # Rotate x-axis labels for readability
+    plot.title = element_text(size = 14, face = "bold"),
+    legend.position = "bottom"
+  )
+```
 
 7. Interpret Findings
    - Discuss any differences in the best-fitting models between the sibling and children distributions.
    - Consider the implications of these differences for understanding family structures and fertility patterns.
+
 
 ## [Instructions for Manqing] Cohort Stability Analysis Siblings
 
@@ -1449,6 +1561,9 @@ Analyze the stability of sibling distributions across cohorts, similar to the an
 2. For each combination of RACE and birth_range:
    - Compare the sibling distributions across different census years.
    - Use statistical tests (e.g., Kolmogorov-Smirnov test) to assess if distributions are significantly different.
+```{r}
+
+```
 
 3. Create a summary table showing:
    - RACE
