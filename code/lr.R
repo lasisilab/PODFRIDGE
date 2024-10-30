@@ -45,7 +45,7 @@ log_message("Starting simulation setup and processing...")
 
 # Load Allele Frequencies Data
 log_message("Loading allele frequencies data...")
-  allele_freq_time <- system.time({
+allele_freq_time <- system.time({
   df_allelefreq <- fread(paste0(getwd(),"/data/df_allelefreq_combined.csv"))
 #  eval(parse(text=paste0("df_allelefreq <- df_allelefreq[df_allelefreq$population == \"",population[slurm_job_id],"\",]")))
   df_allelefreq[, allele := as.character(allele)]
@@ -75,7 +75,7 @@ individuals_genotypes <- fread(paste0(getwd(),"/",input_dir,"/processed_genotype
 individuals_genotypes[,5:8] <- lapply(individuals_genotypes[,5:8],as.character)
 
 #  dup_df<-duplicated(individuals_genotypes) #specify rows
- # individuals_genotypes2 <- individuals_genotypes[!dup_df,]
+# individuals_genotypes2 <- individuals_genotypes[!dup_df,]
 #df_allelefreq2$gen_id<-1:nrow(df_allelefreq2) #gen_id is a key that later can be used to rejoin LRs to individual records
 #log_message("Extracting unique loci...")
 
@@ -89,6 +89,14 @@ kinship_matrix <- data.table(
 
 # Functions
 calculate_likelihood_ratio <- function(allele_frequency_data) {
+   print(class(allele_frequency_data))
+  print(head(allele_frequency_data))
+  allele_frequency_data$shared_alleles<-as.numeric(allele_frequency_data$shared_alleles)
+  allele_frequency_data$k0<-as.numeric(allele_frequency_data$k0)
+  allele_frequency_data$k1<-as.numeric(allele_frequency_data$k1)
+  allele_frequency_data$k2<-as.numeric(allele_frequency_data$k2)
+  allele_frequency_data$pA<-as.numeric(allele_frequency_data$pA)
+  allele_frequency_data$pB<-as.numeric(allele_frequency_data$pB)
   allele_frequency_data$LR<-ifelse(allele_frequency_data$shared_alleles == 0, allele_frequency_data$k0,NA)
 
   allele_frequency_data$Rxp<-ifelse(allele_frequency_data$shared_alleles==1,allele_frequency_data$pA,NA)
@@ -206,26 +214,36 @@ kinship_calculation <- function(allele_frequency_data, kinship_matrix,df_allelef
 
   allele_frequency_data<-left_join(allele_frequency_data,kinship_matrix)
   allele_frequency_data$marker<-allele_frequency_data$locus
-  a2<<-allele_frequency_data
 
   t1<-df_allelefreq
   names(t1)<-c("A","locus","pA","population")
   allele_frequency_data<-left_join(allele_frequency_data,t1)
 
-  t1<<-t1
-
   t1<-df_allelefreq
   names(t1)<-c("B","locus","pB","population")
   allele_frequency_data<-left_join(allele_frequency_data,t1)
 
-  t2<<-t1
   rm(t1)
 
-  allele_frequency_data$relationship_known<-allele_frequency_data$relationship_type
-  allele_frequency_data$relationship_tested<-allele_frequency_data$relationship_type
+ allele_frequency_data$relationship_tested<-allele_frequency_data$relationship_type
+
+  length_r<-nrow(kinship_matrix)
+  length_t<-nrow(allele_frequency_data)
+
+  allele_frequency_data<-sapply(allele_frequency_data, rep.int, times=length_r)
+
+  allele_frequency_data<-as.data.table(allele_frequency_data)
+
+  relationship_known<-rep(kinship_matrix$relationship_type,each=length_t)
+  print(head(relationship_known))
+
+  allele_frequency_data<-cbind(allele_frequency_data,relationship_known)
+
 
   kinship_calculations <- calculate_likelihood_ratio(allele_frequency_data)
+
   return(kinship_calculations)
+
 }
 
 calculate_combined_lrs <- function(final_results, loci_lists) {
@@ -264,7 +282,12 @@ combined_lrs$LR<-as.numeric(combined_lrs$LR)
 
 # Save results to CSV
 log_message("Saving results to CSV files...")
+log_message("Saving results to CSV files...")
+print(output_file)
+print(head(processed_genotypes))
 fwrite(processed_genotypes, output_file)
+print(output_file2)
 fwrite(combined_lrs,output_file2)
+print(head(combined_lrs))
 
 log_message("LR calculations completed.")
