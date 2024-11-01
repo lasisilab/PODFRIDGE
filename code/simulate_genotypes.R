@@ -1,21 +1,16 @@
 # Load Required Libraries
 suppressMessages(suppressWarnings({
-  library(tidyverse)
+  library(tibble)
   library(furrr)
   library(data.table)
   library(future)
   library(parallel)
   library(doParallel)
 }))
-
-
-# Read Command-Line Arguments
 args <- commandArgs(trailingOnly = TRUE)
-n_sims_related <- as.numeric(args[1])
-n_sims_unrelated <- as.numeric(args[2])
-job_id <- as.character(args[3])
-if(length(args)>3){
-  use_remote_cluster<-as.numeric(args[4])
+print(args)
+if(length(args)>4){
+  use_remote_cluster<-as.numeric(args[5])
 }
 if(!exists("use_remote_cluster")){ #Add this parameter to the run script
   use_remote_cluster<-0
@@ -29,10 +24,10 @@ if(use_remote_cluster==0){
     cl <- makeCluster(availableCores(),type="FORK")  #specify how many cores to use
   }
   # Ensure the cluster is stopped when the script exits
-  on.exit(parallel::stopCluster(cl))
-  plan(cluster, workers = cl)
+  # on.exit(parallel::stopCluster(cl))
+  future::plan(future::cluster, workers = cl)
 } else { #if sending to remote cluster(s)
-  plan(cluster, workers = ("clustername1")) #use syntax "server.remote.org" in workers if using an online cluster
+  future::plan(future::cluster, workers = ("clustername1")) #use syntax "server.remote.org" in workers if using an online cluster
 }
 
 #plan() options:
@@ -57,28 +52,30 @@ log_function_time <- function(func, name, ...) {
   result <- func(...)
   end_time <- Sys.time()
   duration <- as.numeric(difftime(end_time, start_time, units = "secs"))
-  
+
   if (!name %in% names(timing_log)) {
     timing_log[[name]] <- list(total = 0, count = 0, min = Inf, max = -Inf, times = c())
   }
-  
+
   timing_log[[name]]$total <- timing_log[[name]]$total + duration
   timing_log[[name]]$count <- timing_log[[name]]$count + 1
   timing_log[[name]]$min <- min(timing_log[[name]]$min, duration)
   timing_log[[name]]$max <- max(timing_log[[name]]$max, duration)
   timing_log[[name]]$times <- c(timing_log[[name]]$times, duration)
-  
+
   return(list(result = result, timing_log = timing_log))
 }
 
+# Read Command-Line Arguments
 
-# Create output folder with job ID- if using batch submission:
+n_sims_related <- as.numeric(args[1])
+n_sims_unrelated <- as.numeric(args[2])
+job_id <- as.character(args[3])
+
+print("Creating directories")
+print(getwd())
+# Create output folder with job ID
 output_dir <- file.path("data", "sims", paste0("simulation_", job_id))
-
-# Create output folder with job ID- if using array submission:
-#i<-Sys.getenv("SLURM_ARRAY_TASK_ID")
-#output_dir <- file.path("data", "sims", paste0("simulation_",i,"_", job_id))
-
 dir.create(output_dir, recursive = TRUE)
 
 output_file <- file.path(output_dir, "processed_genotypes.csv")
@@ -91,9 +88,11 @@ log_message("Starting genotype simulation...")
 log_message("Loading allele frequencies data...")
 allele_freq_time <- system.time({
   df_allelefreq <- fread("data/df_allelefreq_combined.csv")
+  # df_allelefreq <- fread("data/syn_data.csv")
   df_allelefreq <- df_allelefreq[population != "all"] # Filter out "all" population
   df_allelefreq[, allele := as.character(allele)]
   df_allelefreq = as.data.table(df_allelefreq)
+
 })
 log_message(paste("Loaded allele frequencies data in", allele_freq_time["elapsed"], "seconds."))
 
@@ -133,11 +132,6 @@ generate_simulation_setup <- function(kinship_matrix, population_list, num_relat
   for (population in population_list) {
     for (relationship in kinship_matrix$relationship_type) {
       num_simulations <- ifelse(relationship == "unrelated", num_unrelated, num_related)
-      #simulation_setup <- rbind(simulation_setup, data.frame(
-      #  population = population,
-      #  relationship_type = relationship,
-      #  num_simulations = num_simulations
-      #))
       l = list(simulation_setup, data.table(
         population = population,
         relationship_type = relationship,
@@ -168,24 +162,22 @@ simulate_genotypes <- function(row, df_allelefreq, kinship_matrix) {
   population <- row$population
   locus <- row$locus
   relationship <- row$relationship_type
-  
-  allele_freqs <- df_allelefreq[which(df_allelefreq$population == population & df_allelefreq$marker == locus),]
-  
+
+  allele_freqs <- df_allelefreq[which(df_allelefreq$population == population & df_allelefreq$marker == locus & df_allelefreq$frequency>0),]
+
   if (nrow(allele_freqs) == 0) {
-    stop(paste("No valid alleles found for population", population, "and locus", locus))
+    stop(paste("No valid alleles found for population ", population, " at locus", locus))
   }
-  
+
   alleles <- allele_freqs$allele
   frequencies <- allele_freqs$frequency
-  frequencies <- round(frequencies / sum(frequencies), 6)
-  valid_indices <- frequencies > 0
-  alleles <- alleles[valid_indices]
-  frequencies <- frequencies[valid_indices]
-  
+  frequencies <- round(frequencies, 6)
+  print(summary(frequencies))
+
   ind1_alleles <- sample(alleles, size = 2, replace = TRUE, prob = frequencies)
   kinship_coeffs <- kinship_matrix[which(kinship_matrix$relationship_type == relationship), ]
   relationship_choice <- sample(c('none', 'one', 'both'), size = 1, prob = c(kinship_coeffs$k0, kinship_coeffs$k1, kinship_coeffs$k2))
-  
+
   if (relationship_choice == 'none') {
     ind2_alleles <- sample(alleles, size = 2, replace = TRUE, prob = frequencies)
   } else if (relationship_choice == 'one') {
@@ -199,12 +191,11 @@ simulate_genotypes <- function(row, df_allelefreq, kinship_matrix) {
   } else if (relationship_choice == 'both') {
     ind2_alleles <- ind1_alleles
   }
-  
+
   row$ind1_allele1 <- ind1_alleles[1]
   row$ind1_allele2 <- ind1_alleles[2]
   row$ind2_allele1 <- ind2_alleles[1]
   row$ind2_allele2 <- ind2_alleles[2]
-  
   return(row)
 }
 
@@ -214,55 +205,47 @@ process_individuals_genotypes <- function(sim_id,individuals_genotypes, df_allel
       res <- log_function_time(simulate_genotypes, "simulate_genotypes", list(...), df_allelefreq, kinship_matrix)
       return(res$result)
     }, seed = TRUE) |>
-    data.table::rbindlist() 
+    data.table::rbindlist()
   final_individuals_genotypes$sim_id<- sim_id
   return(final_individuals_genotypes)
 }
 
-#purrr::map inside the future_pmap_dfr loop seems to slow this section (solution below is faster), but this version also works.
-#process_simulation_setup_v1 <- function(simulation_setup, df_allelefreq, kinship_matrix, loci_list, output_file) {
- #   process_time <- system.time({
-  #  class(simulation_setup)<-"data.frame"
-   # final_results <- simulation_setup |>
-    # furrr::future_pmap_dfr(.f=function(population, relationship_type, num_simulations) {
-     #    purrr::map_dfr(1:num_simulations, function(sim_id) {
-      #   individuals_genotypes <- initialize_individuals_pair(population, relationship_type, sim_id, loci_list)
-       #  processed_genotypes <- log_function_time(process_individuals_genotypes, "process_individuals_genotypes", sim_id,individuals_genotypes, df_allelefreq, kinship_matrix)
-        # return(processed_genotypes$result)
-         #})
 #     })
- #   fwrite(final_results, gsub("processed","v1_processed",output_file))
+#   fwrite(final_results, gsub("processed","v1_processed",output_file))
 #  })
-#}    
+#}
 
 process_simulation_setup <- function(simulation_setup, df_allelefreq, kinship_matrix, loci_list, output_file) {
+
   process_time <- system.time({
     final_results <- simulation_setup |>
       future_pmap_dfr(function(population, relationship_type, num_simulations){
         cs<-seq(from=1,to=num_simulations,by=1)
-       # tibble(
-        foreach(i = cs, .combine="rbind") %dopar% {
-          sim_id = cs[i]
-          individuals_genotypes <- initialize_individuals_pair(population, relationship_type, sim_id, loci_list)
-         processed_genotypes <- log_function_time(process_individuals_genotypes, "process_individuals_genotypes", sim_id,individuals_genotypes, df_allelefreq, kinship_matrix)
-          return(processed_genotypes$result)
-        }#)
+        tibble(
+          foreach(i = cs, .combine="rbind") %dopar% {
+            sim_id = cs[i]
+            individuals_genotypes <- initialize_individuals_pair(population, relationship_type, sim_id, loci_list)
+            processed_genotypes <- log_function_time(process_individuals_genotypes, "process_individuals_genotypes", sim_id,individuals_genotypes, df_allelefreq, kinship_matrix)
+            return(processed_genotypes$result)
+          })
       }, .options = furrr::furrr_options(seed = NULL))
+
     fwrite(final_results, output_file,append=TRUE)
   })
-#  class(final_results)<-"data.table"
+  #  class(final_results)<-"data.table"
 
   log_message(paste("Processing completed in", process_time["elapsed"], "seconds."))
+
 }
 
 # Execute Simulation Setup and Processing (this is already too fast to benefit from being run in parallel)
 setup_res <- log_function_time(generate_simulation_setup, "generate_simulation_setup", kinship_matrix, populations_list, n_sims_related, n_sims_unrelated)
 simulation_setup <- setup_res$result
+#simulation_setup is a table of all possible relationship and population combinations and the number of simulations to assign to each.
+#Is this necessary as all unrelated will be assigned the same number of simulations etc
 
 timing_log <- setup_res$timing_log
-
 proc_res <- log_function_time(process_simulation_setup, "process_simulation_setup", simulation_setup, df_allelefreq, kinship_matrix, loci_list, output_file)
-
 timing_log <- proc_res$timing_log
 
 #proc_res_v1 <- log_function_time(process_simulation_setup_v1, "process_simulation_setup_v1", simulation_setup, df_allelefreq, kinship_matrix, loci_list, output_file)
