@@ -162,7 +162,7 @@ child_plot <- ggplot(df_mirror, aes(x = chborn_num, y = proportion, fill = as.fa
   ) +
   scale_x_continuous(breaks = 0:12, labels = c(0:11, "12+")) +
   scale_fill_manual(values = my_colors) +
-  scale_alpha_manual(values = c("White" = 0.7, "Black/African American" = 1)) +
+  scale_alpha_manual(values = c("White" = 0.7, "Black/African American" = 1), guide = "none") +
   labs(
     title = "Distribution of Number of Children by Census Year, Race, and Age Range",
     x = "Number of Children",
@@ -181,8 +181,6 @@ child_plot <- ggplot(df_mirror, aes(x = chborn_num, y = proportion, fill = as.fa
   )
 
 print(child_plot)
-# Save the plot (optional)
-# ggsave("children_distribution_mirror_plot.png", width = 20, height = 25, units = "in", dpi = 300)
 
 # Print summary to check age ranges and normalization
 print(df_proportions %>%
@@ -1047,10 +1045,17 @@ part2<- part1 +
                                         (YEAR == 1970 & AGE_RANGE == "60-69")),
             aes(xmin = -0.45, xmax = 0.45, ymin = -0.3, ymax = 0), 
             fill = "blue", alpha = 0.03) + 
-  labs(title = "Fertility Distribution Shifts Across Cohorts",
+  labs(title = "Fertility Distribution Shifts",
        subtitle = "Highlighted significant shifts in Number of zero Children",
-       caption = "Annotations indicate key shifts in fertility distribution across census years") +
-  theme_minimal()
+       caption = "Annotations indicate key shifts in number of zero children across census years. White population shown on left (negative values), Black/African American on right (positive values)\nProportions normalized within each age range, race, and census year\nFootnote: The category '12+' includes families with 12 or more children.") +
+  theme_minimal()+
+  theme(
+    plot.title = element_text(size = 14, hjust = 0.5),
+    plot.subtitle = element_text(size = 12, hjust = 0.5), 
+    plot.caption = element_text(size = 9, hjust = 0.5),  
+    axis.text.y = element_text(size = 8),
+    strip.text = element_text(size = 10)
+  )
 part2
 ```
 
@@ -1069,10 +1074,17 @@ child_plot +
                                         (YEAR == 1990 & AGE_RANGE == "60-69")),
             aes(xmin = -0.45, xmax = 13, ymin = -0.3, ymax = 0.3), 
             fill = "blue", alpha = 0.01) + 
-  labs(title = "Fertility Distribution Shifts Across Cohorts",
+  labs(title = "Fertility Distribution Shifts",
        subtitle = "Highlighted significant shifts in Mean Family Size",
-       caption = "Annotations indicate key shifts in fertility distribution across census years") +
-  theme_minimal()
+       caption = "Annotations indicate key shifts in Mean Family Size across census years. White population shown on left (negative values), Black/African American on right (positive values)\nProportions normalized within each age range, race, and census year\nFootnote: The category '12+' includes families with 12 or more children.") +
+  theme_minimal()+
+  theme(
+    plot.title = element_text(size = 14, hjust = 0.5),
+    plot.subtitle = element_text(size = 12, hjust = 0.5), 
+    plot.caption = element_text(size = 9, hjust = 0.5),  
+    axis.text.y = element_text(size = 8),
+    strip.text = element_text(size = 10)
+  )
 ```
 
 #### 2.2 Panel B: Comparison of 40-49 and 50-59 Age Groups in 1990
@@ -1097,10 +1109,10 @@ filter_df <- df_proportions %>%
 
 ```{r}
 ggplot(filter_df, aes(x = chborn_num, y = proportion, fill = AGE_RANGE)) +
-  geom_col(position = "identity", alpha = 0.5) +  # Use geom_col() for pre-summarized data
-  facet_wrap(~ RACE) +  # Create separate plots by Race
+  geom_col(position = "identity", alpha = 0.5) +  
+  facet_wrap(~ RACE) +  
   labs(
-    title = "Comparison of Children Born Between 40-49 and 50-59 Age Groups in 1990",
+    title = "Distribution of Number of Children for Women in 40-49 and 50-59 Age Groups in 1990",
     x = "Number of Children",
     y = "Proportion",
     fill = "Age Range"
@@ -1186,13 +1198,16 @@ wilcox_test_result <- wilcox.test(data_40_49_b$chborn_num, data_50_59_b$chborn_n
 wilcox_test_result2 <- wilcox.test(data_40_49_w$chborn_num, data_50_59_w$chborn_num)$p.value
 print(c(wilcox_test_result, wilcox_test_result2))
 ```
-**_RESULT:_** These p-values are both extremely small (close to zero), meaning there is a very strong statistical difference between the two age groups (40-49 and 50-59) in terms of the number of children they have for both the Black/African American and White racial groups. 
+**_RESULT:_** These p-values are both extremely small (close to zero), meaning there is a very strong statistical difference between the two age groups (40-49 and 50-59) in terms of the number of children within each racial group. 
+
 #### 3.2 F-Test for Difference in Variances
 
 - **Assess Variance Differences**:
   - Perform an F-test or Levene's test to compare the variances of the number of children between the two age groups within each racial group.
 ```{r}
 ## Apply Levene's test since non-normality
+
+# Levene's test for Black group
 levene_test_b <- leveneTest(chborn_num ~ as.factor(AGE_RANGE), data = df_b)
 
 # Levene's test for White group
@@ -1211,7 +1226,7 @@ print(levene_test_w)
   - Perform a chi-square test to determine if the proportion of childlessness differs significantly between the age groups within each racial group.
 ```{r}
 ZI_table <- df %>% 
-  mutate(childlessness = ifelse(chborn_num == 0, "Zero Children", "One or More")) %>%       group_by(RACE, AGE_RANGE, childlessness) %>%
+  mutate(childlessness = ifelse(chborn_num == 0, "0 Children", "1+ Children")) %>%       group_by(RACE, AGE_RANGE, childlessness) %>%
   summarise(count = n())
 
 ZI_table
@@ -1234,7 +1249,7 @@ cont_table_w <- xtabs(count ~ AGE_RANGE + childlessness, data = ZI_table_w)
 chi_test_w <- chisq.test(cont_table_w)
 chi_test_w
 ```
-**_RESULT:_** The p-values for both tests are extremely low, suggests that there is a significant difference in the proportion of women with zero children versus those with one or more children across different age ranges for both the Black/African American and White racial groups. The results imply that childlessness is not uniformly distributed across age groups. Some age groups may have a higher proportion of women with zero children compared to others. 
+**_RESULT:_** The p-values for both tests are extremely low, suggests that there is a significant difference in the proportion of women with 0 children versus those with 1+ children across different age ranges for both the Black/African American and White racial groups. The results imply that childlessness is not uniformly distributed across age groups(40-49 and 50-59) in 1990. 
 
 ### Step 4: Summarize Findings
 
@@ -1351,9 +1366,8 @@ Create a mirror plot for the distribution of siblings across census years, races
 
 1. Start with your dataframe that includes the `AGE_RANGE` column.
 ```{r}
-df2 <- df %>%
-  mutate(AGE_RANGE = mapply(calculate_cohort, YEAR, AGE_RANGE)) %>% 
-  dplyr::select(RACE, YEAR, AGE_RANGE, AGE_RANGE, chborn_num)
+df2 <- df %>% 
+  dplyr::select(RACE, YEAR, AGE_RANGE, chborn_num)
 ```
 
 2. Create a new column for the number of siblings:
@@ -1365,7 +1379,7 @@ df2 <- df2 %>%
 3. Calculate the frequency of siblings:
 ```{r}
 df2 <- df2 %>%
-mutate(sibling_freq = n_siblings * 1)  # Assuming each mother represents 1 in frequency
+mutate(sibling_freq = ifelse(chborn_num != 1, n_siblings * 1, 1))  # Assuming each mother represents 1 in frequency
 ```
 
 ### Step 2: Aggregate Sibling Data
@@ -1433,7 +1447,7 @@ ggplot(data = df_sibling_mirror %>% filter(n_siblings != "-1"), aes(x = n_siblin
  scale_fill_manual(values = my_colors) +
  scale_alpha_manual(values = c("White" = 0.7, "Black/African American" = 1)) +
  labs(
-   title = "Distribution of Number of Siblings by Census Year, Race, and Birth Range",
+   title = "Distribution of Number of Siblings by Census Year, Race, and Age Range",
    x = "Number of Siblings",
    y = "Proportion",
    fill = "Number of Siblings",
@@ -1470,14 +1484,15 @@ By 1980 and 1990, the distribution shifts toward smaller family sizes, with a gr
 
 2. Compare the distributions between White and Black/African American populations.
 **_RESULT:_**
--Black/African American Populations: (right side of each pair) consistently show a higher proportion of individuals with larger sibling counts (5-10 siblings) compared to White populations. However, similar to the White population, the number of individuals with fewer siblings increases over time.
+-Black/African American Populations (right side of each pair) consistently show a higher proportion of individuals with larger sibling counts (5-10 siblings) compared to White populations. However, similar to the White population, the number of individuals with fewer siblings increases over time.
 
 3. Note any significant changes or trends in the number of siblings over time.
 **_RESULT:_**
 -White Populations: (left side of each pair) have a more marked shift toward smaller families by 1990, with a larger proportion of individuals having 0-2 siblings compared to the Black/African American population. The decline in larger family sizes (5+ siblings) is more pronounced among Whites, particularly by 1980 and 1990.
 
 4. Consider how these sibling distributions might differ from the children distributions you analyzed earlier, and think about potential reasons for these differences.
-**_RESULT:_** While both distributions show a trend toward smaller families, the sibling distribution is more spread out across different sibling counts.
+**_RESULT:_** 
+While both distributions show a trend toward smaller families, the sibling distribution is more spread out across different sibling counts, suggesting potential difference in the distribution. 
 
 
 
@@ -1587,21 +1602,21 @@ print(best_models_sib)
 ```{r}
 # Bar plot showing the distribution of best models across races
 ggplot(best_models_sib, aes(x = Race, fill = Best_Model)) +
-  geom_bar(position = "dodge") +
+  geom_bar(position = "stack") +
   labs(title = "Best-Fitting Models (siblings) by Race", x = "Race", y = "Count", fill = "Best Model")
 ```
 
 ```{r}
 # Bar plot showing the distribution of best models across races
 ggplot(best_models_sib, aes(x = Census_Year, fill = Best_Model)) +
-  geom_bar(position = "dodge") +
+  geom_bar(position = "stack") +
   labs(title = "Best-Fitting Models (siblings) by Census Year", x = "Census Year", y = "Count", fill = "Best Model")
 ```
 
 ```{r}
 # Bar plot showing the distribution of best models across races
 ggplot(best_models_sib, aes(x = AGE_RANGE, fill = Best_Model)) +
-  geom_bar(position = "dodge") +
+  geom_bar(position = "stack") +
   labs(title = "Best-Fitting Models (siblings) by Birth Range)", x = "Age Range", y = "Count", fill = "Best Model")
 ```
 
@@ -1626,6 +1641,8 @@ ggplot(best_models_sib, aes(x = Census_Year, y = AGE_RANGE, fill = Best_Model)) 
 
 7. Interpret Findings
    - Discuss any differences in the best-fitting models between the sibling and children distributions.
+**_RESULT:_** By comparing the pattern of best-fitting models between the sibling and children distributions, we observe that the best model for black population has the same best model(zero-inlfated NB) across year and age range except on one subset(age 40-49 in 1990) in siblings distribution. However, there is a large difference in best model for white population. A large portion of best model in children distribution for white population is zero-inlfated NB, while negative-binomial is the best model fitted for siblings distribution except for one subset(age 40-49 in 1990). 
+
    - Consider the implications of these differences for understanding family structures and fertility patterns.
 
 
