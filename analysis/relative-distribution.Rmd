@@ -511,21 +511,21 @@ Finally, visualize the distribution of the best-fitting models across races, cen
 ```{r}
 # Bar plot showing the distribution of best models across races
 ggplot(best_models, aes(x = Race, fill = Best_Model)) +
-  geom_bar(position = "dodge") +
+  geom_bar(position = "stack") +
   labs(title = "Best-Fitting Models by Race", x = "Race", y = "Count", fill = "Best Model")
 ```
 
 ```{r}
 # Bar plot showing the distribution of best models across races
 ggplot(best_models, aes(x = Census_Year, fill = Best_Model)) +
-  geom_bar(position = "dodge") +
+  geom_bar(position = "stack") +
   labs(title = "Best-Fitting Models by Census Year", x = "Census Year", y = "Count", fill = "Best Model")
 ```
 
 ```{r}
 # Bar plot showing the distribution of best models across races
 ggplot(best_models, aes(x = Age_Range, fill = Best_Model)) +
-  geom_bar(position = "dodge") +
+  geom_bar(position = "stack") +
   labs(title = "Best-Fitting Models by Age Range", x = "Age Range", y = "Count", fill = "Best Model")
 ```
 
@@ -689,160 +689,127 @@ merged_df_black <- merged_data %>% filter(Race == "Black/African American")
 merged_df_white <- merged_data %>% filter(Race == "White")
 ```
 
-
 ```{r}
-# Initialize an empty data frame to store the results
-results_df_black <- data.frame(Cohort = character(),
-                               Census_Year = integer(),
-                               P_Value = numeric(),
-                               Test_Statistic = numeric(),
-                               stringsAsFactors = FALSE)
+# Filter cohorts with more than one census year
+cohort_counts <- merged_df_black %>%
+  group_by(Cohort) %>%
+  summarise(Unique_Census_Years = n_distinct(Census_Year)) %>%
+  filter(Unique_Census_Years > 1)
 
-# Get a list of unique cohorts
-cohorts <- unique(merged_df_black$Cohort)
+# Get the list of cohorts for testing
+cohorts_for_test <- cohort_counts$Cohort
 
-# Loop through each cohort
-for (cohort in cohorts) {
+# Initialize results data frame
+results_black <- data.frame(RACE = character(), Cohort = character(), Chi_Square = numeric(), p_value = numeric(), stringsAsFactors = FALSE)
+
+# Loop through each cohort and run the chi-square test
+for (cohort in cohorts_for_test) {
+  cohort_data <- merged_df_black %>% filter(Cohort == cohort)
   
-  # Filter data for the specific cohort
-  cohort_data <- merged_df_black[merged_df_black$Cohort == cohort, ]
+  # Create contingency table
+  contingency_table <- table(cohort_data$Census_Year, cohort_data$chborn_num == "0")
   
-  # Loop through each unique Census Year for this cohort
-  for (year in unique(cohort_data$Census_Year)) {
+  # Perform the chi-square test only if more than one row is in the table
+  if (nrow(contingency_table) > 1) {
+    test_result <- chisq.test(contingency_table)
     
-    # Filter for the specific census year
-    cohort_year_data <- cohort_data[cohort_data$Census_Year == year, ]
-    
-    # Calculate the observed counts for women with zero children and with children
-    observed <- table(cohort_year_data$chborn_num == 0)  
-    
-    # Skip if there are not both TRUE and FALSE values
-    if (length(observed) >= 2) {
-      
-      # Expected counts assuming no change (proportions remain constant)
-      expected <- rep(mean(observed), length(observed))
-      
-      # Perform the Chi-Square test
-      chi_square_test <- chisq.test(observed, p = expected/sum(expected))
-      
-      # Extract p-value and test statistic
-      p_value <- chi_square_test$p.value
-      test_stat <- chi_square_test$statistic
-      
-      # Store the results in the data frame
-      results_df_black <- rbind(results_df_black, data.frame(Cohort = cohort,
-                                                             Census_Year = year,
-                                                             P_Value = p_value,
-                                                             Test_Statistic = test_stat))
-    }
+    # Append results to the results data frame
+    results_black <- rbind(results_black, data.frame(
+      RACE = "Black/African American",
+      Cohort = cohort,
+      Chi_Square = test_result$statistic,
+      p_value = test_result$p.value
+    ))
   }
 }
 
-# Print the final results
-print(results_df_black)
+results_black <- results_black %>%
+  mutate(Significance = ifelse(p_value > 0.05, "No", "Yes"))
+
+print(results_black)
 
 ```
 
 ```{r}
-results_df_white <- data.frame(Cohort = character(),
-                               Census_Year = integer(),
-                               P_Value = numeric(),
-                               Test_Statistic = numeric(),
-                               stringsAsFactors = FALSE)
+# Filter cohorts with more than one census year
+cohort_counts2 <- merged_df_white %>%
+  group_by(Cohort) %>%
+  summarise(Unique_Census_Years = n_distinct(Census_Year)) %>%
+  filter(Unique_Census_Years > 1)
 
-# Loop through white population
-cohorts_white <- unique(merged_df_white$Cohort)
+# Get the list of cohorts for testing
+cohorts_for_test2 <- cohort_counts2$Cohort
 
-for (cohort in cohorts_white) {
+# Initialize results data frame
+results_white <- data.frame(RACE = character(), Cohort = character(), Chi_Square = numeric(), p_value = numeric(), stringsAsFactors = FALSE)
+
+# Loop through each cohort and run the chi-square test
+for (cohort in cohorts_for_test2) {
+  cohort_data <- merged_df_white %>% filter(Cohort == cohort)
   
-  # Filter data for the specific cohort
-  cohort_data <- merged_df_white[merged_df_white$Cohort == cohort, ]
+  # Create contingency table
+  contingency_table <- table(cohort_data$Census_Year, cohort_data$chborn_num == "0")
   
-  # Loop through each unique Census Year for this cohort
-  for (year in unique(cohort_data$Census_Year)) {
+  # Perform the chi-square test only if more than one row is in the table
+  if (nrow(contingency_table) > 1) {
+    test_result <- chisq.test(contingency_table)
     
-    # Filter for the specific census year
-    cohort_year_data <- cohort_data[cohort_data$Census_Year == year, ]
-    
-    # Calculate the observed counts for women with zero children and with children
-    observed <- table(cohort_year_data$chborn_num == 0)  # TRUE: no children, FALSE: have children
-    
-    # Skip if there are not both TRUE and FALSE values
-    if (length(observed) >= 2) {
-      
-      # Expected counts assuming no change (proportions remain constant)
-      expected <- rep(mean(observed), length(observed))
-      
-      # Perform the Chi-Square test
-      chi_square_test <- chisq.test(observed, p = expected/sum(expected))
-      
-      # Extract p-value and test statistic
-      p_value <- chi_square_test$p.value
-      test_stat <- chi_square_test$statistic
-      
-      # Store the results in the data frame
-      results_df_white <- rbind(results_df_white, data.frame(Cohort = cohort,
-                                                             Census_Year = year,
-                                                             P_Value = p_value,
-                                                             Test_Statistic = test_stat
-                                                             ))
-    }
+    # Append results to the results data frame
+    results_white <- rbind(results_white, data.frame(
+      RACE = "White",
+      Cohort = cohort,
+      Chi_Square = test_result$statistic,
+      p_value = test_result$p.value
+    ))
   }
 }
-print(results_df_white)
+results_white <- results_white %>%
+  mutate(Significance = ifelse(p_value > 0.05, "No", "Yes"))
+
+print(results_white)
 ```
 
- 
 ```{r}
-results_df_black$Population <- "Black"
-results_df_white$Population <- "White"
-
 # Combine the two data frames
-combined_result <- rbind(results_df_black, results_df_white)
-combined_result$P_Value[combined_result$P_Value == 0] <- 1e-300
+combined_result <- rbind(results_black, results_white)
 
-# Get the minimum and maximum p-values for the log scale
-min_p_value <- min(combined_result$P_Value, na.rm = TRUE)
-max_p_value <- max(combined_result$P_Value, na.rm = TRUE)
-
-# Adjust plot with dynamic limits based on the p-value range
-ggplot(combined_result, aes(x = Census_Year, y = P_Value, group = interaction(Cohort, Population), color = Population)) +
-  geom_line(aes(linetype = Population), size = 1) +
-  geom_point(aes(shape = Population), size = 2) +  # Different shapes for Population
-  facet_wrap(~ Cohort, scales = "free_y") +
-  labs(title = "P-Value Comparison between Black and White Populations",
-       x = "Census Year", y = "P-Value") +
+# Create the plot
+ggplot(combined_result, aes(x = Cohort, y = p_value, color = RACE, shape = Significance)) +
+  geom_point(size = 2) +
+  geom_line(aes(group = RACE)) +
+    annotate("text", x = Inf, y = 0.05, label = "p = 0.05", hjust = 1.1, vjust = -0.5, color = "red", size = 3) +
+  geom_hline(yintercept = 0.05, linetype = "dashed", color = "red", size = 0.5) + 
+  scale_y_log10() +  # Use log scale for better visualization if p-values vary widely
+  labs(
+    title = "Change of p-values by Cohort",
+    x = "Cohort",
+    y = "p-value (log scale)",
+    color = "Race",
+    shape = "Significance"
+  ) +
   theme_minimal() +
-  theme(legend.position = "bottom") +
-  scale_y_log10(breaks = scales::trans_breaks("log10", function(x) 10^x),
-                labels = scales::trans_format("log10", scales::math_format(10^.x)),
-                limits = c(min_p_value, max_p_value))  # Dynamically set limits
-
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ```
-**_RESULT:_**
--In some cohorts (-Inf-1900, -Inf-1920, 1891-1900, 1911-1920, 1921-1930, 1931-1940, 1941-1950), the p-values for Black women tend to be similar to those for White women, even across census year, suggesting no significant difference in the probability of having zero children between the two groups. By contrast, cohorts -Inf-1890, -Inf-1910 present a difference in p-value, indicating a discrepancy between two groups. Specially, there is a increase in the p-value for balck population in cohort 1901-1910. 
--Since the p-values are plotted on a log scale, the extremely small values (e.g., 1e-300) suggest that there are significant differences between the observed and expected proportions of women with zero children across all census years for both populations.
+**_RESULT:_** The graph shows that there is a discrepancy in the p-value within the cohorts like 1901-1910, 1911-1920 and 1921-1930 by race. However, in cohort 1931-1941, the p-value of each race is pretty close to each other. The overall trend of the p-value for black population is stable across cohort, while the trend for white population fluctuate a lot. 
+
 
 ```{r}
-ggplot(combined_result, aes(x = Census_Year, y = Test_Statistic, group = interaction(Cohort, Population), color = Population)) +
-  geom_line(aes(linetype = Population), size = 1) +
-  geom_point(aes(shape = Population), size = 2) +  # Different shapes for Population
-  facet_wrap(~ Cohort, scales = "free_y") +
-  labs(title = "Test_Statistics Comparison between Black and White Populations",
-       x = "Census Year", y = "Test_Statistics") +
+ggplot(combined_result, aes(x = Cohort, y = Chi_Square, color = RACE)) +
+  geom_point(size = 3) +
+  geom_line(aes(group = RACE)) +
+  labs(
+    title = "Change of Test Statistics by Cohort",
+    x = "Cohort",
+    y = "Chi-Square",
+    color = "Race"
+  ) +
   theme_minimal() +
-  theme(legend.position = "bottom")
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
 ```
-**_RESULT:_** 
--Black Population: The test statistics for the Black population are relatively stable across most cohorts, with moderate test statistics in the range of 5,000–10,000 for most census years.
--White Population: The test statistics are much higher for the White population, especially in cohorts like 1911-1920, 1921-1930, and 1931-1940, where they reach values as high as 100,000.
--For cohorts like 1891-1900, 1901-1910, and 1921-1930, the test statistics for the White population are significantly higher than for the Black population, indicating greater differences between the observed and expected proportions of women with zero children in the White population.
--In the cohort 1941-1950, there’s a large test statistic spike for the White population, but the Black population remains much lower, suggesting less variation in the observed and expected values for the Black population.
 
 **_CONCLUSION:_**
--Based on the p-value comparison, both Black and White women show statistically significant differences in the number of children over time. However, the larger test statistics for the White population suggest that there might be more variability or greater differences in childbearing patterns among White women compared to Black women. So while both populations show significant patterns, White women appear to have more pronounced differences over time.
--The probability of having zero children does change over time for Black women. This is evidenced by the consistently low p-values across all census years, suggesting that the number of children born to Black women differs significantly from the expected proportions. The test statistics for Black women are stable but moderate, indicating that while there are significant differences, they are less pronounced compared to the White population.
 
 #### b. **Family Size Analysis**
 - Use an **ANOVA** or **linear regression** to test if the mean or variance in family size changes over census years for the same cohort.
@@ -997,7 +964,7 @@ child_plot +
                                         (YEAR == 1990 & AGE_RANGE == "50-59")|
                                         (YEAR == 1990 & AGE_RANGE == "60-69")),
             aes(xmin = -0.45, xmax = 0.45, ymin = -0.3, ymax = 0.3), 
-            fill = "blue", alpha = 0.1) +  # Apply transparency
+            fill = "blue", alpha = 0.03) +  # Apply transparency
   
   # Update the title, subtitle, and caption
   labs(title = "Fertility Distribution Shifts Across Cohorts",

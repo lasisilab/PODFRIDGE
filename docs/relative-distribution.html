@@ -355,7 +355,7 @@ div.tocify {
 <h1 class="title toc-ignore">Estimating Differences in the Distribution
 of First-degree Relatives</h1>
 <h4 class="author">Manqing Lin, Tina Lasisi</h4>
-<h4 class="date">2024-10-22 09:36:17</h4>
+<h4 class="date">2024-11-04 17:01:42</h4>
 
 </div>
 
@@ -363,7 +363,7 @@ of First-degree Relatives</h1>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -374,8 +374,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -384,13 +384,13 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2024-10-22
+<strong>Last updated:</strong> 2024-11-04
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>PODFRIDGE/</code> <span
@@ -413,18 +413,21 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
@@ -515,15 +518,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreebb2c61b7f74db6bd5d5499c3a5769fe950aa670etargetblankbb2c61ba">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree60011e57ae152539af40965576154b7707b9c8bdtargetblank60011e5a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/bb2c61b7f74db6bd5d5499c3a5769fe950aa670e" target="_blank">bb2c61b</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/60011e57ae152539af40965576154b7707b9c8bd" target="_blank">60011e5</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreebb2c61b7f74db6bd5d5499c3a5769fe950aa670etargetblankbb2c61ba"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree60011e57ae152539af40965576154b7707b9c8bdtargetblank60011e5a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -533,7 +536,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/bb2c61b7f74db6bd5d5499c3a5769fe950aa670e" target="_blank">bb2c61b</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/60011e57ae152539af40965576154b7707b9c8bd" target="_blank">60011e5</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -553,6 +556,9 @@ Ignored files:
     Ignored:    .Rproj.user/
     Ignored:    analysis/.Rhistory
     Ignored:    data/.DS_Store
+
+Unstaged changes:
+    Modified:   analysis/relative-distribution.Rmd
 
 </code></pre>
 <p>
@@ -598,6 +604,74 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/6fb5b405d09346d07e1d2be9e59158068a385b20/analysis/relative-distribution.Rmd" target="_blank">6fb5b40</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-10-29
+</td>
+<td>
+update sibling’s distribution plot
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/570abb077e3ce782ed0ad4a4efadedacced84fbc/analysis/relative-distribution.Rmd" target="_blank">570abb0</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-10-22
+</td>
+<td>
+update sibling part
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/2e09e084a0ab4c6710fc50bf2575a64d7115435e/analysis/relative-distribution.Rmd" target="_blank">2e09e08</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-10-22
+</td>
+<td>
+workflow build
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/2e09e084a0ab4c6710fc50bf2575a64d7115435e/docs/relative-distribution.html" target="_blank">2e09e08</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-10-22
+</td>
+<td>
+workflow build
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1554,6 +1628,9 @@ model_logistic &lt;- glm(Best_Model_Binary ~ Race + Census_Year + Age_Range, fam
 
 # Summary of the logistic regression model
 summary(model_logistic)</code></pre>
+<p><strong><em>RESULT:</em></strong>The p-value for each variable is
+smaller than 0.05, indicating non-significant effects on best_model
+fitting.</p>
 <ol start="3" style="list-style-type: decimal">
 <li><p><strong>Multinomial Logistic Regression</strong> (if more than
 two models): If you have multiple possible best-fitting models (Poisson,
@@ -1599,15 +1676,15 @@ model varies across race, census year, and age range.</li>
 <p><strong>Example of a simple bar plot in R</strong>:</p>
 <pre class="r"><code># Bar plot showing the distribution of best models across races
 ggplot(best_models, aes(x = Race, fill = Best_Model)) +
-  geom_bar(position = &quot;dodge&quot;) +
+  geom_bar(position = &quot;stack&quot;) +
   labs(title = &quot;Best-Fitting Models by Race&quot;, x = &quot;Race&quot;, y = &quot;Count&quot;, fill = &quot;Best Model&quot;)</code></pre>
 <pre class="r"><code># Bar plot showing the distribution of best models across races
 ggplot(best_models, aes(x = Census_Year, fill = Best_Model)) +
-  geom_bar(position = &quot;dodge&quot;) +
+  geom_bar(position = &quot;stack&quot;) +
   labs(title = &quot;Best-Fitting Models by Census Year&quot;, x = &quot;Census Year&quot;, y = &quot;Count&quot;, fill = &quot;Best Model&quot;)</code></pre>
 <pre class="r"><code># Bar plot showing the distribution of best models across races
 ggplot(best_models, aes(x = Age_Range, fill = Best_Model)) +
-  geom_bar(position = &quot;dodge&quot;) +
+  geom_bar(position = &quot;stack&quot;) +
   labs(title = &quot;Best-Fitting Models by Age Range&quot;, x = &quot;Age Range&quot;, y = &quot;Count&quot;, fill = &quot;Best Model&quot;)</code></pre>
 <pre class="r"><code>ggplot(best_models, aes(x = Census_Year, y = Age_Range, fill = Best_Model)) +
   geom_tile(color = &quot;white&quot;, lwd = 0.5, linetype = 1) + # Create the tiles
@@ -1621,7 +1698,6 @@ ggplot(best_models, aes(x = Age_Range, fill = Best_Model)) +
   ) +
   theme_minimal() +
   theme(
-    axis.text.x = element_text(angle = 45, hjust = 1), # Rotate x-axis labels for readability
     plot.title = element_text(size = 14, face = &quot;bold&quot;),
     legend.position = &quot;bottom&quot;
   )</code></pre>
@@ -1640,6 +1716,11 @@ you’ll be able to conclude which model fits each race best across
 different years, and whether race, census year, or age group is the
 dominant factor.</li>
 </ul>
+<p><strong><em>CONCLUSION:</em></strong> Both the logistics regression
+and the result visualization shows that there isn’t a significant
+association between the predictor and the best-fitting model, ie. no
+certain races, age ranges, or census year are more likely to have a
+particular model as the best fit.</p>
 </div>
 </div>
 <div id="instructions-for-manqing-cohort-stability-analysis"
@@ -1919,172 +2000,116 @@ the same cohort.</p>
 <pre class="r"><code>## divided the corhort by race
 merged_df_black &lt;- merged_data %&gt;% filter(Race == &quot;Black/African American&quot;)
 merged_df_white &lt;- merged_data %&gt;% filter(Race == &quot;White&quot;)</code></pre>
-<pre class="r"><code># Initialize an empty data frame to store the results
-results_df_black &lt;- data.frame(Cohort = character(),
-                               Census_Year = integer(),
-                               P_Value = numeric(),
-                               Test_Statistic = numeric(),
-                               stringsAsFactors = FALSE)
+<pre class="r"><code># Filter cohorts with more than one census year
+cohort_counts &lt;- merged_df_black %&gt;%
+  group_by(Cohort) %&gt;%
+  summarise(Unique_Census_Years = n_distinct(Census_Year)) %&gt;%
+  filter(Unique_Census_Years &gt; 1)
 
-# Get a list of unique cohorts
-cohorts &lt;- unique(merged_df_black$Cohort)
+# Get the list of cohorts for testing
+cohorts_for_test &lt;- cohort_counts$Cohort
 
-# Loop through each cohort
-for (cohort in cohorts) {
+# Initialize results data frame
+results_black &lt;- data.frame(RACE = character(), Cohort = character(), Chi_Square = numeric(), p_value = numeric(), stringsAsFactors = FALSE)
+
+# Loop through each cohort and run the chi-square test
+for (cohort in cohorts_for_test) {
+  cohort_data &lt;- merged_df_black %&gt;% filter(Cohort == cohort)
   
-  # Filter data for the specific cohort
-  cohort_data &lt;- merged_df_black[merged_df_black$Cohort == cohort, ]
+  # Create contingency table
+  contingency_table &lt;- table(cohort_data$Census_Year, cohort_data$chborn_num == &quot;0&quot;)
   
-  # Loop through each unique Census Year for this cohort
-  for (year in unique(cohort_data$Census_Year)) {
+  # Perform the chi-square test only if more than one row is in the table
+  if (nrow(contingency_table) &gt; 1) {
+    test_result &lt;- chisq.test(contingency_table)
     
-    # Filter for the specific census year
-    cohort_year_data &lt;- cohort_data[cohort_data$Census_Year == year, ]
-    
-    # Calculate the observed counts for women with zero children and with children
-    observed &lt;- table(cohort_year_data$chborn_num == 0)  # TRUE: no children, FALSE: have children
-    
-    # Skip if there are not both TRUE and FALSE values
-    if (length(observed) &gt;= 2) {
-      
-      # Expected counts assuming no change (proportions remain constant)
-      expected &lt;- rep(mean(observed), length(observed))
-      
-      # Perform the Chi-Square test
-      chi_square_test &lt;- chisq.test(observed, p = expected/sum(expected))
-      
-      # Extract p-value and test statistic
-      p_value &lt;- chi_square_test$p.value
-      test_stat &lt;- chi_square_test$statistic
-      
-      # Store the results in the data frame
-      results_df_black &lt;- rbind(results_df_black, data.frame(Cohort = cohort,
-                                                             Census_Year = year,
-                                                             P_Value = p_value,
-                                                             Test_Statistic = test_stat))
-    }
+    # Append results to the results data frame
+    results_black &lt;- rbind(results_black, data.frame(
+      RACE = &quot;Black/African American&quot;,
+      Cohort = cohort,
+      Chi_Square = test_result$statistic,
+      p_value = test_result$p.value
+    ))
   }
 }
 
-# Print the final results
-print(results_df_black)</code></pre>
-<pre class="r"><code>results_df_white &lt;- data.frame(Cohort = character(),
-                               Census_Year = integer(),
-                               P_Value = numeric(),
-                               Test_Statistic = numeric(),
-                               stringsAsFactors = FALSE)
+results_black &lt;- results_black %&gt;%
+  mutate(Significance = ifelse(p_value &gt; 0.05, &quot;No&quot;, &quot;Yes&quot;))
 
-# Loop through white population
-cohorts_white &lt;- unique(merged_df_white$Cohort)
+print(results_black)</code></pre>
+<pre class="r"><code># Filter cohorts with more than one census year
+cohort_counts2 &lt;- merged_df_white %&gt;%
+  group_by(Cohort) %&gt;%
+  summarise(Unique_Census_Years = n_distinct(Census_Year)) %&gt;%
+  filter(Unique_Census_Years &gt; 1)
 
-for (cohort in cohorts_white) {
+# Get the list of cohorts for testing
+cohorts_for_test2 &lt;- cohort_counts2$Cohort
+
+# Initialize results data frame
+results_white &lt;- data.frame(RACE = character(), Cohort = character(), Chi_Square = numeric(), p_value = numeric(), stringsAsFactors = FALSE)
+
+# Loop through each cohort and run the chi-square test
+for (cohort in cohorts_for_test2) {
+  cohort_data &lt;- merged_df_white %&gt;% filter(Cohort == cohort)
   
-  # Filter data for the specific cohort
-  cohort_data &lt;- merged_df_white[merged_df_white$Cohort == cohort, ]
+  # Create contingency table
+  contingency_table &lt;- table(cohort_data$Census_Year, cohort_data$chborn_num == &quot;0&quot;)
   
-  # Loop through each unique Census Year for this cohort
-  for (year in unique(cohort_data$Census_Year)) {
+  # Perform the chi-square test only if more than one row is in the table
+  if (nrow(contingency_table) &gt; 1) {
+    test_result &lt;- chisq.test(contingency_table)
     
-    # Filter for the specific census year
-    cohort_year_data &lt;- cohort_data[cohort_data$Census_Year == year, ]
-    
-    # Calculate the observed counts for women with zero children and with children
-    observed &lt;- table(cohort_year_data$chborn_num == 0)  # TRUE: no children, FALSE: have children
-    
-    # Skip if there are not both TRUE and FALSE values
-    if (length(observed) &gt;= 2) {
-      
-      # Expected counts assuming no change (proportions remain constant)
-      expected &lt;- rep(mean(observed), length(observed))
-      
-      # Perform the Chi-Square test
-      chi_square_test &lt;- chisq.test(observed, p = expected/sum(expected))
-      
-      # Extract p-value and test statistic
-      p_value &lt;- chi_square_test$p.value
-      test_stat &lt;- chi_square_test$statistic
-      
-      # Store the results in the data frame
-      results_df_white &lt;- rbind(results_df_white, data.frame(Cohort = cohort,
-                                                             Census_Year = year,
-                                                             P_Value = p_value,
-                                                             Test_Statistic = test_stat
-                                                             ))
-    }
+    # Append results to the results data frame
+    results_white &lt;- rbind(results_white, data.frame(
+      RACE = &quot;White&quot;,
+      Cohort = cohort,
+      Chi_Square = test_result$statistic,
+      p_value = test_result$p.value
+    ))
   }
 }
-print(results_df_white)</code></pre>
-<pre class="r"><code>results_df_black$Population &lt;- &quot;Black&quot;
-results_df_white$Population &lt;- &quot;White&quot;
+results_white &lt;- results_white %&gt;%
+  mutate(Significance = ifelse(p_value &gt; 0.05, &quot;No&quot;, &quot;Yes&quot;))
 
-# Combine the two data frames
-combined_result &lt;- rbind(results_df_black, results_df_white)
-combined_result$P_Value[combined_result$P_Value == 0] &lt;- 1e-300
+print(results_white)</code></pre>
+<pre class="r"><code># Combine the two data frames
+combined_result &lt;- rbind(results_black, results_white)
 
-# Get the minimum and maximum p-values for the log scale
-min_p_value &lt;- min(combined_result$P_Value, na.rm = TRUE)
-max_p_value &lt;- max(combined_result$P_Value, na.rm = TRUE)
-
-# Adjust plot with dynamic limits based on the p-value range
-ggplot(combined_result, aes(x = Census_Year, y = P_Value, group = interaction(Cohort, Population), color = Population)) +
-  geom_line(aes(linetype = Population), size = 1) +
-  geom_point(aes(shape = Population), size = 2) +  # Different shapes for Population
-  facet_wrap(~ Cohort, scales = &quot;free_y&quot;) +
-  labs(title = &quot;P-Value Comparison between Black and White Populations&quot;,
-       x = &quot;Census Year&quot;, y = &quot;P-Value&quot;) +
+# Create the plot
+ggplot(combined_result, aes(x = Cohort, y = p_value, color = RACE, shape = Significance)) +
+  geom_point(size = 2) +
+  geom_line(aes(group = RACE)) +
+    annotate(&quot;text&quot;, x = Inf, y = 0.05, label = &quot;p = 0.05&quot;, hjust = 1.1, vjust = -0.5, color = &quot;red&quot;, size = 3) +
+  geom_hline(yintercept = 0.05, linetype = &quot;dashed&quot;, color = &quot;red&quot;, size = 0.5) + 
+  scale_y_log10() +  # Use log scale for better visualization if p-values vary widely
+  labs(
+    title = &quot;Change of p-values by Cohort&quot;,
+    x = &quot;Cohort&quot;,
+    y = &quot;p-value (log scale)&quot;,
+    color = &quot;Race&quot;,
+    shape = &quot;Significance&quot;
+  ) +
   theme_minimal() +
-  theme(legend.position = &quot;bottom&quot;) +
-  scale_y_log10(breaks = scales::trans_breaks(&quot;log10&quot;, function(x) 10^x),
-                labels = scales::trans_format(&quot;log10&quot;, scales::math_format(10^.x)),
-                limits = c(min_p_value, max_p_value))  # Dynamically set limits</code></pre>
-<p>Result: -In some cohorts (-Inf-1900, -Inf-1920, 1891-1900, 1911-1920,
-1921-1930, 1931-1940, 1941-1950), the p-values for Black women tend to
-be similar to those for White women, even across census year, suggesting
-no significant difference in the probability of having zero children
-between the two groups. By contrast, cohorts -Inf-1890, -Inf-1910
-present a difference in p-value, indicating a discrepancy between two
-groups. Specially, there is a increase in the p-value for balck
-population in cohort 1901-1910. -Since the p-values are plotted on a log
-scale, the extremely small values (e.g., 1e-300) suggest that there are
-significant differences between the observed and expected proportions of
-women with zero children across all census years for both
-populations.</p>
-<pre class="r"><code>ggplot(combined_result, aes(x = Census_Year, y = Test_Statistic, group = interaction(Cohort, Population), color = Population)) +
-  geom_line(aes(linetype = Population), size = 1) +
-  geom_point(aes(shape = Population), size = 2) +  # Different shapes for Population
-  facet_wrap(~ Cohort, scales = &quot;free_y&quot;) +
-  labs(title = &quot;Test_Statistics Comparison between Black and White Populations&quot;,
-       x = &quot;Census Year&quot;, y = &quot;Test_Statistics&quot;) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
+<p><strong><em>RESULT:</em></strong> The graph shows that there is a
+discrepancy in the p-value within the cohorts like 1901-1910, 1911-1920
+and 1921-1930 by race. However, in cohort 1931-1941, the p-value of each
+race is pretty close to each other. The overall trend of the p-value for
+black population is stable across cohort, while the trend for white
+population fluctuate a lot.</p>
+<pre class="r"><code>ggplot(combined_result, aes(x = Cohort, y = Chi_Square, color = RACE)) +
+  geom_point(size = 3) +
+  geom_line(aes(group = RACE)) +
+  labs(
+    title = &quot;Change of Test Statistics by Cohort&quot;,
+    x = &quot;Cohort&quot;,
+    y = &quot;Chi-Square&quot;,
+    color = &quot;Race&quot;
+  ) +
   theme_minimal() +
-  theme(legend.position = &quot;bottom&quot;)</code></pre>
-<p>Result: -Black Population: The test statistics for the Black
-population are relatively stable across most cohorts, with moderate test
-statistics in the range of 5,000–10,000 for most census years. -White
-Population: The test statistics are much higher for the White
-population, especially in cohorts like 1911-1920, 1921-1930, and
-1931-1940, where they reach values as high as 100,000. -For cohorts like
-1891-1900, 1901-1910, and 1921-1930, the test statistics for the White
-population are significantly higher than for the Black population,
-indicating greater differences between the observed and expected
-proportions of women with zero children in the White population. -In the
-cohort 1941-1950, there’s a large test statistic spike for the White
-population, but the Black population remains much lower, suggesting less
-variation in the observed and expected values for the Black
-population.</p>
-<p>CONCLUSION: -Based on the p-value comparison, both Black and White
-women show statistically significant differences in the number of
-children over time. However, the larger test statistics for the White
-population suggest that there might be more variability or greater
-differences in childbearing patterns among White women compared to Black
-women. So while both populations show significant patterns, White women
-appear to have more pronounced differences over time. -The probability
-of having zero children does change over time for Black women. This is
-evidenced by the consistently low p-values across all census years,
-suggesting that the number of children born to Black women differs
-significantly from the expected proportions. The test statistics for
-Black women are stable but moderate, indicating that while there are
-significant differences, they are less pronounced compared to the White
-population.</p>
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
+<p><strong><em>CONCLUSION:</em></strong></p>
 </div>
 <div id="b.-family-size-analysis" class="section level4">
 <h4>b. <strong>Family Size Analysis</strong></h4>
@@ -2127,13 +2152,13 @@ for (cohort in cohorts1) {
   cat(&quot;\nANOVA for Variance in Family Size:\n&quot;)
   print(summary(anova_variance_result))
 }</code></pre>
-<p>Result: 1.The ANOVA is not applicable for the following cohort since
-there is only one census year available in the dataset for those
-cohorts:-Inf-1910, 1941-1950, -Inf-1920, -Inf-1890, -Inf-1900, and
-1891-1900 2.By looking at the ANOVA for mean and variance family size,
-the p-value of the rest cohorts are smaller than 0.05, indicating mean
-and variance family size for these cohort has significantly changed over
-different census years.</p>
+<p><strong><em>RESULT:</em></strong> 1.The ANOVA is not applicable for
+the following cohort since there is only one census year available in
+the dataset for those cohorts:-Inf-1910, 1941-1950, -Inf-1920,
+-Inf-1890, -Inf-1900, and 1891-1900 2.By looking at the ANOVA for mean
+and variance family size, the p-value of the rest cohorts are smaller
+than 0.05, indicating mean and variance family size for these cohort has
+significantly changed over different census years.</p>
 </div>
 <div id="c.-model-fit-analysis" class="section level4">
 <h4>c. <strong>Model Fit Analysis</strong></h4>
@@ -2154,9 +2179,9 @@ model_fit_analysis &lt;- glm(Best_Model_Binary ~ factor(Census_Year), data = coh
 
 # Summary of the model
 summary(model_fit_analysis)</code></pre>
-<p>Result: The p-value of all the “Census_Year” is greater than 0.05,
-suggesting no statistically significant effect on choice between best
-models.</p>
+<p><strong><em>RESULT:</em></strong> The p-value of all the
+“Census_Year” is greater than 0.05, suggesting no statistically
+significant effect on choice between best models.</p>
 </div>
 </div>
 <div id="step-4-interpret-the-results" class="section level3">
@@ -2299,27 +2324,9 @@ children or an increase in childlessness.</li>
                                         (YEAR == 1990 &amp; AGE_RANGE == &quot;50-59&quot;)|
                                         (YEAR == 1990 &amp; AGE_RANGE == &quot;60-69&quot;)),
             aes(xmin = -0.45, xmax = 0.45, ymin = -0.3, ymax = 0.3), 
-            fill = &quot;blue&quot;, alpha = 0.1) +  # Apply transparency
+            fill = &quot;blue&quot;, alpha = 0.03) +  # Apply transparency
   
   # Update the title, subtitle, and caption
-  labs(title = &quot;Fertility Distribution Shifts Across Cohorts&quot;,
-       subtitle = &quot;Highlighted shifts in fertility and childlessness&quot;,
-       caption = &quot;Annotations indicate key shifts in fertility distribution across census years&quot;) +
-  theme_minimal()</code></pre>
-<pre class="r"><code>limits &lt;- df_mirror %&gt;%
-  filter(YEAR == 1960 &amp; AGE_RANGE == &quot;40-49&quot;) %&gt;%
-  summarize(
-    xmin = -0.45,
-    xmax = 0.45,
-    ymin = -0.3,
-    ymax = 0.3
-  )
-
-# Add the annotation using the calculated limits
-child_plot +
-  annotate(&quot;rect&quot;, xmin = limits$xmin, xmax = limits$xmax, 
-           ymin = limits$ymin, ymax = limits$ymax, 
-           alpha = 0.3, color = &quot;blue&quot;, fill = &quot;blue&quot;) +
   labs(title = &quot;Fertility Distribution Shifts Across Cohorts&quot;,
        subtitle = &quot;Highlighted shifts in fertility and childlessness&quot;,
        caption = &quot;Annotations indicate key shifts in fertility distribution across census years&quot;) +
@@ -2433,11 +2440,11 @@ test in the follwoing:</p>
 <pre class="r"><code>wilcox_test_result &lt;- wilcox.test(data_40_49_b$chborn_num, data_50_59_b$chborn_num)$p.value
 wilcox_test_result2 &lt;- wilcox.test(data_40_49_w$chborn_num, data_50_59_w$chborn_num)$p.value
 print(c(wilcox_test_result, wilcox_test_result2))</code></pre>
-<p>Result: These p-values are both extremely small (close to zero),
-meaning there is a very strong statistical difference between the two
-age groups (40-49 and 50-59) in terms of the number of children they
-have for both the Black/African American and White racial groups. ####
-3.2 F-Test for Difference in Variances</p>
+<p><strong><em>RESULT:</em></strong> These p-values are both extremely
+small (close to zero), meaning there is a very strong statistical
+difference between the two age groups (40-49 and 50-59) in terms of the
+number of children they have for both the Black/African American and
+White racial groups. #### 3.2 F-Test for Difference in Variances</p>
 <ul>
 <li><strong>Assess Variance Differences</strong>:
 <ul>
@@ -2455,10 +2462,11 @@ levene_test_w &lt;- leveneTest(chborn_num ~ as.factor(AGE_RANGE), data = df_w)
 # Print results
 print(levene_test_b)
 print(levene_test_w)</code></pre>
-<p>Result: Since the p values are smaller than 0.05 for both racial
-group, we have enough evidence to reject the null hypothesis, indicating
-that the variances of the number of children between the two age groups
-within each racial group are significantly different.</p>
+<p><strong><em>RESULT:</em></strong> Since the p values are smaller than
+0.05 for both racial group, we have enough evidence to reject the null
+hypothesis, indicating that the variances of the number of children
+between the two age groups within each racial group are significantly
+different.</p>
 </div>
 <div id="chi-square-test-for-difference-in-zero-inflation"
 class="section level4">
@@ -2490,13 +2498,13 @@ chi_test_b</code></pre>
 cont_table_w &lt;- xtabs(count ~ AGE_RANGE + childlessness, data = ZI_table_w)
 chi_test_w &lt;- chisq.test(cont_table_w)
 chi_test_w</code></pre>
-<p>Result: The p-values for both tests are extremely low, suggests that
-there is a significant difference in the proportion of women with zero
-children versus those with one or more children across different age
-ranges for both the Black/African American and White racial groups. The
-results imply that childlessness is not uniformly distributed across age
-groups. Some age groups may have a higher proportion of women with zero
-children compared to others.</p>
+<p><strong><em>RESULT:</em></strong> The p-values for both tests are
+extremely low, suggests that there is a significant difference in the
+proportion of women with zero children versus those with one or more
+children across different age ranges for both the Black/African American
+and White racial groups. The results imply that childlessness is not
+uniformly distributed across age groups. Some age groups may have a
+higher proportion of women with zero children compared to others.</p>
 </div>
 </div>
 <div id="step-4-summarize-findings" class="section level3">
@@ -2700,12 +2708,12 @@ number of children.</p>
 <div id="step-1-calculate-sibling-frequencies" class="section level3">
 <h3>Step 1: Calculate Sibling Frequencies</h3>
 <ol style="list-style-type: decimal">
-<li>Start with your dataframe that includes the <code>birth_range</code>
+<li>Start with your dataframe that includes the <code>AGE_RANGE</code>
 column.</li>
 </ol>
 <pre class="r"><code>df2 &lt;- df %&gt;%
-  mutate(birth_range = mapply(calculate_cohort, YEAR, AGE_RANGE)) %&gt;% 
-  dplyr::select(RACE, YEAR, AGE_RANGE, birth_range, chborn_num)</code></pre>
+  mutate(AGE_RANGE = mapply(calculate_cohort, YEAR, AGE_RANGE)) %&gt;% 
+  dplyr::select(RACE, YEAR, AGE_RANGE, AGE_RANGE, chborn_num)</code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li>Create a new column for the number of siblings:</li>
 </ol>
@@ -2723,7 +2731,7 @@ mutate(sibling_freq = n_siblings * 1)  # Assuming each mother represents 1 in fr
 <li>Group the data and calculate sibling frequencies:</li>
 </ol>
 <pre class="r"><code>df_siblings &lt;- df2 %&gt;%
- group_by(YEAR, RACE, birth_range, n_siblings) %&gt;%
+ group_by(YEAR, RACE, AGE_RANGE, n_siblings) %&gt;%
  summarise(
    sibling_count = sum(sibling_freq),
    .groups = &quot;drop&quot;
@@ -2732,7 +2740,7 @@ mutate(sibling_freq = n_siblings * 1)  # Assuming each mother represents 1 in fr
 <li>Calculate proportions within each group:</li>
 </ol>
 <pre class="r"><code>df_sibling_proportions &lt;- df_siblings %&gt;%
- group_by(YEAR, RACE, birth_range) %&gt;%
+ group_by(YEAR, RACE, AGE_RANGE) %&gt;%
  mutate(proportion = sibling_count / sum(sibling_count)) %&gt;%
  ungroup()</code></pre>
 </div>
@@ -2741,9 +2749,9 @@ mutate(sibling_freq = n_siblings * 1)  # Assuming each mother represents 1 in fr
 <p>Before creating the plot, verify that the proportions are correctly
 normalized:</p>
 <pre class="r"><code>normalization_check &lt;- df_sibling_proportions %&gt;%
-  group_by(YEAR, RACE, birth_range) %&gt;%
+  group_by(YEAR, RACE, AGE_RANGE) %&gt;%
   summarise(total_proportion = sum(proportion), .groups = &quot;drop&quot;) %&gt;%
-  arrange(YEAR, RACE, birth_range)
+  arrange(YEAR, RACE, AGE_RANGE)
 
 print(normalization_check)</code></pre>
 <p>Ensure that the <code>total_proportion</code> for each group is very
@@ -2764,16 +2772,16 @@ close to 1.0. If not, revisit your calculations in Step 2.</p>
 <ol start="2" style="list-style-type: decimal">
 <li>Create the plot:</li>
 </ol>
-<pre class="r"><code>ggplot(df_sibling_mirror, aes(x = n_siblings, y = proportion, fill = as.factor(n_siblings))) +
+<pre class="r"><code>ggplot(data = df_sibling_mirror %&gt;% filter(n_siblings != &quot;-1&quot;), aes(x = n_siblings, y = proportion, fill = as.factor(n_siblings))) +
  geom_col(aes(alpha = RACE)) +
  geom_hline(yintercept = 0, color = &quot;black&quot;, size = 0.5) +
- facet_grid(birth_range ~ YEAR, scales = &quot;free_y&quot;) +
+ facet_grid(AGE_RANGE ~ YEAR, scales = &quot;free_y&quot;) +
  coord_flip() +
  scale_y_continuous(
    labels = function(x) abs(x),
    limits = function(x) c(-max(abs(x)), max(abs(x)))
  ) +
- scale_x_continuous(breaks = 0:12, labels = c(0:11, &quot;12+&quot;)) +
+ scale_x_continuous(breaks = 0:11, labels = c(0:10, &quot;11+&quot;)) +
  scale_fill_manual(values = my_colors) +
  scale_alpha_manual(values = c(&quot;White&quot; = 0.7, &quot;Black/African American&quot; = 1)) +
  labs(
@@ -2781,7 +2789,7 @@ close to 1.0. If not, revisit your calculations in Step 2.</p>
    x = &quot;Number of Siblings&quot;,
    y = &quot;Proportion&quot;,
    fill = &quot;Number of Siblings&quot;,
-   caption = &quot;White population shown on left (negative values), Black/African American on right (positive values)\nProportions normalized within each birth range, race, and census year\nFootnote: The category &#39;12+&#39; includes individuals with 12 or more siblings.&quot;
+   caption = &quot;White population shown on left (negative values), Black/African American on right (positive values)\nProportions normalized within each age range, race, and census year\nFootnote: The category &#39;11+&#39; includes individuals with 11 or more siblings.&quot;
  ) +
  theme_minimal() +
  theme(
@@ -2797,40 +2805,47 @@ close to 1.0. If not, revisit your calculations in Step 2.</p>
 <h3>Step 6: Interpret the Plot</h3>
 <p>After creating the plot, examine it carefully:</p>
 <ol style="list-style-type: decimal">
-<li><p>Look for patterns in sibling distribution across different census
-years and birth ranges. Result: -By Census Year: We can observe a
-decrease in family size over time. The distribution of centered toward
-smaller number of siblings. By 1990, most of the distribution are more
-compact, with a peak around 2–4 siblings, and the tail of the
-distribution (larger numbers of siblings) has reduced significantly. -By
-birth range:For individuals born in earlier periods like pre-1900 or
-1910, the distribution is skewed toward larger families, with more
-people having a larger number of siblings.As we move to more recent
-birth ranges, the distributions shift toward smaller family
-sizes.</p></li>
+<li>Look for patterns in sibling distribution across different census
+years and age ranges. <strong><em>RESULT:</em></strong> -By Census Year:
+In 1960 and 1970, individuals are more likely to have higher number of
+siblings, especially in the 5-10 range. This trend diminishes over
+time.</li>
+</ol>
+<p>By 1980 and 1990, the distribution shifts toward smaller family
+sizes, with a growing proportion of individuals having fewer
+siblings.</p>
+<p>-By age range: 40-49 Age Group: For this group, the number of
+individuals with 0-2 siblings increases across census years, especially
+in 1980 and 1990, while the proportion of individuals with larger
+sibling counts decreases.</p>
+<p>50-59 and 60-69 Age Groups: These groups show a similar shift toward
+smaller family sizes, but the trend is slightly more gradual compared to
+the younger age group.</p>
+<p>70+ Age Group: The shift to fewer siblings is noticeable, although
+the trend is less pronounced. The distribution remains relatively stable
+across the census years, with a significant portion of individuals still
+coming from large families in 1960 and 1970.</p>
+<ol start="2" style="list-style-type: decimal">
 <li><p>Compare the distributions between White and Black/African
-American populations. Result: In general, the White population tends to
-have a more concentrated distribution around 2–4 siblings in later
-census years, while the Black/African American population often shows a
-slightly more spread-out distribution. However, the trend of decreasing
-family size over time is visible in both populations, though it appears
-more pronounced for the White population.</p></li>
+American populations. <strong><em>RESULT:</em></strong> -Black/African
+American Populations: (right side of each pair) consistently show a
+higher proportion of individuals with larger sibling counts (5-10
+siblings) compared to White populations. However, similar to the White
+population, the number of individuals with fewer siblings increases over
+time.</p></li>
 <li><p>Note any significant changes or trends in the number of siblings
-over time. Result: -Decrease in Family Size: Both distribution of
-children and siblings indicate a clear societal trend toward smaller
-family sizes over time, with fewer people having a large number of
-siblings or children. -Cohort Effects: Individuals born earlier
-(pre-1900 or early 1900s) tend to come from larger families, while those
-born later (1930s-1950s) tend to have fewer siblings and
-children.</p></li>
+over time. <strong><em>RESULT:</em></strong> -White Populations: (left
+side of each pair) have a more marked shift toward smaller families by
+1990, with a larger proportion of individuals having 0-2 siblings
+compared to the Black/African American population. The decline in larger
+family sizes (5+ siblings) is more pronounced among Whites, particularly
+by 1980 and 1990.</p></li>
 <li><p>Consider how these sibling distributions might differ from the
 children distributions you analyzed earlier, and think about potential
-reasons for these differences. Result: While both distributions show a
-trend toward smaller families, the sibling distribution is more spread
-out across different sibling counts. This might be due to the
-calculation difference in proportion between number of children and
-number of siblings. For example, if a family have 12 children, then all
-of these 12 children have 11 siblings, leading to</p></li>
+reasons for these differences. <strong><em>RESULT:</em></strong> While
+both distributions show a trend toward smaller families, the sibling
+distribution is more spread out across different sibling
+counts.</p></li>
 </ol>
 </div>
 </div>
@@ -2847,8 +2862,8 @@ distribution, this time using the sibling distribution data.</p>
 <ol style="list-style-type: decimal">
 <li><p>Prepare the Sibling Data Use the sibling distribution data you
 calculated earlier (<code>df_sibling_proportions</code>).</p></li>
-<li><p>Fit Models For each combination of RACE, YEAR, and birth_range,
-fit the following distributions:</p>
+<li><p>Fit Models For each combination of RACE, YEAR, and AGE_RANGE, fit
+the following distributions:</p>
 <ul>
 <li>Poisson</li>
 <li>Negative Binomial</li>
@@ -2859,19 +2874,117 @@ fit the following distributions:</p>
 analysis.</p></li>
 <li><p>Compare Model Fits Use AIC (Akaike Information Criterion) to
 compare the fits of different models for each group.</p></li>
-<li><p>Identify Best-Fitting Models Determine which model fits best for
-each combination of RACE, YEAR, and birth_range.</p></li>
-<li><p>Analyze Patterns</p>
+</ol>
+<pre class="r"><code>combinations2 &lt;- df2 %&gt;%
+  filter(n_siblings != -1) %&gt;%
+  group_by(YEAR, RACE, AGE_RANGE) %&gt;%
+  group_split()
+
+# Initialize the data frame to store results
+best_models_sib &lt;- data.frame(
+  Race = character(),
+  Census_Year = numeric(),
+  AGE_RANGE = character(),
+  AIC_poisson = numeric(),
+  AIC_nb = numeric(),
+  AIC_zip = numeric(),
+  AIC_zinb = numeric(),
+  stringsAsFactors = FALSE
+)
+
+# Loop through each subset of data
+for (i in seq_along(combinations2)) {
+  subset_data &lt;- combinations2[[i]]
+  
+  # Fit Poisson model
+  poisson_model &lt;- glm(n_siblings ~ 1, family = poisson, data = subset_data)
+  # Fit Negative Binomial model
+  nb_model &lt;- glm.nb(n_siblings ~ 1, data = subset_data)
+
+  # Fit Zero-Inflated Poisson model
+  zip_model &lt;- zeroinfl(n_siblings ~ 1 | 1, data = subset_data, dist = &quot;poisson&quot;,control = zeroinfl.control(maxit = 100))
+  
+  # Fit Zero-Inflated Negative Binomial model with increased max iterations
+  zinb_model &lt;- zeroinfl(n_siblings ~ 1 | 1, data = subset_data, dist = &quot;negbin&quot;,control = zeroinfl.control(maxit = 100))
+  
+  # Append the result to the best_models data frame
+  best_models_sib &lt;- rbind(
+    best_models_sib,
+    data.frame(
+      Race = unique(subset_data$RACE),
+      Census_Year = unique(subset_data$YEAR),
+      AGE_RANGE = unique(subset_data$AGE_RANGE),
+      AIC_poisson = AIC(poisson_model),
+      AIC_nb = AIC(nb_model),
+      AIC_zip = AIC(zip_model),
+      AIC_zinb = AIC(zinb_model),
+      stringsAsFactors = FALSE
+    )
+  )
+}</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>Identify Best-Fitting Models Determine which model fits best for
+each combination of RACE, YEAR, and AGE_RANGE.</li>
+</ol>
+<pre class="r"><code># Add a Best_Model column to store the best model based on minimum AIC
+best_models_sib$Best_Model &lt;- apply(best_models_sib, 1, function(row) {
+  # Get AIC values for Poisson, NB, ZIP, and ZINB models
+  aic_values &lt;- c(Poisson = as.numeric(row[&#39;AIC_poisson&#39;]),
+                  Negative_Binomial = as.numeric(row[&#39;AIC_nb&#39;]),
+                  Zero_Inflated_Poisson = as.numeric(row[&#39;AIC_zip&#39;]),
+                  Zero_Inflated_NB= as.numeric(row[&#39;AIC_zinb&#39;]))
+  
+  # Find the name of the model with the minimum AIC value
+  best_models_sib &lt;- names(which.min(aic_values))
+  
+  return(best_models_sib)
+})
+
+best_models_sib &lt;- best_models_sib %&gt;% dplyr::select(Race, Census_Year, AGE_RANGE, Best_Model)
+# View the updated table with the Best_Model column
+print(best_models_sib)</code></pre>
+<ol start="5" style="list-style-type: decimal">
+<li>Analyze Patterns
 <ul>
 <li>Examine how the best-fitting model changes across years and birth
 ranges for each race.</li>
 <li>Compare these patterns to those observed in the children
 distribution analysis.</li>
 </ul></li>
-<li><p>Visualize Results Create a summary plot showing the best-fitting
+<li>Visualize Results Create a summary plot showing the best-fitting
 models across years and birth ranges for each race, similar to the one
-created for the children distribution.</p></li>
-<li><p>Interpret Findings</p>
+created for the children distribution.</li>
+</ol>
+<pre class="r"><code># Bar plot showing the distribution of best models across races
+ggplot(best_models_sib, aes(x = Race, fill = Best_Model)) +
+  geom_bar(position = &quot;dodge&quot;) +
+  labs(title = &quot;Best-Fitting Models (siblings) by Race&quot;, x = &quot;Race&quot;, y = &quot;Count&quot;, fill = &quot;Best Model&quot;)</code></pre>
+<pre class="r"><code># Bar plot showing the distribution of best models across races
+ggplot(best_models_sib, aes(x = Census_Year, fill = Best_Model)) +
+  geom_bar(position = &quot;dodge&quot;) +
+  labs(title = &quot;Best-Fitting Models (siblings) by Census Year&quot;, x = &quot;Census Year&quot;, y = &quot;Count&quot;, fill = &quot;Best Model&quot;)</code></pre>
+<pre class="r"><code># Bar plot showing the distribution of best models across races
+ggplot(best_models_sib, aes(x = AGE_RANGE, fill = Best_Model)) +
+  geom_bar(position = &quot;dodge&quot;) +
+  labs(title = &quot;Best-Fitting Models (siblings) by Birth Range)&quot;, x = &quot;Age Range&quot;, y = &quot;Count&quot;, fill = &quot;Best Model&quot;)</code></pre>
+<pre class="r"><code>ggplot(best_models_sib, aes(x = Census_Year, y = AGE_RANGE, fill = Best_Model)) +
+  geom_tile(color = &quot;white&quot;, lwd = 0.5, linetype = 1) + # Create the tiles
+  facet_wrap(~Race, nrow = 2) + # Facet by Race
+  scale_fill_manual(values = c(&quot;Poisson&quot; = &quot;#0072B2&quot;, &quot;Zero_Inflated_NB&quot; = &quot;#F0E442&quot;, &quot;Negative_Binomial&quot; = &quot;grey&quot;)) + 
+  labs(
+    title = &quot;Best Model(siblings) by Race, Census Year, and Birth Range&quot;,
+    x = &quot;Census Year&quot;,
+    y = &quot;Age Range&quot;,
+    fill = &quot;Best Model&quot;
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1), # Rotate x-axis labels for readability
+    plot.title = element_text(size = 14, face = &quot;bold&quot;),
+    legend.position = &quot;bottom&quot;
+  )</code></pre>
+<ol start="7" style="list-style-type: decimal">
+<li>Interpret Findings
 <ul>
 <li>Discuss any differences in the best-fitting models between the
 sibling and children distributions.</li>
@@ -2894,7 +3007,7 @@ similar to the analysis performed for children.</p>
 <ol style="list-style-type: decimal">
 <li><p>Use the sibling distribution data
 (<code>df_sibling_proportions</code>).</p></li>
-<li><p>For each combination of RACE and birth_range:</p>
+<li><p>For each combination of RACE and AGE_RANGE:</p>
 <ul>
 <li>Compare the sibling distributions across different census
 years.</li>
@@ -2904,7 +3017,7 @@ distributions are significantly different.</li>
 <li><p>Create a summary table showing:</p>
 <ul>
 <li>RACE</li>
-<li>birth_range</li>
+<li>AGE_RANGE</li>
 <li>Whether the distribution is stable across census years</li>
 <li>Any significant changes observed</li>
 </ul></li>
@@ -2942,13 +3055,13 @@ across census years for different races and birth ranges.</p>
 <li>X-axis: Number of siblings (0 to 12+)</li>
 <li>Y-axis: Proportion</li>
 <li>Color: Census Year</li>
-<li>Facet by: RACE and birth_range</li>
+<li>Facet by: RACE and AGE_RANGE</li>
 </ul></li>
 <li><p>Use <code>ggplot2</code> to create the plot:</p></li>
 </ol>
 <pre class="r"><code>ggplot(df_sibling_proportions, aes(x = n_siblings, y = proportion, color = factor(YEAR))) +
  geom_line() +
- facet_grid(RACE ~ birth_range) +
+ facet_grid(RACE ~ AGE_RANGE) +
  labs(title = &quot;Sibling Distribution Across Census Years&quot;,
       x = &quot;Number of Siblings&quot;, y = &quot;Proportion&quot;, color = &quot;Census Year&quot;) +
  theme_minimal() +
