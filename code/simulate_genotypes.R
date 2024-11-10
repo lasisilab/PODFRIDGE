@@ -172,7 +172,7 @@ simulate_genotypes <- function(row, df_allelefreq, kinship_matrix) {
   alleles <- allele_freqs$allele
   frequencies <- allele_freqs$frequency
   frequencies <- round(frequencies, 6)
-  print(summary(frequencies))
+ # print(summary(frequencies))
 
   ind1_alleles <- sample(alleles, size = 2, replace = TRUE, prob = frequencies)
   kinship_coeffs <- kinship_matrix[which(kinship_matrix$relationship_type == relationship), ]
