@@ -2,7 +2,6 @@
 #This script expands population and relationship options to create additional LR columns rather than rows
 #LR assumes known and tested populations are the same, and that known and tested relationships are accurate
 #LR columns specifying a different predicted population assume that the predicted relationship is accurate
-#LR columns specifying a different predicted relationship assume that the predicted population is accurate
 #Combined LRs are based on the original LR values
 #Combined LR fields with a '_tested' suffix show alternative combined LRs for tested (not known) relationships
 
