@@ -355,7 +355,7 @@ div.tocify {
 <h1 class="title toc-ignore">Estimating Differences in the Distribution
 of First-degree Relatives</h1>
 <h4 class="author">Manqing Lin, Tina Lasisi</h4>
-<h4 class="date">2024-11-05 14:55:23</h4>
+<h4 class="date">2024-11-12 14:27:51</h4>
 
 </div>
 
@@ -384,7 +384,7 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2024-11-05
+<strong>Last updated:</strong> 2024-11-12
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -518,15 +518,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree1741cb1d69036bd588d6f00cdff2b95b37a1b106targetblank1741cb1a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree3069ce172ec5df7154ecfbde0113f102c173e68btargetblank3069ce1a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/1741cb1d69036bd588d6f00cdff2b95b37a1b106" target="_blank">1741cb1</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/3069ce172ec5df7154ecfbde0113f102c173e68b" target="_blank">3069ce1</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree1741cb1d69036bd588d6f00cdff2b95b37a1b106targetblank1741cb1a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree3069ce172ec5df7154ecfbde0113f102c173e68btargetblank3069ce1a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -536,7 +536,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/1741cb1d69036bd588d6f00cdff2b95b37a1b106" target="_blank">1741cb1</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/3069ce172ec5df7154ecfbde0113f102c173e68b" target="_blank">3069ce1</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -555,6 +555,7 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
     Ignored:    analysis/.Rhistory
+    Ignored:    analysis/figure/
     Ignored:    data/.DS_Store
 
 Unstaged changes:
@@ -604,6 +605,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/06a8f9602d51a58fe87d4ac678eb63ef39cf2275/analysis/relative-distribution.Rmd" target="_blank">06a8f96</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-11-05
+</td>
+<td>
+update sibling’s part
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/06a8f9602d51a58fe87d4ac678eb63ef39cf2275/docs/relative-distribution.html" target="_blank">06a8f96</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-11-05
+</td>
+<td>
+update sibling’s part
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -2019,6 +2054,13 @@ summary_table &lt;- merged_data %&gt;% group_by(Race, Cohort, Census_Year) %&gt;
 
 # View the summary table
 print(summary_table)</code></pre>
+<pre class="r"><code>merged_data %&gt;% 
+  group_by(Race) %&gt;%
+  count()
+
+white_prop &lt;-304522 / 1740755
+black_prop &lt;- 38797 /176722</code></pre>
+<pre class="r"><code>merged_data %&gt;% filter(Race == &quot;White&quot;) %&gt;% summarise(Mean = mean(chborn_num))</code></pre>
 </div>
 <div
 id="step-3-test-for-significant-changes-over-time-within-each-cohort"
@@ -2244,54 +2286,60 @@ both population.</p>
 <div id="c.-model-fit-analysis" class="section level4">
 <h4>c. <strong>Model Fit Analysis</strong></h4>
 <ul>
-<li><p>If the best-fitting model changes for the same cohort over time,
+<li>If the best-fitting model changes for the same cohort over time,
 this suggests that the distribution of family sizes has shifted. Use
 <strong>multinomial logistic regression</strong> to test if the model
-fit differs across census years for the same cohort.</p>
-<p><strong>Example Code</strong>:</p></li>
+fit differs across census years for the same cohort.</li>
 </ul>
-<pre class="r"><code>cohort_data &lt;- summary_table %&gt;%
-  left_join(best_models, by = c(&quot;Race&quot;, &quot;Census_Year&quot;, &quot;Cohort&quot;)) %&gt;%
-    mutate(Best_Model_Binary = ifelse(Best_Model == &quot;Zero_Inflated_NB&quot;, 1, 0)) %&gt;%
-  dplyr::select(Race, Cohort, Census_Year, Best_Model)
+<p><strong>Example Code</strong>:</p>
+<pre class="r"><code># Test for white population
+test_df_w &lt;- merged_data %&gt;%
+  mutate(Best_Model_Binary = ifelse(Best_Model == &quot;Zero_Inflated_NB&quot;, 1, 0)) %&gt;%
+  select(Race, Cohort, Census_Year, Best_Model, Best_Model_Binary) %&gt;% 
+  filter(Race == &quot;White&quot;)
 
-
-unique_cohorts &lt;- unique(cohort_data$Cohort)
-
-model_summaries &lt;- list()
+unique_cohorts &lt;- unique(test_df_w$Cohort)
 
 for (cohort in unique_cohorts) {
-  cohort_data &lt;- cohort_data %&gt;% filter(Cohort == cohort)
+  cohort_data &lt;- test_df_w %&gt;% filter(Cohort == cohort)
   
   if (n_distinct(cohort_data$Census_Year) &gt; 1) {
-    logistic_model &lt;- glm(Best_Model_Binary ~ as.factor(Census_Year), data = cohort_data, family = binomial)
-    
-    model_summaries[[cohort]] &lt;- summary(logistic_model)
-    
-    print(paste(&quot;Cohort:&quot;, cohort))
-    print(summary(logistic_model))
+    if (n_distinct(cohort_data$Best_Model_Binary) &gt; 1) {
+      logistic_model &lt;- glm(Best_Model_Binary ~ as.factor(Census_Year), data = cohort_data, family = binomial)
+      
+      print(paste(&quot;Cohort:&quot;, cohort))
+      print(summary(logistic_model))
+    } else {
+      print(paste(&quot;Warning for Cohort&quot;, cohort, &quot;: Best_Model_Binary contains only a single category. Model convergence issues likely due to lack of variability.&quot;))
+    }
   } else {
     print(paste(&quot;Cohort:&quot;, cohort, &quot;- Not enough data variability across census years for logistic regression.&quot;))
   }
 }</code></pre>
-<pre class="r"><code>cohorts_for_test &lt;- cohort_data %&gt;%
-  group_by(Cohort) %&gt;%
-  summarise(Unique_Census_Years = n_distinct(Census_Year)) %&gt;%
-  filter(Unique_Census_Years &gt; 1) %&gt;%
-  pull(Cohort)
+<pre class="r"><code># Test for black population
+test_df_b &lt;- merged_data %&gt;%
+  mutate(Best_Model_Binary = ifelse(Best_Model == &quot;Zero_Inflated_NB&quot;, 1, 0)) %&gt;%
+  select(Race, Cohort, Census_Year, Best_Model, Best_Model_Binary) %&gt;% 
+  filter(Race == &quot;Black/African American&quot;)
 
-results &lt;- data.frame(
-  Cohort = character(),
-  Chi_Square = numeric(),
-  p_value = numeric(),
-  stringsAsFactors = FALSE
-)
+unique_cohorts &lt;- unique(test_df_b$Cohort)
 
-cohort_data &lt;- cohort_data %&gt;% filter(Cohort == &quot;1901-1910&quot;)
+for (cohort in unique_cohorts) {
+  cohort_data &lt;- test_df_b %&gt;% filter(Cohort == cohort)
   
-  # Create a contingency table for Census Year and Best Model
-contingency_table &lt;- table(cohort_data$Census_Year, cohort_data$Best_Model)
-contingency_table</code></pre>
+  if (n_distinct(cohort_data$Census_Year) &gt; 1) {
+    if (n_distinct(cohort_data$Best_Model_Binary) &gt; 1) {
+      logistic_model &lt;- glm(Best_Model_Binary ~ as.factor(Census_Year), data = cohort_data, family = binomial)
+      
+      print(paste(&quot;Cohort:&quot;, cohort))
+      print(summary(logistic_model))
+    } else {
+      print(paste(&quot;Warning for Cohort&quot;, cohort, &quot;: Best_Model_Binary contains only a single category. Model convergence issues likely due to lack of variability.&quot;))
+    }
+  } else {
+    print(paste(&quot;Cohort:&quot;, cohort, &quot;- Not enough data variability across census years for logistic regression.&quot;))
+  }
+}</code></pre>
 <p><strong><em>RESULT:</em></strong> The p-value of all the
 “Census_Year” is greater than 0.05, suggesting no statistically
 significant effect on choice between best models.</p>

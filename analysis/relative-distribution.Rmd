@@ -670,6 +670,20 @@ summary_table <- merged_data %>% group_by(Race, Cohort, Census_Year) %>%
 print(summary_table)
 ```
 
+```{r}
+merged_data %>% 
+  group_by(Race) %>%
+  count()
+
+white_prop <-304522 / 1740755
+black_prop <- 38797 /176722
+```
+
+```{r}
+merged_data %>% filter(Race == "White") %>% summarise(Mean = mean(chborn_num))
+```
+
+
 ### Step 3: Test for Significant Changes Over Time Within Each Cohort
 Once the cohort information and summary statistics are available, the goal is to determine if there is a **significant change** in any of the following across census years for the same cohort:
 
@@ -905,28 +919,28 @@ for (cohort in cohorts2) {
 - If the best-fitting model changes for the same cohort over time, this suggests that the distribution of family sizes has shifted. Use **multinomial logistic regression** to test if the model fit differs across census years for the same cohort.
 
 
-  **Example Code**:
+**Example Code**:
 ```{r}
-cohort_data <- summary_table %>%
-  left_join(best_models, by = c("Race", "Census_Year", "Cohort")) %>%
-    mutate(Best_Model_Binary = ifelse(Best_Model == "Zero_Inflated_NB", 1, 0)) %>%
-  dplyr::select(Race, Cohort, Census_Year, Best_Model)
+# Test for white population
+test_df_w <- merged_data %>%
+  mutate(Best_Model_Binary = ifelse(Best_Model == "Zero_Inflated_NB", 1, 0)) %>%
+  select(Race, Cohort, Census_Year, Best_Model, Best_Model_Binary) %>% 
+  filter(Race == "White")
 
-
-unique_cohorts <- unique(cohort_data$Cohort)
-
-model_summaries <- list()
+unique_cohorts <- unique(test_df_w$Cohort)
 
 for (cohort in unique_cohorts) {
-  cohort_data <- cohort_data %>% filter(Cohort == cohort)
+  cohort_data <- test_df_w %>% filter(Cohort == cohort)
   
   if (n_distinct(cohort_data$Census_Year) > 1) {
-    logistic_model <- glm(Best_Model_Binary ~ as.factor(Census_Year), data = cohort_data, family = binomial)
-    
-    model_summaries[[cohort]] <- summary(logistic_model)
-    
-    print(paste("Cohort:", cohort))
-    print(summary(logistic_model))
+    if (n_distinct(cohort_data$Best_Model_Binary) > 1) {
+      logistic_model <- glm(Best_Model_Binary ~ as.factor(Census_Year), data = cohort_data, family = binomial)
+      
+      print(paste("Cohort:", cohort))
+      print(summary(logistic_model))
+    } else {
+      print(paste("Warning for Cohort", cohort, ": Best_Model_Binary contains only a single category. Model convergence issues likely due to lack of variability."))
+    }
   } else {
     print(paste("Cohort:", cohort, "- Not enough data variability across census years for logistic regression."))
   }
@@ -934,26 +948,31 @@ for (cohort in unique_cohorts) {
 ```
 
 ```{r}
-cohorts_for_test <- cohort_data %>%
-  group_by(Cohort) %>%
-  summarise(Unique_Census_Years = n_distinct(Census_Year)) %>%
-  filter(Unique_Census_Years > 1) %>%
-  pull(Cohort)
+# Test for black population
+test_df_b <- merged_data %>%
+  mutate(Best_Model_Binary = ifelse(Best_Model == "Zero_Inflated_NB", 1, 0)) %>%
+  select(Race, Cohort, Census_Year, Best_Model, Best_Model_Binary) %>% 
+  filter(Race == "Black/African American")
 
-results <- data.frame(
-  Cohort = character(),
-  Chi_Square = numeric(),
-  p_value = numeric(),
-  stringsAsFactors = FALSE
-)
+unique_cohorts <- unique(test_df_b$Cohort)
 
-cohort_data <- cohort_data %>% filter(Cohort == "1901-1910")
+for (cohort in unique_cohorts) {
+  cohort_data <- test_df_b %>% filter(Cohort == cohort)
   
-  # Create a contingency table for Census Year and Best Model
-contingency_table <- table(cohort_data$Census_Year, cohort_data$Best_Model)
-contingency_table
+  if (n_distinct(cohort_data$Census_Year) > 1) {
+    if (n_distinct(cohort_data$Best_Model_Binary) > 1) {
+      logistic_model <- glm(Best_Model_Binary ~ as.factor(Census_Year), data = cohort_data, family = binomial)
+      
+      print(paste("Cohort:", cohort))
+      print(summary(logistic_model))
+    } else {
+      print(paste("Warning for Cohort", cohort, ": Best_Model_Binary contains only a single category. Model convergence issues likely due to lack of variability."))
+    }
+  } else {
+    print(paste("Cohort:", cohort, "- Not enough data variability across census years for logistic regression."))
+  }
+}
 ```
-
 
 **_RESULT:_** The p-value of all the "Census_Year" is greater than 0.05, suggesting no statistically significant effect on choice between best models. 
 
