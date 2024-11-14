@@ -1695,12 +1695,18 @@ Analyze the stability of sibling distributions across cohorts, similar to the an
 
 1. Use the sibling distribution data (`df_sibling_proportions`).
 
-2. For each combination of RACE and AGE_RANGE:
+2. For each combination of RACE and birth_range:
    - Compare the sibling distributions across different census years.
    - Use statistical tests (e.g., Kolmogorov-Smirnov test) to assess if distributions are significantly different.
+
+```{r}
+ df_sibling_proportions <- df_sibling_proportions %>%
+  mutate(Cohort = mapply(calculate_cohort, YEAR, AGE_RANGE))
+```
+
 ```{r}
 df_sibling_proportions %>%
-  filter(n_siblings >= 0, sibling_count >= 0, proportion >= 0) %>% group_by(RACE, AGE_RANGE) %>%
+  filter(n_siblings >= 0, sibling_count >= 0, proportion >= 0) %>% group_by(RACE, Cohort) %>%
   ggplot(aes(x = n_siblings, y = proportion, color = as.factor(YEAR))) +
   geom_line() +
   labs(
@@ -1709,7 +1715,7 @@ df_sibling_proportions %>%
     y = "Proportion",
     color = "Census Year"
   ) +
-  facet_grid(RACE ~ AGE_RANGE) +
+  facet_grid(RACE ~ Cohort) +
   theme_minimal()
 ```
 
@@ -1717,19 +1723,19 @@ df_sibling_proportions %>%
 df_sibling_b <- df_sibling_proportions %>% filter(RACE == "Black/African American", n_siblings >= 0, sibling_count >= 0, proportion >= 0)
 
 results_sib_b <- list()
-unique_age_ranges <- unique(df_sibling_proportions$AGE_RANGE)
 
-for (age_range in unique_age_ranges) {
-  # Subset data for each age range
-  age_data <- df_sibling_b %>% filter(AGE_RANGE == age_range)
+cohort_counts2 <- df_sibling_b %>%
+  group_by(Cohort) %>%
+  summarise(Unique_Census_Years = n_distinct(YEAR)) %>%
+  filter(Unique_Census_Years > 1)
+
+for (cohort in cohort_counts2$Cohort) {
+  cohort_data <- df_sibling_b %>% filter(Cohort == cohort)
   
-  # Kruskal-Wallis test for sibling count distribution across years within the age range
-  test_result <- kruskal.test(sibling_count ~ YEAR, data = age_data)
+  test_result <- kruskal.test(sibling_count ~ YEAR, data = cohort_data)
   
-  # Store the result
-  results_sib_b[[age_range]] <- test_result
+  results_sib_b[[cohort]] <- test_result
 }
-
 results_sib_b
 ```
 
@@ -1737,31 +1743,33 @@ results_sib_b
 df_sibling_w <- df_sibling_proportions %>% filter(RACE == "White", n_siblings >= 0, sibling_count >= 0, proportion >= 0)
 
 results_sib_w <- list()
-unique_age_ranges <- unique(df_sibling_proportions$AGE_RANGE)
 
-for (age_range in unique_age_ranges) {
-  # Subset data for each age range
-  age_data <- df_sibling_w %>% filter(AGE_RANGE == age_range)
+cohort_counts2 <- df_sibling_w %>%
+  group_by(Cohort) %>%
+  summarise(Unique_Census_Years = n_distinct(YEAR)) %>%
+  filter(Unique_Census_Years > 1)
+
+for (cohort in cohort_counts2$Cohort) {
+  cohort_data <- df_sibling_w %>% filter(Cohort == cohort)
   
-  # Kruskal-Wallis test for sibling count distribution across years within the age range
-  test_result <- kruskal.test(sibling_count ~ YEAR, data = age_data)
+  test_result <- kruskal.test(sibling_count ~ YEAR, data = cohort_data)
   
-  # Store the result
-  results_sib_w[[age_range]] <- test_result
+  results_sib_w[[cohort]] <- test_result
 }
-
 results_sib_w
+
 ```
+
 
 3. Create a summary table showing:
    - RACE
-   - AGE_RANGE
+   - birth_range
    - Whether the distribution is stable across census years
    - Any significant changes observed
 ```{r}
 results_summary <- data.frame(
   RACE = character(),
-  AGE_RANGE = character(),
+  Cohort = character(),
   Stable_Distribution = character(),
   Significant_Changes = character(),
   stringsAsFactors = FALSE
@@ -1770,15 +1778,15 @@ results_summary <- data.frame(
 summarize_results <- function(test_results, race) {
   summary_list <- list()
   
-  for (age_range in names(test_results)) {
-    test_result <- test_results[[age_range]]
+  for (birth_range in names(test_results)) {
+    test_result <- test_results[[birth_range]]
     
     stable <- ifelse(test_result$p.value >= 0.05, "Yes", "No")
     significant_changes <- ifelse(test_result$p.value < 0.05, "Yes", "No")
     
-    summary_list[[age_range]] <- data.frame(
+    summary_list[[birth_range]] <- data.frame(
       RACE = race,
-      AGE_RANGE = age_range,
+      Cohort = birth_range,
       Stable_Distribution = stable,
       Significant_Changes = significant_changes
     )
@@ -1802,11 +1810,11 @@ results_summary
 4. Visualize stability:
    - Create a heatmap or similar plot showing stability/changes across cohorts and races.
 ```{r}
-ggplot(results_summary, aes(x = AGE_RANGE, y = RACE, fill = Significant_Changes)) +
+ggplot(results_summary, aes(x = Cohort, y = RACE, fill = Significant_Changes)) +
   geom_tile(color = "white") +
   scale_fill_manual(values = c("Yes" = "red", "No" = "blue")) +
-  labs(title = "Significant Changes in Sibling Count Distribution Across Years by Race and Age Range",
-       x = "Age Range",
+  labs(title = "Significant Changes in Sibling Count Distribution Across Years by Race and Birth Range",
+       x = "Birth Range",
        y = "Race",
        fill = "Significant Changes") +
   theme_minimal() +
@@ -1835,13 +1843,14 @@ Create a visualization showing how sibling distributions change across census ye
 
 3. Use `ggplot2` to create the plot:
 ```{r}
-ggplot(df_sibling_proportions, aes(x = n_siblings, y = proportion, color = factor(YEAR))) +
+df_sibling_proportions %>%
+  filter(n_siblings >= 0, sibling_count >= 0, proportion >= 0) %>% ggplot(aes(x = n_siblings, y = proportion, color = factor(YEAR))) +
  geom_line() +
  facet_grid(RACE ~ AGE_RANGE) +
  labs(title = "Sibling Distribution Across Census Years",
       x = "Number of Siblings", y = "Proportion", color = "Census Year") +
  theme_minimal() +
- theme(axis.text.x = element_text(angle = 45, hjust = 1))
+ theme(axis.text.x = element_text(hjust = 1))
 ```
 
 4. Analyze the plot:
