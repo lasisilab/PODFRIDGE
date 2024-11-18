@@ -63,17 +63,16 @@ log_function_time <- function(func, name, ...) {
 }
 
 # Read Command-Line Arguments
-#args <- commandArgs(trailingOnly = TRUE)
-args<-c("10","8","Full_runthrough")
+args <- commandArgs(trailingOnly = TRUE)
+#args<-c("100","200","100200_runthrough_focal")
 n_sims_related <- as.numeric(args[1])
 n_sims_unrelated <- as.numeric(args[2])
 job_id <- as.character(args[3])
 
 # Create output folder with job ID
-output_dir <- file.path("data", "sims", paste0("simulation_", job_id))
+output_dir <- file.path("data", "sims", paste0("simulation_script_", slurm_job_id,".out"))
 dir.create(output_dir, recursive = TRUE)
-
-output_file <- file.path(output_dir, "processed_genotypes.csv")
+output_file <- "processed_genotypes.csv"
 timing_log_file <- file.path(output_dir, "timing_log.csv")
 
 # Log the start of the process
@@ -249,11 +248,12 @@ process_simulation_setup2 <- function(individuals_genotypes,df_allelefreq, kinsh
       return(processed_genotypes$result)
     }, seed = TRUE) |>
     data.table::rbindlist()
-
-    return(final_resultsc)
-    fwrite(final_resultsc, output_file,append=TRUE)
+  final_resultsc <-final_resultsc[, c("seed"):=NULL]
+   #  return(final_resultsc)
+  #  fwrite(final_resultsc, output_file,append=TRUE)
   })
   log_message(paste("Processing completed in", process_time["elapsed"], "seconds."))
+  return(final_resultsc)
 }
 
 
@@ -267,7 +267,12 @@ proc_res1<-data.table(proc_res1$result)
 
 proc_res2 <- log_function_time(process_simulation_setup2, "process_simulation_setup2", proc_res1, df_allelefreq, kinship_matrix, output_file)
 timing_log <- proc_res2$timing_log
-proc_res2<-proc_res2$result
+#proc_res2<-proc_res2$result
+final_resultsc <-as.data.frame(proc_res2$result)
+write.table(final_resultsc,gzfile(paste0(output_dir,"/",output_file,".gz")),append=FALSE)
+#save(final_resultsc,file=output_file, compress=T)
+#write.csv(final_resultsc,"final_resultsc.csv")
+
 
 log_message("Genotype simulation completed.")
 
