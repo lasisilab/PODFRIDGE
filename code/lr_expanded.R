@@ -16,8 +16,8 @@ library(doParallel)
 library(stringr)
 
 # Read Command-Line Arguments
-args<-c("3","simulation_100200_runthrough_focal")
-#args <- commandArgs(trailingOnly = TRUE)
+#args<-c("3","simulation_100200_runthrough_focal")
+args <- commandArgs(trailingOnly = TRUE)
 str(args)
 cat(args, sep = "\n")
 
