@@ -841,10 +841,8 @@ ggplot(combined_result, aes(x = Cohort, y = Chi_Square, color = RACE)) +
 ```
 
 ```{r}
-merged_data2 <- left_join(merged_data, summary_table, by = c("Race","Cohort","Census_Year")) %>% dplyr::select(Race, Cohort, Census_Year, Mean, Variance)
-
-merged_black = merged_data2 %>% filter(Race == "Black/African American")
-merged_white = merged_data2 %>% filter(Race == "White")
+merged_black = summary_table %>% filter(Race == "Black/African American")
+merged_white = summary_table %>% filter(Race == "White")
 
 ```
 
@@ -1812,7 +1810,7 @@ results_summary
 ```{r}
 ggplot(results_summary, aes(x = Cohort, y = RACE, fill = Significant_Changes)) +
   geom_tile(color = "white") +
-  scale_fill_manual(values = c("Yes" = "red", "No" = "blue")) +
+  scale_fill_manual(values = c("Yes" = "#e93e3a", "No" = "#fdc70c")) +
   labs(title = "Significant Changes in Sibling Count Distribution Across Years by Race and Birth Range",
        x = "Birth Range",
        y = "Race",
@@ -1825,6 +1823,201 @@ ggplot(results_summary, aes(x = Cohort, y = RACE, fill = Significant_Changes)) +
    - Identify which cohorts show stable sibling distributions.
    - Compare stability patterns to those observed in the children distribution analysis.
    - Discuss implications of stability or lack thereof for understanding family structure changes over time.
+
+## Apply similar analysis performed in the children's part:
+1. Zero Inflation: Check if the proportion of individuals with zero siblings changes significantly over time for the same cohort.
+
+```{r}
+best_models_sib <- best_models_sib %>%
+  mutate(Cohort = mapply(calculate_cohort, Census_Year, AGE_RANGE)) %>% 
+  dplyr::select(Race, Census_Year, AGE_RANGE, Best_Model, Cohort)
+
+df_merg2 <- df2 %>%
+  rename(Census_Year = YEAR, Race = RACE)
+
+# Perform a left join to merge the data frames
+merged_data_sib <- left_join(df_merg2, best_models_sib, by = c("Race", "Census_Year", "AGE_RANGE"))
+```
+
+```{r}
+## divided the corhort by race
+merged_df_black2 <- merged_data_sib %>% filter(Race == "Black/African American")
+merged_df_white2 <- merged_data_sib %>% filter(Race == "White")
+```
+
+```{r}
+# Filter cohorts with more than one census year
+cohort_counts <- merged_df_black2 %>%
+  group_by(Cohort) %>%
+  summarise(Unique_Census_Years = n_distinct(Census_Year)) %>%
+  filter(Unique_Census_Years > 1)
+
+# Get the list of cohorts for testing
+cohorts_for_test <- cohort_counts$Cohort
+
+# Initialize results data frame
+results_black2 <- data.frame(RACE = character(), Cohort = character(), Chi_Square = numeric(), p_value = numeric(), stringsAsFactors = FALSE)
+
+# Loop through each cohort and run the chi-square test
+for (cohort in cohorts_for_test) {
+  cohort_data <- merged_df_black2 %>% filter(Cohort == cohort)
+  
+  # Create contingency table
+  contingency_table <- table(cohort_data$Census_Year, cohort_data$n_siblings == "0")
+  
+  # Perform the chi-square test only if more than one row is in the table
+  if (nrow(contingency_table) > 1) {
+    test_result <- chisq.test(contingency_table)
+    
+    # Append results to the results data frame
+    results_black2 <- rbind(results_black2, data.frame(
+      RACE = "Black/African American",
+      Cohort = cohort,
+      Chi_Square = test_result$statistic,
+      p_value = test_result$p.value
+    ))
+  }
+}
+
+results_black2 <- results_black2 %>%
+  mutate(Significance = ifelse(p_value > 0.05, "No", "Yes"))
+
+print(results_black2)
+```
+
+```{r}
+# Filter cohorts with more than one census year
+cohort_counts <- merged_df_white2 %>%
+  group_by(Cohort) %>%
+  summarise(Unique_Census_Years = n_distinct(Census_Year)) %>%
+  filter(Unique_Census_Years > 1)
+
+# Get the list of cohorts for testing
+cohorts_for_test <- cohort_counts$Cohort
+
+# Initialize results data frame
+results_white2 <- data.frame(RACE = character(), Cohort = character(), Chi_Square = numeric(), p_value = numeric(), stringsAsFactors = FALSE)
+
+# Loop through each cohort and run the chi-square test
+for (cohort in cohorts_for_test) {
+  cohort_data <- merged_df_white2 %>% filter(Cohort == cohort)
+  
+  # Create contingency table
+  contingency_table <- table(cohort_data$Census_Year, cohort_data$n_siblings == "0")
+  
+  # Perform the chi-square test only if more than one row is in the table
+  if (nrow(contingency_table) > 1) {
+    test_result <- chisq.test(contingency_table)
+    
+    # Append results to the results data frame
+    results_white2 <- rbind(results_white2, data.frame(
+      RACE = "White",
+      Cohort = cohort,
+      Chi_Square = test_result$statistic,
+      p_value = test_result$p.value
+    ))
+  }
+}
+
+results_white2 <- results_white2 %>%
+  mutate(Significance = ifelse(p_value > 0.05, "No", "Yes"))
+
+print(results_white2)
+```
+
+2. Family Size: Test if the mean or variance in the number of siblings changes for the same cohort over time.
+```{r}
+sum_table_sib <- merged_data_sib %>% group_by(Race, Cohort, Census_Year) %>%
+  summarise(
+    Mean = mean(chborn_num),
+    Variance = var(chborn_num))
+
+sum_table_black = sum_table_sib %>% filter(Race == "Black/African American")
+sum_table_white = sum_table_sib %>% filter(Race == "White")
+```
+
+```{r}
+##Test for Black population
+cohorts1 <- unique(sum_table_black$Cohort)
+
+# Loop through each cohort and apply ANOVA for Mean and Variance
+for (cohort in cohorts1) {
+  
+  # Filter data for the specific cohort
+  cohort_data_b <- sum_table_black[sum_table_black$Cohort == cohort, ]
+  
+  # Check if there are at least two unique Census_Year values
+  if (length(unique(cohort_data_b$Census_Year)) < 2) {
+    cat("\nCohort:", cohort, "has only one Census Year. Skipping ANOVA.\n")
+    next
+  }
+  
+  # Perform ANOVA for Mean
+  anova_mean_result <- aov(Mean ~ factor(Census_Year), data = cohort_data_b)
+  
+  # Perform ANOVA for Variance
+  anova_variance_result <- aov(Variance ~ factor(Census_Year), data = cohort_data_b)
+  
+  # Output the results
+  cat("\nCohort:", cohort)
+  cat("\nANOVA for Mean Family Size:\n")
+  print(summary(anova_mean_result))
+  cat("\nANOVA for Variance in Family Size:\n")
+  print(summary(anova_variance_result))
+}
+```
+
+```{r}
+##Test for White population
+cohorts2 <- unique(sum_table_white$Cohort)
+
+# Loop through each cohort and apply ANOVA for Mean and Variance
+for (cohort in cohorts2) {
+  
+  # Filter data for the specific cohort
+  cohort_data_w <- sum_table_white[sum_table_white$Cohort == cohort, ]
+  
+  # Check if there are at least two unique Census_Year values
+  if (length(unique(cohort_data_w$Census_Year)) < 2) {
+    cat("\nCohort:", cohort, "has only one Census Year. Skipping ANOVA.\n")
+    next
+  }
+  
+  # Perform ANOVA for Mean
+  anova_mean_result <- aov(Mean ~ factor(Census_Year), data = cohort_data_w)
+  
+  # Perform ANOVA for Variance
+  anova_variance_result <- aov(Variance ~ factor(Census_Year), data = cohort_data_w)
+  
+  # Output the results
+  cat("\nCohort:", cohort)
+  cat("\nANOVA for Mean Family Size:\n")
+  print(summary(anova_mean_result))
+  cat("\nANOVA for Variance in Family Size:\n")
+  print(summary(anova_variance_result))
+}
+```
+
+
+3. Model Fit: Analyze if the best-fitting model for the cohort changes over time.
+```{r}
+ggplot(best_models_sib, aes(x = Census_Year, y = Cohort, fill = Best_Model)) +
+  geom_tile(color = "white", lwd = 0.5, linetype = 1) + # Create the tiles
+  facet_wrap(~Race, nrow = 2) + # Facet by Race
+  scale_fill_manual(values = c("Poisson" = "#0072B2", "Zero_Inflated_NB" = "#F0E442", "Negative_Binomial" = "grey")) + 
+  labs(
+    title = "Best Model(siblings) by Race, Census Year, and Cohort(Birth Range)",
+    x = "Census Year",
+    y = "Birth Range",
+    fill = "Best Model"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 14, face = "bold"),
+    legend.position = "bottom"
+  )
+```
+
 
 ## [Instructions for Manqing] Plot Across Census Years Siblings
 
