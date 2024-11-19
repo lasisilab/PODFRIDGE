@@ -23,7 +23,7 @@ library(MASS)
 file_type<-"pdf" #option to toggle between pdf or png outputs, pdf being faster
 
 output_dir <- file.path("output/example_plots")
-#output_dir <- file.path("output", paste0("simulation_", slurm_job_id))
+#output_dir <- file.path("output", slurm_job_id)
 #dir.create(output_dir, recursive = TRUE)
 
 # load combined_lrs
