@@ -478,7 +478,7 @@ model_logistic <- glm(Best_Model_Binary ~ Race + Census_Year + Age_Range, family
 summary(model_logistic)
 
 ```
-**_RESULT:_**The p-value for each variable is smaller than 0.05, indicating  non-significant effects on best_model fitting. 
+**_RESULT:_**The p-value for each variable is larger than 0.05, indicating  non-significant effects on best_model fitting. 
 
 3. **Multinomial Logistic Regression** (if more than two models):
    If you have multiple possible best-fitting models (Poisson, NB, ZIP, ZINB), you can use multinomial logistic regression to assess the impact of race, census year, and age range on model selection.
@@ -507,30 +507,28 @@ Finally, visualize the distribution of the best-fitting models across races, cen
 
 **Example of a simple bar plot in R**:
 ```{r}
-# Bar plot showing the distribution of best models across races
-ggplot(best_models, aes(x = Race, fill = Best_Model)) +
-  geom_bar(position = "stack") +
-  labs(title = "Best-Fitting Models by Race", x = "Race", y = "Count", fill = "Best Model")
-```
+model_proportions <- best_models %>%
+  group_by(Race, Age_Range, Best_Model) %>%
+  summarise(Count = n(), .groups = "drop") %>%
+  group_by(Race, Age_Range) %>%
+  mutate(Proportion = Count / sum(Count))
 
-```{r}
-# Bar plot showing the distribution of best models across races
-ggplot(best_models, aes(x = Census_Year, fill = Best_Model)) +
-  geom_bar(position = "stack") +
-  labs(title = "Best-Fitting Models by Census Year", x = "Census Year", y = "Count", fill = "Best Model")
-```
-
-```{r}
-# Bar plot showing the distribution of best models across races
-ggplot(best_models, aes(x = Age_Range, fill = Best_Model)) +
-  geom_bar(position = "stack") +
-  labs(title = "Best-Fitting Models by Age Range", x = "Age Range", y = "Count", fill = "Best Model")
+                                                                    ggplot(model_proportions, aes(x = Age_Range, y = Proportion, fill = Best_Model)) +
+  geom_bar(stat = "identity", position = "fill") +
+  facet_wrap(~ Race) +
+  labs(
+    title = "Proportion of Models by Race and Age Group",
+    x = "Age Range",
+    y = "Proportion",
+    fill = "Model"
+  ) +
+  theme_minimal()
 ```
 
 ```{r}
 ggplot(best_models, aes(x = Census_Year, y = Age_Range, fill = Best_Model)) +
-  geom_tile(color = "white", lwd = 0.5, linetype = 1) + # Create the tiles
-  facet_wrap(~Race, nrow = 2) + # Facet by Race
+  geom_tile(color = "white", lwd = 0.5, linetype = 1) + 
+  facet_wrap(~Race, nrow = 2) +  
   scale_fill_manual(values = c("Zero_Inflated_Poisson" = "#0072B2", "Zero_Inflated_NB" = "#F0E442")) + 
   labs(
     title = "Best Model by Race, Census Year, and Age Range",
@@ -551,7 +549,7 @@ ggplot(best_models, aes(x = Census_Year, y = Age_Range, fill = Best_Model)) +
 - **Summarizing Across Years**: After analyzing the data, you'll be able to conclude which model fits each race best across different years, and whether race, census year, or age group is the dominant factor.
 
 **_CONCLUSION:_**
-Both the logistics regression and the result visualization shows that there isn't a significant association between the predictor and the best-fitting model, ie. no certain races, age ranges, or census year are more likely to have a particular model as the best fit.
+The logistics regression shows that there isn't a significant association between the predictors(races, age ranges, and census year) and the best-fitting model. According to the resulting visualization, the ZINB model is the best fit for the black population across census year and age group. However, the ZINB model perform the best among the white population only across year 1960 and 1970, and age group 60-69 and 70+. 
 
 ## [Instructions for Manqing] Cohort Stability Analysis 
 For Question 2: **Cohort Stability Analysis**, the goal is to determine if there is a significant change in **zero inflation**, **family size**, or **model fit** for the same cohort across different census years, given race. 
@@ -578,37 +576,31 @@ Using the existing table of model summaries, calculate the **birth-year cohort**
 
 ```{r}
 calculate_cohort <- function(census_year, age_range) {
-  # Extract the lower and upper age limits from the Age_Range
   age_limits <- as.numeric(unlist(strsplit(age_range, "-|\\+")))
   
-  # If the age range is "70+", treat the upper bound as 70+ (i.e., infinity)
   if (length(age_limits) == 1) {
     lower_age <- age_limits
-    upper_age <- Inf  # For ages 70+, we assume no upper bound
+    upper_age <- Inf  
   } else {
     lower_age <- age_limits[1]
     upper_age <- age_limits[2]
   }
   
-  # Calculate birth cohort bounds
   lower_cohort <- census_year - upper_age
   upper_cohort <- census_year - lower_age
   
-  # If it's the 70+ age range, we'll assume the lower bound goes back to a reasonable limit
+  
   if (upper_age == Inf) {
     upper_cohort <- census_year - 70
   }
   
-  # Return the birth cohort as a string (e.g., "1941-1950")
   return(paste(lower_cohort, upper_cohort, sep = "-"))
 }
 
-# Apply this function to your best_models table to create a new 'Cohort' column
 best_models <- best_models %>%
   mutate(Cohort = mapply(calculate_cohort, Census_Year, Age_Range)) %>% 
   dplyr::select(Race, Census_Year, Age_Range, Best_Model, Cohort)
 
-# View the updated table
 print(best_models)
 
 ```
@@ -668,19 +660,6 @@ summary_table <- merged_data %>% group_by(Race, Cohort, Census_Year) %>%
 
 # View the summary table
 print(summary_table)
-```
-
-```{r}
-merged_data %>% 
-  group_by(Race) %>%
-  count()
-
-white_prop <-304522 / 1740755
-black_prop <- 38797 /176722
-```
-
-```{r}
-merged_data %>% filter(Race == "White") %>% summarise(Mean = mean(chborn_num))
 ```
 
 
@@ -781,10 +760,6 @@ results_white <- results_white %>%
 print(results_white)
 ```
 
-```{r}
-cohort_data <- merged_df_white %>% filter(Cohort == "1901-1910")
-```
-
 
 ```{r}
 # Combine the two data frames
@@ -827,6 +802,10 @@ ggplot(combined_result, aes(x = Cohort, y = Chi_Square, color = RACE)) +
 ```
 
 **_CONCLUSION:_**
+We observe that the proportion of women with zero children change significantly across census year in the following cohort by race:
+-black population:1901-1910, 1921-1930
+-white population:1901-1910, 1911-1920, 1921-1930
+
 
 #### b. **Family Size Analysis**
 - Use an **ANOVA** or **linear regression** to test if the mean or variance in family size changes over census years for the same cohort.
@@ -841,9 +820,9 @@ ggplot(combined_result, aes(x = Cohort, y = Chi_Square, color = RACE)) +
 ```
 
 ```{r}
-merged_black = summary_table %>% filter(Race == "Black/African American")
-merged_white = summary_table %>% filter(Race == "White")
-
+merged_data2 <- left_join(merged_data, summary_table, by = c("Race","Cohort","Census_Year")) %>% dplyr::select(Race, Cohort, Census_Year, Mean, Variance)
+merged_black = merged_data2 %>% filter(Race == "Black/African American")
+merged_white = merged_data2 %>% filter(Race == "White")
 ```
 
 
@@ -1286,7 +1265,7 @@ cont_table_w <- xtabs(count ~ AGE_RANGE + childlessness, data = ZI_table_w)
 chi_test_w <- chisq.test(cont_table_w)
 chi_test_w
 ```
-**_RESULT:_** The p-values for both tests are extremely low, suggests that there is a significant difference in the proportion of women with 0 children versus those with 1+ children across different age ranges for both the Black/African American and White racial groups. The results imply that childlessness is not uniformly distributed across age groups(40-49 and 50-59) in 1990. 
+**_RESULT:_** The p-values for both tests are extremely low, suggests that there is a significant difference in the proportion of women with 0 children across different age ranges for both the Black/African American and White racial groups. The results imply that childlessness is not uniformly distributed across age groups. 
 
 ### Step 4: Summarize Findings
 
