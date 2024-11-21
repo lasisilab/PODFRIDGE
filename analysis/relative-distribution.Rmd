@@ -1911,8 +1911,10 @@ sum_table_sib <- merged_data_sib %>% group_by(Race, Cohort, Census_Year) %>%
     Mean = mean(chborn_num),
     Variance = var(chborn_num))
 
-sum_table_black = sum_table_sib %>% filter(Race == "Black/African American")
-sum_table_white = sum_table_sib %>% filter(Race == "White")
+merged_sib <- left_join(merged_data_sib, sum_table_sib, by = c("Race","Cohort","Census_Year")) %>% dplyr::select(Race, Cohort, Census_Year, Mean, Variance)
+
+sum_table_black = merged_sib %>% filter(Race == "Black/African American")
+sum_table_white = merged_sib %>% filter(Race == "White")
 ```
 
 ```{r}
