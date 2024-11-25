@@ -26,7 +26,7 @@ Our study aims to provide insight into the implications of these techniques for 
 [Estimation of Forensic Database Representation](regression.html)
 
 ### Family Structure
-[Differences in Distribution of Close Relatives](siblings_analysis.html)
+[Differences in Distribution of Close Relatives](relative-distribution.html)
 
 ### STR Likelihood Ratio Effects 
 [CODIS Allele Frequencies](CODIS-STR-freqs.html)

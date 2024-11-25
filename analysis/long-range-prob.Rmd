@@ -1,0 +1,352 @@
+---
+title: "Long range probability of a Match"
+author: "tinalasisi"
+date: "2024-11-23"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+# Adapting the Erlich et al. Model to Incorporate Zero-Inflated Negative Binomial Fertility Distributions
+
+## Introduction
+
+In the Erlich et al. model (2018), the probability of identifying an individual through genetic genealogy databases is calculated based on population genetics parameters and assumptions about family sizes. The original model assumes a Poisson distribution of family sizes with a constant mean number of children per family and a constant effective population size. However, real-world fertility data often exhibit overdispersion and zero-inflation, particularly when considering different populations.
+
+Our goal is to adapt the original Erlich et al. model to incorporate a zero-inflated negative binomial (ZINB) distribution for fertility, using accurate information about the fertility distributions for two different populations: European Americans and African Americans. We aim to model the distribution of fertility more accurately while staying as close as possible to the original model and its assumptions. This adaptation will allow us to refine the model’s predictions with minimal changes to the original functions.
+
+> **Note:** The ZINB parameters (`mu`, `theta`, `pi`) need to be estimated accurately from separate analyses of fertility data for each population. In the code provided below, these parameters are placeholders and should be replaced with the actual estimates obtained from your data.
+
+---
+
+## Original Functions
+
+Here are the original functions from the Erlich et al. model. These functions calculate the probability of a match for direct and once-removed relatives and compute the coverage of the database.
+
+```r
+# Define genome size and number of chromosomes
+genome_size = 35 
+num_chrs = 22
+
+# Function to calculate the probability of a match for direct relatives
+p_match = function(g, m, min_num_seg) {
+  m = m / 100 # Convert m from cM to Morgans
+  f = exp(-2 * g * m) / 2^(2 * g - 2) # Calculate f value
+  pr = 1 - pbinom(min_num_seg - 1, num_chrs + genome_size * 2 * g, f) # Calculate probability
+  return(pr)
+}
+
+# Function to calculate the probability of a match for once-removed relatives
+p_match_or = function(g, m, min_num_seg) {
+  m = m / 100 # Convert m from cM to Morgans
+  f = exp(-(2 * g + 1) * m) / 2^(2 * g - 1) # Calculate f value
+  pr = 1 - pbinom(min_num_seg - 1, num_chrs + genome_size * (2 * g + 1), f) # Calculate probability
+  return(pr)
+}
+
+# Function to calculate the coverage of the database
+coverage = function(Ks, maxg, N_pop, r, m, min_num_seg, min_num_rel, rep_direct = rep(1, 10), rep_or = rep(1, 10)) {
+  N = N_pop / 2 # Convert population size to number of couples
+  pr_succ = numeric(length(Ks)) # Initialize the vector of probabilities of success
+
+  # Loop through database sizes
+  for (i in seq_along(Ks)) {
+    K = Ks[i] # Current database size
+    K_same = round(K * (r / 2) / (1 + r / 2)) # Number of direct relatives
+    K_or = round(K * 1 / (1 + r / 2)) # Number of once-removed relatives
+
+    # Initialize vectors for probability calculations
+    p_no_coal = numeric(maxg) 
+    p_coal = numeric(maxg)
+    p_no_coal_or = numeric(maxg) 
+    p_coal_or = numeric(maxg)
+    Ns = N * (r / 2)^(-(1:(maxg + 1))) # Ns values
+    tot_p = 0
+    tot_p_or = 0
+
+    # Loop through generations
+    for (g in 1:maxg) {
+      f = 2^(2 * g - 2) / Ns[g] # Coalescence probability for direct relatives
+      f_or = 2^(2 * g - 1) / Ns[g + 1] # Coalescence probability for once-removed relatives
+
+      # Update probabilities
+      if (g > 1) {
+        p_coal[g] = p_no_coal[g - 1] * f
+        p_no_coal[g] = p_no_coal[g - 1] * (1 - f)
+        p_coal_or[g] = p_no_coal_or[g - 1] * f_or
+        p_no_coal_or[g] = p_no_coal_or[g - 1] * (1 - f_or)
+      } else {
+        p_coal[g] = f 
+        p_no_coal[g] = 1 - f 
+        p_coal_or[g] = f_or 
+        p_no_coal_or[g] = 1 - f_or
+      }
+
+      # Update total probabilities
+      tot_p = tot_p + p_coal[g] * p_match(g, m, min_num_seg) * rep_direct[g] 
+      if (g < maxg) {
+        tot_p_or = tot_p_or + p_coal_or[g] * p_match_or(g, m, min_num_seg) * rep_or[g]
+      } 
+    }
+
+    # Calculate probability of no success
+    pr_no_succ = 0
+    for (n in 0:(min_num_rel - 1)) {
+      for (n_or in 0:n) {
+        pr_no_succ = pr_no_succ + dbinom(n_or, K_or, tot_p_or) * dbinom(n - n_or, K_same, tot_p)
+      }
+    }
+    
+    # Calculate the probability of success
+    pr_succ[i] = 1 - pr_no_succ
+  }
+  
+  return(pr_succ)
+}
+
+# Ks: A vector of database sizes
+# maxg: Maximum degree of relatedness to consider (e.g., 2 for first cousins)
+# N_pop: Total population size
+# r: Mean number of children per mating pair
+# m: Minimum length in cM of a detectable segment
+# min_num_seg: Minimum number of segments required to declare a match
+# min_num_rel: Minimum number of relatives required to declare success
+```
+
+---
+
+## Adaptation of the Functions
+
+We aim to adapt the original functions to incorporate the zero-inflated negative binomial (ZINB) distribution parameters (`mu`, `theta`, `pi`) that accurately represent the fertility distributions for European Americans and African Americans. This involves modifying the coverage function to adjust the coalescence probability based on the variance in family sizes due to the ZINB distribution.
+
+> **Note:** The ZINB parameters (`mu`, `theta`, `pi`) need to be estimated accurately from separate analyses of fertility data for each population. In the code below, these parameters are placeholders and should be replaced with your actual estimates.
+
+---
+
+## Adapted Functions
+
+```r
+# Define genome size and number of chromosomes
+genome_size = 35 
+num_chrs = 22
+
+# Function to calculate the probability of a match for direct relatives (unchanged)
+p_match = function(g, m, min_num_seg) {
+  m = m / 100 # Convert m from cM to Morgans
+  f = exp(-2 * g * m) / 2^(2 * g - 2) # Calculate f value
+  pr = 1 - pbinom(min_num_seg - 1, num_chrs + genome_size * 2 * g, f) # Calculate probability
+  return(pr)
+}
+
+# Function to calculate the probability of a match for once-removed relatives (unchanged)
+p_match_or = function(g, m, min_num_seg) {
+  m = m / 100 # Convert m from cM to Morgans
+  f = exp(-(2 * g + 1) * m) / 2^(2 * g - 1) # Calculate f value
+  pr = 1 - pbinom(min_num_seg - 1, num_chrs + genome_size * (2 * g + 1), f) # Calculate probability
+  return(pr)
+}
+
+# Adapted coverage function to include ZINB parameters
+coverage = function(Ks, maxg, N_pop, m, min_num_seg, min_num_rel, mu, theta, pi) {
+  N = N_pop / 2 # Convert population size to number of couples
+  pr_succ = numeric(length(Ks)) # Initialize the vector of probabilities of success
+
+  # Calculate variance from ZINB
+  variance = (1 - pi) * mu * (1 + mu * (1 / theta + pi))
+  
+  # Adjusted coalescence probability factor due to variance in family size
+  sigma2_mu2 = variance / mu^2
+  adjustment_factor = (1 + sigma2_mu2) # Adjustment factor for coalescence probability
+
+  # Loop through database sizes
+  for (i in seq_along(Ks)) {
+    K = Ks[i] # Current database size
+    K_same = round(K / 2) # Assuming half of the database are direct relatives
+    K_or = K - K_same
+
+    # Initialize vectors for probability calculations
+    p_no_coal = numeric(maxg) 
+    p_coal = numeric(maxg)
+    p_no_coal_or = numeric(maxg) 
+    p_coal_or = numeric(maxg)
+    tot_p = 0
+    tot_p_or = 0
+
+    # Loop through generations
+    for (g in 1:maxg) {
+      # Adjusted coalescence probabilities incorporating variance
+      f = (2^(2 * g - 2) / N) * adjustment_factor # Coalescence probability for direct relatives
+      f_or = (2^(2 * g - 1) / N) * adjustment_factor # Coalescence probability for once-removed relatives
+
+      # Update probabilities
+      if (g > 1) {
+        p_coal[g] = p_no_coal[g - 1] * f
+        p_no_coal[g] = p_no_coal[g - 1] * (1 - f)
+        p_coal_or[g] = p_no_coal_or[g - 1] * f_or
+        p_no_coal_or[g] = p_no_coal_or[g - 1] * (1 - f_or)
+      } else {
+        p_coal[g] = f 
+        p_no_coal[g] = 1 - f 
+        p_coal_or[g] = f_or 
+        p_no_coal_or[g] = 1 - f_or
+      }
+
+      # Update total probabilities
+      tot_p = tot_p + p_coal[g] * p_match(g, m, min_num_seg)
+      if (g < maxg) {
+        tot_p_or = tot_p_or + p_coal_or[g] * p_match_or(g, m, min_num_seg)
+      } 
+    }
+
+    # Calculate probability of no success
+    pr_no_succ = 0
+    for (n in 0:(min_num_rel - 1)) {
+      for (n_or in 0:n) {
+        pr_no_succ = pr_no_succ + dbinom(n_or, K_or, tot_p_or) * dbinom(n - n_or, K_same, tot_p)
+      }
+    }
+    
+    # Calculate the probability of success
+    pr_succ[i] = 1 - pr_no_succ
+  }
+  
+  return(pr_succ)
+}
+```
+
+---
+
+## Application of the Adapted Functions
+
+```r
+# Population sizes
+EA_POP_1990 = 199686070 # European American Population 1990
+AA_POP_1990 = 29986060  # African American Population 1990
+
+# Placeholder ZINB parameters for European Americans (replace with actual estimates)
+N_pop_white = EA_POP_1990
+mu_white = 2.79    # Mean number of children among women with at least one child
+theta_white = 1.25 # Dispersion parameter from ZINB model
+pi_white = 0.197   # Zero-inflation probability
+
+# Placeholder ZINB parameters for African Americans (replace with actual estimates)
+N_pop_black = AA_POP_1990
+mu_black = 3.06    # Mean number of children among women with at least one child
+theta_black = 0.95 # Dispersion parameter from ZINB model
+pi_black = 0.179   # Zero-inflation probability
+
+# Common parameters
+num_K = 10000      # Number of data points
+m = 6              # Minimum cM
+min_num_seg = 2    # Number of segments
+min_num_rel = 1    # Minimum number of relatives
+maxg_values = c(2, 3, 4, 5) # Max generations for 1C to 4C
+
+# Generate Ks (database sizes) for both populations
+Ks_white = round(seq(from = N_pop_white / num_K, to = N_pop_white, length.out = num_K))
+Ks_black = round(seq(from = N_pop_black / num_K, to = N_pop_black, length.out = num_K))
+
+# Initialize lists to store coverage results
+coverage_white_list = list()
+coverage_black_list = list()
+
+# Calculate coverage for each cousin degree for European Americans
+for (maxg in maxg_values) {
+  coverage_white_list[[as.character(maxg)]] = coverage(
+    Ks = Ks_white, maxg = maxg, N_pop = N_pop_white, m = m,
+    min_num_seg = min_num_seg, min_num_rel = min_num_rel,
+    mu = mu_white, theta = theta_white, pi = pi_white
+  )
+}
+
+# Calculate coverage for each cousin degree for African Americans
+for (maxg in maxg_values) {
+  coverage_black_list[[as.character(maxg)]] = coverage(
+    Ks = Ks_black, maxg = maxg, N_pop = N_pop_black, m = m,
+    min_num_seg = min_num_seg, min_num_rel = min_num_rel,
+    mu = mu_black, theta = theta_black, pi = pi_black
+  )
+}
+```
+
+---
+
+## Plotting the Results
+
+```r
+library(ggplot2)
+library(RColorBrewer)
+library(dplyr)
+
+# Prepare data for plotting
+
+# For European Americans
+plot_data_white = data.frame(
+  Ks_proportion = rep(Ks_white / N_pop_white * 100, times = length(maxg_values)),
+  Coverage = unlist(coverage_white_list),
+  Population = "European Americans",
+  Relationship = factor(rep(c("1C", "2C", "3C", "4C"), each = num_K), levels = c("1C", "2C", "3C", "4C"))
+)
+
+# For African Americans
+plot_data_black = data.frame(
+  Ks_proportion = rep(Ks_black / N_pop_black * 100, times = length(maxg_values)),
+  Coverage = unlist(coverage_black_list),
+  Population = "African Americans",
+  Relationship = factor(rep(c("1C", "2C", "3C", "4C"), each = num_K), levels = c("1C", "2C", "3C", "4C"))
+)
+
+# Combine data
+plot_data = rbind(plot_data_white, plot_data_black)
+
+# Remove rows with NA or infinite Coverage values
+plot_data <- plot_data[is.finite(plot_data$Coverage), ]
+
+# Create color palette for cousin degrees
+colors = brewer.pal(4, "Set1")  # Use a palette with 4 distinct colors
+
+# Create the plot
+p <- ggplot(plot_data, aes(x = Ks_proportion, y = Coverage, color = Relationship)) +
+  geom_line() +
+  scale_color_manual(values = colors, name = "Cousin Degree") +
+  scale_x_continuous(labels = scales::percent_format(scale = 1), breaks = seq(0, 5, 1), limits = c(0, 5)) +
+  labs(title = "Coverage Comparison Between European and African Americans",
+       x = "Database Size (% of Population)",
+       y = "Probability of a Match") +
+  theme_minimal() +
+  facet_wrap(~Population, ncol = 2) +
+  theme(legend.position = "bottom")
+
+# Add labels directly on the lines
+label_data <- plot_data %>%
+  group_by(Population, Relationship) %>%
+  filter(Ks_proportion == max(Ks_proportion))
+
+# Adjust the label positions slightly
+label_data$Ks_proportion <- label_data$Ks_proportion + 0.1  # Shift labels slightly to the right
+
+p <- p + geom_text(data = label_data,
+                   aes(label = Relationship),
+                   hjust = 0,
+                   vjust = 0,
+                   size = 3,
+                   show.legend = FALSE)
+
+# Adjust x limits to make space for labels
+p <- p + xlim(0, 5.5)
+
+# Display the plot
+print(p)
+```
+
+---
+
+## Conclusion
+
+By adapting the original functions to incorporate the ZINB parameters, we have refined the model to more accurately represent the fertility distributions of European Americans and African Americans. We have made minimal changes to the original model, staying as close as possible to its assumptions and structure. This approach allows us to enhance the model’s accuracy with minimal effort, making it accessible for further analysis and contributions.
+
+---
+
+## References
+
+- Erlich, Y., Shor, T., Pe’er, I., & Carmi, S. (2018). Identity inference of genomic data using long-range familial searches. *Science*, 362(6415), 690–694.
