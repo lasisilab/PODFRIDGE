@@ -1,0 +1,4 @@
+# Two files needed to run the regression:
+
+# CODIS_regression_data.csv contains the data needed to run the regression model on the 7 states
+# CODIS_regression_predict_data.csv contains the data needed to make predictions for the oremaining states
