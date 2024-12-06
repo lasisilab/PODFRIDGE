@@ -1,4 +1,19 @@
 # Two files needed to run the regression:
 
 # CODIS_regression_data.csv contains the data needed to run the regression model on the 7 states
-# CODIS_regression_predict_data.csv contains the data needed to make predictions for the oremaining states
+# mt.percent.black: proportion of the Murphy & Tong dataset that is Black
+# census.percent.black: proportion of the U.S. census population that is Black
+# pecent.incarc.black: proportion of the prison population that is Black
+# "" for all other races
+
+# mt.total: total number of people in the Murphy & Tong CODIS dataset
+# census.total: total U.S. census population
+# prison.total: total prison population, 2022
+
+# CODIS_regression_predict_data.csv contains the data needed to make predictions for the remaining states
+# incarcerated_total: total number of people in prison, 2022
+# incarcerated_white: total number of White people in prison, 2022 
+# "" for all other incarcerated_race variables
+# census.percent.black: proportion of the U.S. census population that is Black
+# "" for all other census.percent variables
+# census.total: total U.S. Census population
