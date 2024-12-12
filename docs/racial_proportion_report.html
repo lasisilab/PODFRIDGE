@@ -355,7 +355,7 @@ div.tocify {
 <h1 class="title toc-ignore">Predict racial proportions in the M&amp;T
 forensic database</h1>
 <h4 class="author">Junhui He</h4>
-<h4 class="date">2024-12-11 20:10:29</h4>
+<h4 class="date">2024-12-11 20:14:59</h4>
 
 </div>
 
@@ -363,7 +363,7 @@ forensic database</h1>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+workflowr <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -374,8 +374,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> </a>
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -388,9 +388,9 @@ aria-hidden="true"></span> </a>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 1
+aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>PODFRIDGE/</code> <span
@@ -413,21 +413,18 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
-<span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
-changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges"
+<div id="strongRMarkdownfilestronguptodate"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has staged changes. To know which version of the
-R Markdown file created these results, you’ll want to first commit it to
-the Git repo. If you’re still working on the analysis, you can ignore
-this warning. When you’re finished, you can run
-<code>wflow_publish</code> to commit the R Markdown file and build the
-HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
 </div>
 </div>
 </div>
@@ -518,15 +515,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree382189b590680f2a22e77dbc41bdc0c01a8e38b1targetblank382189ba">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree0ccc04b9820c7a49a2636a4095491d498d729b7atargetblank0ccc04ba">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/382189b590680f2a22e77dbc41bdc0c01a8e38b1" target="_blank">382189b</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/0ccc04b9820c7a49a2636a4095491d498d729b7a" target="_blank">0ccc04b</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree382189b590680f2a22e77dbc41bdc0c01a8e38b1targetblank382189ba"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree0ccc04b9820c7a49a2636a4095491d498d729b7atargetblank0ccc04ba"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -536,7 +533,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/382189b590680f2a22e77dbc41bdc0c01a8e38b1" target="_blank">382189b</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/0ccc04b9820c7a49a2636a4095491d498d729b7a" target="_blank">0ccc04b</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -553,17 +550,6 @@ were generated:
 Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-    Ignored:    analysis/site_libs/
-
-Unstaged changes:
-    Deleted:    analysis/images/goodness_of_fit-01.png
-    Deleted:    analysis/images/goodness_of_fit.png
-    Modified:   analysis/racial_proportion_report.Rmd
-
-Staged changes:
-    New:        analysis/images/goodness_of_fit-01.png
-    New:        analysis/images/goodness_of_fit.png
-    Modified:   analysis/racial_proportion_report.Rmd
 
 </code></pre>
 <p>
@@ -610,6 +596,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/0ccc04b9820c7a49a2636a4095491d498d729b7a/analysis/racial_proportion_report.Rmd" target="_blank">0ccc04b</a>
+</td>
+<td>
+He Junhui
+</td>
+<td>
+2024-12-11
+</td>
+<td>
+create racial proportion report with workflowr
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/0ccc04b9820c7a49a2636a4095491d498d729b7a/docs/racial_proportion_report.html" target="_blank">0ccc04b</a>
+</td>
+<td>
+He Junhui
+</td>
+<td>
+2024-12-11
+</td>
+<td>
+create racial proportion report with workflowr
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -992,17 +1012,21 @@ tzcode source: internal
 attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
+other attached packages:
+[1] workflowr_1.7.1
+
 loaded via a namespace (and not attached):
- [1] vctrs_0.6.4       cli_3.6.1         knitr_1.44        rlang_1.1.1      
- [5] xfun_0.40         stringi_1.7.12    promises_1.2.1    jsonlite_1.8.8   
- [9] workflowr_1.7.1   glue_1.6.2        rprojroot_2.0.4   git2r_0.35.0     
-[13] htmltools_0.5.6.1 httpuv_1.6.11     sass_0.4.7        fansi_1.0.5      
-[17] rmarkdown_2.25    jquerylib_0.1.4   evaluate_0.23     tibble_3.2.1     
-[21] fastmap_1.1.1     yaml_2.3.7        lifecycle_1.0.4   whisker_0.4.1    
-[25] stringr_1.5.0     compiler_4.3.1    fs_1.6.3          Rcpp_1.0.11      
-[29] pkgconfig_2.0.3   rstudioapi_0.15.0 later_1.3.1       digest_0.6.33    
-[33] R6_2.5.1          utf8_1.2.3        pillar_1.9.0      magrittr_2.0.3   
-[37] bslib_0.5.1       tools_4.3.1       cachem_1.0.8     </code></pre>
+ [1] vctrs_0.6.4       httr_1.4.7        cli_3.6.1         knitr_1.44       
+ [5] rlang_1.1.1       xfun_0.40         stringi_1.7.12    processx_3.8.2   
+ [9] promises_1.2.1    jsonlite_1.8.8    glue_1.6.2        rprojroot_2.0.4  
+[13] git2r_0.35.0      htmltools_0.5.6.1 httpuv_1.6.11     ps_1.7.5         
+[17] sass_0.4.7        fansi_1.0.5       rmarkdown_2.25    jquerylib_0.1.4  
+[21] tibble_3.2.1      evaluate_0.23     fastmap_1.1.1     yaml_2.3.7       
+[25] lifecycle_1.0.4   whisker_0.4.1     stringr_1.5.0     compiler_4.3.1   
+[29] fs_1.6.3          pkgconfig_2.0.3   Rcpp_1.0.11       rstudioapi_0.15.0
+[33] later_1.3.1       digest_0.6.33     R6_2.5.1          utf8_1.2.3       
+[37] pillar_1.9.0      callr_3.7.5       magrittr_2.0.3    bslib_0.5.1      
+[41] tools_4.3.1       cachem_1.0.8      getPass_0.2-4    </code></pre>
 </div>
 </div>
 
