@@ -681,6 +681,10 @@ merged_df_white <- merged_data %>% filter(Race == "White")
 ```
 
 ```{r echo=TRUE, eval=TRUE}
+# Data frame to store proportions
+proportions_df_b <- data.frame(Cohort = character(), Census_Year = character(), 
+                             Proportion_Zero_Children = numeric(), Race = character(), stringsAsFactors = FALSE)
+
 # Filter cohorts with more than one census year
 cohort_counts <- merged_df_black %>%
   group_by(Cohort) %>%
@@ -711,6 +715,21 @@ for (cohort in cohorts_for_test) {
       Chi_Square = test_result$statistic,
       p_value = test_result$p.value
     ))
+    
+    # proportion across year
+    proportions <- cohort_data %>%
+      group_by(Census_Year) %>%
+      summarise(Proportion_Zero_Children = mean(chborn_num == "0"))
+    
+    proportions$Cohort <- cohort
+    proportions$Race <- "Black"
+    
+    # Combine into one data frame
+    proportions_df_b <- rbind(proportions_df_b, proportions)
+  
+    # Print proportions for review
+    print(paste("Proportions for cohort:", cohort))
+    print(proportions)
   }
 }
 
@@ -721,7 +740,49 @@ print(results_black)
 
 ```
 
+```{r}
+# Function to determine the nature of change
+determine_nature_of_change <- function(proportions) {
+  if (nrow(proportions) > 1) {
+    if (all(diff(proportions$Proportion_Zero_Children) > 0)) {
+      return("Increase")
+    } else if (all(diff(proportions$Proportion_Zero_Children) < 0)) {
+      return("Decrease")
+    } else {
+      return("Mixed/No Change")
+    }
+  } else {
+    return("Not Applicable")
+  }
+}
+
+# Add the Nature_of_Change column
+results_black$Nature_of_Change <- NA  # Initialize the column
+
+# Loop through each cohort in results_black
+for (i in 1:nrow(results_black)) {
+  cohort <- results_black$Cohort[i]
+  cohort_data <- merged_df_black %>% filter(Cohort == cohort)
+  
+  # Calculate proportions for the cohort
+  proportions <- cohort_data %>%
+    group_by(Census_Year) %>%
+    summarise(Proportion_Zero_Children = mean(chborn_num == "0"))
+    
+  # Determine nature of change
+  results_black$Nature_of_Change[i] <- determine_nature_of_change(proportions)
+}
+
+# View the updated results_black
+print(results_black)
+
+```
+
 ```{r echo=TRUE, eval=TRUE}
+# Data frame to store proportions
+proportions_df_w <- data.frame(Cohort = character(), Census_Year = character(), 
+                             Proportion_Zero_Children = numeric(), Race = character(), stringsAsFactors = FALSE)
+
 # Filter cohorts with more than one census year
 cohort_counts2 <- merged_df_white %>%
   group_by(Cohort) %>%
@@ -752,12 +813,50 @@ for (cohort in cohorts_for_test2) {
       Chi_Square = test_result$statistic,
       p_value = test_result$p.value
     ))
+    
+    # proportion across year
+    proportions <- cohort_data %>%
+      group_by(Census_Year) %>%
+      summarise(Proportion_Zero_Children = mean(chborn_num == "0"))
+    
+    proportions$Cohort <- cohort
+    proportions$Race <- "White"
+    
+    # Combine into one data frame
+    proportions_df_w <- rbind(proportions_df_w, proportions)
+  
+    # Print proportions for review
+    print(paste("Proportions for cohort:", cohort))
+    print(proportions)
   }
 }
 results_white <- results_white %>%
   mutate(Significance = ifelse(p_value > 0.05, "No", "Yes"))
 
 print(results_white)
+```
+
+```{r}
+# Add the Nature_of_Change column
+results_white$Nature_of_Change <- NA  # Initialize the column
+
+# Loop through each cohort in results_white
+for (i in 1:nrow(results_white)) {
+  cohort <- results_white$Cohort[i]
+  cohort_data <- merged_df_white %>% filter(Cohort == cohort)
+  
+  # Calculate proportions for the cohort
+  proportions <- cohort_data %>%
+    group_by(Census_Year) %>%
+    summarise(Proportion_Zero_Children = mean(chborn_num == "0"))
+  
+  # Determine nature of change
+  results_white$Nature_of_Change[i] <- determine_nature_of_change(proportions)
+}
+
+# View the updated results_white
+print(results_white)
+
 ```
 
 
@@ -806,7 +905,6 @@ We observe that the proportion of women with zero children change significantly 
   -black population:1901-1910, 1921-1930
   -white population:1901-1910, 1911-1920, 1921-1930
 
-
 #### b. **Family Size Analysis**
 - Use an **ANOVA** or **linear regression** to test if the mean or variance in family size changes over census years for the same cohort.
   
@@ -851,8 +949,6 @@ for (cohort in cohorts1) {
   cat("\nCohort:", cohort)
   cat("\nANOVA for Mean Family Size:\n")
   print(summary(anova_mean_result))
-  cat("\nANOVA for Variance in Family Size:\n")
-  print(summary(anova_variance_result))
 }
 
 ```
@@ -875,21 +971,16 @@ for (cohort in cohorts2) {
   # Perform ANOVA for Mean
   anova_mean_result <- aov(Mean ~ factor(Census_Year), data = cohort_data_w)
   
-  # Perform ANOVA for Variance
-  anova_variance_result <- aov(Variance ~ factor(Census_Year), data = cohort_data_w)
-  
   # Output the results
   cat("\nCohort:", cohort)
   cat("\nANOVA for Mean Family Size:\n")
   print(summary(anova_mean_result))
-  cat("\nANOVA for Variance in Family Size:\n")
-  print(summary(anova_variance_result))
 }
 ```
 
 **_RESULT:_** 
   1.In both racial group, the ANOVA is not applicable for the following cohort since there is only one census year available in the data for those cohorts:-Inf-1910, 1941-1950, -Inf-1920, -Inf-1890, -Inf-1900, and 1891-1900
-  2.By looking at the ANOVA for mean and variance family size in both racial group, the p-value of the rest cohorts (1901-1910, 1911-1920, 1921-1930, 1931-1940) are smaller than 0.05, indicating mean and variance family size for these cohort has significantly changed over different census years in both population. 
+  2.By looking at the ANOVA for mean family size in both racial group, the p-value of the rest cohorts (1901-1910, 1911-1920, 1921-1930, 1931-1940) are smaller than 0.05, indicating mean family size for these cohort has significantly changed over different census years in both population. 
 
 
 #### c. **Model Fit Analysis**
@@ -971,7 +1062,7 @@ ggplot(best_models, aes(x = Census_Year, y = Cohort, fill = Best_Model)) +
   )
 ```
 
-**_RESULT:_** Based on the heatmap created, we can see that the model fit for each cohort across year does not change.
+**_RESULT:_** Based on the heatmap created, we can see that the model fit for each cohort(cohort with 2+ corresponding census year) across year does not change.
 
 ### Step 4: Interpret the Results
 For each cohort, you will assess whether:
@@ -1101,6 +1192,46 @@ child_plot +
     axis.text.y = element_text(size = 8),
     strip.text = element_text(size = 10)
   )
+```
+
+Additional Visualization: Nature of significant Change for cohorts By Race
+```{r}
+## Balck population
+filter_prop_b <- proportions_df_b %>% 
+  filter(Cohort %in% c("1901-1910", "1921-1930"))
+
+# Create the plot
+ggplot(filter_prop_b, aes(x = Census_Year, y = Proportion_Zero_Children)) +
+  geom_line(size = 1, color = "#F07857") +  
+  geom_point(size = 2, color = "#F07857") + 
+  facet_wrap(~ Cohort, scales = "free_x") +  
+  labs(
+    title = "Cohorts (Black) with Significant Change in Probability of Zero Children",
+    x = "Census Year",
+    y = "Proportion with Zero Children"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+
+```{r}
+## White population
+filter_prop_w <- proportions_df_w %>% 
+  filter(Cohort %in% c("1901-1910", "1911-1920", "1921-1930"))
+
+# Create the plot
+ggplot(filter_prop_w, aes(x = Census_Year, y = Proportion_Zero_Children)) +
+  geom_line(size = 1, color = "#43A5BE") + 
+  geom_point(size = 2, color = "#43A5BE") + 
+  facet_wrap(~ Cohort, scales = "free_x") + 
+  labs(
+    title = "Cohorts (White) with Significant Change in Probability of Zero Children",
+    x = "Census Year",
+    y = "Proportion with Zero Children"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
 #### 2.2 Panel B: Comparison of 40-49 and 50-59 Age Groups in 1990
@@ -1809,6 +1940,11 @@ ggplot(results_summary, aes(x = Cohort, y = RACE, fill = Significant_Changes)) +
    - Identify which cohorts show stable sibling distributions.
    - Compare stability patterns to those observed in the children distribution analysis.
    - Discuss implications of stability or lack thereof for understanding family structure changes over time.
+   
+**_RESULT:_**
+From the plot above, we can see the distribution of sibling is stable in the following cohorts by race:
+  -black population:1901-1919, 1911-1920, 1921-1930
+  -white population:1901-1910
 
 ## Apply similar analysis performed in the children's part:
 1. Zero Inflation: Check if the proportion of individuals with zero siblings changes significantly over time for the same cohort.
@@ -1870,6 +2006,7 @@ results_black2 <- results_black2 %>%
 
 print(results_black2)
 ```
+**_RESULT:_** The table shows that only the cohort 1921-1930 has significant change in probability of individuals with zero siblings in black population.
 
 ```{r echo=TRUE, eval=TRUE}
 # Filter cohorts with more than one census year
@@ -1910,6 +2047,7 @@ results_white2 <- results_white2 %>%
 
 print(results_white2)
 ```
+**_RESULT:_** The table shows that cohorts 1901-1910, 1911-1920, 1921-1930 have significant change in probability of individuals with zero siblings in white population.
 
 2. Family Size: Test if the mean or variance in the number of siblings changes for the same cohort over time.
 ```{r echo=TRUE, eval=TRUE}
@@ -1943,17 +2081,13 @@ for (cohort in cohorts1) {
   # Perform ANOVA for Mean
   anova_mean_result <- aov(Mean ~ factor(Census_Year), data = cohort_data_b)
   
-  # Perform ANOVA for Variance
-  anova_variance_result <- aov(Variance ~ factor(Census_Year), data = cohort_data_b)
-  
   # Output the results
   cat("\nCohort:", cohort)
-  cat("\nANOVA for Mean Family Size:\n")
+  cat("\nANOVA for Mean number of Siblings:\n")
   print(summary(anova_mean_result))
-  cat("\nANOVA for Variance in Family Size:\n")
-  print(summary(anova_variance_result))
 }
 ```
+**_RESULT:_** The mean number of siblings change significantly in cohorts 1901-1910, 1911-1920, 1921-1930, 1931-1940 in black population.
 
 ```{r echo=TRUE, eval=TRUE}
 ##Test for White population
@@ -1974,18 +2108,14 @@ for (cohort in cohorts2) {
   # Perform ANOVA for Mean
   anova_mean_result <- aov(Mean ~ factor(Census_Year), data = cohort_data_w)
   
-  # Perform ANOVA for Variance
-  anova_variance_result <- aov(Variance ~ factor(Census_Year), data = cohort_data_w)
-  
   # Output the results
   cat("\nCohort:", cohort)
-  cat("\nANOVA for Mean Family Size:\n")
+  cat("\nANOVA for Mean number of Siblings:\n")
   print(summary(anova_mean_result))
-  cat("\nANOVA for Variance in Family Size:\n")
-  print(summary(anova_variance_result))
+  
 }
 ```
-
+**_RESULT:_** The mean number of siblings change significantly in cohorts 1901-1910, 1911-1920, 1921-1930, 1931-1940 in white population.
 
 3. Model Fit: Analyze if the best-fitting model for the cohort changes over time.
 ```{r echo=TRUE, eval=TRUE}
@@ -2005,7 +2135,7 @@ ggplot(best_models_sib, aes(x = Census_Year, y = Cohort, fill = Best_Model)) +
     legend.position = "bottom"
   )
 ```
-
+**_RESULT:_** The best model for each cohort(those with 1+ corresponding census year) is stable over time.
 
 ## [Instructions for Manqing] Plot Across Census Years Siblings
 
