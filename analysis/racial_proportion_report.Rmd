@@ -1,13 +1,15 @@
 ---
 title: "Predict racial proportions in the M&T forensic database"
 author: "Junhui He"
-output: 
-  html_document:
-    number_sections: true
+output: html_document
 date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
 editor: visual
 site: workflowr::wflow_site
 ---
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_knit$set(base.dir = "https://github.com/lasisilab/PODFRIDGE/raw/main/")
+```
 
 ## Objective
 
@@ -55,13 +57,14 @@ To interpreter those coefficients, we simply denote the binomial logistic regres
 
 We estimate the linear coefficients $\beta$ of the binomial logistic regression for black Americans and white Americans using `glm()` function and do a Wald test on the beta coefficients. The $p$-values show that these coefficients are all statistically significant.
 
-![Summary statistics of binomial regression for Black People](../docs/figure/racial_breakdown/glm_black.png "Summary statistics of Black People")
+![Summary statistics of binomial regression for Black People](figure/racial_breakdown/glm_black.png "Summary statistics of Black People")
 
-![Summary statistics of binomial regression for White People](../docs/figure/racial_breakdown/glm_white.png "Summary statistics of White People")
+![Summary statistics of binomial regression for White People](figure/racial_breakdown/glm_white.png "Summary statistics of White People")
 
 ### Goodness-of-Fit
 
-Furthermore, we plot the fitted racial proportions using stick-breaking binomial regression versus the ground truth for the 7 states with available data. This figure shows that data points are around the identical map, which means our model fits the training data well at least. ![Goodness-of-Fit for racial breakdown using binomial regression](../docs/figure/racial_breakdown/goodness_of_fit.png "Goodness-of-Fit")
+Furthermore, we plot the fitted racial proportions using stick-breaking binomial regression versus the ground truth for the 7 states with available data. This figure shows that data points are around the identical map, which means our model fits the training data well at least. 
+![Goodness-of-Fit for racial breakdown using binomial regression](figure/racial_breakdown/goodness_of_fit.png "Goodness-of-Fit")
 
 ## Main Findings
 
@@ -73,7 +76,7 @@ Black Americans are significantly overrepresented in all states in M&T forensic 
 
 We generate side-by-side pie charts for each state showing the racial composition according to the census (left) versus the estimated racial composition of CODIS (right) for each state. From the following figure, Black/African Americans are overrepresented and white Americans are underrepresented in CODIS compared to Census.
 
-![Racial breakdown of Census and CODIS for each state](../docs/figure/racial_breakdown/racial_breakdown.png "Racial Composition")
+![Racial breakdown of Census and CODIS for each state](figure/racial_breakdown/racial_breakdown.png "Racial Composition")
 
 ### Difference of racial proportions
 
@@ -84,9 +87,9 @@ relative~difference=\frac{Proportion_{CODIS}-Proportion_{Census}}{Proportion_{Ce
 \end{split}
 \end{equation*} The difference barcharts show that Black/African Americans are sigficantly overrepresented in all states and White Americans are underrepresented in most states in M&T forensic database compared to census representation.
 
-![Absolute difference of racial proportions](../docs/figure/racial_breakdown/abs_difference.png "Absolute Difference")
+![Absolute difference of racial proportions](figure/racial_breakdown/abs_difference.png "Absolute Difference")
 
-![Relative difference of racial proportions](../docs/figure/racial_breakdown/rela_difference.png "Relative Difference")
+![Relative difference of racial proportions](figure/racial_breakdown/rela_difference.png "Relative Difference")
 
 ## Statistical Inference
 
@@ -96,4 +99,4 @@ For each state, we consider a hypothesis testing problem for the difference of b
 
 Finally, we calculate the $1-\alpha$ confidence intervals for the fitted probability using binomial regression. The normal approximation for the log odds $z=x^\top \beta$ contributes to a confidence interval $ConfInt=[g(\hat{z}-c_{1-\alpha/2}se(\hat{z})),~g(\hat{z}+c_{1-\alpha/2}se(\hat{z}))]$ for the black proportion in Census, where $c_{1-\alpha/2}$ is the $1-\alpha/2$ quantile of the standard normal distribution. This implies a confidence interval for the differences with $ConfInt-p_{Census}$. For the white Americans, we utilize a Bonferroni method to construct the confidence interval. As the number of population in each state with available data is very large, the estimated standard errors $se(\hat{z})$ is very small, causing that the interval widths are almost equal to zero compared to the point estimation. It also explains why the $p$-values for the above hypothesis testing are nearly zero.
 
-![Widths of confidence intervals for racial proportions](docs/figure/racial_breakdown/goodness_of_fit.png "Interval Widths")
+![Widths of confidence intervals for racial proportions](figure/racial_breakdown/interval_widths.png "Interval Widths")

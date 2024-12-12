@@ -355,7 +355,7 @@ div.tocify {
 <h1 class="title toc-ignore">Predict racial proportions in the M&amp;T
 forensic database</h1>
 <h4 class="author">Junhui He</h4>
-<h4 class="date">2024-12-11 20:32:35</h4>
+<h4 class="date">2024-12-11 20:41:29</h4>
 
 </div>
 
@@ -422,10 +422,10 @@ changes </a>
 <div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes. To know which version of
-the R Markdown file created these results, you’ll want to first commit
-it to the Git repo. If you’re still working on the analysis, you can
-ignore this warning. When you’re finished, you can run
+<p>The R Markdown file has staged changes. To know which version of the
+R Markdown file created these results, you’ll want to first commit it to
+the Git repo. If you’re still working on the analysis, you can ignore
+this warning. When you’re finished, you can run
 <code>wflow_publish</code> to commit the R Markdown file and build the
 HTML.</p>
 </div>
@@ -518,15 +518,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreed316cd9232cf9d7e3f05470170b0dba99f145733targetblankd316cd9a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree49a0f2db61f7364fd4aafd0e295b4077623bcaa4targetblank49a0f2da">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/d316cd9232cf9d7e3f05470170b0dba99f145733" target="_blank">d316cd9</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/49a0f2db61f7364fd4aafd0e295b4077623bcaa4" target="_blank">49a0f2d</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreed316cd9232cf9d7e3f05470170b0dba99f145733targetblankd316cd9a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree49a0f2db61f7364fd4aafd0e295b4077623bcaa4targetblank49a0f2da"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -536,7 +536,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/d316cd9232cf9d7e3f05470170b0dba99f145733" target="_blank">d316cd9</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/49a0f2db61f7364fd4aafd0e295b4077623bcaa4" target="_blank">49a0f2d</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -555,7 +555,7 @@ Ignored files:
     Ignored:    .Rproj.user/
     Ignored:    analysis/site_libs/
 
-Unstaged changes:
+Staged changes:
     Modified:   analysis/racial_proportion_report.Rmd
 
 </code></pre>
@@ -603,6 +603,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/49a0f2db61f7364fd4aafd0e295b4077623bcaa4/docs/racial_proportion_report.html" target="_blank">49a0f2d</a>
+</td>
+<td>
+He Junhui
+</td>
+<td>
+2024-12-11
+</td>
+<td>
+test workflowr
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -934,14 +951,14 @@ function and do a Wald test on the beta coefficients. The <span
 class="math inline">\(p\)</span>-values show that these coefficients are
 all statistically significant.</p>
 <div class="float">
-<img src="../docs/figure/racial_breakdown/glm_black.png"
+<img src="figure/racial_breakdown/glm_black.png"
 title="Summary statistics of Black People"
 alt="Summary statistics of binomial regression for Black People" />
 <div class="figcaption">Summary statistics of binomial regression for
 Black People</div>
 </div>
 <div class="float">
-<img src="../docs/figure/racial_breakdown/glm_white.png"
+<img src="figure/racial_breakdown/glm_white.png"
 title="Summary statistics of White People"
 alt="Summary statistics of binomial regression for White People" />
 <div class="figcaption">Summary statistics of binomial regression for
@@ -954,8 +971,7 @@ White People</div>
 stick-breaking binomial regression versus the ground truth for the 7
 states with available data. This figure shows that data points are
 around the identical map, which means our model fits the training data
-well at least. <img
-src="../docs/figure/racial_breakdown/goodness_of_fit.png"
+well at least. <img src="figure/racial_breakdown/goodness_of_fit.png"
 title="Goodness-of-Fit"
 alt="Goodness-of-Fit for racial breakdown using binomial regression" /></p>
 </div>
@@ -975,7 +991,7 @@ composition of CODIS (right) for each state. From the following figure,
 Black/African Americans are overrepresented and white Americans are
 underrepresented in CODIS compared to Census.</p>
 <div class="float">
-<img src="../docs/figure/racial_breakdown/racial_breakdown.png"
+<img src="figure/racial_breakdown/racial_breakdown.png"
 title="Racial Composition"
 alt="Racial breakdown of Census and CODIS for each state" />
 <div class="figcaption">Racial breakdown of Census and CODIS for each
@@ -997,13 +1013,13 @@ Black/African Americans are sigficantly overrepresented in all states
 and White Americans are underrepresented in most states in M&amp;T
 forensic database compared to census representation.</p>
 <div class="float">
-<img src="../docs/figure/racial_breakdown/abs_difference.png"
+<img src="figure/racial_breakdown/abs_difference.png"
 title="Absolute Difference"
 alt="Absolute difference of racial proportions" />
 <div class="figcaption">Absolute difference of racial proportions</div>
 </div>
 <div class="float">
-<img src="../docs/figure/racial_breakdown/rela_difference.png"
+<img src="figure/racial_breakdown/rela_difference.png"
 title="Relative Difference"
 alt="Relative difference of racial proportions" />
 <div class="figcaption">Relative difference of racial proportions</div>
@@ -1052,7 +1068,7 @@ estimation. It also explains why the <span
 class="math inline">\(p\)</span>-values for the above hypothesis testing
 are nearly zero.</p>
 <div class="float">
-<img src="docs/figure/racial_breakdown/goodness_of_fit.png"
+<img src="figure/racial_breakdown/interval_widths.png"
 title="Interval Widths"
 alt="Widths of confidence intervals for racial proportions" />
 <div class="figcaption">Widths of confidence intervals for racial
