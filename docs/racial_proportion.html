@@ -355,7 +355,7 @@ div.tocify {
 <h1 class="title toc-ignore">Predict racial proportions in the M&amp;T
 forensic database</h1>
 <h4 class="author">Junhui He</h4>
-<h4 class="date">2024-12-12 12:50:07</h4>
+<h4 class="date">2024-12-12 13:03:33</h4>
 
 </div>
 
@@ -363,7 +363,7 @@ forensic database</h1>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+workflowr <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -374,8 +374,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> </a>
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -388,9 +388,9 @@ aria-hidden="true"></span> </a>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 1
+aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>PODFRIDGE/</code> <span
@@ -413,21 +413,18 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
-<span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
-changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges"
+<div id="strongRMarkdownfilestronguptodate"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown is untracked by Git. To know which version of the R
-Markdown file created these results, you’ll want to first commit it to
-the Git repo. If you’re still working on the analysis, you can ignore
-this warning. When you’re finished, you can run
-<code>wflow_publish</code> to commit the R Markdown file and build the
-HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
 </div>
 </div>
 </div>
@@ -518,15 +515,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreefd3e7f50437fd2f02e1a41d5676e39fd40b35a40targetblankfd3e7f5a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree1a329292bcb8c648dc31423b6ee18f0c25592e21targetblank1a32929a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/fd3e7f50437fd2f02e1a41d5676e39fd40b35a40" target="_blank">fd3e7f5</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/1a329292bcb8c648dc31423b6ee18f0c25592e21" target="_blank">1a32929</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreefd3e7f50437fd2f02e1a41d5676e39fd40b35a40targetblankfd3e7f5a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree1a329292bcb8c648dc31423b6ee18f0c25592e21targetblank1a32929a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -536,7 +533,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/fd3e7f50437fd2f02e1a41d5676e39fd40b35a40" target="_blank">fd3e7f5</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/1a329292bcb8c648dc31423b6ee18f0c25592e21" target="_blank">1a32929</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -555,13 +552,6 @@ Ignored files:
     Ignored:    .Rproj.user/
     Ignored:    analysis/site_libs/
 
-Untracked files:
-    Untracked:  analysis/racial_proportion.Rmd
-
-Unstaged changes:
-    Modified:   analysis/racial_proportion_forensic.qmd
-    Deleted:    analysis/racial_proportion_report.Rmd
-
 </code></pre>
 <p>
 Note that any generated files, e.g. HTML, png, CSS, etc., are not
@@ -575,10 +565,74 @@ have uncommitted changes.
 <hr>
 </div>
 <div id="versions" class="tab-pane fade">
+
 <p>
-There are no past versions. Publish this analysis with
-<code>wflow_publish()</code> to start tracking its development.
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/racial_proportion.Rmd</code>) and
+HTML (<code>docs/racial_proportion.html</code>) files. If you’ve
+configured a remote Git repository (see <code>?wflow_git_remote</code>),
+click on the hyperlinks in the table below to view the files as they
+were in that past version.
 </p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/1a329292bcb8c648dc31423b6ee18f0c25592e21/analysis/racial_proportion.Rmd" target="_blank">1a32929</a>
+</td>
+<td>
+He Junhui
+</td>
+<td>
+2024-12-12
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/1a329292bcb8c648dc31423b6ee18f0c25592e21/docs/racial_proportion.html" target="_blank">1a32929</a>
+</td>
+<td>
+He Junhui
+</td>
+<td>
+2024-12-12
+</td>
+<td>
+m
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <hr>
 </div>
 </div>
@@ -774,6 +828,46 @@ states with available data. This figure shows that data points are
 around the identical map, which means our model fits the training data
 well at least.</p>
 <p><img src="figure/racial_proportion.Rmd/Goodness-of-Fit%20for%20racial%20breakdown%20using%20binomial%20regression-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Goodness-of-Fit-for-racial-breakdown-using-binomial-regression-1">
+Past versions of "Goodness-of-Fit for racial breakdown using binomial
+regression-1.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Goodness-of-Fit-for-racial-breakdown-using-binomial-regression-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/1a329292bcb8c648dc31423b6ee18f0c25592e21/docs/figure/racial_proportion.Rmd/Goodness-of-Fit for racial breakdown using binomial regression-1.png" target="_blank">1a32929</a>
+</td>
+<td>
+He Junhui
+</td>
+<td>
+2024-12-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="main-findings" class="section level2">
@@ -791,6 +885,46 @@ composition of CODIS (right) for each state. From the following figure,
 Black/African Americans are overrepresented and white Americans are
 underrepresented in CODIS compared to Census.</p>
 <p><img src="figure/racial_proportion.Rmd/Racial%20breakdown%20of%20Census%20and%20CODIS%20for%20each%20state-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Racial-breakdown-of-Census-and-CODIS-for-each-state-1">
+Past versions of "Racial breakdown of Census and CODIS for each
+state-1.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Racial-breakdown-of-Census-and-CODIS-for-each-state-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/1a329292bcb8c648dc31423b6ee18f0c25592e21/docs/figure/racial_proportion.Rmd/Racial breakdown of Census and CODIS for each state-1.png" target="_blank">1a32929</a>
+</td>
+<td>
+He Junhui
+</td>
+<td>
+2024-12-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="difference-of-racial-proportions" class="section level3">
 <h3>5.3 Difference of racial proportions</h3>
@@ -807,7 +941,83 @@ Black/African Americans are sigficantly overrepresented in all states
 and White Americans are underrepresented in most states in M&amp;T
 forensic database compared to census representation.</p>
 <p><img src="figure/racial_proportion.Rmd/Absolute%20difference%20of%20racial%20proportions-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Absolute-difference-of-racial-proportions-1">
+Past versions of "Absolute difference of racial proportions-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-Absolute-difference-of-racial-proportions-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/1a329292bcb8c648dc31423b6ee18f0c25592e21/docs/figure/racial_proportion.Rmd/Absolute difference of racial proportions-1.png" target="_blank">1a32929</a>
+</td>
+<td>
+He Junhui
+</td>
+<td>
+2024-12-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p><img src="figure/racial_proportion.Rmd/Relative%20difference%20of%20racial%20proportions-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Relative-difference-of-racial-proportions-1">
+Past versions of "Relative difference of racial proportions-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-Relative-difference-of-racial-proportions-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/1a329292bcb8c648dc31423b6ee18f0c25592e21/docs/figure/racial_proportion.Rmd/Relative difference of racial proportions-1.png" target="_blank">1a32929</a>
+</td>
+<td>
+He Junhui
+</td>
+<td>
+2024-12-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="statistical-inference" class="section level2">
@@ -852,6 +1062,46 @@ estimation. It also explains why the <span
 class="math inline">\(p\)</span>-values for the above hypothesis testing
 are nearly zero.</p>
 <p><img src="figure/racial_proportion.Rmd/Widths%20of%20confidence%20intervals%20for%20racial%20proportions-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Widths-of-confidence-intervals-for-racial-proportions-1">
+Past versions of "Widths of confidence intervals for racial
+proportions-1.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Widths-of-confidence-intervals-for-racial-proportions-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/1a329292bcb8c648dc31423b6ee18f0c25592e21/docs/figure/racial_proportion.Rmd/Widths of confidence intervals for racial proportions-1.png" target="_blank">1a32929</a>
+</td>
+<td>
+He Junhui
+</td>
+<td>
+2024-12-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -896,8 +1146,9 @@ loaded via a namespace (and not attached):
 [29] httpuv_1.6.11     xfun_0.40         fs_1.6.3          sass_0.4.7       
 [33] cli_3.6.1         withr_3.0.0       magrittr_2.0.3    digest_0.6.33    
 [37] rstudioapi_0.15.0 lifecycle_1.0.4   vctrs_0.6.4       evaluate_0.23    
-[41] glue_1.6.2        farver_2.1.1      colorspace_2.1-0  fansi_1.0.5      
-[45] rmarkdown_2.25    tools_4.3.1       pkgconfig_2.0.3   htmltools_0.5.6.1</code></pre>
+[41] glue_1.6.2        farver_2.1.1      whisker_0.4.1     colorspace_2.1-0 
+[45] fansi_1.0.5       rmarkdown_2.25    tools_4.3.1       pkgconfig_2.0.3  
+[49] htmltools_0.5.6.1</code></pre>
 </div>
 </div>
 
