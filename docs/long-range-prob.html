@@ -9,10 +9,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Junhui He" />
+<meta name="author" content="tinalasisi" />
 
+<meta name="date" content="2024-11-23" />
 
-<title>Predict racial proportions in the M&amp;T forensic database</title>
+<title>Long range probability of a Match</title>
 
 <script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -352,10 +353,9 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Predict racial proportions in the M&amp;T
-forensic database</h1>
-<h4 class="author">Junhui He</h4>
-<h4 class="date">2024-12-11 19:45:04</h4>
+<h1 class="title toc-ignore">Long range probability of a Match</h1>
+<h4 class="author">tinalasisi</h4>
+<h4 class="date">2024-11-23</h4>
 
 </div>
 
@@ -363,7 +363,7 @@ forensic database</h1>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+workflowr <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -374,8 +374,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> </a>
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -388,9 +388,9 @@ aria-hidden="true"></span> </a>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 1
+aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>PODFRIDGE/</code> <span
@@ -413,21 +413,18 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
-<span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
-changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges"
+<div id="strongRMarkdownfilestronguptodate"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown is untracked by Git. To know which version of the R
-Markdown file created these results, you’ll want to first commit it to
-the Git repo. If you’re still working on the analysis, you can ignore
-this warning. When you’re finished, you can run
-<code>wflow_publish</code> to commit the R Markdown file and build the
-HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
 </div>
 </div>
 </div>
@@ -553,11 +550,10 @@ were generated:
 Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-    Ignored:    analysis/site_libs/
 
 Untracked files:
     Untracked:  analysis/racial_proportion_forensic.qmd
-    Untracked:  analysis/racial_proportion_report.Rmd
+    Untracked:  analysis/racial_proportion_report.qmd
 
 </code></pre>
 <p>
@@ -575,9 +571,8 @@ have uncommitted changes.
 
 <p>
 These are the previous versions of the repository in which changes were
-made to the R Markdown
-(<code>analysis/racial_proportion_report.Rmd</code>) and HTML
-(<code>docs/racial_proportion_report.html</code>) files. If you’ve
+made to the R Markdown (<code>analysis/long-range-prob.Rmd</code>) and
+HTML (<code>docs/long-range-prob.html</code>) files. If you’ve
 configured a remote Git repository (see <code>?wflow_git_remote</code>),
 click on the hyperlinks in the table below to view the files as they
 were in that past version.
@@ -606,53 +601,19 @@ Message
 <tbody>
 <tr>
 <td>
-html
+Rmd
 </td>
 <td>
-<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/d5b46893df73e807ea6e0017ce7993e9b1d3e6fe/docs/racial_proportion_report.html" target="_blank">d5b4689</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/228ffbdd8f5dd731e7ef8a1145d7f2dfe754f33c/analysis/long-range-prob.Rmd" target="_blank">228ffbd</a>
 </td>
 <td>
-He Junhui
+tinalasisi
 </td>
 <td>
-2024-12-11
+2024-11-24
 </td>
 <td>
-update report
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/7714006ea48dad3600a82113ee9658cb36d28b2e/docs/racial_proportion_report.html" target="_blank">7714006</a>
-</td>
-<td>
-He Junhui
-</td>
-<td>
-2024-12-11
-</td>
-<td>
-update racial proportion regressio reportn
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/0db5aa07044fa2bc62e58e2b5f7f05b388cb958e/docs/racial_proportion_report.html" target="_blank">0db5aa0</a>
-</td>
-<td>
-He Junhui
-</td>
-<td>
-2024-12-09
-</td>
-<td>
-Publish racial breakdown using binomial regression
+Add long-range page + fix broken links
 </td>
 </tr>
 </tbody>
@@ -662,268 +623,377 @@ Publish racial breakdown using binomial regression
 </div>
 </div>
 </div>
-<div id="objective" class="section level2">
-<h2>Objective</h2>
-<p>To analyse the comparison between the M&amp;T forensic DNA database
-and census database, we have to attain the racial breakdown (e.g., the
-proportions of black, white people) of the state-level forensic database
-across the US. However, the breakdown is given in only 7 states, which
-are California, Florida, Indiana, Maine, Nevada, South Dakota and Texas.
-Thus, we need to develop a statistical model to estimate the proportions
-of black and white Americans in the remaining 43 states. Specifically,
-we focus on the differences of the racial breakdown between the forensic
-database and census database.</p>
+<div
+id="adapting-the-erlich-et-al.-model-to-incorporate-zero-inflated-negative-binomial-fertility-distributions"
+class="section level1">
+<h1>Adapting the Erlich et al. Model to Incorporate Zero-Inflated
+Negative Binomial Fertility Distributions</h1>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>In the Erlich et al. model (2018), the probability of identifying an
+individual through genetic genealogy databases is calculated based on
+population genetics parameters and assumptions about family sizes. The
+original model assumes a Poisson distribution of family sizes with a
+constant mean number of children per family and a constant effective
+population size. However, real-world fertility data often exhibit
+overdispersion and zero-inflation, particularly when considering
+different populations.</p>
+<p>Our goal is to adapt the original Erlich et al. model to incorporate
+a zero-inflated negative binomial (ZINB) distribution for fertility,
+using accurate information about the fertility distributions for two
+different populations: European Americans and African Americans. We aim
+to model the distribution of fertility more accurately while staying as
+close as possible to the original model and its assumptions. This
+adaptation will allow us to refine the model’s predictions with minimal
+changes to the original functions.</p>
+<blockquote>
+<p><strong>Note:</strong> The ZINB parameters (<code>mu</code>,
+<code>theta</code>, <code>pi</code>) need to be estimated accurately
+from separate analyses of fertility data for each population. In the
+code provided below, these parameters are placeholders and should be
+replaced with the actual estimates obtained from your data.</p>
+</blockquote>
+<hr />
 </div>
-<div id="binomial-logistic-regression-model" class="section level2">
-<h2>Binomial Logistic Regression Model</h2>
-<p>In the underlying work, we establish binomial regression models to
-make the estimations. To make the main findings interpretable, we will
-give a brief introduction of this common model. <span style="color:red">
-If you don’t care about the details of the binomial regression model,
-just feel free to skip this part <span>.</p>
-<p>Firstly, we introduces the concept of binomial distributions. Suppose
-in each observation, an event has two possible states, success or
-failure, and the probability of success is defined as <span
-class="math inline">\(p\)</span>. Then in <span
-class="math inline">\(n\)</span> observations, the number of success
-<span class="math inline">\(y\in \{0,1,\ldots, n\}\)</span> follows a
-binomial distribution <span
-class="math inline">\(\text{B}(n,p)\)</span>. A special case of the
-binomial distribution is <span class="math inline">\(n=1\)</span>, where
-the distribution is the simple Bernouli distribution. The success
-probability <span class="math inline">\(p\)</span> determines the
-characteristics of the binomial distribution. An important property is
-that the expectation is given by <span
-class="math inline">\(np\)</span>.</p>
-<p>Now we can delve into the binomial regression. Let the predictor be
-<span class="math inline">\(x\)</span> and the response variable be
-<span class="math inline">\(y\)</span>, we assume <span
-class="math display">\[y|x\sim \text{B}(n, g(x^\top \beta)),\]</span>
-where <span class="math inline">\(\beta\)</span> is the coefficients,
-and <span class="math inline">\(g\)</span> is a link function taking
-values in <span class="math inline">\([0,1]\)</span>. The popular
-choices of <span class="math inline">\(g\)</span> include Logit and
-Probit functions. Here we choose the Logit link function for its
-interpretability, which is given by <span
-class="math display">\[g:\mathbb{R}\rightarrow [0,1], \quad
-g(z)=\frac{\exp(z)}{\exp(z)+1}.\]</span> To fit this model, we will
-estimate the linear coefficients <span
-class="math inline">\(\hat{\beta}\)</span>, thereby we can predict the
-success probability <span class="math inline">\(\hat{p}=g(x_*^\top
-\hat{\beta})\)</span> on a new point <span
-class="math inline">\(x_*\)</span>, which can be considered as the
-proportion of success events given <span
-class="math inline">\(x_*\)</span>.</p>
+<div id="original-functions" class="section level2">
+<h2>Original Functions</h2>
+<p>Here are the original functions from the Erlich et al. model. These
+functions calculate the probability of a match for direct and
+once-removed relatives and compute the coverage of the database.</p>
+<pre class="r"><code># Define genome size and number of chromosomes
+genome_size = 35 
+num_chrs = 22
+
+# Function to calculate the probability of a match for direct relatives
+p_match = function(g, m, min_num_seg) {
+  m = m / 100 # Convert m from cM to Morgans
+  f = exp(-2 * g * m) / 2^(2 * g - 2) # Calculate f value
+  pr = 1 - pbinom(min_num_seg - 1, num_chrs + genome_size * 2 * g, f) # Calculate probability
+  return(pr)
+}
+
+# Function to calculate the probability of a match for once-removed relatives
+p_match_or = function(g, m, min_num_seg) {
+  m = m / 100 # Convert m from cM to Morgans
+  f = exp(-(2 * g + 1) * m) / 2^(2 * g - 1) # Calculate f value
+  pr = 1 - pbinom(min_num_seg - 1, num_chrs + genome_size * (2 * g + 1), f) # Calculate probability
+  return(pr)
+}
+
+# Function to calculate the coverage of the database
+coverage = function(Ks, maxg, N_pop, r, m, min_num_seg, min_num_rel, rep_direct = rep(1, 10), rep_or = rep(1, 10)) {
+  N = N_pop / 2 # Convert population size to number of couples
+  pr_succ = numeric(length(Ks)) # Initialize the vector of probabilities of success
+
+  # Loop through database sizes
+  for (i in seq_along(Ks)) {
+    K = Ks[i] # Current database size
+    K_same = round(K * (r / 2) / (1 + r / 2)) # Number of direct relatives
+    K_or = round(K * 1 / (1 + r / 2)) # Number of once-removed relatives
+
+    # Initialize vectors for probability calculations
+    p_no_coal = numeric(maxg) 
+    p_coal = numeric(maxg)
+    p_no_coal_or = numeric(maxg) 
+    p_coal_or = numeric(maxg)
+    Ns = N * (r / 2)^(-(1:(maxg + 1))) # Ns values
+    tot_p = 0
+    tot_p_or = 0
+
+    # Loop through generations
+    for (g in 1:maxg) {
+      f = 2^(2 * g - 2) / Ns[g] # Coalescence probability for direct relatives
+      f_or = 2^(2 * g - 1) / Ns[g + 1] # Coalescence probability for once-removed relatives
+
+      # Update probabilities
+      if (g &gt; 1) {
+        p_coal[g] = p_no_coal[g - 1] * f
+        p_no_coal[g] = p_no_coal[g - 1] * (1 - f)
+        p_coal_or[g] = p_no_coal_or[g - 1] * f_or
+        p_no_coal_or[g] = p_no_coal_or[g - 1] * (1 - f_or)
+      } else {
+        p_coal[g] = f 
+        p_no_coal[g] = 1 - f 
+        p_coal_or[g] = f_or 
+        p_no_coal_or[g] = 1 - f_or
+      }
+
+      # Update total probabilities
+      tot_p = tot_p + p_coal[g] * p_match(g, m, min_num_seg) * rep_direct[g] 
+      if (g &lt; maxg) {
+        tot_p_or = tot_p_or + p_coal_or[g] * p_match_or(g, m, min_num_seg) * rep_or[g]
+      } 
+    }
+
+    # Calculate probability of no success
+    pr_no_succ = 0
+    for (n in 0:(min_num_rel - 1)) {
+      for (n_or in 0:n) {
+        pr_no_succ = pr_no_succ + dbinom(n_or, K_or, tot_p_or) * dbinom(n - n_or, K_same, tot_p)
+      }
+    }
+    
+    # Calculate the probability of success
+    pr_succ[i] = 1 - pr_no_succ
+  }
+  
+  return(pr_succ)
+}
+
+# Ks: A vector of database sizes
+# maxg: Maximum degree of relatedness to consider (e.g., 2 for first cousins)
+# N_pop: Total population size
+# r: Mean number of children per mating pair
+# m: Minimum length in cM of a detectable segment
+# min_num_seg: Minimum number of segments required to declare a match
+# min_num_rel: Minimum number of relatives required to declare success</code></pre>
+<hr />
 </div>
-<div id="data-and-model-setting" class="section level2">
-<h2>Data and Model Setting</h2>
-<p>In this section, we demonstrate the response variable and predictors
-used in the binomial regression, and give the concrete model
-equation.</p>
-<div id="response-variable" class="section level3">
-<h3>Response variable:</h3>
+<div id="adaptation-of-the-functions" class="section level2">
+<h2>Adaptation of the Functions</h2>
+<p>We aim to adapt the original functions to incorporate the
+zero-inflated negative binomial (ZINB) distribution parameters
+(<code>mu</code>, <code>theta</code>, <code>pi</code>) that accurately
+represent the fertility distributions for European Americans and African
+Americans. This involves modifying the coverage function to adjust the
+coalescence probability based on the variance in family sizes due to the
+ZINB distribution.</p>
+<blockquote>
+<p><strong>Note:</strong> The ZINB parameters (<code>mu</code>,
+<code>theta</code>, <code>pi</code>) need to be estimated accurately
+from separate analyses of fertility data for each population. In the
+code below, these parameters are placeholders and should be replaced
+with your actual estimates.</p>
+</blockquote>
+<hr />
+</div>
+<div id="adapted-functions" class="section level2">
+<h2>Adapted Functions</h2>
+<pre class="r"><code># Define genome size and number of chromosomes
+genome_size = 35 
+num_chrs = 22
+
+# Function to calculate the probability of a match for direct relatives (unchanged)
+p_match = function(g, m, min_num_seg) {
+  m = m / 100 # Convert m from cM to Morgans
+  f = exp(-2 * g * m) / 2^(2 * g - 2) # Calculate f value
+  pr = 1 - pbinom(min_num_seg - 1, num_chrs + genome_size * 2 * g, f) # Calculate probability
+  return(pr)
+}
+
+# Function to calculate the probability of a match for once-removed relatives (unchanged)
+p_match_or = function(g, m, min_num_seg) {
+  m = m / 100 # Convert m from cM to Morgans
+  f = exp(-(2 * g + 1) * m) / 2^(2 * g - 1) # Calculate f value
+  pr = 1 - pbinom(min_num_seg - 1, num_chrs + genome_size * (2 * g + 1), f) # Calculate probability
+  return(pr)
+}
+
+# Adapted coverage function to include ZINB parameters
+coverage = function(Ks, maxg, N_pop, m, min_num_seg, min_num_rel, mu, theta, pi) {
+  N = N_pop / 2 # Convert population size to number of couples
+  pr_succ = numeric(length(Ks)) # Initialize the vector of probabilities of success
+
+  # Calculate variance from ZINB
+  variance = (1 - pi) * mu * (1 + mu * (1 / theta + pi))
+  
+  # Adjusted coalescence probability factor due to variance in family size
+  sigma2_mu2 = variance / mu^2
+  adjustment_factor = (1 + sigma2_mu2) # Adjustment factor for coalescence probability
+
+  # Loop through database sizes
+  for (i in seq_along(Ks)) {
+    K = Ks[i] # Current database size
+    K_same = round(K / 2) # Assuming half of the database are direct relatives
+    K_or = K - K_same
+
+    # Initialize vectors for probability calculations
+    p_no_coal = numeric(maxg) 
+    p_coal = numeric(maxg)
+    p_no_coal_or = numeric(maxg) 
+    p_coal_or = numeric(maxg)
+    tot_p = 0
+    tot_p_or = 0
+
+    # Loop through generations
+    for (g in 1:maxg) {
+      # Adjusted coalescence probabilities incorporating variance
+      f = (2^(2 * g - 2) / N) * adjustment_factor # Coalescence probability for direct relatives
+      f_or = (2^(2 * g - 1) / N) * adjustment_factor # Coalescence probability for once-removed relatives
+
+      # Update probabilities
+      if (g &gt; 1) {
+        p_coal[g] = p_no_coal[g - 1] * f
+        p_no_coal[g] = p_no_coal[g - 1] * (1 - f)
+        p_coal_or[g] = p_no_coal_or[g - 1] * f_or
+        p_no_coal_or[g] = p_no_coal_or[g - 1] * (1 - f_or)
+      } else {
+        p_coal[g] = f 
+        p_no_coal[g] = 1 - f 
+        p_coal_or[g] = f_or 
+        p_no_coal_or[g] = 1 - f_or
+      }
+
+      # Update total probabilities
+      tot_p = tot_p + p_coal[g] * p_match(g, m, min_num_seg)
+      if (g &lt; maxg) {
+        tot_p_or = tot_p_or + p_coal_or[g] * p_match_or(g, m, min_num_seg)
+      } 
+    }
+
+    # Calculate probability of no success
+    pr_no_succ = 0
+    for (n in 0:(min_num_rel - 1)) {
+      for (n_or in 0:n) {
+        pr_no_succ = pr_no_succ + dbinom(n_or, K_or, tot_p_or) * dbinom(n - n_or, K_same, tot_p)
+      }
+    }
+    
+    # Calculate the probability of success
+    pr_succ[i] = 1 - pr_no_succ
+  }
+  
+  return(pr_succ)
+}</code></pre>
+<hr />
+</div>
+<div id="application-of-the-adapted-functions" class="section level2">
+<h2>Application of the Adapted Functions</h2>
+<pre class="r"><code># Population sizes
+EA_POP_1990 = 199686070 # European American Population 1990
+AA_POP_1990 = 29986060  # African American Population 1990
+
+# Placeholder ZINB parameters for European Americans (replace with actual estimates)
+N_pop_white = EA_POP_1990
+mu_white = 2.79    # Mean number of children among women with at least one child
+theta_white = 1.25 # Dispersion parameter from ZINB model
+pi_white = 0.197   # Zero-inflation probability
+
+# Placeholder ZINB parameters for African Americans (replace with actual estimates)
+N_pop_black = AA_POP_1990
+mu_black = 3.06    # Mean number of children among women with at least one child
+theta_black = 0.95 # Dispersion parameter from ZINB model
+pi_black = 0.179   # Zero-inflation probability
+
+# Common parameters
+num_K = 10000      # Number of data points
+m = 6              # Minimum cM
+min_num_seg = 2    # Number of segments
+min_num_rel = 1    # Minimum number of relatives
+maxg_values = c(2, 3, 4, 5) # Max generations for 1C to 4C
+
+# Generate Ks (database sizes) for both populations
+Ks_white = round(seq(from = N_pop_white / num_K, to = N_pop_white, length.out = num_K))
+Ks_black = round(seq(from = N_pop_black / num_K, to = N_pop_black, length.out = num_K))
+
+# Initialize lists to store coverage results
+coverage_white_list = list()
+coverage_black_list = list()
+
+# Calculate coverage for each cousin degree for European Americans
+for (maxg in maxg_values) {
+  coverage_white_list[[as.character(maxg)]] = coverage(
+    Ks = Ks_white, maxg = maxg, N_pop = N_pop_white, m = m,
+    min_num_seg = min_num_seg, min_num_rel = min_num_rel,
+    mu = mu_white, theta = theta_white, pi = pi_white
+  )
+}
+
+# Calculate coverage for each cousin degree for African Americans
+for (maxg in maxg_values) {
+  coverage_black_list[[as.character(maxg)]] = coverage(
+    Ks = Ks_black, maxg = maxg, N_pop = N_pop_black, m = m,
+    min_num_seg = min_num_seg, min_num_rel = min_num_rel,
+    mu = mu_black, theta = theta_black, pi = pi_black
+  )
+}</code></pre>
+<hr />
+</div>
+<div id="plotting-the-results" class="section level2">
+<h2>Plotting the Results</h2>
+<pre class="r"><code>library(ggplot2)
+library(RColorBrewer)
+library(dplyr)
+
+# Prepare data for plotting
+
+# For European Americans
+plot_data_white = data.frame(
+  Ks_proportion = rep(Ks_white / N_pop_white * 100, times = length(maxg_values)),
+  Coverage = unlist(coverage_white_list),
+  Population = &quot;European Americans&quot;,
+  Relationship = factor(rep(c(&quot;1C&quot;, &quot;2C&quot;, &quot;3C&quot;, &quot;4C&quot;), each = num_K), levels = c(&quot;1C&quot;, &quot;2C&quot;, &quot;3C&quot;, &quot;4C&quot;))
+)
+
+# For African Americans
+plot_data_black = data.frame(
+  Ks_proportion = rep(Ks_black / N_pop_black * 100, times = length(maxg_values)),
+  Coverage = unlist(coverage_black_list),
+  Population = &quot;African Americans&quot;,
+  Relationship = factor(rep(c(&quot;1C&quot;, &quot;2C&quot;, &quot;3C&quot;, &quot;4C&quot;), each = num_K), levels = c(&quot;1C&quot;, &quot;2C&quot;, &quot;3C&quot;, &quot;4C&quot;))
+)
+
+# Combine data
+plot_data = rbind(plot_data_white, plot_data_black)
+
+# Remove rows with NA or infinite Coverage values
+plot_data &lt;- plot_data[is.finite(plot_data$Coverage), ]
+
+# Create color palette for cousin degrees
+colors = brewer.pal(4, &quot;Set1&quot;)  # Use a palette with 4 distinct colors
+
+# Create the plot
+p &lt;- ggplot(plot_data, aes(x = Ks_proportion, y = Coverage, color = Relationship)) +
+  geom_line() +
+  scale_color_manual(values = colors, name = &quot;Cousin Degree&quot;) +
+  scale_x_continuous(labels = scales::percent_format(scale = 1), breaks = seq(0, 5, 1), limits = c(0, 5)) +
+  labs(title = &quot;Coverage Comparison Between European and African Americans&quot;,
+       x = &quot;Database Size (% of Population)&quot;,
+       y = &quot;Probability of a Match&quot;) +
+  theme_minimal() +
+  facet_wrap(~Population, ncol = 2) +
+  theme(legend.position = &quot;bottom&quot;)
+
+# Add labels directly on the lines
+label_data &lt;- plot_data %&gt;%
+  group_by(Population, Relationship) %&gt;%
+  filter(Ks_proportion == max(Ks_proportion))
+
+# Adjust the label positions slightly
+label_data$Ks_proportion &lt;- label_data$Ks_proportion + 0.1  # Shift labels slightly to the right
+
+p &lt;- p + geom_text(data = label_data,
+                   aes(label = Relationship),
+                   hjust = 0,
+                   vjust = 0,
+                   size = 3,
+                   show.legend = FALSE)
+
+# Adjust x limits to make space for labels
+p &lt;- p + xlim(0, 5.5)
+
+# Display the plot
+print(p)</code></pre>
+<hr />
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>By adapting the original functions to incorporate the ZINB
+parameters, we have refined the model to more accurately represent the
+fertility distributions of European Americans and African Americans. We
+have made minimal changes to the original model, staying as close as
+possible to its assumptions and structure. This approach allows us to
+enhance the model’s accuracy with minimal effort, making it accessible
+for further analysis and contributions.</p>
+<hr />
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
 <ul>
-<li>The total number of people for each state in the M&amp;T forensic
-database.</li>
-<li>The number of each rate for each state in the M&amp;T database.</li>
+<li>Erlich, Y., Shor, T., Pe’er, I., &amp; Carmi, S. (2018). Identity
+inference of genomic data using long-range familial searches.
+<em>Science</em>, 362(6415), 690–694.</li>
 </ul>
-</div>
-<div id="predictor" class="section level3">
-<h3>Predictor:</h3>
-<ul>
-<li>The proportion of black and white people for each state in the
-census database.</li>
-<li>The proportion of black and white people of the prison population
-for each state.</li>
-</ul>
-</div>
-<div id="stick-breaking" class="section level3">
-<h3>Stick-breaking:</h3>
-<p>We divide the people of the US into three categories, black + white +
-other. Then we need to estimate the complete racial breakdown for three
-categories in each state. To ensure the sum of these percents is equal
-to 1, we use a simple stick-breaking technique. That is, we separately
-estimate the percent of black people in all people <span
-class="math inline">\(p_{1}\)</span> and the percent of white people in
-non-black people <span class="math inline">\(p_{2}\)</span>. Then the
-racial breakdown is given by <span
-class="math display">\[\pi_{black}=p_1, \quad
-\pi_{white}=(1-p_1)p_2,\quad \pi_{other}=(1-p_1)(1-p_2).\]</span> We run
-2 binomial regression models to predict <span
-class="math inline">\(p_1\)</span> and <span
-class="math inline">\(p_2\)</span> for each state.</p>
-</div>
-<div id="model-equation" class="section level3">
-<h3>Model equation</h3>
-<p>Compared to the predictors used by Hanna, we remove the racial
-indicator and the interaction between the racial indicator and the
-census/prison proportion to avoid colinearity, which leads to a singular
-problem for linear regression. The colinearity means the predictors are
-linearly dependent. Therefore, the model equations are defined as <span
-class="math display">\[ \frac{black}{all} = g(\beta_{00} +
-\beta_{01}*black_{census}+\beta_{02}*white_{census}+ \\ \beta_{03}*
-black_{prison}+\beta_{04}*white_{prison}), \]</span> <span
-class="math display">\[ \frac{white}{nonblack} = g(\beta_{10} +
-\beta_{11}*black_{census}+\beta_{12}*white_{census}+ \\ \beta_{13}*
-black_{prison}+\beta_{14}*white_{prison}). \]</span></p>
-</div>
-<div id="coefficient-interpretability" class="section level3">
-<h3>Coefficient interpretability</h3>
-<p>To interpreter those coefficients, we simply denote the binomial
-logistic regression model as <span class="math display">\[p = g(\beta_0
-+ \sum_{j=1}^p\beta_j x_{j}),\]</span> where <span
-class="math inline">\(g\)</span> is the logit link function and <span
-class="math inline">\(x_j\)</span> for <span
-class="math inline">\(1,\ldots,p\)</span> are covariates. We consider an
-odds as <span class="math inline">\(p/(1-p)\)</span>, which is the ratio
-of success probabilities versus failure probabilities. Thus, using the
-logit link function, the model equation can be written as <span
-class="math display">\[\log(\frac{p}{1-p})=\beta_0 + \sum_{j=1}^p\beta_j
-x_{j}.\]</span> Therefore, we can interpreter the coefficients <span
-class="math inline">\(\beta_j\)</span> as the increase in the log odds
-for every unit increase in <span class="math inline">\(x_j\)</span>.</p>
-</div>
-</div>
-<div id="model-evaluation" class="section level2">
-<h2>Model Evaluation</h2>
-<p><span style="color:red"> If you just want to read the answers to the
-key questions, please skip this part and go to the next section
-directly. <span></p>
-<div id="coefficient-estimatioan-and-hypothesis-testing"
-class="section level3">
-<h3>Coefficient estimatioan and hypothesis testing</h3>
-<p>We estimate the linear coefficients <span
-class="math inline">\(\beta\)</span> of the binomial logistic regression
-for black Americans and white Americans using <code>glm()</code>
-function and do a Wald test on the beta coefficients. The <span
-class="math inline">\(p\)</span>-values show that these coefficients are
-all statistically significant.</p>
-<div class="float">
-<img src="docs/figure/racial_breakdown/glm_black.png"
-title="Summary statistics of Black People"
-alt="Summary statistics of binomial regression for Black People" />
-<div class="figcaption">Summary statistics of binomial regression for
-Black People</div>
-</div>
-<div class="float">
-<img src="docs/figure/racial_breakdown/glm_white.png"
-title="Summary statistics of White People"
-alt="Summary statistics of binomial regression for White People" />
-<div class="figcaption">Summary statistics of binomial regression for
-White People</div>
-</div>
-</div>
-<div id="goodness-of-fit" class="section level3">
-<h3>Goodness-of-Fit</h3>
-<p>Furthermore, we plot the fitted racial proportions using
-stick-breaking binomial regression versus the ground truth for the 7
-states with available data. This figure shows that data points are
-around the identical map, which means our model fits the training data
-well at least. <img
-src="docs/figure/racial_breakdown/goodness_of_fit.png"
-title="Goodness-of-Fit"
-alt="Goodness-of-Fit for racial breakdown using binomial regression" /></p>
-</div>
-</div>
-<div id="main-findings" class="section level2">
-<h2>Main Findings</h2>
-<div id="tldr" class="section level3">
-<h3>TL;DR</h3>
-<p>Black Americans are significantly overrepresented in all states in
-M&amp;T forensic database compared to census representation.</p>
-</div>
-<div id="racial-breakdown" class="section level3">
-<h3>Racial breakdown</h3>
-<p>We generate side-by-side pie charts for each state showing the racial
-composition according to the census (left) versus the estimated racial
-composition of CODIS (right) for each state. From the following figure,
-Black/African Americans are overrepresented and white Americans are
-underrepresented in CODIS compared to Census.</p>
-<div class="float">
-<img src="docs/figure/racial_breakdown/racial_breakdown.png"
-title="Racial Composition"
-alt="Racial breakdown of Census and CODIS for each state" />
-<div class="figcaption">Racial breakdown of Census and CODIS for each
-state</div>
-</div>
-</div>
-<div id="difference-of-racial-proportions" class="section level3">
-<h3>Difference of racial proportions</h3>
-<p>To compare racial proportions between CODIS and Census in each state,
-we visualize the absolute differences and relative differences of racial
-proportions. These differences are defined as followings, <span
-class="math display">\[\begin{equation*}
-\begin{split}
-absolute~difference=Proportion_{CODIS}-Proportion_{Census},\\
-relative~difference=\frac{Proportion_{CODIS}-Proportion_{Census}}{Proportion_{Census}}.
-\end{split}
-\end{equation*}\]</span> The difference barcharts show that
-Black/African Americans are sigficantly overrepresented in all states
-and White Americans are underrepresented in most states in M&amp;T
-forensic database compared to census representation.</p>
-<div class="float">
-<img src="docs/figure/racial_breakdown/abs_difference.png"
-title="Absolute Difference"
-alt="Absolute difference of racial proportions" />
-<div class="figcaption">Absolute difference of racial proportions</div>
-</div>
-<div class="float">
-<img src="docs/figure/racial_breakdown/rela_difference.png"
-title="Relative Difference"
-alt="Relative difference of racial proportions" />
-<div class="figcaption">Relative difference of racial proportions</div>
-</div>
-</div>
-</div>
-<div id="statistical-inference" class="section level2">
-<h2>Statistical Inference</h2>
-<p>Based on the asymptotic theory for maximum likelihood estimation, as
-the sample size increase, <span
-class="math display">\[\sqrt{n}(\hat{\beta}-\beta) \to N(0, ~
-I^{-1}(\beta)),\quad as~n\to \infty,\]</span> where <span
-class="math inline">\(I(\beta)\)</span> is the Fisher information. Thus,
-the log odds approximately follows the normal distribution, <span
-class="math display">\[\log(\frac{\hat{p}}{1-\hat{p}}) \sim N(x^\top
-\beta, ~ \frac{1}{n}x^\top I^{-1}(\beta)x),\]</span> as the total number
-of population in 7 states is very large. This normal approximation is
-useful in the following hypothesis testing and confidence interval
-construction.</p>
-<p>For each state, we consider a hypothesis testing problem for the
-difference of black proportions between Census and CODIS, <span
-class="math display">\[H_0:p_{CODIS,Black}=p_{Census,Black}
-\leftrightarrow H_1:p_{CODIS,Black}&gt;p_{Census,Black}.\]</span> Using
-the logit link function, we work on the log odds instead of the
-probability. The normal approximation helps to construct a one-sided
-testing statistics, and the <span class="math inline">\(p{\text
--values}&lt;10^{-15}\)</span> for all states.</p>
-<p>Finally, we calculate the <span
-class="math inline">\(1-\alpha\)</span> confidence intervals for the
-fitted probability using binomial regression. The normal approximation
-for the log odds <span class="math inline">\(z=x^\top \beta\)</span>
-contributes to a confidence interval <span
-class="math inline">\(ConfInt=[g(\hat{z}-c_{1-\alpha/2}se(\hat{z})),~g(\hat{z}+c_{1-\alpha/2}se(\hat{z}))]\)</span>
-for the black proportion in Census, where <span
-class="math inline">\(c_{1-\alpha/2}\)</span> is the <span
-class="math inline">\(1-\alpha/2\)</span> quantile of the standard
-normal distribution. This implies a confidence interval for the
-differences with <span
-class="math inline">\(ConfInt-p_{Census}\)</span>. For the white
-Americans, we utilize a Bonferroni method to construct the confidence
-interval. As the number of population in each state with available data
-is very large, the estimated standard errors <span
-class="math inline">\(se(\hat{z})\)</span> is very small, causing that
-the interval widths are almost equal to zero compared to the point
-estimation. It also explains why the <span
-class="math inline">\(p\)</span>-values for the above hypothesis testing
-are nearly zero.</p>
-<div class="float">
-<img
-src="C:/Users/hjh/University%20of%20Michigan%20Dropbox/Junhui%20He/Lasisilab/PODFRIDGE/docs/figure/racial_breakdown/interval_widths.png"
-title="Interval Widths"
-alt="Widths of confidence intervals for racial proportions" />
-<div class="figcaption">Widths of confidence intervals for racial
-proportions</div>
-</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -968,6 +1038,7 @@ loaded via a namespace (and not attached):
 [33] later_1.3.1       digest_0.6.33     R6_2.5.1          utf8_1.2.3       
 [37] pillar_1.9.0      callr_3.7.5       magrittr_2.0.3    bslib_0.5.1      
 [41] tools_4.3.1       cachem_1.0.8      getPass_0.2-4    </code></pre>
+</div>
 </div>
 </div>
 
