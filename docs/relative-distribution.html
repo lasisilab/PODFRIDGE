@@ -355,7 +355,7 @@ div.tocify {
 <h1 class="title toc-ignore">Estimating Differences in the Distribution
 of First-degree Relatives</h1>
 <h4 class="author">Manqing Lin, Tina Lasisi</h4>
-<h4 class="date">2024-12-11 14:28:15</h4>
+<h4 class="date">2024-12-16 14:04:39</h4>
 
 </div>
 
@@ -384,7 +384,7 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2024-12-11
+<strong>Last updated:</strong> 2024-12-16
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -518,15 +518,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree0db5aa07044fa2bc62e58e2b5f7f05b388cb958etargetblank0db5aa0a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree9e2e50ef47dc8f2941ae4ef1a368167cab84fa1btargetblank9e2e50ea">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/0db5aa07044fa2bc62e58e2b5f7f05b388cb958e" target="_blank">0db5aa0</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/9e2e50ef47dc8f2941ae4ef1a368167cab84fa1b" target="_blank">9e2e50e</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree0db5aa07044fa2bc62e58e2b5f7f05b388cb958etargetblank0db5aa0a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree9e2e50ef47dc8f2941ae4ef1a368167cab84fa1btargetblank9e2e50ea"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -536,7 +536,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/0db5aa07044fa2bc62e58e2b5f7f05b388cb958e" target="_blank">0db5aa0</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/9e2e50ef47dc8f2941ae4ef1a368167cab84fa1b" target="_blank">9e2e50e</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -604,6 +604,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/231390a7e9b5261ed01047322fdbca2676183be9/analysis/relative-distribution.Rmd" target="_blank">231390a</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-12-11
+</td>
+<td>
+update analysis
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/231390a7e9b5261ed01047322fdbca2676183be9/docs/relative-distribution.html" target="_blank">231390a</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-12-11
+</td>
+<td>
+update analysis
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1436,55 +1470,7 @@ child_plot &lt;- ggplot(df_mirror, aes(x = chborn_num, y = proportion, fill = as
   )
 
 print(child_plot)</code></pre>
-<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-2-1.png" width="864" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-1">
-Past versions of unnamed-chunk-2-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-2-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/83174c03bbc21104de64adb0e1c6e15a206d48bc/docs/figure/relative-distribution.Rmd/unnamed-chunk-2-1.png" target="_blank">83174c0</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2024-09-22
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/28513857e94c801ed7d27e62bb34ff8098d08107/docs/figure/relative-distribution.Rmd/unnamed-chunk-2-1.png" target="_blank">2851385</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2024-09-21
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-3-1.png" width="864" style="display: block; margin: auto;" /></p>
 <pre class="r"><code># Print summary to check age ranges and normalization
 print(df_proportions %&gt;%
   group_by(YEAR, RACE, AGE_RANGE) %&gt;%
@@ -2045,21 +2031,6 @@ model varies across race, census year, and age range.</li>
     fill = &quot;Model&quot;
   ) +
   theme_minimal()</code></pre>
-<pre class="r"><code>ggplot(best_models, aes(x = Census_Year, y = Age_Range, fill = Best_Model)) +
-  geom_tile(color = &quot;white&quot;, lwd = 0.5, linetype = 1) + 
-  facet_wrap(~Race, nrow = 2) +  
-  scale_fill_manual(values = c(&quot;Zero_Inflated_Poisson&quot; = &quot;#0072B2&quot;, &quot;Zero_Inflated_NB&quot; = &quot;#F0E442&quot;)) + 
-  labs(
-    title = &quot;Best Model by Race, Census Year, and Age Range&quot;,
-    x = &quot;Census Year&quot;,
-    y = &quot;Age Range&quot;,
-    fill = &quot;Best Model&quot;
-  ) +
-  theme_minimal() +
-  theme(
-    plot.title = element_text(size = 14, face = &quot;bold&quot;),
-    legend.position = &quot;bottom&quot;
-  )</code></pre>
 <p><img src="figure/relative-distribution.Rmd/unnamed-chunk-11-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-11-1">
@@ -2108,6 +2079,70 @@ linmatch
 <tr>
 <td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/28513857e94c801ed7d27e62bb34ff8098d08107/docs/figure/relative-distribution.Rmd/unnamed-chunk-11-1.png" target="_blank">2851385</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2024-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre class="r"><code>ggplot(best_models, aes(x = Census_Year, y = Age_Range, fill = Best_Model)) +
+  geom_tile(color = &quot;white&quot;, lwd = 0.5, linetype = 1) + 
+  facet_wrap(~Race, nrow = 2) +  
+  scale_fill_manual(values = c(&quot;Zero_Inflated_Poisson&quot; = &quot;#0072B2&quot;, &quot;Zero_Inflated_NB&quot; = &quot;#F0E442&quot;)) + 
+  labs(
+    title = &quot;Best Model by Race, Census Year, and Age Range&quot;,
+    x = &quot;Census Year&quot;,
+    y = &quot;Age Range&quot;,
+    fill = &quot;Best Model&quot;
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 14, face = &quot;bold&quot;),
+    legend.position = &quot;bottom&quot;
+  )</code></pre>
+<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-12-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-12-1">
+Past versions of unnamed-chunk-12-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-12-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/776920fb4e25a0632758115092f6ce91ffdf69fd/docs/figure/relative-distribution.Rmd/unnamed-chunk-12-1.png" target="_blank">776920f</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-11-12
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/28513857e94c801ed7d27e62bb34ff8098d08107/docs/figure/relative-distribution.Rmd/unnamed-chunk-12-1.png" target="_blank">2851385</a>
 </td>
 <td>
 Tina Lasisi
@@ -2673,6 +2708,16 @@ for (i in 1:nrow(results_black)) {
 
 # View the updated results_black
 print(results_black)</code></pre>
+<pre><code>                             RACE    Cohort Chi_Square      p_value
+X-squared  Black/African American 1901-1910   4.310851 0.0378700083
+X-squared1 Black/African American 1911-1920   1.421550 0.4912633533
+X-squared2 Black/African American 1921-1930  17.245995 0.0001799202
+X-squared3 Black/African American 1931-1940   3.466056 0.0626405054
+           Significance Nature_of_Change
+X-squared           Yes         Increase
+X-squared1           No  Mixed/No Change
+X-squared2          Yes  Mixed/No Change
+X-squared3           No         Decrease</code></pre>
 <pre class="r"><code># Data frame to store proportions
 proportions_df_w &lt;- data.frame(Cohort = character(), Census_Year = character(), 
                              Proportion_Zero_Children = numeric(), Race = character(), stringsAsFactors = FALSE)
@@ -2778,6 +2823,16 @@ for (i in 1:nrow(results_white)) {
 
 # View the updated results_white
 print(results_white)</code></pre>
+<pre><code>            RACE    Cohort  Chi_Square       p_value Significance
+X-squared  White 1901-1910 662.9400598 3.427247e-146          Yes
+X-squared1 White 1911-1920 711.8344845 2.673657e-155          Yes
+X-squared2 White 1921-1930  80.1733778  3.895581e-18          Yes
+X-squared3 White 1931-1940   0.1867867  6.656046e-01           No
+           Nature_of_Change
+X-squared          Increase
+X-squared1  Mixed/No Change
+X-squared2         Decrease
+X-squared3         Decrease</code></pre>
 <pre class="r"><code># Combine the two data frames
 combined_result &lt;- rbind(results_black, results_white)
 
@@ -2794,24 +2849,6 @@ ggplot(combined_result, aes(x = Cohort, y = p_value, color = RACE, shape = Signi
     y = &quot;p-value (log scale)&quot;,
     color = &quot;Race&quot;,
     shape = &quot;Significance&quot;
-  ) +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
-<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-20-1.png" width="864" style="display: block; margin: auto;" />
-<strong><em>RESULT:</em></strong> The graph shows that there is a
-discrepancy in the p-value within the cohorts like 1901-1910, 1911-1920
-and 1921-1930 by race. However, in cohort 1931-1941, the p-value of each
-race is pretty close to each other. The overall trend of the p-value for
-black population is stable across cohort, while the trend for white
-population fluctuate a lot.</p>
-<pre class="r"><code>ggplot(combined_result, aes(x = Cohort, y = Chi_Square, color = RACE)) +
-  geom_point(size = 3) +
-  geom_line(aes(group = RACE)) +
-  labs(
-    title = &quot;Change of Test Statistics by Cohort&quot;,
-    x = &quot;Cohort&quot;,
-    y = &quot;Chi-Square&quot;,
-    color = &quot;Race&quot;
   ) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
@@ -2840,6 +2877,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/231390a7e9b5261ed01047322fdbca2676183be9/docs/figure/relative-distribution.Rmd/unnamed-chunk-21-1.png" target="_blank">231390a</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-12-11
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/776920fb4e25a0632758115092f6ce91ffdf69fd/docs/figure/relative-distribution.Rmd/unnamed-chunk-21-1.png" target="_blank">776920f</a>
 </td>
 <td>
@@ -2852,6 +2900,72 @@ linmatch
 <tr>
 <td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/28513857e94c801ed7d27e62bb34ff8098d08107/docs/figure/relative-distribution.Rmd/unnamed-chunk-21-1.png" target="_blank">2851385</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2024-09-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><strong><em>RESULT:</em></strong> The graph shows that there is a
+discrepancy in the p-value within the cohorts like 1901-1910, 1911-1920
+and 1921-1930 by race. However, in cohort 1931-1941, the p-value of each
+race is pretty close to each other. The overall trend of the p-value for
+black population is stable across cohort, while the trend for white
+population fluctuate a lot.</p>
+<pre class="r"><code>ggplot(combined_result, aes(x = Cohort, y = Chi_Square, color = RACE)) +
+  geom_point(size = 3) +
+  geom_line(aes(group = RACE)) +
+  labs(
+    title = &quot;Change of Test Statistics by Cohort&quot;,
+    x = &quot;Cohort&quot;,
+    y = &quot;Chi-Square&quot;,
+    color = &quot;Race&quot;
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
+<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-22-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-22-1">
+Past versions of unnamed-chunk-22-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-22-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/776920fb4e25a0632758115092f6ce91ffdf69fd/docs/figure/relative-distribution.Rmd/unnamed-chunk-22-1.png" target="_blank">776920f</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-11-12
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/28513857e94c801ed7d27e62bb34ff8098d08107/docs/figure/relative-distribution.Rmd/unnamed-chunk-22-1.png" target="_blank">2851385</a>
 </td>
 <td>
 Tina Lasisi
@@ -3124,13 +3238,13 @@ ggplot(best_models, aes(x = Census_Year, y = Cohort, fill = Best_Model)) +
     plot.title = element_text(size = 14, face = &quot;bold&quot;),
     legend.position = &quot;bottom&quot;
   )</code></pre>
-<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-28-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-29-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-28-1">
-Past versions of unnamed-chunk-28-1.png
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-29-1">
+Past versions of unnamed-chunk-29-1.png
 </button>
 </p>
-<div id="fig-unnamed-chunk-28-1" class="collapse">
+<div id="fig-unnamed-chunk-29-1" class="collapse">
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
 <thead>
@@ -3149,7 +3263,7 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/800786411d6551c5050635b63803c9f8e4c12506/docs/figure/relative-distribution.Rmd/unnamed-chunk-28-1.png" target="_blank">8007864</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/800786411d6551c5050635b63803c9f8e4c12506/docs/figure/relative-distribution.Rmd/unnamed-chunk-29-1.png" target="_blank">8007864</a>
 </td>
 <td>
 linmatch
@@ -3321,13 +3435,13 @@ children or an increase in childlessness.</li>
     strip.text = element_text(size = 10)
   )
 part2</code></pre>
-<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-30-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-31-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-30-1">
-Past versions of unnamed-chunk-30-1.png
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-31-1">
+Past versions of unnamed-chunk-31-1.png
 </button>
 </p>
-<div id="fig-unnamed-chunk-30-1" class="collapse">
+<div id="fig-unnamed-chunk-31-1" class="collapse">
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
 <thead>
@@ -3346,7 +3460,29 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/776920fb4e25a0632758115092f6ce91ffdf69fd/docs/figure/relative-distribution.Rmd/unnamed-chunk-30-1.png" target="_blank">776920f</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/231390a7e9b5261ed01047322fdbca2676183be9/docs/figure/relative-distribution.Rmd/unnamed-chunk-31-1.png" target="_blank">231390a</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-12-11
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/800786411d6551c5050635b63803c9f8e4c12506/docs/figure/relative-distribution.Rmd/unnamed-chunk-31-1.png" target="_blank">8007864</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-12-03
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/776920fb4e25a0632758115092f6ce91ffdf69fd/docs/figure/relative-distribution.Rmd/unnamed-chunk-31-1.png" target="_blank">776920f</a>
 </td>
 <td>
 linmatch
@@ -3383,55 +3519,7 @@ linmatch
     axis.text.y = element_text(size = 8),
     strip.text = element_text(size = 10)
   )</code></pre>
-<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-31-1.png" width="864" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-31-1">
-Past versions of unnamed-chunk-31-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-31-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/800786411d6551c5050635b63803c9f8e4c12506/docs/figure/relative-distribution.Rmd/unnamed-chunk-31-1.png" target="_blank">8007864</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-12-03
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/776920fb4e25a0632758115092f6ce91ffdf69fd/docs/figure/relative-distribution.Rmd/unnamed-chunk-31-1.png" target="_blank">776920f</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-11-12
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-32-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>Additional Visualization: Nature of significant Change for cohorts By
 Race</p>
 <pre class="r"><code>## Balck population
@@ -3450,6 +3538,55 @@ ggplot(filter_prop_b, aes(x = Census_Year, y = Proportion_Zero_Children)) +
   ) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
+<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-33-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-33-1">
+Past versions of unnamed-chunk-33-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-33-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/800786411d6551c5050635b63803c9f8e4c12506/docs/figure/relative-distribution.Rmd/unnamed-chunk-33-1.png" target="_blank">8007864</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-12-03
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/776920fb4e25a0632758115092f6ce91ffdf69fd/docs/figure/relative-distribution.Rmd/unnamed-chunk-33-1.png" target="_blank">776920f</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-11-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>## White population
 filter_prop_w &lt;- proportions_df_w %&gt;% 
   filter(Cohort %in% c(&quot;1901-1910&quot;, &quot;1911-1920&quot;, &quot;1921-1930&quot;))
@@ -3466,6 +3603,7 @@ ggplot(filter_prop_w, aes(x = Census_Year, y = Proportion_Zero_Children)) +
   ) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
+<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-34-1.png" width="864" style="display: block; margin: auto;" /></p>
 </div>
 <div id="panel-b-comparison-of-40-49-and-50-59-age-groups-in-1990"
 class="section level4">
@@ -3503,44 +3641,7 @@ groups.</li>
     y = &quot;Proportion&quot;,
     fill = &quot;Age Range&quot;
   ) </code></pre>
-<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-35-1.png" width="864" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-35-1">
-Past versions of unnamed-chunk-35-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-35-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/800786411d6551c5050635b63803c9f8e4c12506/docs/figure/relative-distribution.Rmd/unnamed-chunk-35-1.png" target="_blank">8007864</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-12-03
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-36-1.png" width="864" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>summary_stats &lt;- filter_df %&gt;%
   group_by(AGE_RANGE, RACE) %&gt;%
   summarise(
@@ -3589,11 +3690,11 @@ data_50_59_b &lt;- df %&gt;% filter(AGE_RANGE == &quot;50-59&quot;, RACE == &quo
 
 qqnorm(data_40_49_b$chborn_num, main = &quot;QQ Plot: 40-49 Age Group (Black/African American)&quot;)
 qqline(data_40_49_b$chborn_num)</code></pre>
-<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-37-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-38-1.png" width="864" style="display: block; margin: auto;" /></p>
 <pre class="r"><code># QQ plot for the 50-59 age group
 qqnorm(data_50_59_b$chborn_num, main = &quot;QQ Plot: 50-59 Age Group (Black/African American)&quot;)
 qqline(data_50_59_b$chborn_num)</code></pre>
-<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-37-2.png" width="864" style="display: block; margin: auto;" /></p>
+<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-38-2.png" width="864" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>## Check equal variance for black population
 df_b &lt;- df %&gt;% filter(RACE == &quot;Black/African American&quot;)
 
@@ -3613,11 +3714,11 @@ data_50_59_w &lt;- df %&gt;% filter(AGE_RANGE == &quot;50-59&quot;, RACE == &quo
 
 qqnorm(data_40_49_w$chborn_num, main = &quot;QQ Plot: 40-49 Age Group (White)&quot;)
 qqline(data_40_49_w$chborn_num)</code></pre>
-<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-39-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-40-1.png" width="864" style="display: block; margin: auto;" /></p>
 <pre class="r"><code># QQ plot for the 50-59 age group
 qqnorm(data_50_59_w$chborn_num, main = &quot;QQ Plot: 50-59 Age Group (White)&quot;)
 qqline(data_50_59_w$chborn_num)</code></pre>
-<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-39-2.png" width="864" style="display: block; margin: auto;" /></p>
+<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-40-2.png" width="864" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>## Check equal variance for white population
 df_w &lt;- df %&gt;% filter(RACE == &quot;White&quot;)
 
@@ -4056,7 +4157,7 @@ close to 1.0. If not, revisit your calculations in Step 2.</p>
    panel.grid.major.y = element_blank(),
    panel.grid.minor.y = element_blank()
  )</code></pre>
-<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-54-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-55-1.png" width="864" style="display: block; margin: auto;" /></p>
 </div>
 <div id="step-6-interpret-the-plot" class="section level3">
 <h3>Step 6: Interpret the Plot</h3>
@@ -4258,14 +4359,91 @@ created for the children distribution.</li>
 ggplot(best_models_sib, aes(x = Race, fill = Best_Model)) +
   geom_bar(position = &quot;stack&quot;) +
   labs(title = &quot;Best-Fitting Models (siblings) by Race&quot;, x = &quot;Race&quot;, y = &quot;Count&quot;, fill = &quot;Best Model&quot;)</code></pre>
+<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-58-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-58-1">
+Past versions of unnamed-chunk-58-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-58-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/800786411d6551c5050635b63803c9f8e4c12506/docs/figure/relative-distribution.Rmd/unnamed-chunk-58-1.png" target="_blank">8007864</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-12-03
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># Bar plot showing the distribution of best models across races
 ggplot(best_models_sib, aes(x = Census_Year, fill = Best_Model)) +
   geom_bar(position = &quot;stack&quot;) +
   labs(title = &quot;Best-Fitting Models (siblings) by Census Year&quot;, x = &quot;Census Year&quot;, y = &quot;Count&quot;, fill = &quot;Best Model&quot;)</code></pre>
+<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-59-1.png" width="864" style="display: block; margin: auto;" /></p>
 <pre class="r"><code># Bar plot showing the distribution of best models across races
 ggplot(best_models_sib, aes(x = AGE_RANGE, fill = Best_Model)) +
   geom_bar(position = &quot;stack&quot;) +
   labs(title = &quot;Best-Fitting Models (siblings) by Birth Range)&quot;, x = &quot;Age Range&quot;, y = &quot;Count&quot;, fill = &quot;Best Model&quot;)</code></pre>
+<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-60-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-60-1">
+Past versions of unnamed-chunk-60-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-60-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/231390a7e9b5261ed01047322fdbca2676183be9/docs/figure/relative-distribution.Rmd/unnamed-chunk-60-1.png" target="_blank">231390a</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-12-11
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>ggplot(best_models_sib, aes(x = Census_Year, y = AGE_RANGE, fill = Best_Model)) +
   geom_tile(color = &quot;white&quot;, lwd = 0.5, linetype = 1) + # Create the tiles
   facet_wrap(~Race, nrow = 2) + # Facet by Race
@@ -4282,7 +4460,7 @@ ggplot(best_models_sib, aes(x = AGE_RANGE, fill = Best_Model)) +
     plot.title = element_text(size = 14, face = &quot;bold&quot;),
     legend.position = &quot;bottom&quot;
   )</code></pre>
-<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-60-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-61-1.png" width="864" style="display: block; margin: auto;" /></p>
 <ol start="7" style="list-style-type: decimal">
 <li>Interpret Findings
 <ul>
@@ -4340,44 +4518,7 @@ distributions are significantly different.</li>
   ) +
   facet_grid(RACE ~ Cohort) +
   theme_minimal()</code></pre>
-<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-62-1.png" width="864" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-62-1">
-Past versions of unnamed-chunk-62-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-62-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/800786411d6551c5050635b63803c9f8e4c12506/docs/figure/relative-distribution.Rmd/unnamed-chunk-62-1.png" target="_blank">8007864</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-12-03
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-63-1.png" width="864" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>df_sibling_b &lt;- df_sibling_proportions %&gt;% filter(RACE == &quot;Black/African American&quot;, n_siblings &gt;= 0, sibling_count &gt;= 0, proportion &gt;= 0)
 
 results_sib_b &lt;- list()
@@ -4543,7 +4684,7 @@ cohorts and races.</li>
        fill = &quot;Significant Changes&quot;) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
-<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-66-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-67-1.png" width="864" style="display: block; margin: auto;" /></p>
 <ol start="5" style="list-style-type: decimal">
 <li>Interpret results:
 <ul>
@@ -4843,9 +4984,46 @@ over time.</li>
     plot.title = element_text(size = 14, face = &quot;bold&quot;),
     legend.position = &quot;bottom&quot;
   )</code></pre>
-<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-74-1.png" width="864" style="display: block; margin: auto;" />
-<strong><em>RESULT:</em></strong> The best model for each cohort(those
-with 1+ corresponding census year) is stable over time.</p>
+<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-75-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-75-1">
+Past versions of unnamed-chunk-75-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-75-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/231390a7e9b5261ed01047322fdbca2676183be9/docs/figure/relative-distribution.Rmd/unnamed-chunk-75-1.png" target="_blank">231390a</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-12-11
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><strong><em>RESULT:</em></strong> The best model for each
+cohort(those with 1+ corresponding census year) is stable over time.</p>
 </div>
 <div id="instructions-for-manqing-plot-across-census-years-siblings"
 class="section level2">
@@ -4877,7 +5055,7 @@ across census years for different races and birth ranges.</p>
       x = &quot;Number of Siblings&quot;, y = &quot;Proportion&quot;, color = &quot;Census Year&quot;) +
  theme_minimal() +
  theme(axis.text.x = element_text(hjust = 1))</code></pre>
-<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-75-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-76-1.png" width="864" style="display: block; margin: auto;" /></p>
 <ol start="4" style="list-style-type: decimal">
 <li>Analyze the plot:
 <ul>
@@ -4904,6 +5082,48 @@ Session information
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.3.2 (2023-10-31)
+Platform: x86_64-apple-darwin20 (64-bit)
+Running under: macOS Sonoma 14.5
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: America/Detroit
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] rstatix_0.7.2     car_3.1-3         carData_3.0-5     nnet_7.3-19      
+ [5] pscl_1.5.9        MASS_7.3-60       gridExtra_2.3     ggnewscale_0.5.0 
+ [9] patchwork_1.2.0   rempsyc_0.1.8     scales_1.3.0      knitr_1.45       
+[13] viridis_0.6.5     viridisLite_0.4.2 lubridate_1.9.3   forcats_1.0.0    
+[17] stringr_1.5.1     purrr_1.0.2       readr_2.1.5       tidyr_1.3.1      
+[21] tibble_3.2.1      ggplot2_3.5.1     tidyverse_2.0.0   dplyr_1.1.4      
+[25] workflowr_1.7.1  
+
+loaded via a namespace (and not attached):
+ [1] gtable_0.3.4      xfun_0.41         bslib_0.6.1       processx_3.8.3   
+ [5] callr_3.7.3       tzdb_0.4.0        vctrs_0.6.5       tools_4.3.2      
+ [9] ps_1.7.6          generics_0.1.3    fansi_1.0.6       highr_0.10       
+[13] pkgconfig_2.0.3   lifecycle_1.0.4   farver_2.1.1      compiler_4.3.2   
+[17] git2r_0.33.0      munsell_0.5.0     getPass_0.2-4     httpuv_1.6.14    
+[21] htmltools_0.5.7   sass_0.4.8        yaml_2.3.8        Formula_1.2-5    
+[25] later_1.3.2       pillar_1.9.0      jquerylib_0.1.4   whisker_0.4.1    
+[29] cachem_1.0.8      abind_1.4-8       tidyselect_1.2.1  digest_0.6.34    
+[33] stringi_1.8.3     labeling_0.4.3    rprojroot_2.0.4   fastmap_1.1.1    
+[37] grid_4.3.2        colorspace_2.1-0  cli_3.6.2         magrittr_2.0.3   
+[41] utf8_1.2.4        broom_1.0.6       withr_3.0.0       backports_1.5.0  
+[45] promises_1.2.1    timechange_0.3.0  rmarkdown_2.25    httr_1.4.7       
+[49] hms_1.1.3         evaluate_0.23     rlang_1.1.3       Rcpp_1.0.12      
+[53] glue_1.7.0        rstudioapi_0.15.0 jsonlite_1.8.9    R6_2.5.1         
+[57] fs_1.6.3         </code></pre>
 </div>
 </div>
 </div>

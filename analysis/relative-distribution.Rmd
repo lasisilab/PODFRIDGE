@@ -21,9 +21,9 @@ We used publicly available data from the Integrated Public Use Microdata Series 
 Data citation: Steven Ruggles, Sarah Flood, Matthew Sobek, Daniel Backman, Annie Chen, Grace Cooper, Stephanie Richards, Renae Rogers, and Megan Schouweiler. IPUMS USA: Version 14.0 [dataset]. Minneapolis, MN: IPUMS, 2023. https://doi.org/10.18128/D010.V14.0
 
 
-```{r setup, include=FALSE, echo=FALSE, eval=TRUE}
+```{r setup, include=FALSE, echo=TRUE, eval=TRUE}
 #knitr::opts_knit$set(root.dir = ".")
-knitr::opts_chunk$set(eval = FALSE, echo = TRUE, warning = FALSE, fig.width = 9, fig.height = 7)
+knitr::opts_chunk$set(eval = TRUE, echo = TRUE, warning = FALSE, fig.width = 9, fig.height = 7)
 
 
 # load necessary libraries
@@ -61,8 +61,7 @@ $$
 n_{sib} = chborn_{num} - 1
 $$
 
-
-```{r data, echo=TRUE, eval=TRUE}
+```{r}
 path <- file.path(".", "data")
 savepath <- file.path(".", "output")
 
@@ -73,7 +72,7 @@ children_data = read.csv(prop_race_year)
 mother_data = read.csv(data_filter)
 ```
 
-```{r, echo=TRUE, eval=TRUE}
+```{r}
 df <- mother_data %>%
   # Filter for women aged 40 and above
   filter(AGE >= 40) %>%
@@ -134,7 +133,7 @@ table(df$AGE_RANGE)
 # Distribution of Number of Children Across Census Years
 First we visualize the general trends in the frequency of the number of children for African American and European American mothers across the Census years by age group. 
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 # Calculate proportions within each group, ensuring proper normalization
 df_proportions <- df %>%
   group_by(YEAR, RACE, AGE_RANGE, chborn_num) %>%
@@ -287,7 +286,7 @@ Once the models are fitted, compare them using goodness-of-fit criteria like **A
     - Compare zero-inflated models to standard models to assess if zero-inflation significantly improves the fit.
 
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 ## Approach 1:
 combinations <- df %>%
   group_by(YEAR, RACE, AGE_RANGE) %>%
@@ -344,7 +343,7 @@ for (i in seq_along(combinations)) {
 
 ```
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 EDA_df$model <- NA  # Create an empty column for the model
 
 for(i in 1:nrow(EDA_df)) {
@@ -364,7 +363,7 @@ print(EDA_df)
 ```
 
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 ## Approach 2
 # Initialize the data frame to store results
 best_models <- data.frame(
@@ -411,7 +410,7 @@ for (i in seq_along(combinations)) {
 
 ```
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 # Add a Best_Model column to store the best model based on minimum AIC
 best_models$Best_Model <- apply(best_models, 1, function(row) {
   # Get AIC values for Poisson, NB, ZIP, and ZINB models
@@ -467,7 +466,7 @@ Once you’ve gathered the best model for each subset, you can analyze which fac
    You could fit a logistic regression model where the response variable is the best-fitting model (binary or multinomial) and the predictor variables are race, census year, and age range. This will allow you to quantify the effect of each variable on the model choice.
 
    **Example in R** (assuming binary outcome: Poisson vs. NB):
-```{r echo=TRUE, eval=TRUE}
+```{r}
 # Recode Best_Model to a binary variable (e.g., "Zero_Inflated_NB" vs. "Other")
 best_models$Best_Model_Binary <- ifelse(best_models$Best_Model == "Zero_Inflated_NB", 1, 0)
 
@@ -525,7 +524,7 @@ model_proportions <- best_models %>%
   theme_minimal()
 ```
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 ggplot(best_models, aes(x = Census_Year, y = Age_Range, fill = Best_Model)) +
   geom_tile(color = "white", lwd = 0.5, linetype = 1) + 
   facet_wrap(~Race, nrow = 2) +  
@@ -574,7 +573,7 @@ Using the existing table of model summaries, calculate the **birth-year cohort**
 | White             | 1980        | 50-59     | Poisson           | 1921-1930     |
 | ...               | ...         | ...       | ...               | ...           |
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 calculate_cohort <- function(census_year, age_range) {
   age_limits <- as.numeric(unlist(strsplit(age_range, "-|\\+")))
   
@@ -621,7 +620,7 @@ These statistics will help quantify family size changes over time.
 | White             | 1921-1930     | 1980        | Poisson           | 3.0   | 1.5      | 3    | 0.15    | 0.25    | 0.30    | ... | 0.05      |
 | ...               | ...           | ...         | ...               | ...   | ...      | ...  | ...     | ...     | ...     | ... | ...       |
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 df_merg <- df %>%
   rename(Census_Year = YEAR, Race = RACE, Age_Range = AGE_RANGE)
 
@@ -629,7 +628,7 @@ df_merg <- df %>%
 merged_data <- left_join(df_merg, best_models, by = c("Race", "Census_Year", "Age_Range"))
 ```
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 calculate_mode <- function(x) {
   ux <- unique(x)
   ux[which.max(tabulate(match(x, ux)))]
@@ -674,13 +673,13 @@ Once the cohort information and summary statistics are available, the goal is to
 - Use a **logistic regression** model to assess if the probability of having zero children changes significantly over time for the same cohort.
   
   **Example Code**:
-```{r echo=TRUE, eval=TRUE}
+```{r}
 ## divided the corhort by race
 merged_df_black <- merged_data %>% filter(Race == "Black/African American")
 merged_df_white <- merged_data %>% filter(Race == "White")
 ```
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 # Data frame to store proportions
 proportions_df_b <- data.frame(Cohort = character(), Census_Year = character(), 
                              Proportion_Zero_Children = numeric(), Race = character(), stringsAsFactors = FALSE)
@@ -778,7 +777,7 @@ print(results_black)
 
 ```
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 # Data frame to store proportions
 proportions_df_w <- data.frame(Cohort = character(), Census_Year = character(), 
                              Proportion_Zero_Children = numeric(), Race = character(), stringsAsFactors = FALSE)
@@ -860,7 +859,7 @@ print(results_white)
 ```
 
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 # Combine the two data frames
 combined_result <- rbind(results_black, results_white)
 
@@ -885,7 +884,7 @@ ggplot(combined_result, aes(x = Cohort, y = p_value, color = RACE, shape = Signi
 **_RESULT:_** The graph shows that there is a discrepancy in the p-value within the cohorts like 1901-1910, 1911-1920 and 1921-1930 by race. However, in cohort 1931-1941, the p-value of each race is pretty close to each other. The overall trend of the p-value for black population is stable across cohort, while the trend for white population fluctuate a lot. 
 
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 ggplot(combined_result, aes(x = Cohort, y = Chi_Square, color = RACE)) +
   geom_point(size = 3) +
   geom_line(aes(group = RACE)) +
@@ -917,14 +916,14 @@ We observe that the proportion of women with zero children change significantly 
   #anova(family_size_model)
 ```
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 merged_data2 <- left_join(merged_data, summary_table, by = c("Race","Cohort","Census_Year")) %>% dplyr::select(Race, Cohort, Census_Year, Mean, Variance)
 merged_black = merged_data2 %>% filter(Race == "Black/African American")
 merged_white = merged_data2 %>% filter(Race == "White")
 ```
 
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 cohorts1 <- unique(merged_black$Cohort)
 
 # Loop through each cohort and apply ANOVA for Mean and Variance
@@ -953,7 +952,7 @@ for (cohort in cohorts1) {
 
 ```
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 cohorts2 <- unique(merged_white$Cohort)
 
 # Loop through each cohort and apply ANOVA for Mean and Variance
@@ -988,7 +987,7 @@ for (cohort in cohorts2) {
 
 
 **Example Code**:
-```{r echo=TRUE, eval=TRUE}
+```{r}
 # Test for white population
 test_df_w <- merged_data %>%
   mutate(Best_Model_Binary = ifelse(Best_Model == "Zero_Inflated_NB", 1, 0)) %>%
@@ -1015,7 +1014,7 @@ for (cohort in unique_cohorts) {
 }
 ```
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 # Test for black population
 test_df_b <- merged_data %>%
   mutate(Best_Model_Binary = ifelse(Best_Model == "Zero_Inflated_NB", 1, 0)) %>%
@@ -1042,7 +1041,7 @@ for (cohort in unique_cohorts) {
 }
 ```
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 # Due to the problem indicated above, I use an alternative method:visualization
 
 ggplot(best_models, aes(x = Census_Year, y = Cohort, fill = Best_Model)) +
@@ -1133,7 +1132,7 @@ Design visualizations that effectively communicate your findings.
   - Include text or labels that describe the nature of the significant shifts for each highlighted cohort.
     - For example, indicate if there was a decrease in mean number of children or an increase in childlessness.
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 part1<- child_plot +
   geom_rect(data = df_mirror %>% filter((YEAR == 1960 & AGE_RANGE == "50-59")|
                                         (YEAR == 1970 & AGE_RANGE == "40-49")|
@@ -1145,7 +1144,7 @@ part1<- child_plot +
 
 ```
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 part2<- part1 +
   geom_rect(data = df_mirror %>% filter((YEAR == 1960 & AGE_RANGE == "40-49")|
                                         (YEAR == 1970 & AGE_RANGE == "50-59")|
@@ -1167,7 +1166,7 @@ part2
 ```
 
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 child_plot +
   geom_rect(data = df_mirror %>% filter((YEAR == 1960 & AGE_RANGE == "40-49")|
                                         (YEAR == 1960 & AGE_RANGE == "50-59")|
@@ -1248,13 +1247,13 @@ ggplot(filter_prop_w, aes(x = Census_Year, y = Proportion_Zero_Children)) +
 - **Ensure Clarity in Visuals**:
   - Properly label axes, legends, and titles.
   - Use consistent color schemes for easy comparison between groups.
-```{r echo=TRUE, eval=TRUE}
+```{r}
 filter_df <- df_proportions %>% 
   filter(YEAR == "1990", AGE_RANGE %in% c("40-49", "50-59")) 
 ```
 
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 ggplot(filter_df, aes(x = chborn_num, y = proportion, fill = AGE_RANGE)) +
   geom_col(position = "identity", alpha = 0.5) +  
   facet_wrap(~ RACE) +  
@@ -1267,7 +1266,7 @@ ggplot(filter_df, aes(x = chborn_num, y = proportion, fill = AGE_RANGE)) +
 ```
 
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 summary_stats <- filter_df %>%
   group_by(AGE_RANGE, RACE) %>%
   summarise(
@@ -1292,7 +1291,7 @@ Conduct statistical tests to determine if observed differences are significant.
 - **Check Assumptions**:
   - Ensure that the data meets the assumptions of the t-test (normality, equal variances).
   - If assumptions are violated, consider using a non-parametric test like the Mann-Whitney U test.
-```{r echo=TRUE, eval=TRUE}
+```{r}
 ## Check the normality assumption for black population
 # Subset data for the 40-49 and 50-59 age groups
 data_40_49_b <- df %>% filter(AGE_RANGE == "40-49", RACE == "Black/African American")
@@ -1306,7 +1305,7 @@ qqnorm(data_50_59_b$chborn_num, main = "QQ Plot: 50-59 Age Group (Black/African 
 qqline(data_50_59_b$chborn_num)
 ```
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 ## Check equal variance for black population
 df_b <- df %>% filter(RACE == "Black/African American")
 
@@ -1316,7 +1315,7 @@ levene_test_result <- leveneTest(chborn_num ~ as.factor(AGE_RANGE), data = df_b)
 levene_test_result
 ```
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 ## Check the normality assumption for white population
 data_40_49_w <- df %>% filter(AGE_RANGE == "40-49", RACE == "White")
 data_50_59_w <- df %>% filter(AGE_RANGE == "50-59", RACE == "White")
@@ -1329,7 +1328,7 @@ qqnorm(data_50_59_w$chborn_num, main = "QQ Plot: 50-59 Age Group (White)")
 qqline(data_50_59_w$chborn_num)
 ```
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 ## Check equal variance for white population
 df_w <- df %>% filter(RACE == "White")
 
@@ -1340,18 +1339,18 @@ levene_test_result2
 ```
 
 Since the data for black population and white population violate both assumption, we perform a Mann-Whitney U test for both racial groups in the follwoing:
-```{r echo=TRUE, eval=TRUE}
+```{r}
 wilcox_test_result <- wilcox.test(data_40_49_b$chborn_num, data_50_59_b$chborn_num)$p.value
 wilcox_test_result2 <- wilcox.test(data_40_49_w$chborn_num, data_50_59_w$chborn_num)$p.value
 print(c(wilcox_test_result, wilcox_test_result2))
 ```
-**_RESULT:_** These p-values are both extremely small (close to zero), meaning there is a very strong statistical difference between the two age groups (40-49 and 50-59) in terms of the number of children within each racial group. 
+**_RESULT:_** These p-values are both extremely small (close to zero), meaning there is a very strong statistical difference between the two age groups (40-49 and 50-59) in terms of the mean number of children within each racial group. 
 
 #### 3.2 F-Test for Difference in Variances
 
 - **Assess Variance Differences**:
   - Perform an F-test or Levene's test to compare the variances of the number of children between the two age groups within each racial group.
-```{r echo=TRUE, eval=TRUE}
+```{r}
 ## Apply Levene's test since non-normality
 
 # Levene's test for Black group
@@ -1371,7 +1370,7 @@ print(levene_test_w)
 - **Analyze Zero Inflation**:
   - Create contingency tables showing the counts of women with zero children and those with one or more children for each age group.
   - Perform a chi-square test to determine if the proportion of childlessness differs significantly between the age groups within each racial group.
-```{r echo=TRUE, eval=TRUE}
+```{r}
 ZI_table <- df %>% 
   mutate(childlessness = ifelse(chborn_num == 0, "0 Children", "1+ Children")) %>%       group_by(RACE, AGE_RANGE, childlessness) %>%
   summarise(count = n())
@@ -1379,7 +1378,7 @@ ZI_table <- df %>%
 ZI_table
 ```
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 ZI_table_b <- ZI_table %>%
   filter(RACE == "Black/African American")
 
@@ -1388,7 +1387,7 @@ chi_test_b <- chisq.test(cont_table_b)
 chi_test_b
 ```
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 ZI_table_w <- ZI_table %>%
   filter(RACE == "White")
 
@@ -1512,19 +1511,19 @@ Create a mirror plot for the distribution of siblings across census years, races
 ### Step 1: Calculate Sibling Frequencies
 
 1. Start with your dataframe that includes the `AGE_RANGE` column.
-```{r echo=TRUE, eval=TRUE}
+```{r}
 df2 <- df %>% 
   dplyr::select(RACE, YEAR, AGE_RANGE, chborn_num)
 ```
 
 2. Create a new column for the number of siblings:
-```{r echo=TRUE, eval=TRUE}
+```{r}
 df2 <- df2 %>%
  mutate(n_siblings = chborn_num - 1)
 ```
 
 3. Calculate the frequency of siblings:
-```{r echo=TRUE, eval=TRUE}
+```{r}
 df2 <- df2 %>%
 mutate(sibling_freq = ifelse(chborn_num != 1, n_siblings * 1, 1))  # Assuming each mother represents 1 in frequency
 ```
@@ -1532,7 +1531,7 @@ mutate(sibling_freq = ifelse(chborn_num != 1, n_siblings * 1, 1))  # Assuming ea
 ### Step 2: Aggregate Sibling Data
 
 1. Group the data and calculate sibling frequencies:
-```{r echo=TRUE, eval=TRUE}
+```{r}
 df_siblings <- df2 %>%
  group_by(YEAR, RACE, AGE_RANGE, n_siblings) %>%
  summarise(
@@ -1542,7 +1541,7 @@ df_siblings <- df2 %>%
 ```
 
 2. Calculate proportions within each group:
-```{r echo=TRUE, eval=TRUE}
+```{r}
 df_sibling_proportions <- df_siblings %>%
  group_by(YEAR, RACE, AGE_RANGE) %>%
  mutate(proportion = sibling_count / sum(sibling_count)) %>%
@@ -1553,7 +1552,7 @@ df_sibling_proportions <- df_siblings %>%
 
 Before creating the plot, verify that the proportions are correctly normalized:
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 normalization_check <- df_sibling_proportions %>%
   group_by(YEAR, RACE, AGE_RANGE) %>%
   summarise(total_proportion = sum(proportion), .groups = "drop") %>%
@@ -1567,7 +1566,7 @@ Ensure that the `total_proportion` for each group is very close to 1.0. If not, 
 ### Step 4: Prepare Data for Mirror Plot
 
 Reshape data for the mirror plot:
-```{r echo=TRUE, eval=TRUE}
+```{r}
 df_sibling_mirror <- df_sibling_proportions %>%
   mutate(proportion = if_else(RACE == "White", -proportion, proportion))
 ```
@@ -1575,12 +1574,12 @@ df_sibling_mirror <- df_sibling_proportions %>%
 ### Step 5: Create the Mirror Plot
 
 1. Create the color palette:
-```{r echo=TRUE, eval=TRUE}
+```{r}
 my_colors <- colorRampPalette(c("#FFB000", "#F77A2E", "#DE3A8A", "#7253FF", "#5E8BFF"))(13)
 ```
 
 2. Create the plot:
-```{r echo=TRUE, eval=TRUE}
+```{r}
 ggplot(data = df_sibling_mirror %>% filter(n_siblings != "-1"), aes(x = n_siblings, y = proportion, fill = as.factor(n_siblings))) +
  geom_col(aes(alpha = RACE)) +
  geom_hline(yintercept = 0, color = "black", size = 0.5) +
@@ -1671,7 +1670,7 @@ Repeat the model fitting process we performed for the children distribution, thi
 3. Compare Model Fits
    Use AIC (Akaike Information Criterion) to compare the fits of different models for each group.
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 combinations2 <- df2 %>%
   # treat number of sib = -1 as NA
   filter(n_siblings != -1) %>%
@@ -1726,7 +1725,7 @@ for (i in seq_along(combinations2)) {
 
 4. Identify Best-Fitting Models
    Determine which model fits best for each combination of RACE, YEAR, and AGE_RANGE.
-```{r echo=TRUE, eval=TRUE}
+```{r}
 # Add a Best_Model column to store the best model based on minimum AIC
 best_models_sib$Best_Model <- apply(best_models_sib, 1, function(row) {
   # Get AIC values for Poisson, NB, ZIP, and ZINB models
@@ -1774,7 +1773,7 @@ ggplot(best_models_sib, aes(x = AGE_RANGE, fill = Best_Model)) +
   labs(title = "Best-Fitting Models (siblings) by Birth Range)", x = "Age Range", y = "Count", fill = "Best Model")
 ```
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 ggplot(best_models_sib, aes(x = Census_Year, y = AGE_RANGE, fill = Best_Model)) +
   geom_tile(color = "white", lwd = 0.5, linetype = 1) + # Create the tiles
   facet_wrap(~Race, nrow = 2) + # Facet by Race
@@ -1814,12 +1813,12 @@ Analyze the stability of sibling distributions across cohorts, similar to the an
    - Compare the sibling distributions across different census years.
    - Use statistical tests (e.g., Kolmogorov-Smirnov test) to assess if distributions are significantly different.
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
  df_sibling_proportions <- df_sibling_proportions %>%
   mutate(Cohort = mapply(calculate_cohort, YEAR, AGE_RANGE))
 ```
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 df_sibling_proportions %>%
   filter(n_siblings >= 0, sibling_count >= 0, proportion >= 0) %>% group_by(RACE, Cohort) %>%
   ggplot(aes(x = n_siblings, y = proportion, color = as.factor(YEAR))) +
@@ -1834,7 +1833,7 @@ df_sibling_proportions %>%
   theme_minimal()
 ```
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 df_sibling_b <- df_sibling_proportions %>% filter(RACE == "Black/African American", n_siblings >= 0, sibling_count >= 0, proportion >= 0)
 
 results_sib_b <- list()
@@ -1854,7 +1853,7 @@ for (cohort in cohort_counts2$Cohort) {
 results_sib_b
 ```
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 df_sibling_w <- df_sibling_proportions %>% filter(RACE == "White", n_siblings >= 0, sibling_count >= 0, proportion >= 0)
 
 results_sib_w <- list()
@@ -1881,7 +1880,7 @@ results_sib_w
    - birth_range
    - Whether the distribution is stable across census years
    - Any significant changes observed
-```{r echo=TRUE, eval=TRUE}
+```{r}
 results_summary <- data.frame(
   RACE = character(),
   Cohort = character(),
@@ -1924,7 +1923,7 @@ results_summary
 
 4. Visualize stability:
    - Create a heatmap or similar plot showing stability/changes across cohorts and races.
-```{r echo=TRUE, eval=TRUE}
+```{r}
 ggplot(results_summary, aes(x = Cohort, y = RACE, fill = Significant_Changes)) +
   geom_tile(color = "white") +
   scale_fill_manual(values = c("Yes" = "#e93e3a", "No" = "#fdc70c")) +
@@ -1949,7 +1948,7 @@ From the plot above, we can see the distribution of sibling is stable in the fol
 ## Apply similar analysis performed in the children's part:
 1. Zero Inflation: Check if the proportion of individuals with zero siblings changes significantly over time for the same cohort.
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 best_models_sib <- best_models_sib %>%
   mutate(Cohort = mapply(calculate_cohort, Census_Year, AGE_RANGE)) %>% 
   dplyr::select(Race, Census_Year, AGE_RANGE, Best_Model, Cohort)
@@ -1961,13 +1960,13 @@ df_merg2 <- df2 %>%
 merged_data_sib <- left_join(df_merg2, best_models_sib, by = c("Race", "Census_Year", "AGE_RANGE"))
 ```
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 ## divided the corhort by race
 merged_df_black2 <- merged_data_sib %>% filter(Race == "Black/African American")
 merged_df_white2 <- merged_data_sib %>% filter(Race == "White")
 ```
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 # Filter cohorts with more than one census year
 cohort_counts <- merged_df_black2 %>%
   group_by(Cohort) %>%
@@ -2008,7 +2007,7 @@ print(results_black2)
 ```
 **_RESULT:_** The table shows that only the cohort 1921-1930 has significant change in probability of individuals with zero siblings in black population.
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 # Filter cohorts with more than one census year
 cohort_counts <- merged_df_white2 %>%
   group_by(Cohort) %>%
@@ -2050,7 +2049,7 @@ print(results_white2)
 **_RESULT:_** The table shows that cohorts 1901-1910, 1911-1920, 1921-1930 have significant change in probability of individuals with zero siblings in white population.
 
 2. Family Size: Test if the mean or variance in the number of siblings changes for the same cohort over time.
-```{r echo=TRUE, eval=TRUE}
+```{r}
 sum_table_sib <- merged_data_sib %>% group_by(Race, Cohort, Census_Year) %>%
   summarise(
     Mean = mean(chborn_num),
@@ -2062,7 +2061,7 @@ sum_table_black = merged_sib %>% filter(Race == "Black/African American")
 sum_table_white = merged_sib %>% filter(Race == "White")
 ```
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 ##Test for Black population
 cohorts1 <- unique(sum_table_black$Cohort)
 
@@ -2089,7 +2088,7 @@ for (cohort in cohorts1) {
 ```
 **_RESULT:_** The mean number of siblings change significantly in cohorts 1901-1910, 1911-1920, 1921-1930, 1931-1940 in black population.
 
-```{r echo=TRUE, eval=TRUE}
+```{r}
 ##Test for White population
 cohorts2 <- unique(sum_table_white$Cohort)
 
@@ -2118,7 +2117,7 @@ for (cohort in cohorts2) {
 **_RESULT:_** The mean number of siblings change significantly in cohorts 1901-1910, 1911-1920, 1921-1930, 1931-1940 in white population.
 
 3. Model Fit: Analyze if the best-fitting model for the cohort changes over time.
-```{r echo=TRUE, eval=TRUE}
+```{r}
 ggplot(best_models_sib, aes(x = Census_Year, y = Cohort, fill = Best_Model)) +
   geom_tile(color = "white", lwd = 0.5, linetype = 1) + # Create the tiles
   facet_wrap(~Race, nrow = 2) + # Facet by Race
@@ -2153,7 +2152,7 @@ Create a visualization showing how sibling distributions change across census ye
    - Facet by: RACE and AGE_RANGE
 
 3. Use `ggplot2` to create the plot:
-```{r echo=TRUE, eval=TRUE}
+```{r}
 df_sibling_proportions %>%
   filter(n_siblings >= 0, sibling_count >= 0, proportion >= 0) %>% ggplot(aes(x = n_siblings, y = proportion, color = factor(YEAR))) +
  geom_line() +
