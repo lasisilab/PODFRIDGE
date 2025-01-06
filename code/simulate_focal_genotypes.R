@@ -92,9 +92,6 @@ allele_freq_time <- system.time({
 })
 log_message(paste("Loaded allele frequencies data in", allele_freq_time["elapsed"], "seconds."))
 
-test1<-df_allelefreq[df_allelefreq$population=="AfAm",]
-test2<-df_allelefreq[df_allelefreq$population=="Asian",]
-
 #Replace 0 frequencies of absent allele and population combinations - assign the rare allele frequency 5/(2*1036)
 df_allelefreq <- replace(df_allelefreq, df_allelefreq==0, 5/(2*1036))
 df_allelefreq <- replace(df_allelefreq, is.na(df_allelefreq), 5/(2*1036))
