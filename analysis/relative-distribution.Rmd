@@ -208,6 +208,10 @@ For each combination of race, census year, and age range, we fit the following c
 
 ### Fit and Compare Models
 ```{r}
+combinations <- df %>%
+  group_by(YEAR, RACE, AGE_RANGE) %>%
+  group_split()
+
 # Initialize the data frame to store results
 best_models <- data.frame(
   Race = character(),
@@ -781,6 +785,7 @@ child_plot +
 
 #### Additional Visualization: Nature of Significant Change across Year for Cohorts by Race
 ```{r}
+# Significant Change in Zero Inflation
 ## Balck population
 filter_prop_b <- proportions_df_b %>% 
   filter(Cohort %in% c("1901-1910", "1921-1930"))
@@ -808,6 +813,28 @@ ggplot(combined_data, aes(x = Census_Year, y = Proportion_Zero_Children, color =
   )
 
 ```
+
+```{r}
+# Significant Change in mean family size
+
+significant_cohorts <- c("1901-1910", "1911-1920", "1921-1930", "1931-1940")  # Replace with actual significant cohorts
+filtered_data <- merged_data2 %>% filter(Cohort %in% significant_cohorts)
+
+# Plot for significant cohorts
+ggplot(filtered_data, aes(x = as.factor(Census_Year), y = Mean, color = Race, group = interaction(Cohort, Race))) +
+  geom_line(size = 1) +
+  geom_point(size = 2) +
+  facet_wrap(~ Cohort, scales = "free_x") + 
+  labs(
+    title = "Significant Changes in Mean Family Size Over Census Years",
+    x = "Census Year",
+    y = "Mean Family Size",
+    color = "Race"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
 
 ### Panel B: Comparison of 40-49 and 50-59 Age Groups in 1990
 
@@ -886,6 +913,8 @@ print(c(wilcox_test_result, wilcox_test_result2))
 
 ```{r}
 ## Apply Levene's test since non-normality
+df_w <- df %>% filter(RACE == "White")
+df_b <- df %>% filter(RACE == "Black/African American")
 
 # Levene's test for Black group
 levene_test_b <- leveneTest(chborn_num ~ as.factor(AGE_RANGE), data = df_b)
