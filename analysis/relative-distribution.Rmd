@@ -43,6 +43,7 @@ library(ggplot2)
 library(nnet)
 library(car)
 library(rstatix)
+library(ggpubr)
 ```
 
 ## Data Preparation
@@ -623,11 +624,19 @@ merged_black = merged_data %>% filter(Race == "Black/African American")
 merged_white = merged_data %>% filter(Race == "White")
 ```
 
-
 ```{r}
+# Initialize an empty data frame for storing results
+test_result_b <- data.frame(
+  RACE = character(), 
+  Cohort = character(), 
+  Statistic = numeric(), 
+  p_value = numeric(), 
+  stringsAsFactors = FALSE
+)
+
 cohorts1 <- unique(merged_black$Cohort)
 
-# Loop through each cohort and apply ANOVA for Mean and Variance
+# Loop through each cohort and apply ANOVA or t-test
 for (cohort in cohorts1) {
   
   # Filter data for the specific cohort
@@ -638,29 +647,63 @@ for (cohort in cohorts1) {
     cat("\nCohort:", cohort, "has only 1 Census Year. Skipping ANOVA.\n")
     next
   }
-  else if (length(unique(cohort_data_b$Census_Year)) == 2){
+  
+  if (length(unique(cohort_data_b$Census_Year)) == 2) {
+    # Perform t-test
     t_test_result <- t.test(chborn_num ~ Census_Year, data = cohort_data_b)
-     # Output the results
-  cat("\nCohort:", cohort)
-  cat("\nT-test for Mean Family Size:\n")
-  print(t_test_result)
-  }
-  else{
-  # Perform ANOVA for Mean
-  anova_mean_result <- aov(chborn_num ~ factor(Census_Year), data = cohort_data_b)
-   # Output the results
-  cat("\nCohort:", cohort)
-  cat("\nANOVA for Mean Family Size:\n")
-  print(summary(anova_mean_result))
+    
+    # Store results in test_result_b
+    test_result_b <- rbind(
+      test_result_b, 
+      data.frame(
+        RACE = "Black/African American",
+        Cohort = cohort,
+        Statistic = t_test_result$statistic,
+        p_value = t_test_result$p.value
+      )
+    )
+    
+  } else {
+    # Perform ANOVA for Mean
+    anova_mean_result <- aov(chborn_num ~ factor(Census_Year), data = cohort_data_b)
+    anova_summary <- summary(anova_mean_result)
+    
+    # Extract F-statistic and p-value from ANOVA result
+    f_statistic <- anova_summary[[1]]["factor(Census_Year)", "F value"]
+    p_value <- anova_summary[[1]]["factor(Census_Year)", "Pr(>F)"]
+    
+    # Store results in test_result_b
+    test_result_b <- rbind(
+      test_result_b, 
+      data.frame(
+        RACE = "Black/African American",
+        Cohort = cohort,
+        Statistic = f_statistic,
+        p_value = p_value
+      )
+    )
   }
 }
 
+# View the resulting data frame
+print(test_result_b)
+
 ```
 
+
 ```{r}
+# Initialize an empty data frame for storing results
+test_result_w <- data.frame(
+  RACE = character(), 
+  Cohort = character(), 
+  Statistic = numeric(), 
+  p_value = numeric(), 
+  stringsAsFactors = FALSE
+)
+
 cohorts2 <- unique(merged_white$Cohort)
 
-# Loop through each cohort and apply ANOVA for Mean and Variance
+# Loop through each cohort and apply ANOVA or t-test
 for (cohort in cohorts2) {
   
   # Filter data for the specific cohort
@@ -668,25 +711,49 @@ for (cohort in cohorts2) {
   
   # Check if there are at least two unique Census_Year values
   if (length(unique(cohort_data_w$Census_Year)) < 2) {
-    cat("\nCohort:", cohort, "has only 1 Census Year. Skipping ANOVA.\n")
+    cat("\nCohort:", cohort, "has only 1 Census Year. Skipping ANOVA and t-test.\n")
     next
   }
-  else if (length(unique(cohort_data_w$Census_Year)) == 2){
+  
+  if (length(unique(cohort_data_w$Census_Year)) == 2) {
+    # Perform t-test
     t_test_result <- t.test(chborn_num ~ Census_Year, data = cohort_data_w)
-     # Output the results
-  cat("\nCohort:", cohort)
-  cat("\nT-test for Mean Family Size:\n")
-  print(t_test_result)
-  }
-  else{
-  # Perform ANOVA for Mean
-  anova_mean_result <- aov(chborn_num ~ factor(Census_Year), data = cohort_data_w)
-   # Output the results
-  cat("\nCohort:", cohort)
-  cat("\nANOVA for Mean Family Size:\n")
-  print(summary(anova_mean_result))
+    
+    # Store results in test_result_w
+    test_result_w <- rbind(
+      test_result_w, 
+      data.frame(
+        RACE = "White",
+        Cohort = cohort,
+        Statistic = t_test_result$statistic,
+        p_value = t_test_result$p.value
+      )
+    )
+    
+  } else {
+    # Perform ANOVA for Mean
+    anova_mean_result <- aov(chborn_num ~ factor(Census_Year), data = cohort_data_w)
+    anova_summary <- summary(anova_mean_result)
+    
+    # Extract F-statistic and p-value from ANOVA result
+    f_statistic <- anova_summary[[1]]["factor(Census_Year)", "F value"]
+    p_value <- anova_summary[[1]]["factor(Census_Year)", "Pr(>F)"]
+    
+    # Store results in test_result_w
+    test_result_w <- rbind(
+      test_result_w, 
+      data.frame(
+        RACE = "White",
+        Cohort = cohort,
+        Statistic = f_statistic,
+        p_value = p_value
+      )
+    )
   }
 }
+
+print(test_result_w)
+
 ```
 
 **_RESULT:_** 
@@ -735,6 +802,8 @@ The goal is to summarize the previous information and create visualization that 
 #### Cohorts with Significant Change in Zero Inflation
 ```{r}
 # Significant Change in Zero Inflation
+
+
 ## Balck population
 filter_prop_b <- proportions_df_b %>% 
   filter(Cohort %in% c("1901-1910", "1921-1930"))
@@ -766,22 +835,26 @@ ggplot(combined_data, aes(x = Census_Year, y = Proportion_Zero_Children, color =
 
 #### Cohorts with Significant Change in Mean Family Size
 ```{r}
-merged_data2 <- left_join(merged_data, summary_table, by = c("Race","Cohort","Census_Year")) %>% dplyr::select(Race, Cohort, Census_Year, Mean, Variance)
+colnames(merged_data2)[colnames(merged_data2) == "Race"] <- "RACE"
+
+merged_df_b <- left_join(test_result_b, merged_data2 %>% select(RACE, Cohort, Census_Year, Mean), by = c("RACE", "Cohort")) %>% distinct()
+
+merged_df_w <- left_join(test_result_w, merged_data2 %>% select(RACE, Cohort, Census_Year, Mean), by = c("RACE", "Cohort")) %>% distinct()
 
 ## Balck population
-filter_mean_b <- merged_data2 %>% 
-  filter(Cohort %in% c("1901-1910", "1921-1930") & Race == "Black/African American")
+filter_mean_b <- merged_df_b %>% 
+  filter(Cohort %in% c("1901-1910", "1921-1930") & RACE == "Black/African American")
 
 ## White population
-filter_mean_w <- merged_data2 %>% 
-  filter(Cohort %in% c("1901-1910", "1911-1920", "1921-1930") & Race == "White")
+filter_mean_w <- merged_df_w %>% 
+  filter(Cohort %in% c("1901-1910", "1911-1920", "1921-1930") & RACE == "White")
 
 combined_data <- bind_rows(filter_mean_b, filter_mean_w)
 
-ggplot(combined_data, aes(x = Census_Year, y = Mean, color = Cohort)) +
+p<-ggplot(combined_data, aes(x = Census_Year, y = Mean, color = Cohort)) +
   geom_line(size = 1) +
   geom_point(size = 2) +
-  facet_wrap(~ Race, scales = "free_x") +
+  facet_wrap(~ RACE, scales = "free_x") +
   labs(
     title = "Significant Changes in Mean Family Size Over Census Years",
     x = "Census Year",
@@ -793,6 +866,7 @@ ggplot(combined_data, aes(x = Census_Year, y = Mean, color = Cohort)) +
     axis.text.x = element_text(angle = 45, hjust = 1),
     legend.position = "bottom"
   )
+
 ```
 
 
