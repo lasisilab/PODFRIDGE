@@ -619,9 +619,8 @@ ggplot(combined_result, aes(x = Cohort, y = p_value, color = RACE, shape = Signi
 #### b. **Family Size Analysis**
 
 ```{r}
-merged_data2 <- left_join(merged_data, summary_table, by = c("Race","Cohort","Census_Year")) %>% dplyr::select(Race, Cohort, Census_Year, Mean, Variance)
-merged_black = merged_data2 %>% filter(Race == "Black/African American")
-merged_white = merged_data2 %>% filter(Race == "White")
+merged_black = merged_data %>% filter(Race == "Black/African American")
+merged_white = merged_data %>% filter(Race == "White")
 ```
 
 
@@ -636,20 +635,24 @@ for (cohort in cohorts1) {
   
   # Check if there are at least two unique Census_Year values
   if (length(unique(cohort_data_b$Census_Year)) < 2) {
-    cat("\nCohort:", cohort, "has only one Census Year. Skipping ANOVA.\n")
+    cat("\nCohort:", cohort, "has only 1 Census Year. Skipping ANOVA.\n")
     next
   }
-  
+  else if (length(unique(cohort_data_b$Census_Year)) == 2){
+    t_test_result <- t.test(chborn_num ~ Census_Year, data = cohort_data_b)
+     # Output the results
+  cat("\nCohort:", cohort)
+  cat("\nT-test for Mean Family Size:\n")
+  print(t_test_result)
+  }
+  else{
   # Perform ANOVA for Mean
-  anova_mean_result <- aov(Mean ~ factor(Census_Year), data = cohort_data_b)
-  
-  # Perform ANOVA for Variance
-  anova_variance_result <- aov(Variance ~ factor(Census_Year), data = cohort_data_b)
-  
-  # Output the results
+  anova_mean_result <- aov(chborn_num ~ factor(Census_Year), data = cohort_data_b)
+   # Output the results
   cat("\nCohort:", cohort)
   cat("\nANOVA for Mean Family Size:\n")
   print(summary(anova_mean_result))
+  }
 }
 
 ```
@@ -665,23 +668,30 @@ for (cohort in cohorts2) {
   
   # Check if there are at least two unique Census_Year values
   if (length(unique(cohort_data_w$Census_Year)) < 2) {
-    cat("\nCohort:", cohort, "has only one Census Year. Skipping ANOVA.\n")
+    cat("\nCohort:", cohort, "has only 1 Census Year. Skipping ANOVA.\n")
     next
   }
-  
+  else if (length(unique(cohort_data_w$Census_Year)) == 2){
+    t_test_result <- t.test(chborn_num ~ Census_Year, data = cohort_data_w)
+     # Output the results
+  cat("\nCohort:", cohort)
+  cat("\nT-test for Mean Family Size:\n")
+  print(t_test_result)
+  }
+  else{
   # Perform ANOVA for Mean
-  anova_mean_result <- aov(Mean ~ factor(Census_Year), data = cohort_data_w)
-  
-  # Output the results
+  anova_mean_result <- aov(chborn_num ~ factor(Census_Year), data = cohort_data_w)
+   # Output the results
   cat("\nCohort:", cohort)
   cat("\nANOVA for Mean Family Size:\n")
   print(summary(anova_mean_result))
+  }
 }
 ```
 
 **_RESULT:_** 
-  1.In both racial group, the ANOVA is not applicable for the following cohort since there is only one census year available in the data for those cohorts:-Inf-1910, 1941-1950, -Inf-1920, -Inf-1890, -Inf-1900, and 1891-1900
-  2.By looking at the ANOVA for mean family size in both racial group, the p-value of the rest cohorts (1901-1910, 1911-1920, 1921-1930, 1931-1940) are smaller than 0.05, indicating mean family size for these cohort has significantly changed over different census years in both population. 
+  1.In both racial group, the ANOVA and t-test is not applicable for the following cohort since there is only one census year available in the data for those cohorts:-Inf-1910, 1941-1950, -Inf-1920, -Inf-1890, -Inf-1900, and 1891-1900
+  2.By looking at the ANOVA and t-test for mean family size in white population, the p-value of cohorts 1901-1910, 1911-1920 and 1921-1930 are smaller than 0.05. In the black population, the p-value of cohorts 1901-1910 and 1921-1930 are smaller than 0.05. These results indicate mean family size for these cohort has significantly changed over different census years in different racial population.
 
 
 #### c. **Model Fit Analysis**
@@ -722,68 +732,7 @@ The goal is to summarize the previous information and create visualization that 
 
 ### Panel A: Fertility Distribution Shifts Across Cohorts
 
-```{r}
-part1<- child_plot +
-  geom_rect(data = df_mirror %>% filter((YEAR == 1960 & AGE_RANGE == "50-59")|
-                                        (YEAR == 1970 & AGE_RANGE == "40-49")|
-                                        (YEAR == 1970 & AGE_RANGE == "60-69")|
-                                        (YEAR == 1980 & AGE_RANGE == "50-59")|
-                                        (YEAR == 1990 & AGE_RANGE == "60-69")),
-            aes(xmin = -0.45, xmax = 0.45, ymin = -0.3, ymax = 0.3), 
-            fill = "blue", alpha = 0.03)
-
-```
-
-```{r}
-part2<- part1 +
-  geom_rect(data = df_mirror %>% filter((YEAR == 1960 & AGE_RANGE == "40-49")|
-                                        (YEAR == 1970 & AGE_RANGE == "50-59")|
-                                        (YEAR == 1980 & AGE_RANGE == "60-69")),
-            aes(xmin = -0.45, xmax = 0.45, ymin = -0.3, ymax = 0), 
-            fill = "blue", alpha = 0.03) + 
-  labs(title = "Fertility Distribution Shifts",
-       subtitle = "Highlighted significant shifts in Number of zero Children",
-       caption = "Annotations indicate key shifts in number of zero children across census years. White population shown on left (negative values), Black/African American on right (positive values)\nProportions normalized within each age range, race, and census year\nFootnote: The category '12+' includes families with 12 or more children.") +
-  theme_minimal()+
-  theme(
-    plot.title = element_text(size = 14, hjust = 0.5),
-    plot.subtitle = element_text(size = 12, hjust = 0.5), 
-    plot.caption = element_text(size = 9, hjust = 0.5),  
-    axis.text.y = element_text(size = 8),
-    strip.text = element_text(size = 10)
-  )
-part2
-```
-
-
-```{r}
-child_plot +
-  geom_rect(data = df_mirror %>% filter((YEAR == 1960 & AGE_RANGE == "40-49")|
-                                        (YEAR == 1960 & AGE_RANGE == "50-59")|
-                                        (YEAR == 1970 & AGE_RANGE == "40-49")|
-                                        (YEAR == 1970 & AGE_RANGE == "50-59")|
-                                        (YEAR == 1970 & AGE_RANGE == "60-69")|
-                                        (YEAR == 1980 & AGE_RANGE == "40-49")|
-                                        (YEAR == 1980 & AGE_RANGE == "50-59")|
-                                        (YEAR == 1980 & AGE_RANGE == "60-69")|
-                                        (YEAR == 1990 & AGE_RANGE == "50-59")|
-                                        (YEAR == 1990 & AGE_RANGE == "60-69")),
-            aes(xmin = -0.45, xmax = 13, ymin = -0.3, ymax = 0.3), 
-            fill = "blue", alpha = 0.01) + 
-  labs(title = "Fertility Distribution Shifts",
-       subtitle = "Highlighted significant shifts in Mean Family Size",
-       caption = "Annotations indicate key shifts in Mean Family Size across census years. White population shown on left (negative values), Black/African American on right (positive values)\nProportions normalized within each age range, race, and census year\nFootnote: The category '12+' includes families with 12 or more children.") +
-  theme_minimal()+
-  theme(
-    plot.title = element_text(size = 14, hjust = 0.5),
-    plot.subtitle = element_text(size = 12, hjust = 0.5), 
-    plot.caption = element_text(size = 9, hjust = 0.5),  
-    axis.text.y = element_text(size = 8),
-    strip.text = element_text(size = 10)
-  )
-```
-
-#### Additional Visualization: Nature of Significant Change across Year for Cohorts by Race
+#### Cohorts with Significant Change in Zero Inflation
 ```{r}
 # Significant Change in Zero Inflation
 ## Balck population
@@ -814,25 +763,36 @@ ggplot(combined_data, aes(x = Census_Year, y = Proportion_Zero_Children, color =
 
 ```
 
+
+#### Cohorts with Significant Change in Mean Family Size
 ```{r}
-# Significant Change in mean family size
+merged_data2 <- left_join(merged_data, summary_table, by = c("Race","Cohort","Census_Year")) %>% dplyr::select(Race, Cohort, Census_Year, Mean, Variance)
 
-significant_cohorts <- c("1901-1910", "1911-1920", "1921-1930", "1931-1940")  # Replace with actual significant cohorts
-filtered_data <- merged_data2 %>% filter(Cohort %in% significant_cohorts)
+## Balck population
+filter_mean_b <- merged_data2 %>% 
+  filter(Cohort %in% c("1901-1910", "1921-1930") & Race == "Black/African American")
 
-# Plot for significant cohorts
-ggplot(filtered_data, aes(x = as.factor(Census_Year), y = Mean, color = Race, group = interaction(Cohort, Race))) +
+## White population
+filter_mean_w <- merged_data2 %>% 
+  filter(Cohort %in% c("1901-1910", "1911-1920", "1921-1930") & Race == "White")
+
+combined_data <- bind_rows(filter_mean_b, filter_mean_w)
+
+ggplot(combined_data, aes(x = Census_Year, y = Mean, color = Cohort)) +
   geom_line(size = 1) +
   geom_point(size = 2) +
-  facet_wrap(~ Cohort, scales = "free_x") + 
+  facet_wrap(~ Race, scales = "free_x") +
   labs(
     title = "Significant Changes in Mean Family Size Over Census Years",
     x = "Census Year",
-    y = "Mean Family Size",
-    color = "Race"
+    y = "Mean number of Children",
+    color = "Cohort"
   ) +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "bottom"
+  )
 ```
 
 
@@ -1409,15 +1369,8 @@ print(results_white2)
 
 ### b. **Family Size Analysis**
 ```{r}
-sum_table_sib <- merged_data_sib %>% group_by(Race, Cohort, Census_Year) %>%
-  summarise(
-    Mean = mean(chborn_num),
-    Variance = var(chborn_num))
-
-merged_sib <- left_join(merged_data_sib, sum_table_sib, by = c("Race","Cohort","Census_Year")) %>% dplyr::select(Race, Cohort, Census_Year, Mean, Variance)
-
-sum_table_black = merged_sib %>% filter(Race == "Black/African American")
-sum_table_white = merged_sib %>% filter(Race == "White")
+sum_table_black = merged_data_sib %>% filter(Race == "Black/African American" & n_siblings!=-1)
+sum_table_white = merged_data_sib %>% filter(Race == "White"& n_siblings!=-1)
 ```
 
 ```{r}
@@ -1432,20 +1385,27 @@ for (cohort in cohorts1) {
   
   # Check if there are at least two unique Census_Year values
   if (length(unique(cohort_data_b$Census_Year)) < 2) {
-    cat("\nCohort:", cohort, "has only one Census Year. Skipping ANOVA.\n")
+    cat("\nCohort:", cohort, "has only 1 Census Year. Skipping ANOVA.\n")
     next
   }
-  
-  # Perform ANOVA for Mean
-  anova_mean_result <- aov(Mean ~ factor(Census_Year), data = cohort_data_b)
-  
-  # Output the results
+  else if (length(unique(cohort_data_b$Census_Year)) == 2){
+    t_test_result <- t.test(n_siblings ~ Census_Year, data = cohort_data_b)
+     # Output the results
   cat("\nCohort:", cohort)
-  cat("\nANOVA for Mean number of Siblings:\n")
+  cat("\nT-test for Mean Family Size:\n")
+  print(t_test_result)
+  }
+  else{
+  # Perform ANOVA for Mean
+  anova_mean_result <- aov(n_siblings ~ factor(Census_Year), data = cohort_data_b)
+   # Output the results
+  cat("\nCohort:", cohort)
+  cat("\nANOVA for Mean Family Size:\n")
   print(summary(anova_mean_result))
+  }
 }
 ```
-**_RESULT:_** The mean number of siblings change significantly in cohorts 1901-1910, 1911-1920, 1921-1930, 1931-1940 in black population.
+**_RESULT:_** The mean number of siblings change significantly in cohorts 1901-1910 and 1921-1930 in black population.
 
 ```{r}
 ##Test for White population
@@ -1457,23 +1417,29 @@ for (cohort in cohorts2) {
   # Filter data for the specific cohort
   cohort_data_w <- sum_table_white[sum_table_white$Cohort == cohort, ]
   
-  # Check if there are at least two unique Census_Year values
+ # Check if there are at least two unique Census_Year values
   if (length(unique(cohort_data_w$Census_Year)) < 2) {
-    cat("\nCohort:", cohort, "has only one Census Year. Skipping ANOVA.\n")
+    cat("\nCohort:", cohort, "has only 1 Census Year. Skipping ANOVA.\n")
     next
   }
-  
-  # Perform ANOVA for Mean
-  anova_mean_result <- aov(Mean ~ factor(Census_Year), data = cohort_data_w)
-  
-  # Output the results
+  else if (length(unique(cohort_data_w$Census_Year)) == 2){
+    t_test_result <- t.test(n_siblings ~ Census_Year, data = cohort_data_w)
+     # Output the results
   cat("\nCohort:", cohort)
-  cat("\nANOVA for Mean number of Siblings:\n")
+  cat("\nT-test for Mean Family Size:\n")
+  print(t_test_result)
+  }
+  else{
+  # Perform ANOVA for Mean
+  anova_mean_result <- aov(n_siblings ~ factor(Census_Year), data = cohort_data_w)
+   # Output the results
+  cat("\nCohort:", cohort)
+  cat("\nANOVA for Mean Family Size:\n")
   print(summary(anova_mean_result))
-  
+  }
 }
 ```
-**_RESULT:_** The mean number of siblings change significantly in cohorts 1901-1910, 1911-1920, 1921-1930, 1931-1940 in white population.
+**_RESULT:_** The mean number of siblings change significantly in cohorts 1901-1910, 1911-1920, 1921-1930 in white population.
 
 ### c. **Model Fit Analysis**
 ```{r}
