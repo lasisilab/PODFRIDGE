@@ -23,8 +23,7 @@ Data citation: Steven Ruggles, Sarah Flood, Matthew Sobek, Daniel Backman, Annie
 
 ```{r setup, include=FALSE, echo=TRUE, eval=TRUE}
 #knitr::opts_knit$set(root.dir = ".")
-knitr::opts_chunk$set(eval = TRUE, echo = TRUE, warning = FALSE, fig.width = 9, fig.height = 7)
-
+knitr::opts_chunk$set(eval = TRUE, echo = FALSE, warning = FALSE, fig.width = 9, fig.height = 7)
 
 # load necessary libraries
 library(dplyr)
@@ -73,7 +72,7 @@ children_data = read.csv(prop_race_year)
 mother_data = read.csv(data_filter)
 ```
 
-```{r}
+```{r, include=FALSE}
 df <- mother_data %>%
   # Filter for women aged 40 and above
   filter(AGE >= 40) %>%
@@ -181,7 +180,9 @@ child_plot <- ggplot(df_mirror, aes(x = chborn_num, y = proportion, fill = as.fa
   )
 
 print(child_plot)
+```
 
+```{r, include=FALSE}
 # Print summary to check age ranges and normalization
 print(df_proportions %>%
   group_by(YEAR, RACE, AGE_RANGE) %>%
@@ -189,9 +190,10 @@ print(df_proportions %>%
   arrange(YEAR, RACE, AGE_RANGE))
 ```
 
+
 With this visualization of the distribution of the data, we can see that there are differences between White and Black Americans. 
 
-```{r}
+```{r, include=FALSE}
 # Mean Number of Children By race and Year
 df %>% group_by(RACE, YEAR) %>% summarise(Mean = mean(chborn_num))
 ```
@@ -208,7 +210,7 @@ For each combination of race, census year, and age range, we fit the following c
 - **Zero-Inflated Negative Binomial (ZINB) Model**
 
 ### Fit and Compare Models
-```{r}
+```{r, include=FALSE}
 combinations <- df %>%
   group_by(YEAR, RACE, AGE_RANGE) %>%
   group_split()
@@ -364,7 +366,7 @@ df_merg <- df %>%
 merged_data <- left_join(df_merg, best_models, by = c("Race", "Census_Year", "Age_Range"))
 ```
 
-```{r}
+```{r, include=FALSE}
 calculate_mode <- function(x) {
   ux <- unique(x)
   ux[which.max(tabulate(match(x, ux)))]
@@ -413,7 +415,7 @@ merged_df_black <- merged_data %>% filter(Race == "Black/African American")
 merged_df_white <- merged_data %>% filter(Race == "White")
 ```
 
-```{r}
+```{r, include=FALSE}
 # Data frame to store proportions
 proportions_df_b <- data.frame(Cohort = character(), Census_Year = character(), 
                              Proportion_Zero_Children = numeric(), Race = character(), stringsAsFactors = FALSE)
@@ -473,7 +475,7 @@ print(results_black)
 
 ```
 
-```{r}
+```{r, include=FALSE}
 # Function to determine the nature of change
 determine_nature_of_change <- function(proportions) {
   if (nrow(proportions) > 1) {
@@ -511,7 +513,7 @@ print(results_black)
 
 ```
 
-```{r}
+```{r, include=FALSE}
 # Data frame to store proportions
 proportions_df_w <- data.frame(Cohort = character(), Census_Year = character(), 
                              Proportion_Zero_Children = numeric(), Race = character(), stringsAsFactors = FALSE)
@@ -569,7 +571,7 @@ results_white <- results_white %>%
 print(results_white)
 ```
 
-```{r}
+```{r, include=FALSE}
 # Add the Nature_of_Change column
 results_white$Nature_of_Change <- NA  # Initialize the column
 
@@ -592,11 +594,13 @@ print(results_white)
 
 ```
 
-
 ```{r}
 # Combine the two data frames
 combined_result <- rbind(results_black, results_white)
+```
 
+
+```{r}
 # Create the plot
 ggplot(combined_result, aes(x = Cohort, y = p_value, color = RACE, shape = Significance)) +
   geom_point(size = 2) +
@@ -685,6 +689,9 @@ for (cohort in cohorts1) {
   }
 }
 
+test_result_b <- test_result_b %>%
+  mutate(Significance = ifelse(p_value > 0.05, "No", "Yes"))
+
 # View the resulting data frame
 print(test_result_b)
 
@@ -752,6 +759,9 @@ for (cohort in cohorts2) {
   }
 }
 
+test_result_w <- test_result_w %>%
+  mutate(Significance = ifelse(p_value > 0.05, "No", "Yes"))
+
 print(test_result_w)
 
 ```
@@ -803,7 +813,6 @@ The goal is to summarize the previous information and create visualization that 
 ```{r}
 # Significant Change in Zero Inflation
 
-
 ## Balck population
 filter_prop_b <- proportions_df_b %>% 
   filter(Cohort %in% c("1901-1910", "1921-1930"))
@@ -835,26 +844,22 @@ ggplot(combined_data, aes(x = Census_Year, y = Proportion_Zero_Children, color =
 
 #### Cohorts with Significant Change in Mean Family Size
 ```{r}
-colnames(merged_data2)[colnames(merged_data2) == "Race"] <- "RACE"
-
-merged_df_b <- left_join(test_result_b, merged_data2 %>% select(RACE, Cohort, Census_Year, Mean), by = c("RACE", "Cohort")) %>% distinct()
-
-merged_df_w <- left_join(test_result_w, merged_data2 %>% select(RACE, Cohort, Census_Year, Mean), by = c("RACE", "Cohort")) %>% distinct()
+merged_data2 <- left_join(merged_data, summary_table, by = c("Race","Cohort","Census_Year")) %>% dplyr::select(Race, Cohort, Census_Year, Mean, Variance)
 
 ## Balck population
-filter_mean_b <- merged_df_b %>% 
-  filter(Cohort %in% c("1901-1910", "1921-1930") & RACE == "Black/African American")
+filter_mean_b <- merged_data2 %>% 
+  filter(Cohort %in% c("1901-1910", "1921-1930") & Race == "Black/African American")
 
 ## White population
-filter_mean_w <- merged_df_w %>% 
-  filter(Cohort %in% c("1901-1910", "1911-1920", "1921-1930") & RACE == "White")
+filter_mean_w <- merged_data2 %>% 
+  filter(Cohort %in% c("1901-1910", "1911-1920", "1921-1930") & Race == "White")
 
 combined_data <- bind_rows(filter_mean_b, filter_mean_w)
 
-p<-ggplot(combined_data, aes(x = Census_Year, y = Mean, color = Cohort)) +
+ggplot(combined_data, aes(x = Census_Year, y = Mean, color = Cohort)) +
   geom_line(size = 1) +
   geom_point(size = 2) +
-  facet_wrap(~ RACE, scales = "free_x") +
+  facet_wrap(~ Race, scales = "free_x") +
   labs(
     title = "Significant Changes in Mean Family Size Over Census Years",
     x = "Census Year",
@@ -907,7 +912,7 @@ summary_stats
 
 #### Test for Difference in Means
 
-```{r}
+```{r, include=FALSE}
 ## Check the normality assumption for black population
 # Subset data for the 40-49 and 50-59 age groups
 data_40_49_b <- df %>% filter(AGE_RANGE == "40-49", RACE == "Black/African American")
@@ -922,7 +927,7 @@ qqline(data_50_59_b$chborn_num)
 ```
 
 
-```{r}
+```{r, include=FALSE}
 ## Check the normality assumption for white population
 data_40_49_w <- df %>% filter(AGE_RANGE == "40-49", RACE == "White")
 data_50_59_w <- df %>% filter(AGE_RANGE == "50-59", RACE == "White")
@@ -979,7 +984,7 @@ ZI_table_b <- ZI_table %>%
 
 cont_table_b <- xtabs(count ~ AGE_RANGE + childlessness, data = ZI_table_b)
 chi_test_b <- chisq.test(cont_table_b)
-chi_test_b
+chi_test_b$p.value
 ```
 
 ```{r}
@@ -988,7 +993,7 @@ ZI_table_w <- ZI_table %>%
 
 cont_table_w <- xtabs(count ~ AGE_RANGE + childlessness, data = ZI_table_w)
 chi_test_w <- chisq.test(cont_table_w)
-chi_test_w
+chi_test_w$p.value
 ```
 **_RESULT:_** The p-values for both tests are extremely low, suggests that there is a significant difference in the proportion of women with 0 children across age ranges (40-49 vs. 50-59) for both the Black/African American and White racial groups. The results imply that childlessness is not uniformly distributed across age groups. 
 
@@ -1142,8 +1147,6 @@ normalization_check <- df_sibling_proportions %>%
   group_by(YEAR, RACE, AGE_RANGE) %>%
   summarise(total_proportion = sum(proportion), .groups = "drop") %>%
   arrange(YEAR, RACE, AGE_RANGE)
-
-print(normalization_check)
 ```
 
 
@@ -1191,7 +1194,7 @@ ggplot(data = df_sibling_mirror %>% filter(n_siblings != "-1"), aes(x = n_siblin
 ```
 
 
-```{r}
+```{r, include=FALSE}
 # Mean Number of Sibling By race only
 df2 %>% filter(RACE == "Black/African American" & n_siblings >= 0) %>% summarise(Mean = mean(n_siblings))
 
@@ -1288,7 +1291,7 @@ for (i in seq_along(combinations2)) {
 
 
 ### Identify Best-Fitting Models by comparing AIC
-```{r}
+```{r, include=FALSE}
 # Add a Best_Model column to store the best model based on minimum AIC
 best_models_sib$Best_Model <- apply(best_models_sib, 1, function(row) {
   # Get AIC values for Poisson, NB, ZIP, and ZINB models
@@ -1447,7 +1450,16 @@ sum_table_black = merged_data_sib %>% filter(Race == "Black/African American" & 
 sum_table_white = merged_data_sib %>% filter(Race == "White"& n_siblings!=-1)
 ```
 
+
 ```{r}
+# Initialize an empty data frame for storing results
+test_result_b2 <- data.frame(
+  RACE = character(), 
+  Cohort = character(), 
+  Statistic = numeric(), 
+  p_value = numeric(), 
+  stringsAsFactors = FALSE
+)
 ##Test for Black population
 cohorts1 <- unique(sum_table_black$Cohort)
 
@@ -1462,26 +1474,61 @@ for (cohort in cohorts1) {
     cat("\nCohort:", cohort, "has only 1 Census Year. Skipping ANOVA.\n")
     next
   }
-  else if (length(unique(cohort_data_b$Census_Year)) == 2){
+  
+  if (length(unique(cohort_data_b$Census_Year)) == 2) {
+    # Perform t-test
     t_test_result <- t.test(n_siblings ~ Census_Year, data = cohort_data_b)
-     # Output the results
-  cat("\nCohort:", cohort)
-  cat("\nT-test for Mean Family Size:\n")
-  print(t_test_result)
-  }
-  else{
-  # Perform ANOVA for Mean
-  anova_mean_result <- aov(n_siblings ~ factor(Census_Year), data = cohort_data_b)
-   # Output the results
-  cat("\nCohort:", cohort)
-  cat("\nANOVA for Mean Family Size:\n")
-  print(summary(anova_mean_result))
+    
+    # Store results in test_result_b
+    test_result_b2 <- rbind(
+      test_result_b2, 
+      data.frame(
+        RACE = "Black/African American",
+        Cohort = cohort,
+        Statistic = t_test_result$statistic,
+        p_value = t_test_result$p.value
+      )
+    )
+    
+  } else {
+    # Perform ANOVA for Mean
+    anova_mean_result <- aov(n_siblings ~ factor(Census_Year), data = cohort_data_b)
+    anova_summary <- summary(anova_mean_result)
+    
+    # Extract F-statistic and p-value from ANOVA result
+    f_statistic <- anova_summary[[1]]["factor(Census_Year)", "F value"]
+    p_value <- anova_summary[[1]]["factor(Census_Year)", "Pr(>F)"]
+    
+    # Store results in test_result_b
+    test_result_b2 <- rbind(
+      test_result_b2, 
+      data.frame(
+        RACE = "Black/African American",
+        Cohort = cohort,
+        Statistic = f_statistic,
+        p_value = p_value
+      )
+    )
   }
 }
+
+test_result_b2 <- test_result_b2 %>%
+  mutate(Significance = ifelse(p_value > 0.05, "No", "Yes"))
+
+# View the resulting data frame
+print(test_result_b2)
 ```
 **_RESULT:_** The mean number of siblings change significantly in cohorts 1901-1910 and 1921-1930 in black population.
 
 ```{r}
+test_result_w2 <- data.frame(
+  RACE = character(), 
+  Cohort = character(), 
+  Statistic = numeric(), 
+  p_value = numeric(), 
+  stringsAsFactors = FALSE
+)
+
 ##Test for White population
 cohorts2 <- unique(sum_table_white$Cohort)
 
@@ -1493,25 +1540,51 @@ for (cohort in cohorts2) {
   
  # Check if there are at least two unique Census_Year values
   if (length(unique(cohort_data_w$Census_Year)) < 2) {
-    cat("\nCohort:", cohort, "has only 1 Census Year. Skipping ANOVA.\n")
+    cat("\nCohort:", cohort, "has only 1 Census Year. Skipping ANOVA and t-test.\n")
     next
   }
-  else if (length(unique(cohort_data_w$Census_Year)) == 2){
+  
+  if (length(unique(cohort_data_w$Census_Year)) == 2) {
+    # Perform t-test
     t_test_result <- t.test(n_siblings ~ Census_Year, data = cohort_data_w)
-     # Output the results
-  cat("\nCohort:", cohort)
-  cat("\nT-test for Mean Family Size:\n")
-  print(t_test_result)
-  }
-  else{
-  # Perform ANOVA for Mean
-  anova_mean_result <- aov(n_siblings ~ factor(Census_Year), data = cohort_data_w)
-   # Output the results
-  cat("\nCohort:", cohort)
-  cat("\nANOVA for Mean Family Size:\n")
-  print(summary(anova_mean_result))
+    
+    # Store results in test_result_w
+    test_result_w2 <- rbind(
+      test_result_w2, 
+      data.frame(
+        RACE = "White",
+        Cohort = cohort,
+        Statistic = t_test_result$statistic,
+        p_value = t_test_result$p.value
+      )
+    )
+    
+  } else {
+    # Perform ANOVA for Mean
+    anova_mean_result <- aov(n_siblings ~ factor(Census_Year), data = cohort_data_w)
+    anova_summary <- summary(anova_mean_result)
+    
+    # Extract F-statistic and p-value from ANOVA result
+    f_statistic <- anova_summary[[1]]["factor(Census_Year)", "F value"]
+    p_value <- anova_summary[[1]]["factor(Census_Year)", "Pr(>F)"]
+    
+    # Store results in test_result_w
+    test_result_w2 <- rbind(
+      test_result_w2, 
+      data.frame(
+        RACE = "White",
+        Cohort = cohort,
+        Statistic = f_statistic,
+        p_value = p_value
+      )
+    )
   }
 }
+
+test_result_w2 <- test_result_w2 %>%
+  mutate(Significance = ifelse(p_value > 0.05, "No", "Yes"))
+
+print(test_result_w2)
 ```
 **_RESULT:_** The mean number of siblings change significantly in cohorts 1901-1910, 1911-1920, 1921-1930 in white population.
 
@@ -1578,6 +1651,7 @@ for (cohort in cohort_counts2$Cohort) {
 results_sib_b
 ```
 
+
 ```{r}
 df_sibling_w <- df_sibling_proportions %>% filter(RACE == "White", n_siblings >= 0, sibling_count >= 0, proportion >= 0)
 
@@ -1596,15 +1670,9 @@ for (cohort in cohort_counts2$Cohort) {
   results_sib_w[[cohort]] <- test_result
 }
 results_sib_w
-
 ```
 
 
-#### Summary table showing:
-   - RACE
-   - birth_range
-   - Whether the distribution is stable across census years
-   - Any significant changes observed
 ```{r}
 results_summary <- data.frame(
   RACE = character(),
@@ -1645,6 +1713,7 @@ rownames(results_summary) <- NULL
 results_summary
 
 ```
+
 
 #### Visualize stability
 ```{r}
