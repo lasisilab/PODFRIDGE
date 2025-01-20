@@ -7,11 +7,11 @@ editor_options:
   chunk_output_type: console
 ---
 
-## Introduction
+# Introduction
 
 The relative genetic surveillance of a population is influenced by the number of genetically detectable relatives individuals have. First-degree relatives (parents, siblings, and children) are especially relevant in forensic analyses using short tandem repeat (STR) loci, where close familial searches are commonly employed. To explore potential disparities in genetic detectability between African American and European American populations, we examined U.S. Census data from four census years (1960, 1970, 1980, and 1990) focusing on the number of children born to women over the age of 40.
 
-## Data Sources
+# Data Sources
 We used publicly available data from the Integrated Public Use Microdata Series (IPUMS) for the U.S. Census years 1960, 1970, 1980, and 1990. The datasets include information on:
 
 - AGE: Age of the respondent.
@@ -190,26 +190,29 @@ print(df_proportions %>%
   arrange(YEAR, RACE, AGE_RANGE))
 ```
 
-
-With this visualization of the distribution of the data, we can see that there are differences between White and Black Americans. 
+With this visualization of the distribution of the data, we can see that there are differences between races, census year and age groups. 
+**_-By Census Year:_** From 1960 to 1990, the proportion of mothers with larger families (6+ children) decreases for both races across all age groups.
+Smaller families (1-3 children) become more common over the decades.
+**_-By Age Group:_** Older age groups (e.g., 70+) show a higher frequency of larger family sizes, especially in earlier Census years. Younger age groups (40-49) show a stronger shift toward smaller family sizes in more recent decades.
+**_-By Race:_** African American mothers (right side) consistently show a higher proportion of larger families (6+ children) compared to European American mothers.
 
 ```{r, include=FALSE}
 # Mean Number of Children By race and Year
 df %>% group_by(RACE, YEAR) %>% summarise(Mean = mean(chborn_num))
 ```
 
-We will now test for differences in 1) the mean and variance, and 2) zero-inflation.
 
 ## Model Fit Across Census Years 
+We will now find out the best model fitted for each combination of race, census year, and age range. 
 
-For each combination of race, census year, and age range, we fit the following candidate models:
+### Fit and Compare Models
+For each combination, we fit the following candidate models:
 
 - **Poisson Model**
 - **Negative Binomial (NB) Model**
 - **Zero-Inflated Poisson (ZIP) Model**
 - **Zero-Inflated Negative Binomial (ZINB) Model**
 
-### Fit and Compare Models
 ```{r, include=FALSE}
 combinations <- df %>%
   group_by(YEAR, RACE, AGE_RANGE) %>%
@@ -260,7 +263,9 @@ for (i in seq_along(combinations)) {
 
 ```
 
+
 ### Record the Best Model for Each Subset
+Then, we find the AIC value of four models for each combination and record the model with minimum AIC. The following is the table that summarize the best model for each combination of race, census year and age group.
 ```{r}
 # Add a Best_Model column to store the best model based on minimum AIC
 best_models$Best_Model <- apply(best_models, 1, function(row) {
@@ -278,12 +283,12 @@ best_models$Best_Model <- apply(best_models, 1, function(row) {
 
 best_models <- best_models %>% dplyr::select(Race, Census_Year, Age_Range, Best_Model)
 # View the updated table with the Best_Model column
-print(best_models)
+kabble(best_models, caption="Summary Table of Best Model")
 ```
 
 
 ### Analyze the Effect of Race, Census Year, and Age Range
-
+After finding the best model, we want to check if races, age ranges, and census year has significant effect on the best-fitting model. By running a logistics regression, the result (The p-value for each variable is larger than 0.05) shows that there isn't a significant association between the predictors(races, age ranges, and census year) and the best-fitting model.
 ```{r}
 # Recode Best_Model to a binary variable (e.g., "Zero_Inflated_NB" vs. "Other")
 best_models$Best_Model_Binary <- ifelse(best_models$Best_Model == "Zero_Inflated_NB", 1, 0)
@@ -295,10 +300,10 @@ model_logistic <- glm(Best_Model_Binary ~ Race + Census_Year + Age_Range, family
 summary(model_logistic)
 
 ```
-**_RESULT:_**The p-value for each variable is larger than 0.05, indicating  non-significant effects on best model fitting. 
+
 
 ### Visualize the Results
-
+According to the resulting visualization, the ZINB model is the best fit for the black population across census year and age group. However, the ZINB model perform the best among the white population only across year 1960 and 1970, and age group 60-69 and 70+.
 ```{r}
 ggplot(best_models, aes(x = Census_Year, y = Age_Range, fill = Best_Model)) +
   geom_tile(color = "white", lwd = 0.5, linetype = 1) + 
@@ -312,19 +317,25 @@ ggplot(best_models, aes(x = Census_Year, y = Age_Range, fill = Best_Model)) +
   ) +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 14, face = "bold"),
+    plot.title = element_text(size = 14, hjust = 0.5),
     legend.position = "bottom"
   )
 ```
 
-### Conclusion
-The logistics regression shows that there isn't a significant association between the predictors(races, age ranges, and census year) and the best-fitting model. According to the resulting visualization, the ZINB model is the best fit for the black population across census year and age group. However, the ZINB model perform the best among the white population only across year 1960 and 1970, and age group 60-69 and 70+. 
+ 
 
-## Cohort Stability Analysis 
-The goal is to determine if there is a significant change in **zero inflation**, **family size**, or **model fit** for the same cohort across different census years, given race. 
+## Cohort Stability Analysis
+From the previous analysis, we observe that there is discrepancy in the distribution between white and black American. Next, the goal is to determine if there is a **significant change** in any of the following across census years for the same cohort:
 
-### Table with Birth-Year (Cohort)
+1. **Zero Inflation**: Check if the proportion of women with zero children changes significantly over time for the same cohort.
+2. **Family Size**: Test if the mean or variance in the number of children changes for the same cohort over time.
+3. **Model Fit**: Analyze if the best-fitting model for the cohort changes over time.
+
+### Data Preparation
+Firstly, we create a new variable cohort in the original data, which is calculated by subtracting the age range from census year.
+
 ```{r}
+### Table with Cohort
 calculate_cohort <- function(census_year, age_range) {
   age_limits <- as.numeric(unlist(strsplit(age_range, "-|\\+")))
   
@@ -351,14 +362,13 @@ best_models <- best_models %>%
   mutate(Cohort = mapply(calculate_cohort, Census_Year, Age_Range)) %>% 
   dplyr::select(Race, Census_Year, Age_Range, Best_Model, Cohort)
 
-print(best_models)
-
 ```
 
 
-### Summary Statistics for Each Subset
 
 ```{r}
+### Summary Statistics for Each Subset
+
 df_merg <- df %>%
   rename(Census_Year = YEAR, Race = RACE, Age_Range = AGE_RANGE)
 
@@ -394,21 +404,14 @@ summary_table <- merged_data %>% group_by(Race, Cohort, Census_Year) %>%
                 # Prob_7 + Prob_8 + Prob_9 + Prob_10 + Prob_11 + Prob_12plus
   ) %>%
   ungroup() %>% as.data.frame()
-
-# View the summary table
-print(summary_table)
 ```
 
 
 ### Test for Significant Changes Over Time Within Each Cohort
-The goal is to determine if there is a **significant change** in any of the following across census years for the same cohort:
 
-1. **Zero Inflation**: Check if the proportion of women with zero children changes significantly over time for the same cohort.
-2. **Family Size**: Test if the mean or variance in the number of children changes for the same cohort over time.
-3. **Model Fit**: Analyze if the best-fitting model for the cohort changes over time.
 
 #### a. **Zero-Inflation Analysis**
-
+Here, we apply the chi-square test for each cohort within each race. Since some cohorts only have one corresponding census year, the test is not applicable for them.
 ```{r}
 ## divided the corhort by race
 merged_df_black <- merged_data %>% filter(Race == "Black/African American")
@@ -475,7 +478,7 @@ print(results_black)
 
 ```
 
-```{r, include=FALSE}
+```{r}
 # Function to determine the nature of change
 determine_nature_of_change <- function(proportions) {
   if (nrow(proportions) > 1) {
@@ -509,9 +512,10 @@ for (i in 1:nrow(results_black)) {
 }
 
 # View the updated results_black
-print(results_black)
+kabble(results_black, caption="Test Result of Zero Inflation for Black Population")
 
 ```
+Here is a table summarize the test result for black population. We observe that the proportion of women with zero children change significantly across census year in the cohort 1901-1910 and 1921-1930.
 
 ```{r, include=FALSE}
 # Data frame to store proportions
@@ -571,7 +575,7 @@ results_white <- results_white %>%
 print(results_white)
 ```
 
-```{r, include=FALSE}
+```{r}
 # Add the Nature_of_Change column
 results_white$Nature_of_Change <- NA  # Initialize the column
 
@@ -590,16 +594,18 @@ for (i in 1:nrow(results_white)) {
 }
 
 # View the updated results_white
-print(results_white)
+kabble(results_white, caption="Test Result of Zero Inflation for White Population")
 
 ```
+This table summarizes the test result for white population. We observe that the proportion of women with zero children change significantly across census year in cohort 1901-1910, 1911-1920 and 1921-1930.
+
 
 ```{r}
 # Combine the two data frames
 combined_result <- rbind(results_black, results_white)
 ```
 
-
+Combining the results above, we created a plot that demonstrate the change and difference of p value between cohorts and races.
 ```{r}
 # Create the plot
 ggplot(combined_result, aes(x = Cohort, y = p_value, color = RACE, shape = Significance)) +
@@ -616,19 +622,21 @@ ggplot(combined_result, aes(x = Cohort, y = p_value, color = RACE, shape = Signi
     shape = "Significance"
   ) +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(
+        plot.title = element_text(size = 14, hjust = 0.5),
+axis.text.x = element_text(angle = 45, hjust = 1))
 
 ```
-**_RESULT:_** The graph shows that there is a discrepancy in the p-value within the cohorts like 1901-1910, 1911-1920 and 1921-1930 by race. However, in cohort 1931-1941, the p-value of each race is pretty close to each other. The overall trend of the p-value for black population is stable across cohort, while the trend for white population fluctuate a lot. 
+The graph shows that there is a discrepancy in the p-value within the cohorts like 1901-1910, 1911-1920 and 1921-1930 by race. However, in cohort 1931-1941, the p-value of each race is pretty close to each other. The overall trend of the p-value for black population is stable across cohort, while the trend for white population fluctuate a lot. 
 
 #### b. **Family Size Analysis**
-
+We apply t test and ANOVA to check if there is significant difference in the mean family size across year for the same cohort. In both racial group, the ANOVA and t-test is not applicable for the following cohort since there is only one census year available in the data for those cohorts:-Inf-1910, 1941-1950, -Inf-1920, -Inf-1890, -Inf-1900, and 1891-1900
 ```{r}
 merged_black = merged_data %>% filter(Race == "Black/African American")
 merged_white = merged_data %>% filter(Race == "White")
 ```
 
-```{r}
+```{r, include=FALSE}
 # Initialize an empty data frame for storing results
 test_result_b <- data.frame(
   RACE = character(), 
@@ -692,13 +700,14 @@ for (cohort in cohorts1) {
 test_result_b <- test_result_b %>%
   mutate(Significance = ifelse(p_value > 0.05, "No", "Yes"))
 
-# View the resulting data frame
-print(test_result_b)
-
 ```
 
-
 ```{r}
+kable(test_result_b, caption="Test Result of Mean Family Size for Black Population")
+```
+In the black population, the p-value of cohorts 1901-1910 and 1921-1930 are smaller than 0.05. These results indicate mean family size for these cohort has significantly changed over different census years in different racial population.
+
+```{r, include=FALSE}
 # Initialize an empty data frame for storing results
 test_result_w <- data.frame(
   RACE = character(), 
@@ -761,18 +770,16 @@ for (cohort in cohorts2) {
 
 test_result_w <- test_result_w %>%
   mutate(Significance = ifelse(p_value > 0.05, "No", "Yes"))
-
-print(test_result_w)
-
 ```
 
-**_RESULT:_** 
-  1.In both racial group, the ANOVA and t-test is not applicable for the following cohort since there is only one census year available in the data for those cohorts:-Inf-1910, 1941-1950, -Inf-1920, -Inf-1890, -Inf-1900, and 1891-1900
-  2.By looking at the ANOVA and t-test for mean family size in white population, the p-value of cohorts 1901-1910, 1911-1920 and 1921-1930 are smaller than 0.05. In the black population, the p-value of cohorts 1901-1910 and 1921-1930 are smaller than 0.05. These results indicate mean family size for these cohort has significantly changed over different census years in different racial population.
+```{r}
+kable(test_result_w, caption="Test Result of Mean Family Size for White Population")
+```
+By looking at the ANOVA and t-test for mean family size in white population, the p-value of cohorts 1901-1910, 1911-1920 and 1921-1930 are smaller than 0.05. 
 
 
 #### c. **Model Fit Analysis**
-
+Due to the due lack of data variability, we use visualization instead of statistical test. Based on the heatmap created, we can see that the model fit for each cohort(cohort with 2+ corresponding census year) across year does not change.
 ```{r}
 # Due to the due lack of data variability, I use visualization instead of test
 
@@ -793,18 +800,9 @@ ggplot(best_models, aes(x = Census_Year, y = Cohort, fill = Best_Model)) +
   )
 ```
 
-**_RESULT:_** Based on the heatmap created, we can see that the model fit for each cohort(cohort with 2+ corresponding census year) across year does not change.
-
-### Conclusion
-- **Zero-inflation**: We observe that the proportion of women with zero children change significantly across census year in the following cohort by race:
-  -black population:1901-1910, 1921-1930
-  -white population:1901-1910, 1911-1920, 1921-1930
-- **Family size**: Cohorts 1901-1910, 1911-1920, 1921-1930, and 1931-1940 present significant change in mean family size across year for both races. 
-- **Best-fitting Model**: Model fit for each cohort(cohort with 2+ corresponding census year) across year does not change in both racial group. 
-
 
 ## Analyzing and Visualizing Significant Fertility Shifts
-The goal is to summarize the previous information and create visualization that illustrates significant fertility shifts in cohorts, compares fertility patterns of 40-49 year-olds to 50-59 year-olds in the 1990 census so we can pick the set of fertility distributions we want to use to visualize the sibling distribution and do the math on the genetic surveillance.
+The goal of this section is to summarize the previous information and create visualization that illustrates significant fertility shifts in cohorts, compares fertility patterns of 40-49 year-olds to 50-59 year-olds in the 1990 census so we can pick the set of fertility distributions we want to use to visualize the sibling distribution and do the math on the genetic surveillance.
 
 
 ### Panel A: Fertility Distribution Shifts Across Cohorts
@@ -876,8 +874,11 @@ ggplot(combined_data, aes(x = Census_Year, y = Mean, color = Cohort)) +
 
 
 ### Panel B: Comparison of 40-49 and 50-59 Age Groups in 1990
+This analysis examines differences in fertility patterns between the 40-49 and 50-59 age groups in 1990, focusing on the distribution, mean number of children, variance, and childlessness (zero inflation) within Black and White populations.
 
 #### Visulization of Distribution
+Firstly, We present a side-by-side distribution plots comparing the number of children for women in the 40-49 and 50-59 age groups within Black and White populations.
+
 ```{r}
 filter_df <- df_proportions %>% 
   filter(YEAR == "1990", AGE_RANGE %in% c("40-49", "50-59")) 
@@ -893,10 +894,15 @@ ggplot(filter_df, aes(x = chborn_num, y = proportion, fill = AGE_RANGE)) +
     x = "Number of Children",
     y = "Proportion",
     fill = "Age Range"
-  ) 
+  ) +
+  theme(
+    plot.title = element_text(size = 14, hjust = 0.5))
 ```
+For both racial groups, the 40-49 age group has a distribution more skewed towards 0-2 children. Meanwhile, women in the 50-59 age group generally have larger family sizes compared to the 40-49 age group.
 
 ####  Summary Statistics Table
+By summarizing the key statistics for each age group and race, we can derive the same insight, which shows that women in the older age group have larger family sizes. On average, women in the 50-59 age group have more children than those in the 40-49 age group. In addition, The variance in the number of children is larger for the 50-59 age group in both racial groups, indicating greater variability in family size. In terms of zero inflation (proportion of women with no children), the women in 40-49 age group have higher zero inflation than women in 50-59 in both racial groups. 
+
 ```{r}
 summary_stats <- filter_df %>%
   group_by(AGE_RANGE, RACE) %>%
@@ -907,16 +913,20 @@ summary_stats <- filter_df %>%
   )
 
 # Print summary statistics table
-summary_stats
+kable(summary_stats, "Summary Statistics of Number of Children in 1990 (40-49 and 50-59 Age Group)")
 ```
 
 #### Test for Difference in Means
+We firstly plot the diagnostic plot to see if the data fulfill the normality assumption. Thought the data for black population and white population violate normality assumption, we can still perform t test to see if there is significant difference in mean for both racial groups in the following due to large sample size (by central limit theorem).
+
+**Null Hypothesis (H₀):** There is no difference in the mean number of children between the two age groups.
+**Alternative Hypothesis (H₁):** There is a difference in the mean number of children between the two age groups.
 
 ```{r, include=FALSE}
 ## Check the normality assumption for black population
 # Subset data for the 40-49 and 50-59 age groups
-data_40_49_b <- df %>% filter(AGE_RANGE == "40-49", RACE == "Black/African American")
-data_50_59_b <- df %>% filter(AGE_RANGE == "50-59", RACE == "Black/African American")
+data_40_49_b <- df %>% filter(AGE_RANGE == "40-49", RACE == "Black/African American", YEAR == "1990")
+data_50_59_b <- df %>% filter(AGE_RANGE == "50-59", RACE == "Black/African American", YEAR == "1990")
 
 qqnorm(data_40_49_b$chborn_num, main = "QQ Plot: 40-49 Age Group (Black/African American)")
 qqline(data_40_49_b$chborn_num)
@@ -929,8 +939,8 @@ qqline(data_50_59_b$chborn_num)
 
 ```{r, include=FALSE}
 ## Check the normality assumption for white population
-data_40_49_w <- df %>% filter(AGE_RANGE == "40-49", RACE == "White")
-data_50_59_w <- df %>% filter(AGE_RANGE == "50-59", RACE == "White")
+data_40_49_w <- df %>% filter(AGE_RANGE == "40-49", RACE == "White", YEAR == "1990")
+data_50_59_w <- df %>% filter(AGE_RANGE == "50-59", RACE == "White", YEAR == "1990")
 
 qqnorm(data_40_49_w$chborn_num, main = "QQ Plot: 40-49 Age Group (White)")
 qqline(data_40_49_w$chborn_num)
@@ -940,34 +950,51 @@ qqnorm(data_50_59_w$chborn_num, main = "QQ Plot: 50-59 Age Group (White)")
 qqline(data_50_59_w$chborn_num)
 ```
 
-Since the data for black population and white population violate normality assumption, we perform a Mann-Whitney U test for both racial groups in the follwoing:
+
 ```{r}
-wilcox_test_result <- wilcox.test(data_40_49_b$chborn_num, data_50_59_b$chborn_num)$p.value
-wilcox_test_result2 <- wilcox.test(data_40_49_w$chborn_num, data_50_59_w$chborn_num)$p.value
-print(c(wilcox_test_result, wilcox_test_result2))
+df_w <- df %>% filter(RACE == "White"& AGE_RANGE %in% c("40-49", "50-59") & YEAR == "1990")
+df_b <- df %>% filter(RACE == "Black/African American" & AGE_RANGE %in% c("40-49", "50-59") & YEAR == "1990")
+
+t_test_b <- t.test(chborn_num ~ AGE_RANGE, data = df_b)$p.value
+t_test_w <- t.test(chborn_num ~ AGE_RANGE, data = df_w)$p.value
+
+res_df <- data.frame(
+  race = c("African American", "European American"),
+  p_value = c(t_test_b, t_test_w)
+)
+res_df$p_value <- format(res_df$p_value, scientific = TRUE)
+
+kable(res_df, caption="Test Result for Difference in Variance between Age Groups By Race")
 ```
-**_RESULT:_** These p-values are both extremely small (close to zero), meaning there is a very strong statistical difference between the two age groups (40-49 and 50-59) in terms of the mean number of children within each racial group. 
+The p-values are both extremely small, meaning there is a very strong statistical difference between the two age groups (40-49 and 50-59) in terms of the mean number of children within each racial group.
 
 #### Test for Difference in Variances
+We apply Levene's test since non-normality in data. 
+**Null Hypothesis (H₀):** There is no difference in the variance of the number of children between the two age groups.
+**Alternative Hypothesis (H₁):** There is a difference in the variance of the number of children between the two age groups.
 
 ```{r}
 ## Apply Levene's test since non-normality
-df_w <- df %>% filter(RACE == "White")
-df_b <- df %>% filter(RACE == "Black/African American")
-
 # Levene's test for Black group
 levene_test_b <- leveneTest(chborn_num ~ as.factor(AGE_RANGE), data = df_b)
 
 # Levene's test for White group
 levene_test_w <- leveneTest(chborn_num ~ as.factor(AGE_RANGE), data = df_w)
 
-# Print results
-print(levene_test_b)
-print(levene_test_w)
-```
-**_RESULT:_** Since the p values are smaller than 0.05 for both racial group, we have enough evidence to reject the null hypothesis, indicating that the variances of the number of children between the two age groups within each racial group are significantly different.
+res_df2 <- data.frame(
+  race = c("African American", "European American"),
+  p_value = format(c(levene_test_b[["Pr(>F)"]][1], levene_test_w[["Pr(>F)"]][1]), scientific = TRUE)
+)
 
-#### Chi-Square Test for Difference in Zero Inflation
+kable(res_df2, caption="Test Result for Difference in Variance between Age Groups By Race")
+```
+Since the p values are smaller than 0.05 for both racial group, we have enough evidence to reject the null hypothesis, indicating that the variances of the number of children between the two age groups within each racial group are significantly different.
+
+#### Test for Difference in Zero Inflation
+To test the difference in zero inflation between age group, we firstly create a contingency tables showing the counts of women with zero children and those with one or more children for each age group. Then we apply chi-square test within each race. 
+
+**Null Hypothesis (H₀):** There is no difference in the proportion of childlessness between the two age groups.
+**Alternative Hypothesis (H₁):** There is a difference in the proportion of childlessness between the two age groups.
 
 ```{r}
 # contingency tables showing the counts of women with zero children and those with one or more children for each age group 
@@ -975,7 +1002,7 @@ ZI_table <- df %>% filter(YEAR == "1990", AGE_RANGE %in% c("40-49", "50-59")) %>
   mutate(childlessness = ifelse(chborn_num == 0, "0 Children", "1+ Children")) %>%       group_by(RACE, AGE_RANGE, childlessness) %>%
   summarise(count = n())
 
-ZI_table
+kable(ZI_table, caption="Contingency Table of Zero Inflation")
 ```
 
 ```{r}
@@ -984,7 +1011,6 @@ ZI_table_b <- ZI_table %>%
 
 cont_table_b <- xtabs(count ~ AGE_RANGE + childlessness, data = ZI_table_b)
 chi_test_b <- chisq.test(cont_table_b)
-chi_test_b$p.value
 ```
 
 ```{r}
@@ -993,9 +1019,30 @@ ZI_table_w <- ZI_table %>%
 
 cont_table_w <- xtabs(count ~ AGE_RANGE + childlessness, data = ZI_table_w)
 chi_test_w <- chisq.test(cont_table_w)
-chi_test_w$p.value
 ```
-**_RESULT:_** The p-values for both tests are extremely low, suggests that there is a significant difference in the proportion of women with 0 children across age ranges (40-49 vs. 50-59) for both the Black/African American and White racial groups. The results imply that childlessness is not uniformly distributed across age groups. 
+
+```{r}
+res_df3 <- data.frame(
+  race = c("African American", "European American"),
+  p_value = format(c(chi_test_b$p.value, chi_test_w$p.value), scientific = TRUE))
+
+kable(res_df3, caption="Test Result for Zero Inflation between Age Groups By Race")
+```
+The p-values for both tests are extremely low, suggests that there is a significant difference in the proportion of women with 0 children across age ranges (40-49 vs. 50-59) for both the Black/African American and White racial groups. The results imply that childlessness is not uniformly distributed across age groups. 
+
+#### Conclusion
+The results of this panel provide clear evidence of significant differences in fertility patterns between the 40-49 and 50-59 age groups for both Black and White populations:
+
+  -**Mean Number of Children:** Women in the 50-59 age group have significantly more children on average than those in the 40-49 age group (difference: 1.03 for Black women and 0.69 for White women).
+  -**Variance:** The 50-59 age group exhibits greater variability in family sizes.
+  -**Zero Inflation:** The 40-49 age group has a higher proportion of childlessness.
+These findings highlight generational differences in fertility patterns, with older age groups (50-59) reflecting larger family sizes and greater variability.
+
+#### Implication
+These findings suggest notable shifts in fertility trends and behaviors across generations:
+  -The 50-59 age group likely represents completed fertility patterns, where women have finished childbearing. This explains the higher mean number of children and greater variance observed in this group.
+  -The 40-49 age group, on the other hand, may still include women who have not yet completed their fertility, leading to a higher proportion of childlessness and a distribution skewed towards smaller family sizes.
+  -These trends may reflect broader social, economic, and cultural influences on family size, such as changes in education, workforce participation, and access to family planning resources across generations.
 
 ### Step 4: Summarize Findings
 
@@ -1015,24 +1062,6 @@ Write a clear and concise summary addressing the following points.
 - **Highlight Differences Between Racial Groups**:
   - Compare the timing and nature of shifts between African American and European American women.
   - Discuss any patterns or discrepancies observed.
-
-#### 4.2 Comparison of 40-49 and 50-59 Age Groups in 1990
-
-- **Summarize Key Differences**:
-  - Present the differences in fertility patterns between the two age groups for each racial group.
-  - Include comparisons of:
-    - Distribution shapes
-    - Mean number of children
-    - Variance
-    - Zero inflation
-  
-- **Report Statistical Test Results**:
-  - Provide the results of the t-tests, F-tests, and chi-square tests.
-  - Interpret the significance of these results in the context of your analysis.
-  
-- **Discuss Implications**:
-  - Consider what these differences suggest about fertility trends and behaviors.
-  - Reflect on whether the older age group represents completed fertility patterns.
 
 #### 4.3 Synthesis and Implications
 
