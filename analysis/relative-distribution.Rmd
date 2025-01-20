@@ -283,7 +283,7 @@ best_models$Best_Model <- apply(best_models, 1, function(row) {
 
 best_models <- best_models %>% dplyr::select(Race, Census_Year, Age_Range, Best_Model)
 # View the updated table with the Best_Model column
-kabble(best_models, caption="Summary Table of Best Model")
+kable(best_models, caption="Summary Table of Best Model")
 ```
 
 
@@ -512,7 +512,7 @@ for (i in 1:nrow(results_black)) {
 }
 
 # View the updated results_black
-kabble(results_black, caption="Test Result of Zero Inflation for Black Population")
+kable(results_black, caption="Test Result of Zero Inflation for Black Population")
 
 ```
 Here is a table summarize the test result for black population. We observe that the proportion of women with zero children change significantly across census year in the cohort 1901-1910 and 1921-1930.
@@ -594,7 +594,7 @@ for (i in 1:nrow(results_white)) {
 }
 
 # View the updated results_white
-kabble(results_white, caption="Test Result of Zero Inflation for White Population")
+kable(results_white, caption="Test Result of Zero Inflation for White Population")
 
 ```
 This table summarizes the test result for white population. We observe that the proportion of women with zero children change significantly across census year in cohort 1901-1910, 1911-1920 and 1921-1930.
@@ -909,11 +909,11 @@ summary_stats <- filter_df %>%
   summarise(
     mean_children = weighted.mean(chborn_num, count),  # Mean number of children
     variance_children = sum(count * (chborn_num - weighted.mean(chborn_num, count))^2) / sum(count),  # Variance
-    zero_inflation = sum(count[chborn_num == 0]) / sum(count)  # Proportion of women with 0 children
+    zero_inflation = sum(count[chborn_num == 0]) / sum(count), .groups = "drop"
   )
 
 # Print summary statistics table
-kable(summary_stats, "Summary Statistics of Number of Children in 1990 (40-49 and 50-59 Age Group)")
+kable(summary_stats, caption= "Summary Statistics of Number of Children in 1990 (40-49 and 50-59 Age Group)")
 ```
 
 #### Test for Difference in Means
