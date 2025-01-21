@@ -45,7 +45,7 @@ library(rstatix)
 library(ggpubr)
 ```
 
-## Data Preparation
+# Data Preparation
 Filtering Criteria: We selected women aged 40 and above to ensure that most had completed childbearing.
 
 Due to the terms of agreement for using this data, we cannot share the full dataset but our repo contains the subset that was used to calculate the mean number of offspring and variance.
@@ -191,10 +191,10 @@ print(df_proportions %>%
 ```
 
 With this visualization of the distribution of the data, we can see that there are differences between races, census year and age groups. 
-**_-By Census Year:_** From 1960 to 1990, the proportion of mothers with larger families (6+ children) decreases for both races across all age groups.
+- **_By Census Year:_** From 1960 to 1990, the proportion of mothers with larger families (6+ children) decreases for both races across all age groups.
 Smaller families (1-3 children) become more common over the decades.
-**_-By Age Group:_** Older age groups (e.g., 70+) show a higher frequency of larger family sizes, especially in earlier Census years. Younger age groups (40-49) show a stronger shift toward smaller family sizes in more recent decades.
-**_-By Race:_** African American mothers (right side) consistently show a higher proportion of larger families (6+ children) compared to European American mothers.
+- **_By Age Group:_** Older age groups (e.g., 70+) show a higher frequency of larger family sizes, especially in earlier Census years. Younger age groups (40-49) show a stronger shift toward smaller family sizes in more recent decades.
+- **_By Race:_** African American mothers (right side) consistently show a higher proportion of larger families (6+ children) compared to European American mothers.
 
 ```{r, include=FALSE}
 # Mean Number of Children By race and Year
@@ -511,6 +511,8 @@ for (i in 1:nrow(results_black)) {
   results_black$Nature_of_Change[i] <- determine_nature_of_change(proportions)
 }
 
+results_black$p_value = format(results_black$p_value, scientific = TRUE)
+
 # View the updated results_black
 kable(results_black, caption="Test Result of Zero Inflation for Black Population")
 
@@ -593,6 +595,8 @@ for (i in 1:nrow(results_white)) {
   results_white$Nature_of_Change[i] <- determine_nature_of_change(proportions)
 }
 
+results_white$p_value = format(results_white$p_value, scientific = TRUE)
+
 # View the updated results_white
 kable(results_white, caption="Test Result of Zero Inflation for White Population")
 
@@ -606,6 +610,7 @@ combined_result <- rbind(results_black, results_white)
 ```
 
 Combining the results above, we created a plot that demonstrate the change and difference of p value between cohorts and races.
+
 ```{r}
 # Create the plot
 ggplot(combined_result, aes(x = Cohort, y = p_value, color = RACE, shape = Significance)) +
@@ -627,6 +632,7 @@ ggplot(combined_result, aes(x = Cohort, y = p_value, color = RACE, shape = Signi
 axis.text.x = element_text(angle = 45, hjust = 1))
 
 ```
+
 The graph shows that there is a discrepancy in the p-value within the cohorts like 1901-1910, 1911-1920 and 1921-1930 by race. However, in cohort 1931-1941, the p-value of each race is pretty close to each other. The overall trend of the p-value for black population is stable across cohort, while the trend for white population fluctuate a lot. 
 
 #### b. **Family Size Analysis**
@@ -703,6 +709,8 @@ test_result_b <- test_result_b %>%
 ```
 
 ```{r}
+test_result_b$p_value = format(test_result_b$p_value, scientific = TRUE)
+
 kable(test_result_b, caption="Test Result of Mean Family Size for Black Population")
 ```
 In the black population, the p-value of cohorts 1901-1910 and 1921-1930 are smaller than 0.05. These results indicate mean family size for these cohort has significantly changed over different census years in different racial population.
@@ -773,6 +781,8 @@ test_result_w <- test_result_w %>%
 ```
 
 ```{r}
+test_result_w$p_value = format(test_result_w$p_value, scientific = TRUE)
+
 kable(test_result_w, caption="Test Result of Mean Family Size for White Population")
 ```
 By looking at the ANOVA and t-test for mean family size in white population, the p-value of cohorts 1901-1910, 1911-1920 and 1921-1930 are smaller than 0.05. 
@@ -780,6 +790,7 @@ By looking at the ANOVA and t-test for mean family size in white population, the
 
 #### c. **Model Fit Analysis**
 Due to the due lack of data variability, we use visualization instead of statistical test. Based on the heatmap created, we can see that the model fit for each cohort(cohort with 2+ corresponding census year) across year does not change.
+
 ```{r}
 # Due to the due lack of data variability, I use visualization instead of test
 
@@ -788,14 +799,14 @@ ggplot(best_models, aes(x = Census_Year, y = Cohort, fill = Best_Model)) +
   facet_wrap(~Race, nrow = 2) + # Facet by Race
   scale_fill_manual(values = c("Zero_Inflated_Poisson" = "#0072B2", "Zero_Inflated_NB" = "#F0E442")) + 
   labs(
-    title = "Best Model by Race, Census Year, and Cohort(Birth Range)",
+    title = "Best Model by Race, Census Year, and Cohort (Birth Range)",
     x = "Census Year",
     y = "Birth Range",
     fill = "Best Model"
   ) +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 14, face = "bold"),
+    plot.title = element_text(size = 14, hjust = 0.5),
     legend.position = "bottom"
   )
 ```
@@ -806,6 +817,7 @@ The goal of this section is to summarize the previous information and create vis
 
 
 ### Panel A: Fertility Distribution Shifts Across Cohorts
+In this part, we'll summarize the information from the cohort stability and create visualization that illustrates significant fertility shifts in cohorts.
 
 #### Cohorts with Significant Change in Zero Inflation
 ```{r}
@@ -833,12 +845,14 @@ ggplot(combined_data, aes(x = Census_Year, y = Proportion_Zero_Children, color =
   ) +
   theme_minimal() +
   theme(
+    plot.title = element_text(size = 14, hjust = 0.5),
     axis.text.x = element_text(angle = 45, hjust = 1),
     legend.position = "bottom"
   )
 
 ```
-
+- In the **black population**, the most significant shifts in childlessness occurred between the 1960 and 1970 census years, where there is a **sharp increase** in the proportion of women with zero children. This trend continues more gradually between 1970 and 1990 but stabilizes for cohort 1921-1930.
+- In the **white population**, the increase in childlessness is also visible between 1960 and 1970, but the magnitude of the increase is **more pronounced** compared to African American women. Childlessness stabilizes for cohort 1911-1920 and 1921-1930 between 1970 and 1990, with smaller fluctuations in later decades.
 
 #### Cohorts with Significant Change in Mean Family Size
 ```{r}
@@ -866,11 +880,17 @@ ggplot(combined_data, aes(x = Census_Year, y = Mean, color = Cohort)) +
   ) +
   theme_minimal() +
   theme(
+    plot.title = element_text(size = 14, hjust = 0.5),
     axis.text.x = element_text(angle = 45, hjust = 1),
     legend.position = "bottom"
   )
 
 ```
+- For **black population**, the mean family size for the 1921-1930 cohort **increased** substantially in 1990, reaching over 3.6 children on average. However, both cohorts exhibited little change in mean family size in earlier census year (between 1960 and 1980).
+- For **white population**, a consistent decline in mean family size was observed for the 1901-1910 and 1911-1920 cohorts from 1960 to 1970. The 1921-1930 cohort showed a modest increase in mean family size in 1990, reaching around 2.8 children on average, which is **smaller than** the black population.
+
+#### Cohorts with Significant Change in Variance of Family Size
+
 
 
 ### Panel B: Comparison of 40-49 and 50-59 Age Groups in 1990
@@ -919,8 +939,8 @@ kable(summary_stats, caption= "Summary Statistics of Number of Children in 1990 
 #### Test for Difference in Means
 We firstly plot the diagnostic plot to see if the data fulfill the normality assumption. Thought the data for black population and white population violate normality assumption, we can still perform t test to see if there is significant difference in mean for both racial groups in the following due to large sample size (by central limit theorem).
 
-**Null Hypothesis (H₀):** There is no difference in the mean number of children between the two age groups.
-**Alternative Hypothesis (H₁):** There is a difference in the mean number of children between the two age groups.
+- **Null Hypothesis (H₀):** There is no difference in the mean number of children between the two age groups.
+- **Alternative Hypothesis (H₁):** There is a difference in the mean number of children between the two age groups.
 
 ```{r, include=FALSE}
 ## Check the normality assumption for black population
@@ -970,8 +990,8 @@ The p-values are both extremely small, meaning there is a very strong statistica
 
 #### Test for Difference in Variances
 We apply Levene's test since non-normality in data. 
-**Null Hypothesis (H₀):** There is no difference in the variance of the number of children between the two age groups.
-**Alternative Hypothesis (H₁):** There is a difference in the variance of the number of children between the two age groups.
+- **Null Hypothesis (H₀):** There is no difference in the variance of the number of children between the two age groups.
+- **Alternative Hypothesis (H₁):** There is a difference in the variance of the number of children between the two age groups.
 
 ```{r}
 ## Apply Levene's test since non-normality
@@ -993,14 +1013,14 @@ Since the p values are smaller than 0.05 for both racial group, we have enough e
 #### Test for Difference in Zero Inflation
 To test the difference in zero inflation between age group, we firstly create a contingency tables showing the counts of women with zero children and those with one or more children for each age group. Then we apply chi-square test within each race. 
 
-**Null Hypothesis (H₀):** There is no difference in the proportion of childlessness between the two age groups.
-**Alternative Hypothesis (H₁):** There is a difference in the proportion of childlessness between the two age groups.
+- **Null Hypothesis (H₀):** There is no difference in the proportion of childlessness between the two age groups.
+- **Alternative Hypothesis (H₁):** There is a difference in the proportion of childlessness between the two age groups.
 
 ```{r}
 # contingency tables showing the counts of women with zero children and those with one or more children for each age group 
 ZI_table <- df %>% filter(YEAR == "1990", AGE_RANGE %in% c("40-49", "50-59")) %>% 
   mutate(childlessness = ifelse(chborn_num == 0, "0 Children", "1+ Children")) %>%       group_by(RACE, AGE_RANGE, childlessness) %>%
-  summarise(count = n())
+  summarise(count = n(), .groups = "drop")
 
 kable(ZI_table, caption="Contingency Table of Zero Inflation")
 ```
@@ -1033,91 +1053,17 @@ The p-values for both tests are extremely low, suggests that there is a signific
 #### Conclusion
 The results of this panel provide clear evidence of significant differences in fertility patterns between the 40-49 and 50-59 age groups for both Black and White populations:
 
-  -**Mean Number of Children:** Women in the 50-59 age group have significantly more children on average than those in the 40-49 age group (difference: 1.03 for Black women and 0.69 for White women).
-  -**Variance:** The 50-59 age group exhibits greater variability in family sizes.
-  -**Zero Inflation:** The 40-49 age group has a higher proportion of childlessness.
+ - **Mean Number of Children:** Women in the 50-59 age group have significantly **more children** on average than those in the 40-49 age group (difference: 1.03 for Black women and 0.69 for White women).
+ - **Variance:** The 50-59 age group exhibits **greater variability** in family sizes.
+ - **Zero Inflation:** The 40-49 age group has a **higher proportion** of childlessness.
+ 
 These findings highlight generational differences in fertility patterns, with older age groups (50-59) reflecting larger family sizes and greater variability.
 
 #### Implication
 These findings suggest notable shifts in fertility trends and behaviors across generations:
-  -The 50-59 age group likely represents completed fertility patterns, where women have finished childbearing. This explains the higher mean number of children and greater variance observed in this group.
-  -The 40-49 age group, on the other hand, may still include women who have not yet completed their fertility, leading to a higher proportion of childlessness and a distribution skewed towards smaller family sizes.
-  -These trends may reflect broader social, economic, and cultural influences on family size, such as changes in education, workforce participation, and access to family planning resources across generations.
-
-### Step 4: Summarize Findings
-
-Write a clear and concise summary addressing the following points.
-
-#### 4.1 Significant Fertility Shifts Across Cohorts
-
-- **Identify Timing of Shifts**:
-  - Specify when significant fertility shifts occurred for each racial group based on your analysis in Question 2.
-  
-- **Describe Nature of Shifts**:
-  - Detail the characteristics of the shifts, such as:
-    - Decrease in mean number of children
-    - Increase in childlessness (zero inflation)
-    - Changes in variance or distribution shape
-  
-- **Highlight Differences Between Racial Groups**:
-  - Compare the timing and nature of shifts between African American and European American women.
-  - Discuss any patterns or discrepancies observed.
-
-#### 4.3 Synthesis and Implications
-
-- **Integrate Findings**:
-  - Connect the insights from the cohort analysis with the age group comparison.
-  - Discuss how the patterns observed in the 1990 census relate to the shifts identified across cohorts.
-  
-- **Consider Contributing Factors**:
-  - Explore potential social, economic, or policy factors that may have contributed to the observed fertility shifts.
-    - For example, changes in access to education, employment opportunities, or family planning resources.
-  
-- **Reflect on Broader Implications**:
-  - Discuss how these fertility trends might impact your broader research topic, such as genetic surveillance disparities.
-  - Consider the implications for future demographic research or policy development.
-
-### Additional Considerations
-
-- **Visual Clarity**:
-  - Ensure all visualizations are easy to interpret.
-  - Use clear labels, legends, and annotations.
-  
-- **Contextualize Statistical Significance**:
-  - Explain not just whether results are statistically significant, but also what they mean in practical terms.
-  
-- **Acknowledge Data Limitations**:
-  - Discuss any limitations or biases in the data that could affect your findings.
-    - For instance, sample size constraints or missing data.
-  
-- **Ethical Considerations**:
-  - Approach discussions of race and fertility sensitively and responsibly.
-  - Avoid drawing causal conclusions without robust evidence.
-
-### Integration with Previous Work
-
-- **Leverage Previous Analyses**:
-  - Use the visualizations and statistical summaries from Questions 1 and 2 as foundations for this analysis.
-  
-- **Create a Cohesive Narrative**:
-  - Ensure that your findings from all questions are connected and build upon each other.
-  - Tell a comprehensive story about fertility trends across cohorts and racial groups.
-
-### Final Deliverables
-
-- **Multi-Panel Visualization**:
-  - Panel A: Fertility distribution shifts across cohorts with highlighted significant shifts.
-  - Panel B: Comparative distribution plots for 40-49 and 50-59 age groups in 1990, including summary statistics.
-  
-- **Written Summary**:
-  - A concise report that addresses the points outlined in Step 4.
-  - Include interpretations of statistical analyses and discuss broader implications.
-  
-- **Statistical Analysis Documentation**:
-  - Provide details of the statistical tests conducted, including test assumptions, results, and interpretations.
-  
-- **Annotated Code (if applicable)**:
-  - While not the focus, include any new code used for this analysis with appropriate comments.
+  - The 50-59 age group likely represents completed fertility patterns, where women have finished childbearing. This explains the higher mean number of children and greater variance observed in this group.
+  - The 40-49 age group, on the other hand, may still include women who have not yet completed their fertility, leading to a higher proportion of childlessness and a distribution skewed towards smaller family sizes.
+  - These trends may reflect broader social, economic, and cultural influences on family size, such as changes in education, workforce participation, and access to family planning resources across generations.
 
 
 # Distribution of Number of Siblings Across Census Years
@@ -1134,8 +1080,8 @@ For example, suppose 10 mothers (generation 0) have 7 children, then there will 
 We take our original data and calculate the frequency of siblings for each mother based on the number of children they have. We then aggregate this data to get the frequency of siblings for each generation along with details on the birth years of the relevant children to visualize the distribution of the number of siblings across generations.
 
 ## Data Preparation
+Firstly, we calculate the number of sibling by subtracting 1 from number of children. Then, we group the data to calculate sibling frequencies and check the normalization by calculating the proportion of sibling frequencies in each combination of census year, race and age range.
 
-### Calculate Sibling Frequencies
 ```{r}
 df2 <- df %>% 
   dplyr::select(RACE, YEAR, AGE_RANGE, chborn_num)
@@ -1147,12 +1093,14 @@ df2 <- df2 %>%
 ```
 
 ```{r}
+### Calculate Sibling Frequencies
+
 df2 <- df2 %>%
 mutate(sibling_freq = ifelse(chborn_num != 1, n_siblings * 1, 1))  # Assuming each mother represents 1 in frequency
 ```
 
-### Aggregate Sibling Data
 ```{r}
+### Aggregate Sibling Data
 # Group the data and calculate sibling frequencies
 df_siblings <- df2 %>%
  group_by(YEAR, RACE, AGE_RANGE, n_siblings) %>%
@@ -1170,8 +1118,8 @@ df_sibling_proportions <- df_siblings %>%
  ungroup()
 ```
 
-### Check Normalization
 ```{r}
+### Check Normalization
 normalization_check <- df_sibling_proportions %>%
   group_by(YEAR, RACE, AGE_RANGE) %>%
   summarise(total_proportion = sum(proportion), .groups = "drop") %>%
@@ -1180,7 +1128,7 @@ normalization_check <- df_sibling_proportions %>%
 
 
 ## Visualization of Distribution of Number of Siblings
-
+Then we visualize the general trends in the frequency of the number of siblings for African American and European American mothers across the Census years by age group.
 ```{r}
 df_sibling_mirror <- df_sibling_proportions %>%
   mutate(proportion = if_else(RACE == "White", -proportion, proportion))
@@ -1229,26 +1177,18 @@ df2 %>% filter(RACE == "Black/African American" & n_siblings >= 0) %>% summarise
 
 df2 %>% filter(RACE == "White" & n_siblings >= 0) %>% summarise(Mean = mean(n_siblings))
 ```
+With this visualization of the distribution of the data, we can see that there are differences between races, census year and age groups. 
 
-**_RESULT:_**
+- **_By Census Year:_** 
+ - In 1960 and 1970, individuals are more likely to have higher number of siblings,      especially in the 5-10 range. This trend diminishes over time.
+ - By 1980 and 1990, the distribution shifts toward smaller family sizes, with a growing proportion of individuals having fewer siblings.
 
-**_-By Census Year:_** 
-In 1960 and 1970, individuals are more likely to have higher number of siblings,      especially in the 5-10 range. This trend diminishes over time.
+- **_By Age Range:_**
+ - 40-49 Age Group: For this group, the number of individuals with 0-2 siblings increases across census years, especially in 1980 and 1990, while the proportion of individuals with larger sibling counts decreases.
+ - 50-59 and 60-69 Age Groups: These groups show a similar shift toward smaller family sizes, but the trend is slightly more gradual compared to the younger age group.
+ - 70+ Age Group: The shift to fewer siblings is noticeable, although the trend is less pronounced. The distribution remains relatively stable across the census years, with a significant portion of individuals still coming from large families in 1960 and 1970.
 
-By 1980 and 1990, the distribution shifts toward smaller family sizes, with a growing proportion of individuals having fewer siblings.
-
-**_-By age range:_**
-
-40-49 Age Group: For this group, the number of individuals with 0-2 siblings increases across census years, especially in 1980 and 1990, while the proportion of individuals with larger sibling counts decreases.
-
-50-59 and 60-69 Age Groups: These groups show a similar shift toward smaller family sizes, but the trend is slightly more gradual compared to the younger age group.
-
-70+ Age Group: The shift to fewer siblings is noticeable, although the trend is less pronounced. The distribution remains relatively stable across the census years, with a significant portion of individuals still coming from large families in 1960 and 1970.
-
-2. Compare the distributions between White and Black/African American populations.
-
-**_RESULT:_**
--Black/African American Populations (right side of each pair) consistently show a higher proportion of individuals with larger sibling counts (5-10 siblings) compared to White populations. However, similar to the White population, the number of individuals with fewer siblings increases over time.
+- **_By Race:_**Black/African American Populations (right side of each pair) consistently show a higher proportion of individuals with larger sibling counts (5-10 siblings) compared to White populations. However, similar to the White population, the number of individuals with fewer siblings increases over time.
 
 3. Note any significant changes or trends in the number of siblings over time.
 
