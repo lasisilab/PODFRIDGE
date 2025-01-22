@@ -355,7 +355,7 @@ div.tocify {
 <h1 class="title toc-ignore">Estimating Differences in the Distribution
 of First-degree Relatives</h1>
 <h4 class="author">Manqing Lin, Tina Lasisi</h4>
-<h4 class="date">2025-01-20 15:59:11</h4>
+<h4 class="date">2025-01-22 14:21:37</h4>
 
 </div>
 
@@ -384,7 +384,7 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-01-20
+<strong>Last updated:</strong> 2025-01-22
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -518,15 +518,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree23ba6ad15103d97a05fb4ec69e0914a4bfeaceb7targetblank23ba6ada">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree341604654dc879ab431c0805225e879b8cef4808targetblank3416046a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/23ba6ad15103d97a05fb4ec69e0914a4bfeaceb7" target="_blank">23ba6ad</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/341604654dc879ab431c0805225e879b8cef4808" target="_blank">3416046</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree23ba6ad15103d97a05fb4ec69e0914a4bfeaceb7targetblank23ba6ada"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree341604654dc879ab431c0805225e879b8cef4808targetblank3416046a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -536,7 +536,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/23ba6ad15103d97a05fb4ec69e0914a4bfeaceb7" target="_blank">23ba6ad</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/341604654dc879ab431c0805225e879b8cef4808" target="_blank">3416046</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -555,8 +555,10 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
     Ignored:    analysis/.Rhistory
-    Ignored:    analysis/figure/
     Ignored:    data/.DS_Store
+
+Untracked files:
+    Untracked:  com.csv
 
 Unstaged changes:
     Modified:   analysis/relative-distribution.Rmd
@@ -605,6 +607,57 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/341604654dc879ab431c0805225e879b8cef4808/analysis/relative-distribution.Rmd" target="_blank">3416046</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2025-01-21
+</td>
+<td>
+update final report
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/4e0a07c13a2f2ff24d3e68f317c7573f79065ec5/analysis/relative-distribution.Rmd" target="_blank">4e0a07c</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2025-01-20
+</td>
+<td>
+update report
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/4e0a07c13a2f2ff24d3e68f317c7573f79065ec5/docs/relative-distribution.html" target="_blank">4e0a07c</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2025-01-20
+</td>
+<td>
+update report
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1472,8 +1525,9 @@ Backman, Annie Chen, Grace Cooper, Stephanie Richards, Renae Rogers, and
 Megan Schouweiler. IPUMS USA: Version 14.0 [dataset]. Minneapolis, MN:
 IPUMS, 2023. <a href="https://doi.org/10.18128/D010.V14.0"
 class="uri">https://doi.org/10.18128/D010.V14.0</a></p>
-<div id="data-preparation" class="section level2">
-<h2>Data Preparation</h2>
+</div>
+<div id="data-preparation" class="section level1">
+<h1>Data Preparation</h1>
 <p>Filtering Criteria: We selected women aged 40 and above to ensure
 that most had completed childbearing.</p>
 <p>Due to the terms of agreement for using this data, we cannot share
@@ -1491,7 +1545,6 @@ to the mother:</p>
 <p><span class="math display">\[
 n_{sib} = chborn_{num} - 1
 \]</span></p>
-</div>
 </div>
 <div id="distribution-of-number-of-children-across-census-years"
 class="section level1">
@@ -1539,16 +1592,21 @@ linmatch
 </div>
 <p>With this visualization of the distribution of the data, we can see
 that there are differences between races, census year and age groups.
-<strong><em>-By Census Year:</em></strong> From 1960 to 1990, the
+<strong><em>NOTE</em>:</strong>The category ‘12+’ includes families with
+12 or more children.</p>
+<ul>
+<li><strong><em>By Census Year:</em></strong> From 1960 to 1990, the
 proportion of mothers with larger families (6+ children) decreases for
 both races across all age groups. Smaller families (1-3 children) become
-more common over the decades. <strong><em>-By Age Group:</em></strong>
-Older age groups (e.g., 70+) show a higher frequency of larger family
-sizes, especially in earlier Census years. Younger age groups (40-49)
-show a stronger shift toward smaller family sizes in more recent
-decades. <strong><em>-By Race:</em></strong> African American mothers
-(right side) consistently show a higher proportion of larger families
-(6+ children) compared to European American mothers.</p>
+more common over the decades.</li>
+<li><strong><em>By Age Group:</em></strong> Older age groups (e.g., 70+)
+show a higher frequency of larger family sizes, especially in earlier
+Census years. Younger age groups (40-49) show a stronger shift toward
+smaller family sizes in more recent decades.</li>
+<li><strong><em>By Race:</em></strong> African American mothers (right
+side) consistently show a higher proportion of larger families (6+
+children) compared to European American mothers.</li>
+</ul>
 <div id="model-fit-across-census-years" class="section level2">
 <h2>Model Fit Across Census Years</h2>
 <p>We will now find out the best model fitted for each combination of
@@ -1570,7 +1628,7 @@ record the model with minimum AIC. The following is the table that
 summarize the best model for each combination of race, census year and
 age group.</p>
 <table>
-<caption>Summary Table of Best Model</caption>
+<caption>Summary Table of Best Model (Children)</caption>
 <thead>
 <tr class="header">
 <th align="left">Race</th>
@@ -1811,8 +1869,8 @@ Number of Fisher Scoring iterations: 25</code></pre>
 <p>According to the resulting visualization, the ZINB model is the best
 fit for the black population across census year and age group. However,
 the ZINB model perform the best among the white population only across
-year 1960 and 1970, and age group 60-69 and 70+.
-<img src="figure/relative-distribution.Rmd/unnamed-chunk-9-1.png" width="864" style="display: block; margin: auto;" /></p>
+year 1960 and 1970, and age group 60-69 and 70+.</p>
+<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-9-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-1">
 Past versions of unnamed-chunk-9-1.png
@@ -1835,6 +1893,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/4e0a07c13a2f2ff24d3e68f317c7573f79065ec5/docs/figure/relative-distribution.Rmd/unnamed-chunk-9-1.png" target="_blank">4e0a07c</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2025-01-20
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/415f30a114cca2740317633e0520d2c432e0495b/docs/figure/relative-distribution.Rmd/unnamed-chunk-9-1.png" target="_blank">415f30a</a>
@@ -1873,7 +1942,7 @@ the following across census years for the same cohort:</p>
 <li><strong>Zero Inflation</strong>: Check if the proportion of women
 with zero children changes significantly over time for the same
 cohort.</li>
-<li><strong>Family Size</strong>: Test if the mean or variance in the
+<li><strong>Family Size</strong>: Test if the mean and variance in the
 number of children changes for the same cohort over time.</li>
 <li><strong>Model Fit</strong>: Analyze if the best-fitting model for
 the cohort changes over time.</li>
@@ -1895,10 +1964,10 @@ not applicable for them.</p>
 <caption>Test Result of Zero Inflation for Black Population</caption>
 <colgroup>
 <col width="11%" />
-<col width="24%" />
+<col width="23%" />
 <col width="10%" />
 <col width="11%" />
-<col width="10%" />
+<col width="13%" />
 <col width="13%" />
 <col width="17%" />
 </colgroup>
@@ -1908,7 +1977,7 @@ not applicable for them.</p>
 <th align="left">RACE</th>
 <th align="left">Cohort</th>
 <th align="right">Chi_Square</th>
-<th align="right">p_value</th>
+<th align="left">p_value</th>
 <th align="left">Significance</th>
 <th align="left">Nature_of_Change</th>
 </tr>
@@ -1919,7 +1988,7 @@ not applicable for them.</p>
 <td align="left">Black/African American</td>
 <td align="left">1901-1910</td>
 <td align="right">4.310851</td>
-<td align="right">0.0378700</td>
+<td align="left">3.787001e-02</td>
 <td align="left">Yes</td>
 <td align="left">Increase</td>
 </tr>
@@ -1928,7 +1997,7 @@ not applicable for them.</p>
 <td align="left">Black/African American</td>
 <td align="left">1911-1920</td>
 <td align="right">1.421550</td>
-<td align="right">0.4912634</td>
+<td align="left">4.912634e-01</td>
 <td align="left">No</td>
 <td align="left">Mixed/No Change</td>
 </tr>
@@ -1937,7 +2006,7 @@ not applicable for them.</p>
 <td align="left">Black/African American</td>
 <td align="left">1921-1930</td>
 <td align="right">17.245995</td>
-<td align="right">0.0001799</td>
+<td align="left">1.799202e-04</td>
 <td align="left">Yes</td>
 <td align="left">Mixed/No Change</td>
 </tr>
@@ -1946,26 +2015,26 @@ not applicable for them.</p>
 <td align="left">Black/African American</td>
 <td align="left">1931-1940</td>
 <td align="right">3.466056</td>
-<td align="right">0.0626405</td>
+<td align="left">6.264051e-02</td>
 <td align="left">No</td>
 <td align="left">Decrease</td>
 </tr>
 </tbody>
 </table>
-<p>Here is a table summarize the test result for black population. We
+<p>Above is a table summarize the test result for black population. We
 observe that the proportion of women with zero children change
 significantly across census year in the cohort 1901-1910 and
 1921-1930.</p>
-<table>
+<table style="width:100%;">
 <caption>Test Result of Zero Inflation for White Population</caption>
 <colgroup>
 <col width="13%" />
 <col width="7%" />
 <col width="12%" />
-<col width="15%" />
-<col width="12%" />
+<col width="14%" />
 <col width="16%" />
-<col width="21%" />
+<col width="15%" />
+<col width="20%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -1973,7 +2042,7 @@ significantly across census year in the cohort 1901-1910 and
 <th align="left">RACE</th>
 <th align="left">Cohort</th>
 <th align="right">Chi_Square</th>
-<th align="right">p_value</th>
+<th align="left">p_value</th>
 <th align="left">Significance</th>
 <th align="left">Nature_of_Change</th>
 </tr>
@@ -1984,7 +2053,7 @@ significantly across census year in the cohort 1901-1910 and
 <td align="left">White</td>
 <td align="left">1901-1910</td>
 <td align="right">662.9400598</td>
-<td align="right">0.0000000</td>
+<td align="left">3.427247e-146</td>
 <td align="left">Yes</td>
 <td align="left">Increase</td>
 </tr>
@@ -1993,7 +2062,7 @@ significantly across census year in the cohort 1901-1910 and
 <td align="left">White</td>
 <td align="left">1911-1920</td>
 <td align="right">711.8344845</td>
-<td align="right">0.0000000</td>
+<td align="left">2.673657e-155</td>
 <td align="left">Yes</td>
 <td align="left">Mixed/No Change</td>
 </tr>
@@ -2002,7 +2071,7 @@ significantly across census year in the cohort 1901-1910 and
 <td align="left">White</td>
 <td align="left">1921-1930</td>
 <td align="right">80.1733778</td>
-<td align="right">0.0000000</td>
+<td align="left">3.895581e-18</td>
 <td align="left">Yes</td>
 <td align="left">Decrease</td>
 </tr>
@@ -2011,7 +2080,7 @@ significantly across census year in the cohort 1901-1910 and
 <td align="left">White</td>
 <td align="left">1931-1940</td>
 <td align="right">0.1867867</td>
-<td align="right">0.6656046</td>
+<td align="left">6.656046e-01</td>
 <td align="left">No</td>
 <td align="left">Decrease</td>
 </tr>
@@ -2022,8 +2091,8 @@ observe that the proportion of women with zero children change
 significantly across census year in cohort 1901-1910, 1911-1920 and
 1921-1930.</p>
 <p>Combining the results above, we created a plot that demonstrate the
-change and difference of p value between cohorts and races.
-<img src="figure/relative-distribution.Rmd/unnamed-chunk-19-1.png" width="864" style="display: block; margin: auto;" /></p>
+change and difference of p value between cohorts and races.</p>
+<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-19-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-19-1">
 Past versions of unnamed-chunk-19-1.png
@@ -2046,6 +2115,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/4e0a07c13a2f2ff24d3e68f317c7573f79065ec5/docs/figure/relative-distribution.Rmd/unnamed-chunk-19-1.png" target="_blank">4e0a07c</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2025-01-20
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/415f30a114cca2740317633e0520d2c432e0495b/docs/figure/relative-distribution.Rmd/unnamed-chunk-19-1.png" target="_blank">415f30a</a>
@@ -2089,23 +2169,23 @@ cohort 1931-1941, the p-value of each race is pretty close to each
 other. The overall trend of the p-value for black population is stable
 across cohort, while the trend for white population fluctuate a lot.</p>
 </div>
-<div id="b.-family-size-analysis" class="section level4">
-<h4>b. <strong>Family Size Analysis</strong></h4>
-<p>We apply t test and ANOVA to check if there is significant difference
-in the mean family size across year for the same cohort. In both racial
-group, the ANOVA and t-test is not applicable for the following cohort
-since there is only one census year available in the data for those
-cohorts:-Inf-1910, 1941-1950, -Inf-1920, -Inf-1890, -Inf-1900, and
-1891-1900</p>
+<div id="b.-family-size-analysis-mean" class="section level4">
+<h4>b. <strong>Family Size Analysis (Mean)</strong></h4>
+<p>We apply t-test and ANOVA to check if there is a significant
+difference in the mean family size across the year for the same cohort.
+In both racial groups, the ANOVA and t-test are not applicable for the
+following cohort since there is only one census year available in the
+data for those cohorts:-Inf-1910, 1941-1950, -Inf-1920, -Inf-1890,
+-Inf-1900, and 1891-1900</p>
 <table>
 <caption>Test Result of Mean Family Size for Black Population</caption>
 <colgroup>
 <col width="4%" />
-<col width="32%" />
-<col width="14%" />
+<col width="31%" />
+<col width="13%" />
 <col width="15%" />
-<col width="14%" />
-<col width="18%" />
+<col width="17%" />
+<col width="17%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -2113,7 +2193,7 @@ cohorts:-Inf-1910, 1941-1950, -Inf-1920, -Inf-1890, -Inf-1900, and
 <th align="left">RACE</th>
 <th align="left">Cohort</th>
 <th align="right">Statistic</th>
-<th align="right">p_value</th>
+<th align="left">p_value</th>
 <th align="left">Significance</th>
 </tr>
 </thead>
@@ -2123,7 +2203,7 @@ cohorts:-Inf-1910, 1941-1950, -Inf-1920, -Inf-1890, -Inf-1900, and
 <td align="left">Black/African American</td>
 <td align="left">1911-1920</td>
 <td align="right">0.2935745</td>
-<td align="right">0.7455953</td>
+<td align="left">7.455953e-01</td>
 <td align="left">No</td>
 </tr>
 <tr class="even">
@@ -2131,7 +2211,7 @@ cohorts:-Inf-1910, 1941-1950, -Inf-1920, -Inf-1890, -Inf-1900, and
 <td align="left">Black/African American</td>
 <td align="left">1901-1910</td>
 <td align="right">2.8577289</td>
-<td align="right">0.0042727</td>
+<td align="left">4.272684e-03</td>
 <td align="left">Yes</td>
 </tr>
 <tr class="odd">
@@ -2139,7 +2219,7 @@ cohorts:-Inf-1910, 1941-1950, -Inf-1920, -Inf-1890, -Inf-1900, and
 <td align="left">Black/African American</td>
 <td align="left">1921-1930</td>
 <td align="right">21.4153393</td>
-<td align="right">0.0000000</td>
+<td align="left">5.058954e-10</td>
 <td align="left">Yes</td>
 </tr>
 <tr class="even">
@@ -2147,7 +2227,7 @@ cohorts:-Inf-1910, 1941-1950, -Inf-1920, -Inf-1890, -Inf-1900, and
 <td align="left">Black/African American</td>
 <td align="left">1931-1940</td>
 <td align="right">-0.0665138</td>
-<td align="right">0.9469694</td>
+<td align="left">9.469694e-01</td>
 <td align="left">No</td>
 </tr>
 </tbody>
@@ -2164,7 +2244,7 @@ in different racial population.</p>
 <th align="left">RACE</th>
 <th align="left">Cohort</th>
 <th align="right">Statistic</th>
-<th align="right">p_value</th>
+<th align="left">p_value</th>
 <th align="left">Significance</th>
 </tr>
 </thead>
@@ -2174,7 +2254,7 @@ in different racial population.</p>
 <td align="left">White</td>
 <td align="left">1911-1920</td>
 <td align="right">68.7034766</td>
-<td align="right">0.0000000</td>
+<td align="left">1.472553e-30</td>
 <td align="left">Yes</td>
 </tr>
 <tr class="even">
@@ -2182,7 +2262,7 @@ in different racial population.</p>
 <td align="left">White</td>
 <td align="left">1901-1910</td>
 <td align="right">16.2673142</td>
-<td align="right">0.0000000</td>
+<td align="left">1.889832e-59</td>
 <td align="left">Yes</td>
 </tr>
 <tr class="odd">
@@ -2190,7 +2270,7 @@ in different racial population.</p>
 <td align="left">White</td>
 <td align="left">1921-1930</td>
 <td align="right">83.5688313</td>
-<td align="right">0.0000000</td>
+<td align="left">5.178495e-37</td>
 <td align="left">Yes</td>
 </tr>
 <tr class="even">
@@ -2198,7 +2278,7 @@ in different racial population.</p>
 <td align="left">White</td>
 <td align="left">1931-1940</td>
 <td align="right">0.7361998</td>
-<td align="right">0.4616101</td>
+<td align="left">4.616101e-01</td>
 <td align="left">No</td>
 </tr>
 </tbody>
@@ -2207,217 +2287,113 @@ in different racial population.</p>
 population, the p-value of cohorts 1901-1910, 1911-1920 and 1921-1930
 are smaller than 0.05.</p>
 </div>
-<div id="c.-model-fit-analysis" class="section level4">
-<h4>c. <strong>Model Fit Analysis</strong></h4>
+<div id="c.-family-size-analysis-variance" class="section level4">
+<h4>c. <strong>Family Size Analysis (Variance)</strong></h4>
+<p>We apply Levene’s test to check if there is significant difference in
+the variance of family size across year for the same cohort. In both
+racial group, the Levene’s test is not applicable for the following
+cohorts since there is only one census year available in the data for
+those cohorts:-Inf-1910, 1941-1950, -Inf-1920, -Inf-1890, -Inf-1900, and
+1891-1900</p>
+<table>
+<caption>Test Result of Variance of Family Size for Black
+Population</caption>
+<thead>
+<tr class="header">
+<th align="left">RACE</th>
+<th align="left">Cohort</th>
+<th align="right">Statistic</th>
+<th align="right">p_value</th>
+<th align="left">Significance</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Black/African American</td>
+<td align="left">1911-1920</td>
+<td align="right">1.350323</td>
+<td align="right">0.2591689</td>
+<td align="left">No</td>
+</tr>
+<tr class="even">
+<td align="left">Black/African American</td>
+<td align="left">1901-1910</td>
+<td align="right">8.331221</td>
+<td align="right">0.0039006</td>
+<td align="left">Yes</td>
+</tr>
+<tr class="odd">
+<td align="left">Black/African American</td>
+<td align="left">1921-1930</td>
+<td align="right">8.952631</td>
+<td align="right">0.0001296</td>
+<td align="left">Yes</td>
+</tr>
+<tr class="even">
+<td align="left">Black/African American</td>
+<td align="left">1931-1940</td>
+<td align="right">2.780472</td>
+<td align="right">0.0954339</td>
+<td align="left">No</td>
+</tr>
+</tbody>
+</table>
+<p>The table above summarizes the test result for black population. We
+observe that the variance of family size change significantly across
+census year in cohort 1901-1910 and 1921-1930.</p>
+<table>
+<caption>Test Result of Variance of Family Size for White
+Population</caption>
+<thead>
+<tr class="header">
+<th align="left">RACE</th>
+<th align="left">Cohort</th>
+<th align="right">Statistic</th>
+<th align="right">p_value</th>
+<th align="left">Significance</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">White</td>
+<td align="left">1911-1920</td>
+<td align="right">26.3642465</td>
+<td align="right">0.0000000</td>
+<td align="left">Yes</td>
+</tr>
+<tr class="even">
+<td align="left">White</td>
+<td align="left">1901-1910</td>
+<td align="right">2.1878497</td>
+<td align="right">0.1391048</td>
+<td align="left">No</td>
+</tr>
+<tr class="odd">
+<td align="left">White</td>
+<td align="left">1921-1930</td>
+<td align="right">0.5329233</td>
+<td align="right">0.5868872</td>
+<td align="left">No</td>
+</tr>
+<tr class="even">
+<td align="left">White</td>
+<td align="left">1931-1940</td>
+<td align="right">3.5682027</td>
+<td align="right">0.0588976</td>
+<td align="left">No</td>
+</tr>
+</tbody>
+</table>
+<p>This table summarizes the test result for white population. We
+observe that the variance of family size only change significantly
+across census year in cohort 1911-1920.</p>
+</div>
+<div id="d.-model-fit-analysis" class="section level4">
+<h4>d. <strong>Model Fit Analysis</strong></h4>
 <p>Due to the due lack of data variability, we use visualization instead
 of statistical test. Based on the heatmap created, we can see that the
 model fit for each cohort(cohort with 2+ corresponding census year)
-across year does not change.
-<img src="figure/relative-distribution.Rmd/unnamed-chunk-25-1.png" width="864" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-25-1">
-Past versions of unnamed-chunk-25-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-25-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/415f30a114cca2740317633e0520d2c432e0495b/docs/figure/relative-distribution.Rmd/unnamed-chunk-25-1.png" target="_blank">415f30a</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2025-01-14
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/9778698b149d90b981e15a028f7e29f4db32cc30/docs/figure/relative-distribution.Rmd/unnamed-chunk-25-1.png" target="_blank">9778698</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2025-01-09
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/28513857e94c801ed7d27e62bb34ff8098d08107/docs/figure/relative-distribution.Rmd/unnamed-chunk-25-1.png" target="_blank">2851385</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2024-09-21
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div id="analyzing-and-visualizing-significant-fertility-shifts"
-class="section level2">
-<h2>Analyzing and Visualizing Significant Fertility Shifts</h2>
-<p>The goal of this section is to summarize the previous information and
-create visualization that illustrates significant fertility shifts in
-cohorts, compares fertility patterns of 40-49 year-olds to 50-59
-year-olds in the 1990 census so we can pick the set of fertility
-distributions we want to use to visualize the sibling distribution and
-do the math on the genetic surveillance.</p>
-<div id="panel-a-fertility-distribution-shifts-across-cohorts"
-class="section level3">
-<h3>Panel A: Fertility Distribution Shifts Across Cohorts</h3>
-<div id="cohorts-with-significant-change-in-zero-inflation"
-class="section level4">
-<h4>Cohorts with Significant Change in Zero Inflation</h4>
-<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-26-1.png" width="864" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-26-1">
-Past versions of unnamed-chunk-26-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-26-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/415f30a114cca2740317633e0520d2c432e0495b/docs/figure/relative-distribution.Rmd/unnamed-chunk-26-1.png" target="_blank">415f30a</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2025-01-14
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/9778698b149d90b981e15a028f7e29f4db32cc30/docs/figure/relative-distribution.Rmd/unnamed-chunk-26-1.png" target="_blank">9778698</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2025-01-09
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/800786411d6551c5050635b63803c9f8e4c12506/docs/figure/relative-distribution.Rmd/unnamed-chunk-26-1.png" target="_blank">8007864</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-12-03
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/28513857e94c801ed7d27e62bb34ff8098d08107/docs/figure/relative-distribution.Rmd/unnamed-chunk-26-1.png" target="_blank">2851385</a>
-</td>
-<td>
-Tina Lasisi
-</td>
-<td>
-2024-09-21
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-<div id="cohorts-with-significant-change-in-mean-family-size"
-class="section level4">
-<h4>Cohorts with Significant Change in Mean Family Size</h4>
-<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-27-1.png" width="864" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-27-1">
-Past versions of unnamed-chunk-27-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-27-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/415f30a114cca2740317633e0520d2c432e0495b/docs/figure/relative-distribution.Rmd/unnamed-chunk-27-1.png" target="_blank">415f30a</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2025-01-14
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</div>
-<div id="panel-b-comparison-of-40-49-and-50-59-age-groups-in-1990"
-class="section level3">
-<h3>Panel B: Comparison of 40-49 and 50-59 Age Groups in 1990</h3>
-<p>This analysis examines differences in fertility patterns between the
-40-49 and 50-59 age groups in 1990, focusing on the distribution, mean
-number of children, variance, and childlessness (zero inflation) within
-Black and White populations.</p>
-<div id="visulization-of-distribution" class="section level4">
-<h4>Visulization of Distribution</h4>
-<p>Firstly, We present a side-by-side distribution plots comparing the
-number of children for women in the 40-49 and 50-59 age groups within
-Black and White populations.</p>
+across year does not change.</p>
 <p><img src="figure/relative-distribution.Rmd/unnamed-chunk-29-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-29-1">
@@ -2441,6 +2417,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/4e0a07c13a2f2ff24d3e68f317c7573f79065ec5/docs/figure/relative-distribution.Rmd/unnamed-chunk-29-1.png" target="_blank">4e0a07c</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2025-01-20
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/415f30a114cca2740317633e0520d2c432e0495b/docs/figure/relative-distribution.Rmd/unnamed-chunk-29-1.png" target="_blank">415f30a</a>
@@ -2478,6 +2465,336 @@ linmatch
 </table>
 </div>
 </div>
+</div>
+</div>
+</div>
+<div id="analyzing-and-visualizing-significant-fertility-shifts"
+class="section level2">
+<h2>Analyzing and Visualizing Significant Fertility Shifts</h2>
+<p>The goal of this section is to summarize the previous information and
+create visualization that illustrates significant fertility shifts in
+cohorts, compares fertility patterns of 40-49 year-olds to 50-59
+year-olds in the 1990 census so we can pick the set of fertility
+distributions we want to use to visualize the sibling distribution and
+do the math on the genetic surveillance.</p>
+<div id="panel-a-fertility-distribution-shifts-across-cohorts"
+class="section level3">
+<h3>Panel A: Fertility Distribution Shifts Across Cohorts</h3>
+<p>In this part, we’ll summarize the information from the cohort
+stability and create visualization that illustrates significant
+fertility shifts in cohorts.</p>
+<div id="cohorts-with-significant-change-in-zero-inflation"
+class="section level4">
+<h4>Cohorts with Significant Change in Zero Inflation</h4>
+<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-30-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-30-1">
+Past versions of unnamed-chunk-30-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-30-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/415f30a114cca2740317633e0520d2c432e0495b/docs/figure/relative-distribution.Rmd/unnamed-chunk-30-1.png" target="_blank">415f30a</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2025-01-14
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/9778698b149d90b981e15a028f7e29f4db32cc30/docs/figure/relative-distribution.Rmd/unnamed-chunk-30-1.png" target="_blank">9778698</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2025-01-09
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/231390a7e9b5261ed01047322fdbca2676183be9/docs/figure/relative-distribution.Rmd/unnamed-chunk-30-1.png" target="_blank">231390a</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-12-11
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/776920fb4e25a0632758115092f6ce91ffdf69fd/docs/figure/relative-distribution.Rmd/unnamed-chunk-30-1.png" target="_blank">776920f</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-11-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<ul>
+<li>In the <strong>black population</strong>, the most significant
+shifts in childlessness occurred between the 1960 and 1970 census years,
+where there is a <strong>sharp increase</strong> in the proportion of
+women with zero children. This trend continues more gradually between
+1970 and 1990 but stabilizes for cohort 1921-1930.</li>
+<li>In the <strong>white population</strong>, the increase in
+childlessness is also visible between 1960 and 1970, but the magnitude
+of the increase is <strong>more pronounced</strong> compared to African
+American women. Childlessness stabilizes for cohort 1911-1920 and
+1921-1930 between 1970 and 1990, with smaller fluctuations in later
+decades.</li>
+</ul>
+</div>
+<div id="cohorts-with-significant-change-in-mean-family-size"
+class="section level4">
+<h4>Cohorts with Significant Change in Mean Family Size</h4>
+<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-31-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-31-1">
+Past versions of unnamed-chunk-31-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-31-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/4e0a07c13a2f2ff24d3e68f317c7573f79065ec5/docs/figure/relative-distribution.Rmd/unnamed-chunk-31-1.png" target="_blank">4e0a07c</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2025-01-20
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/9778698b149d90b981e15a028f7e29f4db32cc30/docs/figure/relative-distribution.Rmd/unnamed-chunk-31-1.png" target="_blank">9778698</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2025-01-09
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/f567c4a1d97864fe11ddfc3814b1d12a2075f2b9/docs/figure/relative-distribution.Rmd/unnamed-chunk-31-1.png" target="_blank">f567c4a</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-12-16
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/231390a7e9b5261ed01047322fdbca2676183be9/docs/figure/relative-distribution.Rmd/unnamed-chunk-31-1.png" target="_blank">231390a</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-12-11
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/800786411d6551c5050635b63803c9f8e4c12506/docs/figure/relative-distribution.Rmd/unnamed-chunk-31-1.png" target="_blank">8007864</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-12-03
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/776920fb4e25a0632758115092f6ce91ffdf69fd/docs/figure/relative-distribution.Rmd/unnamed-chunk-31-1.png" target="_blank">776920f</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-11-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<ul>
+<li>For <strong>black population</strong>, the mean family size for the
+1921-1930 cohort <strong>increased</strong> substantially in 1990,
+reaching over 3.6 children on average. However, both cohorts exhibited
+little change in mean family size in earlier census year (between 1960
+and 1980).</li>
+<li>For <strong>white population</strong>, a consistent decline in mean
+family size was observed for the 1901-1910 and 1911-1920 cohorts from
+1960 to 1970. The 1921-1930 cohort showed a modest increase in mean
+family size in 1990, reaching around 2.8 children on average, which is
+<strong>smaller than</strong> the black population.</li>
+</ul>
+</div>
+<div id="cohorts-with-significant-change-in-variance-of-family-size"
+class="section level4">
+<h4>Cohorts with Significant Change in Variance of Family Size</h4>
+<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-32-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-32-1">
+Past versions of unnamed-chunk-32-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-32-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/4e0a07c13a2f2ff24d3e68f317c7573f79065ec5/docs/figure/relative-distribution.Rmd/unnamed-chunk-32-1.png" target="_blank">4e0a07c</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2025-01-20
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/f567c4a1d97864fe11ddfc3814b1d12a2075f2b9/docs/figure/relative-distribution.Rmd/unnamed-chunk-32-1.png" target="_blank">f567c4a</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-12-16
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<ul>
+<li>For <strong>black population</strong>, significant decrease in
+variance occur between 1960 and 1970, particularly for the cohort
+1901-1910. Variance continues to shift for cohort 1921-1930 between 1970
+and 1990 with the steeper increases.</li>
+<li>For <strong>white population</strong>, there is little change in
+variance over time. Variance appears to remain stable across Census
+years for cohort 1911-1920. This stability suggests <strong>less
+variability</strong> in fertility patterns among women in white
+population compared to black population.</li>
+</ul>
+</div>
+</div>
+<div id="panel-b-comparison-of-40-49-and-50-59-age-groups-in-1990"
+class="section level3">
+<h3>Panel B: Comparison of 40-49 and 50-59 Age Groups in 1990</h3>
+<p>This analysis examines differences in fertility patterns between the
+40-49 and 50-59 age groups in 1990, focusing on the distribution, mean
+number of children, variance, and childlessness (zero inflation) within
+Black and White populations.</p>
+<div id="visulization-of-distribution" class="section level4">
+<h4>Visulization of Distribution</h4>
+<p>Firstly, we present a side-by-side distribution plots comparing the
+number of children for women in the 40-49 and 50-59 age groups within
+Black and White populations.</p>
+<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-34-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-34-1">
+Past versions of unnamed-chunk-34-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-34-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/f567c4a1d97864fe11ddfc3814b1d12a2075f2b9/docs/figure/relative-distribution.Rmd/unnamed-chunk-34-1.png" target="_blank">f567c4a</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2024-12-16
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>For both racial groups, the 40-49 age group has a distribution more
 skewed towards 0-2 children. Meanwhile, women in the 50-59 age group
 generally have larger family sizes compared to the 40-49 age group.</p>
@@ -2487,7 +2804,7 @@ generally have larger family sizes compared to the 40-49 age group.</p>
 <p>By summarizing the key statistics for each age group and race, we can
 derive the same insight, which shows that women in the older age group
 have larger family sizes. On average, women in the 50-59 age group have
-more children than those in the 40-49 age group. In addition, The
+more children than those in the 40-49 age group. In addition, the
 variance in the number of children is larger for the 50-59 age group in
 both racial groups, indicating greater variability in family size. In
 terms of zero inflation (proportion of women with no children), the
@@ -2551,10 +2868,12 @@ normality assumption. Thought the data for black population and white
 population violate normality assumption, we can still perform t test to
 see if there is significant difference in mean for both racial groups in
 the following due to large sample size (by central limit theorem).</p>
-<p><strong>Null Hypothesis (H₀):</strong> There is no difference in the
-mean number of children between the two age groups. <strong>Alternative
-Hypothesis (H₁):</strong> There is a difference in the mean number of
-children between the two age groups.</p>
+<ul>
+<li><strong>Null Hypothesis (H₀):</strong> There is no difference in the
+mean number of children between the two age groups.</li>
+<li><strong>Alternative Hypothesis (H₁):</strong> There is a difference
+in the mean number of children between the two age groups.</li>
+</ul>
 <table>
 <caption>Test Result for Difference in Variance between Age Groups By
 Race</caption>
@@ -2581,11 +2900,14 @@ terms of the mean number of children within each racial group.</p>
 </div>
 <div id="test-for-difference-in-variances" class="section level4">
 <h4>Test for Difference in Variances</h4>
-<p>We apply Levene’s test since non-normality in data. <strong>Null
-Hypothesis (H₀):</strong> There is no difference in the variance of the
-number of children between the two age groups. <strong>Alternative
-Hypothesis (H₁):</strong> There is a difference in the variance of the
-number of children between the two age groups.</p>
+<p>We apply Levene’s test since non-normality in data.</p>
+<ul>
+<li><strong>Null Hypothesis (H₀):</strong> There is no difference in the
+variance of the number of children between the two age groups.</li>
+<li><strong>Alternative Hypothesis (H₁):</strong> There is a difference
+in the variance of the number of children between the two age
+groups.</li>
+</ul>
 <table>
 <caption>Test Result for Difference in Variance between Age Groups By
 Race</caption>
@@ -2617,12 +2939,12 @@ each racial group are significantly different.</p>
 firstly create a contingency tables showing the counts of women with
 zero children and those with one or more children for each age group.
 Then we apply chi-square test within each race.</p>
-<p><strong>Null Hypothesis (H₀):</strong> There is no difference in the
-proportion of childlessness between the two age groups.
-<strong>Alternative Hypothesis (H₁):</strong> There is a difference in
-the proportion of childlessness between the two age groups.</p>
-<pre><code>`summarise()` has grouped output by &#39;RACE&#39;, &#39;AGE_RANGE&#39;. You can override using
-the `.groups` argument.</code></pre>
+<ul>
+<li><strong>Null Hypothesis (H₀):</strong> There is no difference in the
+proportion of childlessness between the two age groups.</li>
+<li><strong>Alternative Hypothesis (H₁):</strong> There is a difference
+in the proportion of childlessness between the two age groups.</li>
+</ul>
 <table>
 <caption>Contingency Table of Zero Inflation</caption>
 <thead>
@@ -2715,163 +3037,34 @@ uniformly distributed across age groups.</p>
 <p>The results of this panel provide clear evidence of significant
 differences in fertility patterns between the 40-49 and 50-59 age groups
 for both Black and White populations:</p>
-<p>-<strong>Mean Number of Children:</strong> Women in the 50-59 age
-group have significantly more children on average than those in the
-40-49 age group (difference: 1.03 for Black women and 0.69 for White
-women). -<strong>Variance:</strong> The 50-59 age group exhibits greater
-variability in family sizes. -<strong>Zero Inflation:</strong> The 40-49
-age group has a higher proportion of childlessness. These findings
-highlight generational differences in fertility patterns, with older age
-groups (50-59) reflecting larger family sizes and greater
-variability.</p>
+<ul>
+<li><strong>Mean Number of Children:</strong> Women in the 50-59 age
+group have significantly <strong>more children</strong> on average than
+those in the 40-49 age group (difference: 1.03 for Black women and 0.69
+for White women).</li>
+<li><strong>Variance:</strong> The 50-59 age group exhibits
+<strong>greater variability</strong> in family sizes.</li>
+<li><strong>Zero Inflation:</strong> The 40-49 age group has a
+<strong>higher proportion</strong> of childlessness.</li>
+</ul>
+<p>These findings highlight generational differences in fertility
+patterns, with older age groups (50-59) reflecting larger family sizes
+and greater variability.</p>
 </div>
 <div id="implication" class="section level4">
 <h4>Implication</h4>
 <p>These findings suggest notable shifts in fertility trends and
-behaviors across generations: -The 50-59 age group likely represents
+behaviors across generations: - The 50-59 age group likely represents
 completed fertility patterns, where women have finished childbearing.
 This explains the higher mean number of children and greater variance
-observed in this group. -The 40-49 age group, on the other hand, may
+observed in this group. - The 40-49 age group, on the other hand, may
 still include women who have not yet completed their fertility, leading
 to a higher proportion of childlessness and a distribution skewed
-towards smaller family sizes. -These trends may reflect broader social,
+towards smaller family sizes. - These trends may reflect broader social,
 economic, and cultural influences on family size, such as changes in
 education, workforce participation, and access to family planning
 resources across generations.</p>
 </div>
-</div>
-<div id="step-4-summarize-findings" class="section level3">
-<h3>Step 4: Summarize Findings</h3>
-<p>Write a clear and concise summary addressing the following
-points.</p>
-<div id="significant-fertility-shifts-across-cohorts"
-class="section level4">
-<h4>4.1 Significant Fertility Shifts Across Cohorts</h4>
-<ul>
-<li><strong>Identify Timing of Shifts</strong>:
-<ul>
-<li>Specify when significant fertility shifts occurred for each racial
-group based on your analysis in Question 2.</li>
-</ul></li>
-<li><strong>Describe Nature of Shifts</strong>:
-<ul>
-<li>Detail the characteristics of the shifts, such as:
-<ul>
-<li>Decrease in mean number of children</li>
-<li>Increase in childlessness (zero inflation)</li>
-<li>Changes in variance or distribution shape</li>
-</ul></li>
-</ul></li>
-<li><strong>Highlight Differences Between Racial Groups</strong>:
-<ul>
-<li>Compare the timing and nature of shifts between African American and
-European American women.</li>
-<li>Discuss any patterns or discrepancies observed.</li>
-</ul></li>
-</ul>
-</div>
-<div id="synthesis-and-implications" class="section level4">
-<h4>4.3 Synthesis and Implications</h4>
-<ul>
-<li><strong>Integrate Findings</strong>:
-<ul>
-<li>Connect the insights from the cohort analysis with the age group
-comparison.</li>
-<li>Discuss how the patterns observed in the 1990 census relate to the
-shifts identified across cohorts.</li>
-</ul></li>
-<li><strong>Consider Contributing Factors</strong>:
-<ul>
-<li>Explore potential social, economic, or policy factors that may have
-contributed to the observed fertility shifts.
-<ul>
-<li>For example, changes in access to education, employment
-opportunities, or family planning resources.</li>
-</ul></li>
-</ul></li>
-<li><strong>Reflect on Broader Implications</strong>:
-<ul>
-<li>Discuss how these fertility trends might impact your broader
-research topic, such as genetic surveillance disparities.</li>
-<li>Consider the implications for future demographic research or policy
-development.</li>
-</ul></li>
-</ul>
-</div>
-</div>
-<div id="additional-considerations" class="section level3">
-<h3>Additional Considerations</h3>
-<ul>
-<li><strong>Visual Clarity</strong>:
-<ul>
-<li>Ensure all visualizations are easy to interpret.</li>
-<li>Use clear labels, legends, and annotations.</li>
-</ul></li>
-<li><strong>Contextualize Statistical Significance</strong>:
-<ul>
-<li>Explain not just whether results are statistically significant, but
-also what they mean in practical terms.</li>
-</ul></li>
-<li><strong>Acknowledge Data Limitations</strong>:
-<ul>
-<li>Discuss any limitations or biases in the data that could affect your
-findings.
-<ul>
-<li>For instance, sample size constraints or missing data.</li>
-</ul></li>
-</ul></li>
-<li><strong>Ethical Considerations</strong>:
-<ul>
-<li>Approach discussions of race and fertility sensitively and
-responsibly.</li>
-<li>Avoid drawing causal conclusions without robust evidence.</li>
-</ul></li>
-</ul>
-</div>
-<div id="integration-with-previous-work" class="section level3">
-<h3>Integration with Previous Work</h3>
-<ul>
-<li><strong>Leverage Previous Analyses</strong>:
-<ul>
-<li>Use the visualizations and statistical summaries from Questions 1
-and 2 as foundations for this analysis.</li>
-</ul></li>
-<li><strong>Create a Cohesive Narrative</strong>:
-<ul>
-<li>Ensure that your findings from all questions are connected and build
-upon each other.</li>
-<li>Tell a comprehensive story about fertility trends across cohorts and
-racial groups.</li>
-</ul></li>
-</ul>
-</div>
-<div id="final-deliverables" class="section level3">
-<h3>Final Deliverables</h3>
-<ul>
-<li><strong>Multi-Panel Visualization</strong>:
-<ul>
-<li>Panel A: Fertility distribution shifts across cohorts with
-highlighted significant shifts.</li>
-<li>Panel B: Comparative distribution plots for 40-49 and 50-59 age
-groups in 1990, including summary statistics.</li>
-</ul></li>
-<li><strong>Written Summary</strong>:
-<ul>
-<li>A concise report that addresses the points outlined in Step 4.</li>
-<li>Include interpretations of statistical analyses and discuss broader
-implications.</li>
-</ul></li>
-<li><strong>Statistical Analysis Documentation</strong>:
-<ul>
-<li>Provide details of the statistical tests conducted, including test
-assumptions, results, and interpretations.</li>
-</ul></li>
-<li><strong>Annotated Code (if applicable)</strong>:
-<ul>
-<li>While not the focus, include any new code used for this analysis
-with appropriate comments.</li>
-</ul></li>
-</ul>
 </div>
 </div>
 </div>
@@ -2898,26 +3091,304 @@ with details on the birth years of the relevant children to visualize
 the distribution of the number of siblings across generations.</p>
 <div id="data-preparation-2" class="section level2">
 <h2>Data Preparation</h2>
-<div id="calculate-sibling-frequencies" class="section level3">
-<h3>Calculate Sibling Frequencies</h3>
-</div>
-<div id="aggregate-sibling-data" class="section level3">
-<h3>Aggregate Sibling Data</h3>
-</div>
-<div id="check-normalization" class="section level3">
-<h3>Check Normalization</h3>
-</div>
+<p>Firstly, we calculate the number of sibling by subtracting 1 from
+number of children. Then, we group the data to calculate sibling
+frequencies and check the normalization by calculating the proportion of
+sibling frequencies in each combination of census year, race and age
+range.</p>
 </div>
 <div id="visualization-of-distribution-of-number-of-siblings"
 class="section level2">
 <h2>Visualization of Distribution of Number of Siblings</h2>
-<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-47-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>Then we visualize the general trends in the frequency of the number
+of siblings for African American and European American mothers across
+the Census years by age group.</p>
+<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-52-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>With this visualization of the distribution of the data, we can see
+that there are differences between races, census year and age groups.
+<strong><em>Note:</em></strong> The category ‘11+’ includes individuals
+with 11 or more siblings.</p>
+<ul>
+<li><strong><em>By Census Year:</em></strong>
+<ul>
+<li>In 1960 and 1970, individuals are more likely to have higher number
+of siblings, especially in the 5-10 range. This trend diminishes over
+time.</li>
+<li>By 1980 and 1990, the distribution shifts toward smaller family
+sizes, with a growing proportion of individuals having fewer
+siblings.</li>
+</ul></li>
+<li><strong><em>By Age Range:</em></strong>
+<ul>
+<li>40-49 Age Group: For this group, the number of individuals with 0-2
+siblings increases across census years, especially in 1980 and 1990,
+while the proportion of individuals with larger sibling counts
+decreases.</li>
+<li>50-59 and 60-69 Age Groups: These groups show a similar shift toward
+smaller family sizes, but the trend is slightly more gradual compared to
+the younger age group.</li>
+<li>70+ Age Group: The shift to fewer siblings is noticeable, although
+the trend is less pronounced. The distribution remains relatively stable
+across the census years, with a significant portion of individuals still
+coming from large families in 1960 and 1970.</li>
+</ul></li>
+<li><strong><em>By Race:</em> </strong>Black/African American
+Populations (right side of each pair) consistently show a higher
+proportion of individuals with larger sibling counts (5-10 siblings)
+compared to White populations. However, similar to the White population,
+the number of individuals with fewer siblings increases over time.</li>
+</ul>
+<p>Comparing the sibling distribution with the children distribution, we
+find that although both distributions show a trend toward smaller
+families, the sibling distribution is more spread out across different
+sibling counts, suggesting potential difference in the distribution.</p>
+</div>
+<div id="model-fit-across-census-years-1" class="section level2">
+<h2>Model Fit Across Census Years</h2>
+<p>We repeat the model fitting process we performed for the children
+distribution, this time using the sibling distribution data.</p>
+<div id="fit-and-compare-models-1" class="section level3">
+<h3>Fit and Compare Models</h3>
+<p>For each combination, we again fit the following candidate
+models:</p>
+<ul>
+<li><strong>Poisson Model</strong></li>
+<li><strong>Negative Binomial (NB) Model</strong></li>
+<li><strong>Zero-Inflated Poisson (ZIP) Model</strong></li>
+<li><strong>Zero-Inflated Negative Binomial (ZINB) Model</strong></li>
+</ul>
+</div>
+<div id="record-the-best-model-for-each-subset-1"
+class="section level3">
+<h3>Record the Best Model for Each Subset</h3>
+<p>Then, we find the AIC value of four models for each combination and
+record the model with minimum AIC. The following is the table that
+summarize the best model for each combination of race, census year and
+age group.</p>
+<table>
+<caption>Summary Table of Best Model (Siblings)</caption>
+<thead>
+<tr class="header">
+<th align="left">Race</th>
+<th align="right">Census_Year</th>
+<th align="left">AGE_RANGE</th>
+<th align="left">Best_Model</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">White</td>
+<td align="right">1960</td>
+<td align="left">40-49</td>
+<td align="left">Negative_Binomial</td>
+</tr>
+<tr class="even">
+<td align="left">White</td>
+<td align="right">1960</td>
+<td align="left">50-59</td>
+<td align="left">Negative_Binomial</td>
+</tr>
+<tr class="odd">
+<td align="left">White</td>
+<td align="right">1960</td>
+<td align="left">60-69</td>
+<td align="left">Negative_Binomial</td>
+</tr>
+<tr class="even">
+<td align="left">White</td>
+<td align="right">1960</td>
+<td align="left">70+</td>
+<td align="left">Negative_Binomial</td>
+</tr>
+<tr class="odd">
+<td align="left">Black/African American</td>
+<td align="right">1960</td>
+<td align="left">40-49</td>
+<td align="left">Zero_Inflated_NB</td>
+</tr>
+<tr class="even">
+<td align="left">Black/African American</td>
+<td align="right">1960</td>
+<td align="left">50-59</td>
+<td align="left">Zero_Inflated_NB</td>
+</tr>
+<tr class="odd">
+<td align="left">Black/African American</td>
+<td align="right">1960</td>
+<td align="left">60-69</td>
+<td align="left">Zero_Inflated_NB</td>
+</tr>
+<tr class="even">
+<td align="left">Black/African American</td>
+<td align="right">1960</td>
+<td align="left">70+</td>
+<td align="left">Zero_Inflated_NB</td>
+</tr>
+<tr class="odd">
+<td align="left">White</td>
+<td align="right">1970</td>
+<td align="left">40-49</td>
+<td align="left">Negative_Binomial</td>
+</tr>
+<tr class="even">
+<td align="left">White</td>
+<td align="right">1970</td>
+<td align="left">50-59</td>
+<td align="left">Negative_Binomial</td>
+</tr>
+<tr class="odd">
+<td align="left">White</td>
+<td align="right">1970</td>
+<td align="left">60-69</td>
+<td align="left">Negative_Binomial</td>
+</tr>
+<tr class="even">
+<td align="left">White</td>
+<td align="right">1970</td>
+<td align="left">70+</td>
+<td align="left">Negative_Binomial</td>
+</tr>
+<tr class="odd">
+<td align="left">Black/African American</td>
+<td align="right">1970</td>
+<td align="left">40-49</td>
+<td align="left">Zero_Inflated_NB</td>
+</tr>
+<tr class="even">
+<td align="left">Black/African American</td>
+<td align="right">1970</td>
+<td align="left">50-59</td>
+<td align="left">Zero_Inflated_NB</td>
+</tr>
+<tr class="odd">
+<td align="left">Black/African American</td>
+<td align="right">1970</td>
+<td align="left">60-69</td>
+<td align="left">Zero_Inflated_NB</td>
+</tr>
+<tr class="even">
+<td align="left">Black/African American</td>
+<td align="right">1970</td>
+<td align="left">70+</td>
+<td align="left">Zero_Inflated_NB</td>
+</tr>
+<tr class="odd">
+<td align="left">White</td>
+<td align="right">1980</td>
+<td align="left">40-49</td>
+<td align="left">Negative_Binomial</td>
+</tr>
+<tr class="even">
+<td align="left">White</td>
+<td align="right">1980</td>
+<td align="left">50-59</td>
+<td align="left">Negative_Binomial</td>
+</tr>
+<tr class="odd">
+<td align="left">White</td>
+<td align="right">1980</td>
+<td align="left">60-69</td>
+<td align="left">Negative_Binomial</td>
+</tr>
+<tr class="even">
+<td align="left">White</td>
+<td align="right">1980</td>
+<td align="left">70+</td>
+<td align="left">Negative_Binomial</td>
+</tr>
+<tr class="odd">
+<td align="left">Black/African American</td>
+<td align="right">1980</td>
+<td align="left">40-49</td>
+<td align="left">Zero_Inflated_NB</td>
+</tr>
+<tr class="even">
+<td align="left">Black/African American</td>
+<td align="right">1980</td>
+<td align="left">50-59</td>
+<td align="left">Zero_Inflated_NB</td>
+</tr>
+<tr class="odd">
+<td align="left">Black/African American</td>
+<td align="right">1980</td>
+<td align="left">60-69</td>
+<td align="left">Zero_Inflated_NB</td>
+</tr>
+<tr class="even">
+<td align="left">Black/African American</td>
+<td align="right">1980</td>
+<td align="left">70+</td>
+<td align="left">Zero_Inflated_NB</td>
+</tr>
+<tr class="odd">
+<td align="left">White</td>
+<td align="right">1990</td>
+<td align="left">40-49</td>
+<td align="left">Poisson</td>
+</tr>
+<tr class="even">
+<td align="left">White</td>
+<td align="right">1990</td>
+<td align="left">50-59</td>
+<td align="left">Negative_Binomial</td>
+</tr>
+<tr class="odd">
+<td align="left">White</td>
+<td align="right">1990</td>
+<td align="left">60-69</td>
+<td align="left">Negative_Binomial</td>
+</tr>
+<tr class="even">
+<td align="left">White</td>
+<td align="right">1990</td>
+<td align="left">70+</td>
+<td align="left">Negative_Binomial</td>
+</tr>
+<tr class="odd">
+<td align="left">Black/African American</td>
+<td align="right">1990</td>
+<td align="left">40-49</td>
+<td align="left">Negative_Binomial</td>
+</tr>
+<tr class="even">
+<td align="left">Black/African American</td>
+<td align="right">1990</td>
+<td align="left">50-59</td>
+<td align="left">Zero_Inflated_NB</td>
+</tr>
+<tr class="odd">
+<td align="left">Black/African American</td>
+<td align="right">1990</td>
+<td align="left">60-69</td>
+<td align="left">Zero_Inflated_NB</td>
+</tr>
+<tr class="even">
+<td align="left">Black/African American</td>
+<td align="right">1990</td>
+<td align="left">70+</td>
+<td align="left">Zero_Inflated_NB</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="visualize-the-results-1" class="section level3">
+<h3>Visualize the Results</h3>
+<p>By comparing the pattern of best-fitting models between the sibling
+and children distributions, we observe that the best model for black
+population has the same best model(zero-inlfated NB) across year and age
+range except on one subset(age 40-49 in 1990) in siblings distribution.
+However, there is a large difference in best model for white population.
+A large portion of best model in children distribution for white
+population is zero-inlfated NB, while negative-binomial is the best
+model fitted for siblings distribution except for one subset(age 40-49
+in 1990).</p>
+<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-57-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-47-1">
-Past versions of unnamed-chunk-47-1.png
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-57-1">
+Past versions of unnamed-chunk-57-1.png
 </button>
 </p>
-<div id="fig-unnamed-chunk-47-1" class="collapse">
+<div id="fig-unnamed-chunk-57-1" class="collapse">
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
 <thead>
@@ -2936,7 +3407,7 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/415f30a114cca2740317633e0520d2c432e0495b/docs/figure/relative-distribution.Rmd/unnamed-chunk-47-1.png" target="_blank">415f30a</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/415f30a114cca2740317633e0520d2c432e0495b/docs/figure/relative-distribution.Rmd/unnamed-chunk-57-1.png" target="_blank">415f30a</a>
 </td>
 <td>
 linmatch
@@ -2945,183 +3416,9 @@ linmatch
 2025-01-14
 </td>
 </tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><strong><em>RESULT:</em></strong></p>
-<p><strong><em>-By Census Year:</em></strong> In 1960 and 1970,
-individuals are more likely to have higher number of siblings,
-especially in the 5-10 range. This trend diminishes over time.</p>
-<p>By 1980 and 1990, the distribution shifts toward smaller family
-sizes, with a growing proportion of individuals having fewer
-siblings.</p>
-<p><strong><em>-By age range:</em></strong></p>
-<p>40-49 Age Group: For this group, the number of individuals with 0-2
-siblings increases across census years, especially in 1980 and 1990,
-while the proportion of individuals with larger sibling counts
-decreases.</p>
-<p>50-59 and 60-69 Age Groups: These groups show a similar shift toward
-smaller family sizes, but the trend is slightly more gradual compared to
-the younger age group.</p>
-<p>70+ Age Group: The shift to fewer siblings is noticeable, although
-the trend is less pronounced. The distribution remains relatively stable
-across the census years, with a significant portion of individuals still
-coming from large families in 1960 and 1970.</p>
-<ol start="2" style="list-style-type: decimal">
-<li>Compare the distributions between White and Black/African American
-populations.</li>
-</ol>
-<p><strong><em>RESULT:</em></strong> -Black/African American Populations
-(right side of each pair) consistently show a higher proportion of
-individuals with larger sibling counts (5-10 siblings) compared to White
-populations. However, similar to the White population, the number of
-individuals with fewer siblings increases over time.</p>
-<ol start="3" style="list-style-type: decimal">
-<li>Note any significant changes or trends in the number of siblings
-over time.</li>
-</ol>
-<p><strong><em>RESULT:</em></strong> -White Populations: (left side of
-each pair) have a more marked shift toward smaller families by 1990,
-with a larger proportion of individuals having 0-2 siblings compared to
-the Black/African American population. The decline in larger family
-sizes (5+ siblings) is more pronounced among Whites, particularly by
-1980 and 1990.</p>
-<ol start="4" style="list-style-type: decimal">
-<li>Consider how these sibling distributions might differ from the
-children distributions you analyzed earlier, and think about potential
-reasons for these differences.</li>
-</ol>
-<p><strong><em>RESULT:</em></strong> While both distributions show a
-trend toward smaller families, the sibling distribution is more spread
-out across different sibling counts, suggesting potential difference in
-the distribution.</p>
-</div>
-<div id="model-fit-across-census-years-1" class="section level2">
-<h2>Model Fit Across Census Years</h2>
-<p>We repeat the model fitting process we performed for the children
-distribution, this time using the sibling distribution data.</p>
-<div id="identify-best-fitting-models-by-comparing-aic"
-class="section level3">
-<h3>Identify Best-Fitting Models by comparing AIC</h3>
-</div>
-<div id="visualize-results" class="section level3">
-<h3>Visualize Results</h3>
-<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-51-1.png" width="864" style="display: block; margin: auto;" /></p>
-<p><strong><em>RESULT:</em></strong> By comparing the pattern of
-best-fitting models between the sibling and children distributions, we
-observe that the best model for black population has the same best
-model(zero-inlfated NB) across year and age range except on one
-subset(age 40-49 in 1990) in siblings distribution. However, there is a
-large difference in best model for white population. A large portion of
-best model in children distribution for white population is
-zero-inlfated NB, while negative-binomial is the best model fitted for
-siblings distribution except for one subset(age 40-49 in 1990).</p>
-</div>
-</div>
-<div id="cohort-stability-analysis-siblings" class="section level2">
-<h2>Cohort Stability Analysis Siblings</h2>
-<p>Analyze the stability of sibling distributions across cohorts,
-similar to the analysis performed for children.</p>
-<ol style="list-style-type: decimal">
-<li><strong>Zero Inflation</strong>: Check if the proportion of
-individuals with zero siblings changes significantly over time for the
-same cohort</li>
-<li><strong>Family Size</strong>: Test if the mean or variance in the
-number of siblings changes for the same cohort over time.</li>
-<li><strong>Model Fit</strong>: Analyze if the best-fitting model for
-the cohort changes over time.</li>
-</ol>
-<div id="a.-zero-inflation-analysis-1" class="section level3">
-<h3>a. <strong>Zero-Inflation Analysis</strong></h3>
-<pre><code>                             RACE    Cohort Chi_Square    p_value Significance
-X-squared  Black/African American 1901-1910  2.7595148 0.09667755           No
-X-squared1 Black/African American 1911-1920  3.1588986 0.20608856           No
-X-squared2 Black/African American 1921-1930  6.4474388 0.03980673          Yes
-X-squared3 Black/African American 1931-1940  0.8166152 0.36617166           No</code></pre>
-<p><strong><em>RESULT:</em></strong> The table shows that only the
-cohort 1921-1930 has significant change in probability of individuals
-with zero siblings in black population.</p>
-<pre><code>            RACE    Cohort Chi_Square      p_value Significance
-X-squared  White 1901-1910  46.930953 7.353216e-12          Yes
-X-squared1 White 1911-1920 120.015145 8.690450e-27          Yes
-X-squared2 White 1921-1930  79.061388 6.792628e-18          Yes
-X-squared3 White 1931-1940   2.776021 9.568561e-02           No</code></pre>
-<p><strong><em>RESULT:</em></strong> The table shows that cohorts
-1901-1910, 1911-1920, 1921-1930 have significant change in probability
-of individuals with zero siblings in white population.</p>
-</div>
-<div id="b.-family-size-analysis-1" class="section level3">
-<h3>b. <strong>Family Size Analysis</strong></h3>
-<pre><code>
-Cohort: 1891-1900 has only 1 Census Year. Skipping ANOVA.
-
-Cohort: -Inf-1890 has only 1 Census Year. Skipping ANOVA.
-
-Cohort: -Inf-1900 has only 1 Census Year. Skipping ANOVA.
-
-Cohort: -Inf-1910 has only 1 Census Year. Skipping ANOVA.
-
-Cohort: 1941-1950 has only 1 Census Year. Skipping ANOVA.
-
-Cohort: -Inf-1920 has only 1 Census Year. Skipping ANOVA.</code></pre>
-<pre><code>                     RACE    Cohort Statistic      p_value Significance
-1  Black/African American 1911-1920  1.420923 2.415084e-01           No
-t  Black/African American 1901-1910  2.041113 4.126381e-02          Yes
-11 Black/African American 1921-1930 13.940627 8.872689e-07          Yes
-t1 Black/African American 1931-1940  0.951569 3.413272e-01           No</code></pre>
-<p><strong><em>RESULT:</em></strong> The mean number of siblings change
-significantly in cohorts 1901-1910 and 1921-1930 in black
-population.</p>
-<pre><code>
-Cohort: -Inf-1890 has only 1 Census Year. Skipping ANOVA and t-test.
-
-Cohort: 1891-1900 has only 1 Census Year. Skipping ANOVA and t-test.
-
-Cohort: -Inf-1900 has only 1 Census Year. Skipping ANOVA and t-test.
-
-Cohort: -Inf-1910 has only 1 Census Year. Skipping ANOVA and t-test.
-
-Cohort: -Inf-1920 has only 1 Census Year. Skipping ANOVA and t-test.
-
-Cohort: 1941-1950 has only 1 Census Year. Skipping ANOVA and t-test.</code></pre>
-<pre><code>    RACE    Cohort Statistic      p_value Significance
-1  White 1911-1920  7.438832 5.880808e-04          Yes
-t  White 1901-1910  2.126441 3.346854e-02          Yes
-11 White 1921-1930 46.149409 9.125672e-21          Yes
-t1 White 1931-1940  1.151129 2.496808e-01           No</code></pre>
-<p><strong><em>RESULT:</em></strong> The mean number of siblings change
-significantly in cohorts 1901-1910, 1911-1920, 1921-1930 in white
-population.</p>
-</div>
-<div id="c.-model-fit-analysis-1" class="section level3">
-<h3>c. <strong>Model Fit Analysis</strong></h3>
-<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-59-1.png" width="864" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-59-1">
-Past versions of unnamed-chunk-59-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-59-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
 <tr>
 <td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/9778698b149d90b981e15a028f7e29f4db32cc30/docs/figure/relative-distribution.Rmd/unnamed-chunk-59-1.png" target="_blank">9778698</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/9778698b149d90b981e15a028f7e29f4db32cc30/docs/figure/relative-distribution.Rmd/unnamed-chunk-57-1.png" target="_blank">9778698</a>
 </td>
 <td>
 linmatch
@@ -3130,36 +3427,361 @@ linmatch
 2025-01-09
 </td>
 </tr>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/f567c4a1d97864fe11ddfc3814b1d12a2075f2b9/docs/figure/relative-distribution.Rmd/unnamed-chunk-59-1.png" target="_blank">f567c4a</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-12-16
-</td>
-</tr>
 </tbody>
 </table>
 </div>
 </div>
-<p><strong><em>RESULT:</em></strong> The best model for each
-cohort(those with 1+ corresponding census year) is stable over time.</p>
 </div>
-<div id="addtional-analysis-on-overall-distribution"
-class="section level3">
-<h3>Addtional Analysis on Overall Distribution</h3>
-<p>We also perform additional analysis to see if the overall
-distribution is stable across census year for the same cohort</p>
-<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-61-1.png" width="864" style="display: block; margin: auto;" /></p>
+</div>
+<div id="cohort-stability-analysis-siblings" class="section level2">
+<h2>Cohort Stability Analysis Siblings</h2>
+<p>Next, we analyze the stability of sibling distributions across year
+for each cohorts, similar to the analysis performed for children.</p>
+<ol style="list-style-type: decimal">
+<li><strong>Zero Inflation</strong>: Check if the proportion of
+individuals with zero siblings changes significantly over time for the
+same cohort</li>
+<li><strong>Family Size</strong>: Test if the mean in the number of
+siblings changes for the same cohort over time.</li>
+<li><strong>Model Fit</strong>: Analyze if the best-fitting model for
+the cohort changes over time.</li>
+</ol>
+<div id="a.-zero-inflation-analysis-1" class="section level4">
+<h4>a. <strong>Zero-Inflation Analysis</strong></h4>
+<p>We apply the chi-square test for each cohort within each race. Since
+some cohorts only have one corresponding census year, the test is not
+applicable for them.</p>
+<table style="width:100%;">
+<caption>Test Result of Zero Inflation for Black Population</caption>
+<colgroup>
+<col width="14%" />
+<col width="29%" />
+<col width="12%" />
+<col width="14%" />
+<col width="12%" />
+<col width="16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">RACE</th>
+<th align="left">Cohort</th>
+<th align="right">Chi_Square</th>
+<th align="right">p_value</th>
+<th align="left">Significance</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">X-squared</td>
+<td align="left">Black/African American</td>
+<td align="left">1901-1910</td>
+<td align="right">2.7595148</td>
+<td align="right">0.0966776</td>
+<td align="left">No</td>
+</tr>
+<tr class="even">
+<td align="left">X-squared1</td>
+<td align="left">Black/African American</td>
+<td align="left">1911-1920</td>
+<td align="right">3.1588986</td>
+<td align="right">0.2060886</td>
+<td align="left">No</td>
+</tr>
+<tr class="odd">
+<td align="left">X-squared2</td>
+<td align="left">Black/African American</td>
+<td align="left">1921-1930</td>
+<td align="right">6.4474388</td>
+<td align="right">0.0398067</td>
+<td align="left">Yes</td>
+</tr>
+<tr class="even">
+<td align="left">X-squared3</td>
+<td align="left">Black/African American</td>
+<td align="left">1931-1940</td>
+<td align="right">0.8166152</td>
+<td align="right">0.3661717</td>
+<td align="left">No</td>
+</tr>
+</tbody>
+</table>
+<p>The table shows that only the cohort 1921-1930 has significant change
+in probability of individuals with zero siblings in black
+population.</p>
+<table>
+<caption>Test Result of Zero Inflation for White Population</caption>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">RACE</th>
+<th align="left">Cohort</th>
+<th align="right">Chi_Square</th>
+<th align="right">p_value</th>
+<th align="left">Significance</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">X-squared</td>
+<td align="left">White</td>
+<td align="left">1901-1910</td>
+<td align="right">46.930953</td>
+<td align="right">0.0000000</td>
+<td align="left">Yes</td>
+</tr>
+<tr class="even">
+<td align="left">X-squared1</td>
+<td align="left">White</td>
+<td align="left">1911-1920</td>
+<td align="right">120.015146</td>
+<td align="right">0.0000000</td>
+<td align="left">Yes</td>
+</tr>
+<tr class="odd">
+<td align="left">X-squared2</td>
+<td align="left">White</td>
+<td align="left">1921-1930</td>
+<td align="right">79.061387</td>
+<td align="right">0.0000000</td>
+<td align="left">Yes</td>
+</tr>
+<tr class="even">
+<td align="left">X-squared3</td>
+<td align="left">White</td>
+<td align="left">1931-1940</td>
+<td align="right">2.776021</td>
+<td align="right">0.0956856</td>
+<td align="left">No</td>
+</tr>
+</tbody>
+</table>
+<p>The table shows that cohorts 1901-1910, 1911-1920, 1921-1930 have
+significant change in probability of individuals with zero siblings in
+white population.</p>
+</div>
+<div id="b.-family-size-analysis-mean-1" class="section level4">
+<h4>b. <strong>Family Size Analysis (Mean)</strong></h4>
+<p>We apply t-test and ANOVA to check if there is a significant
+difference in the mean family size across the year for the same
+cohort.</p>
+<table>
+<caption>Test Result of Mean Family Size for Black Population</caption>
+<colgroup>
+<col width="4%" />
+<col width="33%" />
+<col width="14%" />
+<col width="14%" />
+<col width="14%" />
+<col width="18%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">RACE</th>
+<th align="left">Cohort</th>
+<th align="right">Statistic</th>
+<th align="right">p_value</th>
+<th align="left">Significance</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1</td>
+<td align="left">Black/African American</td>
+<td align="left">1911-1920</td>
+<td align="right">1.420923</td>
+<td align="right">0.2415084</td>
+<td align="left">No</td>
+</tr>
+<tr class="even">
+<td align="left">t</td>
+<td align="left">Black/African American</td>
+<td align="left">1901-1910</td>
+<td align="right">2.041113</td>
+<td align="right">0.0412638</td>
+<td align="left">Yes</td>
+</tr>
+<tr class="odd">
+<td align="left">11</td>
+<td align="left">Black/African American</td>
+<td align="left">1921-1930</td>
+<td align="right">13.940627</td>
+<td align="right">0.0000009</td>
+<td align="left">Yes</td>
+</tr>
+<tr class="even">
+<td align="left">t1</td>
+<td align="left">Black/African American</td>
+<td align="left">1931-1940</td>
+<td align="right">0.951569</td>
+<td align="right">0.3413272</td>
+<td align="left">No</td>
+</tr>
+</tbody>
+</table>
+<p>The table shows that mean number of siblings change significantly in
+cohorts 1901-1910 and 1921-1930 in black population.</p>
+<table>
+<caption>Test Result of Mean Family Size for White Population</caption>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">RACE</th>
+<th align="left">Cohort</th>
+<th align="right">Statistic</th>
+<th align="right">p_value</th>
+<th align="left">Significance</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1</td>
+<td align="left">White</td>
+<td align="left">1911-1920</td>
+<td align="right">7.438832</td>
+<td align="right">0.0005881</td>
+<td align="left">Yes</td>
+</tr>
+<tr class="even">
+<td align="left">t</td>
+<td align="left">White</td>
+<td align="left">1901-1910</td>
+<td align="right">2.126441</td>
+<td align="right">0.0334685</td>
+<td align="left">Yes</td>
+</tr>
+<tr class="odd">
+<td align="left">11</td>
+<td align="left">White</td>
+<td align="left">1921-1930</td>
+<td align="right">46.149409</td>
+<td align="right">0.0000000</td>
+<td align="left">Yes</td>
+</tr>
+<tr class="even">
+<td align="left">t1</td>
+<td align="left">White</td>
+<td align="left">1931-1940</td>
+<td align="right">1.151129</td>
+<td align="right">0.2496808</td>
+<td align="left">No</td>
+</tr>
+</tbody>
+</table>
+<p>The mean number of siblings change significantly in cohorts
+1901-1910, 1911-1920, 1921-1930 in white population.</p>
+</div>
+<div id="c.-family-size-analysis-variance-1" class="section level4">
+<h4>c. <strong>Family Size Analysis (Variance)</strong></h4>
+<p>We apply Levene’s test to check if there is significant difference in
+the variance of family size across year for the same cohort.</p>
+<table>
+<caption>Test Result of Variance of Family Size for Black
+Population</caption>
+<thead>
+<tr class="header">
+<th align="left">RACE</th>
+<th align="left">Cohort</th>
+<th align="right">Statistic</th>
+<th align="right">p_value</th>
+<th align="left">Significance</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Black/African American</td>
+<td align="left">1911-1920</td>
+<td align="right">2.158523</td>
+<td align="right">0.1155149</td>
+<td align="left">No</td>
+</tr>
+<tr class="even">
+<td align="left">Black/African American</td>
+<td align="left">1901-1910</td>
+<td align="right">10.243728</td>
+<td align="right">0.0013742</td>
+<td align="left">Yes</td>
+</tr>
+<tr class="odd">
+<td align="left">Black/African American</td>
+<td align="left">1921-1930</td>
+<td align="right">7.697212</td>
+<td align="right">0.0004549</td>
+<td align="left">Yes</td>
+</tr>
+<tr class="even">
+<td align="left">Black/African American</td>
+<td align="left">1931-1940</td>
+<td align="right">1.813217</td>
+<td align="right">0.1781381</td>
+<td align="left">No</td>
+</tr>
+</tbody>
+</table>
+<p>The table above summarizes the test result for black population. We
+observe that the variance of family size change significantly across
+census year in cohort 1901-1910 and 1921-1930.</p>
+<table>
+<caption>Test Result of Variance of Family Size for White
+Population</caption>
+<thead>
+<tr class="header">
+<th align="left">RACE</th>
+<th align="left">Cohort</th>
+<th align="right">Statistic</th>
+<th align="right">p_value</th>
+<th align="left">Significance</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Black/African American</td>
+<td align="left">1911-1920</td>
+<td align="right">2.244573</td>
+<td align="right">0.1059746</td>
+<td align="left">No</td>
+</tr>
+<tr class="even">
+<td align="left">Black/African American</td>
+<td align="left">1901-1910</td>
+<td align="right">6.270796</td>
+<td align="right">0.0122753</td>
+<td align="left">Yes</td>
+</tr>
+<tr class="odd">
+<td align="left">Black/African American</td>
+<td align="left">1921-1930</td>
+<td align="right">2.282988</td>
+<td align="right">0.1019806</td>
+<td align="left">No</td>
+</tr>
+<tr class="even">
+<td align="left">Black/African American</td>
+<td align="left">1931-1940</td>
+<td align="right">3.588867</td>
+<td align="right">0.0581697</td>
+<td align="left">No</td>
+</tr>
+</tbody>
+</table>
+<p>This table summarizes the test result for white population. We
+observe that the variance of family size only change significantly
+across census year in cohort 1901-1910.</p>
+</div>
+<div id="d.-model-fit-analysis-1" class="section level4">
+<h4>d. <strong>Model Fit Analysis</strong></h4>
+<p>Same as the children’s part, we use visualization instead of
+statistical test here due to the due lack of data variability. The plot
+shows that the best model for each cohort(those with 1+ corresponding
+census year) is stable over time.
+<img src="figure/relative-distribution.Rmd/unnamed-chunk-71-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-61-1">
-Past versions of unnamed-chunk-61-1.png
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-71-1">
+Past versions of unnamed-chunk-71-1.png
 </button>
 </p>
-<div id="fig-unnamed-chunk-61-1" class="collapse">
+<div id="fig-unnamed-chunk-71-1" class="collapse">
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
 <thead>
@@ -3178,108 +3800,19 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/415f30a114cca2740317633e0520d2c432e0495b/docs/figure/relative-distribution.Rmd/unnamed-chunk-61-1.png" target="_blank">415f30a</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/800786411d6551c5050635b63803c9f8e4c12506/docs/figure/relative-distribution.Rmd/unnamed-chunk-71-1.png" target="_blank">8007864</a>
 </td>
 <td>
 linmatch
 </td>
 <td>
-2025-01-14
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/f567c4a1d97864fe11ddfc3814b1d12a2075f2b9/docs/figure/relative-distribution.Rmd/unnamed-chunk-61-1.png" target="_blank">f567c4a</a>
-</td>
-<td>
-linmatch
-</td>
-<td>
-2024-12-16
+2024-12-03
 </td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<pre><code>$`1901-1910`
-
-    Kruskal-Wallis rank sum test
-
-data:  sibling_count by YEAR
-Kruskal-Wallis chi-squared = 13.23, df = 1, p-value = 0.0002755
-
-
-$`1911-1920`
-
-    Kruskal-Wallis rank sum test
-
-data:  sibling_count by YEAR
-Kruskal-Wallis chi-squared = 22.761, df = 2, p-value = 1.141e-05
-
-
-$`1921-1930`
-
-    Kruskal-Wallis rank sum test
-
-data:  sibling_count by YEAR
-Kruskal-Wallis chi-squared = 18.893, df = 2, p-value = 7.895e-05
-
-
-$`1931-1940`
-
-    Kruskal-Wallis rank sum test
-
-data:  sibling_count by YEAR
-Kruskal-Wallis chi-squared = 0.21333, df = 1, p-value = 0.6442</code></pre>
-<pre><code>$`1901-1910`
-
-    Kruskal-Wallis rank sum test
-
-data:  sibling_count by YEAR
-Kruskal-Wallis chi-squared = 3.8533, df = 1, p-value = 0.04965
-
-
-$`1911-1920`
-
-    Kruskal-Wallis rank sum test
-
-data:  sibling_count by YEAR
-Kruskal-Wallis chi-squared = 4.9189, df = 2, p-value = 0.08548
-
-
-$`1921-1930`
-
-    Kruskal-Wallis rank sum test
-
-data:  sibling_count by YEAR
-Kruskal-Wallis chi-squared = 2.7072, df = 2, p-value = 0.2583
-
-
-$`1931-1940`
-
-    Kruskal-Wallis rank sum test
-
-data:  sibling_count by YEAR
-Kruskal-Wallis chi-squared = 0.21333, df = 1, p-value = 0.6442</code></pre>
-<pre><code>                    RACE    Cohort Stable_Distribution Significant_Changes
-1 Black/African American 1901-1910                  No                 Yes
-2 Black/African American 1911-1920                  No                 Yes
-3 Black/African American 1921-1930                  No                 Yes
-4 Black/African American 1931-1940                 Yes                  No
-5                  White 1901-1910                  No                 Yes
-6                  White 1911-1920                 Yes                  No
-7                  White 1921-1930                 Yes                  No
-8                  White 1931-1940                 Yes                  No</code></pre>
-<div id="visualize-stability" class="section level4">
-<h4>Visualize stability</h4>
-<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-65-1.png" width="864" style="display: block; margin: auto;" /></p>
-</div>
-<div id="result" class="section level4">
-<h4>Result</h4>
-<p>From the plot above, we can see the distribution of sibling is stable
-in the following cohorts by race: -black population:1901-1919,
-1911-1920, 1921-1930 -white population:1901-1910</p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -3330,7 +3863,6 @@ loaded via a namespace (and not attached):
 [49] ggsignif_0.6.4    hms_1.1.3         evaluate_0.23     rlang_1.1.3      
 [53] Rcpp_1.0.12       glue_1.7.0        rstudioapi_0.15.0 jsonlite_1.8.9   
 [57] R6_2.5.1          fs_1.6.3         </code></pre>
-</div>
 </div>
 </div>
 </div>

@@ -190,7 +190,8 @@ print(df_proportions %>%
   arrange(YEAR, RACE, AGE_RANGE))
 ```
 
-With this visualization of the distribution of the data, we can see that there are differences between races, census year and age groups. 
+With this visualization of the distribution of the data, we can see that there are differences between races, census year and age groups. **_NOTE_:**The category '12+' includes families with 12 or more children.
+
 - **_By Census Year:_** From 1960 to 1990, the proportion of mothers with larger families (6+ children) decreases for both races across all age groups.
 Smaller families (1-3 children) become more common over the decades.
 - **_By Age Group:_** Older age groups (e.g., 70+) show a higher frequency of larger family sizes, especially in earlier Census years. Younger age groups (40-49) show a stronger shift toward smaller family sizes in more recent decades.
@@ -283,7 +284,7 @@ best_models$Best_Model <- apply(best_models, 1, function(row) {
 
 best_models <- best_models %>% dplyr::select(Race, Census_Year, Age_Range, Best_Model)
 # View the updated table with the Best_Model column
-kable(best_models, caption="Summary Table of Best Model")
+kable(best_models, caption="Summary Table of Best Model (Children)")
 ```
 
 
@@ -304,6 +305,8 @@ summary(model_logistic)
 
 ### Visualize the Results
 According to the resulting visualization, the ZINB model is the best fit for the black population across census year and age group. However, the ZINB model perform the best among the white population only across year 1960 and 1970, and age group 60-69 and 70+.
+
+
 ```{r}
 ggplot(best_models, aes(x = Census_Year, y = Age_Range, fill = Best_Model)) +
   geom_tile(color = "white", lwd = 0.5, linetype = 1) + 
@@ -328,7 +331,7 @@ ggplot(best_models, aes(x = Census_Year, y = Age_Range, fill = Best_Model)) +
 From the previous analysis, we observe that there is discrepancy in the distribution between white and black American. Next, the goal is to determine if there is a **significant change** in any of the following across census years for the same cohort:
 
 1. **Zero Inflation**: Check if the proportion of women with zero children changes significantly over time for the same cohort.
-2. **Family Size**: Test if the mean or variance in the number of children changes for the same cohort over time.
+2. **Family Size**: Test if the mean and variance in the number of children changes for the same cohort over time.
 3. **Model Fit**: Analyze if the best-fitting model for the cohort changes over time.
 
 ### Data Preparation
@@ -517,7 +520,7 @@ results_black$p_value = format(results_black$p_value, scientific = TRUE)
 kable(results_black, caption="Test Result of Zero Inflation for Black Population")
 
 ```
-Here is a table summarize the test result for black population. We observe that the proportion of women with zero children change significantly across census year in the cohort 1901-1910 and 1921-1930.
+Above is a table summarize the test result for black population. We observe that the proportion of women with zero children change significantly across census year in the cohort 1901-1910 and 1921-1930.
 
 ```{r, include=FALSE}
 # Data frame to store proportions
@@ -612,6 +615,9 @@ combined_result <- rbind(results_black, results_white)
 Combining the results above, we created a plot that demonstrate the change and difference of p value between cohorts and races.
 
 ```{r}
+# Convert p_value to numeric if necessary
+combined_result$p_value <- as.numeric(combined_result$p_value)
+
 # Create the plot
 ggplot(combined_result, aes(x = Cohort, y = p_value, color = RACE, shape = Significance)) +
   geom_point(size = 2) +
@@ -635,8 +641,8 @@ axis.text.x = element_text(angle = 45, hjust = 1))
 
 The graph shows that there is a discrepancy in the p-value within the cohorts like 1901-1910, 1911-1920 and 1921-1930 by race. However, in cohort 1931-1941, the p-value of each race is pretty close to each other. The overall trend of the p-value for black population is stable across cohort, while the trend for white population fluctuate a lot. 
 
-#### b. **Family Size Analysis**
-We apply t test and ANOVA to check if there is significant difference in the mean family size across year for the same cohort. In both racial group, the ANOVA and t-test is not applicable for the following cohort since there is only one census year available in the data for those cohorts:-Inf-1910, 1941-1950, -Inf-1920, -Inf-1890, -Inf-1900, and 1891-1900
+#### b. **Family Size Analysis (Mean)**
+We apply t-test and ANOVA to check if there is a significant difference in the mean family size across the year for the same cohort. In both racial groups, the ANOVA and t-test are not applicable for the following cohort since there is only one census year available in the data for those cohorts:-Inf-1910, 1941-1950, -Inf-1920, -Inf-1890, -Inf-1900, and 1891-1900
 ```{r}
 merged_black = merged_data %>% filter(Race == "Black/African American")
 merged_white = merged_data %>% filter(Race == "White")
@@ -787,9 +793,117 @@ kable(test_result_w, caption="Test Result of Mean Family Size for White Populati
 ```
 By looking at the ANOVA and t-test for mean family size in white population, the p-value of cohorts 1901-1910, 1911-1920 and 1921-1930 are smaller than 0.05. 
 
+#### c. **Family Size Analysis (Variance)**
+We apply Levene's test to check if there is significant difference in the variance of family size across year for the same cohort. In both racial group, the Levene's test is not applicable for the following cohorts since there is only one census year available in the data for those cohorts:-Inf-1910, 1941-1950, -Inf-1920, -Inf-1890, -Inf-1900, and 1891-1900
+```{r, include=FALSE}
+# Initialize a results dataframe
+test_var_b <- data.frame(
+  RACE = character(), 
+  Cohort = character(), 
+  Statistic = numeric(), 
+  p_value = numeric(), 
+  stringsAsFactors = FALSE
+)
 
-#### c. **Model Fit Analysis**
+cohorts1 <- unique(merged_black$Cohort)
+
+# Loop through each cohort and apply Levene's Test
+for (cohort in cohorts1) {
+  
+  # Filter data for the specific cohort
+  cohort_data_b <- merged_black[merged_black$Cohort == cohort, ]
+  
+  # Check if there are at least two unique Census_Year values
+  if (length(unique(cohort_data_b$Census_Year)) < 2) {
+    cat("\nCohort:", cohort, "has only 1 Census Year. Skipping Levene's Test.\n")
+    next
+  }
+  
+  # Perform Levene's Test for variance
+  levene_result <- leveneTest(chborn_num ~ factor(Census_Year), data = cohort_data_b)
+  
+  # Extract F-statistic and p-value
+  f_statistic <- levene_result[["F value"]][1]
+  p_value <- levene_result[["Pr(>F)"]][1]
+  
+  # Store results in test_var_b
+  test_var_b <- rbind(
+    test_var_b, 
+    data.frame(
+      RACE = "Black/African American",
+      Cohort = cohort,
+      Statistic = f_statistic,
+      p_value = p_value
+    )
+  )
+}
+
+# Add significance column
+test_var_b <- test_var_b %>%
+  mutate(Significance = ifelse(p_value > 0.05, "No", "Yes"))
+```
+
+```{r}
+kable(test_var_b, caption="Test Result of Variance of Family Size for Black Population")
+```
+The table above summarizes the test result for black population. We observe that the variance of family size change significantly across census year in cohort 1901-1910 and 1921-1930.
+
+```{r, include=FALSE}
+# Initialize a results dataframe
+test_var_w <- data.frame(
+  RACE = character(), 
+  Cohort = character(), 
+  Statistic = numeric(), 
+  p_value = numeric(), 
+  stringsAsFactors = FALSE
+)
+
+cohorts1 <- unique(merged_white$Cohort)
+
+# Loop through each cohort and apply Levene's Test
+for (cohort in cohorts1) {
+  
+  # Filter data for the specific cohort
+  cohort_data_w <- merged_white[merged_white$Cohort == cohort, ]
+  
+  # Check if there are at least two unique Census_Year values
+  if (length(unique(cohort_data_w$Census_Year)) < 2) {
+    cat("\nCohort:", cohort, "has only 1 Census Year. Skipping Levene's Test.\n")
+    next
+  }
+  
+  # Perform Levene's Test for variance
+  levene_result <- leveneTest(chborn_num ~ factor(Census_Year), data = cohort_data_w)
+  
+  # Extract F-statistic and p-value
+  f_statistic <- levene_result[["F value"]][1]
+  p_value <- levene_result[["Pr(>F)"]][1]
+  
+  # Store results in test_var_w
+  test_var_w <- rbind(
+    test_var_w, 
+    data.frame(
+      RACE = "White",
+      Cohort = cohort,
+      Statistic = f_statistic,
+      p_value = p_value
+    )
+  )
+}
+
+# Add significance column
+test_var_w <- test_var_w %>%
+  mutate(Significance = ifelse(p_value > 0.05, "No", "Yes"))
+```
+
+```{r}
+kable(test_var_w, caption="Test Result of Variance of Family Size for White Population")
+```
+This table summarizes the test result for white population. We observe that the variance of family size only change significantly across census year in cohort 1911-1920.
+
+#### d. **Model Fit Analysis**
 Due to the due lack of data variability, we use visualization instead of statistical test. Based on the heatmap created, we can see that the model fit for each cohort(cohort with 2+ corresponding census year) across year does not change.
+
 
 ```{r}
 # Due to the due lack of data variability, I use visualization instead of test
@@ -875,7 +989,7 @@ ggplot(combined_data, aes(x = Census_Year, y = Mean, color = Cohort)) +
   labs(
     title = "Significant Changes in Mean Family Size Over Census Years",
     x = "Census Year",
-    y = "Mean number of Children",
+    y = "Mean of number of Children",
     color = "Cohort"
   ) +
   theme_minimal() +
@@ -890,14 +1004,43 @@ ggplot(combined_data, aes(x = Census_Year, y = Mean, color = Cohort)) +
 - For **white population**, a consistent decline in mean family size was observed for the 1901-1910 and 1911-1920 cohorts from 1960 to 1970. The 1921-1930 cohort showed a modest increase in mean family size in 1990, reaching around 2.8 children on average, which is **smaller than** the black population.
 
 #### Cohorts with Significant Change in Variance of Family Size
+```{r}
+## Balck population
+filter_mean_b <- merged_data2 %>% 
+  filter(Cohort %in% c("1901-1910", "1921-1930") & Race == "Black/African American")
 
+## White population
+filter_mean_w <- merged_data2 %>% 
+  filter(Cohort %in% c("1911-1920") & Race == "White")
+
+combined_data <- unique(bind_rows(filter_mean_b, filter_mean_w))
+
+ggplot(combined_data, aes(x = Census_Year, y = Variance, color = Cohort)) +
+  geom_line(size = 1) +
+  geom_point(size = 2) +
+  facet_wrap(~ Race) +
+  labs(
+    title = "Significant Changes in Variance Family Size Over Census Years",
+    x = "Census Year",
+    y = "Variance of number of Children",
+    color = "Cohort"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 14, hjust = 0.5),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "bottom"
+  )
+```
+- For **black population**, significant decrease in variance occur between 1960 and 1970, particularly for the cohort 1901-1910. Variance continues to shift for cohort 1921-1930 between 1970 and 1990 with the steeper increases.
+- For **white population**, there is little change in variance over time. Variance appears to remain stable across Census years for cohort 1911-1920. This stability suggests **less variability** in fertility patterns among women in white population compared to black population.
 
 
 ### Panel B: Comparison of 40-49 and 50-59 Age Groups in 1990
 This analysis examines differences in fertility patterns between the 40-49 and 50-59 age groups in 1990, focusing on the distribution, mean number of children, variance, and childlessness (zero inflation) within Black and White populations.
 
 #### Visulization of Distribution
-Firstly, We present a side-by-side distribution plots comparing the number of children for women in the 40-49 and 50-59 age groups within Black and White populations.
+Firstly, we present a side-by-side distribution plots comparing the number of children for women in the 40-49 and 50-59 age groups within Black and White populations.
 
 ```{r}
 filter_df <- df_proportions %>% 
@@ -921,7 +1064,7 @@ ggplot(filter_df, aes(x = chborn_num, y = proportion, fill = AGE_RANGE)) +
 For both racial groups, the 40-49 age group has a distribution more skewed towards 0-2 children. Meanwhile, women in the 50-59 age group generally have larger family sizes compared to the 40-49 age group.
 
 ####  Summary Statistics Table
-By summarizing the key statistics for each age group and race, we can derive the same insight, which shows that women in the older age group have larger family sizes. On average, women in the 50-59 age group have more children than those in the 40-49 age group. In addition, The variance in the number of children is larger for the 50-59 age group in both racial groups, indicating greater variability in family size. In terms of zero inflation (proportion of women with no children), the women in 40-49 age group have higher zero inflation than women in 50-59 in both racial groups. 
+By summarizing the key statistics for each age group and race, we can derive the same insight, which shows that women in the older age group have larger family sizes. On average, women in the 50-59 age group have more children than those in the 40-49 age group. In addition, the variance in the number of children is larger for the 50-59 age group in both racial groups, indicating greater variability in family size. In terms of zero inflation (proportion of women with no children), the women in 40-49 age group have higher zero inflation than women in 50-59 in both racial groups. 
 
 ```{r}
 summary_stats <- filter_df %>%
@@ -990,6 +1133,7 @@ The p-values are both extremely small, meaning there is a very strong statistica
 
 #### Test for Difference in Variances
 We apply Levene's test since non-normality in data. 
+
 - **Null Hypothesis (H₀):** There is no difference in the variance of the number of children between the two age groups.
 - **Alternative Hypothesis (H₁):** There is a difference in the variance of the number of children between the two age groups.
 
@@ -1064,6 +1208,7 @@ These findings suggest notable shifts in fertility trends and behaviors across g
   - The 50-59 age group likely represents completed fertility patterns, where women have finished childbearing. This explains the higher mean number of children and greater variance observed in this group.
   - The 40-49 age group, on the other hand, may still include women who have not yet completed their fertility, leading to a higher proportion of childlessness and a distribution skewed towards smaller family sizes.
   - These trends may reflect broader social, economic, and cultural influences on family size, such as changes in education, workforce participation, and access to family planning resources across generations.
+
 
 
 # Distribution of Number of Siblings Across Census Years
@@ -1177,29 +1322,20 @@ df2 %>% filter(RACE == "Black/African American" & n_siblings >= 0) %>% summarise
 
 df2 %>% filter(RACE == "White" & n_siblings >= 0) %>% summarise(Mean = mean(n_siblings))
 ```
-With this visualization of the distribution of the data, we can see that there are differences between races, census year and age groups. 
+With this visualization of the distribution of the data, we can see that there are differences between races, census year and age groups. **_Note:_** The category '11+' includes individuals with 11 or more siblings.
 
 - **_By Census Year:_** 
- - In 1960 and 1970, individuals are more likely to have higher number of siblings,      especially in the 5-10 range. This trend diminishes over time.
- - By 1980 and 1990, the distribution shifts toward smaller family sizes, with a growing proportion of individuals having fewer siblings.
+  - In 1960 and 1970, individuals are more likely to have higher number of siblings,      especially in the 5-10 range. This trend diminishes over time.
+  - By 1980 and 1990, the distribution shifts toward smaller family sizes, with a growing proportion of individuals having fewer siblings.
 
 - **_By Age Range:_**
- - 40-49 Age Group: For this group, the number of individuals with 0-2 siblings increases across census years, especially in 1980 and 1990, while the proportion of individuals with larger sibling counts decreases.
- - 50-59 and 60-69 Age Groups: These groups show a similar shift toward smaller family sizes, but the trend is slightly more gradual compared to the younger age group.
- - 70+ Age Group: The shift to fewer siblings is noticeable, although the trend is less pronounced. The distribution remains relatively stable across the census years, with a significant portion of individuals still coming from large families in 1960 and 1970.
+  - 40-49 Age Group: For this group, the number of individuals with 0-2 siblings increases across census years, especially in 1980 and 1990, while the proportion of individuals with larger sibling counts decreases.
+  - 50-59 and 60-69 Age Groups: These groups show a similar shift toward smaller family sizes, but the trend is slightly more gradual compared to the younger age group.
+  - 70+ Age Group: The shift to fewer siblings is noticeable, although the trend is less pronounced. The distribution remains relatively stable across the census years, with a significant portion of individuals still coming from large families in 1960 and 1970.
 
-- **_By Race:_**Black/African American Populations (right side of each pair) consistently show a higher proportion of individuals with larger sibling counts (5-10 siblings) compared to White populations. However, similar to the White population, the number of individuals with fewer siblings increases over time.
+- **_By Race:_ **Black/African American Populations (right side of each pair) consistently show a higher proportion of individuals with larger sibling counts (5-10 siblings) compared to White populations. However, similar to the White population, the number of individuals with fewer siblings increases over time.
 
-3. Note any significant changes or trends in the number of siblings over time.
-
-**_RESULT:_**
--White Populations: (left side of each pair) have a more marked shift toward smaller families by 1990, with a larger proportion of individuals having 0-2 siblings compared to the Black/African American population. The decline in larger family sizes (5+ siblings) is more pronounced among Whites, particularly by 1980 and 1990.
-
-4. Consider how these sibling distributions might differ from the children distributions you analyzed earlier, and think about potential reasons for these differences.
-
-**_RESULT:_** 
-While both distributions show a trend toward smaller families, the sibling distribution is more spread out across different sibling counts, suggesting potential difference in the distribution. 
-
+Comparing the sibling distribution with the children distribution, we find that although both distributions show a trend toward smaller families, the sibling distribution is more spread out across different sibling counts, suggesting potential difference in the distribution. 
 
 
 ## Model Fit Across Census Years
@@ -1259,7 +1395,14 @@ for (i in seq_along(combinations2)) {
 ```
 
 
-### Identify Best-Fitting Models by comparing AIC
+### Fit and Compare Models
+For each combination, we again fit the following candidate models:
+
+- **Poisson Model**
+- **Negative Binomial (NB) Model**
+- **Zero-Inflated Poisson (ZIP) Model**
+- **Zero-Inflated Negative Binomial (ZINB) Model**
+
 ```{r, include=FALSE}
 # Add a Best_Model column to store the best model based on minimum AIC
 best_models_sib$Best_Model <- apply(best_models_sib, 1, function(row) {
@@ -1280,8 +1423,16 @@ best_models_sib <- best_models_sib %>% dplyr::select(Race, Census_Year, AGE_RANG
 print(best_models_sib)
 ```
 
+### Record the Best Model for Each Subset
+Then, we find the AIC value of four models for each combination and record the model with minimum AIC. The following is the table that summarize the best model for each combination of race, census year and age group.
+```{r}
+kable(best_models_sib, caption="Summary Table of Best Model (Siblings)")
+```
 
-### Visualize Results
+### Visualize the Results
+By comparing the pattern of best-fitting models between the sibling and children distributions, we observe that the best model for black population has the same best model(zero-inlfated NB) across year and age range except on one subset(age 40-49 in 1990) in siblings distribution. However, there is a large difference in best model for white population. A large portion of best model in children distribution for white population is zero-inlfated NB, while negative-binomial is the best model fitted for siblings distribution except for one subset(age 40-49 in 1990). 
+
+
 ```{r}
 ggplot(best_models_sib, aes(x = Census_Year, y = AGE_RANGE, fill = Best_Model)) +
   geom_tile(color = "white", lwd = 0.5, linetype = 1) + # Create the tiles
@@ -1295,24 +1446,22 @@ ggplot(best_models_sib, aes(x = Census_Year, y = AGE_RANGE, fill = Best_Model)) 
   ) +
   theme_minimal() +
   theme(
-    axis.text.x = element_text(angle = 45, hjust = 1), # Rotate x-axis labels for readability
-    plot.title = element_text(size = 14, face = "bold"),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.title = element_text(size = 14, hjust = 0.5),
     legend.position = "bottom"
   )
 ```
 
-**_RESULT:_** By comparing the pattern of best-fitting models between the sibling and children distributions, we observe that the best model for black population has the same best model(zero-inlfated NB) across year and age range except on one subset(age 40-49 in 1990) in siblings distribution. However, there is a large difference in best model for white population. A large portion of best model in children distribution for white population is zero-inlfated NB, while negative-binomial is the best model fitted for siblings distribution except for one subset(age 40-49 in 1990). 
-
-
 ## Cohort Stability Analysis Siblings
 
-Analyze the stability of sibling distributions across cohorts, similar to the analysis performed for children.
+Next, we analyze the stability of sibling distributions across year for each cohorts, similar to the analysis performed for children.
 
 1. **Zero Inflation**: Check if the proportion of individuals with zero siblings changes significantly over time for the same cohort
-2. **Family Size**: Test if the mean or variance in the number of siblings changes for the same cohort over time.
+2. **Family Size**: Test if the mean in the number of siblings changes for the same cohort over time.
 3. **Model Fit**: Analyze if the best-fitting model for the cohort changes over time.
 
-### a. **Zero-Inflation Analysis**
+#### a. **Zero-Inflation Analysis**
+We apply the chi-square test for each cohort within each race. Since some cohorts only have one corresponding census year, the test is not applicable for them.
 ```{r}
 best_models_sib <- best_models_sib %>%
   mutate(Cohort = mapply(calculate_cohort, Census_Year, AGE_RANGE)) %>% 
@@ -1368,9 +1517,9 @@ for (cohort in cohorts_for_test) {
 results_black2 <- results_black2 %>%
   mutate(Significance = ifelse(p_value > 0.05, "No", "Yes"))
 
-print(results_black2)
+kable(results_black2, caption="Test Result of Zero Inflation for Black Population")
 ```
-**_RESULT:_** The table shows that only the cohort 1921-1930 has significant change in probability of individuals with zero siblings in black population.
+The table shows that only the cohort 1921-1930 has significant change in probability of individuals with zero siblings in black population.
 
 ```{r}
 # Filter cohorts with more than one census year
@@ -1409,18 +1558,20 @@ for (cohort in cohorts_for_test) {
 results_white2 <- results_white2 %>%
   mutate(Significance = ifelse(p_value > 0.05, "No", "Yes"))
 
-print(results_white2)
-```
-**_RESULT:_** The table shows that cohorts 1901-1910, 1911-1920, 1921-1930 have significant change in probability of individuals with zero siblings in white population.
+kable(results_white2, caption="Test Result of Zero Inflation for White Population")
 
-### b. **Family Size Analysis**
+```
+The table shows that cohorts 1901-1910, 1911-1920, 1921-1930 have significant change in probability of individuals with zero siblings in white population.
+
+#### b. **Family Size Analysis (Mean)**
+We apply t-test and ANOVA to check if there is a significant difference in the mean family size across the year for the same cohort.
 ```{r}
 sum_table_black = merged_data_sib %>% filter(Race == "Black/African American" & n_siblings!=-1)
 sum_table_white = merged_data_sib %>% filter(Race == "White"& n_siblings!=-1)
 ```
 
 
-```{r}
+```{r, include=FALSE}
 # Initialize an empty data frame for storing results
 test_result_b2 <- data.frame(
   RACE = character(), 
@@ -1484,12 +1635,14 @@ for (cohort in cohorts1) {
 test_result_b2 <- test_result_b2 %>%
   mutate(Significance = ifelse(p_value > 0.05, "No", "Yes"))
 
-# View the resulting data frame
-print(test_result_b2)
 ```
-**_RESULT:_** The mean number of siblings change significantly in cohorts 1901-1910 and 1921-1930 in black population.
 
 ```{r}
+kable(test_result_b2, caption = "Test Result of Mean Family Size for Black Population")
+```
+The table shows that mean number of siblings change significantly in cohorts 1901-1910 and 1921-1930 in black population.
+
+```{r, include=FALSE}
 test_result_w2 <- data.frame(
   RACE = character(), 
   Cohort = character(), 
@@ -1553,11 +1706,124 @@ for (cohort in cohorts2) {
 test_result_w2 <- test_result_w2 %>%
   mutate(Significance = ifelse(p_value > 0.05, "No", "Yes"))
 
-print(test_result_w2)
 ```
-**_RESULT:_** The mean number of siblings change significantly in cohorts 1901-1910, 1911-1920, 1921-1930 in white population.
 
-### c. **Model Fit Analysis**
+```{r}
+kable(test_result_w2, caption = "Test Result of Mean Family Size for White Population")
+```
+The mean number of siblings change significantly in cohorts 1901-1910, 1911-1920, 1921-1930 in white population.
+
+#### c. **Family Size Analysis (Variance)**
+We apply Levene's test to check if there is significant difference in the variance of family size across year for the same cohort. 
+
+```{r, include=FALSE}
+# Initialize a results dataframe
+test_var_b2 <- data.frame(
+  RACE = character(), 
+  Cohort = character(), 
+  Statistic = numeric(), 
+  p_value = numeric(), 
+  stringsAsFactors = FALSE
+)
+
+cohorts1 <- unique(sum_table_black$Cohort)
+
+# Loop through each cohort and apply Levene's Test
+for (cohort in cohorts1) {
+  
+  # Filter data for the specific cohort
+  cohort_data_b <- sum_table_black[sum_table_black$Cohort == cohort, ]
+  
+  # Check if there are at least two unique Census_Year values
+  if (length(unique(cohort_data_b$Census_Year)) < 2) {
+    cat("\nCohort:", cohort, "has only 1 Census Year. Skipping Levene's Test.\n")
+    next
+  }
+  
+  # Perform Levene's Test for variance
+  levene_result <- leveneTest(n_siblings ~ factor(Census_Year), data = cohort_data_b)
+  
+  # Extract F-statistic and p-value
+  f_statistic <- levene_result[["F value"]][1]
+  p_value <- levene_result[["Pr(>F)"]][1]
+  
+  # Store results in test_var_b2
+  test_var_b2 <- rbind(
+    test_var_b2, 
+    data.frame(
+      RACE = "Black/African American",
+      Cohort = cohort,
+      Statistic = f_statistic,
+      p_value = p_value
+    )
+  )
+}
+
+# Add significance column
+test_var_b2 <- test_var_b2 %>%
+  mutate(Significance = ifelse(p_value > 0.05, "No", "Yes"))
+```
+
+```{r}
+kable(test_var_b2, caption="Test Result of Variance of Family Size for Black Population")
+```
+The table above summarizes the test result for black population. We observe that the variance of family size change significantly across census year in cohort 1901-1910 and 1921-1930.
+
+```{r, include=FALSE}
+# Initialize a results dataframe
+test_var_w2 <- data.frame(
+  RACE = character(), 
+  Cohort = character(), 
+  Statistic = numeric(), 
+  p_value = numeric(), 
+  stringsAsFactors = FALSE
+)
+
+cohorts2 <- unique(sum_table_white$Cohort)
+
+# Loop through each cohort and apply ANOVA for Mean and Variance
+for (cohort in cohorts2) {
+  
+  # Filter data for the specific cohort
+  cohort_data_w <- sum_table_white[sum_table_white$Cohort == cohort, ]
+  
+  # Check if there are at least two unique Census_Year values
+  if (length(unique(cohort_data_w$Census_Year)) < 2) {
+    cat("\nCohort:", cohort, "has only 1 Census Year. Skipping Levene's Test.\n")
+    next
+  }
+  
+  # Perform Levene's Test for variance
+  levene_result <- leveneTest(n_siblings ~ factor(Census_Year), data = cohort_data_w)
+  
+  # Extract F-statistic and p-value
+  f_statistic <- levene_result[["F value"]][1]
+  p_value <- levene_result[["Pr(>F)"]][1]
+  
+  # Store results in test_var_w2
+  test_var_w2 <- rbind(
+    test_var_w2, 
+    data.frame(
+      RACE = "Black/African American",
+      Cohort = cohort,
+      Statistic = f_statistic,
+      p_value = p_value
+    )
+  )
+}
+
+# Add significance column
+test_var_w2 <- test_var_w2 %>%
+  mutate(Significance = ifelse(p_value > 0.05, "No", "Yes"))
+```
+
+```{r}
+kable(test_var_w2, caption="Test Result of Variance of Family Size for White Population")
+```
+This table summarizes the test result for white population. We observe that the variance of family size only change significantly across census year in cohort 1901-1910.
+
+#### d. **Model Fit Analysis**
+Same as the children's part, we use visualization instead of statistical test here due to the due lack of data variability. The plot shows that the best model for each cohort(those with 1+ corresponding census year) is stable over time.
 ```{r}
 ggplot(best_models_sib, aes(x = Census_Year, y = Cohort, fill = Best_Model)) +
   geom_tile(color = "white", lwd = 0.5, linetype = 1) + # Create the tiles
@@ -1571,133 +1837,8 @@ ggplot(best_models_sib, aes(x = Census_Year, y = Cohort, fill = Best_Model)) +
   ) +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 14, face = "bold"),
+    plot.title = element_text(size = 14, hjust = 0.5),
     legend.position = "bottom"
   )
 ```
-**_RESULT:_** The best model for each cohort(those with 1+ corresponding census year) is stable over time.
 
-### Addtional Analysis on Overall Distribution
-We also perform additional analysis to see if the overall distribution is stable across census year for the same cohort
-
-```{r}
- df_sibling_proportions <- df_sibling_proportions %>%
-  mutate(Cohort = mapply(calculate_cohort, YEAR, AGE_RANGE))
-```
-
-```{r}
-df_sibling_proportions %>%
-  filter(n_siblings >= 0, sibling_count >= 0, proportion >= 0) %>% group_by(RACE, Cohort) %>%
-  ggplot(aes(x = n_siblings, y = proportion, color = as.factor(YEAR))) +
-  geom_line() +
-  labs(
-    title = "Sibling Distribution by Census Year",
-    x = "Number of Siblings",
-    y = "Proportion",
-    color = "Census Year"
-  ) +
-  facet_grid(RACE ~ Cohort) +
-  theme_minimal()
-```
-
-```{r}
-df_sibling_b <- df_sibling_proportions %>% filter(RACE == "Black/African American", n_siblings >= 0, sibling_count >= 0, proportion >= 0)
-
-results_sib_b <- list()
-
-cohort_counts2 <- df_sibling_b %>%
-  group_by(Cohort) %>%
-  summarise(Unique_Census_Years = n_distinct(YEAR)) %>%
-  filter(Unique_Census_Years > 1)
-
-for (cohort in cohort_counts2$Cohort) {
-  cohort_data <- df_sibling_b %>% filter(Cohort == cohort)
-  
-  test_result <- kruskal.test(sibling_count ~ YEAR, data = cohort_data)
-  
-  results_sib_b[[cohort]] <- test_result
-}
-results_sib_b
-```
-
-
-```{r}
-df_sibling_w <- df_sibling_proportions %>% filter(RACE == "White", n_siblings >= 0, sibling_count >= 0, proportion >= 0)
-
-results_sib_w <- list()
-
-cohort_counts2 <- df_sibling_w %>%
-  group_by(Cohort) %>%
-  summarise(Unique_Census_Years = n_distinct(YEAR)) %>%
-  filter(Unique_Census_Years > 1)
-
-for (cohort in cohort_counts2$Cohort) {
-  cohort_data <- df_sibling_w %>% filter(Cohort == cohort)
-  
-  test_result <- kruskal.test(sibling_count ~ YEAR, data = cohort_data)
-  
-  results_sib_w[[cohort]] <- test_result
-}
-results_sib_w
-```
-
-
-```{r}
-results_summary <- data.frame(
-  RACE = character(),
-  Cohort = character(),
-  Stable_Distribution = character(),
-  Significant_Changes = character(),
-  stringsAsFactors = FALSE
-)
-
-summarize_results <- function(test_results, race) {
-  summary_list <- list()
-  
-  for (birth_range in names(test_results)) {
-    test_result <- test_results[[birth_range]]
-    
-    stable <- ifelse(test_result$p.value >= 0.05, "Yes", "No")
-    significant_changes <- ifelse(test_result$p.value < 0.05, "Yes", "No")
-    
-    summary_list[[birth_range]] <- data.frame(
-      RACE = race,
-      Cohort = birth_range,
-      Stable_Distribution = stable,
-      Significant_Changes = significant_changes
-    )
-  }
-  
-  do.call(rbind, summary_list)
-}
-
-results_summary_black <- summarize_results(results_sib_b, "Black/African American")
-
-results_summary_white <- summarize_results(results_sib_w, "White")
-
-results_summary <- rbind(results_summary, results_summary_black, results_summary_white)
-
-rownames(results_summary) <- NULL 
-
-results_summary
-
-```
-
-
-#### Visualize stability
-```{r}
-ggplot(results_summary, aes(x = Cohort, y = RACE, fill = Significant_Changes)) +
-  geom_tile(color = "white") +
-  scale_fill_manual(values = c("Yes" = "#e93e3a", "No" = "#fdc70c")) +
-  labs(title = "Significant Changes in Sibling Count Distribution Across Years by Race and Birth Range",
-       x = "Birth Range",
-       y = "Race",
-       fill = "Significant Changes") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-```
-
-#### Result
-From the plot above, we can see the distribution of sibling is stable in the following cohorts by race:
-  -black population:1901-1919, 1911-1920, 1921-1930
-  -white population:1901-1910
