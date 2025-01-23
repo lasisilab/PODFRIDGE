@@ -355,7 +355,7 @@ div.tocify {
 <h1 class="title toc-ignore">Disparities in the probability of finding a
 relative via long-range familial search</h1>
 <h4 class="author">Junhui He</h4>
-<h4 class="date">2025-01-17 17:54:02</h4>
+<h4 class="date">2025-01-22 20:24:56</h4>
 
 </div>
 
@@ -384,7 +384,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-01-17
+<strong>Last updated:</strong> 2025-01-22
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -515,15 +515,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree64c4f90fbc623e0c1baeb950e36965e1abe1ae3etargetblank64c4f90a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree90a3d7c710bd9e1ee2853d1dd36c0a18976919aftargetblank90a3d7ca">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/64c4f90fbc623e0c1baeb950e36965e1abe1ae3e" target="_blank">64c4f90</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/90a3d7c710bd9e1ee2853d1dd36c0a18976919af" target="_blank">90a3d7c</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree64c4f90fbc623e0c1baeb950e36965e1abe1ae3etargetblank64c4f90a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree90a3d7c710bd9e1ee2853d1dd36c0a18976919aftargetblank90a3d7ca"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -533,7 +533,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/64c4f90fbc623e0c1baeb950e36965e1abe1ae3e" target="_blank">64c4f90</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/90a3d7c710bd9e1ee2853d1dd36c0a18976919af" target="_blank">90a3d7c</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -797,6 +797,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/90a3d7c710bd9e1ee2853d1dd36c0a18976919af/analysis/probability_disparity.Rmd" target="_blank">90a3d7c</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-01-22
+</td>
+<td>
+wflow_publish("analysis/probability_disparity.Rmd")
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/8c86890ef53a87c172aaf94be7782a828f89dd37/docs/probability_disparity.html" target="_blank">8c86890</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-01-17
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/64c4f90fbc623e0c1baeb950e36965e1abe1ae3e/analysis/probability_disparity.Rmd" target="_blank">64c4f90</a>
 </td>
 <td>
@@ -843,7 +877,10 @@ population is <span class="math inline">\(\alpha\)</span>.</p></li>
 <li><p>The database has <span class="math inline">\(K\)</span>
 individuals, and the racial proportion of the database is <span
 class="math inline">\(\beta\)</span>. The database is randomly sampled
-from the current population.</p></li>
+from the current population. Both the population proportion <span
+class="math inline">\(\alpha\)</span> and the database proportion <span
+class="math inline">\(\beta\)</span> are considered fixed
+constants.</p></li>
 <li><p>The family trees of different races are strictly separated. For
 instance, the ancestors and descendants of black Americans are also
 black Americans.</p></li>
@@ -851,16 +888,20 @@ black Americans.</p></li>
 except for the known ancestor couple of the target.</p></li>
 <li><p>The number of children per couple at the generation <span
 class="math inline">\(g\)</span> before the present is <span
-class="math inline">\(r_g\)</span>. In this model, we estimate <span
-class="math inline">\(r_1\)</span> by the children number of 1990
-age-range 40-49 women, <span class="math inline">\(r_2\)</span> by the
-children number of 1960 age-range 40-49 women, <span
-class="math inline">\(r_3\)</span> by the children number of 1960
-age-range 70+ women and <span class="math inline">\(r_g\)</span> has the
-same distribution as <span class="math inline">\(r_3\)</span> for <span
-class="math inline">\(g\geq 3\)</span>. Additionally, if a certain
-couple is known as the ancestors of the target, it has at least one
-child.</p></li>
+class="math inline">\(r_g\)</span>. It is assumed that <span
+class="math inline">\(r_g\)</span> follows a multinomial distribution.
+In this model, the distribution of <span
+class="math inline">\(r_1\)</span> is estimated based on the number of
+children born to women aged 40-49 in 1990, the distribution of <span
+class="math inline">\(r_2\)</span> is estimated based on the number of
+children born to women aged 40-49 in 1960, and the distribution of <span
+class="math inline">\(r_3\)</span> is estimated based on the number of
+children born to women aged 70+ in 1960. For generations <span
+class="math inline">\(g\geq 3\)</span>, <span
+class="math inline">\(r_g\)</span> is assumed to follow the same
+distribution as <span class="math inline">\(r_3\)</span>. Additionally,
+if a specific couple is known as the ancestors of the target, it is
+assumed that they have at least one child.</p></li>
 <li><p>Individuals are diploid and we consider only the autosomal
 genome.</p></li>
 <li><p>The genome of the target individual is compared to those of all
@@ -955,7 +996,8 @@ the family size,</p>
 <p>We utilize Monte Carlo methods to calculate the mean probability of
 identifying an individual over family size, i.e., <span
 class="math inline">\(E[P(\text{identify}|r)]\)</span>.</p>
-<p>Additionally, we calculate <span
+<p>Additionally, since <span class="math inline">\(r\)</span> is a
+random variable, we calculate <span
 class="math inline">\(P(\text{identify}|\bar{r})\)</span> to make a
 comparison with <span
 class="math inline">\(E[P(\text{identify}|r)]\)</span>, where <span
@@ -969,27 +1011,76 @@ class="math inline">\(r\)</span>.</p>
 </div>
 <div id="experimental-results" class="section level2">
 <h2>4 Experimental results</h2>
+<div id="identifying-probabilities-considering-the-family-size"
+class="section level3">
+<h3>4.1 Identifying probabilities considering the family size</h3>
+<p>In this subsection, it is assumed that the population and database
+consist of a single race. Ratios <span
+class="math inline">\(\alpha\)</span> and <span
+class="math inline">\(\beta\)</span> are set to <span
+class="math inline">\(1\)</span> in the calculation of identifying
+probabilities. These probabilities are utilized to explore the influence
+of disparities in the family size of different races, without
+considering the racial representation.</p>
 <ol style="list-style-type: decimal">
 <li>The mean probability of identifying an individual over the family
-size up to a certain type of cousinship from a database, <span
+size up to a certain type of cousinship from a pure database, <span
+class="math inline">\(E[P(\text{identify}|r)]\)</span></li>
+</ol>
+<p><img src="figure/probability_disparity.Rmd/plot-probability-1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<ol start="2" style="list-style-type: decimal">
+<li>The pseudo probability of identifying an individual using a mean
+family size up to a certain type of cousinship from a pure database,
+<span class="math inline">\(P(\text{identify}|\bar{r})\)</span></li>
+</ol>
+<p><img src="figure/probability_disparity.Rmd/plot-pseudo-probability-1-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div
+id="identifying-probabilities-considering-the-family-size-and-racial-representation"
+class="section level3">
+<h3>4.2 Identifying probabilities considering the family size and racial
+representation</h3>
+<p>In this subsection, it is assumed that the population and database
+consist of multiple races, including black and white Americans. Ratios
+<span class="math inline">\(\alpha\)</span> and <span
+class="math inline">\(\beta\)</span> correspond to racial proportions in
+population and database, respectively. We calculate the probabilities of
+identifying an individual by treating <span
+class="math inline">\(\alpha\)</span> and <span
+class="math inline">\(\beta\)</span> fixed as constants. When the
+database size is much smaller than the population size, this assumption
+seems to be reasonable.</p>
+<ol style="list-style-type: decimal">
+<li>The mean probability of identifying an individual over the family
+size up to a certain type of cousinship from a mixed database, <span
 class="math inline">\(E[P(\text{identify}|r)]\)</span>, considering the
 population size, the database size and the race</li>
 </ol>
-<p><img src="figure/probability_disparity.Rmd/plot-probability-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/probability_disparity.Rmd/plot-probability-2-1.png" width="672" style="display: block; margin: auto;" /></p>
 <ol start="2" style="list-style-type: decimal">
 <li>The pseudo probability of identifying an individual using a mean
-family size up to a certain type of cousinship from a database, <span
-class="math inline">\(P(\text{identify}|\bar{r})\)</span>, considering
-the population size, the database size and the race</li>
+family size up to a certain type of cousinship from a mixed database,
+<span class="math inline">\(P(\text{identify}|\bar{r})\)</span>,
+considering the population size, the database size and the race</li>
 </ol>
-<p><img src="figure/probability_disparity.Rmd/plot-pseudo-probability-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/probability_disparity.Rmd/plot-pseudo-probability-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
 </div>
 <div id="conclusions" class="section level2">
 <h2>5 Conclusions</h2>
 <ol style="list-style-type: decimal">
-<li><p>The identification probability for White Americans is
-significantly higher than that for Black Americans, primarily due to
-disparities in database representation.</p></li>
+<li><p>Considering only the family size, it is interesting to observe
+that identification probabilities <span
+class="math inline">\(E[P(\text{identify}|r)]\)</span> for black and
+white Americans are close to each other (see Figure 1 in Section 4.1),
+while pseudo identification probabilities <span
+class="math inline">\(P(\text{identify}|\bar{r})\)</span> for black
+Americans are significantly higher than that for black Americans (see
+Figure 2 in Section 4.1).</p></li>
+<li><p>Considering the family size and racial representation, the
+identification probability for White Americans is significantly higher
+than that for Black Americans (see Figures 1 and 2 in Section 4.2),
+primarily due to disparities in database representation.</p></li>
 <li><p>The value of <span
 class="math inline">\(P(\text{identify}|\bar{r})\)</span> is notably
 higher than <span
