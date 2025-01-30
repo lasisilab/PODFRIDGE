@@ -434,7 +434,7 @@ ggplot(prob_df, aes(x=prop, y=prob)) + geom_line(aes(colour=cousin, linetype=chi
 
 Furthermore, we consider a random family size $r$ with the following distribution: $$P(r=2)=P(r=3)=50\%.$$ This implies that half of the couples have 2 children, while the other half have 3 children. The mean family size, denoted by $\bar{r}$, is given as $2.5$. Consequently, we obtain the following relationships: $$E[P(\text{identify}|r)] = 0.5*P(\text{identify}|2) + 0.5 * P(\text{identify}|3),$$ $$P(\text{identify}|\bar{r}) = P(\text{identify}|2.5).$$
 
-```{r plot-probability-3}
+```{r plot-probability-4}
 pr_avg = array(dim = c(length(gmaxs), length(K_props), 2))
 pr_avg[,,1] = pr[,,2]
 pr_avg[,,2] = (pr[,,1] + pr[,,3])/2
