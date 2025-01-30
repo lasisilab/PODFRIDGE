@@ -11,6 +11,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 # load package
 library(ggplot2)
+library(ggpubr)
 ```
 
 ## 1 Objective
@@ -140,8 +141,10 @@ dtc_props = racial_composition$Proportion[c(10, 12)]
 # population size
 N = sum(racial_composition$Number_of_Customers[1:4])
 
-# read family size distributions for black/white Americans (Result 2)
+# read family size multinomial distributions for black/white Americans (Result 2)
 family_size = read.csv(file.path("data", "family_size.csv"))
+# read estimated family distributions (zero inflated negative binomial/Poisson)
+load(file.path("data", "family_distribution.Rdata"))
 
 black_family_size = rbind(family_size$proportion[which(family_size$RACE=="Black/African American" & family_size$YEAR=="1990" & family_size$AGE_RANGE=="40-49")],
                           family_size$proportion[which(family_size$RACE=="Black/African American" & family_size$YEAR=="1960" & family_size$AGE_RANGE=="40-49")],
@@ -153,8 +156,8 @@ white_family_size = rbind(family_size$proportion[which(family_size$RACE=="White"
 ```
 
 ```{r monte-carlo}
-# calculate the distribution of match probabilities using Monte Carlo methods
-coverage_samples <- function(num_sample, family_size, gmax, tot_N, tot_K, pop_prop, dtc_prop, m, min_num_seg, min_num_rel) {
+# assuming the family size follows a multinomial distribution, calculate the distribution of match probabilities using Monte Carlo methods
+coverage_samples_mul <- function(num_sample, family_size, gmax, tot_N, tot_K, pop_prop, dtc_prop, m, min_num_seg, min_num_rel) {
   N = round(tot_N * pop_prop) # population size of certain race
   K = round(tot_K * dtc_prop) # database size of certain race
   
@@ -181,6 +184,62 @@ coverage_samples <- function(num_sample, family_size, gmax, tot_N, tot_K, pop_pr
   
   return(cov_sam)
 }
+
+# assuming the family size follows a zero-inflated negative binomail/Poisson distribution, calculate the distribution of match probabilities using Monte Carlo methods
+coverage_samples_zi <- function(num_sample, family_distribution, gmax, tot_N, tot_K, pop_prop, dtc_prop, m, min_num_seg, min_num_rel) {
+  N = round(tot_N * pop_prop) # population size of certain race
+  K = round(tot_K * dtc_prop) # database size of certain race
+  
+  cov_sam = rep(NA, num_sample)
+  g_family = length(family_distribution)
+  
+  for (i in 1:num_sample) {
+    tot_p_match = 0
+    for (g in 1:gmax) {
+      # sample a family size
+      r = rep(NA, g)
+      if(g > 1) {
+        for(k in 1:(g-1)) {
+          r_dist = family_distribution[[min(k,g_family)]]
+          r_dist[1] = exp(r_dist[1]) # calculate the mean for count model
+          r_dist[2] = exp(r_dist[2])/(1+exp(r_dist[2])) # calculate the probability for zero inflation model
+          if(runif(1)<r_dist[2]) {
+            r[k] = 0
+          } else {
+            if(length(r_dist)==2) {
+              # zero-inflated Poisson
+              r[k] = rpois(1, r_dist[1])
+            } else {
+              # zero-inflated negative binomial
+              r[k] = rnbinom(1, size = r_dist[3], mu = r_dist[1])
+            }
+          }
+        }
+      }
+      
+      # the number of children should be at least one
+      r_dist = family_distribution[[min(g,g_family)]]
+      r_dist[1] = exp(r_dist[1])
+      r_g = 0
+      if(length(r_dist)==2) {
+        while(r_g == 0) {
+          r_g = rpois(1, r_dist[1])
+        }
+      } else {
+        while (r_g == 0) {
+          r_g = rnbinom(1, size = r_dist[3], mu = r_dist[1])
+        }
+      }
+      r[g] = r_g
+      tot_p_match = tot_p_match + match_prob(g, r, N, m, min_num_seg)
+    }
+    
+    # calculate coverage
+    cov_sam[i] = 1 - pbinom(min_num_rel-1, K, tot_p_match)
+  }
+  
+  return(cov_sam)
+}
 ```
 
 ### 4.1 Identifying probabilities considering the family size
@@ -188,10 +247,10 @@ coverage_samples <- function(num_sample, family_size, gmax, tot_N, tot_K, pop_pr
 In this subsection, it is assumed that the population and database consist of a single race. Ratios $\alpha$ and $\beta$ are set to $1$ in the calculation of identifying probabilities. These probabilities are utilized to explore the influence of disparities in the family size of different races, without considering the racial representation.
 
 ```{r match-parameters-1}
-N_black = round(N *  pop_props[2]) #black population size
-N_white = round(N * pop_props[1]) #white population size
+N_black = round(N *  pop_props[2]) #black population size 3994033800
+N_white = round(N * pop_props[1]) #white population size 19169764700
 num_sample = 1e4 #number of Monte Carlo samples
-K_props = seq(0,1,length.out=100) #database/population
+K_props = seq(0,0.1,length.out=50) #database/population
 Ks_black = round(N_black*K_props) #black DTC database size
 Ks_white = round(N_white*K_props) #white DTC database size
 m = 6 #minimal cM
@@ -201,43 +260,62 @@ gmaxs = c(2:5) #number of generations
 ```
 
 ```{r identify-probability-1}
-pr_black = array(dim = c(length(gmaxs), length(K_props)))
-pr_white = array(dim = c(length(gmaxs), length(K_props)))
+pr_black_mul = array(dim = c(length(gmaxs), length(K_props)))
+pr_white_mul = array(dim = c(length(gmaxs), length(K_props)))
+pr_black_zi = array(dim = c(length(gmaxs), length(K_props)))
+pr_white_zi = array(dim = c(length(gmaxs), length(K_props)))
 pr_black_pse = array(dim = c(length(gmaxs), length(K_props)))
 pr_white_pse = array(dim = c(length(gmaxs), length(K_props)))
 r_black = sapply(1:3, function(i) {return(sum(black_family_size[i,]*c(0:12)))})
 r_white = sapply(1:3, function(i) {return(sum(white_family_size[i,]*c(0:12)))})
 for(i in 1:length(K_props)) {
   for(j in 1:length(gmaxs)) {
-    cov_black = coverage_samples(num_sample, black_family_size, gmaxs[j], N_black, Ks_black[i], 1, 1, m, min_num_seg, min_num_rel)
-    pr_black[j, i] = mean(cov_black)
-    cov_white = coverage_samples(num_sample, white_family_size, gmaxs[j], N_white, Ks_white[i], 1, 1, m, min_num_seg, min_num_rel)
-    pr_white[j, i] = mean(cov_white)
+    cov_black_mul = coverage_samples_mul(num_sample, black_family_size, gmaxs[j], N_black, Ks_black[i], 1, 1, m, min_num_seg, min_num_rel)
+    pr_black_mul[j, i] = mean(cov_black_mul)
+    cov_white_mul = coverage_samples_mul(num_sample, white_family_size, gmaxs[j], N_white, Ks_white[i], 1, 1, m, min_num_seg, min_num_rel)
+    pr_white_mul[j, i] = mean(cov_white_mul)
     
-    pr_black_pse[j, i] = coverage(gmaxs[j], N_black, round(0.1*Ks_black[i]), c(r_black, rep(r_black[3], max(0, gmaxs[j]-3))), m, min_num_seg, min_num_rel)
-    pr_white_pse[j, i] = coverage(gmaxs[j], N_white, round(0.1*Ks_white[i]), c(r_white, rep(r_white[3], max(0, gmaxs[j]-3))), m, min_num_seg, min_num_rel)
+    cov_black_zi = coverage_samples_zi(num_sample, family_distribution$black, gmaxs[j], N_black, Ks_black[i], 1, 1, m, min_num_seg, min_num_rel)
+    pr_black_zi[j, i] = mean(cov_black_zi)
+    cov_white_zi = coverage_samples_zi(num_sample, family_distribution$white, gmaxs[j], N_white, Ks_white[i], 1, 1, m, min_num_seg, min_num_rel)
+    pr_white_zi[j, i] = mean(cov_white_zi)
+    
+    pr_black_pse[j, i] = coverage(gmaxs[j], N_black, round(Ks_black[i]), c(r_black, rep(r_black[3], max(0, gmaxs[j]-3))), m, min_num_seg, min_num_rel)
+    pr_white_pse[j, i] = coverage(gmaxs[j], N_white, round(Ks_white[i]), c(r_white, rep(r_white[3], max(0, gmaxs[j]-3))), m, min_num_seg, min_num_rel)
   }
 }
 ```
 
-1.  The mean probability of identifying an individual over the family size up to a certain type of cousinship from a pure database, $E[P(\text{identify}|r)]$
+The probabilities of identifying an individual over the family size up to a certain type of cousinship from a pure database, where the identifying probability is $E[P(\text{identify}|r)]$ and the pseudo probability is $P(\text{identify}|\bar{r})$. The family size distributions are estimated using a multinomial distribution or a zero inflation model, respectively.
 
-```{r plot-probability-1}
-black_df = data.frame(prob=c(pr_black), prop=rep(K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("Black American"))
-white_df = data.frame(prob=c(pr_white), prop=rep(K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("White American"))
-prob_df = rbind(black_df, white_df)
+From left to right, the panels in Figure 1 are: 
 
-ggplot(prob_df, aes(x=prop, y=prob)) + geom_line(aes(colour=cousin, linetype=race)) + xlab("Database size/population size") + ylab("Probability of identifying an individual")
-```
+1. Identifying probability using multinomial distributions 
 
-2.  The pseudo probability of identifying an individual using a mean family size up to a certain type of cousinship from a pure database, $P(\text{identify}|\bar{r})$
+2. Identifying probability using zero inflation models 
 
-```{r plot-pseudo-probability-1}
-pse_black_df = data.frame(prob=c(pr_black_pse), prop=rep(0.1*K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("Black American"))
-pse_white_df = data.frame(prob=c(pr_white_pse), prop=rep(0.1*K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("White American"))
+3. Pseudo identifying probability
+
+```{r plot-probability-1, fig.width=10, fig.height=4}
+black_df_mul = data.frame(prob=c(pr_black_mul), prop=rep(K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("Black American"))
+white_df_mul = data.frame(prob=c(pr_white_mul), prop=rep(K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("White American"))
+prob_df_mul = rbind(black_df_mul, white_df_mul)
+
+p.11 = ggplot(prob_df_mul, aes(x=prop, y=prob)) + geom_line(aes(colour=cousin, linetype=race)) + xlab("Database size/population size") + ylab("Probability of identifying an individual") + ylim(0,1)
+
+black_df_zi = data.frame(prob=c(pr_black_zi), prop=rep(K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("Black American"))
+white_df_zi = data.frame(prob=c(pr_white_zi), prop=rep(K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("White American"))
+prob_df_zi = rbind(black_df_zi, white_df_zi)
+
+p.12 = ggplot(prob_df_zi, aes(x=prop, y=prob)) + geom_line(aes(colour=cousin, linetype=race)) + xlab("Database size/population size") + ylab("") + ylim(0,1)
+
+pse_black_df = data.frame(prob=c(pr_black_pse), prop=rep(K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("Black American"))
+pse_white_df = data.frame(prob=c(pr_white_pse), prop=rep(K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("White American"))
 pse_prob_df = rbind(pse_black_df, pse_white_df)
 
-ggplot(pse_prob_df, aes(x=prop, y=prob)) + geom_line(aes(colour=cousin, linetype=race)) + xlab("Database size/population size") + ylab("Probability of identifying an individual")
+p.13 = ggplot(pse_prob_df, aes(x=prop, y=prob)) + geom_line(aes(colour=cousin, linetype=race)) + xlab("Database size/population size") + ylab("") + ylim(0,1)
+
+ggarrange(p.11, p.12, p.13, nrow = 1, ncol = 3, common.legend = TRUE)
 ```
 
 ### 4.2 Identifying probabilities considering the family size and racial representation
@@ -247,7 +325,7 @@ In this subsection, it is assumed that the population and database consist of mu
 ```{r match-parameters-2}
 N = sum(racial_composition$Number_of_Customers[1:4]) #population size
 num_sample = 1e4 #number of Monte Carlo samples
-K_props = seq(0,1,length.out=100) #database/population
+K_props = seq(0,0.1,length.out=50) #database/population
 Ks = round(N*K_props) #DTC database size
 m = 6 #minimal cM
 min_num_seg = 2 #number of segments
@@ -256,49 +334,113 @@ gmaxs = c(2:5) #number of generations
 ```
 
 ```{r identify-probability-2}
-pr_black = array(dim = c(length(gmaxs), length(K_props)))
-pr_white = array(dim = c(length(gmaxs), length(K_props)))
+pr_black_mul = array(dim = c(length(gmaxs), length(K_props)))
+pr_white_mul = array(dim = c(length(gmaxs), length(K_props)))
+pr_black_zi = array(dim = c(length(gmaxs), length(K_props)))
+pr_white_zi = array(dim = c(length(gmaxs), length(K_props)))
 pr_black_pse = array(dim = c(length(gmaxs), length(K_props)))
 pr_white_pse = array(dim = c(length(gmaxs), length(K_props)))
 r_black = sapply(1:3, function(i) {return(sum(black_family_size[i,]*c(0:12)))})
 r_white = sapply(1:3, function(i) {return(sum(white_family_size[i,]*c(0:12)))})
 for(i in 1:length(K_props)) {
   for(j in 1:length(gmaxs)) {
-    cov_black = coverage_samples(num_sample, black_family_size, gmaxs[j], N, Ks[i], pop_props[2], dtc_props[2], m, min_num_seg, min_num_rel)
-    pr_black[j, i] = mean(cov_black)
-    cov_white = coverage_samples(num_sample, white_family_size, gmaxs[j], N, Ks[i], pop_props[1], dtc_props[1], m, min_num_seg, min_num_rel)
-    pr_white[j, i] = mean(cov_white)
+    cov_black_mul = coverage_samples_mul(num_sample, black_family_size, gmaxs[j], N, Ks[i], pop_props[2], dtc_props[2], m, min_num_seg, min_num_rel)
+    pr_black_mul[j, i] = mean(cov_black_mul)
+    cov_white_mul = coverage_samples_mul(num_sample, white_family_size, gmaxs[j], N, Ks[i], pop_props[1], dtc_props[1], m, min_num_seg, min_num_rel)
+    pr_white_mul[j, i] = mean(cov_white_mul)
     
-    pr_black_pse[j, i] = coverage(gmaxs[j], round(N*pop_props[2]), round(0.1*Ks[i]*dtc_props[2]), c(r_black, rep(r_black[3], max(0, gmaxs[j]-3))), m, min_num_seg, min_num_rel)
-    pr_white_pse[j, i] = coverage(gmaxs[j], round(N*pop_props[1]), round(0.1*Ks[i]*dtc_props[1]), c(r_white, rep(r_white[3], max(0, gmaxs[j]-3))), m, min_num_seg, min_num_rel)
+    cov_black_zi = coverage_samples_zi(num_sample, family_distribution$black, gmaxs[j], N, Ks[i], pop_props[2], dtc_props[2], m, min_num_seg, min_num_rel)
+    pr_black_zi[j, i] = mean(cov_black_zi)
+    cov_white_zi = coverage_samples_zi(num_sample, family_distribution$white, gmaxs[j], N, Ks[i], pop_props[1], dtc_props[1], m, min_num_seg, min_num_rel)
+    pr_white_zi[j, i] = mean(cov_white_zi)
+    
+    pr_black_pse[j, i] = coverage(gmaxs[j], round(N*pop_props[2]), round(Ks[i]*dtc_props[2]), c(r_black, rep(r_black[3], max(0, gmaxs[j]-3))), m, min_num_seg, min_num_rel)
+    pr_white_pse[j, i] = coverage(gmaxs[j], round(N*pop_props[1]), round(Ks[i]*dtc_props[1]), c(r_white, rep(r_white[3], max(0, gmaxs[j]-3))), m, min_num_seg, min_num_rel)
   }
 }
 ```
 
-1.  The mean probability of identifying an individual over the family size up to a certain type of cousinship from a mixed database, $E[P(\text{identify}|r)]$, considering the population size, the database size and the race
+The probabilities of identifying an individual over the family size up to a certain type of cousinship from a mixed database, where the identifying probability is $E[P(\text{identify}|r)]$ and the pseudo probability is $P(\text{identify}|\bar{r})$. The family size distributions are estimated using a multinomial distribution or a zero inflation model, respectively.
 
-```{r plot-probability-2}
-black_df = data.frame(prob=c(pr_black), prop=rep(K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("Black American"))
-white_df = data.frame(prob=c(pr_white), prop=rep(K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("White American"))
-prob_df = rbind(black_df, white_df)
+From left to right, the panels in Figure 2 are:
 
-ggplot(prob_df, aes(x=prop, y=prob)) + geom_line(aes(colour=cousin, linetype=race)) + xlab("Database size/population size") + ylab("Probability of identifying an individual")
-```
+1.  Identifying probability using multinomial distributions
 
-2.  The pseudo probability of identifying an individual using a mean family size up to a certain type of cousinship from a mixed database, $P(\text{identify}|\bar{r})$, considering the population size, the database size and the race
+2.  Identifying probability using zero inflation models
 
-```{r plot-pseudo-probability-2}
-pse_black_df = data.frame(prob=c(pr_black_pse), prop=rep(0.1*K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("Black American"))
-pse_white_df = data.frame(prob=c(pr_white_pse), prop=rep(0.1*K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("White American"))
+3.  Pseudo identifying probability
+
+```{r plot-probability-2, fig.width=10, fig.height=4}
+black_df_mul = data.frame(prob=c(pr_black_mul), prop=rep(K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("Black American"))
+white_df_mul = data.frame(prob=c(pr_white_mul), prop=rep(K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("White American"))
+prob_df_mul = rbind(black_df_mul, white_df_mul)
+
+p.21 = ggplot(prob_df_mul, aes(x=prop, y=prob)) + geom_line(aes(colour=cousin, linetype=race)) + xlab("Database size/population size") + ylab("Probability of identifying an individual") + ylim(0,1)
+
+black_df_zi = data.frame(prob=c(pr_black_zi), prop=rep(K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("Black American"))
+white_df_zi = data.frame(prob=c(pr_white_zi), prop=rep(K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("White American"))
+prob_df_zi = rbind(black_df_zi, white_df_zi)
+
+p.22 = ggplot(prob_df_zi, aes(x=prop, y=prob)) + geom_line(aes(colour=cousin, linetype=race)) + xlab("Database size/population size") + ylab("") + ylim(0,1)
+
+pse_black_df = data.frame(prob=c(pr_black_pse), prop=rep(K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("Black American"))
+pse_white_df = data.frame(prob=c(pr_white_pse), prop=rep(K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("White American"))
 pse_prob_df = rbind(pse_black_df, pse_white_df)
 
-ggplot(pse_prob_df, aes(x=prop, y=prob)) + geom_line(aes(colour=cousin, linetype=race)) + xlab("Database size/population size") + ylab("Probability of identifying an individual")
+p.23 = ggplot(pse_prob_df, aes(x=prop, y=prob)) + geom_line(aes(colour=cousin, linetype=race)) + xlab("Database size/population size") + ylab("") + ylim(0,1)
+
+ggarrange(p.21, p.22, p.23, nrow = 1, ncol = 3, common.legend = TRUE)
 ```
 
-## 5 Conclusions
+### 4.3 Conclusions
 
 1.  Considering only the family size, it is interesting to observe that identification probabilities $E[P(\text{identify}|r)]$ for black and white Americans are close to each other (see Figure 1 in Section 4.1), while pseudo identification probabilities $P(\text{identify}|\bar{r})$ for black Americans are significantly higher than that for black Americans (see Figure 2 in Section 4.1).
 
 2.  Considering the family size and racial representation, the identification probability for White Americans is significantly higher than that for Black Americans (see Figures 1 and 2 in Section 4.2), primarily due to disparities in database representation.
 
 3.  The value of $P(\text{identify}|\bar{r})$ is notably higher than $E[P(\text{identify}|r)]$, highlighting the importance of considering family size as a complete distribution in the analysis.
+
+## 5 A toy example for distinguishing $E[P(\text{identify}|r)]$ and $P(\text{identify}|\bar{r})$
+
+To intuitively illustrate the impact of the full distribution of the number of children on the calculation of the identification probability, we assume that $r_g=r_0$ for all $g\geq 1$, and compute the probability $P(\text{identify}|r_0)$ for various constant values of $r_0$. Especially, we consider the scenarios where $r_0$ is set to $2$, $2.5$ and $3$.
+
+```{r match-parameters-3}
+N = sum(racial_composition$Number_of_Customers[1:4]) #population size 331449281
+K_props = seq(0,0.1,length.out=50) #database/population
+Ks = round(N*K_props) #DTC database size
+m = 6 #minimal cM
+min_num_seg = 2 #number of segments
+min_num_rel = 1 #number of relatives
+gmaxs = c(2:5) #number of generations
+rs = c(2, 2.5, 3) #number of children
+```
+
+```{r identify-probability-3}
+pr = array(dim = c(length(gmaxs), length(K_props), length(rs)))
+for(i in 1:length(gmaxs)) {
+  for(j in 1:length(K_props)) {
+    for(k in 1:length(rs)) {
+      pr[i,j,k] = coverage(gmaxs[i], N, Ks[j], rs[k], m, min_num_seg, min_num_rel)
+    }
+  }
+}
+```
+
+```{r plot-probability-3}
+indices = expand.grid(cousin=factor(gmaxs-1), prop=K_props, children_number=factor(c("r = 2", "r = 2.5", "r = 3")))
+prob_df = data.frame(indices, prob=c(pr))
+ggplot(prob_df, aes(x=prop, y=prob)) + geom_line(aes(colour=cousin, linetype=children_number)) + xlab("Database size/population size") + ylab("Probability of identifying an individual") + ylim(0,1)
+```
+
+Furthermore, we consider a random family size $r$ with the following distribution: $$P(r=2)=P(r=3)=50\%.$$ This implies that half of the couples have 2 children, while the other half have 3 children. The mean family size, denoted by $\bar{r}$, is given as $2.5$. Consequently, we obtain the following relationships: $$E[P(\text{identify}|r)] = 0.5*P(\text{identify}|2) + 0.5 * P(\text{identify}|3),$$ $$P(\text{identify}|\bar{r}) = P(\text{identify}|2.5).$$
+
+```{r plot-probability-3}
+pr_avg = array(dim = c(length(gmaxs), length(K_props), 2))
+pr_avg[,,1] = pr[,,2]
+pr_avg[,,2] = (pr[,,1] + pr[,,3])/2
+indices_avg = expand.grid(cousin=factor(gmaxs-1), prop=K_props, probability=factor(c("P(Identify|mean(r))", "E[P(Identify|r)]")))
+prob_df_avg = data.frame(indices_avg, prob=c(pr_avg))
+ggplot(prob_df_avg, aes(x=prop, y=prob)) + geom_line(aes(colour=cousin, linetype=probability)) + xlab("Database size/population size") + ylab("Probability of identifying an individual") + ylim(0,1)
+```
+
+This figure shows that $P(\text{identify}|\bar{r})>E[P(\text{identify}|r)]$, with the difference becoming more pronounced as the degree of cousinship increases. The underlying mathematical principle responsible for this relationship is **Jensen's Inequality**.
