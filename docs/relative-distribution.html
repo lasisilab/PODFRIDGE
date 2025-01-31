@@ -355,7 +355,7 @@ div.tocify {
 <h1 class="title toc-ignore">Estimating Differences in the Distribution
 of First-degree Relatives</h1>
 <h4 class="author">Manqing Lin, Tina Lasisi</h4>
-<h4 class="date">2025-01-22 14:21:37</h4>
+<h4 class="date">2025-01-31 14:32:26</h4>
 
 </div>
 
@@ -363,7 +363,7 @@ of First-degree Relatives</h1>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+workflowr <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -374,8 +374,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> </a>
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -384,13 +384,13 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-01-22
+<strong>Last updated:</strong> 2025-01-31
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 1
+aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>PODFRIDGE/</code> <span
@@ -413,21 +413,18 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
-<span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
-changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges"
+<div id="strongRMarkdownfilestronguptodate"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes. To know which version of
-the R Markdown file created these results, you’ll want to first commit
-it to the Git repo. If you’re still working on the analysis, you can
-ignore this warning. When you’re finished, you can run
-<code>wflow_publish</code> to commit the R Markdown file and build the
-HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
 </div>
 </div>
 </div>
@@ -518,15 +515,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree341604654dc879ab431c0805225e879b8cef4808targetblank3416046a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree27739be6646e11106f2c18c8d947ef40e78d3350targetblank27739bea">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/341604654dc879ab431c0805225e879b8cef4808" target="_blank">3416046</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/27739be6646e11106f2c18c8d947ef40e78d3350" target="_blank">27739be</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree341604654dc879ab431c0805225e879b8cef4808targetblank3416046a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree27739be6646e11106f2c18c8d947ef40e78d3350targetblank27739bea"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -536,7 +533,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/341604654dc879ab431c0805225e879b8cef4808" target="_blank">3416046</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/27739be6646e11106f2c18c8d947ef40e78d3350" target="_blank">27739be</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -556,12 +553,6 @@ Ignored files:
     Ignored:    .Rproj.user/
     Ignored:    analysis/.Rhistory
     Ignored:    data/.DS_Store
-
-Untracked files:
-    Untracked:  com.csv
-
-Unstaged changes:
-    Modified:   analysis/relative-distribution.Rmd
 
 </code></pre>
 <p>
@@ -607,6 +598,74 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/27739be6646e11106f2c18c8d947ef40e78d3350/analysis/relative-distribution.Rmd" target="_blank">27739be</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2025-01-31
+</td>
+<td>
+Update relative-distribution.Rmd
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/d9eb4e2a80be4763ad33a4ded6ac0891ac65aecd/analysis/relative-distribution.Rmd" target="_blank">d9eb4e2</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2025-01-31
+</td>
+<td>
+update fertility shift plot
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/b856701f515155bc91e396024d02c0db98e960a2/analysis/relative-distribution.Rmd" target="_blank">b856701</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2025-01-22
+</td>
+<td>
+update final report
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/b856701f515155bc91e396024d02c0db98e960a2/docs/relative-distribution.html" target="_blank">b856701</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2025-01-22
+</td>
+<td>
+update final report
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -2419,6 +2478,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/b856701f515155bc91e396024d02c0db98e960a2/docs/figure/relative-distribution.Rmd/unnamed-chunk-29-1.png" target="_blank">b856701</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2025-01-22
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/4e0a07c13a2f2ff24d3e68f317c7573f79065ec5/docs/figure/relative-distribution.Rmd/unnamed-chunk-29-1.png" target="_blank">4e0a07c</a>
 </td>
 <td>
@@ -2482,10 +2552,11 @@ class="section level3">
 <h3>Panel A: Fertility Distribution Shifts Across Cohorts</h3>
 <p>In this part, we’ll summarize the information from the cohort
 stability and create visualization that illustrates significant
-fertility shifts in cohorts.</p>
-<div id="cohorts-with-significant-change-in-zero-inflation"
-class="section level4">
-<h4>Cohorts with Significant Change in Zero Inflation</h4>
+fertility shifts in cohorts. Cohorts that exhibit a significant change
+over time are represented with solid lines, while those with
+non-significant changes are depicted using dashed lines.</p>
+<div id="significant-change-in-zero-inflation" class="section level4">
+<h4>Significant Change in Zero Inflation</h4>
 <p><img src="figure/relative-distribution.Rmd/unnamed-chunk-30-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-30-1">
@@ -2509,6 +2580,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/b856701f515155bc91e396024d02c0db98e960a2/docs/figure/relative-distribution.Rmd/unnamed-chunk-30-1.png" target="_blank">b856701</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2025-01-22
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/415f30a114cca2740317633e0520d2c432e0495b/docs/figure/relative-distribution.Rmd/unnamed-chunk-30-1.png" target="_blank">415f30a</a>
@@ -2571,9 +2653,8 @@ American women. Childlessness stabilizes for cohort 1911-1920 and
 decades.</li>
 </ul>
 </div>
-<div id="cohorts-with-significant-change-in-mean-family-size"
-class="section level4">
-<h4>Cohorts with Significant Change in Mean Family Size</h4>
+<div id="significant-change-in-mean-family-size" class="section level4">
+<h4>Significant Change in Mean Family Size</h4>
 <p><img src="figure/relative-distribution.Rmd/unnamed-chunk-31-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-31-1">
@@ -2597,6 +2678,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/b856701f515155bc91e396024d02c0db98e960a2/docs/figure/relative-distribution.Rmd/unnamed-chunk-31-1.png" target="_blank">b856701</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2025-01-22
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/4e0a07c13a2f2ff24d3e68f317c7573f79065ec5/docs/figure/relative-distribution.Rmd/unnamed-chunk-31-1.png" target="_blank">4e0a07c</a>
@@ -2680,9 +2772,9 @@ family size in 1990, reaching around 2.8 children on average, which is
 <strong>smaller than</strong> the black population.</li>
 </ul>
 </div>
-<div id="cohorts-with-significant-change-in-variance-of-family-size"
+<div id="significant-change-in-variance-of-family-size"
 class="section level4">
-<h4>Cohorts with Significant Change in Variance of Family Size</h4>
+<h4>Significant Change in Variance of Family Size</h4>
 <p><img src="figure/relative-distribution.Rmd/unnamed-chunk-32-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-32-1">
@@ -2706,6 +2798,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/b856701f515155bc91e396024d02c0db98e960a2/docs/figure/relative-distribution.Rmd/unnamed-chunk-32-1.png" target="_blank">b856701</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2025-01-22
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/4e0a07c13a2f2ff24d3e68f317c7573f79065ec5/docs/figure/relative-distribution.Rmd/unnamed-chunk-32-1.png" target="_blank">4e0a07c</a>
@@ -2780,6 +2883,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/b856701f515155bc91e396024d02c0db98e960a2/docs/figure/relative-distribution.Rmd/unnamed-chunk-34-1.png" target="_blank">b856701</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2025-01-22
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/f567c4a1d97864fe11ddfc3814b1d12a2075f2b9/docs/figure/relative-distribution.Rmd/unnamed-chunk-34-1.png" target="_blank">f567c4a</a>
@@ -3104,6 +3218,43 @@ class="section level2">
 of siblings for African American and European American mothers across
 the Census years by age group.</p>
 <p><img src="figure/relative-distribution.Rmd/unnamed-chunk-52-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-52-1">
+Past versions of unnamed-chunk-52-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-52-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/b856701f515155bc91e396024d02c0db98e960a2/docs/figure/relative-distribution.Rmd/unnamed-chunk-52-1.png" target="_blank">b856701</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2025-01-22
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>With this visualization of the distribution of the data, we can see
 that there are differences between races, census year and age groups.
 <strong><em>Note:</em></strong> The category ‘11+’ includes individuals
@@ -3405,6 +3556,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/b856701f515155bc91e396024d02c0db98e960a2/docs/figure/relative-distribution.Rmd/unnamed-chunk-57-1.png" target="_blank">b856701</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2025-01-22
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/415f30a114cca2740317633e0520d2c432e0495b/docs/figure/relative-distribution.Rmd/unnamed-chunk-57-1.png" target="_blank">415f30a</a>
@@ -3798,6 +3960,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/b856701f515155bc91e396024d02c0db98e960a2/docs/figure/relative-distribution.Rmd/unnamed-chunk-71-1.png" target="_blank">b856701</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2025-01-22
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/800786411d6551c5050635b63803c9f8e4c12506/docs/figure/relative-distribution.Rmd/unnamed-chunk-71-1.png" target="_blank">8007864</a>
