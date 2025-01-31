@@ -933,104 +933,94 @@ The goal of this section is to summarize the previous information and create vis
 ### Panel A: Fertility Distribution Shifts Across Cohorts
 In this part, we'll summarize the information from the cohort stability and create visualization that illustrates significant fertility shifts in cohorts.
 
-#### Cohorts with Significant Change in Zero Inflation
+#### Significant Change in Zero Inflation
 ```{r}
-# Significant Change in Zero Inflation
+significant_black <- c("1901-1910", "1921-1930")
+significant_white <- c("1901-1910", "1911-1920", "1921-1930")
 
-## Balck population
-filter_prop_b <- proportions_df_b %>% 
-  filter(Cohort %in% c("1901-1910", "1921-1930"))
+combined_data <- bind_rows(proportions_df_b, proportions_df_w) %>%
+  mutate(Race = factor(Race, levels = c("White", "Black"), 
+                       labels = c("White", "Black/African American")))
 
-## White population
-filter_prop_w <- proportions_df_w %>% 
-  filter(Cohort %in% c("1901-1910", "1911-1920", "1921-1930"))
+# Assign line styles
+combined_data <- combined_data %>%
+  mutate(Line_Style = ifelse((Race == "Black/African American" & Cohort %in%   
+                                significant_black) |
+                             (Race == "White" & Cohort %in% significant_white),
+                             "solid", "dashed"))
 
-combined_data <- bind_rows(filter_prop_b, filter_prop_w)
-
-ggplot(combined_data, aes(x = Census_Year, y = Proportion_Zero_Children, color = Cohort)) +
-  geom_line(size = 1) +
-  geom_point(size = 2) +
-  facet_wrap(~ Race, scales = "free_x") +
-  labs(
-    title = "Significant Change in Probability of Zero Children by Race and Cohort",
-    x = "Census Year",
-    y = "Proportion of Zero Children",
-    color = "Cohort"
-  ) +
+# Plot using ggplot2
+ggplot(combined_data, aes(x = Census_Year, y = Proportion_Zero_Children, group = Cohort)) +
+  geom_line(aes(linetype = Line_Style, color = Cohort), size = 1) +
+  geom_point(aes(color = Cohort), size = 2) +
+  facet_wrap(~Race) +
+  scale_linetype_manual(values = c("solid" = "solid", "dashed" = "dashed")) +
+  labs(title = "Significant Changes in Zero Inflation Over Census Years",
+       x = "Census Year", y = "Proportion with Zero Children",
+       color = "Cohort", linetype = "Significance") +
   theme_minimal() +
-  theme(
-    plot.title = element_text(size = 14, hjust = 0.5),
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    legend.position = "bottom"
-  )
-
+  theme(legend.position = "bottom")
 ```
+
+
 - In the **black population**, the most significant shifts in childlessness occurred between the 1960 and 1970 census years, where there is a **sharp increase** in the proportion of women with zero children. This trend continues more gradually between 1970 and 1990 but stabilizes for cohort 1921-1930.
 - In the **white population**, the increase in childlessness is also visible between 1960 and 1970, but the magnitude of the increase is **more pronounced** compared to African American women. Childlessness stabilizes for cohort 1911-1920 and 1921-1930 between 1970 and 1990, with smaller fluctuations in later decades.
 
-#### Cohorts with Significant Change in Mean Family Size
+#### Significant Change in Mean Family Size
+
 ```{r}
 merged_data2 <- left_join(merged_data, summary_table, by = c("Race","Cohort","Census_Year")) %>% dplyr::select(Race, Cohort, Census_Year, Mean, Variance)
 
-## Balck population
-filter_mean_b <- merged_data2 %>% 
-  filter(Cohort %in% c("1901-1910", "1921-1930") & Race == "Black/African American")
+combined_data <- unique(merged_data2) %>% filter(Cohort %in% c("1901-1910", "1911-1920", "1921-1930", "1931-1940"))
 
-## White population
-filter_mean_w <- merged_data2 %>% 
-  filter(Cohort %in% c("1901-1910", "1911-1920", "1921-1930") & Race == "White")
+# Assign line styles
+combined_data <- combined_data %>%
+  mutate(Line_Style = ifelse((Race == "Black/African American" & Cohort %in% 
+                                significant_black) |
+                             (Race == "White" & Cohort %in% significant_white),
+                              "Significant", "Non-significant"))
 
-combined_data <- bind_rows(filter_mean_b, filter_mean_w)
-
-ggplot(combined_data, aes(x = Census_Year, y = Mean, color = Cohort)) +
-  geom_line(size = 1) +
-  geom_point(size = 2) +
-  facet_wrap(~ Race, scales = "free_x") +
-  labs(
-    title = "Significant Changes in Mean Family Size Over Census Years",
-    x = "Census Year",
-    y = "Mean of number of Children",
-    color = "Cohort"
-  ) +
+ggplot(combined_data, aes(x = Census_Year, y = Mean, group = Cohort)) +
+  geom_line(aes(linetype = Line_Style, color = Cohort), size = 1) +
+  geom_point(aes(color = Cohort), size = 2) +
+  facet_wrap(~Race) +
+  scale_linetype_manual(values = c("Significant" = "solid", "Non-significant" = "dashed")) +
+  labs(title = "Significant Changes in Mean Family Size Over Census Years",
+       x = "Census Year", y = "Mean of number of Children",
+       color = "Cohort", linetype = "Significance") +
   theme_minimal() +
-  theme(
-    plot.title = element_text(size = 14, hjust = 0.5),
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    legend.position = "bottom"
-  )
+  theme(legend.position = "bottom")
 
 ```
 - For **black population**, the mean family size for the 1921-1930 cohort **increased** substantially in 1990, reaching over 3.6 children on average. However, both cohorts exhibited little change in mean family size in earlier census year (between 1960 and 1980).
 - For **white population**, a consistent decline in mean family size was observed for the 1901-1910 and 1911-1920 cohorts from 1960 to 1970. The 1921-1930 cohort showed a modest increase in mean family size in 1990, reaching around 2.8 children on average, which is **smaller than** the black population.
 
-#### Cohorts with Significant Change in Variance of Family Size
+#### Significant Change in Variance of Family Size
 ```{r}
-## Balck population
-filter_mean_b <- merged_data2 %>% 
-  filter(Cohort %in% c("1901-1910", "1921-1930") & Race == "Black/African American")
+significant_black <- c("1901-1910", "1921-1930")
+significant_white <- c("1911-1920")
 
-## White population
-filter_mean_w <- merged_data2 %>% 
-  filter(Cohort %in% c("1911-1920") & Race == "White")
+combined_data <- unique(merged_data2) %>% filter(Cohort %in% c("1901-1910", "1911-1920", "1921-1930", "1931-1940"))
 
-combined_data <- unique(bind_rows(filter_mean_b, filter_mean_w))
+# Assign line styles
+combined_data <- combined_data %>%
+  mutate(Line_Style = ifelse((Race == "Black/African American" & Cohort %in% 
+                                significant_black) |
+                             (Race == "White" & Cohort %in% significant_white),
+                              "Significant", "Non-significant"))
 
-ggplot(combined_data, aes(x = Census_Year, y = Variance, color = Cohort)) +
-  geom_line(size = 1) +
-  geom_point(size = 2) +
-  facet_wrap(~ Race) +
-  labs(
-    title = "Significant Changes in Variance Family Size Over Census Years",
-    x = "Census Year",
-    y = "Variance of number of Children",
-    color = "Cohort"
-  ) +
+
+ggplot(combined_data, aes(x = Census_Year, y = Variance, group = Cohort)) +
+  geom_line(aes(linetype = Line_Style, color = Cohort), size = 1) +
+  geom_point(aes(color = Cohort), size = 2) +
+  facet_wrap(~Race) +
+  scale_linetype_manual(values = c("Significant" = "solid", "Non-significant" = "dashed")) +
+  labs(title = "Significant Changes in Variance of Family Size Over Census Years",
+       x = "Census Year", y = "Variance of number of Children",
+       color = "Cohort", linetype = "Significance") +
   theme_minimal() +
-  theme(
-    plot.title = element_text(size = 14, hjust = 0.5),
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    legend.position = "bottom"
-  )
+  theme(legend.position = "bottom")
+
 ```
 - For **black population**, significant decrease in variance occur between 1960 and 1970, particularly for the cohort 1901-1910. Variance continues to shift for cohort 1921-1930 between 1970 and 1990 with the steeper increases.
 - For **white population**, there is little change in variance over time. Variance appears to remain stable across Census years for cohort 1911-1920. This stability suggests **less variability** in fertility patterns among women in white population compared to black population.
