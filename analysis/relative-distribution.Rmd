@@ -931,7 +931,7 @@ The goal of this section is to summarize the previous information and create vis
 
 
 ### Panel A: Fertility Distribution Shifts Across Cohorts
-In this part, we'll summarize the information from the cohort stability and create visualization that illustrates significant fertility shifts in cohorts.
+In this part, we'll summarize the information from the cohort stability and create visualization that illustrates significant fertility shifts in cohorts.  Cohorts that exhibit a significant change over time are represented with solid lines, while those with non-significant changes are depicted using dashed lines.
 
 #### Significant Change in Zero Inflation
 ```{r}
@@ -954,12 +954,19 @@ ggplot(combined_data, aes(x = Census_Year, y = Proportion_Zero_Children, group =
   geom_line(aes(linetype = Line_Style, color = Cohort), size = 1) +
   geom_point(aes(color = Cohort), size = 2) +
   facet_wrap(~Race) +
-  scale_linetype_manual(values = c("solid" = "solid", "dashed" = "dashed")) +
+  scale_linetype_manual(
+    name = "Significance", 
+    values = c("solid" = "solid", "dashed" = "dashed"),
+    breaks = c("dashed", "solid"),
+    labels = c("Non-significant", "Significant")
+  ) +
   labs(title = "Significant Changes in Zero Inflation Over Census Years",
        x = "Census Year", y = "Proportion with Zero Children",
        color = "Cohort", linetype = "Significance") +
   theme_minimal() +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom",
+        legend.key.size=unit(2,"lines"), 
+        plot.title = element_text(size = 14, hjust = 0.5))
 ```
 
 
@@ -989,7 +996,9 @@ ggplot(combined_data, aes(x = Census_Year, y = Mean, group = Cohort)) +
        x = "Census Year", y = "Mean of number of Children",
        color = "Cohort", linetype = "Significance") +
   theme_minimal() +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom",
+        legend.key.size=unit(2,"lines"), 
+        plot.title = element_text(size = 14, hjust = 0.5))
 
 ```
 - For **black population**, the mean family size for the 1921-1930 cohort **increased** substantially in 1990, reaching over 3.6 children on average. However, both cohorts exhibited little change in mean family size in earlier census year (between 1960 and 1980).
@@ -1019,7 +1028,9 @@ ggplot(combined_data, aes(x = Census_Year, y = Variance, group = Cohort)) +
        x = "Census Year", y = "Variance of number of Children",
        color = "Cohort", linetype = "Significance") +
   theme_minimal() +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom",
+        legend.key.size=unit(2,"lines"), 
+        plot.title = element_text(size = 14, hjust = 0.5))
 
 ```
 - For **black population**, significant decrease in variance occur between 1960 and 1970, particularly for the cohort 1901-1910. Variance continues to shift for cohort 1921-1930 between 1970 and 1990 with the steeper increases.
