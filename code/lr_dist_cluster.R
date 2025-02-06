@@ -7,21 +7,16 @@ library(future)
 library(parallel)
 library(ggplot2)
 library(tidyr)
-#library(dichromat)
-#library(MASS)
 
 file_type<-"png" #option to toggle between pdf or png outputs, pdf being faster
 # Read Command-Line Arguments
 args <- commandArgs(trailingOnly = TRUE)
 slurm_job_id <- as.character(args[1])
 
-
 output_dir <- file.path("output")
 
 # load combined_lrs
 combined_lrs = fread(paste0("output/",slurm_job_id,"/sim_summary_genotypes.csv"))
-#combined_lrs = fread(paste0("data/example_data/sim_summary_genotypes.csv"))
-
 combined_lrs$LR<-as.numeric(combined_lrs$LR)
 combined_lrs$relationship_tested <- factor(combined_lrs$relationship_tested, levels = c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated"))
 combined_lrs$population<-as.factor(combined_lrs$population)
@@ -90,8 +85,6 @@ color_palette_race = c("#AA4499", "#DDCC77", "#88CCEE", "#117733")
 
 plot0<-ggplot(summary_stats, aes(x = loci_set_factor, y = mean_LR, group = population_label, color = population_label)) +
       geom_line(size = 2) +
-      # geom_errorbar(aes(x = loci_set_factor, ymin=lower_95, ymax=upper_95, group = population, color = population), width=.2,
-      #            position=position_dodge(.1))  +
       facet_wrap(~ relationship_tested,  ncol = 2) +
       scale_y_log10() +
       labs(
@@ -111,14 +104,13 @@ plot0<-ggplot(summary_stats, aes(x = loci_set_factor, y = mean_LR, group = popul
     invisible(print(plot0))
     dev.off()
   } else {
-  #  setwd(output_dir)
     ggsave(plot=plot0,path=paste0(output_dir, "/"),filename="Mean_LR_Distributions_Across_Populations_and_Relationship_Types.png", width = 16, height = 12)
   }
 
 
 
 #combined_lrs$LR = ifelse(combined_lrs$LR < 1e-32, 1e-32, combined_lrs$LR)
-PLOTA<-ggplot(combined_lrs, aes(x = relationship_tested, y = LR, fill = population_label, color = population_label)) +
+plota<-ggplot(combined_lrs, aes(x = relationship_tested, y = LR, fill = population_label, color = population_label)) +
     geom_boxplot(position = position_dodge(width = 0.9)) +
     facet_wrap(~ loci_set_factor, scales = "fixed") +
     labs(
@@ -138,14 +130,12 @@ PLOTA<-ggplot(combined_lrs, aes(x = relationship_tested, y = LR, fill = populati
 
  if(!file_type=="png"){
     pdf(paste(output_dir, "/LR_Distributions_Across_Populations_and_Relationship_Types.pdf", sep = ""))
-    invisible(print(PLOTA))
+    invisible(print(plota))
     dev.off()
   } else {
   #  setwd(output_dir)
-    ggsave(plot=PLOTA,path=paste0(output_dir, "/"),filename="LR_Distributions_Across_Populations_and_Relationship_Types.png", width = 16, height = 12)
+    ggsave(plot=plota,path=paste0(output_dir, "/"),filename="LR_Distributions_Across_Populations_and_Relationship_Types.png", width = 16, height = 12)
   }
-
-
 
 gb_df = combined_lrs %>%
     group_by(relationship_known, relationship_tested, loci_set) %>%
@@ -172,7 +162,7 @@ ann_text1$relationship_known_factor <- factor(ann_text1$relationship_known, leve
 combined_lrs$trunc <- ifelse(combined_lrs$LR == 0, 1e-16, combined_lrs$LR)
 n = nrow(combined_lrs[which(relationship_known == "unrelated" & relationship_tested == "parent_child"),])
 
-PLOTB<-ggplot(combined_lrs, aes(x = relationship_tested, y = trunc, fill = population_label)) +
+plotb<-ggplot(combined_lrs, aes(x = relationship_tested, y = trunc, fill = population_label)) +
     geom_boxplot(position = position_dodge(width = 0.9)) +
     facet_grid(relationship_known_factor ~ loci_set_factor, scales = "free_y") +
     labs(
@@ -193,14 +183,12 @@ PLOTB<-ggplot(combined_lrs, aes(x = relationship_tested, y = trunc, fill = popul
 
  if(!file_type=="png"){
     pdf(paste(output_dir, "/LR_Distributions_for_Relationship_Comparisons.pdf", sep = ""))
-    invisible(print(PLOTB))
+    invisible(print(plotb))
     dev.off()
   } else {
   #  setwd(output_dir)
-    ggsave(plot=PLOTB,path=paste0(output_dir, "/"),filename="LR_Distributions_for_Relationship_Comparisons.png", width = 16, height = 12)
+    ggsave(plot=plotb,path=paste0(output_dir, "/"),filename="LR_Distributions_for_Relationship_Comparisons.png", width = 16, height = 12)
   }
-
-
 
 #Plots showing the distribution of likelihood ratios relative to the cutoffs for each hypothesis type (cousins, full siblings, half siblings, parent_child, and #second cousins).
 #Here, we use the following cutoffs: false positive rate (FPR) of 0.01%, 0.1%, 1%, and a fixed cutoff of 1.
@@ -241,7 +229,6 @@ for(hypothesis in hypotheses){
     invisible(print(plot1))
     dev.off()
   } else {
-  #  setwd(output_dir)
     ggsave(plot=plot1,path=paste0(output_dir, "/"),filename="Log_Likelihood_Ratios_for_hypothesis.png", width = 16, height = 12)
   }
   plot2 = ggplot(data = combined_lrs_hyp_cutoffs) +
@@ -265,7 +252,6 @@ for(hypothesis in hypotheses){
     invisible(print(plot2))
     dev.off()
   } else {
-  #  setwd(output_dir)
     ggsave(plot=plot2,path=paste0(output_dir, "/"),filename="Log_Likelihood_Ratios_for_hypothesis2.png", width = 16, height = 12)
   }
 
@@ -368,15 +354,7 @@ for(hypothesis in hypotheses){
     invisible(print(plot1))
     dev.off()
   } else {
-  #  setwd(output_dir)
     ggsave(plot=plot1,path=paste0(output_dir, "/"),filename="Proportions_Exceeding_Likelihood_Cut-offs.png", width = 16, height = 12)
   }
-
 }
-
-plot_list[[1]]
-plot_list[[2]]
-plot_list[[3]]
-plot_list[[4]]
-plot_list[[5]]
 
