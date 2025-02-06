@@ -28,7 +28,7 @@ We establish a theoretical binomial model $\text{Bin}(K,p)$ to calculate the pro
 
 3.  The family trees of different races are strictly separated. For instance, the ancestors and descendants of black Americans are also black Americans.
 
-4.  We assume that there is no inter-marriage in the family involved, except for the known ancestor couple of the target.
+4.  There is no-inbreeding.
 
 5.  The number of children per couple at the generation $g$ before the present is $r_g$. It is assumed that $r_g$ follows a multinomial distribution. In this model, the distribution of $r_1$ is estimated based on the number of children born to women aged 40-49 in 1990, the distribution of $r_2$ is estimated based on the number of children born to women aged 40-49 in 1960, and the distribution of $r_3$ is estimated based on the number of children born to women aged 70+ in 1960. For generations $g\geq 3$, $r_g$ is assumed to follow the same distribution as $r_3$. Additionally, if a specific couple is known as the ancestors of the target, it is assumed that they have at least one child.
 
@@ -74,7 +74,13 @@ To identify an individual, we need to find at least $t$ matches in the database.
 
 $$P(\text{identify}|r)=1-\sum_{k=1}^{t-1} \text{Bin}(k;\beta K, P(\text{match}|r)).$$
 
-We utilize Monte Carlo methods to calculate the mean probability of identifying an individual over family size, i.e., $E[P(\text{identify}|r)]$.
+We utilize Monte Carlo methods to calculate the mean probability of identifying an individual over family size, i.e., $E[P(\text{identify}|r)]$. The Monte Carlo method is a popular statistical technique for numerically estimating expectations over complex distributions. Our algorithm follows these steps:
+
+1.  Given an integer $I\in\mathbb{N}$, for each iteration $i=1,\ldots,I$ and each generation $g$, we independently sample a value of $r_g^{(i)}$ from the corresponding family size distribution (which is modeled using a zero-inflated negative binomial model). We denote $r^{(i)}$ as $\{r_g^{(i)}\}_{g=1}^{g_\max}$.
+
+2.  For each sampled $r^{(i)}$, we compute the identifying probability $P(\text{identify}|r^{(i)})$.
+
+3.  The expected identification probability is then estimated as: $$E[P(\text{identify}|r)]=\frac{1}{I}\sum_{i=1}^I P(\text{identify}|r^{(i)}).$$
 
 Additionally, since $r$ is a random variable, we calculate $P(\text{identify}|\bar{r})$ to make a comparison with $E[P(\text{identify}|r)]$, where $\bar{r}$ represents the mean number of children. This probability $P(\text{identify}|\bar{r})$ is used in the paper of Erlich et al. 2018, if we substitute $\bar{r}$ by a constant $r$.
 
@@ -242,13 +248,23 @@ coverage_samples_zi <- function(num_sample, family_distribution, gmax, tot_N, to
 }
 ```
 
-### 4.1 Identifying probabilities considering the family size
+We focus on long-range familial search in the United States, using the U.S. Census population as the total population size, given as $N=331,449,281$. The racial composition is $$\alpha_{black}=12.05021\%,~\alpha_{white}=57.83619\%,~\alpha_{other}=30.1136\%,$$ where $\alpha_i$ indicates the proportion of race $i$ in the population.
 
-In this subsection, it is assumed that the population and database consist of a single race. Ratios $\alpha$ and $\beta$ are set to $1$ in the calculation of identifying probabilities. These probabilities are utilized to explore the influence of disparities in the family size of different races, without considering the racial representation.
+Our analysis examines how family size distributions and database representation influence the probability of identifying an individual in a database. We consider two scenarios for database representation:
+
+-   Ideal case: All racial groups are proportionally represented in the database, meaning $\beta_{black}=\alpha_{black}$ and $\beta_{white}=\alpha_{white}$.
+
+-   Real case: Black Americans are underrepresented in the database, while White Americans are overrepresented. The exact values of $\beta$ depend on the specific database available. For this analysis, we use a calibrated estimation from Stella BooydeGraaff (Result 1b), where $$\beta_{black}=3.847235\%,~\beta_{white}=80\%.$$
+
+In our analysis, the maximum database size is set to $K=0.1*N=33,144,928$. Thus, the range of database size is $[0,0.1*N].$
+
+### 4.1 Identifying probabilities without considering representation disparities
+
+In this subsection, we assume that the population and database have the same representation. The database proportions $\beta$ are set equal to the population proportions $\alpha$ in the calculation of identifying probabilities. These results are utilized to explore the solely influence of disparities in the family size of different races.
 
 ```{r match-parameters-1}
-N_black = round(N *  pop_props[2]) #black population size 3994033800
-N_white = round(N * pop_props[1]) #white population size 19169764700
+N_black = round(N *  pop_props[2] / 100) #black population size 39940338
+N_white = round(N * pop_props[1] / 100) #white population size 191697647
 num_sample = 1e4 #number of Monte Carlo samples
 K_props = seq(0,0.1,length.out=50) #database/population
 Ks_black = round(N_black*K_props) #black DTC database size
@@ -260,8 +276,8 @@ gmaxs = c(2:5) #number of generations
 ```
 
 ```{r identify-probability-1}
-pr_black_mul = array(dim = c(length(gmaxs), length(K_props)))
-pr_white_mul = array(dim = c(length(gmaxs), length(K_props)))
+#pr_black_mul = array(dim = c(length(gmaxs), length(K_props)))
+#pr_white_mul = array(dim = c(length(gmaxs), length(K_props)))
 pr_black_zi = array(dim = c(length(gmaxs), length(K_props)))
 pr_white_zi = array(dim = c(length(gmaxs), length(K_props)))
 pr_black_pse = array(dim = c(length(gmaxs), length(K_props)))
@@ -270,10 +286,10 @@ r_black = sapply(1:3, function(i) {return(sum(black_family_size[i,]*c(0:12)))})
 r_white = sapply(1:3, function(i) {return(sum(white_family_size[i,]*c(0:12)))})
 for(i in 1:length(K_props)) {
   for(j in 1:length(gmaxs)) {
-    cov_black_mul = coverage_samples_mul(num_sample, black_family_size, gmaxs[j], N_black, Ks_black[i], 1, 1, m, min_num_seg, min_num_rel)
-    pr_black_mul[j, i] = mean(cov_black_mul)
-    cov_white_mul = coverage_samples_mul(num_sample, white_family_size, gmaxs[j], N_white, Ks_white[i], 1, 1, m, min_num_seg, min_num_rel)
-    pr_white_mul[j, i] = mean(cov_white_mul)
+    #cov_black_mul = coverage_samples_mul(num_sample, black_family_size, gmaxs[j], N_black, Ks_black[i], 1, 1, m, min_num_seg, min_num_rel)
+    #pr_black_mul[j, i] = mean(cov_black_mul)
+    #cov_white_mul = coverage_samples_mul(num_sample, white_family_size, gmaxs[j], N_white, Ks_white[i], 1, 1, m, min_num_seg, min_num_rel)
+    #pr_white_mul[j, i] = mean(cov_white_mul)
     
     cov_black_zi = coverage_samples_zi(num_sample, family_distribution$black, gmaxs[j], N_black, Ks_black[i], 1, 1, m, min_num_seg, min_num_rel)
     pr_black_zi[j, i] = mean(cov_black_zi)
@@ -286,41 +302,39 @@ for(i in 1:length(K_props)) {
 }
 ```
 
-The probabilities of identifying an individual over the family size up to a certain type of cousinship from a pure database, where the identifying probability is $E[P(\text{identify}|r)]$ and the pseudo probability is $P(\text{identify}|\bar{r})$. The family size distributions are estimated using a multinomial distribution or a zero inflation model, respectively.
+The probabilities of identifying an individual over the family size up to a certain type of cousinship from a database without representation disparities, where the identifying probability is $E[P(\text{identify}|r)]$ and the pseudo probability is $P(\text{identify}|\bar{r})$. The family size distributions are estimated using a zero inflation model.
 
-From left to right, the panels in Figure 1 are: 
+From left to right, the panels in Figure 1 are:
 
-1. Identifying probability using multinomial distributions 
+1.  Identifying probability using zero inflation models (specifically, the better model from zero-inflated negative binomial and zero-inflated poisson)
 
-2. Identifying probability using zero inflation models 
+2.  Pseudo identifying probability
 
-3. Pseudo identifying probability
+```{r plot-probability-1, fig.width=7, fig.height=4}
+#black_df_mul = data.frame(prob=c(pr_black_mul), prop=rep(K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("Black American"))
+#white_df_mul = data.frame(prob=c(pr_white_mul), prop=rep(K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("White American"))
+#prob_df_mul = rbind(black_df_mul, white_df_mul)
 
-```{r plot-probability-1, fig.width=10, fig.height=4}
-black_df_mul = data.frame(prob=c(pr_black_mul), prop=rep(K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("Black American"))
-white_df_mul = data.frame(prob=c(pr_white_mul), prop=rep(K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("White American"))
-prob_df_mul = rbind(black_df_mul, white_df_mul)
-
-p.11 = ggplot(prob_df_mul, aes(x=prop, y=prob)) + geom_line(aes(colour=cousin, linetype=race)) + xlab("Database size/population size") + ylab("Probability of identifying an individual") + ylim(0,1)
+#p.11 = ggplot(prob_df_mul, aes(x=prop, y=prob)) + geom_line(aes(colour=cousin, linetype=race)) + xlab("Database size/population size") + ylab("Probability of identifying an individual") + ylim(0,1)
 
 black_df_zi = data.frame(prob=c(pr_black_zi), prop=rep(K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("Black American"))
 white_df_zi = data.frame(prob=c(pr_white_zi), prop=rep(K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("White American"))
 prob_df_zi = rbind(black_df_zi, white_df_zi)
 
-p.12 = ggplot(prob_df_zi, aes(x=prop, y=prob)) + geom_line(aes(colour=cousin, linetype=race)) + xlab("Database size/population size") + ylab("") + ylim(0,1)
+p.12 = ggplot(prob_df_zi, aes(x=prop*N, y=prob)) + geom_line(aes(colour=cousin, linetype=race)) + xlab("Database size") + ylab("") + ylim(0,1)
 
 pse_black_df = data.frame(prob=c(pr_black_pse), prop=rep(K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("Black American"))
 pse_white_df = data.frame(prob=c(pr_white_pse), prop=rep(K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("White American"))
 pse_prob_df = rbind(pse_black_df, pse_white_df)
 
-p.13 = ggplot(pse_prob_df, aes(x=prop, y=prob)) + geom_line(aes(colour=cousin, linetype=race)) + xlab("Database size/population size") + ylab("") + ylim(0,1)
+p.13 = ggplot(pse_prob_df, aes(x=prop*N, y=prob)) + geom_line(aes(colour=cousin, linetype=race)) + xlab("Database size") + ylab("") + ylim(0,1)
 
-ggarrange(p.11, p.12, p.13, nrow = 1, ncol = 3, common.legend = TRUE)
+ggarrange(p.12, p.13, nrow = 1, ncol = 2, common.legend = TRUE)
 ```
 
-### 4.2 Identifying probabilities considering the family size and racial representation
+### 4.2 Identifying probabilities considering representation disparities
 
-In this subsection, it is assumed that the population and database consist of multiple races, including black and white Americans. Ratios $\alpha$ and $\beta$ correspond to racial proportions in population and database, respectively. We calculate the probabilities of identifying an individual by treating $\alpha$ and $\beta$ fixed as constants. When the database size is much smaller than the population size, this assumption seems to be reasonable.
+In this subsection, we assume that representation disparities exist between the population and the database. Specifically, Black Americans are underrepresented, while White Americans are overrepresented in the database. We calculate the probabilities of identifying an individual by treating $\alpha$ and $\beta$ fixed as constants. When the database size is much smaller than the population size, this assumption seems to be reasonable.
 
 ```{r match-parameters-2}
 N = sum(racial_composition$Number_of_Customers[1:4]) #population size
@@ -334,8 +348,8 @@ gmaxs = c(2:5) #number of generations
 ```
 
 ```{r identify-probability-2}
-pr_black_mul = array(dim = c(length(gmaxs), length(K_props)))
-pr_white_mul = array(dim = c(length(gmaxs), length(K_props)))
+#pr_black_mul = array(dim = c(length(gmaxs), length(K_props)))
+#pr_white_mul = array(dim = c(length(gmaxs), length(K_props)))
 pr_black_zi = array(dim = c(length(gmaxs), length(K_props)))
 pr_white_zi = array(dim = c(length(gmaxs), length(K_props)))
 pr_black_pse = array(dim = c(length(gmaxs), length(K_props)))
@@ -344,10 +358,10 @@ r_black = sapply(1:3, function(i) {return(sum(black_family_size[i,]*c(0:12)))})
 r_white = sapply(1:3, function(i) {return(sum(white_family_size[i,]*c(0:12)))})
 for(i in 1:length(K_props)) {
   for(j in 1:length(gmaxs)) {
-    cov_black_mul = coverage_samples_mul(num_sample, black_family_size, gmaxs[j], N, Ks[i], pop_props[2], dtc_props[2], m, min_num_seg, min_num_rel)
-    pr_black_mul[j, i] = mean(cov_black_mul)
-    cov_white_mul = coverage_samples_mul(num_sample, white_family_size, gmaxs[j], N, Ks[i], pop_props[1], dtc_props[1], m, min_num_seg, min_num_rel)
-    pr_white_mul[j, i] = mean(cov_white_mul)
+    #cov_black_mul = coverage_samples_mul(num_sample, black_family_size, gmaxs[j], N, Ks[i], pop_props[2], dtc_props[2], m, min_num_seg, min_num_rel)
+    #pr_black_mul[j, i] = mean(cov_black_mul)
+    #cov_white_mul = coverage_samples_mul(num_sample, white_family_size, gmaxs[j], N, Ks[i], pop_props[1], dtc_props[1], m, min_num_seg, min_num_rel)
+    #pr_white_mul[j, i] = mean(cov_white_mul)
     
     cov_black_zi = coverage_samples_zi(num_sample, family_distribution$black, gmaxs[j], N, Ks[i], pop_props[2], dtc_props[2], m, min_num_seg, min_num_rel)
     pr_black_zi[j, i] = mean(cov_black_zi)
@@ -360,43 +374,41 @@ for(i in 1:length(K_props)) {
 }
 ```
 
-The probabilities of identifying an individual over the family size up to a certain type of cousinship from a mixed database, where the identifying probability is $E[P(\text{identify}|r)]$ and the pseudo probability is $P(\text{identify}|\bar{r})$. The family size distributions are estimated using a multinomial distribution or a zero inflation model, respectively.
+The probabilities of identifying an individual over the family size up to a certain type of cousinship from a database with representation disparities, where the identifying probability is $E[P(\text{identify}|r)]$ and the pseudo probability is $P(\text{identify}|\bar{r})$. The family size distributions are estimated using a zero inflation model.
 
 From left to right, the panels in Figure 2 are:
 
-1.  Identifying probability using multinomial distributions
+1.  Identifying probability using zero inflation models
 
-2.  Identifying probability using zero inflation models
+2.  Pseudo identifying probability
 
-3.  Pseudo identifying probability
+```{r plot-probability-2, fig.width=7, fig.height=4}
+#black_df_mul = data.frame(prob=c(pr_black_mul), prop=rep(K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("Black American"))
+#white_df_mul = data.frame(prob=c(pr_white_mul), prop=rep(K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("White American"))
+#prob_df_mul = rbind(black_df_mul, white_df_mul)
 
-```{r plot-probability-2, fig.width=10, fig.height=4}
-black_df_mul = data.frame(prob=c(pr_black_mul), prop=rep(K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("Black American"))
-white_df_mul = data.frame(prob=c(pr_white_mul), prop=rep(K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("White American"))
-prob_df_mul = rbind(black_df_mul, white_df_mul)
-
-p.21 = ggplot(prob_df_mul, aes(x=prop, y=prob)) + geom_line(aes(colour=cousin, linetype=race)) + xlab("Database size/population size") + ylab("Probability of identifying an individual") + ylim(0,1)
+#p.21 = ggplot(prob_df_mul, aes(x=prop, y=prob)) + geom_line(aes(colour=cousin, linetype=race)) + xlab("Database size/population size") + ylab("Probability of identifying an individual") + ylim(0,1)
 
 black_df_zi = data.frame(prob=c(pr_black_zi), prop=rep(K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("Black American"))
 white_df_zi = data.frame(prob=c(pr_white_zi), prop=rep(K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("White American"))
 prob_df_zi = rbind(black_df_zi, white_df_zi)
 
-p.22 = ggplot(prob_df_zi, aes(x=prop, y=prob)) + geom_line(aes(colour=cousin, linetype=race)) + xlab("Database size/population size") + ylab("") + ylim(0,1)
+p.22 = ggplot(prob_df_zi, aes(x=prop*N, y=prob)) + geom_line(aes(colour=cousin, linetype=race)) + xlab("Database size") + ylab("") + ylim(0,1)
 
 pse_black_df = data.frame(prob=c(pr_black_pse), prop=rep(K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("Black American"))
 pse_white_df = data.frame(prob=c(pr_white_pse), prop=rep(K_props, each=length(gmaxs)), cousin=factor(rep(gmaxs-1, length(K_props))), race=factor("White American"))
 pse_prob_df = rbind(pse_black_df, pse_white_df)
 
-p.23 = ggplot(pse_prob_df, aes(x=prop, y=prob)) + geom_line(aes(colour=cousin, linetype=race)) + xlab("Database size/population size") + ylab("") + ylim(0,1)
+p.23 = ggplot(pse_prob_df, aes(x=prop*N, y=prob)) + geom_line(aes(colour=cousin, linetype=race)) + xlab("Database size") + ylab("") + ylim(0,1)
 
-ggarrange(p.21, p.22, p.23, nrow = 1, ncol = 3, common.legend = TRUE)
+ggarrange(p.22, p.23, nrow = 1, ncol = 2, common.legend = TRUE)
 ```
 
 ### 4.3 Conclusions
 
-1.  Considering only the family size, it is interesting to observe that identification probabilities $E[P(\text{identify}|r)]$ for black and white Americans are close to each other (see Figure 1 in Section 4.1), while pseudo identification probabilities $P(\text{identify}|\bar{r})$ for black Americans are significantly higher than that for black Americans (see Figure 2 in Section 4.1).
+1.  Without accounting for representation disparities, it is interesting to note that the expected identification probability, $E[P(\text{identify}|r)]$, is higher for Black Americans than for White Americans at lower degrees of cousinship. However, this difference diminishes as the degree of cousinship increases and eventually reverses. A potential explanation is that Black Americans, on average, have larger family sizes than White Americans, leading to higher $E[P(\text{identify}|r)]$ at lower degrees of cousinship. However, the family size distribution among Black Americans is bimodal, meaning they are significantly more likely than White Americans to have no children. As a result, at higher degrees of cousinship, $E[P(\text{identify}|r)]$ becomes lower for Black Americans compared to White Americans. A graphical explanation of this pattern is provided in Section 5.
 
-2.  Considering the family size and racial representation, the identification probability for White Americans is significantly higher than that for Black Americans (see Figures 1 and 2 in Section 4.2), primarily due to disparities in database representation.
+2.  Considering representation disparities, the identification probability for White Americans is significantly higher than that for Black Americans, as black Americans are underrepresented while white Americans are overrepresented.
 
 3.  The value of $P(\text{identify}|\bar{r})$ is notably higher than $E[P(\text{identify}|r)]$, highlighting the importance of considering family size as a complete distribution in the analysis.
 
@@ -433,6 +445,8 @@ ggplot(prob_df, aes(x=prop, y=prob)) + geom_line(aes(colour=cousin, linetype=chi
 ```
 
 Furthermore, we consider a random family size $r$ with the following distribution: $$P(r=2)=P(r=3)=50\%.$$ This implies that half of the couples have 2 children, while the other half have 3 children. The mean family size, denoted by $\bar{r}$, is given as $2.5$. Consequently, we obtain the following relationships: $$E[P(\text{identify}|r)] = 0.5*P(\text{identify}|2) + 0.5 * P(\text{identify}|3),$$ $$P(\text{identify}|\bar{r}) = P(\text{identify}|2.5).$$
+
+**Remark:** The formula for $E[P(\text{identify}|r)]$ above implicitly assumes the number of children remains the same across generations. This assumption is made solely to simplify the expression; the correct formula would be significantly more complex. For example, assuming $g_\max=2$, the expectation can be expressed as: $$E[P(\text{identify}|r)]=0.5*0.5*P(\text{identify}|r_1=2,r_2=2)+0.5*0.5*P(\text{identify}|r_1=2,r_2=3)\\+0.5*0.5*P(\text{identify}|r_1=3,r_2=2)+0.5*0.5*P(\text{identify}|r_1=3,r_2=3).$$
 
 ```{r plot-probability-4}
 pr_avg = array(dim = c(length(gmaxs), length(K_props), 2))
