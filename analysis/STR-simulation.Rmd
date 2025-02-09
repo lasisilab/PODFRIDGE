@@ -128,7 +128,7 @@ If both alleles do not match then $\kappa_2 / R_X^u = 0$.
 
 For our purposes, we can describe the flowchart for the likelihood ratio calculation as follows:
 
-![](assets/STR_LR.png)
+![](assets/LR-workflow.png)
 
 ### Function
 

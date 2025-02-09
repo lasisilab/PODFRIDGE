@@ -21,19 +21,20 @@ Our study aims to provide insight into the implications of these techniques for 
 
 
 ### Database Representation
-[Murphy & Tong FOIA Data](murphy.html)
-[DTC Database Composition](database-composition.html)
-[Estimation of Forensic Database Representation](regression.html)
+
+The reanalysis of the data from Murphy and Tong (2019) can be found at [Murphy & Tong FOIA Data](murphy.html).
+
+The meta-analysis on [DTC Database Composition](database-composition.html) is found in the linked page.
+
+And our [Estimation of Forensic Database Representation](racial_proportion.html). 
 
 ### Family Structure
-[Differences in Distribution of Close Relatives](relative-distribution.html)
+We analyze 4 Census years in which mothers report the total number of children born to them to estimate population variation in family size. The results are found in [Family Size Variation](relative-distribution.html).
 
 ### STR Likelihood Ratio Effects 
-[CODIS Allele Frequencies](CODIS-STR-freqs.html)
-[Likelihood Ratio Calculation](lr.html)
-[Simulation Framework for STR loci](STR-simulation.html)
+We visualize previously reported [CODIS STR Allele Frequencies](CODIS-STR-freqs.html) and provide a [Likelihood Ratio Calculation](lr.html) deriving the match probability equation used in forensic genetics. Our [Simulation Framework for STR loci](STR-simulation.html) is also available and our [Likelihood Ration Distributions](lr_dist.html) are also shared.
 
 ### Genetic Surveillance Burden
-[Long-range Familial Searching Reach Estimation Methods](methods.html)
+We review [Long-range Familial Searching Reach Estimation Methods](methods.html) used in Erlich et al 2018 and Coop & Edge 2019 and provide our own analysis in [Disparities in Long-Range Familial Search](probability_disparity.html). 
 
-[Population Estimation of Genetic Surveillance Equation](final_equation.html)
+For short-range familial searchwes, we provide a [Population Estimation of Genetic Surveillance Equation](final_equation.html) that will serve as the basis for our calculations of disparities in genetic surveillance burden based on database representation and family structure.
