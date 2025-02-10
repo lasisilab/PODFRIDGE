@@ -168,7 +168,6 @@ calculate_likelihood_ratio2 <- function(allele_frequency_data) {
 }
 
 
-#THIS FUNCTION HAS BEEN CHECKED
 kinship_calculation <- function(allele_frequency_data, kinship_matrix,df_allelefreq) {
   print("starting kinship_calculation")
 
@@ -490,12 +489,7 @@ log_message(paste("Calculated combined likelihood ratios in", combined_lrs_time[
 # Save results to CSV
 log_message("Writing results to compressed files...")
 
-#fwrite(processed_genotypes, output_file)
 setwd(output_dir)
-#write.table(processed_genotypes,gzfile(paste0(output_file,".gz")),append=FALSE)
-#save(processed_genotypes,file=output_file, compress=T)
 write.table(combined_lrs,gzfile(paste0(output_file2,".gz")),append=FALSE)
-#save(combined_lrs,file=output_file2, compress=T)
-#fwrite(combined_lrs,output_file2)
 setwd(t)
 log_message("LR calculations completed.")
