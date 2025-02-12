@@ -26,6 +26,11 @@ combined_lrs$population_tested<-as.factor(combined_lrs$population_tested)
 calculate_cutoffs <- function(input_df, fp_rates, hypothesis) {
   input_df<-input_df[input_df$relationship_known == "unrelated" & input_df$relationship_tested == hypothesis,]
 
+#LR assumes known and tested populations are the same, and that known and tested relationships are accurate
+#LR columns specifying a different predicted population assume that the predicted relationship is accurate
+#LR columns specifying a different predicted relationship assume that the predicted population is accurate
+
+
   cutoffs <- input_df[,
                                   list(
       fixed_cutoff = 1.00,
@@ -69,6 +74,7 @@ combined_lrs$loci_set_factor <- factor(combined_lrs$loci_set, levels=c("core_13"
 
 # make sure relationships are in the order we want
 combined_lrs$relationship_known_factor <- factor(combined_lrs$relationship_known, levels=c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated"))
+combined_lrs$relationship_tested_factor <- factor(combined_lrs$relationship_tested, levels=c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated"))
 
 # race labels (can be changed)
 combined_lrs <- combined_lrs %>%
@@ -82,7 +88,7 @@ combined_lrs <- combined_lrs %>%
                                                          population_tested == "Hispanic" ~ "Hispanic"))
 
 summary_stats <- combined_lrs[,    list(
-  mean_LR = mean(LR),
+  mean_LR = mean(LR),   #LR assumes relationship tested and population tested are correct
   lower_95 = quantile(LR, 0.025),
   upper_95 = quantile(LR, 0.975)#,
 ),
