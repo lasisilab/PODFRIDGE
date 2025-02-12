@@ -20,10 +20,12 @@ combined_lrs = fread(paste0("output/",slurm_job_id,"/summary_genotypes.csv"))
 combined_lrs$LR<-as.numeric(combined_lrs$LR)
 combined_lrs$relationship_tested <- factor(combined_lrs$relationship_tested, levels = c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated"))
 combined_lrs$population<-as.factor(combined_lrs$population)
+combined_lrs$population_tested<-as.factor(combined_lrs$population_tested)
 
 # Function to calculate cut-off values for 1%, 0.1%, and 0.01% FPR
 calculate_cutoffs <- function(input_df, fp_rates, hypothesis) {
   input_df<-input_df[input_df$relationship_known == "unrelated" & input_df$relationship_tested == hypothesis,]
+
   cutoffs <- input_df[,
                                   list(
       fixed_cutoff = 1.00,
@@ -31,15 +33,16 @@ calculate_cutoffs <- function(input_df, fp_rates, hypothesis) {
       cutoff_0_1 = quantile(LR, probs = 1 - fp_rates[2] / 100, na.rm = TRUE),
       cutoff_0_01 = quantile(LR, probs = 1 - fp_rates[3] / 100, na.rm = TRUE),
       n_unrelated = .N),
-    by=c("population", "loci_set")]
+    by=c("population", "population_tested","loci_set")] #Define cutoffs for population_known,population_tested, loci set  
   return(cutoffs)
 }
 
 calculate_proportions_exceeding_cutoffs <- function(input_df, cutoffs, hypothesis) {
   input_df<-input_df[input_df$relationship_tested == hypothesis,]
-  df_with_cutoffs <- left_join(input_df, cutoffs, by = c("population", "loci_set"))
+  df_with_cutoffs <- left_join(input_df, cutoffs, by = c("population","population_tested", "loci_set"))
   df_with_cutoffs <- df_with_cutoffs [,list(
       population=population,
+      population_tested=population_tested,
       relationship_tested = relationship_tested,
       relationship_known = relationship_known,
       loci_set = loci_set,
@@ -56,7 +59,7 @@ calculate_proportions_exceeding_cutoffs <- function(input_df, cutoffs, hypothesi
       proportion_exceeding_0_1 = sum(exceeds_cutoff_0_1, na.rm = TRUE) / .N,
       proportion_exceeding_0_01 = sum(exceeds_cutoff_0_01, na.rm = TRUE) / .N,
       n_related = .N),
-      by=c("population","relationship_tested","loci_set", "relationship_known")]
+      by=c("population","population_tested","relationship_tested","loci_set", "relationship_known")]
   return(proportions_exceeding)
 }
 
@@ -72,15 +75,19 @@ combined_lrs <- combined_lrs %>%
                      mutate(population_label = case_when(population == "AfAm" ~ "African-American",
                                                          population == "Asian" ~ "Asian",
                                                          population == "Cauc" ~ "Caucasian",
-                                                         population == "Hispanic" ~ "Hispanic"))
+                                                         population == "Hispanic" ~ "Hispanic"),
+                           population_tested_label = case_when(population_tested == "AfAm" ~ "African-American",
+                                                         population_tested == "Asian" ~ "Asian",
+                                                         population_tested == "Cauc" ~ "Caucasian",
+                                                         population_tested == "Hispanic" ~ "Hispanic"))
 
 summary_stats <- combined_lrs[,    list(
   mean_LR = mean(LR),
   lower_95 = quantile(LR, 0.025),
   upper_95 = quantile(LR, 0.975)#,
 ),
-by=c("relationship_tested","population_label","loci_set_factor")]
-
+by=c("relationship_tested","population_tested_label","population_label","loci_set_factor")]
+summary_stats<-summary_stats[summary_stats$population_label==summary_stats$population_tested_label,]
 color_palette_race = c("#AA4499", "#DDCC77", "#88CCEE", "#117733")
 
 plot0<-ggplot(summary_stats, aes(x = loci_set_factor, y = mean_LR, group = population_label, color = population_label)) +
