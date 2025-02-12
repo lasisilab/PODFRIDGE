@@ -16,7 +16,7 @@ slurm_job_id <- as.character(args[1])
 output_dir <- file.path("output")
 
 # load combined_lrs
-combined_lrs = fread(paste0("output/",slurm_job_id,"/sim_summary_genotypes.csv"))
+combined_lrs = fread(paste0("output/",slurm_job_id,"/summary_genotypes.csv"))
 combined_lrs$LR<-as.numeric(combined_lrs$LR)
 combined_lrs$relationship_tested <- factor(combined_lrs$relationship_tested, levels = c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated"))
 combined_lrs$population<-as.factor(combined_lrs$population)
