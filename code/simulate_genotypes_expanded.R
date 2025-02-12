@@ -104,7 +104,7 @@ kinship_matrix <- data.table(
 #################################################################################
 
 # Functions
-calculate_likelihood_ratio <- function(allele_frequency_data,population) {
+calculate_likelihood_ratio <- function(allele_frequency_data,population) { #Assign probabilities of A and B from allele frequency data
 
   for(p in 1:length(population)){
     eval(parse(text=paste0("allele_frequency_data$LR_",population[p],"<-ifelse(allele_frequency_data$shared_alleles == 0, allele_frequency_data$k0,NA)")))
@@ -117,9 +117,9 @@ calculate_likelihood_ratio <- function(allele_frequency_data,population) {
     allele_frequency_data$Rxp<-ifelse(allele_frequency_data$shared_alleles==1 & allele_frequency_data$genotype_match=="AB-AB",(allele_frequency_data$Rxp*allele_frequency_data$pB)/(allele_frequency_data$pA+allele_frequency_data$pB),allele_frequency_data$Rxp)
     eval(parse(text=paste0("allele_frequency_data$LR_",population[p],"<-ifelse(allele_frequency_data$shared_alleles == 1, allele_frequency_data$k0 + (allele_frequency_data$k1 / allele_frequency_data$Rxp),allele_frequency_data$LR_",population[p],")")))
 
-    k0 = 0 #Why are we using these and not the values from the kinship matrix? Are they the same?
-    k1 = 1
-    k2 = 0
+    #k0 = 0 #These lines don't seem to be functional within the code
+    #k1 = 1
+    #k2 = 0
      allele_frequency_data$Rxp<-ifelse(allele_frequency_data$shared_alleles==2 & allele_frequency_data$genotype_match == "AA-AA",allele_frequency_data$pA,allele_frequency_data$Rxp)
     allele_frequency_data$Rxu<-ifelse(allele_frequency_data$shared_alleles==2  & allele_frequency_data$genotype_match == "AA-AA",allele_frequency_data$pA*allele_frequency_data$pA,NA)
 
@@ -148,9 +148,9 @@ calculate_likelihood_ratio2 <- function(allele_frequency_data) {
   allele_frequency_data$Rxp<-ifelse(allele_frequency_data$shared_alleles==1 & allele_frequency_data$genotype_match=="AB-AB",(allele_frequency_data$Rxp*allele_frequency_data$pB)/(allele_frequency_data$pA+allele_frequency_data$pB),allele_frequency_data$Rxp)
   allele_frequency_data$LR_relationship_tested<-ifelse(allele_frequency_data$shared_alleles == 1, allele_frequency_data$k0 + (allele_frequency_data$k1 / allele_frequency_data$Rxp),allele_frequency_data$LR_relationship_tested)
 
-  k0 = 0 #Why are we using these and not the values from the kinship matrix? Are they the same?
-  k1 = 1
-  k2 = 0
+  #k0 = 0 #These lines don't seem to be functional within the code
+  #k1 = 1
+  #k2 = 0
   allele_frequency_data$Rxp<-ifelse(allele_frequency_data$shared_alleles==2 & allele_frequency_data$genotype_match == "AA-AA",allele_frequency_data$pA,allele_frequency_data$Rxp)
   allele_frequency_data$Rxu<-ifelse(allele_frequency_data$shared_alleles==2  & allele_frequency_data$genotype_match == "AA-AA",allele_frequency_data$pA*allele_frequency_data$pA,NA)
 
