@@ -94,6 +94,7 @@ summary_stats <- combined_lrs[,    list(
   upper_95 = quantile(LR, 0.975)#,
 ),
 by=c("relationship_tested","population_tested_label","loci_set_factor")]
+
 summary_stats<-summary_stats[summary_stats$population_known_label==summary_stats$population_tested_label,]
 color_palette_race = c("#AA4499", "#DDCC77", "#88CCEE", "#117733")
 
