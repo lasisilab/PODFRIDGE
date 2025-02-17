@@ -1,0 +1,207 @@
+---
+title: "Disparities in Short-Range Familial Searches"
+author: "Junhui He"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+# load package
+library(ggplot2)
+library(ggpubr)
+```
+
+## 1 Objective
+
+We aims to examines disparities in the probability of detecting an individual through short-range familial searches using forensic DNA databases for Black and White Americans. This analysis integrates forensic database sizes, forensic database representation (from Result 1), family size distributions (from Result 2), and considers different levels of true positive rates in determining a familial relationship of a particular kind.
+
+## 2 Model assumptions
+
+1.  The population size is $N$, and the racial proportion of the population is $\alpha$.
+
+2.  The database has $K$ individuals, and the racial proportion of the database is $\beta$. For a given race, the database is randomly sampled from the current population. Both the population proportion $\alpha$ and the database proportion $\beta$ are considered fixed constants.
+
+3.  The family trees of different races are strictly separated. For instance, the parents and siblings of black Americans are black Americans, while the parents and siblings of white Americans are white Americans.
+
+4.  The number of siblings is $r$, which is assumed to follow a multinomial distribution. In this model, the distribution of $r$ is estimated based on the number of children born to women aged 40-49 in 1990 minus one.
+
+5.  In the short-range familial search, we only consider the individual self, the parents and full siblings for detection.
+
+6.  All related individuals are alive in the population.
+
+7.  <span style="color:red"> The definition of detection: <span> If we have one correct match, we declare that there is sufficient information to detect the target, regardless of whether or not we have any incorrect match.
+
+## 3 Derivation
+
+The derivation of the detection probability is based on [Population Estimation of Genetic Surveillance Equation](https://lasisilab.github.io/PODFRIDGE/final_equation.html).
+
+### 3.1 The probability of any individual present in a database
+
+According to Assumptions 1 and 2, for the given race, there are $\alpha N$ individuals in the population and $\beta K$ individuals in the database. Because of the randomly sampling, the probability of any individual present in a database is $P(\text{present})=\frac{\beta K}{\alpha N}.$
+
+### 3.2 The probability of a certain number of individuals among a group present in a database
+
+Assume the group consists of $n$ individuals. We establish a binomial model for the number of individuals $k$ among this group present in a database, i.e., $k\sim \text{Bin}(n, P(\text{present}))$. Thus, the probability of a certain number of individuals among a group present in a database is $\text{Bin}(k;n,P(\text{present})).$
+
+### 3.3 The probability of at least one individual among a group detected in a database
+
+Suppose the detection probability given a kind of relationship is $P(\text{detect}|\text{a relationship})$. Based on the Bayes formula, the probability of at least one individual among a group detected in a database is given as $$P(\text{detect at least one individual among a group in a database})\\=\sum_{k=1}^n P(\text{detect at least one individual | k individuals present})P(\text{k individuals present})\\=\sum_{k=1}^n \text{Bin}(k;n,P(\text{present}))\{1-(1-P(\text{detect}|\text{a relationship}))^k\}.$$
+
+### 3.4 The probability of detecting an individual in a database through short-range familial search
+
+The probability of an individual being detected in the database is comprised of three separate probabilities: (1) the probability of the individual self being in the database, (2) the probability of being detected due to one or both parents being in the database, and (3) the probability of being detected due to one or more siblings being present in the database.
+
+Assume that the individual self and the parents can be detected in a full probability, i.e., $P(\text{detect}|\text{individual self, or parents})=1$. Therefore, the detection probability due to the individual self or one or both parents being in the database is given by $1-\text{Bin}(0;3,P(\text{present})).$ According to Section 3.3, assuming $r$ siblings, the detection probability due to one or more siblings being present in the database is given by $\sum_{k=1}^r \text{Bin}(k;r,P(\text{present}))\{1-(1-P(\text{detect}|\text{a sibling}))^k\}.$
+
+Consequently, the probability of detecting an individual in a database through short-range familial search is $$P(\text{detect})=1-\left(1-\frac{\beta K}{\alpha N}\right)^3 \\ + \sum_{n=1}^{r_\max} \left[P(r=n)\sum_{k=1}^n {n \choose k} (\frac{\beta K}{\alpha N})^k(1-\frac{\beta K}{\alpha N})^{n-k} \{1-(1-P(\text{detect}|\text{a sibling}))^k\}\right].$$
+
+## 4 Hypothesis testing in determining a familial relationship with forensic STR loci
+
+The short-range familial search utilizes a hypothesis testing to determine a familial relationship of a particular kind. Especially, for a pair of individuals, $$H_0:\text{unrelated pairs}\leftrightarrow H_1:  \text{detecting a certain familial relationship}.$$ Therefore, the detection probability given a relationship is the so-called true positive rate, $P(\text{accept } H_1|H_1\text{ is true})$.
+
+In literature, the short-range familial search conducts a likelihood ratio test. The true positive rate will depend on the number of STR loci, population allele frequency differences and cutoff thresholds. See Result 4 for further discussions.
+
+**Remark:** Assumption 7 implies that the false positive rate, $P(\text{accept }H_1 | H_0 \text{ is true})$, does not influence the probability of detecting an individual.
+
+## 5 Experimental results
+
+We focus on short-range familial search in the United States, using the U.S. Census population as the total population size, given as $N=331,449,281$. The racial composition is $$\alpha_{black}=12.05021\%,~\alpha_{white}=57.83619\%,~\alpha_{other}=30.1136\%,$$ where $\alpha_i$ indicates the proportion of race $i$ in the population.
+
+Our analysis examines how family size distributions, database representation and the probability of detecting a sibling influence the probability of detecting an individual in a database. We consider two scenarios for database representation:
+
+-   Ideal case: All racial groups are proportionally represented in the database, meaning $\beta_{black}=\alpha_{black}$ and $\beta_{white}=\alpha_{white}$.
+
+-   Real case: In the real forensic database, Black Americans are overrepresented, while White Americans are underrepresented. The exact values of $\beta$ depend on the specific database available. For this analysis, we take the values where $\beta_{black}=25\%,~\beta_{white}=45\%.$
+
+In our analysis, the maximum database size is set to $K=0.1*N=33,144,928$. Thus, the range of database size is $[0,0.1*N].$ Moreover, for the detection probability of a sibling, we consider three settings where $P(\text{detect}|\text{a sibling})=20\%,~50\%,~\text{and}~90\%.$
+
+```{r data}
+# read racial compositions in Census population (Result 1b)
+racial_composition = read.csv(file.path("output", "demographic_composition_comparison.csv"))
+
+# population proportions
+pop_props = racial_composition$Proportion[c(1,3)]
+# forensic database proportions
+for_props = c(45, 25)
+# population size
+N = sum(racial_composition$Number_of_Customers[1:4])
+
+# read family size multinomial distributions for black/white Americans (Result 2)
+family_size = read.csv(file.path("data", "family_size.csv"))
+
+black_family_size = family_size$proportion[which(family_size$RACE=="Black/African American" & family_size$YEAR=="1990" & family_size$AGE_RANGE=="40-49")]
+
+white_family_size = family_size$proportion[which(family_size$RACE=="White" & family_size$YEAR=="1990" & family_size$AGE_RANGE=="40-49")]
+
+black_sibling_size = black_family_size[-1]/sum(black_family_size[-1])
+white_sibling_size = white_family_size[-1]/sum(white_family_size[-1])
+```
+
+```{r short-range-detect}
+match_sibling_prob <- function(N, K, pop_prop, for_prop, r, detect_sibling) {
+  p_present = for_prop*K / (pop_prop*N)
+  tot_p_sibling = 0
+  
+  if(r>=1) {
+    for(k in 1:r) {
+      p_sibling = dbinom(k, r, p_present) * (1 - (1 - detect_sibling)^k)
+      tot_p_sibling = tot_p_sibling + p_sibling
+    }
+  }
+  
+  return(tot_p_sibling)
+}
+
+detect_prob <- function(N, K, pop_prop, for_prop, sibling_size, detect_sibling) {
+  p_present = for_prop*K / (pop_prop*N)
+  p_selfandparent = 1 - (1 - p_present)^3
+  
+  p_sibling = 0
+  
+  if(length(sibling_size)>1) {
+    for(i in 2:length(sibling_size)) {
+      p_sibling = p_sibling + sibling_size[i] * match_sibling_prob(N, K, pop_prop, for_prop, i-1, detect_sibling)
+    }
+  }
+  
+  return(p_selfandparent + p_sibling)
+}
+
+# N: the population size
+# K: the forensic database size
+# pop_prop: the racial proportion in the population
+# for_prop: the racial proportion in the forensic database
+# sibling_size: the distribution of the number of sibling
+# detect_sibling: the probability of detecting a sibling
+```
+
+### 4.1 Detection probabilities without considering representation disparities
+
+In this subsection, we assume that the population and database have the same representation. The database proportions $\beta$ are set equal to the population proportions $\alpha$ in the calculation of detection probabilities. These results are utilized to explore the solely influence of disparities in the family sizes.
+
+The probabilities of detecting an individual given a certain level of true positive rates from a forensic database without representation disparities through short-range familial search.
+
+```{r match-parameter}
+Ks = round(seq(0, 0.1*N, length.out=50)) #forensic database size
+sibling_probs = c(0.2, 0.5, 0.9) #the detection probability given a sibling
+```
+
+```{r detect-probability-1}
+pr_black = array(dim = c(length(sibling_probs), length(Ks)))
+pr_white = array(dim = c(length(sibling_probs), length(Ks)))
+
+for(i in 1:length(sibling_probs)) {
+  for(j in 1:length(Ks)) {
+    pr_black[i,j] = detect_prob(N, Ks[j], pop_props[2], pop_props[2], black_sibling_size, sibling_probs[i])
+    pr_white[i,j] = detect_prob(N, Ks[j], pop_props[1], pop_props[1], white_sibling_size, sibling_probs[i])
+  }
+}
+```
+
+```{r plot-probability-1}
+black_df = data.frame(prob=c(pr_black), database=rep(Ks, each=length(sibling_probs)), detection=factor(rep(sibling_probs, length(Ks))), race=factor("Black American"))
+
+white_df = data.frame(prob=c(pr_white), database=rep(Ks, each=length(sibling_probs)), detection=factor(rep(sibling_probs, length(Ks))), race=factor("White American"))
+
+prob_df = rbind(black_df, white_df)
+
+ggplot(prob_df, aes(x=database, y=prob)) + geom_line(aes(colour=detection, linetype=race)) + xlab("Database size") + ylab("Detection probabilities") + labs(colour="P(detect | a sibling)")
+```
+
+### 4.2 Detection probabilities considering representation disparities
+
+In this subsection, we assume that representation disparities exist between the Census population and the forensic database. Specifically, Black Americans are overrepresented, while White Americans are underrepresented in the database. We calculate the probabilities of detecting an individual by treating $\alpha$ and $\beta$ fixed as constants.
+
+The probabilities of detecting an individual given a certain level of true positive rates from a forensic database with representation disparities through short-range familial search.
+
+```{r detect-probability-2}
+pr_black = array(dim = c(length(sibling_probs), length(Ks)))
+pr_white = array(dim = c(length(sibling_probs), length(Ks)))
+
+for(i in 1:length(sibling_probs)) {
+  for(j in 1:length(Ks)) {
+    pr_black[i,j] = detect_prob(N, Ks[j], pop_props[2], for_props[2], black_sibling_size, sibling_probs[i])
+    pr_white[i,j] = detect_prob(N, Ks[j], pop_props[1], for_props[1], white_sibling_size, sibling_probs[i])
+  }
+}
+```
+
+```{r plot-probability-2}
+black_df = data.frame(prob=c(pr_black), database=rep(Ks, each=length(sibling_probs)), detection=factor(rep(sibling_probs, length(Ks))), race=factor("Black American"))
+
+white_df = data.frame(prob=c(pr_white), database=rep(Ks, each=length(sibling_probs)), detection=factor(rep(sibling_probs, length(Ks))), race=factor("White American"))
+
+prob_df = rbind(black_df, white_df)
+
+ggplot(prob_df, aes(x=database, y=prob)) + geom_line(aes(colour=detection, linetype=race)) + xlab("Database size") + ylab("Detection probabilities") + labs(colour="P(detect | a sibling)")
+```
+
+### 4.3 Conclusions
+
+1.  Without accounting for representation disparities, the detection probability for Black Americans is slightly higher than that for White Americans, as Black Americans have mildly more siblings than White Americans.
+
+2.  Considering representation disparities, the detection probability for Black Americans is significantly higher than that for White Americans, as black Americans are overrepresented while white Americans are underrepresented.
+
+3. The detection probability increases with the true positive rate.
