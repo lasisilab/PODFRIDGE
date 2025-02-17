@@ -66,7 +66,7 @@ ilogit <- function(x) {
 ```{r data}
 # read and preprocess data
 # read data
-data_path = 'data/regression_data'
+data_path = '../data/regression_data'
 response_data_path = file.path(data_path, 'CODIS_regression_data.csv')
 predictor_data_path = file.path(data_path, 'CODIS_regression_predict_data.csv')
 
