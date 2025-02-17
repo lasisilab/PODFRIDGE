@@ -118,10 +118,7 @@ calculate_likelihood_ratio <- function(allele_frequency_data,population) {
     allele_frequency_data$Rxp<-ifelse(allele_frequency_data$shared_alleles==1 & allele_frequency_data$genotype_match=="AB-AB",(allele_frequency_data$Rxp*allele_frequency_data$pB)/(allele_frequency_data$pA+allele_frequency_data$pB),allele_frequency_data$Rxp)
     eval(parse(text=paste0("allele_frequency_data$LR_",population[p],"<-ifelse(allele_frequency_data$shared_alleles == 1, allele_frequency_data$k0 + (allele_frequency_data$k1 / allele_frequency_data$Rxp),allele_frequency_data$LR_",population[p],")")))
 
-    k0 = 0 #Why are we using these and not the values from the kinship matrix? Are they the same?
-    k1 = 1
-    k2 = 0
-     allele_frequency_data$Rxp<-ifelse(allele_frequency_data$shared_alleles==2 & allele_frequency_data$genotype_match == "AA-AA",allele_frequency_data$pA,allele_frequency_data$Rxp)
+    allele_frequency_data$Rxp<-ifelse(allele_frequency_data$shared_alleles==2 & allele_frequency_data$genotype_match == "AA-AA",allele_frequency_data$pA,allele_frequency_data$Rxp)
     allele_frequency_data$Rxu<-ifelse(allele_frequency_data$shared_alleles==2  & allele_frequency_data$genotype_match == "AA-AA",allele_frequency_data$pA*allele_frequency_data$pA,NA)
 
     allele_frequency_data$Rxp<-ifelse(allele_frequency_data$shared_alleles==2 & allele_frequency_data$genotype_match == "AB-AB",(4*allele_frequency_data$pA*allele_frequency_data$pB)/(allele_frequency_data$pA+allele_frequency_data$pB),allele_frequency_data$Rxp)
@@ -142,7 +139,6 @@ calculate_likelihood_ratio <- function(allele_frequency_data,population) {
 
 calculate_likelihood_ratio2 <- function(allele_frequency_data) {
   allele_frequency_data$LR_relationship_tested<-ifelse(allele_frequency_data$shared_alleles == 0, allele_frequency_data$k0,NA)
-  allele_frequency_data$Rxp<-ifelse(allele_frequency_data$shared_alleles==1,allele_frequency_data$pA,NA)
   allele_frequency_data$Rxp<-ifelse(allele_frequency_data$shared_alleles==1,allele_frequency_data$pA,NA)
   allele_frequency_data$Rxp<-ifelse(allele_frequency_data$shared_alleles==1 & allele_frequency_data$genotype_match=="AB-AA"|allele_frequency_data$genotype_match=="AA-AB",allele_frequency_data$Rxp*2,allele_frequency_data$Rxp)
   allele_frequency_data$Rxp<-ifelse(allele_frequency_data$shared_alleles==1 & allele_frequency_data$genotype_match=="AB-AC"|allele_frequency_data$genotype_match=="AB-AB",allele_frequency_data$Rxp*4,allele_frequency_data$Rxp)
@@ -168,7 +164,6 @@ calculate_likelihood_ratio2 <- function(allele_frequency_data) {
 }
 
 
-#THIS FUNCTION HAS BEEN CHECKED
 kinship_calculation <- function(allele_frequency_data, kinship_matrix,df_allelefreq) {
   print("starting kinship_calculation")
 
@@ -490,12 +485,7 @@ log_message(paste("Calculated combined likelihood ratios in", combined_lrs_time[
 # Save results to CSV
 log_message("Writing results to compressed files...")
 
-#fwrite(processed_genotypes, output_file)
 setwd(output_dir)
-#write.table(processed_genotypes,gzfile(paste0(output_file,".gz")),append=FALSE)
-#save(processed_genotypes,file=output_file, compress=T)
 write.table(combined_lrs,gzfile(paste0(output_file2,".gz")),append=FALSE)
-#save(combined_lrs,file=output_file2, compress=T)
-#fwrite(combined_lrs,output_file2)
 setwd(t)
 log_message("LR calculations completed.")

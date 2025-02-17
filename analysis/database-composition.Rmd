@@ -256,7 +256,7 @@ The companies that law enforcement can access are FamilyTreeDNA and GEDmatch. Fa
 
 The company whose database is open to the public is MyHeritage. Genetic data is not publicly available, but records such as birth, marriage, death, burial, census, military, immigration, yearbooks are. Family sites and certain settings can allow for publicly accessible genetic data as well.
 
-The other Direct-to-Consumer companies are characterized as allowing access to neither law enforcement or the public. Ancestry DNA requires valid legal reasoning to share data with law enforcement. 23andMe has an opt-in option for scientific researcher that 81% of users do. Living DNA shares anonymous data with third parties, and has an opt-in option to share data with researchers, however, they do not sell data to law enforcement unless feel they are legally compelled.
+The other Direct-to-Consumer companies are characterized as allowing access to neither law enforcement or the public. Ancestry DNA requires valid legal reasoning to share data with law enforcement. Over 80% if 23andMe users opt-in for their data to be used in scientific research. Living DNA shares anonymous data with third parties, and has an opt-in option to share data with researchers, however, they do not sell data to law enforcement unless feel they are legally compelled.
 
 ## Estimated Ethnic Representation of Direct-to-Consumer Databases
 

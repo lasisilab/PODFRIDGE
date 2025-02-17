@@ -16,30 +16,39 @@ slurm_job_id <- as.character(args[1])
 output_dir <- file.path("output")
 
 # load combined_lrs
-combined_lrs = fread(paste0("output/",slurm_job_id,"/sim_summary_genotypes.csv"))
+combined_lrs = fread(paste0("output/",slurm_job_id,"/summary_genotypes.csv"))
 combined_lrs$LR<-as.numeric(combined_lrs$LR)
 combined_lrs$relationship_tested <- factor(combined_lrs$relationship_tested, levels = c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated"))
-combined_lrs$population<-as.factor(combined_lrs$population)
+combined_lrs$population_known<-as.factor(combined_lrs$population)
+combined_lrs$population_tested<-as.factor(combined_lrs$population_tested)
 
 # Function to calculate cut-off values for 1%, 0.1%, and 0.01% FPR
 calculate_cutoffs <- function(input_df, fp_rates, hypothesis) {
   input_df<-input_df[input_df$relationship_known == "unrelated" & input_df$relationship_tested == hypothesis,]
-  cutoffs <- input_df[,
-                                  list(
+
+#LR assumes known and tested populations are the same, and that known and tested relationships are accurate
+#LR columns specifying a different predicted population assume that the predicted relationship is accurate
+#LR columns specifying a different predicted relationship assume that the predicted population is accurate
+
+#LR column should be assigned cutoffs based on the original code- calculate proportions where population is the tested population
+#LR_x_population columns should be assigned separate cutoffs grouped by the known population  
+
+cutoffs1 <- input_df[input_df$population_known==input_df$population_tested,
+   list(
       fixed_cutoff = 1.00,
       cutoff_1 = quantile(LR, probs = 1 - fp_rates[1] / 100, na.rm = TRUE),
       cutoff_0_1 = quantile(LR, probs = 1 - fp_rates[2] / 100, na.rm = TRUE),
       cutoff_0_01 = quantile(LR, probs = 1 - fp_rates[3] / 100, na.rm = TRUE),
       n_unrelated = .N),
-    by=c("population", "loci_set")]
+    by=c("population_tested", "loci_set")] #Define cutoffs for population_tested, loci set  
   return(cutoffs)
 }
 
 calculate_proportions_exceeding_cutoffs <- function(input_df, cutoffs, hypothesis) {
-  input_df<-input_df[input_df$relationship_tested == hypothesis,]
-  df_with_cutoffs <- left_join(input_df, cutoffs, by = c("population", "loci_set"))
+  input_df<-input_df[input_df$relationship_tested == hypothesis & input_df$population_known==input_df$population_tested,]
+  df_with_cutoffs <- left_join(input_df, cutoffs, by = c("population_tested", "loci_set"))
   df_with_cutoffs <- df_with_cutoffs [,list(
-      population=population,
+      population_tested=population_tested,
       relationship_tested = relationship_tested,
       relationship_known = relationship_known,
       loci_set = loci_set,
@@ -49,14 +58,14 @@ calculate_proportions_exceeding_cutoffs <- function(input_df, cutoffs, hypothesi
       exceeds_cutoff_0_01 = LR > cutoff_0_01
     )]
 
-  df_no_cutoffs<-df_with_cutoffs[!df_with_cutoffs$relationship_tested == "unrelated",]
+  df_no_cutoffs<-df_with_cutoffs[!df_with_cutoffs$relationship_tested == "unrelated" & input_df$population_known==input_df$population_tested,]
   proportions_exceeding <- df_no_cutoffs[,    list(
       proportion_exceeding_fixed = sum(exceeds_fixed_cutoff) / .N,
       proportion_exceeding_1 = sum(exceeds_cutoff_1, na.rm = TRUE) / .N,
       proportion_exceeding_0_1 = sum(exceeds_cutoff_0_1, na.rm = TRUE) / .N,
       proportion_exceeding_0_01 = sum(exceeds_cutoff_0_01, na.rm = TRUE) / .N,
       n_related = .N),
-      by=c("population","relationship_tested","loci_set", "relationship_known")]
+      by=c("population","population_tested","relationship_tested","loci_set", "relationship_known")]
   return(proportions_exceeding)
 }
 
@@ -66,24 +75,30 @@ combined_lrs$loci_set_factor <- factor(combined_lrs$loci_set, levels=c("core_13"
 
 # make sure relationships are in the order we want
 combined_lrs$relationship_known_factor <- factor(combined_lrs$relationship_known, levels=c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated"))
+combined_lrs$relationship_tested_factor <- factor(combined_lrs$relationship_tested, levels=c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated"))
 
 # race labels (can be changed)
 combined_lrs <- combined_lrs %>%
-                     mutate(population_label = case_when(population == "AfAm" ~ "African-American",
-                                                         population == "Asian" ~ "Asian",
-                                                         population == "Cauc" ~ "Caucasian",
-                                                         population == "Hispanic" ~ "Hispanic"))
+                     mutate(population_known_label = case_when(population_known == "AfAm" ~ "African-American",
+                                                         population_known == "Asian" ~ "Asian",
+                                                         population_known == "Cauc" ~ "Caucasian",
+                                                         population_known == "Hispanic" ~ "Hispanic"),
+                           population_tested_label = case_when(population_tested == "AfAm" ~ "African-American",
+                                                         population_tested == "Asian" ~ "Asian",
+                                                         population_tested == "Cauc" ~ "Caucasian",
+                                                         population_tested == "Hispanic" ~ "Hispanic"))
 
 summary_stats <- combined_lrs[,    list(
-  mean_LR = mean(LR),
+  mean_LR = mean(LR),   #LR assumes relationship tested and population tested are correct
   lower_95 = quantile(LR, 0.025),
   upper_95 = quantile(LR, 0.975)#,
 ),
-by=c("relationship_tested","population_label","loci_set_factor")]
+by=c("relationship_tested","population_tested_label","loci_set_factor")]
 
+summary_stats<-summary_stats[summary_stats$population_known_label==summary_stats$population_tested_label,]
 color_palette_race = c("#AA4499", "#DDCC77", "#88CCEE", "#117733")
 
-plot0<-ggplot(summary_stats, aes(x = loci_set_factor, y = mean_LR, group = population_label, color = population_label)) +
+plot0<-ggplot(summary_stats, aes(x = loci_set_factor, y = mean_LR, group = population_known_label, color = population_known_label)) +
       geom_line(size = 2) +
       facet_wrap(~ relationship_tested,  ncol = 2) +
       scale_y_log10() +
@@ -110,7 +125,7 @@ plot0<-ggplot(summary_stats, aes(x = loci_set_factor, y = mean_LR, group = popul
 
 
 #combined_lrs$LR = ifelse(combined_lrs$LR < 1e-32, 1e-32, combined_lrs$LR)
-plota<-ggplot(combined_lrs, aes(x = relationship_tested, y = LR, fill = population_label, color = population_label)) +
+plota<-ggplot(combined_lrs, aes(x = relationship_tested, y = LR, fill = population_tested_label, color = population_tested_label)) +
     geom_boxplot(position = position_dodge(width = 0.9)) +
     facet_wrap(~ loci_set_factor, scales = "fixed") +
     labs(

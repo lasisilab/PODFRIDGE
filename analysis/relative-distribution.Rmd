@@ -1080,11 +1080,7 @@ summary_stats <- filter_df %>%
 kable(summary_stats, caption= "Summary Statistics of Number of Children in 1990 (40-49 and 50-59 Age Group)")
 ```
 
-#### Test for Difference in Means
-We firstly plot the diagnostic plot to see if the data fulfill the normality assumption. Thought the data for black population and white population violate normality assumption, we can still perform t test to see if there is significant difference in mean for both racial groups in the following due to large sample size (by central limit theorem).
 
-- **Null Hypothesis (H₀):** There is no difference in the mean number of children between the two age groups.
-- **Alternative Hypothesis (H₁):** There is a difference in the mean number of children between the two age groups.
 
 ```{r, include=FALSE}
 ## Check the normality assumption for black population
@@ -1115,30 +1111,16 @@ qqline(data_50_59_w$chborn_num)
 ```
 
 
-```{r}
-df_w <- df %>% filter(RACE == "White"& AGE_RANGE %in% c("40-49", "50-59") & YEAR == "1990")
-df_b <- df %>% filter(RACE == "Black/African American" & AGE_RANGE %in% c("40-49", "50-59") & YEAR == "1990")
-
-t_test_b <- t.test(chborn_num ~ AGE_RANGE, data = df_b)$p.value
-t_test_w <- t.test(chborn_num ~ AGE_RANGE, data = df_w)$p.value
-
-res_df <- data.frame(
-  race = c("African American", "European American"),
-  p_value = c(t_test_b, t_test_w)
-)
-res_df$p_value <- format(res_df$p_value, scientific = TRUE)
-
-kable(res_df, caption="Test Result for Difference in Variance between Age Groups By Race")
-```
-The p-values are both extremely small, meaning there is a very strong statistical difference between the two age groups (40-49 and 50-59) in terms of the mean number of children within each racial group.
-
 #### Test for Difference in Variances
-We apply Levene's test since non-normality in data. 
+We firstly plot the diagnostic plot to see if the data fulfill the normality assumption. The result shows the data for black population and white population violate normality assumption, so we apply Levene's test since non-normality in data. 
 
 - **Null Hypothesis (H₀):** There is no difference in the variance of the number of children between the two age groups.
 - **Alternative Hypothesis (H₁):** There is a difference in the variance of the number of children between the two age groups.
 
 ```{r}
+df_w <- df %>% filter(RACE == "White"& AGE_RANGE %in% c("40-49", "50-59") & YEAR == "1990")
+df_b <- df %>% filter(RACE == "Black/African American" & AGE_RANGE %in% c("40-49", "50-59") & YEAR == "1990")
+
 ## Apply Levene's test since non-normality
 # Levene's test for Black group
 levene_test_b <- leveneTest(chborn_num ~ as.factor(AGE_RANGE), data = df_b)
@@ -1154,6 +1136,36 @@ res_df2 <- data.frame(
 kable(res_df2, caption="Test Result for Difference in Variance between Age Groups By Race")
 ```
 Since the p values are smaller than 0.05 for both racial group, we have enough evidence to reject the null hypothesis, indicating that the variances of the number of children between the two age groups within each racial group are significantly different.
+
+#### Test for Difference in Means
+According to the results from previous parts, which indicate a violation of normality and equal variance, we choose to use the Mann-Whitney U test to check if the mean number of children are statistically different between age groups. 
+
+- **Null Hypothesis (H₀):** There is no difference in the mean number of children between the two age groups.
+- **Alternative Hypothesis (H₁):** There is a difference in the mean number of children between the two age groups.
+
+```{r}
+df_40_49_w <- df_w %>% filter(AGE_RANGE == "40-49") %>% pull(chborn_num)
+df_50_59_w <- df_w %>% filter(AGE_RANGE == "50-59") %>% pull(chborn_num)
+
+# Perform Mann-Whitney U test (Wilcoxon rank-sum test in R)
+t_test_w<-wilcox.test(df_40_49_w, df_50_59_w, alternative = "two.sided")$p.value
+
+df_40_49_b <- df_b %>% filter(AGE_RANGE == "40-49") %>% pull(chborn_num)
+df_50_59_b <- df_b %>% filter(AGE_RANGE == "50-59") %>% pull(chborn_num)
+
+# Perform Mann-Whitney U test (Wilcoxon rank-sum test in R)
+t_test_b<-wilcox.test(df_40_49_b, df_50_59_b, alternative = "two.sided")$p.value
+
+res_df <- data.frame(
+  race = c("African American", "European American"),
+  p_value = c(t_test_b, t_test_w)
+)
+res_df$p_value <- format(res_df$p_value, scientific = TRUE)
+
+kable(res_df, caption="Test Result for Difference in Variance between Age Groups By Race")
+```
+The p-values are both extremely small, meaning there is a very strong statistical difference between the two age groups (40-49 and 50-59) in terms of the mean number of children within each racial group.
+
 
 #### Test for Difference in Zero Inflation
 To test the difference in zero inflation between age group, we firstly create a contingency tables showing the counts of women with zero children and those with one or more children for each age group. Then we apply chi-square test within each race. 

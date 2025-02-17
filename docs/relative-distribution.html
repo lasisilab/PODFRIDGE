@@ -355,7 +355,7 @@ div.tocify {
 <h1 class="title toc-ignore">Estimating Differences in the Distribution
 of First-degree Relatives</h1>
 <h4 class="author">Manqing Lin, Tina Lasisi</h4>
-<h4 class="date">2025-01-31 14:32:26</h4>
+<h4 class="date">2025-02-13 12:36:28</h4>
 
 </div>
 
@@ -363,7 +363,7 @@ of First-degree Relatives</h1>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -374,8 +374,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -384,13 +384,13 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-01-31
+<strong>Last updated:</strong> 2025-02-13
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>PODFRIDGE/</code> <span
@@ -413,18 +413,21 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
@@ -515,15 +518,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree27739be6646e11106f2c18c8d947ef40e78d3350targetblank27739bea">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree020be6fe709c713d2ff3400a57cc8284ec460309targetblank020be6fa">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/27739be6646e11106f2c18c8d947ef40e78d3350" target="_blank">27739be</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/020be6fe709c713d2ff3400a57cc8284ec460309" target="_blank">020be6f</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree27739be6646e11106f2c18c8d947ef40e78d3350targetblank27739bea"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree020be6fe709c713d2ff3400a57cc8284ec460309targetblank020be6fa"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -533,7 +536,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/27739be6646e11106f2c18c8d947ef40e78d3350" target="_blank">27739be</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/020be6fe709c713d2ff3400a57cc8284ec460309" target="_blank">020be6f</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -552,7 +555,11 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
     Ignored:    analysis/.Rhistory
+    Ignored:    analysis/figure/
     Ignored:    data/.DS_Store
+
+Unstaged changes:
+    Modified:   analysis/relative-distribution.Rmd
 
 </code></pre>
 <p>
@@ -598,6 +605,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/020be6fe709c713d2ff3400a57cc8284ec460309/docs/relative-distribution.html" target="_blank">020be6f</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2025-01-31
+</td>
+<td>
+workflowr update
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -2582,6 +2606,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/020be6fe709c713d2ff3400a57cc8284ec460309/docs/figure/relative-distribution.Rmd/unnamed-chunk-30-1.png" target="_blank">020be6f</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2025-01-31
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/b856701f515155bc91e396024d02c0db98e960a2/docs/figure/relative-distribution.Rmd/unnamed-chunk-30-1.png" target="_blank">b856701</a>
 </td>
 <td>
@@ -2678,6 +2713,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/020be6fe709c713d2ff3400a57cc8284ec460309/docs/figure/relative-distribution.Rmd/unnamed-chunk-31-1.png" target="_blank">020be6f</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2025-01-31
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/b856701f515155bc91e396024d02c0db98e960a2/docs/figure/relative-distribution.Rmd/unnamed-chunk-31-1.png" target="_blank">b856701</a>
@@ -2798,6 +2844,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/020be6fe709c713d2ff3400a57cc8284ec460309/docs/figure/relative-distribution.Rmd/unnamed-chunk-32-1.png" target="_blank">020be6f</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2025-01-31
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/b856701f515155bc91e396024d02c0db98e960a2/docs/figure/relative-distribution.Rmd/unnamed-chunk-32-1.png" target="_blank">b856701</a>
@@ -2975,46 +3032,12 @@ in both racial groups.</p>
 </tbody>
 </table>
 </div>
-<div id="test-for-difference-in-means" class="section level4">
-<h4>Test for Difference in Means</h4>
-<p>We firstly plot the diagnostic plot to see if the data fulfill the
-normality assumption. Thought the data for black population and white
-population violate normality assumption, we can still perform t test to
-see if there is significant difference in mean for both racial groups in
-the following due to large sample size (by central limit theorem).</p>
-<ul>
-<li><strong>Null Hypothesis (H₀):</strong> There is no difference in the
-mean number of children between the two age groups.</li>
-<li><strong>Alternative Hypothesis (H₁):</strong> There is a difference
-in the mean number of children between the two age groups.</li>
-</ul>
-<table>
-<caption>Test Result for Difference in Variance between Age Groups By
-Race</caption>
-<thead>
-<tr class="header">
-<th align="left">race</th>
-<th align="left">p_value</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">African American</td>
-<td align="left">6.05337e-226</td>
-</tr>
-<tr class="even">
-<td align="left">European American</td>
-<td align="left">0.00000e+00</td>
-</tr>
-</tbody>
-</table>
-<p>The p-values are both extremely small, meaning there is a very strong
-statistical difference between the two age groups (40-49 and 50-59) in
-terms of the mean number of children within each racial group.</p>
-</div>
 <div id="test-for-difference-in-variances" class="section level4">
 <h4>Test for Difference in Variances</h4>
-<p>We apply Levene’s test since non-normality in data.</p>
+<p>We firstly plot the diagnostic plot to see if the data fulfill the
+normality assumption. The result shows the data for black population and
+white population violate normality assumption, so we apply Levene’s test
+since non-normality in data.</p>
 <ul>
 <li><strong>Null Hypothesis (H₀):</strong> There is no difference in the
 variance of the number of children between the two age groups.</li>
@@ -3046,6 +3069,42 @@ Race</caption>
 have enough evidence to reject the null hypothesis, indicating that the
 variances of the number of children between the two age groups within
 each racial group are significantly different.</p>
+</div>
+<div id="test-for-difference-in-means" class="section level4">
+<h4>Test for Difference in Means</h4>
+<p>According to the results from previous parts, which indicate a
+violation of normality and equal variance, we choose to use the
+Mann-Whitney U test to check if the mean number of children are
+statistically different between age groups.</p>
+<ul>
+<li><strong>Null Hypothesis (H₀):</strong> There is no difference in the
+mean number of children between the two age groups.</li>
+<li><strong>Alternative Hypothesis (H₁):</strong> There is a difference
+in the mean number of children between the two age groups.</li>
+</ul>
+<table>
+<caption>Test Result for Difference in Variance between Age Groups By
+Race</caption>
+<thead>
+<tr class="header">
+<th align="left">race</th>
+<th align="left">p_value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">African American</td>
+<td align="left">5.924427e-169</td>
+</tr>
+<tr class="even">
+<td align="left">European American</td>
+<td align="left">0.000000e+00</td>
+</tr>
+</tbody>
+</table>
+<p>The p-values are both extremely small, meaning there is a very strong
+statistical difference between the two age groups (40-49 and 50-59) in
+terms of the mean number of children within each racial group.</p>
 </div>
 <div id="test-for-difference-in-zero-inflation" class="section level4">
 <h4>Test for Difference in Zero Inflation</h4>
