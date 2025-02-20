@@ -15,10 +15,11 @@ knitr::opts_chunk$set(eval = TRUE, echo = FALSE, warning = FALSE, fig.width = 7,
                       
 ```
 
-The following supplementary resource attempts to explain the statistical calculations used for the individual likelihood ratios at each locus given two known allele profiles. It uses the Weight of Evidence text as a starting and ending point to show the derivation of the standard Match Probability equation into the likelihood ratio (LR) equation we will use in our simulation. This provides a detailed explaination of why certain variables are used or not used in the calculations, and what the final numbers respresent. 
+The following supplementary resource attempts to explain the statistical calculations used for the individual likelihood ratios at each locus given two known allele profiles. It uses the Weight of Evidence text as a starting and ending point to show the derivation of the standard Match Probability equation into the likelihood ratio (LR) equation we will use in our simulation. This provides a detailed explanation of why certain variables are used or not used in the calculations, and what the final numbers represent. 
 
 
 5.6 in Weight of Evidence 
+
 
 The following equation predicts the probability that the next allele sampled in a population will be allele A, also known as the Match Probability, $M$. 
 $$
@@ -36,9 +37,7 @@ This gives us our base likelihood ratio, which we will be deriving using the equ
 $$
 R = \frac{P(profile\:c \:|\:profile\:O,\:related)}{P(profile\:c\:|\:profile\:O,\:unrelated)}
 $$
-We know related individuals will likely share a certain number of alleles due to recent common ancestors. This is known as alleles being identical by descent, or IBD, and can either be 0, 1, or 2. The probability for sharing 0, 1, or 2 alleles due to IBD is represented as $\kappa$, and will be calculated for each relationship as shown in the table below. 
-
-table
+We know related individuals will likely share a certain number of alleles due to recent common ancestors. This is known as alleles being identical by descent, or IBD, and can either be 0, 1, or 2. The probability for sharing 0, 1, or 2 alleles due to IBD is represented as $\kappa$, and will be calculated for each relationship.
 
 To determine the probability of sharing $i$ alleles for a related pair, we must multiple the probability of sharing 0, 1, or 2 alleles due to IBD by the probability of profile O having $i$ shared alleles based on profile c, and sum the possible options for all values of i. 
 
