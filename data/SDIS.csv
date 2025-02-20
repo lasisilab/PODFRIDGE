@@ -1,49 +1,27 @@
 State,N_total,N_arrestees,N_offenders,N_ForensicProfiles,arrestee_collect,fam_search,year,source,comments
-,,,,,,,,,
 Alabama,360000,,,,yes,no,2024,https://adfs.alabama.gov/services/fb/fb-statistics,
-,,,,,,,,,
 Alaska,,52149,26997,3866,yes,no,2024,https://dps.alaska.gov/Statewide/CrimeLab/Forensic-Biology/DNA,https://dps.alaska.gov/getmedia/f5f17e5a-125a-4b9f-8e24-97bb48cf08d9/Quick-Reference-Guide-for-DNA-Database-Collection.pdf; no total reported but can add offender + arrestee profiles
-,,,,,,,,,
 Arizona,,,,,yes,yes,,https://www.azdps.gov/services/governmental-services/scientific-analysis-bureau/dna-scientific-services,"numbers not explicitly listed on AZ website (only that they add 20,000 offender/arrestee samples each year to CODIS)"
-,,,,,,,,,
 Arkansas,12221,,,,yes,yes,2022,https://www.dps.arkansas.gov/wp-content/uploads/2022-ASCL-Annual-Report.pdf,https://le.fbi.gov/science-and-lab/biometrics-and-fingerprints/codis-2
-,,,,,,,,,
 California,3365402,,,167053,yes,yes,2024,https://oag.ca.gov/system/files/media/databank-quarterly-rpt-2024-q1.pdf,No stats separating arrestee from offender in their SDIS (called “Data Bank”); https://oag.ca.gov/bfs/prop69/faqs#familial
-,,,,,,,,,
 Colorado,499170,,,,yes,yes,2019,chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://spl.cde.state.co.us/artemis/psserials/ps51internet/ps512019internet.pdf,
-,,,,,,,,,
 Connecticut,20000,0,,,no,yes,2024,"https://portal.ct.gov/despp/division-of-scientific-services/_content/dna-database#:~:text=20%2C000%20profiles%20are%20currently%20entered,5%20out%20of%205%20stars","https://www.govtech.com/public-safety/connecticut-crime-lab-offers-dna-testing-funds-to-local-police#:~:text=(TNS)%20%E2%80%94%20As%20more%20and,the%20pool%20of%20potential%20suspects."
-,,,,,,,,,
 Delaware,,0,,,no,no,2023,https://forensics.delaware.gov/resources/contentFolder/pdfs/2023%20DFS%20Annual%20Report.pdf?cache=1719431746750; https://forensics.delaware.gov/sections/index.shtml?dc=DNAUnit,"Got total of 33,331 from adding together “DNA Casework samples analyzed” from 2019-2023, official total not listed, only yearly totals"
-,,,,,,,,,
 Florida,1713890,,,,yes,yes,2024,https://www.fdle.state.fl.us/Forensics/Disciplines/DNA-Database,
-,,,,,,,,,
 Georgia,347145,0,324864,22281,no,no,2017,https://gbi.georgia.gov/press-releases/2017-12-04/gbi-crime-lab-codis-records-6000th-state-offender-dna-match,"347,145 profiles, 324,864 are offender/probationer, i did the subtraction; https://www.ncsea.org/documents/Mandatory-Paternity-Testing-in-Georgia_Dec-2015.pdf"
-,,,,,,,,,
 Hawaii,,,,,no,no,,,
-,,,,,,,,,
 Idaho,39000,0,39000,,no,yes,2017,https://isp.idaho.gov/forensics/services/dna-database/,"Total offenders 39,000 as of 2017, approx 5,00 added each year;https://bja.ojp.gov/funding/awards/15pbja-22-gg-03763-saki"
-,,,,,,,,,
 Illinois,689297,0,689297,69927,no,no,2023,https://isp.illinois.gov/StaticFiles/docs/ForensicServices/Reports/2023dnareport.pdf,
-,,,,,,,,,
 Indiana,449000,144000,304000,22400,yes,yes,2024,https://www.in.gov/isp/labs/files/CODIS_Stats_05-2024.pdf,https://www.in.gov/isp/labs/files/PEB-24_Familial_Searching_11-1-23.pdf
-,,,,,,,,,
 Iowa,,0,,,no,no,,,"https://publications.iowa.gov/37872/1/FY2020%20Annual%20ReportSJ.pdf - 6,138 offender profiles
 https://publications.iowa.gov/44533/1/FY2021%20Annual%20Report%20FINAL-Reduced%20File%20Size.pdf - 5,093 offender profiles and 699 forensic profiles
 https://publications.iowa.gov/44465/1/2022AnnualReport-FINAL.pdf - 6,542 offender profiles and 645 forensic profiles"
-,,,,,,,,,
 Kansas,,,,,yes,no,,,
-,,,,,,,,,
 Kentucky,,,,,no,yes,,,
-,,,,,,,,,
 Louisiana,699618,,,,yes,yes,2022,https://www.researchgate.net/publication/359750254_Expanding_DNA_database_effectiveness,https://www.lsp.org/media/ccjlzykl/forensic-lab-services-guide-rev011223.pdf
-,,,,,,,,,
 Maine,,,,,no,no,,,
-,,,,,,,,,
 Maryland,,5525,142278,,yes,no,2022,https://mdsp.maryland.gov/Organization/Documents/2022%20Annual%20DNA%20Database%20Report.pdf,
-,,,,,,,,,
 Massachusetts,,,,,no,yes,,,"https://malegislature.gov/Bills/192/S1595 permitted in certain cases, no strict protocol"
-,,,,,,,,,
 Michigan,,,,,yes,yes,"Have totals from 2001, and then yearly additions from 2022 and 2023, missing data from 2002 through 2021",https://www.house.mi.gov/hfa/Archives/PDF/dna.pdf,"Total through 2001 - 19,904
 Arrestees 2022 - 17,215
 Offenders 2022 - 2,032
@@ -52,66 +30,34 @@ Arrestees 2023 - 18,977
 Offenders 2023 - 2,108
 Total 2023 - 21,085
 Other sources: BID Transparency reports from https://www.michigan.gov/msp/-/media/Project/Websites/msp/bid/BID_Transparency_Report.pdf?rev=a8b4342274cb4deba1f4e7e9a7263532&hash=1401CAFEE8E72815E22A74330255C901 and https://www.michigan.gov/msp/-/media/Project/Websites/msp/bid/BID---2023-Transparency-Report.pdf?rev=7c3614223b5f4edc8af2e90e644134dc&hash=37712C148914DC2190DDB8D98AAABD1A"
-,,,,,,,,,
 Minnesota,180000,0,180000,,no,yes,2021,https://dps.mn.gov/divisions/bca/bca-divisions/forensic-science/Pages/dna-codis.aspx,
-,,,,,,,,,
 Mississippi,118000,,,,yes,no,2017,https://www.dps.ms.gov/sites/dps/files/documents/DPS-FY2017-Annual-Report.pdf,
-,,,,,,,,,
 Missouri,400000,,386000,,yes,no,2020/21,https://www.mshp.dps.missouri.gov/MSHPWeb/PatrolDivisions/CLD/,"https://www.mshp.dps.missouri.gov/MSHPWeb/PatrolDivisions/CLD/documents/CrimeLabDivision-History.pdf, total is from at least 2021"
-,,,,,,,,,
 Montana,32284,0,32284,878,no,no,2016,https://leg.mt.gov/content/Committees/Interim/2015-2016/Law-and-Justice/Meetings/Apr-2016/Exhibits/MrPasternakPresentation.pdf,"https://www.eff.org/deeplinks/2023/08/montanas-new-genetic-privacy-law-caps-ten-years-innovative-state-privacy#:~:text=In%202021%2C%20Montana%20expressly%20restricted,databases%20like%20genetic%20genealogy%20sites. - https://leg.mt.gov/bills/mca/title_0440/chapter_0060/part_0010/section_0040/0440-0060-0010-0040.html
 https://dojmt.gov/wp-content/uploads/DNA-eligibility-flowchart.pdf5"
-,,,,,,,,,
 Nebraska,,,,,no,,,,
-,,,,,,,,,
 Nevada,245000,,,,yes,no,2024,https://www.lvmpd.com/about/bureaus/forensic-laboratory/biology-dna,
-,,,,,,,,,
 New Hampshire,,,,,no,no,,,
-,,,,,,,,,
 New Jersey,32696,,,,yes,no,2023,https://nj.gov/njsp/about/pdf/2023_njsp_AnnualReport.pdf,"In 2023, 9,821 profiles were uploaded to the state database. can see this number for each year via NJSP Annual Reports"
-,,,,,,,,,
 New Mexico,,,,,yes,no,,,
-,,,,,,,,,
 New York,,,,,no,yes,,,
-,,,,,,,,,
 North Carolina,350000,50000,300000,,yes,yes,2024,https://ncdoj.gov/crime-lab/dna-database/,
-,,,,,,,,,
 North Dakota,,,,,yes,no,,,
-,,,,,,,,,
 Ohio,,,,,yes,yes,,,
-,,,,,,,,,
 Oklahoma,,,,,yes,no,,,
-,,,,,,,,,
 Oregon,,,,,no,no,,,
-,,,,,,,,,
 Pennsylvania,,,,,no,,,,
-,,,,,,,,,
 Puerto Rico,,,,,yes,,,,
-,,,,,,,,,
 Rhode Island,27818,484,27334,1798,yes,no,2024,https://health.ri.gov/programs/detail.php?pgm_id=1096,could be NDIS stats
-,,,,,,,,,
 South Carolina,175629,,,11127,yes,no,2013,https://dc.statelibrary.sc.gov/bitstreams/0e04a987-c9a7-433d-938d-d77d19a90460/download,"https://dc.statelibrary.sc.gov/bitstreams/29d147a1-3db5-42e8-a8b1-f785250892ec/download, SC uploaded 16,713 new samples to law enforcement agencies. In 2013, projected increase in sample volume from 10,000 to 20,000 samples per year"
-,,,,,,,,,
 South Dakota,56200,,,,yes,yes,2024,https://atg.sd.gov/LawEnforcement/Forensics/codis.aspx#gsc.tab=0,
-,,,,,,,,,
 Tennessee,,226569,292045,,yes,no,2022,https://www.tn.gov/content/dam/tn/tbi/documents/Annual%20report%202021-2022%20final%20secured.pdf,https://wapp.capitol.tn.gov/apps/Billinfo/default.aspx?BillNumber=HB2059&ga=107
-,,,,,,,,,
 Texas,1213618,,,,yes,yes,2024,https://txdpslabs.qualtraxcloud.com/ShowDocument.aspx?ID=56262,monthly stats published; https://txdpslabs.qualtraxcloud.com/showdocument.aspx?ID=152449
-,,,,,,,,,
 Utah,,,,,yes,yes,,,"https://universe.byu.edu/2020/01/23/from-partial-matches-to-familial-dna-how-forensic-genealogy-is-revolutionizing-the-way-the-united-states-solves-crimes/#:~:text=Utah%20began%20the%20practice%20of,databases%20could%20still%20be%20searched."
-,,,,,,,,,
 Vermont,,,,,no,no,,,
-,,,,,,,,,
 Virginia,509009,,,,yes,yes,2024,https://dfs.virginia.gov/laboratory-forensic-services/dna-databank/data-bank-statistics/dna-databank-statistics/,
-,,,,,,,,,
 Washington,272000,0,272000,8800,no,no,2017,https://www.wsp.wa.gov/forensics/docs/crimelab/conv_off_dna_ppt.pdf,https://www.wsp.wa.gov/2021-crime-lab-ar/
-,,,,,,,,,
 Washington DC,,,,,,no,,,https://archive.gfjc.fiu.edu/fse/13/13-10.html
-,,,,,,,,,
 West Virginia,47444,0,47444,3905,no,no,2023,https://www.wvsp.gov/departments/laboratory/Documents/WV%20CODIS%20Brochure%202.1.24.pdf,
-,,,,,,,,,
-,,,,,,,,,
-,,,,,,,,,
 Wisconsin,,,,,yes,yes,,,
-,,,,,,,,,
 Wyoming,,,,,no,yes,,,

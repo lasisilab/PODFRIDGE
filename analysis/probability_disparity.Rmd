@@ -24,7 +24,7 @@ We establish a theoretical binomial model $\text{Bin}(K,p)$ to calculate the pro
 
 1.  In the current generation, the population size is $N$, and the racial proportion of the population is $\alpha$.
 
-2.  The database has $K$ individuals, and the racial proportion of the database is $\beta$. The database is randomly sampled from the current population. Both the population proportion $\alpha$ and the database proportion $\beta$ are considered fixed constants.
+2.  The database has $K$ individuals, and the racial proportion of the database is $\beta$. For a given race, the database is randomly sampled from the current population. Both the population proportion $\alpha$ and the database proportion $\beta$ are considered fixed constants.
 
 3.  The family trees of different races are strictly separated. For instance, the ancestors and descendants of black Americans are also black Americans.
 

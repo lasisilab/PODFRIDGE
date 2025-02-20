@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Junhui He" />
+
+<meta name="date" content="2025-02-17" />
+
+<title>Disparities in Short-Range Familial Searches</title>
+
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.5.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">PODFRIDGE</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/lasisilab/PODFRIDGE">
+    <span class="fab fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Disparities in Short-Range Familial
+Searches</h1>
+<h4 class="author">Junhui He</h4>
+<h4 class="date">2025-02-17</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2025-02-17
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>PODFRIDGE/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20230302code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20230302)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20230302code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20230302)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreea233b4f2808d6ddcc712dd45ad177b01f0db1ce4targetblanka233b4fa">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/a233b4f2808d6ddcc712dd45ad177b01f0db1ce4" target="_blank">a233b4f</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreea233b4f2808d6ddcc712dd45ad177b01f0db1ce4targetblanka233b4fa"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/a233b4f2808d6ddcc712dd45ad177b01f0db1ce4" target="_blank">a233b4f</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    analysis/.Rhistory
+
+Unstaged changes:
+    Modified:   PODFRIDGE.Rproj
+    Modified:   analysis/probability_disparity.Rmd
+    Modified:   analysis/racial_proportion.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+There are no past versions. Publish this analysis with
+<code>wflow_publish()</code> to start tracking its development.
+</p>
+<hr>
+</div>
+</div>
+</div>
+<div id="objective" class="section level2">
+<h2>1 Objective</h2>
+<p>We aims to examines disparities in the probability of detecting an
+individual through short-range familial searches using forensic DNA
+databases for Black and White Americans. This analysis integrates
+forensic database sizes, forensic database representation (from Result
+1), family size distributions (from Result 2), and considers different
+levels of true positive rates in determining a familial relationship of
+a particular kind.</p>
+</div>
+<div id="model-assumptions" class="section level2">
+<h2>2 Model assumptions</h2>
+<ol style="list-style-type: decimal">
+<li><p>The population size is <span class="math inline">\(N\)</span>,
+and the racial proportion of the population is <span
+class="math inline">\(\alpha\)</span>.</p></li>
+<li><p>The database has <span class="math inline">\(K\)</span>
+individuals, and the racial proportion of the database is <span
+class="math inline">\(\beta\)</span>. For a given race, the database is
+randomly sampled from the current population. Both the population
+proportion <span class="math inline">\(\alpha\)</span> and the database
+proportion <span class="math inline">\(\beta\)</span> are considered
+fixed constants.</p></li>
+<li><p>The family trees of different races are strictly separated. For
+instance, the parents and siblings of black Americans are black
+Americans, while the parents and siblings of white Americans are white
+Americans.</p></li>
+<li><p>The number of siblings is <span class="math inline">\(r\)</span>,
+which is assumed to follow a multinomial distribution. In this model,
+the distribution of <span class="math inline">\(r\)</span> is estimated
+based on the number of children born to women aged 40-49 in 1990 minus
+one.</p></li>
+<li><p>In the short-range familial search, we only consider the
+individual self, the parents and full siblings for detection.</p></li>
+<li><p>All related individuals are alive in the population.</p></li>
+<li><p><span style="color:red"> The definition of detection: <span> If
+we have one correct match, we declare that there is sufficient
+information to detect the target, regardless of whether or not we have
+any incorrect match.</p></li>
+</ol>
+</div>
+<div id="derivation" class="section level2">
+<h2>3 Derivation</h2>
+<p>The derivation of the detection probability is based on <a
+href="https://lasisilab.github.io/PODFRIDGE/final_equation.html">Population
+Estimation of Genetic Surveillance Equation</a>.</p>
+<div id="the-probability-of-any-individual-present-in-a-database"
+class="section level3">
+<h3>3.1 The probability of any individual present in a database</h3>
+<p>According to Assumptions 1 and 2, for the given race, there are <span
+class="math inline">\(\alpha N\)</span> individuals in the population
+and <span class="math inline">\(\beta K\)</span> individuals in the
+database. Because of the randomly sampling, the probability of any
+individual present in a database is <span
+class="math inline">\(P(\text{present})=\frac{\beta K}{\alpha
+N}.\)</span></p>
+</div>
+<div
+id="the-probability-of-a-certain-number-of-individuals-among-a-group-present-in-a-database"
+class="section level3">
+<h3>3.2 The probability of a certain number of individuals among a group
+present in a database</h3>
+<p>Assume the group consists of <span class="math inline">\(n\)</span>
+individuals. We establish a binomial model for the number of individuals
+<span class="math inline">\(k\)</span> among this group present in a
+database, i.e., <span class="math inline">\(k\sim \text{Bin}(n,
+P(\text{present}))\)</span>. Thus, the probability of a certain number
+of individuals among a group present in a database is <span
+class="math inline">\(\text{Bin}(k;n,P(\text{present})).\)</span></p>
+</div>
+<div
+id="the-probability-of-at-least-one-individual-among-a-group-detected-in-a-database"
+class="section level3">
+<h3>3.3 The probability of at least one individual among a group
+detected in a database</h3>
+<p>Suppose the detection probability given a kind of relationship is
+<span class="math inline">\(P(\text{detect}|\text{a
+relationship})\)</span>. Based on the Bayes formula, the probability of
+at least one individual among a group detected in a database is given as
+<span class="math display">\[P(\text{detect at least one individual
+among a group in a database})\\=\sum_{k=1}^n P(\text{detect at least one
+individual | k individuals present})P(\text{k individuals
+present})\\=\sum_{k=1}^n
+\text{Bin}(k;n,P(\text{present}))\{1-(1-P(\text{detect}|\text{a
+relationship}))^k\}.\]</span></p>
+</div>
+<div
+id="the-probability-of-detecting-an-individual-in-a-database-through-short-range-familial-search"
+class="section level3">
+<h3>3.4 The probability of detecting an individual in a database through
+short-range familial search</h3>
+<p>The probability of an individual being detected in the database is
+comprised of three separate probabilities: (1) the probability of the
+individual self being in the database, (2) the probability of being
+detected due to one or both parents being in the database, and (3) the
+probability of being detected due to one or more siblings being present
+in the database.</p>
+<p>Assume that the individual self and the parents can be detected in a
+full probability, i.e., <span
+class="math inline">\(P(\text{detect}|\text{individual self, or
+parents})=1\)</span>. Therefore, the detection probability due to the
+individual self or one or both parents being in the database is given by
+<span
+class="math inline">\(1-\text{Bin}(0;3,P(\text{present})).\)</span>
+According to Section 3.3, assuming <span
+class="math inline">\(r\)</span> siblings, the detection probability due
+to one or more siblings being present in the database is given by <span
+class="math inline">\(\sum_{k=1}^r
+\text{Bin}(k;r,P(\text{present}))\{1-(1-P(\text{detect}|\text{a
+sibling}))^k\}.\)</span></p>
+<p>Consequently, the probability of detecting an individual in a
+database through short-range familial search is <span
+class="math display">\[P(\text{detect})=1-\left(1-\frac{\beta K}{\alpha
+N}\right)^3 \\ + \sum_{n=1}^{r_\max} \left[P(r=n)\sum_{k=1}^n {n \choose
+k} (\frac{\beta K}{\alpha N})^k(1-\frac{\beta K}{\alpha N})^{n-k}
+\{1-(1-P(\text{detect}|\text{a sibling}))^k\}\right].\]</span></p>
+</div>
+</div>
+<div
+id="hypothesis-testing-in-determining-a-familial-relationship-with-forensic-str-loci"
+class="section level2">
+<h2>4 Hypothesis testing in determining a familial relationship with
+forensic STR loci</h2>
+<p>The short-range familial search utilizes a hypothesis testing to
+determine a familial relationship of a particular kind. Especially, for
+a pair of individuals, <span class="math display">\[H_0:\text{unrelated
+pairs}\leftrightarrow H_1:  \text{detecting a certain familial
+relationship}.\]</span> Therefore, the detection probability given a
+relationship is the so-called true positive rate, <span
+class="math inline">\(P(\text{accept } H_1|H_1\text{ is
+true})\)</span>.</p>
+<p>In literature, the short-range familial search conducts a likelihood
+ratio test. The true positive rate will depend on the number of STR
+loci, population allele frequency differences and cutoff thresholds. See
+Result 4 for further discussions.</p>
+<p><strong>Remark:</strong> Assumption 7 implies that the false positive
+rate, <span class="math inline">\(P(\text{accept }H_1 | H_0 \text{ is
+true})\)</span>, does not influence the probability of detecting an
+individual.</p>
+</div>
+<div id="experimental-results" class="section level2">
+<h2>5 Experimental results</h2>
+<p>We focus on short-range familial search in the United States, using
+the U.S. Census population as the total population size, given as <span
+class="math inline">\(N=331,449,281\)</span>. The racial composition is
+<span
+class="math display">\[\alpha_{black}=12.05021\%,~\alpha_{white}=57.83619\%,~\alpha_{other}=30.1136\%,\]</span>
+where <span class="math inline">\(\alpha_i\)</span> indicates the
+proportion of race <span class="math inline">\(i\)</span> in the
+population.</p>
+<p>Our analysis examines how family size distributions, database
+representation and the probability of detecting a sibling influence the
+probability of detecting an individual in a database. We consider two
+scenarios for database representation:</p>
+<ul>
+<li><p>Ideal case: All racial groups are proportionally represented in
+the database, meaning <span
+class="math inline">\(\beta_{black}=\alpha_{black}\)</span> and <span
+class="math inline">\(\beta_{white}=\alpha_{white}\)</span>.</p></li>
+<li><p>Real case: In the real forensic database, Black Americans are
+overrepresented, while White Americans are underrepresented. The exact
+values of <span class="math inline">\(\beta\)</span> depend on the
+specific database available. For this analysis, we take the values where
+<span
+class="math inline">\(\beta_{black}=25\%,~\beta_{white}=45\%.\)</span></p></li>
+</ul>
+<p>In our analysis, the maximum database size is set to <span
+class="math inline">\(K=0.1*N=33,144,928\)</span>. Thus, the range of
+database size is <span class="math inline">\([0,0.1*N].\)</span>
+Moreover, for the detection probability of a sibling, we consider three
+settings where <span class="math inline">\(P(\text{detect}|\text{a
+sibling})=20\%,~50\%,~\text{and}~90\%.\)</span></p>
+<div
+id="detection-probabilities-without-considering-representation-disparities"
+class="section level3">
+<h3>4.1 Detection probabilities without considering representation
+disparities</h3>
+<p>In this subsection, we assume that the population and database have
+the same representation. The database proportions <span
+class="math inline">\(\beta\)</span> are set equal to the population
+proportions <span class="math inline">\(\alpha\)</span> in the
+calculation of detection probabilities. These results are utilized to
+explore the solely influence of disparities in the family sizes.</p>
+<p>The probabilities of detecting an individual given a certain level of
+true positive rates from a forensic database without representation
+disparities through short-range familial search.</p>
+<p><img src="figure/short-range-disparity.Rmd/plot-probability-1-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="detection-probabilities-considering-representation-disparities"
+class="section level3">
+<h3>4.2 Detection probabilities considering representation
+disparities</h3>
+<p>In this subsection, we assume that representation disparities exist
+between the Census population and the forensic database. Specifically,
+Black Americans are overrepresented, while White Americans are
+underrepresented in the database. We calculate the probabilities of
+detecting an individual by treating <span
+class="math inline">\(\alpha\)</span> and <span
+class="math inline">\(\beta\)</span> fixed as constants.</p>
+<p>The probabilities of detecting an individual given a certain level of
+true positive rates from a forensic database with representation
+disparities through short-range familial search.</p>
+<p><img src="figure/short-range-disparity.Rmd/plot-probability-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="conclusions" class="section level3">
+<h3>4.3 Conclusions</h3>
+<ol style="list-style-type: decimal">
+<li><p>Without accounting for representation disparities, the detection
+probability for Black Americans is slightly higher than that for White
+Americans, as Black Americans have mildly more siblings than White
+Americans.</p></li>
+<li><p>Considering representation disparities, the detection probability
+for Black Americans is significantly higher than that for White
+Americans, as black Americans are overrepresented while white Americans
+are underrepresented.</p></li>
+<li><p>The detection probability increases with the true positive
+rate.</p></li>
+</ol>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre><code>R version 4.4.2 (2024-10-31 ucrt)
+Platform: x86_64-w64-mingw32/x64
+Running under: Windows 10 x64 (build 19045)
+
+Matrix products: default
+
+
+locale:
+[1] LC_COLLATE=Chinese (Simplified)_China.utf8 
+[2] LC_CTYPE=Chinese (Simplified)_China.utf8   
+[3] LC_MONETARY=Chinese (Simplified)_China.utf8
+[4] LC_NUMERIC=C                               
+[5] LC_TIME=Chinese (Simplified)_China.utf8    
+
+time zone: America/New_York
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] ggpubr_0.6.0    ggplot2_3.5.1   workflowr_1.7.1
+
+loaded via a namespace (and not attached):
+ [1] tidyr_1.3.1       sass_0.4.9        utf8_1.2.4        generics_0.1.3   
+ [5] rstatix_0.7.2     stringi_1.8.4     digest_0.6.37     magrittr_2.0.3   
+ [9] evaluate_1.0.1    grid_4.4.2        fastmap_1.2.0     rprojroot_2.0.4  
+[13] jsonlite_1.8.9    processx_3.8.4    whisker_0.4.1     backports_1.5.0  
+[17] Formula_1.2-5     ps_1.8.1          promises_1.3.2    httr_1.4.7       
+[21] purrr_1.0.2       fansi_1.0.6       scales_1.3.0      jquerylib_0.1.4  
+[25] abind_1.4-8       cli_3.6.3         rlang_1.1.4       munsell_0.5.1    
+[29] withr_3.0.2       cachem_1.1.0      yaml_2.3.10       tools_4.4.2      
+[33] ggsignif_0.6.4    dplyr_1.1.4       colorspace_2.1-1  httpuv_1.6.15    
+[37] broom_1.0.7       vctrs_0.6.5       R6_2.5.1          lifecycle_1.0.4  
+[41] git2r_0.35.0      stringr_1.5.1     car_3.1-3         fs_1.6.5         
+[45] pkgconfig_2.0.3   callr_3.7.6       pillar_1.9.0      bslib_0.8.0      
+[49] later_1.4.1       gtable_0.3.6      glue_1.8.0        Rcpp_1.0.13-1    
+[53] xfun_0.49         tibble_3.2.1      tidyselect_1.2.1  rstudioapi_0.17.1
+[57] knitr_1.49        farver_2.1.2      htmltools_0.5.8.1 labeling_0.4.3   
+[61] carData_3.0-5     rmarkdown_2.29    compiler_4.4.2    getPass_0.2-4    </code></pre>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
