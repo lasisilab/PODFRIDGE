@@ -11,7 +11,7 @@
 
 <meta name="author" content="Junhui He" />
 
-<meta name="date" content="2025-02-22" />
+<meta name="date" content="2025-03-01" />
 
 <title>Disparities in Short-Range Familial Searches</title>
 
@@ -356,7 +356,7 @@ div.tocify {
 <h1 class="title toc-ignore">Disparities in Short-Range Familial
 Searches</h1>
 <h4 class="author">Junhui He</h4>
-<h4 class="date">2025-02-22</h4>
+<h4 class="date">2025-03-01</h4>
 
 </div>
 
@@ -385,7 +385,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-02-22
+<strong>Last updated:</strong> 2025-03-01
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -516,15 +516,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreea67a6139faf82312d33d24f6da99a4bc52ab27adtargetblanka67a613a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree887220433768aad4afd56c55d8b52401fca02a47targetblank8872204a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/a67a6139faf82312d33d24f6da99a4bc52ab27ad" target="_blank">a67a613</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/887220433768aad4afd56c55d8b52401fca02a47" target="_blank">8872204</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreea67a6139faf82312d33d24f6da99a4bc52ab27adtargetblanka67a613a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree887220433768aad4afd56c55d8b52401fca02a47targetblank8872204a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -534,7 +534,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/a67a6139faf82312d33d24f6da99a4bc52ab27ad" target="_blank">a67a613</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/887220433768aad4afd56c55d8b52401fca02a47" target="_blank">8872204</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -549,10 +549,9 @@ were generated:
 </p>
 <pre><code>
 Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-
-Unstaged changes:
-    Modified:   PODFRIDGE.Rproj
 
 </code></pre>
 <p>
@@ -597,6 +596,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/887220433768aad4afd56c55d8b52401fca02a47/analysis/short-range-disparity.Rmd" target="_blank">8872204</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-03-01
+</td>
+<td>
+modify short-range-disparity report
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/e711b4e6b790e0dda95bc86459e20e4d26ed715d/docs/short-range-disparity.html" target="_blank">e711b4e</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-02-22
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -682,254 +715,117 @@ fixed constants.</p></li>
 instance, the parents and siblings of black Americans are black
 Americans, while the parents and siblings of white Americans are white
 Americans.</p></li>
-<li><p>The number of siblings is <span class="math inline">\(r\)</span>,
-which is assumed to follow a multinomial distribution. In this model,
-the distribution of <span class="math inline">\(r\)</span> is estimated
-based on the number of children born to women aged 40-49 in 1990 minus
-one.</p></li>
+<li><p>The number of siblings is assumed to follow a multinomial
+distribution. In this model, the distribution is estimated based on the
+number of children born to women aged 50-59 in 1990 minus one.</p></li>
 <li><p>In the short-range familial search, we only consider the
 individual self, the parents and full siblings for detection.</p></li>
 <li><p>All related individuals are alive in the population.</p></li>
-<li><p><span style="color:red"> The definition of detection: <span> If
-we have one correct match, we declare that there is sufficient
-information to detect the target, regardless of whether or not we have
-any incorrect match.</p></li>
 </ol>
-</div>
-<div id="derivation" class="section level2">
-<h2>3 Derivation</h2>
-<p>The derivation of the detection probability is based on <a
-href="https://lasisilab.github.io/PODFRIDGE/final_equation.html">Population
-Estimation of Genetic Surveillance Equation</a>.</p>
-<div id="the-probability-of-any-individual-present-in-a-database"
-class="section level3">
-<h3>3.1 The probability of any individual present in a database</h3>
-<p>According to Assumptions 1 and 2, for the given race, there are <span
-class="math inline">\(\alpha N\)</span> individuals in the population
-and <span class="math inline">\(\beta K\)</span> individuals in the
-database. Because of the randomly sampling, the probability of any
-individual present in a database is <span
-class="math inline">\(P(\text{present})=\frac{\beta K}{\alpha
-N}.\)</span></p>
-</div>
-<div
-id="the-probability-of-a-certain-number-of-individuals-among-a-group-present-in-a-database"
-class="section level3">
-<h3>3.2 The probability of a certain number of individuals among a group
-present in a database</h3>
-<p>Assume the group consists of <span class="math inline">\(n\)</span>
-individuals. We establish a binomial model for the number of individuals
-<span class="math inline">\(k\)</span> among this group present in a
-database, i.e., <span class="math inline">\(k\sim \text{Bin}(n,
-P(\text{present}))\)</span>. Thus, the probability of a certain number
-of individuals among a group present in a database is <span
-class="math inline">\(\text{Bin}(k;n,P(\text{present})).\)</span></p>
-</div>
-<div
-id="the-probability-of-at-least-one-individual-among-a-group-detected-in-a-database"
-class="section level3">
-<h3>3.3 The probability of at least one individual among a group
-detected in a database</h3>
-<p>Suppose the detection probability given a kind of relationship is
-<span class="math inline">\(P(\text{detect}|\text{a
-relationship})\)</span>. Based on the Bayes formula, the probability of
-at least one individual among a group detected in a database is given as
-<span class="math display">\[P(\text{detect at least one individual
-among a group in a database})\\=\sum_{k=1}^n P(\text{detect at least one
-individual | k individuals present})P(\text{k individuals
-present})\\=\sum_{k=1}^n
-\text{Bin}(k;n,P(\text{present}))\{1-(1-P(\text{detect}|\text{a
-relationship}))^k\}.\]</span></p>
-</div>
-<div
-id="the-probability-of-detecting-an-individual-in-a-database-through-short-range-familial-search"
-class="section level3">
-<h3>3.4 The probability of detecting an individual in a database through
-short-range familial search</h3>
-<p>The probability of an individual being detected in the database is
-comprised of three separate probabilities: (1) the probability of the
-individual self being in the database, (2) the probability of being
-detected due to one or both parents being in the database, and (3) the
-probability of being detected due to one or more siblings being present
-in the database.</p>
-<p>Assume that the individual self and the parents can be detected in a
-full probability, i.e., <span
-class="math inline">\(P(\text{detect}|\text{individual self, or
-parents})=1\)</span>. Therefore, the detection probability due to the
-individual self or one or both parents being in the database is given by
-<span
-class="math inline">\(1-\text{Bin}(0;3,P(\text{present})).\)</span>
-According to Section 3.3, assuming <span
-class="math inline">\(r\)</span> siblings, the detection probability due
-to one or more siblings being present in the database is given by <span
-class="math inline">\(\sum_{k=1}^r
-\text{Bin}(k;r,P(\text{present}))\{1-(1-P(\text{detect}|\text{a
-sibling}))^k\}.\)</span></p>
-<p>Consequently, the probability of detecting an individual in a
-database through short-range familial search is <span
-class="math display">\[P(\text{detect})=1-\left(1-\frac{\beta K}{\alpha
-N}\right)^3 \\ + \sum_{n=1}^{r_\max} \left[P(r=n)\sum_{k=1}^n {n \choose
-k} (\frac{\beta K}{\alpha N})^k(1-\frac{\beta K}{\alpha N})^{n-k}
-\{1-(1-P(\text{detect}|\text{a sibling}))^k\}\right].\]</span></p>
-</div>
 </div>
 <div
 id="hypothesis-testing-in-determining-a-familial-relationship-with-forensic-str-loci"
 class="section level2">
-<h2>4 Hypothesis testing in determining a familial relationship with
+<h2>3 Hypothesis testing in determining a familial relationship with
 forensic STR loci</h2>
 <p>The short-range familial search utilizes a hypothesis testing to
-determine a familial relationship of a particular kind. Especially, for
-a pair of individuals, <span class="math display">\[H_0:\text{unrelated
-pairs}\leftrightarrow H_1:  \text{detecting a certain familial
-relationship}.\]</span> Therefore, the detection probability given a
-relationship is the so-called true positive rate, <span
-class="math inline">\(P(\text{accept } H_1|H_1\text{ is
-true})\)</span>.</p>
-<p>In literature, the short-range familial search conducts a likelihood
-ratio test. The true positive rate will depend on the number of STR
-loci, population allele frequency differences and cutoff thresholds. See
-Result 4 for further discussions.</p>
-<p><strong>Remark:</strong> Assumption 7 implies that the false positive
-rate, <span class="math inline">\(P(\text{accept }H_1 | H_0 \text{ is
-true})\)</span>, does not influence the probability of detecting an
-individual.</p>
-</div>
-<div id="experimental-results" class="section level2">
-<h2>5 Experimental results</h2>
-<p>We focus on short-range familial search in the United States, using
-the U.S. Census population as the total population size, given as <span
-class="math inline">\(N=331,449,281\)</span>. The racial composition is
-<span
-class="math display">\[\alpha_{black}=12.05\%,~\alpha_{white}=57.84\%,~\alpha_{other}=30.11\%,\]</span>
-where <span class="math inline">\(\alpha_i\)</span> indicates the
-proportion of race <span class="math inline">\(i\)</span> in the
-population.</p>
-<p>Our analysis examines how family size distributions, database
-representation and the probability of detecting a sibling influence the
-probability of detecting an individual in a database. We consider two
-scenarios for database representation:</p>
-<ul>
-<li><p>Ideal case: All racial groups are proportionally represented in
-the database, meaning <span
-class="math inline">\(\beta_{black}=\alpha_{black}\)</span> and <span
-class="math inline">\(\beta_{white}=\alpha_{white}\)</span>.</p></li>
-<li><p>Real case: In the real forensic database, Black Americans are
-overrepresented, while White Americans are underrepresented. The exact
-values of <span class="math inline">\(\beta\)</span> depend on the
-specific database available. For this analysis, we take the values based
-on the <a
-href="https://lasisilab.github.io/PODFRIDGE/racial_proportion.html">prediction
-of racial proportions of each state in the CODIS forensic
-database</a>.</p></li>
-</ul>
-<p>Especially, we consider <span
-class="math inline">\(25\%,~50\%,~75\%\)</span> quantiles of the
-absolute difference of racial proportions between forensic database and
-Census database, corresponding to the database representation <span
-class="math inline">\(\beta^1_{black}=20.42\%,~\beta^1_{white}=56.50\%,
-\quad \beta^2_{black}=24.50\%,~\beta^2_{white}=49.76\%\)</span> and
-<span
-class="math inline">\(\beta^3_{black}=28.97\%,~\beta^3_{white}=39.26\%\)</span>.</p>
-<p>In our analysis, the maximum database size is set to <span
-class="math inline">\(K=0.1*N=33,144,928\)</span>. Thus, the range of
-database size is <span class="math inline">\([0,0.1*N].\)</span>
-Moreover, for the detection probability of a sibling, we consider three
-settings where <span class="math inline">\(P(\text{detect}|\text{a
-sibling})=20\%,~50\%,~\text{and}~90\%.\)</span></p>
-<div id="distribution-of-number-of-siblings" class="section level3">
-<h3>5.1 Distribution of number of siblings</h3>
-<p><img src="figure/short-range-disparity.Rmd/sibling-number-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>Since the proportion of individuals with more than <span
-class="math inline">\(11\)</span> siblings is extremely small (i.e.,
-nearly zero), we believe that <span style="color:red;">a simple
-multinomial distribution</span> is appropriate for modeling the number
-of siblings.</p>
-</div>
-<div
-id="detection-probabilities-without-considering-representation-disparities"
-class="section level3">
-<h3>5.2 Detection probabilities without considering representation
-disparities</h3>
-<p>In this subsection, we assume that the population and database have
-the same representation. The database proportions <span
-class="math inline">\(\beta\)</span> are set equal to the population
-proportions <span class="math inline">\(\alpha\)</span> in the
-calculation of detection probabilities. These results are utilized to
-explore the solely influence of disparities in the family sizes.</p>
-<p>The probabilities of detecting an individual given a certain level of
-true positive rates from a forensic database without representation
-disparities through short-range familial search.</p>
-<p><img src="figure/short-range-disparity.Rmd/plot-probability-1-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plot-probability-1-1">
-Past versions of plot-probability-1-1.png
-</button>
-</p>
-<div id="fig-plot-probability-1-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/bd3ef154793a489789542a69cc11bf9d836f7d96/docs/figure/short-range-disparity.Rmd/plot-probability-1-1.png" target="_blank">bd3ef15</a>
-</td>
-<td>
-He Junhui
-</td>
-<td>
-2025-02-17
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-<div id="detection-probabilities-considering-representation-disparities"
-class="section level3">
-<h3>5.3 Detection probabilities considering representation
-disparities</h3>
-<p>In this subsection, we assume that representation disparities exist
-between the Census population and the forensic database. Specifically,
-Black Americans are overrepresented, while White Americans are
-underrepresented in the database. We calculate the probabilities of
-detecting an individual by treating <span
-class="math inline">\(\alpha\)</span> and <span
-class="math inline">\(\beta\)</span> fixed as constants.</p>
-<p>The probabilities of detecting an individual given a certain level of
-true positive rates from a forensic database with representation
-disparities through short-range familial search.</p>
-<p>From left to right, the panels in the following figure correspond to
-forensic database representation :</p>
+determine a familial relationship of a particular kind. Specifically,
+for a pair of individuals, consider the following null and alternative
+hypothesis: <span class="math display">\[H_0:\text{unrelated
+pairs}\leftrightarrow H_1:  \text{exist a certain familial
+relationship}.\]</span> The kinds of familial relationship involved in
+short-range familial search contain the individual, parents and full
+siblings.</p>
+<p>When the alternative hypothesis is accepted, there is supposed to
+exist a certain kind of relationship between the pair of individuals,
+and we call it a positive test. There are two possibilities for a
+positive test:</p>
 <ol style="list-style-type: decimal">
-<li><p><span
-class="math inline">\(\beta^1_{black}=20.42\%,~\beta^1_{white}=56.50\%.\)</span></p></li>
-<li><p><span
-class="math inline">\(\beta^2_{black}=24.50\%,~\beta^2_{white}=49.76\%.\)</span></p></li>
-<li><p><span
-class="math inline">\(\beta^3_{black}=28.97\%,~\beta^3_{white}=39.26\%.\)</span></p></li>
+<li>False positive: The two individuals are unrelated in fact, but the
+test claims they are related mistakenly.</li>
+<li>True positive: The two individuals are related and the test detects
+their relationship correctly.</li>
 </ol>
-<p><img src="figure/short-range-disparity.Rmd/plot-probability-2-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>In this analysis, we denote the True Positive Rate as TPR, and denote
+the False Positive Rate as FPR. The short-range familial search conducts
+a likelihood ratio test (LRT) to detect the relationship. The
+performance of LRT will depend on many factors, including the familial
+relationshiop considered in the test, the number of STR loci, population
+allele frequency differences and cutoff thresholds. See Result 4 for
+further discussions.</p>
+</div>
+<div id="the-detection-probability" class="section level2">
+<h2>4 The detection probability</h2>
+<div id="definition" class="section level3">
+<h3>4.1 Definition</h3>
+<p>Before our formal derivation, we have to define the concept of a
+detection. A detection, or a match is the decision that we accept the
+alternative hypothesis in the likelihood ratio test. Consequently, a
+detection is equivalent to a positive test. A detection contains two
+possible cases: (1) correct detection, corresponding to true positive;
+(2) incorrect detection, corresponding to false positive.</p>
+</div>
+<div id="derivation" class="section level3">
+<h3>4.2 Derivation</h3>
+<p>We give a step-by-step derivation for the detection probability in a
+database.</p>
+<ol style="list-style-type: decimal">
+<li><p>For any random person, the probability of the event {A person is
+present in a database} is <span
+class="math inline">\(P(present)=\frac{\beta K}{\alpha N}\)</span>,
+where <span class="math inline">\(K\)</span> is the database size, <span
+class="math inline">\(N\)</span> is the population size, <span
+class="math inline">\(\beta\)</span> and <span
+class="math inline">\(\alpha\)</span> and racial proportions in the
+database and population.</p></li>
+<li><p>Suppose the individual has <span class="math inline">\(n\)</span>
+relatives. The probability of the event {<span
+class="math inline">\(k\)</span> relatives present in the database,
+<span class="math inline">\(n-k\)</span> relatives absent in the
+database | <span class="math inline">\(n\)</span> relatives} is <span
+class="math inline">\(Bin(k;n,P(present))={n \choose k}
+P(present)^k(1-P(present))^{n-k}\)</span>.</p></li>
+<li><p>Suppose <span class="math inline">\(k\)</span> relatives are
+present in the database and <span class="math inline">\(n-k\)</span>
+relatives are absent in the database. The number of detection inside and
+outside the database follows <span class="math inline">\(Bin(k,
+TPR)\)</span> and <span class="math inline">\(Bin(n-k, FPR)\)</span>,
+respectively. Thus, the probability of the event {at least one detection
+| <span class="math inline">\(k\)</span> relatives present in the
+database, <span class="math inline">\(n-k\)</span> relatives absent in
+the database} is <span class="math inline">\(1 -
+(1-TPR)^k(1-FPR)^{n-k}\)</span>.</p></li>
+<li><p>For a given short-range familial relationship, the probability of
+the event {at least one detection of a certain relationship} is <span
+class="math display">\[P(at~least~one~detection~of~a~certain~relationship)=\\\sum_{n=1}^{n_\max}P(n~relatives)\sum_{k=0}^nBin(k;n,P(present))\{1
+- (1-TPR)^k(1-FPR)^{n-k}\}.\]</span></p></li>
+<li><p>The probability of the event {at least one detection} is the sum
+of the probability in Step 4 across relationships of the individual,
+parents and full sibling.</p></li>
+</ol>
+</div>
+</div>
+<div id="experiments" class="section level2">
+<h2>5 Experiments</h2>
+<p>We focus on short-range familial search in the United States, and
+will calculate the detection probabilities for Black and White Americans
+state-by-state.</p>
+<div id="settings" class="section level3">
+<h3>5.1 Settings</h3>
+<p>Our analysis examines how family size distributions, database
+representation and true/false positive rate influence the probability of
+detecting an individual in a database.</p>
+<ol style="list-style-type: decimal">
+<li>The number of siblings whose mothers are women aged 50-59 in 1990 is
+given in the following figure:</li>
+</ol>
+<p><img src="figure/short-range-disparity.Rmd/sibling-number-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plot-probability-2-1">
-Past versions of plot-probability-2-1.png
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-sibling-number-1">
+Past versions of sibling-number-1.png
 </button>
 </p>
-<div id="fig-plot-probability-2-1" class="collapse">
+<div id="fig-sibling-number-1" class="collapse">
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
 <thead>
@@ -948,33 +844,536 @@ Date
 <tbody>
 <tr>
 <td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/bd3ef154793a489789542a69cc11bf9d836f7d96/docs/figure/short-range-disparity.Rmd/plot-probability-2-1.png" target="_blank">bd3ef15</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/e711b4e6b790e0dda95bc86459e20e4d26ed715d/docs/figure/short-range-disparity.Rmd/sibling-number-1.png" target="_blank">e711b4e</a>
 </td>
 <td>
-He Junhui
+Junhui He
 </td>
 <td>
-2025-02-17
+2025-02-22
 </td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
+<p>Following Result 2, we use a negative binomial distribution to model
+the number of siblings for White Americans, and use a zero-inflated
+negative binomial distribution to model the number of siblings for Black
+Americans. In calculating the detection probability, we truncate the
+number of siblings at <span class="math inline">\(20\)</span>. In
+addition, we assume that all states follow the same distribution of
+number of sibling.</p>
+<ol start="2" style="list-style-type: decimal">
+<li>We use Census data as the population, and use CODIS data as the
+forensic database. The state-level population and forensic database size
+by race is given as follows:</li>
+</ol>
+<table style="width:100%;">
+<colgroup>
+<col width="16%" />
+<col width="14%" />
+<col width="14%" />
+<col width="14%" />
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">State</th>
+<th align="right">census.total</th>
+<th align="right">census.black</th>
+<th align="right">census.white</th>
+<th align="right">codis.total</th>
+<th align="right">codis.black</th>
+<th align="right">codis.white</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Alabama</td>
+<td align="right">4767326</td>
+<td align="right">1296162</td>
+<td align="right">3220452</td>
+<td align="right">39545</td>
+<td align="right">18253</td>
+<td align="right">21292</td>
+</tr>
+<tr class="even">
+<td align="left">Alaska</td>
+<td align="right">643867</td>
+<td align="right">21898</td>
+<td align="right">435392</td>
+<td align="right">35311</td>
+<td align="right">914</td>
+<td align="right">5237</td>
+</tr>
+<tr class="odd">
+<td align="left">Arizona</td>
+<td align="right">6154696</td>
+<td align="right">339150</td>
+<td align="right">4322337</td>
+<td align="right">73669</td>
+<td align="right">9313</td>
+<td align="right">34353</td>
+</tr>
+<tr class="even">
+<td align="left">Arkansas</td>
+<td align="right">2797949</td>
+<td align="right">453783</td>
+<td align="right">2114512</td>
+<td align="right">10395</td>
+<td align="right">4401</td>
+<td align="right">5715</td>
+</tr>
+<tr class="odd">
+<td align="left">California</td>
+<td align="right">33777988</td>
+<td align="right">2237044</td>
+<td align="right">16296122</td>
+<td align="right">567170</td>
+<td align="right">141488</td>
+<td align="right">210144</td>
+</tr>
+<tr class="even">
+<td align="left">Colorado</td>
+<td align="right">5066044</td>
+<td align="right">234828</td>
+<td align="right">4082927</td>
+<td align="right">223434</td>
+<td align="right">28486</td>
+<td align="right">140920</td>
+</tr>
+<tr class="odd">
+<td align="left">Connecticut</td>
+<td align="right">3273040</td>
+<td align="right">388675</td>
+<td align="right">2395128</td>
+<td align="right">8809</td>
+<td align="right">2250</td>
+<td align="right">4968</td>
+</tr>
+<tr class="even">
+<td align="left">Delaware</td>
+<td align="right">913430</td>
+<td align="right">218899</td>
+<td align="right">597763</td>
+<td align="right">11760</td>
+<td align="right">9399</td>
+<td align="right">1701</td>
+</tr>
+<tr class="odd">
+<td align="left">Florida</td>
+<td align="right">17986115</td>
+<td align="right">3246381</td>
+<td align="right">12422961</td>
+<td align="right">544332</td>
+<td align="right">20152</td>
+<td align="right">514348</td>
+</tr>
+<tr class="even">
+<td align="left">Georgia</td>
+<td align="right">9968000</td>
+<td align="right">3320513</td>
+<td align="right">5555483</td>
+<td align="right">15047</td>
+<td align="right">9851</td>
+<td align="right">4682</td>
+</tr>
+<tr class="odd">
+<td align="left">Hawaii</td>
+<td align="right">1087142</td>
+<td align="right">23417</td>
+<td align="right">333261</td>
+<td align="right">11131</td>
+<td align="right">516</td>
+<td align="right">3018</td>
+</tr>
+<tr class="even">
+<td align="left">Idaho</td>
+<td align="right">1685901</td>
+<td align="right">15726</td>
+<td align="right">1510360</td>
+<td align="right">8041</td>
+<td align="right">244</td>
+<td align="right">6253</td>
+</tr>
+<tr class="odd">
+<td align="left">Illinois</td>
+<td align="right">11667524</td>
+<td align="right">1808271</td>
+<td align="right">7868227</td>
+<td align="right">31094</td>
+<td align="right">18094</td>
+<td align="right">9094</td>
+</tr>
+<tr class="even">
+<td align="left">Indiana</td>
+<td align="right">6348802</td>
+<td align="right">648513</td>
+<td align="right">5241795</td>
+<td align="right">14468</td>
+<td align="right">3591</td>
+<td align="right">10479</td>
+</tr>
+<tr class="odd">
+<td align="left">Iowa</td>
+<td align="right">3011086</td>
+<td align="right">131972</td>
+<td align="right">2694521</td>
+<td align="right">23017</td>
+<td align="right">4793</td>
+<td align="right">17021</td>
+</tr>
+<tr class="even">
+<td align="left">Kansas</td>
+<td align="right">2657373</td>
+<td align="right">168809</td>
+<td align="right">2222462</td>
+<td align="right">48538</td>
+<td align="right">13016</td>
+<td align="right">35318</td>
+</tr>
+<tr class="odd">
+<td align="left">Kentucky</td>
+<td align="right">4260996</td>
+<td align="right">362417</td>
+<td align="right">3711254</td>
+<td align="right">118670</td>
+<td align="right">34762</td>
+<td align="right">76716</td>
+</tr>
+<tr class="even">
+<td align="left">Louisiana</td>
+<td align="right">4384380</td>
+<td align="right">1464023</td>
+<td align="right">2657652</td>
+<td align="right">16469</td>
+<td align="right">10840</td>
+<td align="right">4972</td>
+</tr>
+<tr class="odd">
+<td align="left">Maine</td>
+<td align="right">1297649</td>
+<td align="right">25752</td>
+<td align="right">1237041</td>
+<td align="right">3202</td>
+<td align="right">226</td>
+<td align="right">2846</td>
+</tr>
+<tr class="even">
+<td align="left">Maryland</td>
+<td align="right">5695323</td>
+<td align="right">1820472</td>
+<td align="right">3007874</td>
+<td align="right">55491</td>
+<td align="right">34835</td>
+<td align="right">20207</td>
+</tr>
+<tr class="odd">
+<td align="left">Massachusetts</td>
+<td align="right">6421050</td>
+<td align="right">494029</td>
+<td align="right">4896037</td>
+<td align="right">14681</td>
+<td align="right">2712</td>
+<td align="right">9681</td>
+</tr>
+<tr class="even">
+<td align="left">Michigan</td>
+<td align="right">9442016</td>
+<td align="right">1376579</td>
+<td align="right">7444974</td>
+<td align="right">256960</td>
+<td align="right">85888</td>
+<td align="right">168422</td>
+</tr>
+<tr class="odd">
+<td align="left">Minnesota</td>
+<td align="right">5360773</td>
+<td align="right">398434</td>
+<td align="right">4423146</td>
+<td align="right">155525</td>
+<td align="right">39743</td>
+<td align="right">103741</td>
+</tr>
+<tr class="even">
+<td align="left">Mississippi</td>
+<td align="right">2850547</td>
+<td align="right">1084481</td>
+<td align="right">1658893</td>
+<td align="right">10612</td>
+<td align="right">6328</td>
+<td align="right">4193</td>
+</tr>
+<tr class="odd">
+<td align="left">Missouri</td>
+<td align="right">5741742</td>
+<td align="right">699840</td>
+<td align="right">4740335</td>
+<td align="right">11783</td>
+<td align="right">3701</td>
+<td align="right">7882</td>
+</tr>
+<tr class="even">
+<td align="left">Montana</td>
+<td align="right">1012950</td>
+<td align="right">5484</td>
+<td align="right">916524</td>
+<td align="right">2460</td>
+<td align="right">47</td>
+<td align="right">1961</td>
+</tr>
+<tr class="odd">
+<td align="left">Nebraska</td>
+<td align="right">1817341</td>
+<td align="right">96535</td>
+<td align="right">1538052</td>
+<td align="right">2451</td>
+<td align="right">566</td>
+<td align="right">1483</td>
+</tr>
+<tr class="even">
+<td align="left">Nevada</td>
+<td align="right">2670605</td>
+<td align="right">304739</td>
+<td align="right">1588463</td>
+<td align="right">5629</td>
+<td align="right">1602</td>
+<td align="right">2590</td>
+</tr>
+<tr class="odd">
+<td align="left">New Hampshire</td>
+<td align="right">1299787</td>
+<td align="right">20127</td>
+<td align="right">1216203</td>
+<td align="right">624</td>
+<td align="right">40</td>
+<td align="right">578</td>
+</tr>
+<tr class="even">
+<td align="left">New Jersey</td>
+<td align="right">8385500</td>
+<td align="right">1219770</td>
+<td align="right">5112280</td>
+<td align="right">17898</td>
+<td align="right">9444</td>
+<td align="right">6708</td>
+</tr>
+<tr class="odd">
+<td align="left">New Mexico</td>
+<td align="right">1695276</td>
+<td align="right">45904</td>
+<td align="right">1078937</td>
+<td align="right">2621</td>
+<td align="right">157</td>
+<td align="right">813</td>
+</tr>
+<tr class="even">
+<td align="left">New York</td>
+<td align="right">18433786</td>
+<td align="right">2986172</td>
+<td align="right">11143349</td>
+<td align="right">132709</td>
+<td align="right">68684</td>
+<td align="right">17116</td>
+</tr>
+<tr class="odd">
+<td align="left">North Carolina</td>
+<td align="right">9727667</td>
+<td align="right">2140217</td>
+<td align="right">6488459</td>
+<td align="right">23450</td>
+<td align="right">12270</td>
+<td align="right">11138</td>
+</tr>
+<tr class="even">
+<td align="left">North Dakota</td>
+<td align="right">737154</td>
+<td align="right">26783</td>
+<td align="right">645938</td>
+<td align="right">32509</td>
+<td align="right">2983</td>
+<td align="right">24363</td>
+</tr>
+<tr class="odd">
+<td align="left">Ohio</td>
+<td align="right">11118076</td>
+<td align="right">1478781</td>
+<td align="right">9080688</td>
+<td align="right">71913</td>
+<td align="right">26015</td>
+<td align="right">45454</td>
+</tr>
+<tr class="even">
+<td align="left">Oklahoma</td>
+<td align="right">3451195</td>
+<td align="right">289961</td>
+<td align="right">2514885</td>
+<td align="right">10656</td>
+<td align="right">2841</td>
+<td align="right">5853</td>
+</tr>
+<tr class="odd">
+<td align="left">Oregon</td>
+<td align="right">3793917</td>
+<td align="right">82655</td>
+<td align="right">3169096</td>
+<td align="right">5045</td>
+<td align="right">515</td>
+<td align="right">3552</td>
+</tr>
+<tr class="even">
+<td align="left">Pennsylvania</td>
+<td align="right">12228216</td>
+<td align="right">1423169</td>
+<td align="right">9750687</td>
+<td align="right">10238</td>
+<td align="right">4159</td>
+<td align="right">5088</td>
+</tr>
+<tr class="odd">
+<td align="left">Rhode Island</td>
+<td align="right">995585</td>
+<td align="right">62168</td>
+<td align="right">782920</td>
+<td align="right">14465</td>
+<td align="right">3672</td>
+<td align="right">7852</td>
+</tr>
+<tr class="even">
+<td align="left">South Carolina</td>
+<td align="right">4820049</td>
+<td align="right">1280531</td>
+<td align="right">3243442</td>
+<td align="right">6955</td>
+<td align="right">3752</td>
+<td align="right">3203</td>
+</tr>
+<tr class="odd">
+<td align="left">South Dakota</td>
+<td align="right">840002</td>
+<td align="right">17842</td>
+<td align="right">715336</td>
+<td align="right">40687</td>
+<td align="right">2961</td>
+<td align="right">25411</td>
+</tr>
+<tr class="even">
+<td align="left">Tennessee</td>
+<td align="right">6497942</td>
+<td align="right">1092948</td>
+<td align="right">4990938</td>
+<td align="right">40544</td>
+<td align="right">14544</td>
+<td align="right">25620</td>
+</tr>
+<tr class="odd">
+<td align="left">Texas</td>
+<td align="right">24011767</td>
+<td align="right">3552997</td>
+<td align="right">14609365</td>
+<td align="right">70955</td>
+<td align="right">22169</td>
+<td align="right">25519</td>
+</tr>
+<tr class="even">
+<td align="left">Utah</td>
+<td align="right">2992603</td>
+<td align="right">40058</td>
+<td align="right">2573413</td>
+<td align="right">110189</td>
+<td align="right">5993</td>
+<td align="right">94992</td>
+</tr>
+<tr class="odd">
+<td align="left">Vermont</td>
+<td align="right">606051</td>
+<td align="right">9034</td>
+<td align="right">577751</td>
+<td align="right">2754</td>
+<td align="right">295</td>
+<td align="right">2423</td>
+</tr>
+<tr class="even">
+<td align="left">Virginia</td>
+<td align="right">7925686</td>
+<td align="right">1607581</td>
+<td align="right">5208856</td>
+<td align="right">12379</td>
+<td align="right">6249</td>
+<td align="right">5836</td>
+</tr>
+<tr class="odd">
+<td align="left">Washington</td>
+<td align="right">6868622</td>
+<td align="right">307565</td>
+<td align="right">5130920</td>
+<td align="right">7413</td>
+<td align="right">1376</td>
+<td align="right">4585</td>
+</tr>
+<tr class="even">
+<td align="left">West Virginia</td>
+<td align="right">1708772</td>
+<td align="right">65813</td>
+<td align="right">1610749</td>
+<td align="right">3412</td>
+<td align="right">955</td>
+<td align="right">2218</td>
+</tr>
+<tr class="odd">
+<td align="left">Wisconsin</td>
+<td align="right">5534184</td>
+<td align="right">376256</td>
+<td align="right">4737545</td>
+<td align="right">9324</td>
+<td align="right">3482</td>
+<td align="right">5253</td>
+</tr>
+<tr class="even">
+<td align="left">Wyoming</td>
+<td align="right">533378</td>
+<td align="right">5232</td>
+<td align="right">488374</td>
+<td align="right">3353</td>
+<td align="right">129</td>
+<td align="right">2482</td>
+</tr>
+</tbody>
+</table>
+<p>Furthermore, we show the proportions of database size/population size
+for Black and White Americans in the following figure.</p>
+<p><img src="figure/short-range-disparity.Rmd/plot-proportion-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/short-range-disparity.Rmd/plot-proportion-2.png" width="672" style="display: block; margin: auto;" /></p>
+<ol start="3" style="list-style-type: decimal">
+<li>True/False positive rate: The relationship between true and false
+positive rate is super complex in short-range familial search. It could
+depend on the hypothesis type, the likelihood cutoff, the number of STR
+loci, the race and so on. See <a
+href="https://lasisilab.github.io/PODFRIDGE/lr_dist.html">Likelihood
+Ratio Distribution</a> for an overview.</li>
+</ol>
+<p>In this analysis, we consider a special case of true/false positive
+rates. For individual hypothesis, TPR is set to 1 and FPR is set to 0.
+For parent-child hypothesis, TPR is set to 1 and FPR is set to 0.01%.
+For full-sibling hypothesis, TPR is set to 75% and FPR is set to 1%.</p>
+</div>
+<div id="state-level-detection-probabilities" class="section level3">
+<h3>5.2 State-level detection probabilities</h3>
+<p><img src="figure/short-range-disparity.Rmd/plot-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/short-range-disparity.Rmd/plot-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/short-range-disparity.Rmd/plot-3.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="conclusions" class="section level3">
-<h3>5.4 Conclusions</h3>
+<h3>5.3 Conclusions</h3>
 <ol style="list-style-type: decimal">
-<li><p>Without accounting for representation disparities, the detection
-probability for Black Americans is slightly higher than that for White
-Americans, as Black Americans have mildly more siblings than White
-Americans.</p></li>
-<li><p>Considering representation disparities, the detection probability
-for Black Americans is significantly higher than that for White
-Americans, as black Americans are overrepresented while white Americans
-are underrepresented.</p></li>
-<li><p>The detection probability increases with the true positive
-rate.</p></li>
+<li><p>The detection probability for Black Americans is higher than that
+for White Americans in all states except for Florida. This is because
+(1) Black Americans have mildly more siblings than White Americans, and
+(2) Black Americans are overrepresented while White Americans are
+underrepresented in the forensic database.</p></li>
+<li><p>The situation is opposite in Florida, where Black Americans are
+underrepresented while White Americans are overrepresented in the
+forensic database.</p></li>
 </ol>
 <br>
 <p>
@@ -1009,19 +1408,18 @@ loaded via a namespace (and not attached):
  [5] rstatix_0.7.2     stringi_1.8.4     digest_0.6.37     magrittr_2.0.3   
  [9] evaluate_1.0.1    grid_4.4.2        fastmap_1.2.0     rprojroot_2.0.4  
 [13] jsonlite_1.8.9    processx_3.8.4    whisker_0.4.1     backports_1.5.0  
-[17] Formula_1.2-5     gridExtra_2.3     ps_1.8.1          promises_1.3.2   
-[21] httr_1.4.7        purrr_1.0.2       fansi_1.0.6       scales_1.3.0     
-[25] jquerylib_0.1.4   abind_1.4-8       cli_3.6.3         rlang_1.1.4      
-[29] cowplot_1.1.3     munsell_0.5.1     withr_3.0.2       cachem_1.1.0     
-[33] yaml_2.3.10       tools_4.4.2       ggsignif_0.6.4    dplyr_1.1.4      
-[37] colorspace_2.1-1  httpuv_1.6.15     broom_1.0.7       vctrs_0.6.5      
-[41] R6_2.5.1          lifecycle_1.0.4   git2r_0.35.0      stringr_1.5.1    
-[45] car_3.1-3         fs_1.6.5          pkgconfig_2.0.3   callr_3.7.6      
-[49] pillar_1.9.0      bslib_0.8.0       later_1.4.1       gtable_0.3.6     
-[53] glue_1.8.0        Rcpp_1.0.13-1     xfun_0.49         tibble_3.2.1     
-[57] tidyselect_1.2.1  rstudioapi_0.17.1 knitr_1.49        farver_2.1.2     
-[61] htmltools_0.5.8.1 labeling_0.4.3    carData_3.0-5     rmarkdown_2.29   
-[65] compiler_4.4.2    getPass_0.2-4    </code></pre>
+[17] Formula_1.2-5     ps_1.8.1          promises_1.3.2    httr_1.4.7       
+[21] purrr_1.0.2       fansi_1.0.6       scales_1.3.0      jquerylib_0.1.4  
+[25] abind_1.4-8       cli_3.6.3         rlang_1.1.4       munsell_0.5.1    
+[29] withr_3.0.2       cachem_1.1.0      yaml_2.3.10       tools_4.4.2      
+[33] ggsignif_0.6.4    dplyr_1.1.4       colorspace_2.1-1  httpuv_1.6.15    
+[37] broom_1.0.7       vctrs_0.6.5       R6_2.5.1          lifecycle_1.0.4  
+[41] git2r_0.35.0      stringr_1.5.1     car_3.1-3         fs_1.6.5         
+[45] pkgconfig_2.0.3   callr_3.7.6       pillar_1.9.0      bslib_0.8.0      
+[49] later_1.4.1       gtable_0.3.6      glue_1.8.0        Rcpp_1.0.13-1    
+[53] xfun_0.49         tibble_3.2.1      tidyselect_1.2.1  rstudioapi_0.17.1
+[57] knitr_1.49        farver_2.1.2      htmltools_0.5.8.1 labeling_0.4.3   
+[61] carData_3.0-5     rmarkdown_2.29    compiler_4.4.2    getPass_0.2-4    </code></pre>
 </div>
 </div>
 </div>
