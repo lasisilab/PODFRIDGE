@@ -25,11 +25,11 @@ We aims to examines disparities in the probability of detecting an individual th
 
 3.  The family trees of different races are strictly separated. For instance, the parents and siblings of black Americans are black Americans, while the parents and siblings of white Americans are white Americans.
 
-4.  The number of siblings is assumed to follow a multinomial distribution. In this model, the distribution is estimated based on the number of children born to women aged 50-59 in 1990 minus one.
+4.  In this model, the distribution of the sibling number is estimated based on the number of children born to women aged 50-59 in 1990 minus one. In addition, we assume that all states follow the same distribution.
 
 5.  In the short-range familial search, we only consider the individual self, the parents and full siblings for detection.
 
-6.  All related individuals are alive in the population.
+6. All relatives involved are included in the same population as the individual. For example, if a person lives in Michigan, their parents and siblings also live in Michigan.
 
 ## 3 Hypothesis testing in determining a familial relationship with forensic STR loci
 
@@ -55,12 +55,12 @@ We give a step-by-step derivation for the detection probability in a database.
 
 1.  For any random person, the probability of the event {A person is present in a database} is $P(present)=\frac{\beta K}{\alpha N}$, where $K$ is the database size, $N$ is the population size, $\beta$ and $\alpha$ and racial proportions in the database and population.
 
-2.  Suppose the individual has $n$ relatives. The probability of the event {$k$ relatives present in the database, $n-k$ relatives absent in the database | $n$ relatives} is $Bin(k;n,P(present))={n \choose k} P(present)^k(1-P(present))^{n-k}$.
+2.  Suppose the individual has $n$ relatives. The probability of the event {$r$ relatives present in the database | $n$ relatives} is $Bin(r;n,P(present))={n \choose r} P(present)^r(1-P(present))^{n-r}$.
 
-3. Suppose $k$ relatives are present in the database and $n-k$ relatives are absent in the database. The number of detection inside and outside the database follows $Bin(k, TPR)$ and $Bin(n-k, FPR)$, respectively. Thus, the probability of the event {at least one detection | $k$ relatives present in the database, $n-k$ relatives absent in the database} is $1 - (1-TPR)^k(1-FPR)^{n-k}$.
+3. Suppose $r$ relatives are present in the database, then $K-r$ unrelated people are present in the database. The number of correct detection and incorrect detection in the database follows $Bin(r, TPR)$ and $Bin(K-r, FPR)$, respectively. Thus, the probability of the event {at least one detection | $r$ relatives present in the database, $K-r$ unrelated people present in the database} is $1 - (1-TPR)^r(1-FPR)^{K-r}$.
 
 4. For a given short-range familial relationship, the probability of the event {at least one detection of a certain relationship} is 
-$$P(at~least~one~detection~of~a~certain~relationship)=\\\sum_{n=1}^{n_\max}P(n~relatives)\sum_{k=0}^nBin(k;n,P(present))\{1 - (1-TPR)^k(1-FPR)^{n-k}\}.$$
+$$P(at~least~one~detection~of~a~certain~relationship)=\\\sum_{n=1}^{n_\max}P(n~relatives)\sum_{r=0}^nBin(r;n,P(present))\{1 - (1-TPR)^r(1-FPR)^{K-r}\}.$$
 5. The probability of the event {at least one detection} is the sum of the probability in Step 4 across relationships of the individual, parents and full sibling.
  
 
@@ -99,7 +99,7 @@ detect_prob <- function(N, K, r, TPR, FPR) {
   
   if(r>=1) {
     for(k in 0:r) {
-      p = dbinom(k, r, p_present) * (1 - (1 - TPR)^k*(1 - FPR)^(r-k))
+      p = dbinom(k, r, p_present) * (1 - (1 - TPR)^k*(1 - FPR)^(K-k))
       tot_p = tot_p + p
     }
   }
@@ -161,7 +161,7 @@ ggplot(data = df_sibling, mapping = aes(x=n_siblings, y=proportions, fill=as.fac
  scale_fill_manual(values = my_colors) +
  scale_alpha_manual(values = c("White American" = 0.7, "Black American" = 1)) +
  labs(
-   title = "Distribution of Number of Siblings by Race for Women Aged 40-49 in 1990",
+   title = "Distribution of Number of Siblings by Race for Women Aged 50-59 in 1990",
    x = "Number of Siblings",
    y = "Proportion",
    fill = "Number of Siblings",
@@ -176,7 +176,7 @@ ggplot(data = df_sibling, mapping = aes(x=n_siblings, y=proportions, fill=as.fac
  )
 ```
 
-Following Result 2, we use a negative binomial distribution to model the number of siblings for White Americans, and use a zero-inflated negative binomial distribution to model the number of siblings for Black Americans. In calculating the detection probability, we truncate the number of siblings at $20$. In addition, we assume that all states follow the same distribution of number of sibling.
+Following Result 2, we use a negative binomial distribution to model the number of siblings for White Americans, and use a zero-inflated negative binomial distribution to model the number of siblings for Black Americans. In calculating the detection probability, we truncate the number of siblings at $20$.
 
 
 2. We use Census data as the population, and use CODIS data as the forensic database. The state-level population and forensic database size by race is given as follows:
@@ -189,9 +189,9 @@ knitr::kable(codis_census)
 Furthermore, we show the proportions of database size/population size for Black and White Americans in the following figure.
 
 ```{r plot-proportion, include=TRUE}
-ggplot(data = codis_census) + geom_col(mapping = aes(x=State, y=codis.black/census.black), position = position_dodge()) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), axis.title.x = element_blank(), plot.title = element_text(hjust = 0.5, size = 10), legend.position = 'bottom') + ylab('Proportion') + ylim(0,0.25) + ggtitle('State-level database size/population size for Black Americans')
+ggplot(data = codis_census) + geom_col(mapping = aes(x=State, y=codis.black/census.black), position = position_dodge()) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), axis.title.x = element_blank(), plot.title = element_text(hjust = 0.5, size = 10), legend.position = 'bottom') + ylab('P(present)') + ylim(0,0.25) + ggtitle('State-level database size/population size for Black Americans', subtitle = "(The present probability for Black Americans)")
 
-ggplot(data = codis_census) + geom_col(mapping = aes(x=State, y=codis.white/census.white), position = position_dodge()) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), axis.title.x = element_blank(), plot.title = element_text(hjust = 0.5, size = 10), legend.position = 'bottom') + ylab('Proportion') + ylim(0,0.25) + ggtitle('State-level database size/population size for White Americans')
+ggplot(data = codis_census) + geom_col(mapping = aes(x=State, y=codis.white/census.white), position = position_dodge()) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), axis.title.x = element_blank(), plot.title = element_text(hjust = 0.5, size = 10), legend.position = 'bottom') + ylab('P(present)') + ylim(0,0.25) + ggtitle('State-level database size/population size for White Americans', subtitle = '(The present probability for White Americans)')
 ```
 
 3. True/False positive rate: The relationship between true and false positive rate is super complex in short-range familial search. It could depend on the hypothesis type, the likelihood cutoff, the number of STR loci, the race and so on. See [Likelihood Ratio Distribution](https://lasisilab.github.io/PODFRIDGE/lr_dist.html) for an overview. 
@@ -202,7 +202,7 @@ In this analysis, we consider a special case of true/false positive rates. For i
 
 ```{r parameter}
 TPR = c(1, 1, 0.75)
-FPR = c(0, 0.0001, 0.01)
+FPR = c(0, 0.0001, 0.01)/1e5
 ```
 
 ```{r detect-probability}
@@ -226,12 +226,26 @@ colnames(pr_white_df) = c("individual", "parent", "full_sibling", "total")
 ```
 
 
-```{r plot}
+```{r plot, include=FALSE}
 ggplot() + geom_col(mapping = aes(x=codis_census$State, y=pr_black_df$total-pr_white_df$total), position = position_dodge()) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), axis.title.x = element_blank(), plot.title = element_text(hjust = 0.5, size = 10), legend.position = 'bottom') + ylab('Detection probability')  + ggtitle('Difference of state-level detection probabilities between Black and White Americans')
 
 ggplot() + geom_col(mapping = aes(x=codis_census$State, y=pr_black_df$total), position = position_dodge()) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), axis.title.x = element_blank(), plot.title = element_text(hjust = 0.5, size = 10), legend.position = 'bottom') + ylab('Detection probability') + ylim(0,1) + ggtitle('State-level detection probability for Black Americans')
 
 ggplot() + geom_col(mapping = aes(x=codis_census$State, y=pr_white_df$total), position = position_dodge()) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), axis.title.x = element_blank(), plot.title = element_text(hjust = 0.5, size = 10), legend.position = 'bottom') + ylab('Detection probability') + ylim(0,1) + ggtitle('State-level detection probability for White Americans')
+```
+
+```{r plot-separate}
+ggplot() + geom_col(mapping = aes(x=codis_census$State, y=pr_black_df$parent), position = position_dodge()) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), axis.title.x = element_blank(), plot.title = element_text(hjust = 0.5, size = 10), legend.position = 'bottom') + ylab('Detection probability') + ylim(0,0.5) + ggtitle('State-level parent detection probability for Black Americans')
+
+ggplot() + geom_col(mapping = aes(x=codis_census$State, y=pr_white_df$parent), position = position_dodge()) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), axis.title.x = element_blank(), plot.title = element_text(hjust = 0.5, size = 10), legend.position = 'bottom') + ylab('Detection probability') + ylim(0,0.5) + ggtitle('State-level parent detection probability for White Americans')
+
+ggplot() + geom_col(mapping = aes(x=codis_census$State, y=pr_black_df$parent-pr_white_df$parent), position = position_dodge()) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), axis.title.x = element_blank(), plot.title = element_text(hjust = 0.5, size = 10), legend.position = 'bottom') + ylab('Detection probability')  + ggtitle('Difference of state-level parent detection probabilities between Black and White Americans')
+
+ggplot() + geom_col(mapping = aes(x=codis_census$State, y=pr_black_df$full_sibling), position = position_dodge()) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), axis.title.x = element_blank(), plot.title = element_text(hjust = 0.5, size = 10), legend.position = 'bottom') + ylab('Detection probability') + ylim(0,0.5) + ggtitle('State-level full sibling detection probability for Black Americans')
+
+ggplot() + geom_col(mapping = aes(x=codis_census$State, y=pr_white_df$full_sibling), position = position_dodge()) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), axis.title.x = element_blank(), plot.title = element_text(hjust = 0.5, size = 10), legend.position = 'bottom') + ylab('Detection probability') + ylim(0,0.5) + ggtitle('State-level full sibling detection probability for White Americans')
+
+ggplot() + geom_col(mapping = aes(x=codis_census$State, y=pr_black_df$full_sibling-pr_white_df$full_sibling), position = position_dodge()) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), axis.title.x = element_blank(), plot.title = element_text(hjust = 0.5, size = 10), legend.position = 'bottom') + ylab('Detection probability')  + ggtitle('Difference of state-level full sibling detection probabilities between Black and White Americans')
 ```
 
 
@@ -240,3 +254,5 @@ ggplot() + geom_col(mapping = aes(x=codis_census$State, y=pr_white_df$total), po
 1. The detection probability for Black Americans is higher than that for White Americans in all states except for Florida. This is because (1) Black Americans have mildly more siblings than White Americans, and (2) Black Americans are overrepresented while White Americans are underrepresented in the forensic database.
 
 2. The situation is opposite in Florida, where Black Americans are underrepresented while White Americans are overrepresented in the forensic database.
+
+
