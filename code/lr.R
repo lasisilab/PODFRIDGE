@@ -268,15 +268,14 @@ kinship_calculation <- function(allele_frequency_data, kinship_matrix,df_allelef
   names(t1)[1:2]<-c("A","locus")
   allele_frequency_data<-left_join(allele_frequency_data,t1)
   print(1)
-  print(head(allele_frequency_data))
-  print(head(t1))
 
   t2<-df3
   names(t2)<-gsub("frequency","pB",names(t2))
   names(t2)[1:2]<-c("B","locus")
   print(2)
-  print(head(allele_frequency_data))
-  print(head(t2))
+   print(names(allele_frequency_data))
+  print(names(t2))
+
   allele_frequency_data<-left_join(allele_frequency_data,t2)
 
   rm(t1)
