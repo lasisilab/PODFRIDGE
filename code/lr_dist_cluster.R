@@ -10,7 +10,7 @@ library(tidyr)
 
 file_type<-"png" #option to toggle between pdf or png outputs, pdf being faster
 # Read Command-Line Arguments
-#args <- commandArgs(trailingOnly = TRUE)
+args <- commandArgs(trailingOnly = TRUE)
 slurm_job_id <- as.character(args[1])
 
 output_dir <- file.path("output")
