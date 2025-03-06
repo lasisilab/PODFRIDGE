@@ -16,7 +16,6 @@ library(doParallel)
 library(stringr)
 
 # Read Command-Line Arguments
-#args<-c("3","simulation_100200_runthrough_focal")
 args <- commandArgs(trailingOnly = TRUE)
 str(args)
 cat(args, sep = "\n")
@@ -43,8 +42,8 @@ input_dir <- file.path("data", "sims", paste0("simulation_script_", slurm_job_id
 dir.create(input_dir, recursive = TRUE)
 output_dir <- input_dir
 #output_file <- file.path(output_dir, paste0("sim_processed_genotypes.csv"))
-output_file <- "sim_processed_genotypes.csv"
-output_file2 <- "sim_combined_genotypes.csv"
+output_file <- "sim_processed_genotypes_focal.csv"
+output_file2 <- "sim_combined_genotypes_focal.csv"
 timing_log_file <- file.path(output_dir, "timing_log.csv")
 
 # Log the start of the process
@@ -84,12 +83,15 @@ log_message(paste("Loaded core loci data in", core_loci_time["elapsed"], "second
 rm(core_loci)
 
 # Load Individuals Genotypes Data
-#individuals_genotypes <- fread(paste0(input_dir,"/processed_genotypes.csv"))
+print("input_dir")
+print(input_dir)
+individuals_genotypes <- fread(paste0(input_dir,"/processed_genotypes_original.csv"))
 #individuals_genotypes <- load(paste0(input_dir,"/processed_genotypes.Rbin"))
-individuals_genotypes <- read.table(gzfile(paste0(input_dir,"/processed_genotypes.csv.gz")),row.names=1)
-individuals_genotypes <-individuals_genotypes %>%
-  select(-one_of("seed")) %>%
-  as.data.table()
+#individuals_genotypes <- read.table(gzfile(paste0(input_dir,"/processed_genotypes.csv.gz")),row.names=1)
+print(head(individuals_genotypes))
+#individuals_genotypes <-individuals_genotypes %>%
+ # select(-one_of("seed")) %>%
+  #as.data.table()
 
 individuals_genotypes[,5:8] <- lapply(individuals_genotypes[,5:8],as.character)
 names(individuals_genotypes)[3]<-"population_known"
@@ -118,7 +120,10 @@ calculate_likelihood_ratio <- function(allele_frequency_data,population) {
     allele_frequency_data$Rxp<-ifelse(allele_frequency_data$shared_alleles==1 & allele_frequency_data$genotype_match=="AB-AB",(allele_frequency_data$Rxp*allele_frequency_data$pB)/(allele_frequency_data$pA+allele_frequency_data$pB),allele_frequency_data$Rxp)
     eval(parse(text=paste0("allele_frequency_data$LR_",population[p],"<-ifelse(allele_frequency_data$shared_alleles == 1, allele_frequency_data$k0 + (allele_frequency_data$k1 / allele_frequency_data$Rxp),allele_frequency_data$LR_",population[p],")")))
 
-    allele_frequency_data$Rxp<-ifelse(allele_frequency_data$shared_alleles==2 & allele_frequency_data$genotype_match == "AA-AA",allele_frequency_data$pA,allele_frequency_data$Rxp)
+    k0 = 0 #Why are we using these and not the values from the kinship matrix? Are they the same?
+    k1 = 1
+    k2 = 0
+     allele_frequency_data$Rxp<-ifelse(allele_frequency_data$shared_alleles==2 & allele_frequency_data$genotype_match == "AA-AA",allele_frequency_data$pA,allele_frequency_data$Rxp)
     allele_frequency_data$Rxu<-ifelse(allele_frequency_data$shared_alleles==2  & allele_frequency_data$genotype_match == "AA-AA",allele_frequency_data$pA*allele_frequency_data$pA,NA)
 
     allele_frequency_data$Rxp<-ifelse(allele_frequency_data$shared_alleles==2 & allele_frequency_data$genotype_match == "AB-AB",(4*allele_frequency_data$pA*allele_frequency_data$pB)/(allele_frequency_data$pA+allele_frequency_data$pB),allele_frequency_data$Rxp)
@@ -139,6 +144,7 @@ calculate_likelihood_ratio <- function(allele_frequency_data,population) {
 
 calculate_likelihood_ratio2 <- function(allele_frequency_data) {
   allele_frequency_data$LR_relationship_tested<-ifelse(allele_frequency_data$shared_alleles == 0, allele_frequency_data$k0,NA)
+  allele_frequency_data$Rxp<-ifelse(allele_frequency_data$shared_alleles==1,allele_frequency_data$pA,NA)
   allele_frequency_data$Rxp<-ifelse(allele_frequency_data$shared_alleles==1,allele_frequency_data$pA,NA)
   allele_frequency_data$Rxp<-ifelse(allele_frequency_data$shared_alleles==1 & allele_frequency_data$genotype_match=="AB-AA"|allele_frequency_data$genotype_match=="AA-AB",allele_frequency_data$Rxp*2,allele_frequency_data$Rxp)
   allele_frequency_data$Rxp<-ifelse(allele_frequency_data$shared_alleles==1 & allele_frequency_data$genotype_match=="AB-AC"|allele_frequency_data$genotype_match=="AB-AB",allele_frequency_data$Rxp*4,allele_frequency_data$Rxp)
@@ -164,14 +170,15 @@ calculate_likelihood_ratio2 <- function(allele_frequency_data) {
 }
 
 
+#THIS FUNCTION HAS BEEN CHECKED
 kinship_calculation <- function(allele_frequency_data, kinship_matrix,df_allelefreq) {
   print("starting kinship_calculation")
-
+  allele_frequency_data<-data.table(allele_frequency_data)
   allele_frequency_data$alleles_ind1<- apply( allele_frequency_data[ , c('ind1_allele1','ind1_allele2') ] , 1 , paste , collapse = "_" )
   allele_frequency_data$alleles_ind2<- apply( allele_frequency_data[ , c('ind2_allele1','ind2_allele2') ] , 1 , paste , collapse = "_" )
 
   # Get shared alleles and their counts
-
+print(1)
   allele_frequency_data$shared_alleles1<-NA
   allele_frequency_data$shared_alleles_flag <- ifelse(allele_frequency_data$ind1_allele1==allele_frequency_data$ind2_allele1|allele_frequency_data$ind1_allele1==allele_frequency_data$ind2_allele2,1,0)
   allele_frequency_data$shared_alleles1<-ifelse(allele_frequency_data$shared_alleles_flag==1,allele_frequency_data$ind1_allele1,NA)
@@ -181,11 +188,11 @@ kinship_calculation <- function(allele_frequency_data, kinship_matrix,df_allelef
   allele_frequency_data$shared_alleles2<-ifelse(allele_frequency_data$shared_alleles_flag==1 & !is.na(allele_frequency_data$shared_alleles1) &
                                                   !allele_frequency_data$shared_alleles1==allele_frequency_data$ind1_allele2,
                                                 allele_frequency_data$ind1_allele2,NA)
-
+print(2)
   allele_frequency_data$shared_alleles<-ifelse(!is.na(allele_frequency_data$shared_alleles1),1,0)
   allele_frequency_data$shared_alleles<-ifelse(!is.na(allele_frequency_data$shared_alleles2),2,allele_frequency_data$shared_alleles)
-
-  allele_frequency_data<-allele_frequency_data[, c("shared_alleles_flag"):=NULL]
+#print(summary(allele_frequency_data$shared_alleles_flag))
+ # allele_frequency_data<-allele_frequency_data[, c("shared_alleles_flag"):=NULL]
 
   #Allele mapping
 
@@ -196,7 +203,7 @@ kinship_calculation <- function(allele_frequency_data, kinship_matrix,df_allelef
   allele_frequency_data$B<-ifelse(allele_frequency_data$shared_alleles==1 & allele_frequency_data$ind1_allele1==allele_frequency_data$shared_alleles1 & !allele_frequency_data$ind1_allele1==allele_frequency_data$ind1_allele2,allele_frequency_data$ind1_allele2, allele_frequency_data$B)
   allele_frequency_data$B<-ifelse(allele_frequency_data$shared_alleles==1 & allele_frequency_data$ind1_allele1==allele_frequency_data$shared_alleles1 & allele_frequency_data$ind1_allele1==allele_frequency_data$ind1_allele2 & allele_frequency_data$ind2_allele1 == allele_frequency_data$shared_alleles1,allele_frequency_data$ind2_allele2, allele_frequency_data$B)
   allele_frequency_data$B<-ifelse(allele_frequency_data$shared_alleles==1 & allele_frequency_data$ind1_allele1==allele_frequency_data$shared_alleles1 & allele_frequency_data$ind1_allele1==allele_frequency_data$ind1_allele2 & !allele_frequency_data$ind2_allele1 == allele_frequency_data$shared_alleles1,allele_frequency_data$ind2_allele1, allele_frequency_data$B)
-
+print(3)
   allele_frequency_data$B<-ifelse(is.na(allele_frequency_data$shared_alleles1) & !allele_frequency_data$ind1_allele1==allele_frequency_data$ind1_allele2,allele_frequency_data$ind1_allele2, allele_frequency_data$B)
   allele_frequency_data$B<-ifelse(is.na(allele_frequency_data$shared_alleles1) & allele_frequency_data$ind1_allele1==allele_frequency_data$ind1_allele2 & !allele_frequency_data$ind2_allele1==allele_frequency_data$ind1_allele2,allele_frequency_data$ind2_allele1, allele_frequency_data$B)
   allele_frequency_data$B<-ifelse(allele_frequency_data$B==allele_frequency_data$A,allele_frequency_data$ind2_allele2, allele_frequency_data$B)
@@ -211,7 +218,7 @@ kinship_calculation <- function(allele_frequency_data, kinship_matrix,df_allelef
   allele_frequency_data$C<-ifelse(allele_frequency_data$shared_alleles==0 & !allele_frequency_data$ind1_allele1==allele_frequency_data$ind1_allele2,allele_frequency_data$ind2_allele1,allele_frequency_data$C)
   allele_frequency_data$C<-ifelse(allele_frequency_data$shared_alleles==0 & allele_frequency_data$ind1_allele1==allele_frequency_data$ind1_allele2,allele_frequency_data$ind2_allele2,allele_frequency_data$C)
   allele_frequency_data$C<-ifelse(allele_frequency_data$C==allele_frequency_data$B,NA,allele_frequency_data$C)
-
+print(4)
   allele_frequency_data$D<-ifelse(allele_frequency_data$shared_alleles==0 & !allele_frequency_data$ind1_allele1==allele_frequency_data$ind1_allele2 & !allele_frequency_data$ind2_allele1==allele_frequency_data$ind2_allele2,allele_frequency_data$ind2_allele2,NA)
 
   # Generate genotype strings
@@ -242,7 +249,7 @@ kinship_calculation <- function(allele_frequency_data, kinship_matrix,df_allelef
 
 
   #- for each row we need the marker that matches the locus, extract the frequencies from the whole table for the A and B alleles
-
+print(5)
   #################################################################
   #PART A-
   #Assuming our relationships tested and known are the same-
@@ -485,7 +492,13 @@ log_message(paste("Calculated combined likelihood ratios in", combined_lrs_time[
 # Save results to CSV
 log_message("Writing results to compressed files...")
 
+#fwrite(processed_genotypes, output_file)
 setwd(output_dir)
+print(output_dir)
+#write.table(processed_genotypes,gzfile(paste0(output_file,".gz")),append=FALSE)
+#save(processed_genotypes,file=output_file, compress=T)
 write.table(combined_lrs,gzfile(paste0(output_file2,".gz")),append=FALSE)
+#save(combined_lrs,file=output_file2, compress=T)
+#fwrite(combined_lrs,output_file2)
 setwd(t)
 log_message("LR calculations completed.")
