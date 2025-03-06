@@ -11,7 +11,7 @@
 
 <meta name="author" content="Junhui He" />
 
-<meta name="date" content="2025-03-01" />
+<meta name="date" content="2025-03-06" />
 
 <title>Disparities in Short-Range Familial Searches</title>
 
@@ -356,7 +356,7 @@ div.tocify {
 <h1 class="title toc-ignore">Disparities in Short-Range Familial
 Searches</h1>
 <h4 class="author">Junhui He</h4>
-<h4 class="date">2025-03-01</h4>
+<h4 class="date">2025-03-06</h4>
 
 </div>
 
@@ -385,7 +385,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-03-01
+<strong>Last updated:</strong> 2025-03-06
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -516,15 +516,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree887220433768aad4afd56c55d8b52401fca02a47targetblank8872204a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreef3842a325eb970ea6060c5681bfe890d9ad1ab31targetblankf3842a3a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/887220433768aad4afd56c55d8b52401fca02a47" target="_blank">8872204</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/f3842a325eb970ea6060c5681bfe890d9ad1ab31" target="_blank">f3842a3</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree887220433768aad4afd56c55d8b52401fca02a47targetblank8872204a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreef3842a325eb970ea6060c5681bfe890d9ad1ab31targetblankf3842a3a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -534,7 +534,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/887220433768aad4afd56c55d8b52401fca02a47" target="_blank">8872204</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/f3842a325eb970ea6060c5681bfe890d9ad1ab31" target="_blank">f3842a3</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -552,6 +552,9 @@ Ignored files:
     Ignored:    .DS_Store
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
+
+Unstaged changes:
+    Modified:   PODFRIDGE.Rproj
 
 </code></pre>
 <p>
@@ -596,6 +599,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/f3842a325eb970ea6060c5681bfe890d9ad1ab31/analysis/short-range-disparity.Rmd" target="_blank">f3842a3</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-03-06
+</td>
+<td>
+update the short-range report
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/1e3164761f44aae5b16ae2066fc048cfd41a0c43/docs/short-range-disparity.html" target="_blank">1e31647</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-03-01
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -715,12 +752,15 @@ fixed constants.</p></li>
 instance, the parents and siblings of black Americans are black
 Americans, while the parents and siblings of white Americans are white
 Americans.</p></li>
-<li><p>The number of siblings is assumed to follow a multinomial
-distribution. In this model, the distribution is estimated based on the
-number of children born to women aged 50-59 in 1990 minus one.</p></li>
+<li><p>In this model, the distribution of the sibling number is
+estimated based on the number of children born to women aged 50-59 in
+1990 minus one. In addition, we assume that all states follow the same
+distribution.</p></li>
 <li><p>In the short-range familial search, we only consider the
 individual self, the parents and full siblings for detection.</p></li>
-<li><p>All related individuals are alive in the population.</p></li>
+<li><p>All relatives involved are included in the same population as the
+individual. For example, if a person lives in Michigan, their parents
+and siblings also live in Michigan.</p></li>
 </ol>
 </div>
 <div
@@ -780,25 +820,25 @@ class="math inline">\(\alpha\)</span> and racial proportions in the
 database and population.</p></li>
 <li><p>Suppose the individual has <span class="math inline">\(n\)</span>
 relatives. The probability of the event {<span
-class="math inline">\(k\)</span> relatives present in the database,
-<span class="math inline">\(n-k\)</span> relatives absent in the
-database | <span class="math inline">\(n\)</span> relatives} is <span
-class="math inline">\(Bin(k;n,P(present))={n \choose k}
-P(present)^k(1-P(present))^{n-k}\)</span>.</p></li>
-<li><p>Suppose <span class="math inline">\(k\)</span> relatives are
-present in the database and <span class="math inline">\(n-k\)</span>
-relatives are absent in the database. The number of detection inside and
-outside the database follows <span class="math inline">\(Bin(k,
-TPR)\)</span> and <span class="math inline">\(Bin(n-k, FPR)\)</span>,
-respectively. Thus, the probability of the event {at least one detection
-| <span class="math inline">\(k\)</span> relatives present in the
-database, <span class="math inline">\(n-k\)</span> relatives absent in
-the database} is <span class="math inline">\(1 -
-(1-TPR)^k(1-FPR)^{n-k}\)</span>.</p></li>
+class="math inline">\(r\)</span> relatives present in the database |
+<span class="math inline">\(n\)</span> relatives} is <span
+class="math inline">\(Bin(r;n,P(present))={n \choose r}
+P(present)^r(1-P(present))^{n-r}\)</span>.</p></li>
+<li><p>Suppose <span class="math inline">\(r\)</span> relatives are
+present in the database, then <span class="math inline">\(K-r\)</span>
+unrelated people are present in the database. The number of correct
+detection and incorrect detection in the database follows <span
+class="math inline">\(Bin(r, TPR)\)</span> and <span
+class="math inline">\(Bin(K-r, FPR)\)</span>, respectively. Thus, the
+probability of the event {at least one detection | <span
+class="math inline">\(r\)</span> relatives present in the database,
+<span class="math inline">\(K-r\)</span> unrelated people present in the
+database} is <span class="math inline">\(1 -
+(1-TPR)^r(1-FPR)^{K-r}\)</span>.</p></li>
 <li><p>For a given short-range familial relationship, the probability of
 the event {at least one detection of a certain relationship} is <span
-class="math display">\[P(at~least~one~detection~of~a~certain~relationship)=\\\sum_{n=1}^{n_\max}P(n~relatives)\sum_{k=0}^nBin(k;n,P(present))\{1
-- (1-TPR)^k(1-FPR)^{n-k}\}.\]</span></p></li>
+class="math display">\[P(at~least~one~detection~of~a~certain~relationship)=\\\sum_{n=1}^{n_\max}P(n~relatives)\sum_{r=0}^nBin(r;n,P(present))\{1
+- (1-TPR)^r(1-FPR)^{K-r}\}.\]</span></p></li>
 <li><p>The probability of the event {at least one detection} is the sum
 of the probability in Step 4 across relationships of the individual,
 parents and full sibling.</p></li>
@@ -844,6 +884,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/1e3164761f44aae5b16ae2066fc048cfd41a0c43/docs/figure/short-range-disparity.Rmd/sibling-number-1.png" target="_blank">1e31647</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-03-01
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/e711b4e6b790e0dda95bc86459e20e4d26ed715d/docs/figure/short-range-disparity.Rmd/sibling-number-1.png" target="_blank">e711b4e</a>
 </td>
 <td>
@@ -861,9 +912,7 @@ Junhui He
 the number of siblings for White Americans, and use a zero-inflated
 negative binomial distribution to model the number of siblings for Black
 Americans. In calculating the detection probability, we truncate the
-number of siblings at <span class="math inline">\(20\)</span>. In
-addition, we assume that all states follow the same distribution of
-number of sibling.</p>
+number of siblings at <span class="math inline">\(20\)</span>.</p>
 <ol start="2" style="list-style-type: decimal">
 <li>We use Census data as the population, and use CODIS data as the
 forensic database. The state-level population and forensic database size
@@ -1345,7 +1394,82 @@ by race is given as follows:</li>
 </table>
 <p>Furthermore, we show the proportions of database size/population size
 for Black and White Americans in the following figure.</p>
-<p><img src="figure/short-range-disparity.Rmd/plot-proportion-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/short-range-disparity.Rmd/plot-proportion-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/short-range-disparity.Rmd/plot-proportion-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plot-proportion-1">
+Past versions of plot-proportion-1.png
+</button>
+</p>
+<div id="fig-plot-proportion-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/1e3164761f44aae5b16ae2066fc048cfd41a0c43/docs/figure/short-range-disparity.Rmd/plot-proportion-1.png" target="_blank">1e31647</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-03-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/short-range-disparity.Rmd/plot-proportion-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plot-proportion-2">
+Past versions of plot-proportion-2.png
+</button>
+</p>
+<div id="fig-plot-proportion-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/1e3164761f44aae5b16ae2066fc048cfd41a0c43/docs/figure/short-range-disparity.Rmd/plot-proportion-2.png" target="_blank">1e31647</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-03-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <ol start="3" style="list-style-type: decimal">
 <li>True/False positive rate: The relationship between true and false
 positive rate is super complex in short-range familial search. It could
@@ -1361,7 +1485,7 @@ For full-sibling hypothesis, TPR is set to 75% and FPR is set to 1%.</p>
 </div>
 <div id="state-level-detection-probabilities" class="section level3">
 <h3>5.2 State-level detection probabilities</h3>
-<p><img src="figure/short-range-disparity.Rmd/plot-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/short-range-disparity.Rmd/plot-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/short-range-disparity.Rmd/plot-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/short-range-disparity.Rmd/plot-separate-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/short-range-disparity.Rmd/plot-separate-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/short-range-disparity.Rmd/plot-separate-3.png" width="672" style="display: block; margin: auto;" /><img src="figure/short-range-disparity.Rmd/plot-separate-4.png" width="672" style="display: block; margin: auto;" /><img src="figure/short-range-disparity.Rmd/plot-separate-5.png" width="672" style="display: block; margin: auto;" /><img src="figure/short-range-disparity.Rmd/plot-separate-6.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="conclusions" class="section level3">
 <h3>5.3 Conclusions</h3>
