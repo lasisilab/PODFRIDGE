@@ -57,7 +57,7 @@ log_message("Loading allele frequencies data...")
 print(getwd())
 allele_freq_time <- system.time({
   df_allelefreq <- fread(paste0(getwd(),"/data/df_allelefreq_combined.csv"))
-  df_allelefreq$frequency <- ifelse(df_allelefreq$frequency==0,5/(2*1036),df_allelefreq$frequency)
+#  df_allelefreq$frequency <- ifelse(df_allelefreq$frequency==0,5/(2*1036),df_allelefreq$frequency) 
   df_allelefreq <-df_allelefreq[!df_allelefreq$population=="all",]
 
   #  eval(parse(text=paste0("df_allelefreq <- df_allelefreq[df_allelefreq$population == \"",population[slurm_job_id],"\",]")))
@@ -252,13 +252,14 @@ kinship_calculation <- function(allele_frequency_data, kinship_matrix,df_allelef
   #Assuming our relationships tested and known are the same-
   #Split results by population- create each combination of predicted and known population-
   #This cannot be done in long format as this is too large so create a wide format reference table to join on
-
+ 
   allele_frequency_data<-left_join(allele_frequency_data,kinship_matrix)
   allele_frequency_data$marker<-allele_frequency_data$locus
   population<-c("AfAm", "Cauc", "Hispanic", "Asian")
   if(exists("df3")){
     rm(df3)
   }
+  df_allelefreq$frequency <- ifelse(df_allelefreq$frequency==0,5/(2*1036),df_allelefreq$frequency) 
 
   df2<-df_allelefreq[df_allelefreq$population=="AfAm",]
   names(df2)[3]<-"frequency_AfAm"
