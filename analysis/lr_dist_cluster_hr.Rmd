@@ -1,0 +1,329 @@
+---
+title: "Likelihood Ratio Distributions Mar 25"
+date: "10 March, 2025"
+site: workflowr::wflow_site
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(dplyr)
+library(data.table)
+library(ggplot2)
+library(tidyr)
+#library(DBI)
+
+# Define parameters
+relationships <- c("parent_child", "full_siblings", "half_siblings", "cousins", "second_cousins", "unrelated")
+populations <- c("AfAm", "Asian", "Cauc", "Hispanic")
+loci_sets <- c("core_13", "identifiler_15", "expanded_20", "supplementary", "autosomal_29")
+
+
+#Set up Bigquery connection and recover input table:
+#bq_auth() #You will need to be signed into google and have permissions to access
+#2 #Enter either 1 or 2 here in response to the prompt to authenticate your ID
+
+#project_id<<-"Umbizo"
+#con <- dbConnect(bigrquery::bigquery(), project = project_id)
+
+#input<-paste0(project_id,".LasisiSTR.summary_genotypes")
+#eval(parse(text=paste0("SQL<-\"SELECT * FROM `",input,"`")))
+
+#Other SQL options can be used to filter here, e.g. WHERE x LIKE "Y" and WHERE x IS NOT NULL etc
+
+#con <- dbConnect(
+ # bigrquery::bigquery(),
+ # project = project_id,
+  #billing = project_id,
+#)
+
+#combined_lrs<-as.data.table(data.frame(dbGetQuery(con,SQL)))
+combined_lrs<-readRDS("data/sim_summary_genotypes.rds")
+combined_lrs$population_label<-NA
+combined_lrs$population_label<-ifelse(combined_lrs$population=="AfAm","African-American",combined_lrs$population_label)
+combined_lrs$population_label<-ifelse(combined_lrs$population=="Asian","Asian",combined_lrs$population_label)
+combined_lrs$population_label<-ifelse(combined_lrs$population=="Cauc","Caucasian",combined_lrs$population_label)
+combined_lrs$population_label<-ifelse(combined_lrs$population=="Hispanic","Hispanic",combined_lrs$population_label)
+# Add population labels
+#combined_lrs <- combined_lrs %>%
+ # mutate(population_label = case_when( #This syntax seems to cause a problem within workflowr only
+  #  population == "AfAm" ~ "African-American",
+   # population == "Asian" ~ "Asian",
+    #population == "Cauc" ~ "Caucasian",
+#    population == "Hispanic" ~ "Hispanic"
+ # ))
+
+# Set factor levels
+combined_lrs$loci_set_factor <- factor(combined_lrs$loci_set, 
+                                    levels = c("core_13", "identifiler_15", "expanded_20", "supplementary", "autosomal_29"))
+combined_lrs$relationship_known_factor <- factor(combined_lrs$relationship_known, 
+                                             levels = relationships)
+```
+
+### Plot 0: Mean LR Across Populations and Relationship Types
+
+Mean LR by population, loci set and relationship type, assuming no errors in assigning relationship or population.
+
+```{r plot0, results=FALSE, warning=FALSE, message=FALSE, echo=FALSE, fig.width=20, fig.height=15}
+color_palette_race = c("#AA4499", "#DDCC77", "#88CCEE", "#117733")
+
+# Calculate summary statistics
+summary_stats<-combined_lrs[combined_lrs$population_known==combined_lrs$population_tested & combined_lrs$relationship_tested==combined_lrs$relationship_known,]
+
+#summary_stats <- summary_stats[,
+#  list(
+ #   mean_LR = mean(LR),
+  #  lower_95 = quantile(LR, 0.025),
+   # upper_95 = quantile(LR, 0.975)
+#  ),
+ # by = c("relationship_tested", "population_label", "loci_set_factor")
+#]
+
+summary_stats <- summary_stats %>%
+  group_by("relationship_tested", "population_label", "loci_set_factor") %>%
+  mutate(mean_LR = mean(LR),lower_95 = quantile(LR, 0.025), upper_95 = quantile(LR, 0.975)) %>%
+  ungroup()
+
+
+#  list(
+ #   mean_LR = mean(LR),
+  #  lower_95 = quantile(LR, 0.025),
+   # upper_95 = quantile(LR, 0.975)
+#  ),
+ # by = c("relationship_tested", "population_label", "loci_set_factor")
+#]
+# Example data
+summary_stats$relationship_tested <- factor(summary_stats$relationship_tested, levels = relationships)
+
+plot0 <- ggplot(summary_stats, 
+       aes(x = loci_set_factor, y = mean_LR, 
+           group = population_label, color = population_label)) +
+  geom_line(linewidth = 2) +
+  facet_wrap(~ relationship_tested, ncol = 2) +
+ # scale_y_log10() +
+  labs(
+    title = "Mean LR Across Populations and Relationship Types",
+    x = "Loci Set",
+    y = "Combined LR",
+    color = "Population"
+  ) +
+  scale_color_manual(values = color_palette_race) +
+  theme_minimal(base_size = 24) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "bottom"
+  )
+
+plot0
+```
+
+### Plot A: LR Distributions Across Populations
+
+LR distributions shown by population, loci set and relationship type, assuming no errors in assigning relationship or population.
+
+```{r plota, results=FALSE, warning=FALSE, message=FALSE, echo=FALSE, fig.width=20, fig.height=15}
+
+summary_stats<-combined_lrs[combined_lrs$population_known==combined_lrs$population_tested & combined_lrs$relationship_tested==combined_lrs$relationship_known,]
+
+summary_stats$relationship_tested <- factor(summary_stats$relationship_tested, levels = relationships)
+
+
+plota <- ggplot(summary_stats, 
+       aes(x = relationship_tested, y = LR, 
+           fill = population_label, color = population_label)) +
+  geom_boxplot(position = position_dodge(width = 0.9)) +
+  facet_wrap(~ loci_set_factor, scales = "fixed") +
+  labs(
+    title = "LR Distributions Across Populations and Relationship Types",
+    x = "Relationship Tested",
+    y = "LR",
+    fill = "Population",
+    color = "Population"
+  ) +
+  scale_color_manual(values = color_palette_race) +
+  scale_fill_manual(values = color_palette_race) +
+  theme_minimal(base_size = 24) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  ) +
+  scale_y_log10()
+
+plota
+```
+
+### Plot B: LR Distributions for Relationship Comparisons
+
+LR distributions, comparing known and tested relationship values, assuming no errors in assigning population.
+
+```{r plotb, results=FALSE, warning=FALSE, message=FALSE, echo=FALSE, fig.width=20, fig.height=15}
+n <- nrow(combined_lrs[which(relationship_known == "unrelated" & 
+                            relationship_tested == "parent_child"),])
+
+summary_stats$relationship_known_factor <- factor(summary_stats$relationship_known_factor, levels = relationships)
+summary_stats$relationship_tested <- factor(summary_stats$relationship_tested, levels = relationships)
+
+plotb <- ggplot(combined_lrs[combined_lrs$population_known==combined_lrs$population_tested,], 
+       aes(x = relationship_tested, y = LR, fill = population_label)) +
+  geom_boxplot(position = position_dodge(width = 0.9)) +
+  facet_grid(relationship_known_factor ~ loci_set_factor, scales = "free_y") +
+  labs(
+    title = "LR Distributions for Relationship Comparisons",
+    subtitle = paste0("(n=", n, " related/unrelated pairs)"),
+    x = "Tested Relationship Type",
+    y = "LR",
+    fill = "Population"
+  ) +
+  theme_minimal(base_size = 24) +
+  scale_fill_manual(values = color_palette_race) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  ) +
+  scale_y_log10()
+
+plotb
+```
+
+### Plots 1 & 2: Log Likelihood Ratio Distributions
+
+Plots showing the distribution of likelihood ratios relative to the cutoffs for each hypothesis type (cousins, full siblings, half siblings, parent_child, and second cousins). Here, we use the following cutoffs: false positive rate (FPR) of 0.01%, 0.1%, 1%, and a fixed cutoff of 1. Values that are not present in the plot correspond to a likelihood ratio of 0.
+
+```{r plot1_and_2, results=FALSE, warning=FALSE, message=FALSE, echo=FALSE, fig.width=20, fig.height=15}
+# Function to calculate cut-off values
+calculate_cutoffs <- function(input_df, fp_rates, hypothesis) {
+  input_df <- input_df[input_df$relationship_known == "unrelated" & 
+                      input_df$relationship_tested == hypothesis & input_df$population_tested== input_df$population_known,]
+  cutoffs <- input_df[,
+    list(
+      fixed_cutoff = 1.00,
+      cutoff_1 = quantile(LR, probs = 1 - fp_rates[1] / 100, na.rm = TRUE),
+      cutoff_0_1 = quantile(LR, probs = 1 - fp_rates[2] / 100, na.rm = TRUE),
+      cutoff_0_01 = quantile(LR, probs = 1 - fp_rates[3] / 100, na.rm = TRUE),
+      n_unrelated = .N
+    ),
+    by = c("population", "loci_set")]
+  return(cutoffs)
+}
+
+# Color palette for relationships
+my_colors = colorRampPalette(c("#FFB000","#F77A2E","#DE3A8A","#7253FF","#5E8BFF"))(6)
+
+# Example for parent-child hypothesis
+hypothesis <- "parent_child"
+cutoffs <- calculate_cutoffs(combined_lrs, c(1, 0.1, 0.01), hypothesis)
+combined_lrs_hyp_cutoffs <- merge(combined_lrs, cutoffs, 
+                                 by = c("population", "loci_set"), all.x = TRUE)
+
+combined_lrs_hyp_cutoffs$relationship_known_factor<- factor(combined_lrs_hyp_cutoffs$relationship_known_factor, levels = relationships)
+
+
+plot1 <- ggplot(data = combined_lrs_hyp_cutoffs[which(relationship_tested == hypothesis & population_tested== population_known),]) +
+  geom_density(aes(x = log(LR), fill = relationship_known_factor), alpha = 0.5) +
+  geom_vline(aes(xintercept = log(fixed_cutoff), col = "Fixed cutoff (1)"), 
+             linetype = "dashed") +
+  geom_vline(aes(xintercept = log(cutoff_0_1), col = "0.1% FPR"), 
+             linetype = "dashed") +
+  geom_vline(aes(xintercept = log(cutoff_0_01), col = "0.01% FPR"), 
+             linetype = "dashed") +
+  geom_vline(aes(xintercept = log(cutoff_1), col = "1% FPR"), 
+             linetype = "dashed") +
+  ggtitle(paste0("Log Likelihood Ratios for the ", hypothesis, " hypothesis")) +
+  scale_fill_manual(values = my_colors) +
+  scale_color_manual(name = paste0("Hypothesis: ", hypothesis),
+                    values = c("red", "blue", "forestgreen", "black")) +
+  facet_grid(loci_set_factor ~ population_label, scales = "free") +
+  theme_minimal(base_size = 24) +
+  guides(fill = guide_legend(title = "Known Relationship")) +
+  xlab("Log Likelihood Ratio (LLR)") + 
+  ylab("Frequency")
+
+plot1
+```
+
+### Final Plot: Proportions Exceeding Cutoffs
+
+Below, for each hypothesis (parent_child, full siblings, half siblings, cousins, and second cousins), we plot the proportion of pairs with a likelihood ratio exceeding the cutoffs for a false positive rate (FPR) of 0.01%, 0.1%, 1% and fixed cutoff of 1. Results are faceted by loci set and known relationship type on the x-axis.
+
+```{r final_plot, results=FALSE, warning=FALSE, message=FALSE, echo=FALSE, fig.width=20, fig.height=15}
+calculate_proportions_exceeding_cutoffs <- function(input_df, cutoffs, hypothesis) {
+  input_df <- input_df[input_df$relationship_tested == hypothesis & input_df$population_tested==input_df$population_known,]
+  df_with_cutoffs <- merge(input_df, cutoffs, by = c("population", "loci_set"))
+  
+  df_with_cutoffs <- df_with_cutoffs[,
+    list(
+      population = population,
+      relationship_tested = relationship_tested,
+      relationship_known = relationship_known,
+      loci_set = loci_set,
+      exceeds_fixed_cutoff = LR > fixed_cutoff,
+      exceeds_cutoff_1 = LR > cutoff_1,
+      exceeds_cutoff_0_1 = LR > cutoff_0_1,
+      exceeds_cutoff_0_01 = LR > cutoff_0_01
+    )]
+  
+  proportions_exceeding <- df_with_cutoffs[,
+    list(
+      proportion_exceeding_fixed = sum(exceeds_fixed_cutoff) / .N,
+      proportion_exceeding_1 = sum(exceeds_cutoff_1, na.rm = TRUE) / .N,
+      proportion_exceeding_0_1 = sum(exceeds_cutoff_0_1, na.rm = TRUE) / .N,
+      proportion_exceeding_0_01 = sum(exceeds_cutoff_0_01, na.rm = TRUE) / .N,
+      n_related = .N
+    ),
+    by = c("population", "relationship_tested", "loci_set", "relationship_known")]
+  
+  return(proportions_exceeding)
+}
+
+# Generate final plot for parent-child hypothesis
+proportion_exceeding <- calculate_proportions_exceeding_cutoffs(
+  input_df = combined_lrs, 
+  cutoffs = cutoffs,
+  hypothesis = "parent_child"
+)
+
+proportion_exceeding <- proportion_exceeding %>%
+  mutate(population_label = case_when(
+    population == "AfAm" ~ "African-American",
+    population == "Asian" ~ "Asian",
+    population == "Cauc" ~ "Caucasian",
+    population == "Hispanic" ~ "Hispanic"
+  ))
+
+proportions_long <- proportion_exceeding %>%
+  pivot_longer(
+    cols = starts_with("proportion_exceeding"),
+    names_to = "Cutoff",
+    values_to = "Value"
+  ) %>%
+  mutate(
+    cutoff_label = case_when(
+      Cutoff == "proportion_exceeding_0_01" ~ "0.01% FPR",
+      Cutoff == "proportion_exceeding_0_1" ~ "0.1% FPR",
+      Cutoff == "proportion_exceeding_1" ~ "1% FPR",
+      Cutoff == "proportion_exceeding_fixed" ~ "Fixed (1)"
+    )
+  )
+
+final_plot <- ggplot(proportions_long, 
+       aes(x = relationship_known, y = Value, 
+           fill = population_label, color = population_label)) +
+  geom_bar(stat = "identity", position = position_dodge(width = 0.9)) +
+  facet_grid(cutoff_label ~ loci_set, scales = "fixed") +
+  labs(
+    title = "Proportions Exceeding Likelihood Cut-offs",
+    subtitle = "Parent-Child hypothesis",
+    x = "Relationship Known",
+    y = "Proportion Exceeding Cut-off",
+    fill = "Population",
+    color = "Population"
+  ) +
+  scale_color_manual(values = color_palette_race) +
+  scale_fill_manual(values = color_palette_race) +
+  theme_minimal(base_size = 24) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+
+
+final_plot
+```

@@ -86,15 +86,19 @@ allele_freq_time <- system.time({
   df_allelefreq <- df_allelefreq[population != "all"] # Filter out "all" population
   df_allelefreq[, allele := as.character(allele)]
   df_allelefreq = as.data.table(df_allelefreq)
-  df_allelefreq<-df_allelefreq %>%
-    tidyr::complete(population,allele,marker)
 
 })
 log_message(paste("Loaded allele frequencies data in", allele_freq_time["elapsed"], "seconds."))
 
-#Replace 0 frequencies of absent allele and population combinations - assign the rare allele frequency 5/(2*1036)
-df_allelefreq <- replace(df_allelefreq, df_allelefreq==0, 5/(2*1036))
-df_allelefreq <- replace(df_allelefreq, is.na(df_allelefreq), 5/(2*1036))
+#(MOVED DOWNWARDS)
+#Replace 0 frequencies of absent allele and population combinations in the lookup table
+#- assign the rare allele frequency 5/(2*1036)
+#  df_allelefreq<-df_allelefreq %>%
+#    tidyr::complete(population,allele,marker)
+#This is happening after allele distribution in the simulations so that we are not creating novel allele combinations
+#This just allows us to avoid multiplication by zero for incorrect population LRs
+#df_allelefreq <- replace(df_allelefreq, df_allelefreq==0, 5/(2*1036))
+#df_allelefreq <- replace(df_allelefreq, is.na(df_allelefreq), 5/(2*1036))
 
 # Extract unique loci
 log_message("Extracting unique loci...")
@@ -263,6 +267,7 @@ timing_log <- proc_res1$timing_log
 proc_res1<-data.table(proc_res1$result)
 
 proc_res2 <- log_function_time(process_simulation_setup2, "process_simulation_setup2", proc_res1, df_allelefreq, kinship_matrix, output_file)
+
 timing_log <- proc_res2$timing_log
 #proc_res2<-proc_res2$result
 final_resultsc <-as.data.frame(proc_res2$result)

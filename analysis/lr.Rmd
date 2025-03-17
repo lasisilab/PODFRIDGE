@@ -15,7 +15,12 @@ knitr::opts_chunk$set(eval = TRUE, echo = FALSE, warning = FALSE, fig.width = 7,
                       
 ```
 
+The following supplementary resource attempts to explain the statistical calculations used for the individual likelihood ratios at each locus given two known allele profiles. It uses the Weight of Evidence text as a starting and ending point to show the derivation of the standard Match Probability equation into the likelihood ratio (LR) equation we will use in our simulation. This provides a detailed explanation of why certain variables are used or not used in the calculations, and what the final numbers represent. 
+
+
 5.6 in Weight of Evidence 
+
+
 The following equation predicts the probability that the next allele sampled in a population will be allele A, also known as the Match Probability, $M$. 
 $$
 M=\frac{m \theta+(1-\theta) p}{1+(n-1) \theta}
@@ -32,9 +37,7 @@ This gives us our base likelihood ratio, which we will be deriving using the equ
 $$
 R = \frac{P(profile\:c \:|\:profile\:O,\:related)}{P(profile\:c\:|\:profile\:O,\:unrelated)}
 $$
-We know related individuals will likely share a certain number of alleles due to recent common ancestors. This is known as alleles being identical by descent, or IBD, and can either be 0, 1, or 2. The probability for sharing 0, 1, or 2 alleles due to IBD is represented as $\kappa$, and will be calculated for each relationship as shown in the table below. 
-
-table
+We know related individuals will likely share a certain number of alleles due to recent common ancestors. This is known as alleles being identical by descent, or IBD, and can either be 0, 1, or 2. The probability for sharing 0, 1, or 2 alleles due to IBD is represented as $\kappa$, and will be calculated for each relationship.
 
 To determine the probability of sharing $i$ alleles for a related pair, we must multiple the probability of sharing 0, 1, or 2 alleles due to IBD by the probability of profile O having $i$ shared alleles based on profile c, and sum the possible options for all values of i. 
 
@@ -89,7 +92,7 @@ M_{2\: homo}=\frac{2\theta+(1-\theta)p_A}{1+(2-1)\theta}*\frac{3\theta+(1-\theta
 $$
 which when $\theta = 0$ reduces to ${p_A}^2$
 
-In the instance where only one allele matches between profile A and profile C, $M_2$ would be doubled to account for either allele being the one that is IBD vs IBS, making $M_2 = 2{p_A}^2$.
+In the instance where only one allele matches between profile O and profile C, $M_2$ would be doubled to account for either allele being the one that is IBD vs IBS, making $M_2 = 2{p_A}^2$.
 
 If profile c is heterozygous, we are trying to determine the probability of profile O having two matching alleles, allele A and allele B. This probability evaluates 5.6 for the instances where m = 1, n = 2 and again with m = 1, n = 3, and multiplying by two for the two possible orderings of the A and B alleles, as seen below and in Weight of Evidence as formula 6.4
 $$
@@ -111,7 +114,9 @@ $$
 \end{array}
 \end{aligned}
 $$
+
 ## The Final Likelihood Ratio
+
 To calculate the final likelihood ratio, we must place our related probability estimate for matched alleles over the unrelated estimate for matched alleles.
 We have already done the calculation for this denominator in calculating the $M_2$ equation, which is comparing the probability of a profile appearing twice in a pair of unrelated individuals
 
@@ -141,6 +146,8 @@ R=\frac{\kappa_1(\frac{p_A}{2})+\kappa_0({p_A}^2)}{{p_A}^2}=\frac{\kappa_1}{2p_A
 $$
 This above equation would also be utilized in the instance of profile c = AB and profile O = CB, although $p_B$ would be substituted for $p_A$.
 
+In this instance, the matching allele is unknown between profiles, so we must combine the calculations for the first or the second allele being the matching allele across two heterozygous profiles, transforming $2p_A$ into $4p_A$.
+
 $$
 \begin{equation}
 profile\;c=AB,\;profile\;O=AB\\
@@ -148,5 +155,5 @@ R=\frac{\kappa_2+\kappa_1(\frac{p_A}{2}+\frac{p_B}{2})+\kappa_0(2p_Ap_B)}{2p_Ap_
 \end{equation}
 $$
 
-
+This is where we draw our values for the final simulation, and where we see our equation derivations match up with the text once again. 
 
