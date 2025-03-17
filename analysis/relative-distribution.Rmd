@@ -1254,7 +1254,7 @@ df2 <- df2 %>%
 ### Calculate Sibling Frequencies
 
 df2 <- df2 %>%
-mutate(sibling_freq = ifelse(chborn_num != 1, n_siblings * 1, 1))  # Assuming each mother represents 1 in frequency
+mutate(sibling_freq = ifelse(chborn_num != 1, chborn_num*1, 1))  # Assuming each mother represents 1 in frequency
 ```
 
 ```{r}
@@ -1338,11 +1338,11 @@ df2 %>% filter(RACE == "White" & n_siblings >= 0) %>% summarise(Mean = mean(n_si
 With this visualization of the distribution of the data, we can see that there are differences between races, census year and age groups. **_Note:_** The category '11+' includes individuals with 11 or more siblings.
 
 - **_By Census Year:_** 
-  - In 1960 and 1970, individuals are more likely to have higher number of siblings,      especially in the 5-10 range. This trend diminishes over time.
+  - In 1960 and 1970, individuals are more likely to have higher number of siblings, especially in the 5-10 range. This trend diminishes over time.
   - By 1980 and 1990, the distribution shifts toward smaller family sizes, with a growing proportion of individuals having fewer siblings.
 
 - **_By Age Range:_**
-  - 40-49 Age Group: For this group, the number of individuals with 0-2 siblings increases across census years, especially in 1980 and 1990, while the proportion of individuals with larger sibling counts decreases.
+  - 40-49 Age Group: For this group, the number of individuals with 0-2 siblings increases across census years, especially in 1990, while the proportion of individuals with larger sibling counts decreases.
   - 50-59 and 60-69 Age Groups: These groups show a similar shift toward smaller family sizes, but the trend is slightly more gradual compared to the younger age group.
   - 70+ Age Group: The shift to fewer siblings is noticeable, although the trend is less pronounced. The distribution remains relatively stable across the census years, with a significant portion of individuals still coming from large families in 1960 and 1970.
 
