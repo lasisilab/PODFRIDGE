@@ -11,7 +11,7 @@
 
 <meta name="author" content="Junhui He" />
 
-<meta name="date" content="2025-03-06" />
+<meta name="date" content="2025-03-17" />
 
 <title>Disparities in Short-Range Familial Searches</title>
 
@@ -356,7 +356,7 @@ div.tocify {
 <h1 class="title toc-ignore">Disparities in Short-Range Familial
 Searches</h1>
 <h4 class="author">Junhui He</h4>
-<h4 class="date">2025-03-06</h4>
+<h4 class="date">2025-03-17</h4>
 
 </div>
 
@@ -385,7 +385,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-03-06
+<strong>Last updated:</strong> 2025-03-17
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -516,15 +516,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreef3842a325eb970ea6060c5681bfe890d9ad1ab31targetblankf3842a3a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree27674d2979e016c889d7fa466277ecaa4af175fatargetblank27674d2a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/f3842a325eb970ea6060c5681bfe890d9ad1ab31" target="_blank">f3842a3</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/27674d2979e016c889d7fa466277ecaa4af175fa" target="_blank">27674d2</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreef3842a325eb970ea6060c5681bfe890d9ad1ab31targetblankf3842a3a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree27674d2979e016c889d7fa466277ecaa4af175fatargetblank27674d2a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -534,7 +534,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/f3842a325eb970ea6060c5681bfe890d9ad1ab31" target="_blank">f3842a3</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/27674d2979e016c889d7fa466277ecaa4af175fa" target="_blank">27674d2</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -553,8 +553,16 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
 
+Untracked files:
+    Untracked:  analysis/racial_proportion_v2.Rmd
+    Untracked:  data/regression_data/CODIS_predicted_racial_proportions.csv
+    Untracked:  data/regression_data/CODIS_predicted_total_number.csv
+
 Unstaged changes:
     Modified:   PODFRIDGE.Rproj
+    Modified:   analysis/racial_proportion.Rmd
+    Modified:   analysis/regression.Rmd
+    Modified:   data/final_CODIS_data.csv
 
 </code></pre>
 <p>
@@ -599,6 +607,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/27674d2979e016c889d7fa466277ecaa4af175fa/analysis/short-range-disparity.Rmd" target="_blank">27674d2</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-03-17
+</td>
+<td>
+modify short range disparity
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/f1132466e6637e357afee8a01e35d08d00dc4b65/docs/short-range-disparity.html" target="_blank">f113246</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-03-06
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -752,12 +794,18 @@ fixed constants.</p></li>
 instance, the parents and siblings of black Americans are black
 Americans, while the parents and siblings of white Americans are white
 Americans.</p></li>
-<li><p>In this model, the distribution of the sibling number is
-estimated based on the number of children born to women aged 50-59 in
-1990 minus one. In addition, we assume that all states follow the same
-distribution.</p></li>
+<li><p>The distribution of the children number is estimated based on the
+distribution of the number of children born to women aged 40-49 in
+1990.</p></li>
+<li><p>The distribution of the sibling number is estimated based on the
+distribution of the number of children born to women aged 50-59 in 1990.
+In particular, the frequency of siblings is calculated as <span
+class="math inline">\(freq_{n_{sib}} = freq_{mother} *
+chborn_{num}\)</span>.</p></li>
+<li><p>All states in US follow the same distribution of children and
+sibling numbers.</p></li>
 <li><p>In the short-range familial search, we only consider the
-individual self, the parents and full siblings for detection.</p></li>
+parent-kids and full siblings for relationship detection.</p></li>
 <li><p>All relatives involved are included in the same population as the
 individual. For example, if a person lives in Michigan, their parents
 and siblings also live in Michigan.</p></li>
@@ -839,27 +887,25 @@ database} is <span class="math inline">\(1 -
 the event {at least one detection of a certain relationship} is <span
 class="math display">\[P(at~least~one~detection~of~a~certain~relationship)=\\\sum_{n=1}^{n_\max}P(n~relatives)\sum_{r=0}^nBin(r;n,P(present))\{1
 - (1-TPR)^r(1-FPR)^{K-r}\}.\]</span></p></li>
-<li><p>The probability of the event {at least one detection} is the sum
-of the probability in Step 4 across relationships of the individual,
-parents and full sibling.</p></li>
+<li><p>The probability of the event {at least one detection} is <span
+class="math display">\[1-\prod_{i=1}^{i_\max}(1-P(at~least~one~detection~of~relationship~i)).\]</span></p></li>
 </ol>
 </div>
 </div>
-<div id="experiments" class="section level2">
-<h2>5 Experiments</h2>
+<div id="experimental-setting" class="section level2">
+<h2>5 Experimental Setting</h2>
 <p>We focus on short-range familial search in the United States, and
 will calculate the detection probabilities for Black and White Americans
 state-by-state.</p>
-<div id="settings" class="section level3">
-<h3>5.1 Settings</h3>
 <p>Our analysis examines how family size distributions, database
 representation and true/false positive rate influence the probability of
 detecting an individual in a database.</p>
-<ol style="list-style-type: decimal">
-<li>The number of siblings whose mothers are women aged 50-59 in 1990 is
-given in the following figure:</li>
-</ol>
-<p><img src="figure/short-range-disparity.Rmd/sibling-number-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div id="family-size-distributions" class="section level3">
+<h3>5.1 Family size distributions</h3>
+<p>The distributions of number of children and siblings are given in the
+following figures, where White American shown on left (negative values),
+Black American on right (positive values).</p>
+<p><img src="figure/short-range-disparity.Rmd/sibling-number-1.png" width="1440" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-sibling-number-1">
 Past versions of sibling-number-1.png
@@ -882,6 +928,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/f1132466e6637e357afee8a01e35d08d00dc4b65/docs/figure/short-range-disparity.Rmd/sibling-number-1.png" target="_blank">f113246</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-03-06
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/1e3164761f44aae5b16ae2066fc048cfd41a0c43/docs/figure/short-range-disparity.Rmd/sibling-number-1.png" target="_blank">1e31647</a>
@@ -908,16 +965,13 @@ Junhui He
 </table>
 </div>
 </div>
-<p>Following Result 2, we use a negative binomial distribution to model
-the number of siblings for White Americans, and use a zero-inflated
-negative binomial distribution to model the number of siblings for Black
-Americans. In calculating the detection probability, we truncate the
-number of siblings at <span class="math inline">\(20\)</span>.</p>
-<ol start="2" style="list-style-type: decimal">
-<li>We use Census data as the population, and use CODIS data as the
-forensic database. The state-level population and forensic database size
-by race is given as follows:</li>
-</ol>
+</div>
+<div id="database-representation" class="section level3">
+<h3>5.2 Database representation</h3>
+<p>We use Census data as the population, and use CODIS data as the
+forensic database. In particular, we run regression to predict the
+number of people in CODIS by state and race. The state-level population
+and forensic database size by race is given as follows:</p>
 <table style="width:100%;">
 <colgroup>
 <col width="16%" />
@@ -945,455 +999,455 @@ by race is given as follows:</li>
 <td align="right">4767326</td>
 <td align="right">1296162</td>
 <td align="right">3220452</td>
-<td align="right">39545</td>
-<td align="right">18253</td>
-<td align="right">21292</td>
+<td align="right">360000.000</td>
+<td align="right">146742.2511</td>
+<td align="right">209620.572</td>
 </tr>
 <tr class="even">
 <td align="left">Alaska</td>
 <td align="right">643867</td>
 <td align="right">21898</td>
 <td align="right">435392</td>
-<td align="right">35311</td>
-<td align="right">914</td>
-<td align="right">5237</td>
+<td align="right">71893.895</td>
+<td align="right">2206.6346</td>
+<td align="right">39949.701</td>
 </tr>
 <tr class="odd">
 <td align="left">Arizona</td>
 <td align="right">6154696</td>
 <td align="right">339150</td>
 <td align="right">4322337</td>
-<td align="right">73669</td>
-<td align="right">9313</td>
-<td align="right">34353</td>
+<td align="right">495103.159</td>
+<td align="right">25483.5890</td>
+<td align="right">280512.427</td>
 </tr>
 <tr class="even">
 <td align="left">Arkansas</td>
 <td align="right">2797949</td>
 <td align="right">453783</td>
 <td align="right">2114512</td>
-<td align="right">10395</td>
-<td align="right">4401</td>
-<td align="right">5715</td>
+<td align="right">12221.000</td>
+<td align="right">3580.4744</td>
+<td align="right">8514.105</td>
 </tr>
 <tr class="odd">
 <td align="left">California</td>
 <td align="right">33777988</td>
 <td align="right">2237044</td>
 <td align="right">16296122</td>
-<td align="right">567170</td>
-<td align="right">141488</td>
-<td align="right">210144</td>
+<td align="right">2768269.000</td>
+<td align="right">473373.9990</td>
+<td align="right">819407.624</td>
 </tr>
 <tr class="even">
 <td align="left">Colorado</td>
 <td align="right">5066044</td>
 <td align="right">234828</td>
 <td align="right">4082927</td>
-<td align="right">223434</td>
-<td align="right">28486</td>
-<td align="right">140920</td>
+<td align="right">499170.000</td>
+<td align="right">27583.8604</td>
+<td align="right">329236.365</td>
 </tr>
 <tr class="odd">
 <td align="left">Connecticut</td>
 <td align="right">3273040</td>
 <td align="right">388675</td>
 <td align="right">2395128</td>
-<td align="right">8809</td>
-<td align="right">2250</td>
-<td align="right">4968</td>
+<td align="right">20000.000</td>
+<td align="right">6360.4522</td>
+<td align="right">10641.602</td>
 </tr>
 <tr class="even">
 <td align="left">Delaware</td>
 <td align="right">913430</td>
 <td align="right">218899</td>
 <td align="right">597763</td>
-<td align="right">11760</td>
-<td align="right">9399</td>
-<td align="right">1701</td>
+<td align="right">9499.641</td>
+<td align="right">4214.2481</td>
+<td align="right">5197.489</td>
 </tr>
 <tr class="odd">
 <td align="left">Florida</td>
 <td align="right">17986115</td>
 <td align="right">3246381</td>
 <td align="right">12422961</td>
-<td align="right">544332</td>
-<td align="right">20152</td>
-<td align="right">514348</td>
+<td align="right">1350667.000</td>
+<td align="right">475434.7840</td>
+<td align="right">829309.538</td>
 </tr>
 <tr class="even">
 <td align="left">Georgia</td>
 <td align="right">9968000</td>
 <td align="right">3320513</td>
 <td align="right">5555483</td>
-<td align="right">15047</td>
-<td align="right">9851</td>
-<td align="right">4682</td>
+<td align="right">347145.000</td>
+<td align="right">188994.7076</td>
+<td align="right">151062.666</td>
 </tr>
 <tr class="odd">
 <td align="left">Hawaii</td>
 <td align="right">1087142</td>
 <td align="right">23417</td>
 <td align="right">333261</td>
-<td align="right">11131</td>
-<td align="right">516</td>
-<td align="right">3018</td>
+<td align="right">28214.550</td>
+<td align="right">710.7176</td>
+<td align="right">5701.499</td>
 </tr>
 <tr class="even">
 <td align="left">Idaho</td>
 <td align="right">1685901</td>
 <td align="right">15726</td>
 <td align="right">1510360</td>
-<td align="right">8041</td>
-<td align="right">244</td>
-<td align="right">6253</td>
+<td align="right">39000.000</td>
+<td align="right">303.5099</td>
+<td align="right">33048.945</td>
 </tr>
 <tr class="odd">
 <td align="left">Illinois</td>
 <td align="right">11667524</td>
 <td align="right">1808271</td>
 <td align="right">7868227</td>
-<td align="right">31094</td>
-<td align="right">18094</td>
-<td align="right">9094</td>
+<td align="right">689297.000</td>
+<td align="right">311180.1618</td>
+<td align="right">348148.271</td>
 </tr>
 <tr class="even">
 <td align="left">Indiana</td>
 <td align="right">6348802</td>
 <td align="right">648513</td>
 <td align="right">5241795</td>
-<td align="right">14468</td>
-<td align="right">3591</td>
-<td align="right">10479</td>
+<td align="right">307714.000</td>
+<td align="right">80005.6400</td>
+<td align="right">215399.800</td>
 </tr>
 <tr class="odd">
 <td align="left">Iowa</td>
 <td align="right">3011086</td>
 <td align="right">131972</td>
 <td align="right">2694521</td>
-<td align="right">23017</td>
-<td align="right">4793</td>
-<td align="right">17021</td>
+<td align="right">156631.522</td>
+<td align="right">24799.0490</td>
+<td align="right">126928.305</td>
 </tr>
 <tr class="even">
 <td align="left">Kansas</td>
 <td align="right">2657373</td>
 <td align="right">168809</td>
 <td align="right">2222462</td>
-<td align="right">48538</td>
-<td align="right">13016</td>
-<td align="right">35318</td>
+<td align="right">257451.104</td>
+<td align="right">50839.6910</td>
+<td align="right">203948.698</td>
 </tr>
 <tr class="odd">
 <td align="left">Kentucky</td>
 <td align="right">4260996</td>
 <td align="right">362417</td>
 <td align="right">3711254</td>
-<td align="right">118670</td>
-<td align="right">34762</td>
-<td align="right">76716</td>
+<td align="right">240134.321</td>
+<td align="right">37173.7786</td>
+<td align="right">200813.408</td>
 </tr>
 <tr class="even">
 <td align="left">Louisiana</td>
 <td align="right">4384380</td>
 <td align="right">1464023</td>
 <td align="right">2657652</td>
-<td align="right">16469</td>
-<td align="right">10840</td>
-<td align="right">4972</td>
+<td align="right">699618.000</td>
+<td align="right">368290.6550</td>
+<td align="right">322836.083</td>
 </tr>
 <tr class="odd">
 <td align="left">Maine</td>
 <td align="right">1297649</td>
 <td align="right">25752</td>
 <td align="right">1237041</td>
-<td align="right">3202</td>
-<td align="right">226</td>
-<td align="right">2846</td>
+<td align="right">32847.000</td>
+<td align="right">1281.0330</td>
+<td align="right">30482.016</td>
 </tr>
 <tr class="even">
 <td align="left">Maryland</td>
 <td align="right">5695323</td>
 <td align="right">1820472</td>
 <td align="right">3007874</td>
-<td align="right">55491</td>
-<td align="right">34835</td>
-<td align="right">20207</td>
+<td align="right">126045.313</td>
+<td align="right">80168.2634</td>
+<td align="right">43019.213</td>
 </tr>
 <tr class="odd">
 <td align="left">Massachusetts</td>
 <td align="right">6421050</td>
 <td align="right">494029</td>
 <td align="right">4896037</td>
-<td align="right">14681</td>
-<td align="right">2712</td>
-<td align="right">9681</td>
+<td align="right">175161.522</td>
+<td align="right">32148.3735</td>
+<td align="right">110325.448</td>
 </tr>
 <tr class="even">
 <td align="left">Michigan</td>
 <td align="right">9442016</td>
 <td align="right">1376579</td>
 <td align="right">7444974</td>
-<td align="right">256960</td>
-<td align="right">85888</td>
-<td align="right">168422</td>
+<td align="right">654142.623</td>
+<td align="right">212337.9215</td>
+<td align="right">436272.461</td>
 </tr>
 <tr class="odd">
 <td align="left">Minnesota</td>
 <td align="right">5360773</td>
 <td align="right">398434</td>
 <td align="right">4423146</td>
-<td align="right">155525</td>
-<td align="right">39743</td>
-<td align="right">103741</td>
+<td align="right">180000.000</td>
+<td align="right">43749.3371</td>
+<td align="right">130168.714</td>
 </tr>
 <tr class="even">
 <td align="left">Mississippi</td>
 <td align="right">2850547</td>
 <td align="right">1084481</td>
 <td align="right">1658893</td>
-<td align="right">10612</td>
-<td align="right">6328</td>
-<td align="right">4193</td>
+<td align="right">118000.000</td>
+<td align="right">62017.1570</td>
+<td align="right">54263.231</td>
 </tr>
 <tr class="odd">
 <td align="left">Missouri</td>
 <td align="right">5741742</td>
 <td align="right">699840</td>
 <td align="right">4740335</td>
-<td align="right">11783</td>
-<td align="right">3701</td>
-<td align="right">7882</td>
+<td align="right">400000.000</td>
+<td align="right">88133.7975</td>
+<td align="right">308372.927</td>
 </tr>
 <tr class="even">
 <td align="left">Montana</td>
 <td align="right">1012950</td>
 <td align="right">5484</td>
 <td align="right">916524</td>
-<td align="right">2460</td>
-<td align="right">47</td>
-<td align="right">1961</td>
+<td align="right">32284.000</td>
+<td align="right">228.6695</td>
+<td align="right">27304.886</td>
 </tr>
 <tr class="odd">
 <td align="left">Nebraska</td>
 <td align="right">1817341</td>
 <td align="right">96535</td>
 <td align="right">1538052</td>
-<td align="right">2451</td>
-<td align="right">566</td>
-<td align="right">1483</td>
+<td align="right">54736.739</td>
+<td align="right">9192.4968</td>
+<td align="right">39974.882</td>
 </tr>
 <tr class="even">
 <td align="left">Nevada</td>
 <td align="right">2670605</td>
 <td align="right">304739</td>
 <td align="right">1588463</td>
-<td align="right">5629</td>
-<td align="right">1602</td>
-<td align="right">2590</td>
+<td align="right">167726.000</td>
+<td align="right">42937.8560</td>
+<td align="right">116401.844</td>
 </tr>
 <tr class="odd">
 <td align="left">New Hampshire</td>
 <td align="right">1299787</td>
 <td align="right">20127</td>
 <td align="right">1216203</td>
-<td align="right">624</td>
-<td align="right">40</td>
-<td align="right">578</td>
+<td align="right">15393.452</td>
+<td align="right">722.5766</td>
+<td align="right">13607.847</td>
 </tr>
 <tr class="even">
 <td align="left">New Jersey</td>
 <td align="right">8385500</td>
 <td align="right">1219770</td>
 <td align="right">5112280</td>
-<td align="right">17898</td>
-<td align="right">9444</td>
-<td align="right">6708</td>
+<td align="right">32696.000</td>
+<td align="right">17801.4510</td>
+<td align="right">13122.535</td>
 </tr>
 <tr class="odd">
 <td align="left">New Mexico</td>
 <td align="right">1695276</td>
 <td align="right">45904</td>
 <td align="right">1078937</td>
-<td align="right">2621</td>
-<td align="right">157</td>
-<td align="right">813</td>
+<td align="right">137791.026</td>
+<td align="right">15718.2484</td>
+<td align="right">99923.039</td>
 </tr>
 <tr class="even">
 <td align="left">New York</td>
 <td align="right">18433786</td>
 <td align="right">2986172</td>
 <td align="right">11143349</td>
-<td align="right">132709</td>
-<td align="right">68684</td>
-<td align="right">17116</td>
+<td align="right">696443.925</td>
+<td align="right">310148.6267</td>
+<td align="right">280780.173</td>
 </tr>
 <tr class="odd">
 <td align="left">North Carolina</td>
 <td align="right">9727667</td>
 <td align="right">2140217</td>
 <td align="right">6488459</td>
-<td align="right">23450</td>
-<td align="right">12270</td>
-<td align="right">11138</td>
+<td align="right">350000.000</td>
+<td align="right">147996.2471</td>
+<td align="right">192976.031</td>
 </tr>
 <tr class="even">
 <td align="left">North Dakota</td>
 <td align="right">737154</td>
 <td align="right">26783</td>
 <td align="right">645938</td>
-<td align="right">32509</td>
-<td align="right">2983</td>
-<td align="right">24363</td>
+<td align="right">41485.921</td>
+<td align="right">1151.8924</td>
+<td align="right">32027.576</td>
 </tr>
 <tr class="odd">
 <td align="left">Ohio</td>
 <td align="right">11118076</td>
 <td align="right">1478781</td>
 <td align="right">9080688</td>
-<td align="right">71913</td>
-<td align="right">26015</td>
-<td align="right">45454</td>
+<td align="right">1015392.481</td>
+<td align="right">276829.3194</td>
+<td align="right">728038.606</td>
 </tr>
 <tr class="even">
 <td align="left">Oklahoma</td>
 <td align="right">3451195</td>
 <td align="right">289961</td>
 <td align="right">2514885</td>
-<td align="right">10656</td>
-<td align="right">2841</td>
-<td align="right">5853</td>
+<td align="right">226494.285</td>
+<td align="right">53729.7777</td>
+<td align="right">148300.940</td>
 </tr>
 <tr class="odd">
 <td align="left">Oregon</td>
 <td align="right">3793917</td>
 <td align="right">82655</td>
 <td align="right">3169096</td>
-<td align="right">5045</td>
-<td align="right">515</td>
-<td align="right">3552</td>
+<td align="right">230533.267</td>
+<td align="right">9511.3245</td>
+<td align="right">186615.466</td>
 </tr>
 <tr class="even">
 <td align="left">Pennsylvania</td>
 <td align="right">12228216</td>
 <td align="right">1423169</td>
 <td align="right">9750687</td>
-<td align="right">10238</td>
-<td align="right">4159</td>
-<td align="right">5088</td>
+<td align="right">530243.413</td>
+<td align="right">165136.1824</td>
+<td align="right">350359.644</td>
 </tr>
 <tr class="odd">
 <td align="left">Rhode Island</td>
 <td align="right">995585</td>
 <td align="right">62168</td>
 <td align="right">782920</td>
-<td align="right">14465</td>
-<td align="right">3672</td>
-<td align="right">7852</td>
+<td align="right">27818.000</td>
+<td align="right">7190.5216</td>
+<td align="right">15269.301</td>
 </tr>
 <tr class="even">
 <td align="left">South Carolina</td>
 <td align="right">4820049</td>
 <td align="right">1280531</td>
 <td align="right">3243442</td>
-<td align="right">6955</td>
-<td align="right">3752</td>
-<td align="right">3203</td>
+<td align="right">175629.000</td>
+<td align="right">78666.0457</td>
+<td align="right">94920.924</td>
 </tr>
 <tr class="odd">
 <td align="left">South Dakota</td>
 <td align="right">840002</td>
 <td align="right">17842</td>
 <td align="right">715336</td>
-<td align="right">40687</td>
-<td align="right">2961</td>
-<td align="right">25411</td>
+<td align="right">67600.000</td>
+<td align="right">4056.0000</td>
+<td align="right">45156.800</td>
 </tr>
 <tr class="even">
 <td align="left">Tennessee</td>
 <td align="right">6497942</td>
 <td align="right">1092948</td>
 <td align="right">4990938</td>
-<td align="right">40544</td>
-<td align="right">14544</td>
-<td align="right">25620</td>
+<td align="right">456494.008</td>
+<td align="right">131551.7704</td>
+<td align="right">321353.746</td>
 </tr>
 <tr class="odd">
 <td align="left">Texas</td>
 <td align="right">24011767</td>
 <td align="right">3552997</td>
 <td align="right">14609365</td>
-<td align="right">70955</td>
-<td align="right">22169</td>
-<td align="right">25519</td>
+<td align="right">960985.000</td>
+<td align="right">279646.6350</td>
+<td align="right">358447.405</td>
 </tr>
 <tr class="even">
 <td align="left">Utah</td>
 <td align="right">2992603</td>
 <td align="right">40058</td>
 <td align="right">2573413</td>
-<td align="right">110189</td>
-<td align="right">5993</td>
-<td align="right">94992</td>
+<td align="right">149326.204</td>
+<td align="right">2926.1364</td>
+<td align="right">116733.989</td>
 </tr>
 <tr class="odd">
 <td align="left">Vermont</td>
 <td align="right">606051</td>
 <td align="right">9034</td>
 <td align="right">577751</td>
-<td align="right">2754</td>
-<td align="right">295</td>
-<td align="right">2423</td>
+<td align="right">12941.760</td>
+<td align="right">1089.4961</td>
+<td align="right">11546.709</td>
 </tr>
 <tr class="even">
 <td align="left">Virginia</td>
 <td align="right">7925686</td>
 <td align="right">1607581</td>
 <td align="right">5208856</td>
-<td align="right">12379</td>
-<td align="right">6249</td>
-<td align="right">5836</td>
+<td align="right">509009.000</td>
+<td align="right">228481.7900</td>
+<td align="right">272787.878</td>
 </tr>
 <tr class="odd">
 <td align="left">Washington</td>
 <td align="right">6868622</td>
 <td align="right">307565</td>
 <td align="right">5130920</td>
-<td align="right">7413</td>
-<td align="right">1376</td>
-<td align="right">4585</td>
+<td align="right">272000.000</td>
+<td align="right">48944.4573</td>
+<td align="right">204569.887</td>
 </tr>
 <tr class="even">
 <td align="left">West Virginia</td>
 <td align="right">1708772</td>
 <td align="right">65813</td>
 <td align="right">1610749</td>
-<td align="right">3412</td>
-<td align="right">955</td>
-<td align="right">2218</td>
+<td align="right">47444.000</td>
+<td align="right">4944.1882</td>
+<td align="right">42241.396</td>
 </tr>
 <tr class="odd">
 <td align="left">Wisconsin</td>
 <td align="right">5534184</td>
 <td align="right">376256</td>
 <td align="right">4737545</td>
-<td align="right">9324</td>
-<td align="right">3482</td>
-<td align="right">5253</td>
+<td align="right">433943.146</td>
+<td align="right">104925.8859</td>
+<td align="right">323498.798</td>
 </tr>
 <tr class="even">
 <td align="left">Wyoming</td>
 <td align="right">533378</td>
 <td align="right">5232</td>
 <td align="right">488374</td>
-<td align="right">3353</td>
-<td align="right">129</td>
-<td align="right">2482</td>
+<td align="right">21364.895</td>
+<td align="right">256.8106</td>
+<td align="right">18218.686</td>
 </tr>
 </tbody>
 </table>
-<p>Furthermore, we show the proportions of database size/population size
-for Black and White Americans in the following figure.</p>
+<p>Furthermore, we show the present probability for Black and White
+Americans in the following figure.</p>
 <p><img src="figure/short-range-disparity.Rmd/plot-proportion-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plot-proportion-1">
@@ -1417,6 +1471,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/f1132466e6637e357afee8a01e35d08d00dc4b65/docs/figure/short-range-disparity.Rmd/plot-proportion-1.png" target="_blank">f113246</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-03-06
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/1e3164761f44aae5b16ae2066fc048cfd41a0c43/docs/figure/short-range-disparity.Rmd/plot-proportion-1.png" target="_blank">1e31647</a>
@@ -1457,6 +1522,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/f1132466e6637e357afee8a01e35d08d00dc4b65/docs/figure/short-range-disparity.Rmd/plot-proportion-2.png" target="_blank">f113246</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-03-06
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/1e3164761f44aae5b16ae2066fc048cfd41a0c43/docs/figure/short-range-disparity.Rmd/plot-proportion-2.png" target="_blank">1e31647</a>
 </td>
 <td>
@@ -1470,34 +1546,275 @@ Junhui He
 </table>
 </div>
 </div>
-<ol start="3" style="list-style-type: decimal">
-<li>True/False positive rate: The relationship between true and false
-positive rate is super complex in short-range familial search. It could
-depend on the hypothesis type, the likelihood cutoff, the number of STR
-loci, the race and so on. See <a
+</div>
+<div id="truefalse-positive-rate" class="section level3">
+<h3>5.3 True/False positive rate</h3>
+<p>The relationship between true and false positive rate is super
+complex in short-range familial search. It could depend on the
+hypothesis type, the likelihood cutoff, the number of STR loci, the race
+and so on. See <a
 href="https://lasisilab.github.io/PODFRIDGE/lr_dist.html">Likelihood
-Ratio Distribution</a> for an overview.</li>
-</ol>
+Ratio Distribution</a> for an overview.</p>
 <p>In this analysis, we consider a special case of true/false positive
-rates. For individual hypothesis, TPR is set to 1 and FPR is set to 0.
-For parent-child hypothesis, TPR is set to 1 and FPR is set to 0.01%.
-For full-sibling hypothesis, TPR is set to 75% and FPR is set to 1%.</p>
+rates. For parent-child hypothesis, TPR is set to 1 and FPR is set to
+0.01%. For full-sibling hypothesis, TPR is set to 75% and FPR is set to
+1%.</p>
 </div>
-<div id="state-level-detection-probabilities" class="section level3">
-<h3>5.2 State-level detection probabilities</h3>
-<p><img src="figure/short-range-disparity.Rmd/plot-separate-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/short-range-disparity.Rmd/plot-separate-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/short-range-disparity.Rmd/plot-separate-3.png" width="672" style="display: block; margin: auto;" /><img src="figure/short-range-disparity.Rmd/plot-separate-4.png" width="672" style="display: block; margin: auto;" /><img src="figure/short-range-disparity.Rmd/plot-separate-5.png" width="672" style="display: block; margin: auto;" /><img src="figure/short-range-disparity.Rmd/plot-separate-6.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
-<div id="conclusions" class="section level3">
-<h3>5.3 Conclusions</h3>
+<div id="results" class="section level2">
+<h2>6 Results</h2>
+<p>In this section, we present State-level estimated detection
+probabilities.</p>
+<div id="detection-probability-versus-present-probability"
+class="section level3">
+<h3>6.1 Detection probability versus present probability</h3>
+<p><img src="figure/short-range-disparity.Rmd/detect-present-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="total-detection-probability" class="section level3">
+<h3>6.2 Total detection probability</h3>
+</div>
+<div id="parent-child-full-sibling-detection-probability"
+class="section level3">
+<h3>6.3 Parent, child, full sibling detection probability</h3>
+<p><img src="figure/short-range-disparity.Rmd/plot-separate-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plot-separate-1">
+Past versions of plot-separate-1.png
+</button>
+</p>
+<div id="fig-plot-separate-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/f1132466e6637e357afee8a01e35d08d00dc4b65/docs/figure/short-range-disparity.Rmd/plot-separate-1.png" target="_blank">f113246</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-03-06
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/short-range-disparity.Rmd/plot-separate-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plot-separate-2">
+Past versions of plot-separate-2.png
+</button>
+</p>
+<div id="fig-plot-separate-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/f1132466e6637e357afee8a01e35d08d00dc4b65/docs/figure/short-range-disparity.Rmd/plot-separate-2.png" target="_blank">f113246</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-03-06
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/short-range-disparity.Rmd/plot-separate-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plot-separate-3">
+Past versions of plot-separate-3.png
+</button>
+</p>
+<div id="fig-plot-separate-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/f1132466e6637e357afee8a01e35d08d00dc4b65/docs/figure/short-range-disparity.Rmd/plot-separate-3.png" target="_blank">f113246</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-03-06
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/short-range-disparity.Rmd/plot-separate-4.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plot-separate-4">
+Past versions of plot-separate-4.png
+</button>
+</p>
+<div id="fig-plot-separate-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/f1132466e6637e357afee8a01e35d08d00dc4b65/docs/figure/short-range-disparity.Rmd/plot-separate-4.png" target="_blank">f113246</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-03-06
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/short-range-disparity.Rmd/plot-separate-5.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plot-separate-5">
+Past versions of plot-separate-5.png
+</button>
+</p>
+<div id="fig-plot-separate-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/f1132466e6637e357afee8a01e35d08d00dc4b65/docs/figure/short-range-disparity.Rmd/plot-separate-5.png" target="_blank">f113246</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-03-06
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/short-range-disparity.Rmd/plot-separate-6.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plot-separate-6">
+Past versions of plot-separate-6.png
+</button>
+</p>
+<div id="fig-plot-separate-6" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/f1132466e6637e357afee8a01e35d08d00dc4b65/docs/figure/short-range-disparity.Rmd/plot-separate-6.png" target="_blank">f113246</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-03-06
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/short-range-disparity.Rmd/plot-separate-7.png" width="672" style="display: block; margin: auto;" /><img src="figure/short-range-disparity.Rmd/plot-separate-8.png" width="672" style="display: block; margin: auto;" /><img src="figure/short-range-disparity.Rmd/plot-separate-9.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="conclusions" class="section level2">
+<h2>7 Conclusions</h2>
 <ol style="list-style-type: decimal">
-<li><p>The detection probability for Black Americans is higher than that
-for White Americans in all states except for Florida. This is because
-(1) Black Americans have mildly more siblings than White Americans, and
-(2) Black Americans are overrepresented while White Americans are
-underrepresented in the forensic database.</p></li>
-<li><p>The situation is opposite in Florida, where Black Americans are
-underrepresented while White Americans are overrepresented in the
-forensic database.</p></li>
+<li>The detection probability for Black Americans is higher than that
+for White Americans in most states. This is because (1) Black Americans
+have mildly more children and siblings than White Americans, and (2)
+Black Americans are overrepresented while White Americans are
+underrepresented in the forensic database.</li>
 </ol>
 <br>
 <p>
@@ -1509,7 +1826,7 @@ Session information
 <div id="workflowr-sessioninfo" class="collapse">
 <pre><code>R version 4.4.2 (2024-10-31)
 Platform: aarch64-apple-darwin20
-Running under: macOS Sequoia 15.3.1
+Running under: macOS Sequoia 15.3.2
 
 Matrix products: default
 BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib 
@@ -1534,17 +1851,17 @@ loaded via a namespace (and not attached):
 [13] jsonlite_1.8.9    processx_3.8.4    whisker_0.4.1     backports_1.5.0  
 [17] Formula_1.2-5     ps_1.8.1          promises_1.3.2    httr_1.4.7       
 [21] purrr_1.0.2       fansi_1.0.6       scales_1.3.0      jquerylib_0.1.4  
-[25] abind_1.4-8       cli_3.6.3         rlang_1.1.4       munsell_0.5.1    
-[29] withr_3.0.2       cachem_1.1.0      yaml_2.3.10       tools_4.4.2      
-[33] ggsignif_0.6.4    dplyr_1.1.4       colorspace_2.1-1  httpuv_1.6.15    
-[37] broom_1.0.7       vctrs_0.6.5       R6_2.5.1          lifecycle_1.0.4  
-[41] git2r_0.35.0      stringr_1.5.1     car_3.1-3         fs_1.6.5         
-[45] pkgconfig_2.0.3   callr_3.7.6       pillar_1.9.0      bslib_0.8.0      
-[49] later_1.4.1       gtable_0.3.6      glue_1.8.0        Rcpp_1.0.13-1    
-[53] xfun_0.49         tibble_3.2.1      tidyselect_1.2.1  rstudioapi_0.17.1
-[57] knitr_1.49        farver_2.1.2      htmltools_0.5.8.1 labeling_0.4.3   
-[61] carData_3.0-5     rmarkdown_2.29    compiler_4.4.2    getPass_0.2-4    </code></pre>
-</div>
+[25] abind_1.4-8       cli_3.6.3         rlang_1.1.4       cowplot_1.1.3    
+[29] munsell_0.5.1     withr_3.0.2       cachem_1.1.0      yaml_2.3.10      
+[33] tools_4.4.2       ggsignif_0.6.4    dplyr_1.1.4       colorspace_2.1-1 
+[37] httpuv_1.6.15     broom_1.0.7       vctrs_0.6.5       R6_2.5.1         
+[41] lifecycle_1.0.4   git2r_0.35.0      stringr_1.5.1     car_3.1-3        
+[45] fs_1.6.5          pkgconfig_2.0.3   callr_3.7.6       pillar_1.9.0     
+[49] bslib_0.8.0       later_1.4.1       gtable_0.3.6      glue_1.8.0       
+[53] Rcpp_1.0.13-1     xfun_0.49         tibble_3.2.1      tidyselect_1.2.1 
+[57] rstudioapi_0.17.1 knitr_1.49        farver_2.1.2      htmltools_0.5.8.1
+[61] labeling_0.4.3    carData_3.0-5     rmarkdown_2.29    compiler_4.4.2   
+[65] getPass_0.2-4    </code></pre>
 </div>
 </div>
 </div>
