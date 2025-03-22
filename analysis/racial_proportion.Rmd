@@ -29,7 +29,7 @@ In this section, we demonstrate the response variable and predictors used in the
 ### 3.1 Response variable:
 
 -   The total number of people for each state in the M&T forensic database.
--   The number of each rate for each state in the M&T database.
+-   The number of each race for each state in the M&T database.
 
 ### 3.2 Predictor:
 
@@ -38,11 +38,11 @@ In this section, we demonstrate the response variable and predictors used in the
 
 ### 3.3 Stick-breaking:
 
-We divide the people of the US into three categories, black + white + other. Then we need to estimate the complete racial breakdown for three categories in each state. To ensure the sum of these percents is equal to 1, we use a simple stick-breaking technique. That is, we separately estimate the percent of black people in all people $p_{1}$ and the percent of white people in non-black people $p_{2}$. Then the racial breakdown is given by $$\pi_{black}=p_1, \quad \pi_{white}=(1-p_1)p_2,\quad \pi_{other}=(1-p_1)(1-p_2).$$ We run 2 binomial regression models to predict $p_1$ and $p_2$ for each state.
+We divide the people of the US into three categories, black + white + other. Then we need to estimate the complete racial breakdown for three categories in each state. To ensure the sum of these percents is equal to 1, we use a simple stick-breaking technique. That is, we separately estimate the percent of white people in all people $p_{1}$ and the percent of black people in non-white people $p_{2}$. Then the racial breakdown is given by $$\pi_{white}=p_1, \quad \pi_{black}=(1-p_1)p_2,\quad \pi_{other}=(1-p_1)(1-p_2).$$ We run 2 binomial regression models to predict $p_1$ and $p_2$ for each state.
 
 ### 3.4 Model equation
 
-Compared to the predictors used by Hanna, we remove the racial indicator and the interaction between the racial indicator and the census/prison proportion to avoid colinearity, which leads to a singular problem for linear regression. The colinearity means the predictors are linearly dependent. Therefore, the model equations are defined as $$ \frac{black}{all} = g(\beta_{00} + \beta_{01}*black_{census}+\beta_{02}*white_{census}+ \\ \beta_{03}* black_{prison}+\beta_{04}*white_{prison}), $$ $$ \frac{white}{nonblack} = g(\beta_{10} + \beta_{11}*black_{census}+\beta_{12}*white_{census}+ \\ \beta_{13}* black_{prison}+\beta_{14}*white_{prison}). $$
+Compared to the predictors used by Hanna, we remove the racial indicator and the interaction between the racial indicator and the census/prison proportion to avoid colinearity, which leads to a singular problem for linear regression. Therefore, the model equations are defined as $$ \frac{white}{all} = g(\beta_{00} + \beta_{01}*white_{census}+ \beta_{02}*white_{prison}), $$ $$ \frac{black}{nonwhite} = g(\beta_{10} + \beta_{11}*black_{census} + \beta_{12}*black_{prison}). $$
 
 ### 3.5 Coefficient interpretability
 
@@ -66,7 +66,7 @@ ilogit <- function(x) {
 ```{r data}
 # read and preprocess data
 # read data
-data_path = '../data/regression_data'
+data_path = './data/regression_data'
 response_data_path = file.path(data_path, 'CODIS_regression_data.csv')
 predictor_data_path = file.path(data_path, 'CODIS_regression_predict_data.csv')
 
@@ -79,19 +79,22 @@ idx = c(5, 9, 14, 19, 28, 41, 43)
 
 # calculate the response values
 y = array(dim = c(7, 3))
-colnames(y) = c('mt.black', 'mt.white', 'mt.total')
+colnames(y) = c('mt.white', 'mt.black', 'mt.total')
 rownames(y) = response_data[,2]
 y[,3] = response_data[,12]
-y[,1] = round(y[,3] * response_data[,3])
-y[,2] = round(y[,3] * response_data[,6])
+y[,2] = round(y[,3] * response_data[,3])
+y[,1] = round(y[,3] * response_data[,6])
 
 # calculate the predictor values
-x = matrix(nrow = 50, ncol = 4)
+x = matrix(nrow = 50, ncol = 6)
 rownames(x) = predictor_data[,2]
-colnames(x) = c('census.percent.black', 'census.percent.white', 'incarc.percent.black', 'incarc.percent.white')
-x[,c(1,2)] = as.matrix(predictor_data[,c(12,13)])
-x[,3] = predictor_data[,5]/(predictor_data[,3]-predictor_data[,10])
-x[,4] = predictor_data[,4]/(predictor_data[,3]-predictor_data[,10])
+colnames(x) = c('census.percent.white', 'census.percent.black', 'incarc.percent.white', 'incarc.percent.black', 'census.remain.percent.black', 'incarc.remain.percent.black')
+x[,c(2,1)] = as.matrix(predictor_data[,c(12,13)])
+x[,4] = predictor_data[,5]/(predictor_data[,3]-predictor_data[,10])
+x[,3] = predictor_data[,4]/(predictor_data[,3]-predictor_data[,10])
+
+x[,5] = x[,2] / (1 - x[,1])
+x[,6] = x[,4] / (1 - x[,3])
 
 # create training data and test data
 train_data = as.data.frame(x[idx,])
@@ -103,51 +106,53 @@ test_data = as.data.frame(x[-idx,])
 <span style="color:red"> If you just want to read the answers to the key questions, please skip this part and go to the next section directly. <span>
 
 ```{r binomial-regression}
-# Black Americans
-# fit the binomial regression
-binomial_regression_black = glm(formula = cbind(y[,1], y[,3]-y[,1])~census.percent.black+census.percent.white+incarc.percent.black+incarc.percent.white, family = binomial, data = train_data)
-
-# confidence intervals
-result_black = predict(binomial_regression_black, as.data.frame(x), se.fit = TRUE)
-alpha = 0.05
-z_hat_black = cbind(result_black$fit, result_black$fit-qnorm(1-alpha/2)*result_black$se.fit, result_black$fit+qnorm(1-alpha/2)*result_black$se.fit)
-pi_hat_black = ilogit(z_hat_black)
-rownames(pi_hat_black) = rownames(x)
-colnames(pi_hat_black) = c('probability', 'lcl', 'ucl')
-
-# p value
-probs_black = pnorm(logit(predictor_data[,12]), mean = result_black$fit, sd = result_black$se.fit, lower.tail = FALSE)
-p_values_black = 1 - probs_black
-
 # White Americans
 # fit the binomial regression
-binomial_regression_white = glm(formula = cbind(y[,2], y[,3]-y[,1]-y[,2])~census.percent.black+census.percent.white+incarc.percent.black+incarc.percent.white, family = binomial, data = train_data)
+# binomial_regression.white = glm(formula = cbind(y[,1], y[,3]-y[,1])~census.percent.white+census.percent.black+incarc.percent.white+incarc.percent.black, family = binomial, data = train_data)
+binomial_regression.white = glm(formula = cbind(y[,1], y[,3]-y[,1])~census.percent.white+incarc.percent.white, family = binomial, data = train_data)
+
+# confidence intervals
+result.white = predict(binomial_regression.white, as.data.frame(x), se.fit = TRUE)
+alpha = 0.05
+z_hat.white = cbind(result.white$fit, result.white$fit-qnorm(1-alpha/2)*result.white$se.fit, result.white$fit+qnorm(1-alpha/2)*result.white$se.fit)
+pi_hat.white = ilogit(z_hat.white)
+rownames(pi_hat.white) = rownames(x)
+colnames(pi_hat.white) = c('probability', 'lcl', 'ucl')
+
+# p value
+probs.white = pnorm(logit(predictor_data[,12]), mean = result.white$fit, sd = result.white$se.fit, lower.tail = FALSE)
+p_values.white = 1 - probs.white
+
+# Black Americans
+# fit the binomial regression
+# binomial_regression.black = glm(formula = cbind(y[,2], y[,3]-y[,1]-y[,2])~census.percent.white+census.percent.black+incarc.percent.white+incarc.percent.black, family = binomial, data = train_data)
+binomial_regression.black = glm(formula = cbind(y[,2], y[,3]-y[,1]-y[,2])~census.remain.percent.black+incarc.remain.percent.black, family = binomial, data = train_data)
 
 # confidence intervals with Bonferroni methods
-result_black = predict(binomial_regression_black, as.data.frame(x), se.fit = TRUE)
+result.white = predict(binomial_regression.white, as.data.frame(x), se.fit = TRUE)
 alpha = 0.05
-z_hat_black = cbind(result_black$fit, result_black$fit+qnorm(1-alpha/4)*result_black$se.fit, result_black$fit-qnorm(1-alpha/4)*result_black$se.fit)
-p_hat_black = ilogit(z_hat_black)
+z_hat.white = cbind(result.white$fit, result.white$fit+qnorm(1-alpha/4)*result.white$se.fit, result.white$fit-qnorm(1-alpha/4)*result.white$se.fit)
+p_hat.white = ilogit(z_hat.white)
 
-result_white = predict(binomial_regression_white, as.data.frame(x), se.fit = TRUE)
-z_hat_white = cbind(result_white$fit, result_white$fit-qnorm(1-alpha/4)*result_white$se.fit, result_white$fit+qnorm(1-alpha/4)*result_white$se.fit)
-p_hat_white = ilogit(z_hat_white)
+result.black = predict(binomial_regression.black, as.data.frame(x), se.fit = TRUE)
+z_hat.black = cbind(result.black$fit, result.black$fit-qnorm(1-alpha/4)*result.black$se.fit, result.black$fit+qnorm(1-alpha/4)*result.black$se.fit)
+p_hat.black = ilogit(z_hat.black)
 
-pi_hat_white = (1-p_hat_black)*p_hat_white
-rownames(pi_hat_white) = rownames(x)
-colnames(pi_hat_white) = c('probability', 'lcl', 'ucl')
+pi_hat.black = (1-p_hat.white)*p_hat.black
+rownames(pi_hat.black) = rownames(x)
+colnames(pi_hat.black) = c('probability', 'lcl', 'ucl')
 ```
 
 ### 4.1 Coefficient estimatioan and hypothesis testing
 
 We estimate the linear coefficients $\beta$ of the binomial logistic regression for black Americans and white Americans using `glm()` function and do a Wald test on the beta coefficients. The $p$-values show that these coefficients are all statistically significant.
 
-```{r summary-statistics-of-binomial-regression-for-Black-People}
-summary(binomial_regression_black)
+```{r summary-statistics-of-binomial-regression-for-White-People}
+summary(binomial_regression.white)
 ```
 
-```{r Summary statistics of binomial regression for White People}
-summary(binomial_regression_white)
+```{r Summary statistics of binomial regression for Black People}
+summary(binomial_regression.black)
 ```
 
 ### 4.2 Goodness-of-Fit
@@ -156,7 +161,7 @@ Furthermore, we plot the fitted racial proportions using stick-breaking binomial
 
 ```{r Goodness-of-Fit}
 # goodness of fit
-pis_train = data.frame(ground_truth=c(response_data[,3], response_data[,6]), fitted_value=c(pi_hat_black[idx,1], pi_hat_white[idx,1]), Races=rep(c('Black/African American', 'White American'), each=7), States=rep(response_data[,2], 2))
+pis_train = data.frame(ground_truth=c(response_data[,3], response_data[,6]), fitted_value=c(pi_hat.black[idx,1], pi_hat.white[idx,1]), Races=rep(c('Black/African American', 'White American'), each=7), States=rep(response_data[,2], 2))
 
 ggplot(pis_train) + geom_point(aes(x=ground_truth, y=fitted_value, shape=Races, colour=States), size=4) + xlab('Ground truth in M&T database') + ylab('Fitted probability') + xlim(0,1) + ylim(0,1) + geom_abline(linetype='longdash', linewidth=1) + ggtitle('Goodness of fit for racial breakdown') + theme(plot.title = element_text(hjust = 0.5))
 ```
@@ -165,17 +170,19 @@ ggplot(pis_train) + geom_point(aes(x=ground_truth, y=fitted_value, shape=Races, 
 
 ```{r predict}
 # predict the proportion in test data
-p_hat = cbind(predict(binomial_regression_black, test_data, type='response'), predict(binomial_regression_white, test_data, type='response'))
+p_hat = cbind(predict(binomial_regression.white, test_data, type='response'), predict(binomial_regression.black, test_data, type='response'))
 pi_hat = array(dim=c(43,3))
 pi_hat[,1] = p_hat[,1]
 pi_hat[,2] = (1-p_hat[,1])*p_hat[,2]
 pi_hat[,3] = 1 - pi_hat[,1] - pi_hat[,2]
 # combine the proportions in forensic database
 pis_mt = array(dim=c(50,3))
-colnames(pis_mt) = c('mt.precent.black', 'mt.percent.white', 'mt.percent.other')
+colnames(pis_mt) = c('mt.percent.white', 'mt.percent.black', 'mt.percent.other')
 rownames(pis_mt) = rownames(x)
-pis_mt[idx,] = cbind(response_data[,3], response_data[,6], 1 - response_data[,3] - response_data[,6])
+pis_mt[idx,] = cbind(response_data[,6], response_data[,3], 1 - response_data[,3] - response_data[,6])
 pis_mt[-idx,] = pi_hat
+pis_mt = pis_mt[,c(2, 1, 3)]
+write.csv(pis_mt, file.path(data_path, 'CODIS_predicted_racial_proportions.csv'))
 # extract the proportions in census database
 pis_census = as.array(as.matrix(predictor_data[,12:14]))
 colnames(pis_census) = colnames(predictor_data)[12:14]
@@ -212,7 +219,7 @@ for (i in 1:50) {
 
 ### 5.1 TL;DR
 
-Black Americans are significantly overrepresented in all states in M&T forensic database compared to census representation.
+Black Americans are significantly overrepresented while White Americans are underrepresented in M&T forensic database compared to census representation.
 
 ### 5.2 Racial breakdown
 
@@ -250,13 +257,13 @@ ggplot(data = rela_diff.df, mapping = aes(x=states, y=values, fill=Races)) + geo
 
 Based on the asymptotic theory for maximum likelihood estimation, as the sample size increase, $$\sqrt{n}(\hat{\beta}-\beta) \to N(0, ~ I^{-1}(\beta)),\quad as~n\to \infty,$$ where $I(\beta)$ is the Fisher information. Thus, the log odds approximately follows the normal distribution, $$\log(\frac{\hat{p}}{1-\hat{p}}) \sim N(x^\top \beta, ~ \frac{1}{n}x^\top I^{-1}(\beta)x),$$ as the total number of population in 7 states is very large. This normal approximation is useful in the following hypothesis testing and confidence interval construction.
 
-For each state, we consider a hypothesis testing problem for the difference of black proportions between Census and CODIS, $$H_0:p_{CODIS,Black}=p_{Census,Black} \leftrightarrow H_1:p_{CODIS,Black}>p_{Census,Black}.$$ Using the logit link function, we work on the log odds instead of the probability. The normal approximation helps to construct a one-sided testing statistics, and the $p{\text -values}<10^{-15}$ for all states.
+For each state, we consider a hypothesis testing problem for the difference of white proportions between Census and CODIS, $$H_0:p_{CODIS,White}=p_{Census,White} \leftrightarrow H_1:p_{CODIS,White}>p_{Census,White}.$$ Using the logit link function, we work on the log odds instead of the probability. The normal approximation helps to construct a one-sided testing statistics, and the $p{\text -values}<10^{-15}$ for all states.
 
-Finally, we calculate the $1-\alpha$ confidence intervals for the fitted probability using binomial regression. The normal approximation for the log odds $z=x^\top \beta$ contributes to a confidence interval $ConfInt=[g(\hat{z}-c_{1-\alpha/2}se(\hat{z})),~g(\hat{z}+c_{1-\alpha/2}se(\hat{z}))]$ for the black proportion in Census, where $c_{1-\alpha/2}$ is the $1-\alpha/2$ quantile of the standard normal distribution. This implies a confidence interval for the differences with $ConfInt-p_{Census}$. For the white Americans, we utilize a Bonferroni method to construct the confidence interval. As the number of population in each state with available data is very large, the estimated standard errors $se(\hat{z})$ is very small, causing that the interval widths are almost equal to zero compared to the point estimation. It also explains why the $p$-values for the above hypothesis testing are nearly zero.
+Finally, we calculate the $1-\alpha$ confidence intervals for the fitted probability using binomial regression. The normal approximation for the log odds $z=x^\top \beta$ contributes to a confidence interval $ConfInt=[g(\hat{z}-c_{1-\alpha/2}se(\hat{z})),~g(\hat{z}+c_{1-\alpha/2}se(\hat{z}))]$ for the white proportion in Census, where $c_{1-\alpha/2}$ is the $1-\alpha/2$ quantile of the standard normal distribution. This implies a confidence interval for the differences with $ConfInt-p_{Census}$. For the black Americans, we utilize a Bonferroni method to construct the confidence interval. As the number of population in each state with available data is very large, the estimated standard errors $se(\hat{z})$ is very small, causing that the interval widths are almost equal to zero compared to the point estimation. It also explains why the $p$-values for the above hypothesis testing are nearly zero.
 
 ```{r Widths-of-confidence-intervals}
 # plot confidence intervals' widths
-int_widths = data.frame(index=rep(1:50, 2), widths=c(pi_hat_black[,3]-pi_hat_black[,2], pi_hat_white[,3]-pi_hat_white[,2]), Races=rep(c('Black/African American', 'White American'), each=50))
+int_widths = data.frame(index=rep(1:50, 2), widths=c(pi_hat.black[,3]-pi_hat.black[,2], pi_hat.white[,3]-pi_hat.white[,2]), Races=rep(c('Black/African American', 'White American'), each=50))
 
 ggplot(int_widths) + geom_line(aes(x=index, y=widths, group=Races, colour=Races)) + ylim(0,0.05) + ylab('Interval width') + scale_x_continuous(breaks=c(1:50), labels=rownames(x)) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), axis.title.x = element_blank(), plot.title = element_text(hjust = 0.5, size = 10), legend.position = 'bottom') + ggtitle('Widths of 95% confidence intervals for racial proportions in forensic databases')
 ```
