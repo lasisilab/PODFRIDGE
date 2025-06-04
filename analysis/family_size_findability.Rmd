@@ -1,0 +1,122 @@
+---
+title: "Family size findability"
+author: "Junhui He"
+date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
+site: workflowr::wflow_site
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+# load package
+library(ggplot2)
+library(ggpubr)
+
+source("code/family_size_simulator.R")
+```
+
+## 1. Introduction
+
+We aim to clarify the probability of finding at least one cousin in a database, given the family structure in the PODFRIDGE project. This probability depends on two key factors: the number of relatives—determined by the family size (number of children per family) distribution—and the database coverage, which is the proportion of individuals in the database relative to the total population.
+
+Erlich’s earlier paper modeled the family size distribution using a Poisson distribution, a common approach in many genetic studies. However, this assumption doesn’t accurately capture real-world family sizes, which often show overdispersion and an excess of zeros (i.e., families with no children).
+
+In this report, we simulate the family size distribution using a Zero-Inflated Negative Binomial (ZINB) distribution, which better reflects real-world data than the Poisson model. We then calculate the probability of finding at least one cousin in the database based on the simulated family sizes and different levels of database coverage.
+
+## 2. Methods
+
+### 2.1. Zero-Inflated Negative Binomial (ZINB) Distribution
+
+Based on the empirical data from the US, we find that the distribution of family size is better modeled as a Zero-Inflated Negative Binomial (ZINB) distribution. The ZINB distribution is a more realistic family size distribution, as it accounts for the excess zeros (families with no children) and the overdispersion often observed in family size data.
+
+The Zero-Inflated Negative Binomial (ZINB) distribution is a statistical model that combines a negative binomial distribution with an additional process that generates excess zeros. It is characterized by three parameters: the zero-inflated probability $p$, the mean number $\mu$ and the size $s$ of the negative binomial distribution, denoted by $\text{ZINB}(p, s, \mu) = p\delta_0 + (1-p)\text{NB}(s,\mu)$. The average family size is $(1-p)\mu$. Based on empirical data, we set the parameters to $p=0.1, ~ s=3, ~ \mu = 3$.
+
+### 2.2. Calculating the Number of Relatives
+
+In this report, we only consider the relatives whose generation difference between the individual and the relative is less than or equal to 1. Therefore, the first-degree relatives include parents, siblings, and children; the second-degree relatives include aunts, uncles, nephews, nieces, and half-siblings; and the third-degree relatives include first cousins. The number of relatives is calculated based on the family size distribution simulated by the ZINB distribution. For now, the number of half-siblings is set to 0. 
+
+Specifically, if one couple is known as the ancestor couple of the individual, this couple has at least one child, and the number of children is simulated from the ZINB distribution conditional on at least one child. For simplicity, we assume that $X$ follows a ZINB distribution and $Y$ follows a ZINB distribution conditional on at least one child minus one.
+
+The number of first-degree relatives is given by $2+Y+X$. The number of second-degree relatives is given by $\sum_{i=1}^2Y_i + \sum_{i=1}^{Y}X_i$. The number of third-degree relatives is given by $\sum_{i=1}^{\sum_{j=1}^2 Y_j} X_i$.
+
+**Remark:** For simplicity, sometimes we approximate the number of second-degree relatives as $2Y + YX$, and the number of third-degree relatives as $2YX$.
+
+### 2.3 The Probability of Finding at Least One Cousin in the Database
+
+The number of cousins is simulated from the ZINB distribution as above. The simulated data is denoted as $\{r_k\}_{k=1}^n$, where $n$ is the number of simulations. For each simulated number of cousins $r_k$, we assume that the number of cousins found in the database follows a binomial distribution with parameters $r_k$ and the coverage of the database $c$, denoted as $\text{Binomial}(r_k, c)$. The probability of finding at least one cousin in the database is therefore $1-(1-c)^{r_k}$. The expected probability across all simulations is given by $\frac{1}{n}\sum_{k=1}^n (1-(1-c)^{r_k})$.
+
+### 3. Results
+
+### 3.1. Family Size Simulation
+
+We explore the distribution of first-, second-, and third-degree relatives as family size increases in the simulation. Specifically, we fix the zero-inflated probability $p=0.1$, and the size $s=3$ of the ZINB distribution, and vary the mean number $\mu$ from 1 to 8. The simulation is run for 1000 times, and the distribution of relatives is calculated for each mean family size. The boxplots show that as the mean family size increases, the number of first-degree, second-degree, and third-degree relatives also increases. This is expected, as larger families tend to have more relatives.
+
+
+```{r family_size_simulation, message=FALSE, warning=FALSE, fig.width=12, fig.height=4}
+family_size <- family_size_simulator(n = 1000, inflation = 0.1, size = 3, mu = 3)
+write.csv(family_size, "output/simulated_relatives.csv")
+
+n <- 1000
+mus <- c(1:8)
+family_size_simulation <- data.frame()
+for(i in 1:length(mus)) {
+  family_size_simulation <- rbind(family_size_simulation, family_size_simulator(n, inflation = 0.1, size = 3, mu = mus[i]))
+}
+family_size_simulation$mean_family_size <- factor(rep(mus, each = n))
+
+p1 <- ggplot(family_size_simulation, aes(x = mean_family_size, y = n_first_degree)) +
+  geom_boxplot() +
+  labs(x = "Mean family size (children per family)", y = "Number of first-degree relatives")
+
+p2 <- ggplot(family_size_simulation, aes(x = mean_family_size, y = n_second_degree)) +
+  geom_boxplot() +
+  labs(x = "Mean family size (children per family)", y = "Number of second-degree relatives")
+
+p3 <- ggplot(family_size_simulation, aes(x = mean_family_size, y = n_third_degree)) +
+  geom_boxplot() +
+  labs(x = "Mean family size (children per family)", y = "Number of third-degree relatives")
+
+ggarrange(p1, p2, p3, ncol = 3, nrow = 1, common.legend = TRUE, legend = "bottom")
+```
+
+### 3.2. Relationship between cousin-in-database probability and average family size
+
+In this section, we explore the relationship between family size and the probability of finding at least one cousin in a database. We simulate family sizes using the ZINB distribution and calculate the probability of finding at least one cousin in a database with varying coverages (e.g., 10%, 30%, 50%). For the ZINB distribution, we set the parameters as follows: zero-inflated probability $p=0.1$, size $s=3$, and mean number $\mu$ varying from 1 to 8. The simulation is run for 1000 times.
+
+We draw a plot for visualizing the relationship between family size and cousin-in-database probability across the chosen database coverages. This plot illustrates that as the mean family size increases, the probability of finding at least one cousin in the database also increases. This is because larger families tend to have more cousins, which increases the chances of finding at least one cousin in a database with a given coverage. In addition, we observe that the probability of finding at least one cousin in the database increases with higher database coverage. This is because a higher coverage means that more individuals are included in the database.
+
+```{r cousin_in_database, message=FALSE, warning=FALSE, fig.width=8, fig.height=6}
+cousin_simulation <- array(family_size_simulation$n_third_degree, c(n, length(mus)))
+coverages = c(0.05, 0.1, 0.3, 0.5)
+
+cousin_match_probs <- array(NA, c(length(mus), length(coverages)))
+
+cousin_in_database_probability <- function(n_cousins, coverage = 0.1) {
+  # Calculate the probability of finding at least one cousin in the database
+  p_match = genetic_match(g = 2)
+  return(1 - (1 - p_match * coverage) ^ n_cousins)
+}
+
+for(i in 1:length(mus)) {
+  for(j in 1:length(coverages)) {
+    cousin_match_probs[i, j] <- mean(cousin_in_database_probability(cousin_simulation[, i], coverage = coverages[j]))
+  }
+}
+
+ggplot() + geom_line(aes(x = mus, y = cousin_match_probs[, 2], color = "10% Coverage"), size = 0.8) +
+  geom_line(aes(x = mus, y = cousin_match_probs[, 3], color = "30% Coverage"), size = 0.8) +
+  geom_line(aes(x = mus, y = cousin_match_probs[, 4], color = "50% Coverage"), size = 0.8) +
+  labs(x = "Mean family size (children per family)", y = "Probability of finding at least one cousin in the database") + ylim(c(0, 1)) +
+  scale_color_manual(name = "Database Coverage", values = c("10% Coverage" = "blue", "30% Coverage" = "green", "50% Coverage" = "red"))
+
+ggsave("output/cousin_probability_plot.png", width = 8, height = 6, dpi = 300)
+```
+
+## 4. Conclusion
+
+1. The family size distribution is better modeled as a Zero-Inflated Negative Binomial (ZINB) distribution than a Poisson distribution, which accounts for the excess zeros and overdispersion often observed in realistic family size data.
+
+2. The number of relatives increases with the mean family size,.
+
+3. The probability of finding at least one cousin in a database increases with both the mean family size and the coverage of the database. Larger families tend to have more cousins, and higher database coverage means more individuals are included.
