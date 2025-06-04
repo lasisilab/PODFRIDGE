@@ -138,7 +138,7 @@ coverage <- function(gmax, N, K, r, m, min_num_seg, min_num_rel) {
 
 ```{r data}
 # read racial compositions in Census and DTC database (Result 1b)
-racial_composition = read.csv(file.path("output", "demographic_composition_comparison.csv"))
+racial_composition = read.csv(file.path("../output", "demographic_composition_comparison.csv"))
 
 # population proportions
 pop_props = racial_composition$Proportion[c(1,3)]
@@ -148,9 +148,9 @@ dtc_props = racial_composition$Proportion[c(10, 12)]
 N = sum(racial_composition$Number_of_Customers[1:4])
 
 # read family size multinomial distributions for black/white Americans (Result 2)
-family_size = read.csv(file.path("data", "family_size.csv"))
+family_size = read.csv(file.path("../data", "family_size.csv"))
 # read estimated family distributions (zero inflated negative binomial/Poisson)
-load(file.path("data", "family_distribution.Rdata"))
+load(file.path("../data", "family_distribution.Rdata"))
 
 black_family_size = rbind(family_size$proportion[which(family_size$RACE=="Black/African American" & family_size$YEAR=="1990" & family_size$AGE_RANGE=="40-49")],
                           family_size$proportion[which(family_size$RACE=="Black/African American" & family_size$YEAR=="1960" & family_size$AGE_RANGE=="40-49")],
