@@ -46,7 +46,7 @@ The number of first-degree relatives is given by $2+Y+X$. The number of second-d
 
 The number of cousins is simulated from the ZINB distribution as above. The simulated data is denoted as $\{r_k\}_{k=1}^n$, where $n$ is the number of simulations. For each simulated number of cousins $r_k$, we assume that the number of cousins found in the database follows a binomial distribution with parameters $r_k$ and the coverage of the database $c$, denoted as $\text{Binomial}(r_k, c)$. The probability of finding at least one cousin in the database is therefore $1-(1-c)^{r_k}$. The expected probability across all simulations is given by $\frac{1}{n}\sum_{k=1}^n (1-(1-c)^{r_k})$.
 
-### 3. Results
+## 3. Results
 
 ### 3.1. Family Size Simulation
 
