@@ -21,10 +21,10 @@ The plot below shows the data that is available for each state:
 
 
 ```{r setup, include=FALSE, echo=FALSE}
+library(here)
+setwd(here::here())
 knitr::opts_chunk$set(echo = TRUE)
-```
 
-```{r data, results =FALSE,warning=FALSE,message=FALSE, echo = FALSE}
 # Load necessary libraries
 library(readr)        # read csv files
 library(tidyverse)    # census API
@@ -132,7 +132,7 @@ us_state_density$black_profiles = us_state_density$percent.black.incarc * (us_st
 us_state_density$white_profiles = us_state_density$percent.white.incarc * (us_state_density$offender_profiles)
 
 us_state_density_black = as.data.frame(us_state_density[,c("state","all","census.num.black","census.percent.black","incarcerated_total",
-                                       "incarcerated_black","percent.black.incarc","arrestee_profiles","offender_profiles","black_profiles")])
+                                       "incarcerated_black","percent.incar","arrestee_profiles","offender_profiles","black_profiles")])
 us_state_density_black$race = "Black"
 colnames(us_state_density_black) = c("state","all","population","census.percent","incarcerated_total",
                                      "incarcerated_race","percent.incar","arrestee_profiles","offender_profiles","geometry","race_profiles","race")
@@ -156,7 +156,7 @@ For states in categories (2) and (3), we need to generate an estimation of the r
 $$Proportion_{race} = \beta_0 + \beta_1census_{proportion} + \beta_2prison_{proportion} + \beta_3race + \beta_4race*census_{proportion} + \beta_5race*prison_{proportion}$$
 
 
-For states in category (3) we need both an estimation  of the number of people in SDIS, and an estimation of the number of the racial composition of the datasets. To estimate the racial composition of the database, we use the regression model described above. To generate predictions of the number of people in SDIS for these states, we create an additional regression model with dependent variable the number of people in SDIS and independent variables for the U.S. census proportion of the population that is each race, the proportion of the state's prison population that is each race, and the number of people in NDIS for that state. We create separate regression models for arrests
+For states in category (3) we need both an estimation  of the number of people in SDIS, and an estimation of the racial composition of the datasets. To estimate the racial composition of the database, we use the regression model described above. To generate predictions of the number of people in SDIS for these states, we create an additional regression model with dependent variable the number of people in SDIS and independent variables for the U.S. census proportion of the population that is each race, the proportion of the state's prison population that is each race, and the number of people in NDIS for that state. We create separate regression models for arrests
 and offenders to obtain more accurate predictions:
 
 $$N_{arrestee} = \beta_0 + \beta_1census_{black} + \beta_2census_{white} + \beta_3prison_{black} + \beta_4prison_{white} + \beta_5NDIS_{arrestees} $$
@@ -263,7 +263,7 @@ The following plots show the results of the SDIS regression for both  arrestees 
 ```{r SDIS-regression, results = FALSE,warning=FALSE,message=FALSE,out.width="100%", echo = FALSE}
 # Read in CSV files
 NDIS = read.csv("data/NDIS.csv")       # National DNA Index System data
-SDIS = read.csv("data/SDIS.csv")       # State DNA Index System data
+SDIS = read.csv("data/SDIS.csv")       # State DNA Indexing System data
 
 # Merge NDIS and SDIS datasets by state
 NDIS_SDIS = merge(NDIS, SDIS, by = "State")
@@ -278,8 +278,7 @@ SDIS_states = merge(NDIS_SDIS, prison_data_2022, by = "State")
 
 # Merge census data with NDIS_SDIS_prison data
 colnames(us_state_density)[1] = "State"
-us_state_population= us_state_density[, c("State", "census.num.black", "census.num.white",
-                                          "census.percent.black","census.percent.white","percent.black.incarc","percent.white.incarc")]
+us_state_population= us_state_density[, c("State", "census.num.black", "census.num.white", "census.percent.black","census.percent.white","percent.black.incarc","percent.white.incarc")]
 SDIS_regression = merge(SDIS_states, us_state_population, by = "State")
 
 # Calculate CODIS black and white proportions using previous regression
@@ -303,7 +302,7 @@ SDIS_offenders = SDIS_regression[-c(which(is.na(SDIS_regression$N_offenders.SDIS
 SDIS_offenders = SDIS_offenders[, c("State", "N_offenders.SDIS", "census.num.black", "census.num.white", "incarcerated_black", "incarcerated_white", "N_offenders.NDIS")]
 
 # Perform regression analysis for SDIS offenders
-SDIS_offender = lm(N_offenders.SDIS ~ census.num.black + census.num.white + incarcerated_black + incarcerated_white + N_offenders.NDIS, data = SDIS_offenders)
+SDIS_offender = lm(N_offenders.SDIS ~ census.num.black + census.num.white + incarcerated_black + incarcerated.white + N_offenders.NDIS, data = SDIS_offenders)
 summary(SDIS_offender)
 
 # calculate regression prediction for each state
@@ -316,7 +315,7 @@ SDIS_regression$SDIS.arrestee.prediction = SDIS_arrestee$coeff[1] + SDIS_arreste
 SDIS_regression$SDIS.offender.prediction = SDIS_offender$coeff[1] + SDIS_offender$coeff[2] * SDIS_regression$census.num.black +
                                                              SDIS_offender$coeff[3] * SDIS_regression$census.num.white +
                                                              SDIS_offender$coeff[4] * SDIS_regression$incarcerated_black +
-                                                             SDIS_offender$coeff[5] * SDIS_regression$incarcerated_white +
+                                                             SDIS_offender$coeff[5] * SDIS_regression$incarcerated.white +
                                                              SDIS_offender$coeff[6] * SDIS_regression$N_offenders.NDIS
 
 # make sure no predictions are less than 0
@@ -377,7 +376,7 @@ Murphy_wide = Murphy_wide[, c("State", "value.Total", "value.White", "value.Blac
 final.data = merge(SDIS_regression, Murphy_wide, by = "State", all.x = TRUE)
 
 # Calculate final estimates for Black and White populations in CODIS based on different sources
-for (i in 1:nrow(final.data)) {
+for (i in seq_len(nrow(final.data))) {
   if (!is.na(final.data$value.Total[i])) {
     final.data$final.Black[i] = final.data$value.Total[i] * (final.data$value.Black[i] / 100)
     final.data$final.White[i] = final.data$value.Total[i] * (final.data$value.White[i] / 100)
