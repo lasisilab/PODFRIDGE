@@ -1,13 +1,17 @@
 ---
 title: "Family size findability"
-author: "Junhui He"
+author: "Junhui He and Tina Lasisi"
 date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
 site: workflowr::wflow_site
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(
+  echo = FALSE,
+  root.dir = normalizePath("../")
+)
+
 
 # load package
 library(ggplot2)
@@ -38,9 +42,9 @@ In this report, we only consider the relatives whose generation difference betwe
 
 Specifically, if one couple is known as the ancestor couple of the individual, this couple has at least one child, and the number of children is simulated from the ZINB distribution conditional on at least one child. For simplicity, we assume that $X$ follows a ZINB distribution and $Y$ follows a ZINB distribution conditional on at least one child minus one.
 
-The number of first-degree relatives is given by $2+Y+X$. The number of second-degree relatives is given by $\sum_{i=1}^2Y_i + \sum_{i=1}^{Y}X_i$. The number of third-degree relatives is given by $\sum_{i=1}^{\sum_{j=1}^2 Y_j} X_i$.
+The number of first-degree relatives is given by $2+Y+X$. The number of second-degree relatives is given by $4 + \sum_{i=1}^2Y_i + \sum_{i=1}^{Y}X_i$. The number of third-degree relatives is given by $\sum_{i=1}^{\sum_{j=1}^2 Y_j} X_i$.
 
-**Remark:** For simplicity, sometimes we approximate the number of second-degree relatives as $2Y + YX$, and the number of third-degree relatives as $2YX$.
+**Remark:** For simplicity, sometimes we approximate the number of second-degree relatives as $4 + 2Y + YX$, and the number of third-degree relatives as $2YX$.
 
 ### 2.3 The Probability of Finding at Least One Cousin in the Database
 
@@ -52,8 +56,10 @@ The number of cousins is simulated from the ZINB distribution as above. The simu
 
 We explore the distribution of first-, second-, and third-degree relatives as family size increases in the simulation. Specifically, we fix the zero-inflated probability $p=0.1$, and the size $s=3$ of the ZINB distribution, and vary the mean number $\mu$ from 1 to 8. The simulation is run for 1000 times, and the distribution of relatives is calculated for each mean family size. The boxplots show that as the mean family size increases, the number of first-degree, second-degree, and third-degree relatives also increases. This is expected, as larger families tend to have more relatives.
 
-
 ```{r family_size_simulation, message=FALSE, warning=FALSE, fig.width=12, fig.height=4}
+library(tidyr)
+library(dplyr)
+
 family_size <- family_size_simulator(n = 1000, inflation = 0.1, size = 3, mu = 3)
 write.csv(family_size, "output/simulated_relatives.csv")
 
@@ -65,19 +71,293 @@ for(i in 1:length(mus)) {
 }
 family_size_simulation$mean_family_size <- factor(rep(mus, each = n))
 
+# Define a nice color palette
+library(RColorBrewer)
+# Option 1: Using a gradient from light to dark blue
+blue_palette <- colorRampPalette(brewer.pal(9, "Blues")[3:9])(8)
+
+# Option 2: Using a diverging color palette (uncomment to use)
+# blue_palette <- brewer.pal(8, "BuPu")
+
+# Option 3: Using viridis colors (uncomment to use)
+# library(viridis)
+# blue_palette <- viridis(8, option = "D")
+
 p1 <- ggplot(family_size_simulation, aes(x = mean_family_size, y = n_first_degree)) +
-  geom_boxplot() +
-  labs(x = "Mean family size (children per family)", y = "Number of first-degree relatives")
+  geom_boxplot(aes(fill = mean_family_size), alpha = 0.7, outlier.alpha = 0.3) +
+  scale_fill_manual(values = blue_palette) +
+  labs(x = "Mean family size (children per family)", 
+       y = "Number of first-degree relatives") +
+  theme_minimal() +
+  theme(legend.position = "none",
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.title = element_text(size = 12),
+        axis.text = element_text(size = 10))
 
 p2 <- ggplot(family_size_simulation, aes(x = mean_family_size, y = n_second_degree)) +
-  geom_boxplot() +
-  labs(x = "Mean family size (children per family)", y = "Number of second-degree relatives")
+  geom_boxplot(aes(fill = mean_family_size), alpha = 0.7, outlier.alpha = 0.3) +
+  scale_fill_manual(values = blue_palette) +
+  labs(x = "Mean family size (children per family)", 
+       y = "Number of second-degree relatives") +
+  theme_minimal() +
+  theme(legend.position = "none",
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.title = element_text(size = 12),
+        axis.text = element_text(size = 10))
 
 p3 <- ggplot(family_size_simulation, aes(x = mean_family_size, y = n_third_degree)) +
-  geom_boxplot() +
-  labs(x = "Mean family size (children per family)", y = "Number of third-degree relatives")
+  geom_boxplot(aes(fill = mean_family_size), alpha = 0.7, outlier.alpha = 0.3) +
+  scale_fill_manual(values = blue_palette) +
+  labs(x = "Mean family size (children per family)", 
+       y = "Number of third-degree relatives") +
+  theme_minimal() +
+  theme(legend.position = "none",
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.title = element_text(size = 12),
+        axis.text = element_text(size = 10))
 
-ggarrange(p1, p2, p3, ncol = 3, nrow = 1, common.legend = TRUE, legend = "bottom")
+# Create combined data for p4
+family_size_long <- family_size_simulation %>%
+  select(mean_family_size, n_first_degree, n_second_degree, n_third_degree) %>%
+  pivot_longer(cols = c(n_first_degree, n_second_degree, n_third_degree),
+               names_to = "degree_type",
+               values_to = "count") %>%
+  mutate(degree_type = factor(degree_type, 
+                              levels = c("n_first_degree", "n_second_degree", "n_third_degree"),
+                              labels = c("First-degree", "Second-degree", "Third-degree")))
+
+# Define colors for degree types
+degree_colors <- c("First-degree" = "#E41A1C",    # Red
+                   "Second-degree" = "#377EB8",   # Blue
+                   "Third-degree" = "#4DAF4A")    # Green
+
+# Alternative color scheme (uncomment to use)
+# degree_colors <- c("First-degree" = "#1B9E77",    # Teal
+#                    "Second-degree" = "#D95F02",   # Orange
+#                    "Third-degree" = "#7570B3")    # Purple
+
+p4 <- ggplot(family_size_long, aes(x = mean_family_size, y = count, fill = degree_type)) +
+  geom_boxplot(alpha = 0.7, outlier.alpha = 0.3, position = position_dodge(0.8)) +
+  scale_fill_manual(values = degree_colors, name = "Relative Type") +
+  labs(x = "Mean family size (children per family)", 
+       y = "Number of relatives",
+       title = "Distribution of Relatives by Degree and Family Size") +
+  theme_minimal() +
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.title = element_text(size = 12),
+        axis.text = element_text(size = 10),
+        legend.position = "bottom",
+        plot.title = element_text(size = 14, face = "bold", hjust = 0.5))
+
+# Arrange the first three plots in a single row
+ggarrange(p1, p2, p3, ncol = 3, nrow = 1, common.legend = FALSE)
+```
+
+```{r combined_plot, message=FALSE, warning=FALSE, fig.width=10, fig.height=6}
+# Display p4 separately as a larger plot
+p4
+```
+
+
+```{r family_size_simulation_incremental, message=FALSE, warning=FALSE, fig.width=12, fig.height=5}
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(ggpubr)
+
+# Incremental simulation from 1 to 4 with 0.1 steps
+n <- 10000  # Increased to 10k for more robust estimates
+mus <- seq(1, 4, by = 0.1)  # Create sequence from 1 to 4 with 0.1 increments
+family_size_simulation_incremental <- data.frame()
+
+for(i in 1:length(mus)) {
+  family_size_simulation_incremental <- rbind(family_size_simulation_incremental, 
+                                              family_size_simulator(n, inflation = 0.1, size = 3, mu = mus[i]))
+}
+family_size_simulation_incremental$mean_family_size <- rep(mus, each = n)
+
+# Calculate summary statistics for smooth visualization
+summary_stats <- family_size_simulation_incremental %>%
+  group_by(mean_family_size) %>%
+  summarise(
+    first_median = median(n_first_degree),
+    first_q25 = quantile(n_first_degree, 0.25),
+    first_q75 = quantile(n_first_degree, 0.75),
+    second_median = median(n_second_degree),
+    second_q25 = quantile(n_second_degree, 0.25),
+    second_q75 = quantile(n_second_degree, 0.75),
+    third_median = median(n_third_degree),
+    third_q25 = quantile(n_third_degree, 0.25),
+    third_q75 = quantile(n_third_degree, 0.75),
+    # Calculate totals
+    total_median = median(n_first_degree + n_second_degree + n_third_degree),
+    total_q25 = quantile(n_first_degree + n_second_degree + n_third_degree, 0.25),
+    total_q75 = quantile(n_first_degree + n_second_degree + n_third_degree, 0.75)
+  )
+
+# Create individual smooth plots
+p1_smooth <- ggplot(summary_stats, aes(x = mean_family_size)) +
+  geom_ribbon(aes(ymin = first_q25, ymax = first_q75), alpha = 0.3, fill = "#E41A1C") +
+  geom_line(aes(y = first_median), color = "#E41A1C", size = 1.5) +
+  labs(x = "Mean family size", y = "First-degree relatives") +
+  theme_minimal() +
+  theme(axis.title = element_text(size = 11),
+        axis.text = element_text(size = 9))
+
+p2_smooth <- ggplot(summary_stats, aes(x = mean_family_size)) +
+  geom_ribbon(aes(ymin = second_q25, ymax = second_q75), alpha = 0.3, fill = "#377EB8") +
+  geom_line(aes(y = second_median), color = "#377EB8", size = 1.5) +
+  labs(x = "Mean family size", y = "Second-degree relatives") +
+  theme_minimal() +
+  theme(axis.title = element_text(size = 11),
+        axis.text = element_text(size = 9))
+
+p3_smooth <- ggplot(summary_stats, aes(x = mean_family_size)) +
+  geom_ribbon(aes(ymin = third_q25, ymax = third_q75), alpha = 0.3, fill = "#4DAF4A") +
+  geom_line(aes(y = third_median), color = "#4DAF4A", size = 1.5) +
+  labs(x = "Mean family size", y = "Third-degree relatives") +
+  theme_minimal() +
+  theme(axis.title = element_text(size = 11),
+        axis.text = element_text(size = 9))
+
+# Display three separate smooth plots in a row
+ggarrange(p1_smooth, p2_smooth, p3_smooth, ncol = 3, nrow = 1)
+```
+
+```{r combined_smooth_plots, message=FALSE, warning=FALSE, fig.width=10, fig.height=7}
+# Reshape data for combined plot
+summary_long <- summary_stats %>%
+  select(mean_family_size, first_median, second_median, third_median) %>%
+  pivot_longer(cols = c(first_median, second_median, third_median),
+               names_to = "degree_type",
+               values_to = "median") %>%
+  mutate(degree_type = factor(degree_type,
+                              levels = c("first_median", "second_median", "third_median"),
+                              labels = c("First-degree", "Second-degree", "Third-degree")))
+
+# Add IQR data
+summary_long_iqr <- summary_stats %>%
+  select(mean_family_size, 
+         first_q25, first_q75, 
+         second_q25, second_q75, 
+         third_q25, third_q75) %>%
+  pivot_longer(cols = -mean_family_size,
+               names_to = c("degree", "stat"),
+               names_sep = "_",
+               values_to = "value") %>%
+  pivot_wider(names_from = stat, values_from = value) %>%
+  mutate(degree_type = factor(paste0(degree, "_median"),
+                              levels = c("first_median", "second_median", "third_median"),
+                              labels = c("First-degree", "Second-degree", "Third-degree")))
+
+# Merge median and IQR data
+summary_combined <- left_join(summary_long, summary_long_iqr, 
+                              by = c("mean_family_size", "degree_type"))
+
+# Define colors
+degree_colors <- c("First-degree" = "#E41A1C",    # Red
+                   "Second-degree" = "#377EB8",   # Blue
+                   "Third-degree" = "#4DAF4A")    # Green
+
+# Plot: Combined curves for all degree types
+p_combined_curves <- ggplot(summary_combined, aes(x = mean_family_size)) +
+  geom_ribbon(aes(ymin = q25, ymax = q75, fill = degree_type), alpha = 0.3) +
+  geom_line(aes(y = median, color = degree_type), size = 1.5) +
+  scale_fill_manual(values = degree_colors, name = "Relative Type") +
+  scale_color_manual(values = degree_colors, name = "Relative Type") +
+  labs(x = "Mean family size (children per family)", 
+       y = "Number of relatives",
+       title = "Distribution of Relatives by Degree and Family Size") +
+  theme_minimal() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(size = 14, face = "bold", hjust = 0.5),
+        axis.title = element_text(size = 12),
+        axis.text = element_text(size = 10))
+
+# Plot: Total relatives (sum of all degrees)
+p_total <- ggplot(summary_stats, aes(x = mean_family_size)) +
+  geom_ribbon(aes(ymin = total_q25, ymax = total_q75), alpha = 0.3, fill = "#7570B3") +
+  geom_line(aes(y = total_median), color = "#7570B3", size = 2) +
+  labs(x = "Mean family size (children per family)", 
+       y = "Total number of relatives",
+       title = "Total Number of Relatives (All Degrees Combined)") +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 14, face = "bold", hjust = 0.5),
+        axis.title = element_text(size = 12),
+        axis.text = element_text(size = 10))
+
+# Display both plots
+p_combined_curves
+p_total
+```
+
+```{r comparison, message=FALSE, warning=FALSE, fig.width=10, fig.height=10}
+# Comparison of 2.5 vs 3.5 children mean using boxplots
+comparison_data <- family_size_simulation_incremental %>%
+  filter(mean_family_size %in% c(2.5, 3.5)) %>%
+  mutate(mean_family_size = factor(mean_family_size, labels = c("2.5 children", "3.5 children")))
+
+# Calculate total relatives for comparison
+comparison_data$n_total <- comparison_data$n_first_degree + 
+                           comparison_data$n_second_degree + 
+                           comparison_data$n_third_degree
+
+# Reshape for plotting
+comparison_long <- comparison_data %>%
+  select(mean_family_size, n_first_degree, n_second_degree, n_third_degree, n_total) %>%
+  pivot_longer(cols = -mean_family_size,
+               names_to = "degree_type",
+               values_to = "count") %>%
+  mutate(degree_type = factor(degree_type,
+                              levels = c("n_first_degree", "n_second_degree", 
+                                        "n_third_degree", "n_total"),
+                              labels = c("First-degree", "Second-degree", 
+                                        "Third-degree", "Total")))
+
+# Define colors for the comparison
+comparison_colors <- c("2.5 children" = "#FF7F00", "3.5 children" = "#1F77B4")
+
+# Create comparison boxplot
+p_comparison_box <- ggplot(comparison_long, aes(x = degree_type, y = count, fill = mean_family_size)) +
+  geom_boxplot(alpha = 0.7, outlier.alpha = 0.3) +
+  scale_fill_manual(values = comparison_colors, name = "Mean Family Size") +
+  labs(x = "Relative Type", 
+       y = "Number of Relatives",
+       title = "Distribution of Relative Counts: 2.5 vs 3.5 Children per Family") +
+  theme_minimal() +
+  theme(legend.position = "top",
+        plot.title = element_text(size = 14, face = "bold", hjust = 0.5),
+        axis.title = element_text(size = 12),
+        axis.text = element_text(size = 10))
+
+# Calculate percentage increases based on medians
+pct_changes <- comparison_long %>%
+  group_by(degree_type, mean_family_size) %>%
+  summarise(median_count = median(count), .groups = "drop") %>%
+  pivot_wider(names_from = mean_family_size, values_from = median_count) %>%
+  mutate(pct_increase = round(((`3.5 children` - `2.5 children`) / `2.5 children`) * 100, 1))
+
+# Create percentage change plot
+p_pct_change <- ggplot(pct_changes, aes(x = degree_type, y = pct_increase)) +
+  geom_bar(stat = "identity", fill = "#2CA02C", alpha = 0.8) +
+  labs(x = "Relative Type", 
+       y = "Percentage Increase (%)",
+       title = "Percentage Increase in Relatives from 2.5 to 3.5 Children per Family") +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 14, face = "bold", hjust = 0.5),
+        axis.title = element_text(size = 12),
+        axis.text = element_text(size = 10)) +
+  geom_text(aes(label = paste0(pct_increase, "%")), 
+            vjust = -0.5, size = 4) +
+  # Expand y-axis to accommodate labels
+  scale_y_continuous(expand = expansion(mult = c(0, 0.15)))
+
+# Display comparison plots
+ggarrange(p_comparison_box, p_pct_change, ncol = 1, nrow = 2)
 ```
 
 ### 3.2. Relationship between cousin-in-database probability and average family size
@@ -86,11 +366,27 @@ In this section, we explore the relationship between family size and the probabi
 
 We draw a plot for visualizing the relationship between family size and cousin-in-database probability across the chosen database coverages. This plot illustrates that as the mean family size increases, the probability of finding at least one cousin in the database also increases. This is because larger families tend to have more cousins, which increases the chances of finding at least one cousin in a database with a given coverage. In addition, we observe that the probability of finding at least one cousin in the database increases with higher database coverage. This is because a higher coverage means that more individuals are included in the database.
 
-```{r cousin_in_database, message=FALSE, warning=FALSE, fig.width=8, fig.height=6}
-cousin_simulation <- array(family_size_simulation$n_third_degree, c(n, length(mus)))
-coverages = c(0.05, 0.1, 0.3, 0.5)
 
-cousin_match_probs <- array(NA, c(length(mus), length(coverages)))
+```{r cousin_in_database, message=FALSE, warning=FALSE, fig.width=8, fig.height=6}
+# Set up parameters for cousin probability analysis
+# Using 1 to 4 with 0.5 increments
+mus_cousin <- seq(1, 4, by = 0.5)
+n_cousin <- 10000  # Increase simulation size for more robust estimates
+
+# Generate simulations
+cousin_simulation_data <- data.frame()
+for(i in 1:length(mus_cousin)) {
+  cousin_simulation_data <- rbind(cousin_simulation_data, 
+                                  family_size_simulator(n_cousin, inflation = 0.1, size = 3, mu = mus_cousin[i]))
+}
+
+# Create array of cousin counts
+cousin_simulation <- array(cousin_simulation_data$n_third_degree, c(n_cousin, length(mus_cousin)))
+
+# More realistic coverage levels: 1% to 15%
+coverages = c(0.01, 0.02, 0.05, 0.10, 0.15)
+
+cousin_match_probs <- array(NA, c(length(mus_cousin), length(coverages)))
 
 cousin_in_database_probability <- function(n_cousins, coverage = 0.1) {
   # Calculate the probability of finding at least one cousin in the database
@@ -98,22 +394,270 @@ cousin_in_database_probability <- function(n_cousins, coverage = 0.1) {
   return(1 - (1 - p_match * coverage) ^ n_cousins)
 }
 
-for(i in 1:length(mus)) {
+for(i in 1:length(mus_cousin)) {
   for(j in 1:length(coverages)) {
     cousin_match_probs[i, j] <- mean(cousin_in_database_probability(cousin_simulation[, i], coverage = coverages[j]))
   }
 }
 
-ggplot() + geom_line(aes(x = mus, y = cousin_match_probs[, 2], color = "10% Coverage"), size = 0.8) +
-  geom_line(aes(x = mus, y = cousin_match_probs[, 3], color = "30% Coverage"), size = 0.8) +
-  geom_line(aes(x = mus, y = cousin_match_probs[, 4], color = "50% Coverage"), size = 0.8) +
-  labs(x = "Mean family size (children per family)", y = "Probability of finding at least one cousin in the database") + ylim(c(0, 1)) +
-  scale_color_manual(name = "Database Coverage", values = c("10% Coverage" = "blue", "30% Coverage" = "green", "50% Coverage" = "red"))
+# Create data frame for better plotting
+cousin_prob_df <- expand.grid(mean_family_size = mus_cousin, 
+                              coverage = coverages) %>%
+  mutate(probability = as.vector(cousin_match_probs),
+         coverage_label = factor(paste0(coverage * 100, "% Coverage"),
+                                levels = c("15% Coverage", "10% Coverage", 
+                                          "5% Coverage", "2% Coverage", "1% Coverage")))
+
+# Plot with all coverage levels
+ggplot(cousin_prob_df, aes(x = mean_family_size, y = probability, color = coverage_label)) +
+  geom_line(size = 1.2) +
+  labs(x = "Mean family size (children per family)", 
+       y = "Probability of finding at least one cousin", 
+       title = "Cousin Database Match Probability by Family Size and Database Coverage") +
+  scale_y_continuous(limits = c(0, 1), labels = scales::percent) +
+  scale_color_manual(name = "Database Coverage", 
+                     values = c("15% Coverage" = "#FDE725",
+                                "10% Coverage" = "#5DC863",
+                                "5% Coverage" = "#21908C",
+                                "2% Coverage" = "#3B528B", 
+                                "1% Coverage" = "#440154")) +
+  theme_minimal() +
+  theme(legend.position = "right",
+        plot.title = element_text(size = 14, face = "bold", hjust = 0.5))
 
 ggsave("output/cousin_probability_plot.png", width = 8, height = 6, dpi = 300)
 ```
 
-## 4. Conclusion
+## 4. Comparison: Erlich Original vs ZINB Family Size Model
+
+To understand how realistic family size distributions affect long-range familial search probabilities, we compare Erlich et al.'s original model with our Zero-Inflated Negative Binomial (ZINB) approach. Both models aim to predict the probability of finding genetic relatives in databases of varying sizes.
+
+### Direct Comparison: Original Erlich (r=2.5) vs ZINB (μ=2.5)
+
+The figure below shows a side-by-side comparison of the two models, both using a mean family size of 2.5 children per couple:
+
+```{r comparison_erlich_zinb, fig.width=12, fig.height=6}
+# Function to run original Erlich-style calculations
+run_erlich_original <- function(mu_value) {
+  N <- 250000000
+  num_K <- 1000
+  m <- 6
+  r <- mu_value
+  
+  Ks <- round(seq(from = N/num_K, to = N * 0.05, length.out = num_K))
+  db_proportions <- Ks / N
+  
+  results <- data.frame()
+  
+  for (i in 1:length(db_proportions)) {
+    K <- Ks[i]
+    
+    # Expected number of cousins in Erlich's model
+    n_1c <- 4^2 * (r/2)^2
+    n_2c <- 4^3 * (r/2)^3
+    n_3c <- 4^4 * (r/2)^4
+    n_4c <- 4^5 * (r/2)^5
+    
+    # Genetic match probabilities
+    p_1c <- genetic_match(g = 2, m = m)
+    p_2c <- genetic_match(g = 3, m = m)
+    p_3c <- genetic_match(g = 4, m = m)
+    p_4c <- genetic_match(g = 5, m = m)
+    
+    # Probability of finding at least one
+    prob_1c <- 1 - exp(-n_1c * p_1c * K/N)
+    prob_2c <- 1 - exp(-n_2c * p_2c * K/N)
+    prob_3c <- 1 - exp(-n_3c * p_3c * K/N)
+    prob_4c <- 1 - exp(-n_4c * p_4c * K/N)
+    
+    results <- rbind(results,
+      data.frame(
+        db_proportion = rep(db_proportions[i], 4),
+        probability = c(prob_1c, prob_2c, prob_3c, prob_4c),
+        cousin_degree = factor(c("1C", "2C", "3C", "4C"))
+      )
+    )
+  }
+  
+  return(results)
+}
+
+# Function to run ZINB calculations
+run_zinb_model <- function(mu_value, n_sim = 10000) {
+  N <- 250000000
+  num_K <- 1000
+  m <- 6
+  
+  Ks <- round(seq(from = N/num_K, to = N * 0.05, length.out = num_K))
+  db_proportions <- Ks / N
+  
+  # Simulate families
+  sim_data <- family_size_simulator(n_sim, inflation = 0.1, size = 3, mu = mu_value)
+  
+  # Calculate growth factor
+  effective_mu <- (1 - 0.1) * mu_value
+  growth_factor <- effective_mu^2
+  
+  results <- data.frame()
+  
+  for (i in 1:length(db_proportions)) {
+    db_prop <- db_proportions[i]
+    
+    # Genetic match probabilities
+    p_1c <- genetic_match(g = 2, m = m)
+    p_2c <- genetic_match(g = 3, m = m)
+    p_3c <- genetic_match(g = 4, m = m)
+    p_4c <- genetic_match(g = 5, m = m)
+    
+    # Use simulated data for 1st cousins
+    prob_1c <- 1 - (1 - p_1c * db_prop)^sim_data$n_third_degree
+    
+    # Project higher degree cousins
+    n_2c <- sim_data$n_third_degree * growth_factor
+    n_3c <- sim_data$n_third_degree * growth_factor^2
+    n_4c <- sim_data$n_third_degree * growth_factor^3
+    
+    prob_2c <- 1 - (1 - p_2c * db_prop)^n_2c
+    prob_3c <- 1 - (1 - p_3c * db_prop)^n_3c
+    prob_4c <- 1 - (1 - p_4c * db_prop)^n_4c
+    
+    results <- rbind(results,
+      data.frame(
+        db_proportion = rep(db_prop, 4),
+        probability = c(mean(prob_1c), mean(prob_2c), mean(prob_3c), mean(prob_4c)),
+        cousin_degree = factor(c("1C", "2C", "3C", "4C"))
+      )
+    )
+  }
+  
+  return(results)
+}
+
+# Create side-by-side comparison for μ=2.5
+library(ggplot2)
+library(ggpubr)
+
+# Get results for both models
+erlich_2.5 <- run_erlich_original(2.5)
+erlich_2.5$model <- "Original Erlich Model"
+
+zinb_2.5 <- run_zinb_model(2.5)
+zinb_2.5$model <- "ZINB Model"
+
+# Define colors
+cousin_colors <- c("1C" = "#E41A1C", "2C" = "#377EB8", 
+                   "3C" = "#4DAF4A", "4C" = "#984EA3")
+
+# Create plots
+p_erlich <- ggplot(erlich_2.5, aes(x = db_proportion, y = probability, 
+                                    color = cousin_degree)) +
+  geom_line(size = 1.2) +
+  scale_x_continuous(breaks = seq(0, 0.05, 0.01), 
+                     limits = c(0, 0.05),
+                     labels = scales::percent) +
+  scale_y_continuous(limits = c(0, 1), labels = scales::percent) +
+  scale_color_manual(values = cousin_colors) +
+  labs(title = "Original Erlich Model (r = 2.5)",
+       x = "Database Size / Population Size",
+       y = "Probability of Match",
+       color = "Cousin\nDegree") +
+  theme_minimal() +
+  theme(legend.position = "right",
+        plot.title = element_text(size = 14, face = "bold"))
+
+p_zinb <- ggplot(zinb_2.5, aes(x = db_proportion, y = probability, 
+                                color = cousin_degree)) +
+  geom_line(size = 1.2) +
+  scale_x_continuous(breaks = seq(0, 0.05, 0.01), 
+                     limits = c(0, 0.05),
+                     labels = scales::percent) +
+  scale_y_continuous(limits = c(0, 1), labels = scales::percent) +
+  scale_color_manual(values = cousin_colors) +
+  labs(title = "ZINB Model (μ = 2.5)",
+       x = "Database Size / Population Size",
+       y = "Probability of Match",
+       color = "Cousin\nDegree") +
+  theme_minimal() +
+  theme(legend.position = "right",
+        plot.title = element_text(size = 14, face = "bold"))
+
+# Arrange side by side
+ggarrange(p_erlich, p_zinb, ncol = 2, common.legend = TRUE, legend = "right")
+```
+
+The comparison reveals several key differences:
+
+1. **Lower probabilities across all cousin degrees**: The ZINB model consistently predicts lower probabilities of finding relatives compared to Erlich's model.
+
+2. **Zero inflation impact**: With 10% of families having no children in the ZINB model, many genealogical lines terminate, reducing the overall number of cousins.
+
+3. **Variance effects**: The ZINB distribution's higher variance means some families have many relatives while others have very few, creating a more realistic but less predictable pattern.
+
+### Sensitivity Analysis: Mean Family Size from 1.5 to 4.0
+
+To understand how mean family size affects these probabilities, we examined a range of values from 1.5 to 4.0 children per family:
+
+```{r zinb_family_size_comparison, fig.width=12, fig.height=10}
+# Create plots for different mean family sizes
+mu_values <- c(1.5, 2.0, 2.5, 3.0, 3.5, 4.0)
+plot_list <- list()
+
+for (i in 1:length(mu_values)) {
+  mu <- mu_values[i]
+  
+  # Run ZINB model
+  zinb_results <- run_zinb_model(mu)
+  
+  # Create plot
+  p <- ggplot(zinb_results, aes(x = db_proportion, y = probability, 
+                                 color = cousin_degree)) +
+    geom_line(size = 1.2) +
+    scale_x_continuous(breaks = seq(0, 0.05, 0.01), 
+                       limits = c(0, 0.05),
+                       labels = scales::percent) +
+    scale_y_continuous(limits = c(0, 1), labels = scales::percent) +
+    scale_color_manual(values = cousin_colors) +
+    labs(title = paste0("ZINB Model (μ = ", mu, ")"),
+         x = "Database Size / Population Size",
+         y = "Probability of Match") +
+    theme_minimal() +
+    theme(legend.position = "none",
+          plot.title = element_text(size = 12, face = "bold"))
+  
+  # Add cousin labels at the right edge
+  label_data <- zinb_results %>%
+    group_by(cousin_degree) %>%
+    filter(db_proportion == max(db_proportion)) %>%
+    slice(1)
+  
+  p <- p + 
+    geom_text(data = label_data,
+              aes(x = 0.051, y = probability, label = cousin_degree),
+              hjust = 0, size = 3.5)
+  
+  plot_list[[i]] <- p
+}
+
+# Arrange all plots
+ggarrange(plotlist = plot_list, ncol = 2, nrow = 3)
+```
+
+### Key Findings
+
+The ZINB model reveals several important insights about familial search probabilities:
+
+1. **Non-linear scaling**: The probability of finding relatives doesn't scale linearly with mean family size. The difference between μ=1.5 and μ=2.0 is much smaller than between μ=3.5 and μ=4.0.
+
+2. **Database coverage threshold**: For smaller family sizes (μ < 2), even large databases (5% of population) have limited success in finding distant cousins. 
+
+3. **Fourth cousin saturation**: With larger family sizes (μ ≥ 3), the probability of finding fourth cousins approaches certainty even with modest database coverage (2-3%).
+
+4. **Real-world implications**: Most developed countries have fertility rates between 1.5-2.5, suggesting that the lower probability curves are more representative of actual genealogical networks.
+
+These results suggest that Erlich et al.'s original estimates may be overly optimistic for populations with realistic family size distributions, particularly when accounting for childless couples and the high variance in family sizes observed in real populations.
+
+
+## 5. Conclusion
 
 1. The family size distribution is better modeled as a Zero-Inflated Negative Binomial (ZINB) distribution than a Poisson distribution, which accounts for the excess zeros and overdispersion often observed in realistic family size data.
 

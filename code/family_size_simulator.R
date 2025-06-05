@@ -54,7 +54,7 @@ family_size_simulator <- function(n, type = "ZINB", mu = 3, size = 3, inflation 
           n_nephews_nieces <- n_nephews_nieces + number_of_children_zinb(mu, size, inflation)  # Generate number of nephews/nieces using ZINB
         }
       }
-      n_second_degree <- n_half_sibs + n_aunts_uncles + n_nephews_nieces  # Second-degree relatives include aunts, uncles, nephews, nieces and half-siblings
+      n_second_degree <- 4 + n_half_sibs + n_aunts_uncles + n_nephews_nieces  # Second-degree relatives include grandparents, aunts, uncles, nephews, nieces and half-siblings
       family_size[i, 4] <- n_second_degree
 
       n_cousins <- 0

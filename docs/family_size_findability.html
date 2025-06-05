@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Junhui He" />
+<meta name="author" content="Junhui He and Tina Lasisi" />
 
 
 <title>Family size findability</title>
@@ -353,8 +353,8 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Family size findability</h1>
-<h4 class="author">Junhui He</h4>
-<h4 class="date">2025-06-03 21:42:46</h4>
+<h4 class="author">Junhui He and Tina Lasisi</h4>
+<h4 class="date">2025-06-04 23:55:45</h4>
 
 </div>
 
@@ -362,7 +362,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -373,8 +373,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -383,13 +383,13 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-06-03
+<strong>Last updated:</strong> 2025-06-04
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>PODFRIDGE/</code> <span
@@ -412,18 +412,21 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
@@ -514,15 +517,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreee3bbbd9b6351df1b59ae4e0e040bcab3e3383765targetblanke3bbbd9a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree1e0c7ac8357f98851d73f9c32249a6a7e1a5cb21targetblank1e0c7aca">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/e3bbbd9b6351df1b59ae4e0e040bcab3e3383765" target="_blank">e3bbbd9</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/1e0c7ac8357f98851d73f9c32249a6a7e1a5cb21" target="_blank">1e0c7ac</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreee3bbbd9b6351df1b59ae4e0e040bcab3e3383765targetblanke3bbbd9a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree1e0c7ac8357f98851d73f9c32249a6a7e1a5cb21targetblank1e0c7aca"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -532,7 +535,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/e3bbbd9b6351df1b59ae4e0e040bcab3e3383765" target="_blank">e3bbbd9</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/1e0c7ac8357f98851d73f9c32249a6a7e1a5cb21" target="_blank">1e0c7ac</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -550,19 +553,22 @@ Ignored files:
     Ignored:    .DS_Store
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-    Ignored:    code/.DS_Store
+    Ignored:    data/.DS_Store
+    Ignored:    data/sims/.DS_Store
     Ignored:    output/.DS_Store
+    Ignored:    output/simulation_20240726-155743/.DS_Store
+    Ignored:    output/simulation_20240726-162034_11228488/.DS_Store
+    Ignored:    output/simulation_20240726-163235_11228791/.DS_Store
 
 Untracked files:
-    Untracked:  app/
-    Untracked:  code/family_size_simulator.R
-    Untracked:  code/long-range-familial-search/
-    Untracked:  code/relative_counter.R
-    Untracked:  output/cousin_probability_plot.png
-    Untracked:  output/simulated_relatives.csv
+    Untracked:  output/erlich_style_zinb_mu2.5.png
+    Untracked:  output/erlich_style_zinb_plot.png
 
 Unstaged changes:
-    Modified:   analysis/probability_disparity.Rmd
+    Modified:   analysis/family_size_findability.Rmd
+    Modified:   code/family_size_simulator.R
+    Modified:   output/cousin_probability_plot.png
+    Modified:   output/simulated_relatives.csv
 
 </code></pre>
 <p>
@@ -608,6 +614,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/1b48bf1a92f1b79cbddd94c19a1970177cf85fa4/docs/family_size_findability.html" target="_blank">1b48bf1</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-06-03
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -728,13 +751,13 @@ class="math inline">\(Y\)</span> follows a ZINB distribution conditional
 on at least one child minus one.</p>
 <p>The number of first-degree relatives is given by <span
 class="math inline">\(2+Y+X\)</span>. The number of second-degree
-relatives is given by <span class="math inline">\(\sum_{i=1}^2Y_i +
+relatives is given by <span class="math inline">\(4 + \sum_{i=1}^2Y_i +
 \sum_{i=1}^{Y}X_i\)</span>. The number of third-degree relatives is
 given by <span class="math inline">\(\sum_{i=1}^{\sum_{j=1}^2 Y_j}
 X_i\)</span>.</p>
 <p><strong>Remark:</strong> For simplicity, sometimes we approximate the
-number of second-degree relatives as <span class="math inline">\(2Y +
-YX\)</span>, and the number of third-degree relatives as <span
+number of second-degree relatives as <span class="math inline">\(4 + 2Y
++ YX\)</span>, and the number of third-degree relatives as <span
 class="math inline">\(2YX\)</span>.</p>
 </div>
 <div id="the-probability-of-finding-at-least-one-cousin-in-the-database"
@@ -811,6 +834,10 @@ Junhui He
 </table>
 </div>
 </div>
+<p><img src="figure/family_size_findability.Rmd/combined_plot-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="figure/family_size_findability.Rmd/family_size_simulation_incremental-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p><img src="figure/family_size_findability.Rmd/combined_smooth_plots-1.png" width="960" style="display: block; margin: auto;" /><img src="figure/family_size_findability.Rmd/combined_smooth_plots-2.png" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="figure/family_size_findability.Rmd/comparison-1.png" width="960" style="display: block; margin: auto;" /></p>
 </div>
 <div
 id="relationship-between-cousin-in-database-probability-and-average-family-size"
@@ -877,8 +904,80 @@ Junhui He
 </div>
 </div>
 </div>
+<div id="comparison-erlich-original-vs-zinb-family-size-model"
+class="section level2">
+<h2>4. Comparison: Erlich Original vs ZINB Family Size Model</h2>
+<p>To understand how realistic family size distributions affect
+long-range familial search probabilities, we compare Erlich et al.’s
+original model with our Zero-Inflated Negative Binomial (ZINB) approach.
+Both models aim to predict the probability of finding genetic relatives
+in databases of varying sizes.</p>
+<div id="direct-comparison-original-erlich-r2.5-vs-zinb-μ2.5"
+class="section level3">
+<h3>Direct Comparison: Original Erlich (r=2.5) vs ZINB (μ=2.5)</h3>
+<p>The figure below shows a side-by-side comparison of the two models,
+both using a mean family size of 2.5 children per couple:</p>
+<p><img src="figure/family_size_findability.Rmd/comparison_erlich_zinb-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>The comparison reveals several key differences:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Lower probabilities across all cousin degrees</strong>:
+The ZINB model consistently predicts lower probabilities of finding
+relatives compared to Erlich’s model.</p></li>
+<li><p><strong>Zero inflation impact</strong>: With 10% of families
+having no children in the ZINB model, many genealogical lines terminate,
+reducing the overall number of cousins.</p></li>
+<li><p><strong>Variance effects</strong>: The ZINB distribution’s higher
+variance means some families have many relatives while others have very
+few, creating a more realistic but less predictable pattern.</p></li>
+</ol>
+</div>
+<div id="sensitivity-analysis-mean-family-size-from-1.5-to-4.0"
+class="section level3">
+<h3>Sensitivity Analysis: Mean Family Size from 1.5 to 4.0</h3>
+<p>To understand how mean family size affects these probabilities, we
+examined a range of values from 1.5 to 4.0 children per family:</p>
+<pre><code>Warning: Removed 4 rows containing missing values or values outside the scale range
+(`geom_text()`).
+Removed 4 rows containing missing values or values outside the scale range
+(`geom_text()`).
+Removed 4 rows containing missing values or values outside the scale range
+(`geom_text()`).
+Removed 4 rows containing missing values or values outside the scale range
+(`geom_text()`).
+Removed 4 rows containing missing values or values outside the scale range
+(`geom_text()`).
+Removed 4 rows containing missing values or values outside the scale range
+(`geom_text()`).</code></pre>
+<p><img src="figure/family_size_findability.Rmd/zinb_family_size_comparison-1.png" width="1152" style="display: block; margin: auto;" /></p>
+</div>
+<div id="key-findings" class="section level3">
+<h3>Key Findings</h3>
+<p>The ZINB model reveals several important insights about familial
+search probabilities:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Non-linear scaling</strong>: The probability of finding
+relatives doesn’t scale linearly with mean family size. The difference
+between μ=1.5 and μ=2.0 is much smaller than between μ=3.5 and
+μ=4.0.</p></li>
+<li><p><strong>Database coverage threshold</strong>: For smaller family
+sizes (μ &lt; 2), even large databases (5% of population) have limited
+success in finding distant cousins.</p></li>
+<li><p><strong>Fourth cousin saturation</strong>: With larger family
+sizes (μ ≥ 3), the probability of finding fourth cousins approaches
+certainty even with modest database coverage (2-3%).</p></li>
+<li><p><strong>Real-world implications</strong>: Most developed
+countries have fertility rates between 1.5-2.5, suggesting that the
+lower probability curves are more representative of actual genealogical
+networks.</p></li>
+</ol>
+<p>These results suggest that Erlich et al.’s original estimates may be
+overly optimistic for populations with realistic family size
+distributions, particularly when accounting for childless couples and
+the high variance in family sizes observed in real populations.</p>
+</div>
+</div>
 <div id="conclusion" class="section level2">
-<h2>4. Conclusion</h2>
+<h2>5. Conclusion</h2>
 <ol style="list-style-type: decimal">
 <li><p>The family size distribution is better modeled as a Zero-Inflated
 Negative Binomial (ZINB) distribution than a Poisson distribution, which
@@ -899,13 +998,13 @@ Session information
 </button>
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
-<pre><code>R version 4.3.1 (2023-06-16)
-Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS 15.5
+<pre><code>R version 4.5.0 (2025-04-11)
+Platform: aarch64-apple-darwin20
+Running under: macOS Sequoia 15.5
 
 Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+BLAS:   /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
 
 locale:
 [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -917,25 +1016,26 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] ggpubr_0.6.0    ggplot2_3.5.2   workflowr_1.7.1
+[1] RColorBrewer_1.1-3 dplyr_1.1.4        tidyr_1.3.1        ggpubr_0.6.0      
+[5] ggplot2_3.5.2      workflowr_1.7.1   
 
 loaded via a namespace (and not attached):
- [1] sass_0.4.10        generics_0.1.4     tidyr_1.3.1        rstatix_0.7.2     
- [5] stringi_1.8.7      digest_0.6.37      magrittr_2.0.3     evaluate_1.0.3    
- [9] grid_4.3.1         RColorBrewer_1.1-3 fastmap_1.2.0      rprojroot_2.0.4   
-[13] jsonlite_2.0.0     processx_3.8.6     whisker_0.4.1      backports_1.5.0   
-[17] Formula_1.2-5      ps_1.9.1           promises_1.3.3     httr_1.4.7        
-[21] purrr_1.0.4        scales_1.4.0       jquerylib_0.1.4    abind_1.4-8       
-[25] cli_3.6.5          rlang_1.1.6        cowplot_1.1.3      withr_3.0.2       
-[29] cachem_1.1.0       yaml_2.3.10        tools_4.3.1        ggsignif_0.6.4    
-[33] dplyr_1.1.4        httpuv_1.6.16      broom_1.0.8        vctrs_0.6.5       
-[37] R6_2.6.1           lifecycle_1.0.4    git2r_0.36.2       stringr_1.5.1     
-[41] fs_1.6.6           car_3.1-3          pkgconfig_2.0.3    callr_3.7.6       
-[45] pillar_1.10.2      bslib_0.9.0        later_1.4.2        gtable_0.3.6      
-[49] glue_1.8.0         Rcpp_1.0.14        xfun_0.52          tibble_3.2.1      
-[53] tidyselect_1.2.1   rstudioapi_0.17.1  knitr_1.50         farver_2.1.2      
-[57] htmltools_0.5.8.1  labeling_0.4.3     carData_3.0-5      rmarkdown_2.29    
-[61] compiler_4.3.1     getPass_0.2-4     </code></pre>
+ [1] sass_0.4.10       generics_0.1.4    rstatix_0.7.2     stringi_1.8.7    
+ [5] digest_0.6.37     magrittr_2.0.3    evaluate_1.0.3    grid_4.5.0       
+ [9] fastmap_1.2.0     rprojroot_2.0.4   jsonlite_2.0.0    processx_3.8.6   
+[13] whisker_0.4.1     backports_1.5.0   Formula_1.2-5     gridExtra_2.3    
+[17] ps_1.9.1          promises_1.3.3    httr_1.4.7        purrr_1.0.4      
+[21] scales_1.4.0      textshaping_1.0.1 jquerylib_0.1.4   abind_1.4-8      
+[25] cli_3.6.5         rlang_1.1.6       cowplot_1.1.3     withr_3.0.2      
+[29] cachem_1.1.0      yaml_2.3.10       tools_4.5.0       ggsignif_0.6.4   
+[33] httpuv_1.6.16     broom_1.0.8       vctrs_0.6.5       R6_2.6.1         
+[37] lifecycle_1.0.4   git2r_0.36.2      stringr_1.5.1     fs_1.6.6         
+[41] car_3.1-3         ragg_1.4.0        pkgconfig_2.0.3   callr_3.7.6      
+[45] pillar_1.10.2     bslib_0.9.0       later_1.4.2       gtable_0.3.6     
+[49] glue_1.8.0        Rcpp_1.0.14       systemfonts_1.2.3 xfun_0.52        
+[53] tibble_3.2.1      tidyselect_1.2.1  rstudioapi_0.17.1 knitr_1.50       
+[57] farver_2.1.2      htmltools_0.5.8.1 labeling_0.4.3    carData_3.0-5    
+[61] rmarkdown_2.29    compiler_4.5.0    getPass_0.2-4    </code></pre>
 </div>
 </div>
 </div>
