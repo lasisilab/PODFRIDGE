@@ -28,7 +28,7 @@ library(viridis)
 library(sf)
 ```
 
-## Murphy & Tong 2020 Freedom of Information Act (FIOA) appendix data
+## Murphy & Tong 2020 Freedom of Information Act (FOIA) appendix data
 Murphy & Tong (2020) [1] provided information on the racial composition of NDIS for each state.
 
 ```{r murphy_tong, results =FALSE,warning=FALSE,message=FALSE, echo = FALSE, fig.width = 10, fig.height = 6}
