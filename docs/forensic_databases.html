@@ -1,0 +1,2852 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Junhui He" />
+
+
+<title>Forensic Databases</title>
+
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.5.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">PODFRIDGE</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/lasisilab/PODFRIDGE">
+    <span class="fab fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Forensic Databases</h1>
+<h4 class="author">Junhui He</h4>
+<h4 class="date">2025-06-18 18:00:32</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2025-06-18
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>PODFRIDGE/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20230302code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20230302)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20230302code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20230302)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree841cef898cba1b15d0d589e8ce6d7ce9901ec87dtargetblank841cef8a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/841cef898cba1b15d0d589e8ce6d7ce9901ec87d" target="_blank">841cef8</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree841cef898cba1b15d0d589e8ce6d7ce9901ec87dtargetblank841cef8a"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/841cef898cba1b15d0d589e8ce6d7ce9901ec87d" target="_blank">841cef8</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    code/.DS_Store
+    Ignored:    output/.DS_Store
+
+Unstaged changes:
+    Modified:   analysis/codis_regression.Rmd
+    Modified:   analysis/racial_proportion.Rmd
+    Modified:   analysis/regression.Rmd
+    Modified:   data/final_CODIS_data.csv
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/forensic_databases.Rmd</code>)
+and HTML (<code>docs/forensic_databases.html</code>) files. If you’ve
+configured a remote Git repository (see <code>?wflow_git_remote</code>),
+click on the hyperlinks in the table below to view the files as they
+were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/841cef898cba1b15d0d589e8ce6d7ce9901ec87d/analysis/forensic_databases.Rmd" target="_blank">841cef8</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-06-18
+</td>
+<td>
+recreate the forensic databases description
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="murphy-tong-forensic-databases" class="section level1">
+<h1>1 Murphy &amp; Tong forensic databases</h1>
+<p>Murphy &amp; Tong (2020) [1] constructed a forensic database in the
+Freedom of Information Act (FIOA) appendix data. They provided a
+detailed racial composition of the database in seven US states:
+California, Florida, Indiana, Maine, Nevada, South Dakota, and Texas.
+The racial categories are White, Black, Hispanic, Asian, and native
+Americans. Specifically, we focus on White and Black Americans. The
+database includes information on the number of individuals in each
+racial category for each state.</p>
+<p>The racial composition of the CODIS database is shown in the
+following table and figure.</p>
+<pre class="r"><code># read CODIS data
+codis_data_path = &#39;./data/regression_data/CODIS_regression_data.csv&#39;
+codis_data = read.csv(codis_data_path) # CODIS data
+
+# extract the murphy &amp; tong data
+codis_data_mt = data.frame(
+  State = codis_data$state,
+  Total = codis_data$mt.total,
+  Black = round(codis_data$mt.total * codis_data$mt.percent.black),
+  White = round(codis_data$mt.total * codis_data$mt.percent.white),
+  Other = round(codis_data$mt.total * codis_data$mt.percent.other),
+  Percent_Black = codis_data$mt.percent.black,
+  Percent_White = codis_data$mt.percent.white,
+  Percent_Other = codis_data$mt.percent.other
+)
+
+kable(codis_data_mt, 
+      caption = &quot;Racial composition of the forensic database in Murphy &amp; Tong (2020) [1].&quot;,
+      col.names = c(&quot;State&quot;, &quot;Total&quot;, &quot;Black&quot;, &quot;White&quot;, &quot;Other&quot;, &quot;Percent of Black&quot;, &quot;Percent of White&quot;, &quot;Percent of Other&quot;)
+)</code></pre>
+<table>
+<caption>Racial composition of the forensic database in Murphy &amp;
+Tong (2020) [1].</caption>
+<colgroup>
+<col width="13%" />
+<col width="8%" />
+<col width="7%" />
+<col width="7%" />
+<col width="8%" />
+<col width="18%" />
+<col width="18%" />
+<col width="18%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">State</th>
+<th align="right">Total</th>
+<th align="right">Black</th>
+<th align="right">White</th>
+<th align="right">Other</th>
+<th align="right">Percent of Black</th>
+<th align="right">Percent of White</th>
+<th align="right">Percent of Other</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">California</td>
+<td align="right">2768269</td>
+<td align="right">473374</td>
+<td align="right">819408</td>
+<td align="right">1475487</td>
+<td align="right">0.171</td>
+<td align="right">0.296</td>
+<td align="right">0.533</td>
+</tr>
+<tr class="even">
+<td align="left">Florida</td>
+<td align="right">1350667</td>
+<td align="right">475435</td>
+<td align="right">829310</td>
+<td align="right">45923</td>
+<td align="right">0.352</td>
+<td align="right">0.614</td>
+<td align="right">0.034</td>
+</tr>
+<tr class="odd">
+<td align="left">Indiana</td>
+<td align="right">307714</td>
+<td align="right">80006</td>
+<td align="right">215400</td>
+<td align="right">12309</td>
+<td align="right">0.260</td>
+<td align="right">0.700</td>
+<td align="right">0.040</td>
+</tr>
+<tr class="even">
+<td align="left">Maine</td>
+<td align="right">32847</td>
+<td align="right">1281</td>
+<td align="right">30482</td>
+<td align="right">1084</td>
+<td align="right">0.039</td>
+<td align="right">0.928</td>
+<td align="right">0.033</td>
+</tr>
+<tr class="odd">
+<td align="left">Nevada</td>
+<td align="right">167726</td>
+<td align="right">42938</td>
+<td align="right">116402</td>
+<td align="right">8386</td>
+<td align="right">0.256</td>
+<td align="right">0.694</td>
+<td align="right">0.050</td>
+</tr>
+<tr class="even">
+<td align="left">South Dakota</td>
+<td align="right">67600</td>
+<td align="right">4056</td>
+<td align="right">45157</td>
+<td align="right">18387</td>
+<td align="right">0.060</td>
+<td align="right">0.668</td>
+<td align="right">0.272</td>
+</tr>
+<tr class="odd">
+<td align="left">Texas</td>
+<td align="right">960985</td>
+<td align="right">279647</td>
+<td align="right">358447</td>
+<td align="right">322891</td>
+<td align="right">0.291</td>
+<td align="right">0.373</td>
+<td align="right">0.336</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># plot the racial composition of the CODIS database
+codis_mt_long = codis_data_mt %&gt;% pivot_longer(cols = c(&quot;White&quot;,&quot;Black&quot;,&quot;Other&quot;), names_to = &quot;Race&quot;, values_to = &quot;Value&quot;)
+
+ggplot(codis_mt_long) +
+  geom_col(aes(x = State, y = Value, fill = Race)) +
+  theme_classic() + ylab(&quot;Value&quot;) + theme_minimal() +
+  ggtitle(&quot;Number of people in the forensic database, by race&quot;) +
+  theme(axis.text.x = element_text(angle = 90)) + 
+  scale_fill_manual(name = &quot;Race&quot;,labels = c(&quot;Black&quot;, &quot;Other&quot;, &quot;White&quot;),
+  values = c(&quot;#44AA99&quot;, &quot;#88CCEE&quot;, &quot;#882255&quot;))</code></pre>
+<p><img src="figure/forensic_databases.Rmd/codis-data-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="prison-databases" class="section level1">
+<h1>2 Prison databases</h1>
+<p>Klein et al. (2023) [2] provided the number of incarcerated people of
+racial groups: White, Black, Hispanic, Asian, and native Americans, for
+each US state except for Michigan state. For the state of Michigan, this
+data was pulled from a separate source [4]. This prison database is
+useful for understanding the racial composition of the prison population
+in the US.</p>
+<p>The racial composition of incarcerated people in the US is shown in
+the following table and figure.</p>
+<pre class="r"><code># Load prison data
+prison_data = read.csv(&quot;data/populations_states.csv&quot;)
+
+# Extract year from the date and filter data for 2022
+prison_data$year = substring(prison_data$date, 1, 4)
+prison_data_2022 = prison_data[which(prison_data$year == &quot;2022&quot;),]
+prison_data_2022 = prison_data_2022[!duplicated(prison_data_2022[, &#39;state&#39;]),]
+
+# Michigan source: Vera https://www.vera.org/downloads/pdfdownloads/state-incarceration-trends-michigan.pdf 
+prison_data_2022$incarcerated_black[which(prison_data_2022$state == &quot;Michigan&quot;)] &lt;- 0.53 * as.numeric(prison_data_2022$incarcerated_total[which(prison_data_2022$state == &quot;Michigan&quot;)])
+
+prison_data_2022 &lt;- prison_data_2022[-c(which(prison_data_2022$state == &quot;Federal&quot;)),]
+prison_data_2022 = prison_data_2022[,c(&quot;state&quot;, &quot;incarcerated_total&quot;, &quot;incarcerated_white&quot;, &quot;incarcerated_black&quot;, &quot;incarcerated_hispanic&quot;, &quot;incarcerated_amerind&quot;, &quot;incarcerated_asian&quot;)]
+colnames(prison_data_2022) = c(&quot;State&quot;, &quot;Total&quot;, &quot;White&quot;,&quot;Black&quot;, &quot;Hispanic&quot;, &#39;Native American&#39;,&quot;Asian&quot;)
+rownames(prison_data_2022) = NULL
+
+kable(prison_data_2022, caption = &quot;Number of people in prison by state and race&quot;)</code></pre>
+<table>
+<caption>Number of people in prison by state and race</caption>
+<colgroup>
+<col width="28%" />
+<col width="9%" />
+<col width="8%" />
+<col width="12%" />
+<col width="12%" />
+<col width="21%" />
+<col width="8%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">State</th>
+<th align="right">Total</th>
+<th align="right">White</th>
+<th align="right">Black</th>
+<th align="right">Hispanic</th>
+<th align="right">Native American</th>
+<th align="right">Asian</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Alabama</td>
+<td align="right">25195</td>
+<td align="right">11555</td>
+<td align="right">13428.00</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Alaska</td>
+<td align="right">4624</td>
+<td align="right">1885</td>
+<td align="right">462.00</td>
+<td align="right">124</td>
+<td align="right">1854</td>
+<td align="right">253</td>
+</tr>
+<tr class="odd">
+<td align="left">Arizona</td>
+<td align="right">33855</td>
+<td align="right">13151</td>
+<td align="right">5104.00</td>
+<td align="right">13118</td>
+<td align="right">1871</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Arkansas</td>
+<td align="right">17023</td>
+<td align="right">9646</td>
+<td align="right">6872.00</td>
+<td align="right">570</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">California</td>
+<td align="right">99729</td>
+<td align="right">19786</td>
+<td align="right">28241.00</td>
+<td align="right">45213</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Colorado</td>
+<td align="right">15642</td>
+<td align="right">6447</td>
+<td align="right">2705.00</td>
+<td align="right">4679</td>
+<td align="right">543</td>
+<td align="right">181</td>
+</tr>
+<tr class="odd">
+<td align="left">Connecticut</td>
+<td align="right">9422</td>
+<td align="right">2634</td>
+<td align="right">4074.00</td>
+<td align="right">2639</td>
+<td align="right">34</td>
+<td align="right">41</td>
+</tr>
+<tr class="even">
+<td align="left">Delaware</td>
+<td align="right">4406</td>
+<td align="right">1868</td>
+<td align="right">2524.00</td>
+<td align="right">NA</td>
+<td align="right">0</td>
+<td align="right">5</td>
+</tr>
+<tr class="odd">
+<td align="left">District of Columbia</td>
+<td align="right">1486</td>
+<td align="right">90</td>
+<td align="right">1321.00</td>
+<td align="right">63</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Florida</td>
+<td align="right">78847</td>
+<td align="right">30980</td>
+<td align="right">37553.00</td>
+<td align="right">9949</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Georgia</td>
+<td align="right">46669</td>
+<td align="right">17041</td>
+<td align="right">27514.00</td>
+<td align="right">1914</td>
+<td align="right">21</td>
+<td align="right">157</td>
+</tr>
+<tr class="even">
+<td align="left">Hawaii</td>
+<td align="right">4263</td>
+<td align="right">912</td>
+<td align="right">189.00</td>
+<td align="right">103</td>
+<td align="right">13</td>
+<td align="right">953</td>
+</tr>
+<tr class="odd">
+<td align="left">Idaho</td>
+<td align="right">8765</td>
+<td align="right">6459</td>
+<td align="right">261.00</td>
+<td align="right">1292</td>
+<td align="right">337</td>
+<td align="right">42</td>
+</tr>
+<tr class="even">
+<td align="left">Illinois</td>
+<td align="right">27851</td>
+<td align="right">8812</td>
+<td align="right">15153.00</td>
+<td align="right">3645</td>
+<td align="right">37</td>
+<td align="right">104</td>
+</tr>
+<tr class="odd">
+<td align="left">Indiana</td>
+<td align="right">22918</td>
+<td align="right">14453</td>
+<td align="right">7368.00</td>
+<td align="right">933</td>
+<td align="right">48</td>
+<td align="right">62</td>
+</tr>
+<tr class="even">
+<td align="left">Iowa</td>
+<td align="right">8171</td>
+<td align="right">5236</td>
+<td align="right">2069.00</td>
+<td align="right">585</td>
+<td align="right">184</td>
+<td align="right">93</td>
+</tr>
+<tr class="odd">
+<td align="left">Kansas</td>
+<td align="right">8326</td>
+<td align="right">5640</td>
+<td align="right">2332.00</td>
+<td align="right">NA</td>
+<td align="right">261</td>
+<td align="right">82</td>
+</tr>
+<tr class="even">
+<td align="left">Kentucky</td>
+<td align="right">18660</td>
+<td align="right">14170</td>
+<td align="right">3909.00</td>
+<td align="right">299</td>
+<td align="right">18</td>
+<td align="right">31</td>
+</tr>
+<tr class="odd">
+<td align="left">Louisiana</td>
+<td align="right">26377</td>
+<td align="right">8968</td>
+<td align="right">17303.00</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Maine</td>
+<td align="right">1579</td>
+<td align="right">1278</td>
+<td align="right">158.00</td>
+<td align="right">NA</td>
+<td align="right">52</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Maryland</td>
+<td align="right">14694</td>
+<td align="right">3328</td>
+<td align="right">10551.00</td>
+<td align="right">691</td>
+<td align="right">35</td>
+<td align="right">55</td>
+</tr>
+<tr class="even">
+<td align="left">Massachusetts</td>
+<td align="right">6236</td>
+<td align="right">2609</td>
+<td align="right">1810.00</td>
+<td align="right">1584</td>
+<td align="right">38</td>
+<td align="right">103</td>
+</tr>
+<tr class="odd">
+<td align="left">Michigan</td>
+<td align="right">32114</td>
+<td align="right">14574</td>
+<td align="right">17020.42</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Minnesota</td>
+<td align="right">7511</td>
+<td align="right">3910</td>
+<td align="right">2700.00</td>
+<td align="right">NA</td>
+<td align="right">693</td>
+<td align="right">189</td>
+</tr>
+<tr class="odd">
+<td align="left">Mississippi</td>
+<td align="right">18967</td>
+<td align="right">7086</td>
+<td align="right">11568.00</td>
+<td align="right">218</td>
+<td align="right">39</td>
+<td align="right">46</td>
+</tr>
+<tr class="even">
+<td align="left">Missouri</td>
+<td align="right">23417</td>
+<td align="right">14872</td>
+<td align="right">7810.00</td>
+<td align="right">524</td>
+<td align="right">102</td>
+<td align="right">61</td>
+</tr>
+<tr class="odd">
+<td align="left">Montana</td>
+<td align="right">2635</td>
+<td align="right">1952</td>
+<td align="right">77.00</td>
+<td align="right">NA</td>
+<td align="right">597</td>
+<td align="right">9</td>
+</tr>
+<tr class="even">
+<td align="left">Nebraska</td>
+<td align="right">5585</td>
+<td align="right">2819</td>
+<td align="right">1559.00</td>
+<td align="right">810</td>
+<td align="right">285</td>
+<td align="right">44</td>
+</tr>
+<tr class="odd">
+<td align="left">Nevada</td>
+<td align="right">10394</td>
+<td align="right">4299</td>
+<td align="right">3278.00</td>
+<td align="right">2295</td>
+<td align="right">205</td>
+<td align="right">294</td>
+</tr>
+<tr class="even">
+<td align="left">New Hampshire</td>
+<td align="right">2065</td>
+<td align="right">1716</td>
+<td align="right">141.00</td>
+<td align="right">115</td>
+<td align="right">9</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">New Jersey</td>
+<td align="right">12492</td>
+<td align="right">2771</td>
+<td align="right">7662.00</td>
+<td align="right">1941</td>
+<td align="right">13</td>
+<td align="right">97</td>
+</tr>
+<tr class="even">
+<td align="left">New Mexico</td>
+<td align="right">5742</td>
+<td align="right">4621</td>
+<td align="right">478.00</td>
+<td align="right">NA</td>
+<td align="right">527</td>
+<td align="right">12</td>
+</tr>
+<tr class="odd">
+<td align="left">New York</td>
+<td align="right">30724</td>
+<td align="right">7162</td>
+<td align="right">15047.00</td>
+<td align="right">7366</td>
+<td align="right">292</td>
+<td align="right">191</td>
+</tr>
+<tr class="even">
+<td align="left">North Carolina</td>
+<td align="right">29629</td>
+<td align="right">12198</td>
+<td align="right">14942.00</td>
+<td align="right">NA</td>
+<td align="right">655</td>
+<td align="right">97</td>
+</tr>
+<tr class="odd">
+<td align="left">North Dakota</td>
+<td align="right">1661</td>
+<td align="right">934</td>
+<td align="right">186.00</td>
+<td align="right">104</td>
+<td align="right">419</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Ohio</td>
+<td align="right">43430</td>
+<td align="right">22548</td>
+<td align="right">19331.00</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Oklahoma</td>
+<td align="right">21356</td>
+<td align="right">11088</td>
+<td align="right">6124.00</td>
+<td align="right">1878</td>
+<td align="right">2079</td>
+<td align="right">90</td>
+</tr>
+<tr class="even">
+<td align="left">Oregon</td>
+<td align="right">12002</td>
+<td align="right">8747</td>
+<td align="right">1081.00</td>
+<td align="right">1579</td>
+<td align="right">375</td>
+<td align="right">183</td>
+</tr>
+<tr class="odd">
+<td align="left">Pennsylvania</td>
+<td align="right">36528</td>
+<td align="right">15618</td>
+<td align="right">16986.00</td>
+<td align="right">530</td>
+<td align="right">42</td>
+<td align="right">105</td>
+</tr>
+<tr class="even">
+<td align="left">Rhode Island</td>
+<td align="right">2142</td>
+<td align="right">488</td>
+<td align="right">886.00</td>
+<td align="right">714</td>
+<td align="right">24</td>
+<td align="right">18</td>
+</tr>
+<tr class="odd">
+<td align="left">South Carolina</td>
+<td align="right">15374</td>
+<td align="right">5910</td>
+<td align="right">9250.00</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">South Dakota</td>
+<td align="right">3314</td>
+<td align="right">1710</td>
+<td align="right">261.00</td>
+<td align="right">133</td>
+<td align="right">1173</td>
+<td align="right">26</td>
+</tr>
+<tr class="odd">
+<td align="left">Tennessee</td>
+<td align="right">24532</td>
+<td align="right">13833</td>
+<td align="right">10342.00</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Texas</td>
+<td align="right">119498</td>
+<td align="right">40246</td>
+<td align="right">38955.00</td>
+<td align="right">39610</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Utah</td>
+<td align="right">5925</td>
+<td align="right">3490</td>
+<td align="right">448.00</td>
+<td align="right">1217</td>
+<td align="right">340</td>
+<td align="right">198</td>
+</tr>
+<tr class="even">
+<td align="left">Vermont</td>
+<td align="right">1283</td>
+<td align="right">1099</td>
+<td align="right">121.00</td>
+<td align="right">NA</td>
+<td align="right">15</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Virginia</td>
+<td align="right">24078</td>
+<td align="right">9627</td>
+<td align="right">13480.00</td>
+<td align="right">720</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Washington</td>
+<td align="right">13457</td>
+<td align="right">9465</td>
+<td align="right">2395.00</td>
+<td align="right">2207</td>
+<td align="right">662</td>
+<td align="right">581</td>
+</tr>
+<tr class="odd">
+<td align="left">West Virginia</td>
+<td align="right">4608</td>
+<td align="right">3981</td>
+<td align="right">554.00</td>
+<td align="right">30</td>
+<td align="right">7</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Wisconsin</td>
+<td align="right">19948</td>
+<td align="right">10490</td>
+<td align="right">8236.00</td>
+<td align="right">NA</td>
+<td align="right">959</td>
+<td align="right">248</td>
+</tr>
+<tr class="odd">
+<td align="left">Wyoming</td>
+<td align="right">2167</td>
+<td align="right">1624</td>
+<td align="right">104.00</td>
+<td align="right">255</td>
+<td align="right">161</td>
+<td align="right">NA</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>prison_long = prison_data_2022 %&gt;% pivot_longer(cols = c(&quot;White&quot;,&quot;Black&quot;,&quot;Hispanic&quot;,&quot;Native American&quot; ,&quot;Asian&quot;), names_to = &quot;Race&quot;, values_to = &quot;Value&quot;)
+
+ggplot(prison_long) +
+  geom_col(aes(x = State, y = Value, fill = Race)) +
+  theme_classic() + ylab(&quot;Value&quot;) + theme_minimal() +
+  ggtitle(&quot;Number of incarcerated people, by race&quot;) +
+  theme(axis.text.x = element_text(angle = 90)) + 
+  scale_fill_manual(name = &quot;Race&quot;,labels = c(&quot;Asian&quot;, &quot;Black&quot;, &quot;Hispanic&quot;, &quot;Native American&quot;,&quot;White&quot;),
+  values = c(&quot;#332288&quot;,&quot;#44AA99&quot;, &quot;#88CCEE&quot;, &quot;#CC6677&quot;, &quot;#882255&quot;))</code></pre>
+<p><img src="figure/forensic_databases.Rmd/prison-1.png" width="1440" style="display: block; margin: auto;" /></p>
+</div>
+<div id="census-databases" class="section level1">
+<h1>3 Census databases</h1>
+<p>The U.S. Census Bureau’s API [5] provides demographic data for the
+population of each US state, including racial composition. The racial
+composition of the general population in the US is shown in the
+following table and figure.</p>
+<pre class="r"><code># read census data
+census_data_path = &#39;./data/regression_data/CODIS_regression_predict_data.csv&#39;
+census_prison_data = read.csv(census_data_path) # Census and prison data
+
+# extract census data
+census_data = data.frame(
+  State = census_prison_data$State,
+  Total = census_prison_data$census.total,
+  Black = round(census_prison_data$census.total * census_prison_data$census.percent.black),
+  White = round(census_prison_data$census.total * census_prison_data$census.percent.white),
+  Other = round(census_prison_data$census.total * census_prison_data$census.percent.other),
+  Percent_Black = census_prison_data$census.percent.black,
+  Percent_White = census_prison_data$census.percent.white,
+  Percent_Other = census_prison_data$census.percent.other
+)
+
+kable(census_data, 
+      caption = &quot;Racial composition of the census database in U.S. Census Bureau&#39;s API [5].&quot;,
+      col.names = c(&quot;State&quot;, &quot;Total&quot;, &quot;Black&quot;, &quot;White&quot;, &quot;Other&quot;, &quot;Percent of Black&quot;, &quot;Percent of White&quot;, &quot;Percent of Other&quot;)
+)</code></pre>
+<table>
+<caption>Racial composition of the census database in U.S. Census
+Bureau’s API [5].</caption>
+<colgroup>
+<col width="14%" />
+<col width="8%" />
+<col width="7%" />
+<col width="8%" />
+<col width="8%" />
+<col width="16%" />
+<col width="16%" />
+<col width="16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">State</th>
+<th align="right">Total</th>
+<th align="right">Black</th>
+<th align="right">White</th>
+<th align="right">Other</th>
+<th align="right">Percent of Black</th>
+<th align="right">Percent of White</th>
+<th align="right">Percent of Other</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Alabama</td>
+<td align="right">4767326</td>
+<td align="right">1296162</td>
+<td align="right">3220452</td>
+<td align="right">250712</td>
+<td align="right">0.2718845</td>
+<td align="right">0.6755259</td>
+<td align="right">0.0525896</td>
+</tr>
+<tr class="even">
+<td align="left">Alaska</td>
+<td align="right">643867</td>
+<td align="right">21898</td>
+<td align="right">435392</td>
+<td align="right">186577</td>
+<td align="right">0.0340101</td>
+<td align="right">0.6762142</td>
+<td align="right">0.2897757</td>
+</tr>
+<tr class="odd">
+<td align="left">Arizona</td>
+<td align="right">6154696</td>
+<td align="right">339150</td>
+<td align="right">4322337</td>
+<td align="right">1493209</td>
+<td align="right">0.0551043</td>
+<td align="right">0.7022828</td>
+<td align="right">0.2426130</td>
+</tr>
+<tr class="even">
+<td align="left">Arkansas</td>
+<td align="right">2797949</td>
+<td align="right">453783</td>
+<td align="right">2114512</td>
+<td align="right">229654</td>
+<td align="right">0.1621842</td>
+<td align="right">0.7557364</td>
+<td align="right">0.0820794</td>
+</tr>
+<tr class="odd">
+<td align="left">California</td>
+<td align="right">33777988</td>
+<td align="right">2237044</td>
+<td align="right">16296122</td>
+<td align="right">15244822</td>
+<td align="right">0.0662279</td>
+<td align="right">0.4824480</td>
+<td align="right">0.4513242</td>
+</tr>
+<tr class="even">
+<td align="left">Colorado</td>
+<td align="right">5066044</td>
+<td align="right">234828</td>
+<td align="right">4082927</td>
+<td align="right">748289</td>
+<td align="right">0.0463533</td>
+<td align="right">0.8059399</td>
+<td align="right">0.1477068</td>
+</tr>
+<tr class="odd">
+<td align="left">Connecticut</td>
+<td align="right">3273040</td>
+<td align="right">388675</td>
+<td align="right">2395128</td>
+<td align="right">489237</td>
+<td align="right">0.1187505</td>
+<td align="right">0.7317747</td>
+<td align="right">0.1494748</td>
+</tr>
+<tr class="even">
+<td align="left">Delaware</td>
+<td align="right">913430</td>
+<td align="right">218899</td>
+<td align="right">597763</td>
+<td align="right">96768</td>
+<td align="right">0.2396451</td>
+<td align="right">0.6544158</td>
+<td align="right">0.1059392</td>
+</tr>
+<tr class="odd">
+<td align="left">Florida</td>
+<td align="right">17986115</td>
+<td align="right">3246381</td>
+<td align="right">12422961</td>
+<td align="right">2316773</td>
+<td align="right">0.1804937</td>
+<td align="right">0.6906973</td>
+<td align="right">0.1288090</td>
+</tr>
+<tr class="even">
+<td align="left">Georgia</td>
+<td align="right">9968000</td>
+<td align="right">3320513</td>
+<td align="right">5555483</td>
+<td align="right">1092004</td>
+<td align="right">0.3331173</td>
+<td align="right">0.5573318</td>
+<td align="right">0.1095510</td>
+</tr>
+<tr class="odd">
+<td align="left">Hawaii</td>
+<td align="right">1087142</td>
+<td align="right">23417</td>
+<td align="right">333261</td>
+<td align="right">730464</td>
+<td align="right">0.0215400</td>
+<td align="right">0.3065478</td>
+<td align="right">0.6719122</td>
+</tr>
+<tr class="even">
+<td align="left">Idaho</td>
+<td align="right">1685901</td>
+<td align="right">15726</td>
+<td align="right">1510360</td>
+<td align="right">159815</td>
+<td align="right">0.0093280</td>
+<td align="right">0.8958770</td>
+<td align="right">0.0947950</td>
+</tr>
+<tr class="odd">
+<td align="left">Illinois</td>
+<td align="right">11667524</td>
+<td align="right">1808271</td>
+<td align="right">7868227</td>
+<td align="right">1991026</td>
+<td align="right">0.1549833</td>
+<td align="right">0.6743699</td>
+<td align="right">0.1706468</td>
+</tr>
+<tr class="even">
+<td align="left">Indiana</td>
+<td align="right">6348802</td>
+<td align="right">648513</td>
+<td align="right">5241795</td>
+<td align="right">458494</td>
+<td align="right">0.1021473</td>
+<td align="right">0.8256353</td>
+<td align="right">0.0722174</td>
+</tr>
+<tr class="odd">
+<td align="left">Iowa</td>
+<td align="right">3011086</td>
+<td align="right">131972</td>
+<td align="right">2694521</td>
+<td align="right">184593</td>
+<td align="right">0.0438287</td>
+<td align="right">0.8948668</td>
+<td align="right">0.0613045</td>
+</tr>
+<tr class="even">
+<td align="left">Kansas</td>
+<td align="right">2657373</td>
+<td align="right">168809</td>
+<td align="right">2222462</td>
+<td align="right">266102</td>
+<td align="right">0.0635248</td>
+<td align="right">0.8363380</td>
+<td align="right">0.1001372</td>
+</tr>
+<tr class="odd">
+<td align="left">Kentucky</td>
+<td align="right">4260996</td>
+<td align="right">362417</td>
+<td align="right">3711254</td>
+<td align="right">187325</td>
+<td align="right">0.0850545</td>
+<td align="right">0.8709827</td>
+<td align="right">0.0439627</td>
+</tr>
+<tr class="even">
+<td align="left">Louisiana</td>
+<td align="right">4384380</td>
+<td align="right">1464023</td>
+<td align="right">2657652</td>
+<td align="right">262705</td>
+<td align="right">0.3339179</td>
+<td align="right">0.6061637</td>
+<td align="right">0.0599184</td>
+</tr>
+<tr class="odd">
+<td align="left">Maine</td>
+<td align="right">1297649</td>
+<td align="right">25752</td>
+<td align="right">1237041</td>
+<td align="right">34856</td>
+<td align="right">0.0198451</td>
+<td align="right">0.9532940</td>
+<td align="right">0.0268609</td>
+</tr>
+<tr class="even">
+<td align="left">Maryland</td>
+<td align="right">5695323</td>
+<td align="right">1820472</td>
+<td align="right">3007874</td>
+<td align="right">866977</td>
+<td align="right">0.3196433</td>
+<td align="right">0.5281305</td>
+<td align="right">0.1522261</td>
+</tr>
+<tr class="odd">
+<td align="left">Massachusetts</td>
+<td align="right">6421050</td>
+<td align="right">494029</td>
+<td align="right">4896037</td>
+<td align="right">1030984</td>
+<td align="right">0.0769390</td>
+<td align="right">0.7624979</td>
+<td align="right">0.1605631</td>
+</tr>
+<tr class="even">
+<td align="left">Michigan</td>
+<td align="right">9442016</td>
+<td align="right">1376579</td>
+<td align="right">7444974</td>
+<td align="right">620463</td>
+<td align="right">0.1457929</td>
+<td align="right">0.7884941</td>
+<td align="right">0.0657130</td>
+</tr>
+<tr class="odd">
+<td align="left">Minnesota</td>
+<td align="right">5360773</td>
+<td align="right">398434</td>
+<td align="right">4423146</td>
+<td align="right">539193</td>
+<td align="right">0.0743240</td>
+<td align="right">0.8250948</td>
+<td align="right">0.1005812</td>
+</tr>
+<tr class="even">
+<td align="left">Mississippi</td>
+<td align="right">2850547</td>
+<td align="right">1084481</td>
+<td align="right">1658893</td>
+<td align="right">107173</td>
+<td align="right">0.3804466</td>
+<td align="right">0.5819560</td>
+<td align="right">0.0375973</td>
+</tr>
+<tr class="odd">
+<td align="left">Missouri</td>
+<td align="right">5741742</td>
+<td align="right">699840</td>
+<td align="right">4740335</td>
+<td align="right">301567</td>
+<td align="right">0.1218864</td>
+<td align="right">0.8255918</td>
+<td align="right">0.0525219</td>
+</tr>
+<tr class="even">
+<td align="left">Montana</td>
+<td align="right">1012950</td>
+<td align="right">5484</td>
+<td align="right">916524</td>
+<td align="right">90942</td>
+<td align="right">0.0054139</td>
+<td align="right">0.9048068</td>
+<td align="right">0.0897794</td>
+</tr>
+<tr class="odd">
+<td align="left">Nebraska</td>
+<td align="right">1817341</td>
+<td align="right">96535</td>
+<td align="right">1538052</td>
+<td align="right">182754</td>
+<td align="right">0.0531188</td>
+<td align="right">0.8463200</td>
+<td align="right">0.1005612</td>
+</tr>
+<tr class="even">
+<td align="left">Nevada</td>
+<td align="right">2670605</td>
+<td align="right">304739</td>
+<td align="right">1588463</td>
+<td align="right">777403</td>
+<td align="right">0.1141086</td>
+<td align="right">0.5947952</td>
+<td align="right">0.2910962</td>
+</tr>
+<tr class="odd">
+<td align="left">New Hampshire</td>
+<td align="right">1299787</td>
+<td align="right">20127</td>
+<td align="right">1216203</td>
+<td align="right">63457</td>
+<td align="right">0.0154848</td>
+<td align="right">0.9356941</td>
+<td align="right">0.0488211</td>
+</tr>
+<tr class="even">
+<td align="left">New Jersey</td>
+<td align="right">8385500</td>
+<td align="right">1219770</td>
+<td align="right">5112280</td>
+<td align="right">2053450</td>
+<td align="right">0.1454618</td>
+<td align="right">0.6096571</td>
+<td align="right">0.2448810</td>
+</tr>
+<tr class="odd">
+<td align="left">New Mexico</td>
+<td align="right">1695276</td>
+<td align="right">45904</td>
+<td align="right">1078937</td>
+<td align="right">570435</td>
+<td align="right">0.0270776</td>
+<td align="right">0.6364374</td>
+<td align="right">0.3364850</td>
+</tr>
+<tr class="even">
+<td align="left">New York</td>
+<td align="right">18433786</td>
+<td align="right">2986172</td>
+<td align="right">11143349</td>
+<td align="right">4304265</td>
+<td align="right">0.1619945</td>
+<td align="right">0.6045068</td>
+<td align="right">0.2334987</td>
+</tr>
+<tr class="odd">
+<td align="left">North Carolina</td>
+<td align="right">9727667</td>
+<td align="right">2140217</td>
+<td align="right">6488459</td>
+<td align="right">1098991</td>
+<td align="right">0.2200134</td>
+<td align="right">0.6670108</td>
+<td align="right">0.1129758</td>
+</tr>
+<tr class="even">
+<td align="left">North Dakota</td>
+<td align="right">737154</td>
+<td align="right">26783</td>
+<td align="right">645938</td>
+<td align="right">64433</td>
+<td align="right">0.0363330</td>
+<td align="right">0.8762592</td>
+<td align="right">0.0874078</td>
+</tr>
+<tr class="odd">
+<td align="left">Ohio</td>
+<td align="right">11118076</td>
+<td align="right">1478781</td>
+<td align="right">9080688</td>
+<td align="right">558607</td>
+<td align="right">0.1330069</td>
+<td align="right">0.8167499</td>
+<td align="right">0.0502431</td>
+</tr>
+<tr class="even">
+<td align="left">Oklahoma</td>
+<td align="right">3451195</td>
+<td align="right">289961</td>
+<td align="right">2514885</td>
+<td align="right">646349</td>
+<td align="right">0.0840176</td>
+<td align="right">0.7286998</td>
+<td align="right">0.1872827</td>
+</tr>
+<tr class="odd">
+<td align="left">Oregon</td>
+<td align="right">3793917</td>
+<td align="right">82655</td>
+<td align="right">3169096</td>
+<td align="right">542166</td>
+<td align="right">0.0217862</td>
+<td align="right">0.8353098</td>
+<td align="right">0.1429040</td>
+</tr>
+<tr class="even">
+<td align="left">Pennsylvania</td>
+<td align="right">12228216</td>
+<td align="right">1423169</td>
+<td align="right">9750687</td>
+<td align="right">1054360</td>
+<td align="right">0.1163840</td>
+<td align="right">0.7973924</td>
+<td align="right">0.0862235</td>
+</tr>
+<tr class="odd">
+<td align="left">Rhode Island</td>
+<td align="right">995585</td>
+<td align="right">62168</td>
+<td align="right">782920</td>
+<td align="right">150497</td>
+<td align="right">0.0624437</td>
+<td align="right">0.7863919</td>
+<td align="right">0.1511644</td>
+</tr>
+<tr class="even">
+<td align="left">South Carolina</td>
+<td align="right">4820049</td>
+<td align="right">1280531</td>
+<td align="right">3243442</td>
+<td align="right">296076</td>
+<td align="right">0.2656676</td>
+<td align="right">0.6729064</td>
+<td align="right">0.0614259</td>
+</tr>
+<tr class="odd">
+<td align="left">South Dakota</td>
+<td align="right">840002</td>
+<td align="right">17842</td>
+<td align="right">715336</td>
+<td align="right">106824</td>
+<td align="right">0.0212404</td>
+<td align="right">0.8515884</td>
+<td align="right">0.1271711</td>
+</tr>
+<tr class="even">
+<td align="left">Tennessee</td>
+<td align="right">6497942</td>
+<td align="right">1092948</td>
+<td align="right">4990938</td>
+<td align="right">414056</td>
+<td align="right">0.1681991</td>
+<td align="right">0.7680798</td>
+<td align="right">0.0637211</td>
+</tr>
+<tr class="odd">
+<td align="left">Texas</td>
+<td align="right">24011767</td>
+<td align="right">3552997</td>
+<td align="right">14609365</td>
+<td align="right">5849405</td>
+<td align="right">0.1479690</td>
+<td align="right">0.6084252</td>
+<td align="right">0.2436058</td>
+</tr>
+<tr class="even">
+<td align="left">Utah</td>
+<td align="right">2992603</td>
+<td align="right">40058</td>
+<td align="right">2573413</td>
+<td align="right">379132</td>
+<td align="right">0.0133857</td>
+<td align="right">0.8599246</td>
+<td align="right">0.1266897</td>
+</tr>
+<tr class="odd">
+<td align="left">Vermont</td>
+<td align="right">606051</td>
+<td align="right">9034</td>
+<td align="right">577751</td>
+<td align="right">19266</td>
+<td align="right">0.0149063</td>
+<td align="right">0.9533043</td>
+<td align="right">0.0317894</td>
+</tr>
+<tr class="even">
+<td align="left">Virginia</td>
+<td align="right">7925686</td>
+<td align="right">1607581</td>
+<td align="right">5208856</td>
+<td align="right">1109249</td>
+<td align="right">0.2028318</td>
+<td align="right">0.6572120</td>
+<td align="right">0.1399562</td>
+</tr>
+<tr class="odd">
+<td align="left">Washington</td>
+<td align="right">6868622</td>
+<td align="right">307565</td>
+<td align="right">5130920</td>
+<td align="right">1430137</td>
+<td align="right">0.0447783</td>
+<td align="right">0.7470086</td>
+<td align="right">0.2082131</td>
+</tr>
+<tr class="even">
+<td align="left">West Virginia</td>
+<td align="right">1708772</td>
+<td align="right">65813</td>
+<td align="right">1610749</td>
+<td align="right">32210</td>
+<td align="right">0.0385148</td>
+<td align="right">0.9426354</td>
+<td align="right">0.0188498</td>
+</tr>
+<tr class="odd">
+<td align="left">Wisconsin</td>
+<td align="right">5534184</td>
+<td align="right">376256</td>
+<td align="right">4737545</td>
+<td align="right">420383</td>
+<td align="right">0.0679876</td>
+<td align="right">0.8560512</td>
+<td align="right">0.0759612</td>
+</tr>
+<tr class="even">
+<td align="left">Wyoming</td>
+<td align="right">533378</td>
+<td align="right">5232</td>
+<td align="right">488374</td>
+<td align="right">39772</td>
+<td align="right">0.0098092</td>
+<td align="right">0.9156246</td>
+<td align="right">0.0745663</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># plot the racial composition of the census database
+census_long = census_data %&gt;% pivot_longer(cols = c(&quot;White&quot;,&quot;Black&quot;,&quot;Other&quot;), names_to = &quot;Race&quot;, values_to = &quot;Value&quot;)
+
+ggplot(census_long) +
+  geom_col(aes(x = State, y = Value, fill = Race)) +
+  theme_classic() + ylab(&quot;Value&quot;) + theme_minimal() +
+  ggtitle(&quot;Number of people in the Census database, by race&quot;) +
+  theme(axis.text.x = element_text(angle = 90)) + 
+  scale_fill_manual(name = &quot;Race&quot;,labels = c(&quot;Black&quot;, &quot;Other&quot;, &quot;White&quot;),
+  values = c(&quot;#44AA99&quot;, &quot;#88CCEE&quot;, &quot;#882255&quot;))</code></pre>
+<p><img src="figure/forensic_databases.Rmd/census-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="ndis-databases" class="section level1">
+<h1>4 NDIS databases</h1>
+<p>The National DNA Index System (NDIS) is the highest level of the
+Combined DNA Index System (CODIS) and serves as the central repository
+for DNA profiles submitted by federal, state, and local forensic
+laboratories across the United States. The individuals in the NDIS
+database are typically those who have been arrested or convicted of a
+crime, and the database is used to assist in criminal investigations by
+matching DNA profiles from crime scenes with those in the database. The
+individuals in the NDIS database are divided into two main categories:
+convicted offenders and arrestees. Convicted offenders are individuals
+who have been found guilty of a crime and have had their DNA profiles
+collected as part of the sentencing process. Arrestees are individuals
+who have been arrested for a crime, but may not have been convicted
+yet.</p>
+<p>The NDIS database sizes and proportions of offenders vs arrestees for
+all states are publicly available in [2], which are shown in the
+following table and figure.</p>
+<pre class="r"><code>NDIS &lt;- read.csv(&quot;./data/NDIS.csv&quot;)
+head(NDIS)</code></pre>
+<pre><code>       State N_total N_offenders N_arrestees N_ForensicProfiles
+1    Alabama  362574      261574      101000              24574
+2     Alaska   79146       26997       52149               3866
+3    Arizona  479868      411352       68516              34576
+4   Arkansas  261289      183020       78269              14698
+5 California 3269323     2257141     1012182             149446
+6   Colorado  582627      213721      368906              35968</code></pre>
+<pre class="r"><code>NDIS = NDIS[,c(&quot;State&quot;, &quot;N_total&quot;,&quot;N_arrestees&quot;,&quot;N_offenders&quot;)]
+NDIS = NDIS[-c(which(NDIS$State == &quot;U.S. Army&quot;)),]
+
+kable(NDIS, caption = &quot;Number of arrestees and offenders in NDIS by state&quot;)</code></pre>
+<table>
+<caption>Number of arrestees and offenders in NDIS by state</caption>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">State</th>
+<th align="right">N_total</th>
+<th align="right">N_arrestees</th>
+<th align="right">N_offenders</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1</td>
+<td align="left">Alabama</td>
+<td align="right">362574</td>
+<td align="right">101000</td>
+<td align="right">261574</td>
+</tr>
+<tr class="even">
+<td align="left">2</td>
+<td align="left">Alaska</td>
+<td align="right">79146</td>
+<td align="right">52149</td>
+<td align="right">26997</td>
+</tr>
+<tr class="odd">
+<td align="left">3</td>
+<td align="left">Arizona</td>
+<td align="right">479868</td>
+<td align="right">68516</td>
+<td align="right">411352</td>
+</tr>
+<tr class="even">
+<td align="left">4</td>
+<td align="left">Arkansas</td>
+<td align="right">261289</td>
+<td align="right">78269</td>
+<td align="right">183020</td>
+</tr>
+<tr class="odd">
+<td align="left">5</td>
+<td align="left">California</td>
+<td align="right">3269323</td>
+<td align="right">1012182</td>
+<td align="right">2257141</td>
+</tr>
+<tr class="even">
+<td align="left">6</td>
+<td align="left">Colorado</td>
+<td align="right">582627</td>
+<td align="right">368906</td>
+<td align="right">213721</td>
+</tr>
+<tr class="odd">
+<td align="left">7</td>
+<td align="left">Connecticut</td>
+<td align="right">128631</td>
+<td align="right">0</td>
+<td align="right">128631</td>
+</tr>
+<tr class="even">
+<td align="left">8</td>
+<td align="left">Delaware</td>
+<td align="right">22704</td>
+<td align="right">0</td>
+<td align="right">22704</td>
+</tr>
+<tr class="odd">
+<td align="left">9</td>
+<td align="left">DC/FBI Lab</td>
+<td align="right">3034045</td>
+<td align="right">494664</td>
+<td align="right">2539381</td>
+</tr>
+<tr class="even">
+<td align="left">10</td>
+<td align="left">DC</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">11</td>
+<td align="left">Florida</td>
+<td align="right">1774011</td>
+<td align="right">632359</td>
+<td align="right">1141652</td>
+</tr>
+<tr class="even">
+<td align="left">12</td>
+<td align="left">Georgia</td>
+<td align="right">442649</td>
+<td align="right">0</td>
+<td align="right">442649</td>
+</tr>
+<tr class="odd">
+<td align="left">13</td>
+<td align="left">Hawaii</td>
+<td align="right">41703</td>
+<td align="right">0</td>
+<td align="right">41703</td>
+</tr>
+<tr class="even">
+<td align="left">14</td>
+<td align="left">Idaho</td>
+<td align="right">70329</td>
+<td align="right">0</td>
+<td align="right">70329</td>
+</tr>
+<tr class="odd">
+<td align="left">15</td>
+<td align="left">Illinois</td>
+<td align="right">713767</td>
+<td align="right">918</td>
+<td align="right">712849</td>
+</tr>
+<tr class="even">
+<td align="left">16</td>
+<td align="left">Indiana</td>
+<td align="right">441794</td>
+<td align="right">138228</td>
+<td align="right">303566</td>
+</tr>
+<tr class="odd">
+<td align="left">17</td>
+<td align="left">Iowa</td>
+<td align="right">154777</td>
+<td align="right">0</td>
+<td align="right">154777</td>
+</tr>
+<tr class="even">
+<td align="left">18</td>
+<td align="left">Kansas</td>
+<td align="right">237445</td>
+<td align="right">141055</td>
+<td align="right">96390</td>
+</tr>
+<tr class="odd">
+<td align="left">19</td>
+<td align="left">Kentucky</td>
+<td align="right">241089</td>
+<td align="right">0</td>
+<td align="right">241089</td>
+</tr>
+<tr class="even">
+<td align="left">20</td>
+<td align="left">Louisiana</td>
+<td align="right">666795</td>
+<td align="right">507450</td>
+<td align="right">159345</td>
+</tr>
+<tr class="odd">
+<td align="left">21</td>
+<td align="left">Maine</td>
+<td align="right">37624</td>
+<td align="right">0</td>
+<td align="right">37624</td>
+</tr>
+<tr class="even">
+<td align="left">22</td>
+<td align="left">Maryland</td>
+<td align="right">203596</td>
+<td align="right">56770</td>
+<td align="right">146826</td>
+</tr>
+<tr class="odd">
+<td align="left">23</td>
+<td align="left">Massachusetts</td>
+<td align="right">164175</td>
+<td align="right">0</td>
+<td align="right">164175</td>
+</tr>
+<tr class="even">
+<td align="left">24</td>
+<td align="left">Michigan</td>
+<td align="right">582674</td>
+<td align="right">192674</td>
+<td align="right">390000</td>
+</tr>
+<tr class="odd">
+<td align="left">25</td>
+<td align="left">Minnesota</td>
+<td align="right">194155</td>
+<td align="right">0</td>
+<td align="right">194155</td>
+</tr>
+<tr class="even">
+<td align="left">26</td>
+<td align="left">Mississippi</td>
+<td align="right">145403</td>
+<td align="right">8344</td>
+<td align="right">137059</td>
+</tr>
+<tr class="odd">
+<td align="left">27</td>
+<td align="left">Missouri</td>
+<td align="right">790802</td>
+<td align="right">70784</td>
+<td align="right">360009</td>
+</tr>
+<tr class="even">
+<td align="left">28</td>
+<td align="left">Montana</td>
+<td align="right">50543</td>
+<td align="right">0</td>
+<td align="right">50543</td>
+</tr>
+<tr class="odd">
+<td align="left">29</td>
+<td align="left">Nebraska</td>
+<td align="right">58065</td>
+<td align="right">0</td>
+<td align="right">58065</td>
+</tr>
+<tr class="even">
+<td align="left">30</td>
+<td align="left">Nevada</td>
+<td align="right">258074</td>
+<td align="right">154014</td>
+<td align="right">104060</td>
+</tr>
+<tr class="odd">
+<td align="left">31</td>
+<td align="left">New Hampshire</td>
+<td align="right">18979</td>
+<td align="right">0</td>
+<td align="right">18979</td>
+</tr>
+<tr class="even">
+<td align="left">32</td>
+<td align="left">New Jersey</td>
+<td align="right">62351</td>
+<td align="right">25314</td>
+<td align="right">37037</td>
+</tr>
+<tr class="odd">
+<td align="left">33</td>
+<td align="left">New Mexico</td>
+<td align="right">141776</td>
+<td align="right">70833</td>
+<td align="right">70943</td>
+</tr>
+<tr class="even">
+<td align="left">34</td>
+<td align="left">New York</td>
+<td align="right">720774</td>
+<td align="right">0</td>
+<td align="right">720774</td>
+</tr>
+<tr class="odd">
+<td align="left">35</td>
+<td align="left">North Carolina</td>
+<td align="right">386953</td>
+<td align="right">71186</td>
+<td align="right">315767</td>
+</tr>
+<tr class="even">
+<td align="left">36</td>
+<td align="left">North Dakota</td>
+<td align="right">50880</td>
+<td align="right">36764</td>
+<td align="right">14116</td>
+</tr>
+<tr class="odd">
+<td align="left">37</td>
+<td align="left">Ohio</td>
+<td align="right">899148</td>
+<td align="right">386083</td>
+<td align="right">513065</td>
+</tr>
+<tr class="even">
+<td align="left">38</td>
+<td align="left">Oklahoma</td>
+<td align="right">205791</td>
+<td align="right">12550</td>
+<td align="right">193241</td>
+</tr>
+<tr class="odd">
+<td align="left">39</td>
+<td align="left">Oregon</td>
+<td align="right">234373</td>
+<td align="right">0</td>
+<td align="right">234373</td>
+</tr>
+<tr class="even">
+<td align="left">40</td>
+<td align="left">Pennsylvania</td>
+<td align="right">474358</td>
+<td align="right">0</td>
+<td align="right">474358</td>
+</tr>
+<tr class="odd">
+<td align="left">41</td>
+<td align="left">Puerto Rico</td>
+<td align="right">25059</td>
+<td align="right">2956</td>
+<td align="right">22103</td>
+</tr>
+<tr class="even">
+<td align="left">42</td>
+<td align="left">Rhode Island</td>
+<td align="right">31620</td>
+<td align="right">552</td>
+<td align="right">31068</td>
+</tr>
+<tr class="odd">
+<td align="left">43</td>
+<td align="left">South Carolina</td>
+<td align="right">296476</td>
+<td align="right">73604</td>
+<td align="right">222872</td>
+</tr>
+<tr class="even">
+<td align="left">44</td>
+<td align="left">South Dakota</td>
+<td align="right">89604</td>
+<td align="right">60730</td>
+<td align="right">28874</td>
+</tr>
+<tr class="odd">
+<td align="left">45</td>
+<td align="left">Tennessee</td>
+<td align="right">439569</td>
+<td align="right">157730</td>
+<td align="right">281839</td>
+</tr>
+<tr class="even">
+<td align="left">46</td>
+<td align="left">Texas</td>
+<td align="right">1229577</td>
+<td align="right">194255</td>
+<td align="right">1035322</td>
+</tr>
+<tr class="odd">
+<td align="left">48</td>
+<td align="left">Utah</td>
+<td align="right">147937</td>
+<td align="right">28053</td>
+<td align="right">119884</td>
+</tr>
+<tr class="even">
+<td align="left">49</td>
+<td align="left">Vermont</td>
+<td align="right">22436</td>
+<td align="right">0</td>
+<td align="right">22436</td>
+</tr>
+<tr class="odd">
+<td align="left">50</td>
+<td align="left">Virginia</td>
+<td align="right">504911</td>
+<td align="right">3887</td>
+<td align="right">501024</td>
+</tr>
+<tr class="even">
+<td align="left">51</td>
+<td align="left">Washington</td>
+<td align="right">328412</td>
+<td align="right">0</td>
+<td align="right">328412</td>
+</tr>
+<tr class="odd">
+<td align="left">52</td>
+<td align="left">West Virginia</td>
+<td align="right">47610</td>
+<td align="right">0</td>
+<td align="right">47610</td>
+</tr>
+<tr class="even">
+<td align="left">53</td>
+<td align="left">Wisconsin</td>
+<td align="right">391151</td>
+<td align="right">27569</td>
+<td align="right">363582</td>
+</tr>
+<tr class="odd">
+<td align="left">54</td>
+<td align="left">Wyoming</td>
+<td align="right">32552</td>
+<td align="right">0</td>
+<td align="right">32552</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># plot the NDIS database sizes
+NDIS_long = NDIS %&gt;% pivot_longer(cols = c(&quot;N_arrestees&quot;,&quot;N_offenders&quot;), names_to = &quot;Category&quot;, values_to = &quot;Value&quot;)
+
+ggplot(NDIS_long) +
+  geom_col(aes(x = State, y = Value, fill = Category)) +
+  theme_classic() + ylab(&quot;Value&quot;) + theme_minimal() +
+  ggtitle(&quot;Number of people in the NDIS database, by category&quot;) +
+  theme(axis.text.x = element_text(angle = 90)) + 
+  scale_fill_manual(name = &quot;Category&quot;,labels = c(&quot;Arrestee&quot;, &quot;Offender&quot;),
+  values = c(&quot;#88CCEE&quot;, &quot;#882255&quot;))</code></pre>
+<p><img src="figure/forensic_databases.Rmd/NDIS-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="sdis-databases" class="section level1">
+<h1>5 SDIS databases</h1>
+<p>The State DNA Index System (SDIS) is a key component of the Combined
+DNA Index System (CODIS). It contains DNA profiles collected at the
+state level from individuals, crime scenes, and other sources. In some
+states, SDIS data is publicly available through official government
+websites; however, many states do not make this information accessible
+to the public.</p>
+<p>As with the National DNA Index System (NDIS), individuals in SDIS are
+generally classified into two categories: offenders and arrestees. The
+sizes of SDIS databases and the proportions of offenders in states with
+publicly available data are presented in the table and figures
+below.</p>
+<pre class="r"><code># Load census data and shape for each state
+us_state_density &lt;- get_decennial(
+  geography = &quot;state&quot;,
+  variables = c(all = &quot;P1_002N&quot;, census.num.white = &quot;P1_003N&quot;, census.num.black = &quot;P1_004N&quot;),
+  year = 2020,
+  geometry = TRUE,
+  keep_geo_vars = TRUE
+)
+
+# Spread the data into a wider format
+us_state_density = spread(us_state_density, variable, value)
+
+# Rename column for merging
+us_state_density$State = us_state_density$NAME.x</code></pre>
+<pre class="r"><code>SDIS &lt;- read.csv(&quot;./data/SDIS.csv&quot;)
+SDIS = SDIS[,c(&quot;State&quot;, &quot;N_total&quot;,&quot;N_arrestees&quot;,&quot;N_offenders&quot;,&quot;source&quot;)]
+
+kable(SDIS[,-5], caption = &quot;Number of arrestees and offenders in SDIS by state&quot;)</code></pre>
+<table>
+<caption>Number of arrestees and offenders in SDIS by state</caption>
+<thead>
+<tr class="header">
+<th align="left">State</th>
+<th align="right">N_total</th>
+<th align="right">N_arrestees</th>
+<th align="right">N_offenders</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Alabama</td>
+<td align="right">360000</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Alaska</td>
+<td align="right">NA</td>
+<td align="right">52149</td>
+<td align="right">26997</td>
+</tr>
+<tr class="odd">
+<td align="left">Arizona</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Arkansas</td>
+<td align="right">12221</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">California</td>
+<td align="right">3365402</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Colorado</td>
+<td align="right">499170</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Connecticut</td>
+<td align="right">20000</td>
+<td align="right">0</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Delaware</td>
+<td align="right">NA</td>
+<td align="right">0</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Florida</td>
+<td align="right">1713890</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Georgia</td>
+<td align="right">347145</td>
+<td align="right">0</td>
+<td align="right">324864</td>
+</tr>
+<tr class="odd">
+<td align="left">Hawaii</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Idaho</td>
+<td align="right">39000</td>
+<td align="right">0</td>
+<td align="right">39000</td>
+</tr>
+<tr class="odd">
+<td align="left">Illinois</td>
+<td align="right">689297</td>
+<td align="right">0</td>
+<td align="right">689297</td>
+</tr>
+<tr class="even">
+<td align="left">Indiana</td>
+<td align="right">449000</td>
+<td align="right">144000</td>
+<td align="right">304000</td>
+</tr>
+<tr class="odd">
+<td align="left">Iowa</td>
+<td align="right">NA</td>
+<td align="right">0</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Kansas</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Kentucky</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Louisiana</td>
+<td align="right">699618</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Maine</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Maryland</td>
+<td align="right">NA</td>
+<td align="right">5525</td>
+<td align="right">142278</td>
+</tr>
+<tr class="odd">
+<td align="left">Massachusetts</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Michigan</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Minnesota</td>
+<td align="right">180000</td>
+<td align="right">0</td>
+<td align="right">180000</td>
+</tr>
+<tr class="even">
+<td align="left">Mississippi</td>
+<td align="right">118000</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Missouri</td>
+<td align="right">400000</td>
+<td align="right">NA</td>
+<td align="right">386000</td>
+</tr>
+<tr class="even">
+<td align="left">Montana</td>
+<td align="right">32284</td>
+<td align="right">0</td>
+<td align="right">32284</td>
+</tr>
+<tr class="odd">
+<td align="left">Nebraska</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Nevada</td>
+<td align="right">245000</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">New Hampshire</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">New Jersey</td>
+<td align="right">32696</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">New Mexico</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">New York</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">North Carolina</td>
+<td align="right">350000</td>
+<td align="right">50000</td>
+<td align="right">300000</td>
+</tr>
+<tr class="even">
+<td align="left">North Dakota</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Ohio</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Oklahoma</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Oregon</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Pennsylvania</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Puerto Rico</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Rhode Island</td>
+<td align="right">27818</td>
+<td align="right">484</td>
+<td align="right">27334</td>
+</tr>
+<tr class="odd">
+<td align="left">South Carolina</td>
+<td align="right">175629</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">South Dakota</td>
+<td align="right">56200</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Tennessee</td>
+<td align="right">NA</td>
+<td align="right">226569</td>
+<td align="right">292045</td>
+</tr>
+<tr class="even">
+<td align="left">Texas</td>
+<td align="right">1213618</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Utah</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Vermont</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Virginia</td>
+<td align="right">509009</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Washington</td>
+<td align="right">272000</td>
+<td align="right">0</td>
+<td align="right">272000</td>
+</tr>
+<tr class="odd">
+<td align="left">Washington DC</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">West Virginia</td>
+<td align="right">47444</td>
+<td align="right">0</td>
+<td align="right">47444</td>
+</tr>
+<tr class="odd">
+<td align="left">Wisconsin</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Wyoming</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>SDIS$N_total = ifelse(is.na(SDIS$N_total), SDIS$N_arrestees + SDIS$N_offenders, SDIS$N_total)
+ggplot(SDIS) +
+  geom_col(position=&quot;dodge&quot;, stat=&quot;identity&quot;, aes(x = State, y = N_total)) +
+  theme_classic() + ylab(&quot;Proportion&quot;) +
+  ggtitle(&quot;Size of the SDIS database&quot;) +
+  theme(axis.text.x = element_text(angle = 90)) </code></pre>
+<p><img src="figure/forensic_databases.Rmd/SDIS-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>SDIS$prop.offenders = SDIS$N_offenders / SDIS$N_total
+SDIS_off = na.omit(SDIS)
+ggplot(SDIS_off) +
+  geom_col(position=&quot;dodge&quot;, stat=&quot;identity&quot;, aes(x = State, y = prop.offenders)) +
+  theme_classic() + ylab(&quot;Proportion&quot;) +
+  ggtitle(&quot;Proportion of SDIS that is offenders&quot;) +
+  theme(axis.text.x = element_text(angle = 90)) </code></pre>
+<p><img src="figure/forensic_databases.Rmd/SDIS-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>data.source.sf = merge(us_state_density,SDIS, by = &quot;State&quot;) 
+
+data.source.sf = data.source.sf %&gt;%
+  tigris::shift_geometry()
+
+ggplot() +
+  geom_sf(data = data.source.sf$geometry, aes(fill = data.source.sf$N_total),color = NA) + 
+  geom_sf(data = data.source.sf$geometry, color = &quot;black&quot;,lwd = 0.3,alpha = 0) +
+  theme_void(base_size = 11) + 
+  labs(fill = &quot;&quot;) + scale_fill_viridis() +
+  ggtitle(&quot;Size of the SDIS database, if available&quot;,
+          subtitle = &quot;Grey indicates this information is not publicly available in the state&quot;) +
+  theme(legend.key.height= unit(1, &#39;cm&#39;), legend.key.width= unit(1, &#39;cm&#39;),
+        legend.title=element_text(size=14),  legend.text=element_text(size=14)) </code></pre>
+<p><img src="figure/forensic_databases.Rmd/SDIS-3.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<p>[1] Murphy, Erin, and Jun H. Tong. “The racial composition of
+forensic DNA databases.” Calif. L. Rev. 108 (2020): 1847.<br />
+[2] <a
+href="https://le.fbi.gov/science-and-lab/biometrics-and-fingerprints/codis/codis-ndis-statistics"
+class="uri">https://le.fbi.gov/science-and-lab/biometrics-and-fingerprints/codis/codis-ndis-statistics</a><br />
+[3] Klein, Brennan, et al. “COVID-19 amplified racial disparities in the
+US criminal legal system.” Nature 617.7960 (2023): 344-350.<br />
+[4] <a
+href="https://www.vera.org/downloads/pdfdownloads/state-incarceration-trends-michigan.pdf"
+class="uri">https://www.vera.org/downloads/pdfdownloads/state-incarceration-trends-michigan.pdf</a><br />
+[5] U.S. Census Bureau. “Population.” <a
+href="https://www.census.gov/topics/population.html"
+class="uri">https://www.census.gov/topics/population.html</a><br />
+</p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS 15.5
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: America/Detroit
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] sf_1.0-21         viridis_0.6.5     viridisLite_0.4.2 cowplot_1.1.3    
+ [5] tidycensus_1.7.1  sandwich_3.1-1    ggpubr_0.6.0      jtools_2.3.0     
+ [9] knitr_1.50        lubridate_1.9.4   forcats_1.0.0     stringr_1.5.1    
+[13] dplyr_1.1.4       purrr_1.0.4       readr_2.1.5       tidyr_1.3.1      
+[17] tibble_3.2.1      ggplot2_3.5.2     tidyverse_2.0.0   workflowr_1.7.1  
+
+loaded via a namespace (and not attached):
+ [1] tidyselect_1.2.1    farver_2.1.2        fastmap_1.2.0      
+ [4] promises_1.3.3      digest_0.6.37       timechange_0.3.0   
+ [7] lifecycle_1.0.4     processx_3.8.6      magrittr_2.0.3     
+[10] compiler_4.3.1      rlang_1.1.6         sass_0.4.10        
+[13] tools_4.3.1         yaml_2.3.10         ggsignif_0.6.4     
+[16] labeling_0.4.3      curl_6.2.3          classInt_0.4-11    
+[19] xml2_1.3.8          RColorBrewer_1.1-3  KernSmooth_2.23-21 
+[22] abind_1.4-8         withr_3.0.2         grid_4.3.1         
+[25] git2r_0.36.2        e1071_1.7-16        future_1.40.0      
+[28] globals_0.17.0      scales_1.4.0        cli_3.6.5          
+[31] crayon_1.5.3        rmarkdown_2.29      generics_0.1.4     
+[34] rstudioapi_0.17.1   httr_1.4.7          tzdb_0.5.0         
+[37] DBI_1.2.3           cachem_1.1.0        proxy_0.4-27       
+[40] pander_0.6.6        splines_4.3.1       rvest_1.0.4        
+[43] parallel_4.3.1      tigris_2.2.1        vctrs_0.6.5        
+[46] jsonlite_2.0.0      carData_3.0-5       car_3.1-3          
+[49] callr_3.7.6         hms_1.1.3           rstatix_0.7.2      
+[52] Formula_1.2-5       listenv_0.9.1       jquerylib_0.1.4    
+[55] units_0.8-7         glue_1.8.0          parallelly_1.45.0  
+[58] codetools_0.2-19    ps_1.9.1            stringi_1.8.7      
+[61] gtable_0.3.6        later_1.4.2         broom.mixed_0.2.9.6
+[64] furrr_0.3.1         pillar_1.10.2       rappdirs_0.3.3     
+[67] htmltools_0.5.8.1   R6_2.6.1            rprojroot_2.0.4    
+[70] evaluate_1.0.3      lattice_0.21-8      backports_1.5.0    
+[73] broom_1.0.8         httpuv_1.6.16       bslib_0.9.0        
+[76] class_7.3-22        uuid_1.2-1          Rcpp_1.0.14        
+[79] gridExtra_2.3       nlme_3.1-162        whisker_0.4.1      
+[82] xfun_0.52           fs_1.6.6            zoo_1.8-14         
+[85] getPass_0.2-4       pkgconfig_2.0.3    </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
