@@ -1,0 +1,600 @@
+---
+title: "Regression to predict CODIS database sizes and racial proportions"
+author: "Junhui He"
+output: html_document
+date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
+site: workflowr::wflow_site
+---
+
+# 1 Introduction
+
+The Combined DNA Index System (CODIS) is a national database of DNA profiles maintained by the FBI. It contains DNA profiles from convicted offenders, arrestees, and forensic samples collected from crime scenes. The racial composition of CODIS has been a topic of concern, particularly regarding the overrepresentation of Black individuals compared to their population size in the U.S.
+
+To estimate the number of people in CODIS by state and race, we need information on (1) the number of people in CODIS in each state, and (2) the racial composition of this number. We have several data sources, each of which provide different information for different states:
+
+*   Direct data on the number of Black and White people in CODIS, from a Freedom of Information Act (FOIA) request conducted by Muprhy and Tong (2020) for the following seven states: California, Florida, Indiana, Maine, Nevada, South Dakota, and Texas. [1]
+*   The number of people of each racial group in prison in each state. This data was pulled from a variety of sources and is available in Klein et al. (2023). [2]
+*   The number of people in the State DNA Indexing System (SDIS) and the National DNA Indexing System (NDIS). NDIS data is publicly available for all 50 states [3], whereas SDIS data is only available on a state-by-state basis and is obtained from internet searches. Within each DNA indexing system, both the number of offenders and the number of arrestees are recorded. 
+*   The U.S. Census data for each state [4], which provides the total population and the racial composition of the population. This data is available through the U.S. Census Bureau's API.
+
+Based on the available data types, we separate states into three categories:\
+1. States who have data available in the Murphy & Tong dataset. For these states, no calculations are needed to estimate the number of people and racial compositions in CODIS.\
+2. States who have NDIS and SDIS data available but are not in the Murphy & Tong dataset. For these states, the number of people in CODIS is given by the SDIS database size, and we only need to estimate racial compositions in CODIS.\
+3. States with only NDIS data available. For these states, both the number of people and racial compositions in CODIS are required to be estimated. \
+
+The plot below shows the data that is available for each state:
+
+
+```{r setup, include=FALSE, echo=FALSE}
+library(here)
+setwd(here::here())
+knitr::opts_chunk$set(echo = TRUE)
+
+# Load necessary libraries
+library(readr)        # read csv files
+library(tidyverse)    # census API
+library(knitr)        
+library(jtools) 
+library(ggpubr)
+library(sandwich)     # robust covariance estimator
+library(ggplot2)      # For plotting
+library(stats)        # For statistical functions
+library(tidycensus)   # For accessing US census data
+# Load additional libraries for combining plots
+library(cowplot)
+library(ggpubr) 
+library(viridis)
+library(sf)
+
+# Load prison data
+prison_data = read.csv("data/populations_states.csv")
+
+# Load CODIS data
+codis_data = read.csv("data/CODIS_data.csv")
+
+# Create a data frame for Murphy and Tong profiles
+murphy.tong = data.frame(
+  state = c("California", "Florida", "Indiana", "Maine", "Nevada", "South Dakota", "Texas"), 
+  total = c(2768269, 1350667, 307714, 32847, 167726, 67600, 960985,2768269, 1350667, 307714, 32847, 167726, 67600, 960985),
+  mt.percent = c(0.296, 0.614, 0.7, 0.928, 0.694, 0.668, 0.373,0.171, 0.352, 0.26, 0.039, 0.256, 0.06, 0.291),
+  race = c("White","White","White","White","White","White","White","Black","Black","Black","Black","Black","Black","Black")
+)
+
+data.sources = data.frame(
+  state = c("Alabama","Alaska","Arizona","Arkansas","California","Colorado" ,"Delaware" ,"Florida","Georgia","Hawaii" ,       
+"Idaho","Illinois","Indiana","Iowa", "Kansas", "Kentucky","Louisiana","Maine","Maryland","Massachusetts" ,
+"Michigan", "Minnesota","Mississippi","Missouri","Montana","Nebraska", "Nevada" , "New Hampshire","New Jersey","New Mexico" ,   
+"New York","North Carolina", "North Dakota" ,"Ohio" , "Oklahoma","Oregon","Pennsylvania","Rhode Island", "South Carolina", "South Dakota"  ,
+"Tennessee","Texas" ,"Utah" ,"Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"), 
+  data = c("SDIS+NDIS","NDIS only", "NDIS only", "SDIS+NDIS", "Murphy & Tong","SDIS+NDIS", "NDIS only", "Murphy & Tong" ,"SDIS+NDIS", "NDIS only",
+"SDIS+NDIS", "SDIS+NDIS", "Murphy & Tong", "NDIS only", "NDIS only", "NDIS only", "SDIS+NDIS", "Murphy & Tong" , "NDIS only", "NDIS only",
+"NDIS only", "SDIS+NDIS" ,"SDIS+NDIS", "SDIS+NDIS" ,"SDIS+NDIS", "NDIS only", "Murphy & Tong","NDIS only", "SDIS+NDIS" ,"NDIS only",
+"NDIS only", "SDIS+NDIS", "NDIS only" ,"NDIS only" ,"NDIS only" ,"NDIS only", "NDIS only", "SDIS+NDIS", "SDIS+NDIS" ,"Murphy & Tong", "NDIS only", "Murphy & Tong","NDIS only", "NDIS only" ,"SDIS+NDIS", "SDIS+NDIS" ,"SDIS+NDIS", "NDIS only", "NDIS only")
+)
+```
+
+```{r data-wrangling, results = FALSE,warning=FALSE, message=FALSE, echo = FALSE}
+# Load necessary libraries
+
+# Calculate the number of White and Black profiles in Murphy and Tong data
+murphy.tong$n = murphy.tong$total * murphy.tong$mt.percent
+
+# Extract year from the date and filter data for 2022
+prison_data$year = substring(prison_data$date, 1, 4)
+prison_data_2022 = prison_data[which(prison_data$year == "2022"),]
+prison_data_2022 = prison_data_2022[!duplicated(prison_data_2022[, 'state']),]
+
+# Michigan source: Vera https://www.vera.org/downloads/pdfdownloads/state-incarceration-trends-michigan.pdf 
+prison_data_2022$incarcerated_black[which(prison_data_2022$state == "Michigan")] <- 0.53 * as.numeric(prison_data_2022$incarcerated_total[which(prison_data_2022$state == "Michigan")])
+
+# Load census data for each state
+# P1_002N is the total population, P1_003N is the total White population, and P1_004N is the total Black population
+us_state_density <- get_decennial(
+  geography = "state",
+  variables = c(all = "P1_002N", census.num.white = "P1_003N", census.num.black = "P1_004N"),
+  year = 2020,
+  geometry = TRUE,
+  keep_geo_vars = TRUE
+)
+
+
+# Spread the data into a wider format
+us_state_density = spread(us_state_density, variable, value)
+
+# Calculate the proportion of Black and White populations
+us_state_density$census.percent.black = us_state_density$census.num.black / us_state_density$all
+us_state_density$census.percent.white = us_state_density$census.num.white / us_state_density$all
+
+# Rename column for merging
+us_state_density$state = us_state_density$NAME.x
+
+data.source.sf = merge(us_state_density,data.sources, by = "state") 
+
+data.source.sf = data.source.sf %>%
+  tigris::shift_geometry()
+
+ggplot() +
+  geom_sf(data = data.source.sf$geometry, aes(fill = data.source.sf$data),color = NA) + 
+  geom_sf(data = data.source.sf$geometry, color = "black",lwd = 0.3,alpha = 0) +
+  theme_void(base_size = 11) + 
+  labs(fill = "Data availability") + 
+  #theme(plot.margin = unit(rep(0.5, 4), "cm")) +
+  theme(legend.key.height= unit(1, 'cm'), legend.key.width= unit(1, 'cm'),
+        legend.title=element_text(size=20),  legend.text=element_text(size=16)) 
+
+# Merge census data with prison data
+us_state_density = merge(us_state_density, prison_data_2022, by = "state")
+
+# Calculate the proportion of Black and White incarcerated individuals
+us_state_density$percent.black.incarc = us_state_density$incarcerated_black / us_state_density$incarcerated_total
+us_state_density$percent.white.incarc = us_state_density$incarcerated_white / us_state_density$incarcerated_total
+
+# Merge with CODIS data
+us_state_density = merge(us_state_density, codis_data, by = "state")
+
+# Calculate the number of Black and White profiles in CODIS
+us_state_density$black_profiles = us_state_density$percent.black.incarc * (us_state_density$offender_profiles)
+us_state_density$white_profiles = us_state_density$percent.white.incarc * (us_state_density$offender_profiles)
+
+us_state_density_black = as.data.frame(us_state_density[,c("state","all","census.num.black","census.percent.black","incarcerated_total","incarcerated_black","percent.black.incarc","arrestee_profiles","offender_profiles","black_profiles")])
+
+us_state_density_black$race = "Black"
+colnames(us_state_density_black) = c("state","all","population","census.percent","incarcerated_total",
+                                     "incarcerated_race","percent.incar","arrestee_profiles","offender_profiles","geometry","race_profiles","race")
+
+us_state_density_white = as.data.frame(us_state_density[,c("state","all","census.num.white","census.percent.white","incarcerated_total",
+                                             "incarcerated_white","percent.white.incarc", "arrestee_profiles","offender_profiles","white_profiles")])
+us_state_density_white$race = "White"
+colnames(us_state_density_white) = c("state","all","population","census.percent","incarcerated_total",
+                                     "incarcerated_race","percent.incar","arrestee_profiles","offender_profiles","geometry","race_profiles","race")
+
+inferred_data = rbind(us_state_density_black, us_state_density_white)
+
+# Combine Murphy and Tong data with the merged dataset
+combined = merge(murphy.tong, inferred_data, by = c("state","race"), all.x = TRUE)
+combined$race_bin = ifelse(combined$race == "White",0,1)
+
+```
+
+# 2 Models to predict the number of people and racial composition of CODIS
+
+## 2.1 Predict the racial composition of CODIS profiles
+
+For states in categories (2) and (3), we construct a multinomial regression model using stick-breaking techniques to estimate the racial composition of the CODIS profiles. In the stick-breaking technique, we divide the US races into three types, black + white + other, and separately estimate the percent of white people in all people $p_{1}$ and the percent of black people in non-white people $p_{2}$. Then the racial breakdown is given by 
+$$CODIS\_Prop_{white}=p_1, \quad CODIS\_Prop_{black}=(1-p_1)p_2,\quad CODIS\_Prop_{other}=(1-p_1)(1-p_2).$$
+We use the following binomial regression models to estimate the racial composition of CODIS profiles:
+$$P(\text{a person in CODIS is white}) = g(\beta_{10} + \beta_{11}*Census\_Prop_{white}+ \beta_{12}*Prison\_Prop_{white}),$$
+and 
+$$P(\text{a non-white person in CODIS is black}) = g(\beta_{20} + \beta_{21}*Census\_Prop_{black\mid nonwhite}+ \beta_{22}*Prison\_Prop_{black \mid nonwhite}),$$
+where $g(x)=\frac{\exp(x)}{1+\exp(x)}$ is the logit link function. Consequently, the number of the corresponding racial groups in CODIS follows a binomial distribution with the trial number being the total number of people or non-white people in CODIS, and the success probability being the above estimated racial proportions. The independent variables are the racial proportions of population from the census database and the racial proportions of incarcerated people from the prison database.
+
+## 2.2 Predict the number of people in SDIS
+
+For states in category (3), we need to estimate the number of individuals in SDIS. To do this, we construct a regression model where the dependent variable is the number of people in SDIS, and the independent variables include: the racial composition of the U.S. Census population, the racial composition of the state’s prison population, and the number of individuals in NDIS for that state. We develop two distinct regression models—one for arrestees and one for offenders—to improve prediction accuracy:
+
+$$N_{arrestee} = \beta_0 + \beta_1census_{black} + \beta_2census_{white} + \beta_3prison_{black} + \beta_4prison_{white} + \beta_5NDIS_{arrestees}, $$
+and 
+
+$$N_{offender} = \beta_0 + \beta_1census_{black} + \beta_2census_{white} + \beta_3prison_{black} + \beta_4prison_{white} + \beta_5NDIS_{offenders}. $$
+The estimated number of individuals in SDIS is then calculated as the sum of arrestees and offenders: $N_{SDIS} = N_{arrestee}+N_{offender}$.
+
+
+# 3 Regression to estimate the racial composition of the CODIS database.
+
+```{r data-racial-composition, results = FALSE,warning=FALSE,message=FALSE, echo = FALSE}
+# read and preprocess data
+# read data
+data_path = './data/regression_data'
+response_data_path = file.path(data_path, 'CODIS_regression_data.csv')
+predictor_data_path = file.path(data_path, 'CODIS_regression_predict_data.csv')
+
+response_data = read.csv(response_data_path) # CODIS data
+predictor_data = read.csv(predictor_data_path) # Census and prison data
+predictor_data[is.na(predictor_data)] = 0
+
+idx = c(5, 9, 14, 19, 28, 41, 43) # obtain the index of seven CODIS states
+
+# calculate the response values
+y = array(dim = c(7, 5))
+colnames(y) = c('white', 'black', 'total', 'nonwhite', 'other')
+rownames(y) = response_data[,2]
+y[,3] = response_data[,12]
+y[,2] = round(y[,3] * response_data[,3])
+y[,1] = round(y[,3] * response_data[,6])
+y[,4] = y[,3]-y[,1]
+y[,5] = y[,3]-y[,2]-y[,1]
+mt_data = as.data.frame(y) 
+
+# calculate the predictor values
+x = matrix(nrow = 50, ncol = 6)
+rownames(x) = predictor_data[,2]
+colnames(x) = c('census.percent.white', 'census.percent.black', 'incarc.percent.white', 'incarc.percent.black', 'census.percent.black.remain', 'incarc.percent.black.remain')
+x[,c(2,1)] = as.matrix(predictor_data[,c(12,13)])
+x[,4] = predictor_data[,5]/(predictor_data[,3]-predictor_data[,10])
+x[,3] = predictor_data[,4]/(predictor_data[,3]-predictor_data[,10])
+
+x[,5] = x[,2] / (1 - x[,1])
+x[,6] = x[,4] / (1 - x[,3])
+
+# create training data and test data
+train_data = as.data.frame(x[idx,])
+test_data = as.data.frame(x[-idx,])
+```
+
+```{r binomial-regression, results = FALSE,warning=FALSE,message=FALSE, echo = FALSE}
+logit <- function(y) {
+  return(log(y/(1-y)))
+}
+
+ilogit <- function(x) {
+  return(exp(x)/(1+exp(x)))
+}
+
+# White Americans
+binomial_regression.white = glm(formula = cbind(mt_data$white, # the number of white people in CODIS
+                                                mt_data$nonwhite) ~ # the number of nonwhite people in CODIS
+                                  census.percent.white+ # the census proportion of white people
+                                  incarc.percent.white, # the prison proportion of white people
+                                family = binomial, data = train_data)
+
+
+
+# confidence intervals
+result.white = predict(binomial_regression.white, as.data.frame(x), se.fit = TRUE)
+alpha = 0.05
+z_hat.white = cbind(result.white$fit, result.white$fit-qnorm(1-alpha/2)*result.white$se.fit, result.white$fit+qnorm(1-alpha/2)*result.white$se.fit)
+pi_hat.white = ilogit(z_hat.white)
+rownames(pi_hat.white) = rownames(x)
+colnames(pi_hat.white) = c('probability', 'lcl', 'ucl')
+
+# Black Americans
+binomial_regression.black = glm(formula = cbind(mt_data$black,  # the number of black people in CODIS
+                                            mt_data$other) ~ # the number of other people in CODIS
+                                  census.percent.black.remain + # the census proportion of black people in nonwhite people
+                                  incarc.percent.black.remain, # the prison proportion of black people in nonwhite people
+                                family = binomial, data = train_data)
+
+# confidence intervals with Bonferroni methods
+result.white = predict(binomial_regression.white, as.data.frame(x), se.fit = TRUE)
+alpha = 0.05
+z_hat.white = cbind(result.white$fit, result.white$fit+qnorm(1-alpha/4)*result.white$se.fit, result.white$fit-qnorm(1-alpha/4)*result.white$se.fit)
+p_hat.white = ilogit(z_hat.white)
+
+result.black = predict(binomial_regression.black, as.data.frame(x), se.fit = TRUE)
+z_hat.black = cbind(result.black$fit, result.black$fit-qnorm(1-alpha/4)*result.black$se.fit, result.black$fit+qnorm(1-alpha/4)*result.black$se.fit)
+p_hat.black = ilogit(z_hat.black)
+
+pi_hat.black = (1-p_hat.white)*p_hat.black
+rownames(pi_hat.black) = rownames(x)
+colnames(pi_hat.black) = c('probability', 'lcl', 'ucl')
+
+# Calculate CODIS black and white proportions using previous regression
+p_hat = cbind(predict(binomial_regression.white, test_data, type='response'), predict(binomial_regression.black, test_data, type='response'))
+pi_hat = array(dim=c(43,3))
+pi_hat[,1] = p_hat[,1]
+pi_hat[,2] = (1-p_hat[,1])*p_hat[,2]
+pi_hat[,3] = 1 - pi_hat[,1] - pi_hat[,2]
+# combine the proportions in forensic database
+pis_mt = array(dim=c(50,3))
+colnames(pis_mt) = c('mt.percent.white', 'mt.percent.black', 'mt.percent.other')
+rownames(pis_mt) = rownames(x)
+pis_mt[idx,] = cbind(response_data[,6], response_data[,3], 1 - response_data[,3] - response_data[,6])
+pis_mt[-idx,] = pi_hat
+pis_mt = pis_mt[,c(2, 1, 3)]
+# extract the proportions in census database
+pis_census = as.array(as.matrix(predictor_data[,12:14]))
+colnames(pis_census) = colnames(predictor_data)[12:14]
+rownames(pis_census) = rownames(pis_mt)
+```
+
+We estimate the linear coefficients $\beta$ of the binomial logistic regression for black Americans and white Americans using `glm()` function and do a Wald test on the beta coefficients. The $p$-values show that these coefficients are all statistically significant.
+
+```{r summary-statistics-of-binomial-regression,warning=FALSE,message=FALSE, echo = FALSE}
+summary(binomial_regression.white)
+summary(binomial_regression.black)
+```
+
+
+
+The following plot showing the estimated racial composition using the regression model vs. the true values for the states with available data. We also plot a difference plot (also known as a Bland-Altman plot).
+
+```{r Goodness-of-Fit, results = FALSE,warning=FALSE,message=FALSE, echo = FALSE}
+# goodness of fit
+pis_train = data.frame(States=rep(response_data[,2], 2), ground_truth=c(response_data[,3], response_data[,6]), fitted_value=c(pi_hat.black[idx,1], pi_hat.white[idx,1]), Races=rep(c('Black/African American', 'White American'), each=7))
+
+ggplot(pis_train) + geom_point(aes(x=ground_truth, y=fitted_value, shape=Races, colour=States), size=4) + xlab('Murphy & Tong profiles (FOIA)') + ylab('Estimated CODIS profiles') + xlim(0,1) + ylim(0,1) + geom_abline(linetype='longdash', linewidth=1) + theme(plot.title = element_text(hjust = 0.5)) + theme_classic()
+
+pis_train$Dif <- pis_train$fitted_value - pis_train$ground_truth
+pis_train$Avg <- (pis_train$fitted_value + pis_train$ground_truth) / 2
+
+ggplot(pis_train) + geom_point(aes(x=Avg, y=Dif, shape=Races, colour=States), size=4) + xlab('Average Measure') + ylab('Difference Between Measure') + geom_hline(yintercept = mean(pis_train$Dif), colour = "black", size = 1) +
+  geom_hline(yintercept = mean(pis_train$Dif) - (1.96 * sd(pis_train$Dif)), colour = "grey30", size = 0.5) +
+  geom_hline(yintercept = mean(pis_train$Dif) + (1.96 * sd(pis_train$Dif)), colour = "grey30", size = 0.5) + theme(plot.title = element_text(hjust = 0.5)) + theme_classic()
+```
+
+
+# 4 SDIS regression to predict the number of people in SDIS
+
+The following plots show the results of the SDIS regression for both  arrestees (left) and offenders (right):
+
+
+```{r SDIS-regression, results = FALSE,warning=FALSE,message=FALSE,out.width="100%", echo = FALSE}
+# Read in CSV files
+NDIS = read.csv("./data/NDIS.csv")       # National DNA Index System data
+SDIS = read.csv("./data/SDIS.csv")       # State DNA Indexing System data
+
+# Merge NDIS and SDIS datasets by state
+NDIS_SDIS = merge(NDIS, SDIS, by = "State")
+
+# Rename columns to distinguish between NDIS and SDIS data
+colnames(NDIS_SDIS) <- gsub('.x','.NDIS', names(NDIS_SDIS))
+colnames(NDIS_SDIS) <- gsub('.y','.SDIS', names(NDIS_SDIS))
+
+# Merge NDIS_SDIS data with prison data
+colnames(prison_data_2022)[12] = "State"
+SDIS_states = merge(NDIS_SDIS, prison_data_2022, by = "State")
+
+# Merge census data with NDIS_SDIS_prison data
+colnames(us_state_density)[1] = "State"
+us_state_population= us_state_density[, c("State", "census.num.black", "census.num.white", "census.percent.black","census.percent.white","percent.black.incarc","percent.white.incarc")]
+SDIS_regression = merge(SDIS_states, us_state_population, by = "State")
+
+# Calculate CODIS black and white proportions using previous regression
+SDIS_regression$CODIS.black = pis_mt[,1]
+
+SDIS_regression$CODIS.white = pis_mt[,2]
+
+SDIS_regression$CODIS.other = pis_mt[,3]
+
+SDIS_regression$source = "Regression"
+SDIS_regression.trim = SDIS_regression[, c("State", "CODIS.black", "CODIS.white", "source")]
+
+# Prepare data for regression analysis for SDIS arrestees
+SDIS_arrestees = SDIS_regression[-c(which(is.na(SDIS_regression$N_arrestees.SDIS))),]
+SDIS_arrestees = SDIS_arrestees[, c("State", "N_arrestees.SDIS", "census.num.black", "census.num.white", "incarcerated_black", "incarcerated_white", "N_arrestees.NDIS")]
+
+# Linear model for SDIS arrestees using census percent, prison percent, and number of people in NDIS as predictors
+SDIS_arrestee = lm(N_arrestees.SDIS ~ census.num.black + census.num.white + incarcerated_black + incarcerated_white + N_arrestees.NDIS, data = SDIS_arrestees)
+summary(SDIS_arrestee)
+
+# Prepare data for regression analysis for SDIS offenders
+SDIS_offenders = SDIS_regression[-c(which(is.na(SDIS_regression$N_offenders.SDIS))),]
+SDIS_offenders = SDIS_offenders[, c("State", "N_offenders.SDIS", "census.num.black", "census.num.white", "incarcerated_black", "incarcerated_white", "N_offenders.NDIS")]
+
+# Perform regression analysis for SDIS offenders
+SDIS_offender = lm(N_offenders.SDIS ~ census.num.black + census.num.white + incarcerated_black + incarcerated_white + N_offenders.NDIS, data = SDIS_offenders)
+summary(SDIS_offender)
+
+# calculate regression prediction for each state
+SDIS_regression$SDIS.arrestee.prediction = SDIS_arrestee$coeff[1] + SDIS_arrestee$coeff[2] * SDIS_regression$census.num.black +
+                                                             SDIS_arrestee$coeff[3] * SDIS_regression$census.num.white +
+                                                             SDIS_arrestee$coeff[4] * SDIS_regression$incarcerated_black+
+                                                             SDIS_arrestee$coeff[5] * SDIS_regression$incarcerated_white +
+                                                             SDIS_arrestee$coeff[6] * SDIS_regression$N_arrestees.NDIS
+
+SDIS_regression$SDIS.offender.prediction = SDIS_offender$coeff[1] + SDIS_offender$coeff[2] * SDIS_regression$census.num.black +
+                                                             SDIS_offender$coeff[3] * SDIS_regression$census.num.white +
+                                                             SDIS_offender$coeff[4] * SDIS_regression$incarcerated_black +
+                                                             SDIS_offender$coeff[5] * SDIS_regression$incarcerated_white +
+                                                             SDIS_offender$coeff[6] * SDIS_regression$N_offenders.NDIS
+
+# make sure no predictions are less than 0
+SDIS_regression$SDIS.offender.prediction[SDIS_regression$SDIS.offender.prediction < 0] = 0
+SDIS_regression$SDIS.arrestee.prediction[SDIS_regression$SDIS.arrestee.prediction < 0] = 0
+
+all.arrestees.SDIS <- SDIS_regression[which(!is.na(SDIS_regression$N_arrestees.SDIS)),]
+all.offenders.SDIS <- SDIS_regression[which(!is.na(SDIS_regression$N_offenders.SDIS)),]
+
+# Plot predicted vs. actual SDIS arrestees
+p1 = ggplot(data = all.arrestees.SDIS) +
+  geom_point(aes(x = N_arrestees.SDIS, y = SDIS.arrestee.prediction, fill = State), size = 5, col = "black", shape = 21) +
+  geom_abline(intercept = 0, slope = 1, col = "grey30", linetype = "dashed", size = 1.5) +
+  theme_classic() + ylab("Estimated SDIS arrestees") + xlab("SDIS arrestees") +
+  guides(fill = guide_legend(override.aes = list(shape = 21))) +
+  theme(legend.position = "none")
+
+# Plot predicted vs. actual SDIS offenders
+p2 = ggplot(data = all.offenders.SDIS) +
+  geom_point(aes(x = N_offenders.SDIS, y = SDIS.offender.prediction, fill = State), size = 5, col = "black", shape = 21) +
+  geom_abline(intercept = 0, slope = 1, col = "grey30", linetype = "dashed", size = 1.5) +
+  theme_classic() + ylab("Estimated SDIS offenders") + xlab("SDIS offenders") +
+  guides(fill = guide_legend(override.aes = list(shape = 21))) +
+  theme(legend.position = "none")
+
+# Extract legend from one of the plots
+leg = get_legend(ggplot(data = all.offenders.SDIS) +
+  geom_point(aes(x = N_offenders.SDIS, y = SDIS.offender.prediction, fill = State), size = 5, col = "black", shape = 21) +
+  geom_abline(intercept = 0, slope = 1, col = "grey30", linetype = "dashed", size = 1.5) +
+  theme_classic() + ylab("Estimated SDIS offenders") + xlab("SDIS offenders") +
+  guides(fill = guide_legend(override.aes = list(shape = 21))) +
+  theme(legend.position = "bottom", axis.text.x = element_text(color = "black", size = 16, angle = 0, hjust = .5, vjust = .5, face = "plain"),
+        axis.text.y = element_text(color = "black", size = 16, angle = 0, hjust = 1, vjust = 0, face = "plain"),  
+        axis.title.x = element_text(color = "black", size = 16, angle = 0, hjust = .5, vjust = 0, face = "plain"),
+        axis.title.y = element_text(color = "black", size = 16, angle = 90, hjust = .5, vjust = .5, face = "plain"),
+        aspect.ratio = 1))
+
+# Combine plots a and b into a grid with legend
+p3 = plot_grid(p1, p2, ncol = 2)
+plot_grid(NULL, p3, NULL, leg, nrow = 4, rel_heights = c(0, 1.5, 0.2, 0.5))
+
+
+
+```
+
+# 5 final data
+
+Using the above regression models, we make predictions of the number of people and racial composition in CODIS by state. Then the number of people for each racial group is calculated by $N_{race} = N_{SDIS} * Proportion_{race}$. The plot below shows our estimates for each state, colored by the data source used for each state. The number of Black people in the database are indicated with circles and the number of White people is indicated by triangles.  
+
+```{r final-data, warning=FALSE,message=FALSE,fig.width = 20, fig.height = 10, echo = FALSE}
+Murphy = read.csv("./data/Murphy_FOIA.csv") # FOIA data from Murphy
+
+# Reshape Murphy data to wide format
+Murphy_wide = reshape(Murphy, idvar = "State", timevar = "pop", direction = "wide")
+Murphy_wide = Murphy_wide[, c("State", "value.Total", "value.White", "value.Black")]
+
+# Prepare final dataset 
+final.data = merge(SDIS_regression, Murphy_wide, by = "State", all.x = TRUE)
+
+# Calculate final estimates for Black and White populations in CODIS based on different sources
+for (i in seq_len(nrow(final.data))) {
+  if (!is.na(final.data$value.Total[i])) {
+    final.data$final.Black[i] = final.data$value.Total[i] * (final.data$value.Black[i] / 100)
+    final.data$final.White[i] = final.data$value.Total[i] * (final.data$value.White[i] / 100)
+    final.data$source[i] = "Murphy"
+  } else if (!is.na(final.data$N_total.SDIS[i])) {
+    final.data$final.Black[i] = (final.data$N_total.SDIS[i]) * final.data$CODIS.black[i]
+    final.data$final.White[i] = (final.data$N_total.SDIS[i]) * final.data$CODIS.white[i]
+    final.data$source[i] = "SDIS+regression"
+  } else {
+    final.data$final.Black[i] = (final.data$SDIS.arrestee.prediction[i] + final.data$SDIS.offender.prediction[i]) * final.data$CODIS.black[i]
+    final.data$final.White[i] = (final.data$SDIS.arrestee.prediction[i] + final.data$SDIS.offender.prediction[i]) * final.data$CODIS.white[i]
+    final.data$source[i] = "Regression only"
+  }
+}
+
+# Plot the final estimates for Black and White populations in CODIS
+ggplot(final.data) +
+  geom_point(aes(x = State, y = final.Black, fill = source, shape = "Black"), size = 7, col = "black") +
+  geom_point(aes(x = State, y = final.White, fill = source, shape = "White"), size = 7, col = "black") +
+  scale_fill_manual(name = "Source", labels = c("Murphy", "Regression only", "SDIS+regression"), values = c("#9A77CF", "#EC4176", "#FFA45E")) +
+  scale_shape_manual(name = "Race", labels = c("Black", "White"), values = c(21, 24)) +
+  theme_bw() +
+  guides(fill = guide_legend(override.aes = list(shape = 21))) +
+  theme(axis.text.x = element_text(size = 18, angle = 90, vjust = 0.5, hjust = 1),
+        axis.text.y = element_text(size = 18),
+        axis.title=element_text(size=20),
+        legend.text=element_text(size=16),
+        legend.title = element_text(size=20)) +
+  ylab("Number of People in CODIS")
+```
+
+We additionally generate plots showing the difference in the percent of people in CODIS versus the U.S. census percent of the population for each racial group in each state. 
+```{r maps, warning=FALSE,message=FALSE,fig.width = 20,fig.height = 15, echo = FALSE}
+final.data.sf = st_as_sf(final.data)
+final.data.sf = final.data.sf %>%
+  tigris::shift_geometry()
+
+ggplot() +
+  geom_sf(data = final.data.sf$geometry, aes(fill = final.data.sf$CODIS.black-final.data.sf$census.percent.black),color = NA) + 
+  geom_sf(data = final.data.sf$geometry, color = "black",lwd = 0.3,alpha = 0) +
+  theme_void(base_size = 11) + 
+  scale_fill_viridis(option = "magma", direction = -1)+
+  labs(fill = "Difference between proportion of\npeople in CODIS that are Black\nand census proportion of\nthe population that is Black") + 
+  #theme(plot.margin = unit(rep(0.5, 4), "cm")) +
+  theme(legend.key.height= unit(1, 'cm'), legend.key.width= unit(1, 'cm'),
+        legend.title=element_text(size=20),  legend.text=element_text(size=20)) 
+
+ggplot() +
+  geom_sf(data = final.data.sf$geometry, aes(fill = final.data.sf$CODIS.white-final.data.sf$census.percent.white),color = NA) + 
+  geom_sf(data = final.data.sf$geometry, color = "black",lwd = 0.3,alpha = 0) +
+  theme_void(base_size = 11) + 
+  scale_fill_viridis(option = "magma", direction = -1)+
+  labs(fill = "Difference between proportion of\npeople in CODIS that are White\nand census proportion of\nthe population that is White") + 
+  #theme(plot.margin = unit(rep(0.5, 4), "cm")) +
+  theme(legend.key.height= unit(1, 'cm'), legend.key.width= unit(1, 'cm'),
+        legend.title=element_text(size=20),  legend.text=element_text(size=20)) 
+```
+
+The table containing the estimates for the number of people of each race in CODIS by state, along with the source of the data is below:
+```{r df, warning=FALSE,message=FALSE,fig.width = 20, echo = FALSE}
+final.df = final.data[,c("State","final.Black","final.White","source")]
+colnames(final.df) = c("State","Black Profiles", "White Profiles", "Source")
+final.df
+# write.csv(final.data, "../data/final_CODIS_data.csv")
+```
+
+Finally, we generate side-by-side pie charts for each state showing the  racial composition according to the census (left) versus the estimated racial composition of CODIS (right) for each state. From the following figure, Black/African Americans are overrepresented and white Americans are underrepresented in CODIS compared to Census.
+
+```{r pie-charts, warning=FALSE,message=FALSE,fig.width = 20,fig.height = 10, echo = FALSE}
+final.data.sf$census.percent.other = 1 - (final.data.sf$census.percent.white + final.data.sf$census.percent.black)
+final.data.long = final.data.sf %>%
+  pivot_longer(
+    cols = c("census.percent.white","census.percent.black", "census.percent.other"),
+    names_to = "race",
+    values_to = "census.proportion"
+  )
+
+
+final.data.long.CODIS = final.data.sf %>%
+  pivot_longer(
+    cols = c("CODIS.black","CODIS.white", "CODIS.other"),
+    names_to = "race",
+    values_to = "CODIS.proportion"
+  )
+
+plot_list = list()
+i=1
+for(state in unique(final.data.long$State)){
+  long_data = final.data.long[which(final.data.long$State == state),]
+  long_data_CODIS = final.data.long.CODIS[which(final.data.long.CODIS$State == state),]
+
+  p1 = ggplot(data=long_data, aes(x="", y=census.proportion, fill=race)) +
+  geom_bar(stat="identity", width=1,color = "black") +
+  scale_fill_manual(name = "",values = c("#648FFF","grey","#DC267F"),labels = c("Black/African American","Other American","White American")) +
+  coord_polar("y", start=0) + theme_classic() +
+  xlab("") + ylab("") + ggtitle("  Census") +
+  theme(legend.position = "none", axis.line=element_blank(),axis.ticks=element_blank()) +
+    theme(panel.background = element_blank(), plot.background = element_blank(),
+        axis.text = element_blank()) +
+    theme(plot.margin = unit(c(-0.1, -0.1, -0.1, -0.1), 
+                                "inches")) 
+  
+  p2 = ggplot(data=long_data_CODIS, aes(x="", y=CODIS.proportion, fill=race)) +
+  geom_bar(stat="identity", width=1,color = "black") +
+  scale_fill_manual(name = "",values = c("#648FFF","grey","#DC267F"),labels = c("Black/African American", "Other American","White American")) +
+  coord_polar("y", start=0) + theme_classic() +
+  xlab("") + ylab("") + ggtitle("   CODIS") +
+  theme(legend.position = "none", axis.line=element_blank(),axis.ticks=element_blank()) +
+    theme(panel.background = element_blank(), plot.background = element_blank(),
+        axis.text = element_blank())  +
+    theme(plot.margin = unit(c(-0.1, -0.1, -0.1, -0.1), 
+                                "inches")) 
+    p4 = ggplot() + 
+  annotate("text", x = 4, y = 25, size=6, label = paste0(state)) + 
+  theme_void()
+
+  p3 = plot_grid(NULL,NULL,p1,p2,NULL,NULL,ncol = 2, nrow = 3, rel_heights = c(-0.1,1,-0.1)) 
+  p4 = plot_grid(p4,NULL,p3,nrow=3, rel_heights = c(0.2,-0.2,1))+ 
+    theme(plot.background = element_rect(color="black"),plot.margin = unit(c(0.1, 0.1, -0.5, 0.1), "inches")) 
+  plot_list[[i]] = p4
+  i=i+1
+}
+
+plot1 = 
+  plot_grid(plot_list[[1]],plot_list[[2]], plot_list[[3]], plot_list[[4]], plot_list[[5]], plot_list[[6]], plot_list[[7]], plot_list[[8]], plot_list[[9]], plot_list[[10]],
+          plot_list[[11]], plot_list[[12]], plot_list[[13]], plot_list[[14]], plot_list[[15]], plot_list[[16]], plot_list[[17]], plot_list[[18]], plot_list[[19]], 
+          plot_list[[20]], plot_list[[21]], plot_list[[22]], plot_list[[23]], plot_list[[24]], plot_list[[25]], plot_list[[26]], plot_list[[27]], plot_list[[28]],                     plot_list[[29]], plot_list[[30]], plot_list[[31]], plot_list[[32]], plot_list[[33]], plot_list[[34]], plot_list[[35]], plot_list[[36]], plot_list[[37]],                     plot_list[[38]], plot_list[[39]], plot_list[[40]], plot_list[[41]], plot_list[[42]], plot_list[[43]], plot_list[[44]], plot_list[[45]], plot_list[[46]],                     plot_list[[47]], plot_list[[48]], plot_list[[49]], ncol = 10)
+```
+
+
+```{r pie-charts-final, echo = FALSE, warning=FALSE,message=FALSE,fig.width = 20,fig.height = 12}
+g_legend <- function(a.gplot){ 
+    tmp <- ggplot_gtable(ggplot_build(a.gplot)) 
+    leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box") 
+    legend <- tmp$grobs[[leg]] 
+    legend
+} 
+
+leg = g_legend(ggplot(data=long_data_CODIS, aes(x="", y=CODIS.proportion, fill=race)) +
+  geom_bar(stat="identity", width=1,color = "black") +
+  scale_fill_manual(name = "",values = c("#648FFF","grey","#DC267F"),labels = c("Black/African American","Other American","White American")) +
+  coord_polar("y", start=0) + theme_classic() +
+  xlab("") + ylab("") + ggtitle(paste0(state)) +
+  theme(legend.position = "bottom", axis.line=element_blank(),axis.ticks=element_blank()) +
+    theme(panel.background = element_blank(), plot.background = element_blank(),
+        axis.text = element_blank(),legend.text=element_text(size=20)) )
+
+plot_grid(plot1, leg, nrow = 2, rel_heights = c(0.9,0.1))
+
+```
+
+
+# References
+
+[1] Murphy, Erin, and Jun H. Tong. "The racial composition of forensic DNA databases." Calif. L. Rev. 108 (2020): 1847.
+
+[2] Klein, Brennan, et al. "COVID-19 amplified racial disparities in the US criminal legal system." Nature 617.7960 (2023): 344-350.
+
+[3] https://le.fbi.gov/science-and-lab/biometrics-and-fingerprints/codis/codis-ndis-statistics
+
+[4] U.S. Census Bureau. "Population." https://www.census.gov/topics/population.html
