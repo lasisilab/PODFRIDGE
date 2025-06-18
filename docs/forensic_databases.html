@@ -354,7 +354,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Forensic Databases</h1>
 <h4 class="author">Junhui He</h4>
-<h4 class="date">2025-06-18 18:00:32</h4>
+<h4 class="date">2025-06-18 18:26:12</h4>
 
 </div>
 
@@ -514,15 +514,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree841cef898cba1b15d0d589e8ce6d7ce9901ec87dtargetblank841cef8a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree04a0e06e7b18cbb980d7b7dd0247dd59eeab5483targetblank04a0e06a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/841cef898cba1b15d0d589e8ce6d7ce9901ec87d" target="_blank">841cef8</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/04a0e06e7b18cbb980d7b7dd0247dd59eeab5483" target="_blank">04a0e06</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree841cef898cba1b15d0d589e8ce6d7ce9901ec87dtargetblank841cef8a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree04a0e06e7b18cbb980d7b7dd0247dd59eeab5483targetblank04a0e06a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -532,7 +532,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/841cef898cba1b15d0d589e8ce6d7ce9901ec87d" target="_blank">841cef8</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/04a0e06e7b18cbb980d7b7dd0247dd59eeab5483" target="_blank">04a0e06</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -550,11 +550,11 @@ Ignored files:
     Ignored:    .DS_Store
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
+    Ignored:    analysis/.DS_Store
     Ignored:    code/.DS_Store
     Ignored:    output/.DS_Store
 
 Unstaged changes:
-    Modified:   analysis/codis_regression.Rmd
     Modified:   analysis/racial_proportion.Rmd
     Modified:   analysis/regression.Rmd
     Modified:   data/final_CODIS_data.csv
@@ -602,6 +602,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/04a0e06e7b18cbb980d7b7dd0247dd59eeab5483/analysis/forensic_databases.Rmd" target="_blank">04a0e06</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-06-18
+</td>
+<td>
+modify forensic database files
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/b97304daa2a46ef68b7f5f3f1b4331a287baaea5/docs/forensic_databases.html" target="_blank">b97304d</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-06-18
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -761,12 +795,49 @@ codis_mt_long = codis_data_mt %&gt;% pivot_longer(cols = c(&quot;White&quot;,&qu
 
 ggplot(codis_mt_long) +
   geom_col(aes(x = State, y = Value, fill = Race)) +
-  theme_classic() + ylab(&quot;Value&quot;) + theme_minimal() +
+  theme_classic() + ylab(&quot;Value&quot;) + 
   ggtitle(&quot;Number of people in the forensic database, by race&quot;) +
   theme(axis.text.x = element_text(angle = 90)) + 
   scale_fill_manual(name = &quot;Race&quot;,labels = c(&quot;Black&quot;, &quot;Other&quot;, &quot;White&quot;),
   values = c(&quot;#44AA99&quot;, &quot;#88CCEE&quot;, &quot;#882255&quot;))</code></pre>
 <p><img src="figure/forensic_databases.Rmd/codis-data-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-codis-data-1">
+Past versions of codis-data-1.png
+</button>
+</p>
+<div id="fig-codis-data-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/b97304daa2a46ef68b7f5f3f1b4331a287baaea5/docs/figure/forensic_databases.Rmd/codis-data-1.png" target="_blank">b97304d</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-06-18
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="prison-databases" class="section level1">
 <h1>2 Prison databases</h1>
@@ -1283,12 +1354,49 @@ kable(prison_data_2022, caption = &quot;Number of people in prison by state and 
 
 ggplot(prison_long) +
   geom_col(aes(x = State, y = Value, fill = Race)) +
-  theme_classic() + ylab(&quot;Value&quot;) + theme_minimal() +
+  theme_classic() + ylab(&quot;Value&quot;) + 
   ggtitle(&quot;Number of incarcerated people, by race&quot;) +
   theme(axis.text.x = element_text(angle = 90)) + 
   scale_fill_manual(name = &quot;Race&quot;,labels = c(&quot;Asian&quot;, &quot;Black&quot;, &quot;Hispanic&quot;, &quot;Native American&quot;,&quot;White&quot;),
   values = c(&quot;#332288&quot;,&quot;#44AA99&quot;, &quot;#88CCEE&quot;, &quot;#CC6677&quot;, &quot;#882255&quot;))</code></pre>
 <p><img src="figure/forensic_databases.Rmd/prison-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-prison-1">
+Past versions of prison-1.png
+</button>
+</p>
+<div id="fig-prison-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/b97304daa2a46ef68b7f5f3f1b4331a287baaea5/docs/figure/forensic_databases.Rmd/prison-1.png" target="_blank">b97304d</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-06-18
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="census-databases" class="section level1">
 <h1>3 Census databases</h1>
@@ -1849,12 +1957,49 @@ census_long = census_data %&gt;% pivot_longer(cols = c(&quot;White&quot;,&quot;B
 
 ggplot(census_long) +
   geom_col(aes(x = State, y = Value, fill = Race)) +
-  theme_classic() + ylab(&quot;Value&quot;) + theme_minimal() +
+  theme_classic() + ylab(&quot;Value&quot;) + 
   ggtitle(&quot;Number of people in the Census database, by race&quot;) +
   theme(axis.text.x = element_text(angle = 90)) + 
   scale_fill_manual(name = &quot;Race&quot;,labels = c(&quot;Black&quot;, &quot;Other&quot;, &quot;White&quot;),
   values = c(&quot;#44AA99&quot;, &quot;#88CCEE&quot;, &quot;#882255&quot;))</code></pre>
 <p><img src="figure/forensic_databases.Rmd/census-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-census-1">
+Past versions of census-1.png
+</button>
+</p>
+<div id="fig-census-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/b97304daa2a46ef68b7f5f3f1b4331a287baaea5/docs/figure/forensic_databases.Rmd/census-1.png" target="_blank">b97304d</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-06-18
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="ndis-databases" class="section level1">
 <h1>4 NDIS databases</h1>
@@ -2277,12 +2422,49 @@ NDIS_long = NDIS %&gt;% pivot_longer(cols = c(&quot;N_arrestees&quot;,&quot;N_of
 
 ggplot(NDIS_long) +
   geom_col(aes(x = State, y = Value, fill = Category)) +
-  theme_classic() + ylab(&quot;Value&quot;) + theme_minimal() +
+  theme_classic() + ylab(&quot;Value&quot;) + 
   ggtitle(&quot;Number of people in the NDIS database, by category&quot;) +
   theme(axis.text.x = element_text(angle = 90)) + 
   scale_fill_manual(name = &quot;Category&quot;,labels = c(&quot;Arrestee&quot;, &quot;Offender&quot;),
   values = c(&quot;#88CCEE&quot;, &quot;#882255&quot;))</code></pre>
 <p><img src="figure/forensic_databases.Rmd/NDIS-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-NDIS-1">
+Past versions of NDIS-1.png
+</button>
+</p>
+<div id="fig-NDIS-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/b97304daa2a46ef68b7f5f3f1b4331a287baaea5/docs/figure/forensic_databases.Rmd/NDIS-1.png" target="_blank">b97304d</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-06-18
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="sdis-databases" class="section level1">
 <h1>5 SDIS databases</h1>
@@ -2647,6 +2829,43 @@ ggplot(SDIS) +
   ggtitle(&quot;Size of the SDIS database&quot;) +
   theme(axis.text.x = element_text(angle = 90)) </code></pre>
 <p><img src="figure/forensic_databases.Rmd/SDIS-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-SDIS-1">
+Past versions of SDIS-1.png
+</button>
+</p>
+<div id="fig-SDIS-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/b97304daa2a46ef68b7f5f3f1b4331a287baaea5/docs/figure/forensic_databases.Rmd/SDIS-1.png" target="_blank">b97304d</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-06-18
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>SDIS$prop.offenders = SDIS$N_offenders / SDIS$N_total
 SDIS_off = na.omit(SDIS)
 ggplot(SDIS_off) +
@@ -2655,6 +2874,43 @@ ggplot(SDIS_off) +
   ggtitle(&quot;Proportion of SDIS that is offenders&quot;) +
   theme(axis.text.x = element_text(angle = 90)) </code></pre>
 <p><img src="figure/forensic_databases.Rmd/SDIS-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-SDIS-2">
+Past versions of SDIS-2.png
+</button>
+</p>
+<div id="fig-SDIS-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/b97304daa2a46ef68b7f5f3f1b4331a287baaea5/docs/figure/forensic_databases.Rmd/SDIS-2.png" target="_blank">b97304d</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-06-18
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>data.source.sf = merge(us_state_density,SDIS, by = &quot;State&quot;) 
 
 data.source.sf = data.source.sf %&gt;%
@@ -2670,6 +2926,43 @@ ggplot() +
   theme(legend.key.height= unit(1, &#39;cm&#39;), legend.key.width= unit(1, &#39;cm&#39;),
         legend.title=element_text(size=14),  legend.text=element_text(size=14)) </code></pre>
 <p><img src="figure/forensic_databases.Rmd/SDIS-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-SDIS-3">
+Past versions of SDIS-3.png
+</button>
+</p>
+<div id="fig-SDIS-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/b97304daa2a46ef68b7f5f3f1b4331a287baaea5/docs/figure/forensic_databases.Rmd/SDIS-3.png" target="_blank">b97304d</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-06-18
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="references" class="section level1">
 <h1>References</h1>
