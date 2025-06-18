@@ -1,0 +1,242 @@
+---
+title: "Forensic Databases"
+author: "Junhui He"
+date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE, echo=FALSE}
+
+knitr::opts_chunk$set(eval = TRUE, echo = TRUE, warning = FALSE, fig.width = 7, fig.height = 6)
+
+library(tidyverse)
+library(knitr)
+library(readr)        # read csv files
+library(knitr)        
+library(jtools) 
+library(ggpubr)
+library(sandwich)     # robust covariance estimator
+library(ggplot2)      # For plotting
+library(stats)        # For statistical functions
+library(tidycensus)   # For accessing US census data
+# Load additional libraries for combining plots
+library(cowplot)
+library(ggpubr) 
+library(viridis)
+library(sf)
+```
+
+# 1 Murphy & Tong forensic databases
+
+Murphy & Tong (2020) [1] constructed a forensic database in the Freedom of Information Act (FIOA) appendix data. They provided a detailed racial composition of the database in seven US states: California, Florida, Indiana, Maine, Nevada, South Dakota, and Texas. The racial categories are White, Black, Hispanic, Asian, and native Americans. Specifically, we focus on White and Black Americans. The database includes information on the number of individuals in each racial category for each state.
+
+The racial composition of the CODIS database is shown in the following table and figure.
+
+```{r codis-data, echo=TRUE, message=FALSE, warning=FALSE}
+# read CODIS data
+codis_data_path = './data/regression_data/CODIS_regression_data.csv'
+codis_data = read.csv(codis_data_path) # CODIS data
+
+# extract the murphy & tong data
+codis_data_mt = data.frame(
+  State = codis_data$state,
+  Total = codis_data$mt.total,
+  Black = round(codis_data$mt.total * codis_data$mt.percent.black),
+  White = round(codis_data$mt.total * codis_data$mt.percent.white),
+  Other = round(codis_data$mt.total * codis_data$mt.percent.other),
+  Percent_Black = codis_data$mt.percent.black,
+  Percent_White = codis_data$mt.percent.white,
+  Percent_Other = codis_data$mt.percent.other
+)
+
+kable(codis_data_mt, 
+      caption = "Racial composition of the forensic database in Murphy & Tong (2020) [1].",
+      col.names = c("State", "Total", "Black", "White", "Other", "Percent of Black", "Percent of White", "Percent of Other")
+)
+
+# plot the racial composition of the CODIS database
+codis_mt_long = codis_data_mt %>% pivot_longer(cols = c("White","Black","Other"), names_to = "Race", values_to = "Value")
+
+ggplot(codis_mt_long) +
+  geom_col(aes(x = State, y = Value, fill = Race)) +
+  theme_classic() + ylab("Value") + theme_minimal() +
+  ggtitle("Number of people in the forensic database, by race") +
+  theme(axis.text.x = element_text(angle = 90)) + 
+  scale_fill_manual(name = "Race",labels = c("Black", "Other", "White"),
+  values = c("#44AA99", "#88CCEE", "#882255"))
+```
+
+# 2 Prison databases
+
+Klein et al. (2023) [2] provided the number of incarcerated people of racial groups: White, Black, Hispanic, Asian, and native Americans, for each US state except for Michigan state. For the state of Michigan, this data was pulled from  a separate source [4]. This prison database is useful for understanding the racial composition of the prison population in the US.
+
+The racial composition of incarcerated people in the US is shown in the following table and figure.
+
+```{r prison, results = TRUE,warning=FALSE,message=FALSE, echo = TRUE, fig.width = 15, fig.height = 6}
+# Load prison data
+prison_data = read.csv("data/populations_states.csv")
+
+# Extract year from the date and filter data for 2022
+prison_data$year = substring(prison_data$date, 1, 4)
+prison_data_2022 = prison_data[which(prison_data$year == "2022"),]
+prison_data_2022 = prison_data_2022[!duplicated(prison_data_2022[, 'state']),]
+
+# Michigan source: Vera https://www.vera.org/downloads/pdfdownloads/state-incarceration-trends-michigan.pdf 
+prison_data_2022$incarcerated_black[which(prison_data_2022$state == "Michigan")] <- 0.53 * as.numeric(prison_data_2022$incarcerated_total[which(prison_data_2022$state == "Michigan")])
+
+prison_data_2022 <- prison_data_2022[-c(which(prison_data_2022$state == "Federal")),]
+prison_data_2022 = prison_data_2022[,c("state", "incarcerated_total", "incarcerated_white", "incarcerated_black", "incarcerated_hispanic", "incarcerated_amerind", "incarcerated_asian")]
+colnames(prison_data_2022) = c("State", "Total", "White","Black", "Hispanic", 'Native American',"Asian")
+rownames(prison_data_2022) = NULL
+
+kable(prison_data_2022, caption = "Number of people in prison by state and race")
+
+prison_long = prison_data_2022 %>% pivot_longer(cols = c("White","Black","Hispanic","Native American" ,"Asian"), names_to = "Race", values_to = "Value")
+
+ggplot(prison_long) +
+  geom_col(aes(x = State, y = Value, fill = Race)) +
+  theme_classic() + ylab("Value") + theme_minimal() +
+  ggtitle("Number of incarcerated people, by race") +
+  theme(axis.text.x = element_text(angle = 90)) + 
+  scale_fill_manual(name = "Race",labels = c("Asian", "Black", "Hispanic", "Native American","White"),
+  values = c("#332288","#44AA99", "#88CCEE", "#CC6677", "#882255"))
+``` 
+
+# 3 Census databases
+
+The U.S. Census Bureau's API [5] provides demographic data for the population of each US state, including racial composition. The racial composition of the general population in the US is shown in the following table and figure.
+
+```{r census, warning=FALSE,message=FALSE,echo = TRUE}
+# read census data
+census_data_path = './data/regression_data/CODIS_regression_predict_data.csv'
+census_prison_data = read.csv(census_data_path) # Census and prison data
+
+# extract census data
+census_data = data.frame(
+  State = census_prison_data$State,
+  Total = census_prison_data$census.total,
+  Black = round(census_prison_data$census.total * census_prison_data$census.percent.black),
+  White = round(census_prison_data$census.total * census_prison_data$census.percent.white),
+  Other = round(census_prison_data$census.total * census_prison_data$census.percent.other),
+  Percent_Black = census_prison_data$census.percent.black,
+  Percent_White = census_prison_data$census.percent.white,
+  Percent_Other = census_prison_data$census.percent.other
+)
+
+kable(census_data, 
+      caption = "Racial composition of the census database in U.S. Census Bureau's API [5].",
+      col.names = c("State", "Total", "Black", "White", "Other", "Percent of Black", "Percent of White", "Percent of Other")
+)
+
+# plot the racial composition of the census database
+census_long = census_data %>% pivot_longer(cols = c("White","Black","Other"), names_to = "Race", values_to = "Value")
+
+ggplot(census_long) +
+  geom_col(aes(x = State, y = Value, fill = Race)) +
+  theme_classic() + ylab("Value") + theme_minimal() +
+  ggtitle("Number of people in the Census database, by race") +
+  theme(axis.text.x = element_text(angle = 90)) + 
+  scale_fill_manual(name = "Race",labels = c("Black", "Other", "White"),
+  values = c("#44AA99", "#88CCEE", "#882255"))
+```
+
+# 4 NDIS databases
+
+The National DNA Index System (NDIS) is the highest level of the Combined DNA Index System (CODIS) and serves as the central repository for DNA profiles submitted by federal, state, and local forensic laboratories across the United States. The individuals in the NDIS database are typically those who have been arrested or convicted of a crime, and the database is used to assist in criminal investigations by matching DNA profiles from crime scenes with those in the database. The individuals in the NDIS database are divided into two main categories: convicted offenders and arrestees. Convicted offenders are individuals who have been found guilty of a crime and have had their DNA profiles collected as part of the sentencing process. Arrestees are individuals who have been arrested for a crime, but may not have been convicted yet.
+
+The NDIS database sizes and proportions of offenders vs arrestees for all states are publicly available in [2], which are shown in the following table and figure.
+
+```{r NDIS, warning=FALSE,message=FALSE, echo = TRUE}
+NDIS <- read.csv("./data/NDIS.csv")
+head(NDIS)
+NDIS = NDIS[,c("State", "N_total","N_arrestees","N_offenders")]
+NDIS = NDIS[-c(which(NDIS$State == "U.S. Army")),]
+
+kable(NDIS, caption = "Number of arrestees and offenders in NDIS by state")
+
+# plot the NDIS database sizes
+NDIS_long = NDIS %>% pivot_longer(cols = c("N_arrestees","N_offenders"), names_to = "Category", values_to = "Value")
+
+ggplot(NDIS_long) +
+  geom_col(aes(x = State, y = Value, fill = Category)) +
+  theme_classic() + ylab("Value") + theme_minimal() +
+  ggtitle("Number of people in the NDIS database, by category") +
+  theme(axis.text.x = element_text(angle = 90)) + 
+  scale_fill_manual(name = "Category",labels = c("Arrestee", "Offender"),
+  values = c("#88CCEE", "#882255"))
+``` 
+
+# 5 SDIS databases
+
+The State DNA Index System (SDIS) is a key component of the Combined DNA Index System (CODIS). It contains DNA profiles collected at the state level from individuals, crime scenes, and other sources. In some states, SDIS data is publicly available through official government websites; however, many states do not make this information accessible to the public.
+
+As with the National DNA Index System (NDIS), individuals in SDIS are generally classified into two categories: offenders and arrestees. The sizes of SDIS databases and the proportions of offenders in states with publicly available data are presented in the table and figures below.
+
+```{r state_maps, results =FALSE,warning=FALSE,message=FALSE, echo = TRUE}
+# Load census data and shape for each state
+us_state_density <- get_decennial(
+  geography = "state",
+  variables = c(all = "P1_002N", census.num.white = "P1_003N", census.num.black = "P1_004N"),
+  year = 2020,
+  geometry = TRUE,
+  keep_geo_vars = TRUE
+)
+
+# Spread the data into a wider format
+us_state_density = spread(us_state_density, variable, value)
+
+# Rename column for merging
+us_state_density$State = us_state_density$NAME.x
+```
+
+```{r SDIS, warning=FALSE,message=FALSE, echo = TRUE}
+SDIS <- read.csv("./data/SDIS.csv")
+SDIS = SDIS[,c("State", "N_total","N_arrestees","N_offenders","source")]
+
+kable(SDIS[,-5], caption = "Number of arrestees and offenders in SDIS by state")
+
+SDIS$N_total = ifelse(is.na(SDIS$N_total), SDIS$N_arrestees + SDIS$N_offenders, SDIS$N_total)
+ggplot(SDIS) +
+  geom_col(position="dodge", stat="identity", aes(x = State, y = N_total)) +
+  theme_classic() + ylab("Proportion") +
+  ggtitle("Size of the SDIS database") +
+  theme(axis.text.x = element_text(angle = 90)) 
+
+SDIS$prop.offenders = SDIS$N_offenders / SDIS$N_total
+SDIS_off = na.omit(SDIS)
+ggplot(SDIS_off) +
+  geom_col(position="dodge", stat="identity", aes(x = State, y = prop.offenders)) +
+  theme_classic() + ylab("Proportion") +
+  ggtitle("Proportion of SDIS that is offenders") +
+  theme(axis.text.x = element_text(angle = 90)) 
+
+data.source.sf = merge(us_state_density,SDIS, by = "State") 
+
+data.source.sf = data.source.sf %>%
+  tigris::shift_geometry()
+
+ggplot() +
+  geom_sf(data = data.source.sf$geometry, aes(fill = data.source.sf$N_total),color = NA) + 
+  geom_sf(data = data.source.sf$geometry, color = "black",lwd = 0.3,alpha = 0) +
+  theme_void(base_size = 11) + 
+  labs(fill = "") + scale_fill_viridis() +
+  ggtitle("Size of the SDIS database, if available",
+          subtitle = "Grey indicates this information is not publicly available in the state") +
+  theme(legend.key.height= unit(1, 'cm'), legend.key.width= unit(1, 'cm'),
+        legend.title=element_text(size=14),  legend.text=element_text(size=14)) 
+``` 
+
+
+# References
+
+[1] Murphy, Erin, and Jun H. Tong. "The racial composition of forensic DNA databases." Calif. L. Rev. 108 (2020): 1847.\
+[2] https://le.fbi.gov/science-and-lab/biometrics-and-fingerprints/codis/codis-ndis-statistics \
+[3] Klein, Brennan, et al. "COVID-19 amplified racial disparities in the US criminal legal system." Nature 617.7960 (2023): 344-350. \
+[4] https://www.vera.org/downloads/pdfdownloads/state-incarceration-trends-michigan.pdf \
+[5] U.S. Census Bureau. "Population." https://www.census.gov/topics/population.html \
+
+
+
+
