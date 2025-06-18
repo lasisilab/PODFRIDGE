@@ -66,10 +66,10 @@ data.sources = data.frame(
 "Michigan", "Minnesota","Mississippi","Missouri","Montana","Nebraska", "Nevada" , "New Hampshire","New Jersey","New Mexico" ,   
 "New York","North Carolina", "North Dakota" ,"Ohio" , "Oklahoma","Oregon","Pennsylvania","Rhode Island", "South Carolina", "South Dakota"  ,
 "Tennessee","Texas" ,"Utah" ,"Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"), 
-  data = c("SDIS+NDIS","NDIS only", "NDIS only", "SDIS+NDIS", "Murphy & Tong","SDIS+NDIS", "NDIS only", "Murphy & Tong" ,"SDIS+NDIS", "NDIS only",
-"SDIS+NDIS", "SDIS+NDIS", "Murphy & Tong", "NDIS only", "NDIS only", "NDIS only", "SDIS+NDIS", "Murphy & Tong" , "NDIS only", "NDIS only",
+  data = c("SDIS+NDIS","SDIS+NDIS", "NDIS only", "SDIS+NDIS", "Murphy & Tong","SDIS+NDIS", "NDIS only", "Murphy & Tong" ,"SDIS+NDIS", "NDIS only",
+"SDIS+NDIS", "SDIS+NDIS", "Murphy & Tong", "NDIS only", "NDIS only", "NDIS only", "SDIS+NDIS", "Murphy & Tong" , "SDIS+NDIS", "NDIS only",
 "NDIS only", "SDIS+NDIS" ,"SDIS+NDIS", "SDIS+NDIS" ,"SDIS+NDIS", "NDIS only", "Murphy & Tong","NDIS only", "SDIS+NDIS" ,"NDIS only",
-"NDIS only", "SDIS+NDIS", "NDIS only" ,"NDIS only" ,"NDIS only" ,"NDIS only", "NDIS only", "SDIS+NDIS", "SDIS+NDIS" ,"Murphy & Tong", "NDIS only", "Murphy & Tong","NDIS only", "NDIS only" ,"SDIS+NDIS", "SDIS+NDIS" ,"SDIS+NDIS", "NDIS only", "NDIS only")
+"NDIS only", "SDIS+NDIS", "NDIS only" ,"NDIS only" ,"NDIS only" ,"NDIS only", "NDIS only", "SDIS+NDIS", "SDIS+NDIS" ,"Murphy & Tong", "SDIS+NDIS", "Murphy & Tong", "NDIS only", "NDIS only" ,"SDIS+NDIS", "SDIS+NDIS" ,"SDIS+NDIS", "NDIS only", "NDIS only")
 )
 ```
 
@@ -322,6 +322,7 @@ The following plots show the results of the SDIS regression for both  arrestees 
 # Read in CSV files
 NDIS = read.csv("./data/NDIS.csv")       # National DNA Index System data
 SDIS = read.csv("./data/SDIS.csv")       # State DNA Indexing System data
+SDIS$N_total = ifelse(is.na(SDIS$N_total), SDIS$N_arrestees + SDIS$N_offenders, SDIS$N_total)
 
 # Merge NDIS and SDIS datasets by state
 NDIS_SDIS = merge(NDIS, SDIS, by = "State")
