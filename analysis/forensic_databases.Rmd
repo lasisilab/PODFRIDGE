@@ -61,7 +61,7 @@ codis_mt_long = codis_data_mt %>% pivot_longer(cols = c("White","Black","Other")
 
 ggplot(codis_mt_long) +
   geom_col(aes(x = State, y = Value, fill = Race)) +
-  theme_classic() + ylab("Value") + theme_minimal() +
+  theme_classic() + ylab("Value") + 
   ggtitle("Number of people in the forensic database, by race") +
   theme(axis.text.x = element_text(angle = 90)) + 
   scale_fill_manual(name = "Race",labels = c("Black", "Other", "White"),
@@ -97,7 +97,7 @@ prison_long = prison_data_2022 %>% pivot_longer(cols = c("White","Black","Hispan
 
 ggplot(prison_long) +
   geom_col(aes(x = State, y = Value, fill = Race)) +
-  theme_classic() + ylab("Value") + theme_minimal() +
+  theme_classic() + ylab("Value") + 
   ggtitle("Number of incarcerated people, by race") +
   theme(axis.text.x = element_text(angle = 90)) + 
   scale_fill_manual(name = "Race",labels = c("Asian", "Black", "Hispanic", "Native American","White"),
@@ -135,7 +135,7 @@ census_long = census_data %>% pivot_longer(cols = c("White","Black","Other"), na
 
 ggplot(census_long) +
   geom_col(aes(x = State, y = Value, fill = Race)) +
-  theme_classic() + ylab("Value") + theme_minimal() +
+  theme_classic() + ylab("Value") + 
   ggtitle("Number of people in the Census database, by race") +
   theme(axis.text.x = element_text(angle = 90)) + 
   scale_fill_manual(name = "Race",labels = c("Black", "Other", "White"),
@@ -161,7 +161,7 @@ NDIS_long = NDIS %>% pivot_longer(cols = c("N_arrestees","N_offenders"), names_t
 
 ggplot(NDIS_long) +
   geom_col(aes(x = State, y = Value, fill = Category)) +
-  theme_classic() + ylab("Value") + theme_minimal() +
+  theme_classic() + ylab("Value") + 
   ggtitle("Number of people in the NDIS database, by category") +
   theme(axis.text.x = element_text(angle = 90)) + 
   scale_fill_manual(name = "Category",labels = c("Arrestee", "Offender"),
