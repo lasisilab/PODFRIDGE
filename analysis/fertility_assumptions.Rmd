@@ -338,8 +338,6 @@ knitr::kable(anova_per_model, digits = 4, caption = "Test of Race effect within 
 
 When mean fertility is held constant at 2.5 children for both populations, the expected number of siblings, aunts/uncles, and cousins is virtually identical for Black and White groups, regardless of model choice (Poisson, NB, ZIP, or ZINB). Although our fitted NB/ZINB/ZIP models allow for group-specific overdispersion and zero-inflation, these parameters had negligible practical effect on expected kin counts for the distributions observed in US Census data. We conclude that, in practice, mean fertility is the primary driver of group differences in simulated kinship structure for recent cohorts.
 
-Perfect—let’s keep the language tight and consistent:
-
 # Individual-Level Sibling Distribution and Kinship Risk
 
 We now assess close-kin counts (siblings, aunts/uncles, cousins) directly from the perspective of the focal individual, fitting and simulating the *distribution of siblings* per person, and comparing the effect of distributional assumptions (Poisson, NB, ZIP, ZINB) and race, as before.
@@ -598,6 +596,7 @@ for (rel in relatives) {
 
 ```
 Note: The reference group for all regressions is White, Poisson, Fixed mean (sibling mean = 1.5, fertility mean = 2.5). All coefficients are interpreted relative to this group.
+
 #### Hybrid Best-Fit Model and Poisson Fertility Baseline
 
 ```{r}
