@@ -12,9 +12,9 @@
 <meta name="author" content="Manqing Lin, Tina Lasisi" />
 
 
-<title>Estimating Differences in the Distribution of First-degree Relatives</title>
+<title>Population Differences in the Distribution of First-degree Relatives</title>
 
-<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -36,8 +36,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.5.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet" />
 
 <link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
 <!-- Add a small amount of space between sections. -->
@@ -352,10 +352,10 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Estimating Differences in the Distribution
+<h1 class="title toc-ignore">Population Differences in the Distribution
 of First-degree Relatives</h1>
 <h4 class="author">Manqing Lin, Tina Lasisi</h4>
-<h4 class="date">2025-03-17 16:44:58</h4>
+<h4 class="date">2025-06-18 13:50:19</h4>
 
 </div>
 
@@ -384,7 +384,7 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-03-17
+<strong>Last updated:</strong> 2025-06-18
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -518,15 +518,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreeb3733842a1379baa6825a43c05a12a6465042d08targetblankb373384a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreed36349f1ada7002f5b06dc4b63f500b1857ea6catargetblankd36349fa">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/b3733842a1379baa6825a43c05a12a6465042d08" target="_blank">b373384</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/d36349f1ada7002f5b06dc4b63f500b1857ea6ca" target="_blank">d36349f</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreeb3733842a1379baa6825a43c05a12a6465042d08targetblankb373384a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreed36349f1ada7002f5b06dc4b63f500b1857ea6catargetblankd36349fa"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -536,7 +536,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/b3733842a1379baa6825a43c05a12a6465042d08" target="_blank">b373384</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/d36349f1ada7002f5b06dc4b63f500b1857ea6ca" target="_blank">d36349f</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -554,11 +554,14 @@ Ignored files:
     Ignored:    .DS_Store
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-    Ignored:    analysis/.Rhistory
     Ignored:    data/.DS_Store
+    Ignored:    data/sims/.DS_Store
+    Ignored:    output/.DS_Store
+    Ignored:    output/simulation_20240726-155743/.DS_Store
+    Ignored:    output/simulation_20240726-162034_11228488/.DS_Store
+    Ignored:    output/simulation_20240726-163235_11228791/.DS_Store
 
 Unstaged changes:
-    Modified:   PODFRIDGE.Rproj
     Modified:   analysis/relative-distribution.Rmd
 
 </code></pre>
@@ -574,7 +577,6 @@ have uncommitted changes.
 <hr>
 </div>
 <div id="versions" class="tab-pane fade">
-
 <p>
 These are the previous versions of the repository in which changes were
 made to the R Markdown (<code>analysis/relative-distribution.Rmd</code>)
@@ -605,6 +607,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/c69b10f6512b24b851c5bcdb9f3c3fea77e4686e/analysis/relative-distribution.Rmd" target="_blank">c69b10f</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2025-03-17
+</td>
+<td>
+update sibling frequency calculation
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/c69b10f6512b24b851c5bcdb9f3c3fea77e4686e/docs/relative-distribution.html" target="_blank">c69b10f</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2025-03-17
+</td>
+<td>
+update sibling frequency calculation
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1662,6 +1698,14 @@ to the mother:</p>
 <p><span class="math display">\[
 n_{sib} = chborn_{num} - 1
 \]</span></p>
+<pre class="r"><code>path &lt;- file.path(&quot;.&quot;, &quot;data&quot;)
+savepath &lt;- file.path(&quot;.&quot;, &quot;output&quot;)
+
+prop_race_year &lt;- file.path(path, &quot;proportions_table_by_race_year.csv&quot;)
+data_filter &lt;- file.path(path, &quot;data_filtered_recoded.csv&quot;)
+
+children_data = read.csv(prop_race_year)
+mother_data = read.csv(data_filter)</code></pre>
 </div>
 <div id="distribution-of-number-of-children-across-census-years"
 class="section level1">
@@ -1669,6 +1713,52 @@ class="section level1">
 <p>First we visualize the general trends in the frequency of the number
 of children for African American and European American mothers across
 the Census years by age group.</p>
+<pre class="r"><code># Calculate proportions within each group, ensuring proper normalization
+df_proportions &lt;- df %&gt;%
+  group_by(YEAR, RACE, AGE_RANGE, chborn_num) %&gt;%
+  summarise(count = n(), .groups = &quot;drop&quot;) %&gt;%
+  group_by(YEAR, RACE, AGE_RANGE) %&gt;%
+  mutate(proportion = count / sum(count)) %&gt;%
+  ungroup()
+
+# Reshape data for the mirror plot
+df_mirror &lt;- df_proportions %&gt;%
+  mutate(proportion = if_else(RACE == &quot;White&quot;, -proportion, proportion))
+
+# Create color palette
+my_colors &lt;- colorRampPalette(c(&quot;#FFB000&quot;, &quot;#F77A2E&quot;, &quot;#DE3A8A&quot;, &quot;#7253FF&quot;, &quot;#5E8BFF&quot;))(13)
+
+# Create the plot
+child_plot &lt;- ggplot(df_mirror, aes(x = chborn_num, y = proportion, fill = as.factor(chborn_num))) +
+  geom_col(aes(alpha = RACE)) +
+  geom_hline(yintercept = 0, color = &quot;black&quot;, size = 0.5) +
+  facet_grid(AGE_RANGE ~ YEAR, scales = &quot;free_y&quot;) +
+  coord_flip() +
+  scale_y_continuous(
+    labels = function(x) abs(x),
+    limits = function(x) c(-max(abs(x)), max(abs(x)))
+  ) +
+  scale_x_continuous(breaks = 0:12, labels = c(0:11, &quot;12+&quot;)) +
+  scale_fill_manual(values = my_colors) +
+  scale_alpha_manual(values = c(&quot;White&quot; = 0.7, &quot;Black/African American&quot; = 1), guide = &quot;none&quot;) +
+  labs(
+    title = &quot;Distribution of Number of Children by Census Year, Race, and Age Range&quot;,
+    x = &quot;Number of Children&quot;,
+    y = &quot;Proportion&quot;,
+    fill = &quot;Number of Children&quot;,
+    caption = &quot;White population shown on left (negative values), Black/African American on right (positive values)\nProportions normalized within each age range, race, and census year\nFootnote: The category &#39;12+&#39; includes families with 12 or more children.&quot;
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 14, hjust = 0.5),
+    axis.text.y = element_text(size = 8),
+    strip.text = element_text(size = 10),
+    legend.position = &quot;none&quot;,
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank()
+  )
+
+print(child_plot)</code></pre>
 <p><img src="figure/relative-distribution.Rmd/unnamed-chunk-3-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
@@ -1744,6 +1834,23 @@ race, census year, and age range.</p>
 record the model with minimum AIC. The following is the table that
 summarize the best model for each combination of race, census year and
 age group.</p>
+<pre class="r"><code># Add a Best_Model column to store the best model based on minimum AIC
+best_models$Best_Model &lt;- apply(best_models, 1, function(row) {
+  # Get AIC values for Poisson, NB, ZIP, and ZINB models
+  aic_values &lt;- c(Poisson = as.numeric(row[&#39;AIC_poisson&#39;]),
+                  Negative_Binomial = as.numeric(row[&#39;AIC_nb&#39;]),
+                  Zero_Inflated_Poisson = as.numeric(row[&#39;AIC_zip&#39;]),
+                  Zero_Inflated_NB= as.numeric(row[&#39;AIC_zinb&#39;]))
+  
+  # Find the name of the model with the minimum AIC value
+  best_model &lt;- names(which.min(aic_values))
+  
+  return(best_model)
+})
+
+best_models &lt;- best_models %&gt;% dplyr::select(Race, Census_Year, Age_Range, Best_Model)
+# View the updated table with the Best_Model column
+kable(best_models, caption=&quot;Summary Table of Best Model (Children)&quot;)</code></pre>
 <table>
 <caption>Summary Table of Best Model (Children)</caption>
 <thead>
@@ -1959,6 +2066,14 @@ running a logistics regression, the result (The p-value for each
 variable is larger than 0.05) shows that there isn’t a significant
 association between the predictors(races, age ranges, and census year)
 and the best-fitting model.</p>
+<pre class="r"><code># Recode Best_Model to a binary variable (e.g., &quot;Zero_Inflated_NB&quot; vs. &quot;Other&quot;)
+best_models$Best_Model_Binary &lt;- ifelse(best_models$Best_Model == &quot;Zero_Inflated_NB&quot;, 1, 0)
+
+# Fit binary logistic regression
+model_logistic &lt;- glm(Best_Model_Binary ~ Race + Census_Year + Age_Range, family = binomial(), data = best_models)
+
+# Summary of the logistic regression model
+summary(model_logistic)</code></pre>
 <pre><code>
 Call:
 glm(formula = Best_Model_Binary ~ Race + Census_Year + Age_Range, 
@@ -1987,6 +2102,21 @@ Number of Fisher Scoring iterations: 25</code></pre>
 fit for the black population across census year and age group. However,
 the ZINB model perform the best among the white population only across
 year 1960 and 1970, and age group 60-69 and 70+.</p>
+<pre class="r"><code>ggplot(best_models, aes(x = Census_Year, y = Age_Range, fill = Best_Model)) +
+  geom_tile(color = &quot;white&quot;, lwd = 0.5, linetype = 1) + 
+  facet_wrap(~Race, nrow = 2) +  
+  scale_fill_manual(values = c(&quot;Zero_Inflated_Poisson&quot; = &quot;#0072B2&quot;, &quot;Zero_Inflated_NB&quot; = &quot;#F0E442&quot;)) + 
+  labs(
+    title = &quot;Best Model by Race, Census Year, and Age Range&quot;,
+    x = &quot;Census Year&quot;,
+    y = &quot;Age Range&quot;,
+    fill = &quot;Best Model&quot;
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 14, hjust = 0.5),
+    legend.position = &quot;bottom&quot;
+  )</code></pre>
 <p><img src="figure/relative-distribution.Rmd/unnamed-chunk-9-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-1">
@@ -2068,6 +2198,39 @@ the cohort changes over time.</li>
 <h3>Data Preparation</h3>
 <p>Firstly, we create a new variable cohort in the original data, which
 is calculated by subtracting the age range from census year.</p>
+<pre class="r"><code>### Table with Cohort
+calculate_cohort &lt;- function(census_year, age_range) {
+  age_limits &lt;- as.numeric(unlist(strsplit(age_range, &quot;-|\\+&quot;)))
+  
+  if (length(age_limits) == 1) {
+    lower_age &lt;- age_limits
+    upper_age &lt;- Inf  
+  } else {
+    lower_age &lt;- age_limits[1]
+    upper_age &lt;- age_limits[2]
+  }
+  
+  lower_cohort &lt;- census_year - upper_age
+  upper_cohort &lt;- census_year - lower_age
+  
+  
+  if (upper_age == Inf) {
+    upper_cohort &lt;- census_year - 70
+  }
+  
+  return(paste(lower_cohort, upper_cohort, sep = &quot;-&quot;))
+}
+
+best_models &lt;- best_models %&gt;%
+  mutate(Cohort = mapply(calculate_cohort, Census_Year, Age_Range)) %&gt;% 
+  dplyr::select(Race, Census_Year, Age_Range, Best_Model, Cohort)</code></pre>
+<pre class="r"><code>### Summary Statistics for Each Subset
+
+df_merg &lt;- df %&gt;%
+  rename(Census_Year = YEAR, Race = RACE, Age_Range = AGE_RANGE)
+
+# Perform a left join to merge the data frames
+merged_data &lt;- left_join(df_merg, best_models, by = c(&quot;Race&quot;, &quot;Census_Year&quot;, &quot;Age_Range&quot;))</code></pre>
 </div>
 <div id="test-for-significant-changes-over-time-within-each-cohort"
 class="section level3">
@@ -2077,6 +2240,45 @@ class="section level3">
 <p>Here, we apply the chi-square test for each cohort within each race.
 Since some cohorts only have one corresponding census year, the test is
 not applicable for them.</p>
+<pre class="r"><code>## divided the corhort by race
+merged_df_black &lt;- merged_data %&gt;% filter(Race == &quot;Black/African American&quot;)
+merged_df_white &lt;- merged_data %&gt;% filter(Race == &quot;White&quot;)</code></pre>
+<pre class="r"><code># Function to determine the nature of change
+determine_nature_of_change &lt;- function(proportions) {
+  if (nrow(proportions) &gt; 1) {
+    if (all(diff(proportions$Proportion_Zero_Children) &gt; 0)) {
+      return(&quot;Increase&quot;)
+    } else if (all(diff(proportions$Proportion_Zero_Children) &lt; 0)) {
+      return(&quot;Decrease&quot;)
+    } else {
+      return(&quot;Mixed/No Change&quot;)
+    }
+  } else {
+    return(&quot;Not Applicable&quot;)
+  }
+}
+
+# Add the Nature_of_Change column
+results_black$Nature_of_Change &lt;- NA  # Initialize the column
+
+# Loop through each cohort in results_black
+for (i in 1:nrow(results_black)) {
+  cohort &lt;- results_black$Cohort[i]
+  cohort_data &lt;- merged_df_black %&gt;% filter(Cohort == cohort)
+  
+  # Calculate proportions for the cohort
+  proportions &lt;- cohort_data %&gt;%
+    group_by(Census_Year) %&gt;%
+    summarise(Proportion_Zero_Children = mean(chborn_num == &quot;0&quot;))
+    
+  # Determine nature of change
+  results_black$Nature_of_Change[i] &lt;- determine_nature_of_change(proportions)
+}
+
+results_black$p_value = format(results_black$p_value, scientific = TRUE)
+
+# View the updated results_black
+kable(results_black, caption=&quot;Test Result of Zero Inflation for Black Population&quot;)</code></pre>
 <table>
 <caption>Test Result of Zero Inflation for Black Population</caption>
 <colgroup>
@@ -2142,6 +2344,27 @@ not applicable for them.</p>
 observe that the proportion of women with zero children change
 significantly across census year in the cohort 1901-1910 and
 1921-1930.</p>
+<pre class="r"><code># Add the Nature_of_Change column
+results_white$Nature_of_Change &lt;- NA  # Initialize the column
+
+# Loop through each cohort in results_white
+for (i in 1:nrow(results_white)) {
+  cohort &lt;- results_white$Cohort[i]
+  cohort_data &lt;- merged_df_white %&gt;% filter(Cohort == cohort)
+  
+  # Calculate proportions for the cohort
+  proportions &lt;- cohort_data %&gt;%
+    group_by(Census_Year) %&gt;%
+    summarise(Proportion_Zero_Children = mean(chborn_num == &quot;0&quot;))
+  
+  # Determine nature of change
+  results_white$Nature_of_Change[i] &lt;- determine_nature_of_change(proportions)
+}
+
+results_white$p_value = format(results_white$p_value, scientific = TRUE)
+
+# View the updated results_white
+kable(results_white, caption=&quot;Test Result of Zero Inflation for White Population&quot;)</code></pre>
 <table style="width:100%;">
 <caption>Test Result of Zero Inflation for White Population</caption>
 <colgroup>
@@ -2207,8 +2430,31 @@ significantly across census year in the cohort 1901-1910 and
 observe that the proportion of women with zero children change
 significantly across census year in cohort 1901-1910, 1911-1920 and
 1921-1930.</p>
+<pre class="r"><code># Combine the two data frames
+combined_result &lt;- rbind(results_black, results_white)</code></pre>
 <p>Combining the results above, we created a plot that demonstrate the
 change and difference of p value between cohorts and races.</p>
+<pre class="r"><code># Convert p_value to numeric if necessary
+combined_result$p_value &lt;- as.numeric(combined_result$p_value)
+
+# Create the plot
+ggplot(combined_result, aes(x = Cohort, y = p_value, color = RACE, shape = Significance)) +
+  geom_point(size = 2) +
+  geom_line(aes(group = RACE)) +
+    annotate(&quot;text&quot;, x = Inf, y = 0.05, label = &quot;p = 0.05&quot;, hjust = 1.1, vjust = -0.5, color = &quot;red&quot;, size = 3) +
+  geom_hline(yintercept = 0.05, linetype = &quot;dashed&quot;, color = &quot;red&quot;, size = 0.5) + 
+  scale_y_log10() +  # Use log scale for better visualization if p-values vary widely
+  labs(
+    title = &quot;Change of p-values by Cohort&quot;,
+    x = &quot;Cohort&quot;,
+    y = &quot;p-value (log scale)&quot;,
+    color = &quot;Race&quot;,
+    shape = &quot;Significance&quot;
+  ) +
+  theme_minimal() +
+  theme(
+        plot.title = element_text(size = 14, hjust = 0.5),
+axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
 <p><img src="figure/relative-distribution.Rmd/unnamed-chunk-19-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-19-1">
@@ -2294,6 +2540,11 @@ In both racial groups, the ANOVA and t-test are not applicable for the
 following cohort since there is only one census year available in the
 data for those cohorts:-Inf-1910, 1941-1950, -Inf-1920, -Inf-1890,
 -Inf-1900, and 1891-1900</p>
+<pre class="r"><code>merged_black = merged_data %&gt;% filter(Race == &quot;Black/African American&quot;)
+merged_white = merged_data %&gt;% filter(Race == &quot;White&quot;)</code></pre>
+<pre class="r"><code>test_result_b$p_value = format(test_result_b$p_value, scientific = TRUE)
+
+kable(test_result_b, caption=&quot;Test Result of Mean Family Size for Black Population&quot;)</code></pre>
 <table>
 <caption>Test Result of Mean Family Size for Black Population</caption>
 <colgroup>
@@ -2353,6 +2604,9 @@ data for those cohorts:-Inf-1910, 1941-1950, -Inf-1920, -Inf-1890,
 1921-1930 are smaller than 0.05. These results indicate mean family size
 for these cohort has significantly changed over different census years
 in different racial population.</p>
+<pre class="r"><code>test_result_w$p_value = format(test_result_w$p_value, scientific = TRUE)
+
+kable(test_result_w, caption=&quot;Test Result of Mean Family Size for White Population&quot;)</code></pre>
 <table>
 <caption>Test Result of Mean Family Size for White Population</caption>
 <thead>
@@ -2412,6 +2666,7 @@ racial group, the Levene’s test is not applicable for the following
 cohorts since there is only one census year available in the data for
 those cohorts:-Inf-1910, 1941-1950, -Inf-1920, -Inf-1890, -Inf-1900, and
 1891-1900</p>
+<pre class="r"><code>kable(test_var_b, caption=&quot;Test Result of Variance of Family Size for Black Population&quot;)</code></pre>
 <table>
 <caption>Test Result of Variance of Family Size for Black
 Population</caption>
@@ -2458,6 +2713,7 @@ Population</caption>
 <p>The table above summarizes the test result for black population. We
 observe that the variance of family size change significantly across
 census year in cohort 1901-1910 and 1921-1930.</p>
+<pre class="r"><code>kable(test_var_w, caption=&quot;Test Result of Variance of Family Size for White Population&quot;)</code></pre>
 <table>
 <caption>Test Result of Variance of Family Size for White
 Population</caption>
@@ -2511,6 +2767,23 @@ across census year in cohort 1911-1920.</p>
 of statistical test. Based on the heatmap created, we can see that the
 model fit for each cohort(cohort with 2+ corresponding census year)
 across year does not change.</p>
+<pre class="r"><code># Due to the due lack of data variability, I use visualization instead of test
+
+ggplot(best_models, aes(x = Census_Year, y = Cohort, fill = Best_Model)) +
+  geom_tile(color = &quot;white&quot;, lwd = 0.5, linetype = 1) + # Create the tiles
+  facet_wrap(~Race, nrow = 2) + # Facet by Race
+  scale_fill_manual(values = c(&quot;Zero_Inflated_Poisson&quot; = &quot;#0072B2&quot;, &quot;Zero_Inflated_NB&quot; = &quot;#F0E442&quot;)) + 
+  labs(
+    title = &quot;Best Model by Race, Census Year, and Cohort (Birth Range)&quot;,
+    x = &quot;Census Year&quot;,
+    y = &quot;Birth Range&quot;,
+    fill = &quot;Best Model&quot;
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 14, hjust = 0.5),
+    legend.position = &quot;bottom&quot;
+  )</code></pre>
 <p><img src="figure/relative-distribution.Rmd/unnamed-chunk-29-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-29-1">
@@ -2615,6 +2888,38 @@ over time are represented with solid lines, while those with
 non-significant changes are depicted using dashed lines.</p>
 <div id="significant-change-in-zero-inflation" class="section level4">
 <h4>Significant Change in Zero Inflation</h4>
+<pre class="r"><code>significant_black &lt;- c(&quot;1901-1910&quot;, &quot;1921-1930&quot;)
+significant_white &lt;- c(&quot;1901-1910&quot;, &quot;1911-1920&quot;, &quot;1921-1930&quot;)
+
+combined_data &lt;- bind_rows(proportions_df_b, proportions_df_w) %&gt;%
+  mutate(Race = factor(Race, levels = c(&quot;White&quot;, &quot;Black&quot;), 
+                       labels = c(&quot;White&quot;, &quot;Black/African American&quot;)))
+
+# Assign line styles
+combined_data &lt;- combined_data %&gt;%
+  mutate(Line_Style = ifelse((Race == &quot;Black/African American&quot; &amp; Cohort %in%   
+                                significant_black) |
+                             (Race == &quot;White&quot; &amp; Cohort %in% significant_white),
+                             &quot;solid&quot;, &quot;dashed&quot;))
+
+# Plot using ggplot2
+ggplot(combined_data, aes(x = Census_Year, y = Proportion_Zero_Children, group = Cohort)) +
+  geom_line(aes(linetype = Line_Style, color = Cohort), size = 1) +
+  geom_point(aes(color = Cohort), size = 2) +
+  facet_wrap(~Race) +
+  scale_linetype_manual(
+    name = &quot;Significance&quot;, 
+    values = c(&quot;solid&quot; = &quot;solid&quot;, &quot;dashed&quot; = &quot;dashed&quot;),
+    breaks = c(&quot;dashed&quot;, &quot;solid&quot;),
+    labels = c(&quot;Non-significant&quot;, &quot;Significant&quot;)
+  ) +
+  labs(title = &quot;Significant Changes in Zero Inflation Over Census Years&quot;,
+       x = &quot;Census Year&quot;, y = &quot;Proportion with Zero Children&quot;,
+       color = &quot;Cohort&quot;, linetype = &quot;Significance&quot;) +
+  theme_minimal() +
+  theme(legend.position = &quot;bottom&quot;,
+        legend.key.size=unit(2,&quot;lines&quot;), 
+        plot.title = element_text(size = 14, hjust = 0.5))</code></pre>
 <p><img src="figure/relative-distribution.Rmd/unnamed-chunk-30-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-30-1">
@@ -2724,6 +3029,29 @@ decades.</li>
 </div>
 <div id="significant-change-in-mean-family-size" class="section level4">
 <h4>Significant Change in Mean Family Size</h4>
+<pre class="r"><code>merged_data2 &lt;- left_join(merged_data, summary_table, by = c(&quot;Race&quot;,&quot;Cohort&quot;,&quot;Census_Year&quot;)) %&gt;% dplyr::select(Race, Cohort, Census_Year, Mean, Variance)
+
+combined_data &lt;- unique(merged_data2) %&gt;% filter(Cohort %in% c(&quot;1901-1910&quot;, &quot;1911-1920&quot;, &quot;1921-1930&quot;, &quot;1931-1940&quot;))
+
+# Assign line styles
+combined_data &lt;- combined_data %&gt;%
+  mutate(Line_Style = ifelse((Race == &quot;Black/African American&quot; &amp; Cohort %in% 
+                                significant_black) |
+                             (Race == &quot;White&quot; &amp; Cohort %in% significant_white),
+                              &quot;Significant&quot;, &quot;Non-significant&quot;))
+
+ggplot(combined_data, aes(x = Census_Year, y = Mean, group = Cohort)) +
+  geom_line(aes(linetype = Line_Style, color = Cohort), size = 1) +
+  geom_point(aes(color = Cohort), size = 2) +
+  facet_wrap(~Race) +
+  scale_linetype_manual(values = c(&quot;Significant&quot; = &quot;solid&quot;, &quot;Non-significant&quot; = &quot;dashed&quot;)) +
+  labs(title = &quot;Significant Changes in Mean Family Size Over Census Years&quot;,
+       x = &quot;Census Year&quot;, y = &quot;Mean of number of Children&quot;,
+       color = &quot;Cohort&quot;, linetype = &quot;Significance&quot;) +
+  theme_minimal() +
+  theme(legend.position = &quot;bottom&quot;,
+        legend.key.size=unit(2,&quot;lines&quot;), 
+        plot.title = element_text(size = 14, hjust = 0.5))</code></pre>
 <p><img src="figure/relative-distribution.Rmd/unnamed-chunk-31-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-31-1">
@@ -2855,6 +3183,31 @@ family size in 1990, reaching around 2.8 children on average, which is
 <div id="significant-change-in-variance-of-family-size"
 class="section level4">
 <h4>Significant Change in Variance of Family Size</h4>
+<pre class="r"><code>significant_black &lt;- c(&quot;1901-1910&quot;, &quot;1921-1930&quot;)
+significant_white &lt;- c(&quot;1911-1920&quot;)
+
+combined_data &lt;- unique(merged_data2) %&gt;% filter(Cohort %in% c(&quot;1901-1910&quot;, &quot;1911-1920&quot;, &quot;1921-1930&quot;, &quot;1931-1940&quot;))
+
+# Assign line styles
+combined_data &lt;- combined_data %&gt;%
+  mutate(Line_Style = ifelse((Race == &quot;Black/African American&quot; &amp; Cohort %in% 
+                                significant_black) |
+                             (Race == &quot;White&quot; &amp; Cohort %in% significant_white),
+                              &quot;Significant&quot;, &quot;Non-significant&quot;))
+
+
+ggplot(combined_data, aes(x = Census_Year, y = Variance, group = Cohort)) +
+  geom_line(aes(linetype = Line_Style, color = Cohort), size = 1) +
+  geom_point(aes(color = Cohort), size = 2) +
+  facet_wrap(~Race) +
+  scale_linetype_manual(values = c(&quot;Significant&quot; = &quot;solid&quot;, &quot;Non-significant&quot; = &quot;dashed&quot;)) +
+  labs(title = &quot;Significant Changes in Variance of Family Size Over Census Years&quot;,
+       x = &quot;Census Year&quot;, y = &quot;Variance of number of Children&quot;,
+       color = &quot;Cohort&quot;, linetype = &quot;Significance&quot;) +
+  theme_minimal() +
+  theme(legend.position = &quot;bottom&quot;,
+        legend.key.size=unit(2,&quot;lines&quot;), 
+        plot.title = element_text(size = 14, hjust = 0.5))</code></pre>
 <p><img src="figure/relative-distribution.Rmd/unnamed-chunk-32-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-32-1">
@@ -2951,6 +3304,19 @@ Black and White populations.</p>
 <p>Firstly, we present a side-by-side distribution plots comparing the
 number of children for women in the 40-49 and 50-59 age groups within
 Black and White populations.</p>
+<pre class="r"><code>filter_df &lt;- df_proportions %&gt;% 
+  filter(YEAR == &quot;1990&quot;, AGE_RANGE %in% c(&quot;40-49&quot;, &quot;50-59&quot;)) </code></pre>
+<pre class="r"><code>ggplot(filter_df, aes(x = chborn_num, y = proportion, fill = AGE_RANGE)) +
+  geom_col(position = &quot;identity&quot;, alpha = 0.5) +  
+  facet_wrap(~ RACE) +  
+  labs(
+    title = &quot;Distribution of Number of Children for Women in 40-49 and 50-59 Age Groups in 1990&quot;,
+    x = &quot;Number of Children&quot;,
+    y = &quot;Proportion&quot;,
+    fill = &quot;Age Range&quot;
+  ) +
+  theme(
+    plot.title = element_text(size = 14, hjust = 0.5))</code></pre>
 <p><img src="figure/relative-distribution.Rmd/unnamed-chunk-34-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-34-1">
@@ -3015,6 +3381,16 @@ both racial groups, indicating greater variability in family size. In
 terms of zero inflation (proportion of women with no children), the
 women in 40-49 age group have higher zero inflation than women in 50-59
 in both racial groups.</p>
+<pre class="r"><code>summary_stats &lt;- filter_df %&gt;%
+  group_by(AGE_RANGE, RACE) %&gt;%
+  summarise(
+    mean_children = weighted.mean(chborn_num, count),  # Mean number of children
+    variance_children = sum(count * (chborn_num - weighted.mean(chborn_num, count))^2) / sum(count),  # Variance
+    zero_inflation = sum(count[chborn_num == 0]) / sum(count), .groups = &quot;drop&quot;
+  )
+
+# Print summary statistics table
+kable(summary_stats, caption= &quot;Summary Statistics of Number of Children in 1990 (40-49 and 50-59 Age Group)&quot;)</code></pre>
 <table style="width:100%;">
 <caption>Summary Statistics of Number of Children in 1990 (40-49 and
 50-59 Age Group)</caption>
@@ -3079,6 +3455,22 @@ variance of the number of children between the two age groups.</li>
 in the variance of the number of children between the two age
 groups.</li>
 </ul>
+<pre class="r"><code>df_w &lt;- df %&gt;% filter(RACE == &quot;White&quot;&amp; AGE_RANGE %in% c(&quot;40-49&quot;, &quot;50-59&quot;) &amp; YEAR == &quot;1990&quot;)
+df_b &lt;- df %&gt;% filter(RACE == &quot;Black/African American&quot; &amp; AGE_RANGE %in% c(&quot;40-49&quot;, &quot;50-59&quot;) &amp; YEAR == &quot;1990&quot;)
+
+## Apply Levene&#39;s test since non-normality
+# Levene&#39;s test for Black group
+levene_test_b &lt;- leveneTest(chborn_num ~ as.factor(AGE_RANGE), data = df_b)
+
+# Levene&#39;s test for White group
+levene_test_w &lt;- leveneTest(chborn_num ~ as.factor(AGE_RANGE), data = df_w)
+
+res_df2 &lt;- data.frame(
+  race = c(&quot;African American&quot;, &quot;European American&quot;),
+  p_value = format(c(levene_test_b[[&quot;Pr(&gt;F)&quot;]][1], levene_test_w[[&quot;Pr(&gt;F)&quot;]][1]), scientific = TRUE)
+)
+
+kable(res_df2, caption=&quot;Test Result for Difference in Variance between Age Groups By Race&quot;)</code></pre>
 <table>
 <caption>Test Result for Difference in Variance between Age Groups By
 Race</caption>
@@ -3116,6 +3508,25 @@ mean number of children between the two age groups.</li>
 <li><strong>Alternative Hypothesis (H₁):</strong> There is a difference
 in the mean number of children between the two age groups.</li>
 </ul>
+<pre class="r"><code>df_40_49_w &lt;- df_w %&gt;% filter(AGE_RANGE == &quot;40-49&quot;) %&gt;% pull(chborn_num)
+df_50_59_w &lt;- df_w %&gt;% filter(AGE_RANGE == &quot;50-59&quot;) %&gt;% pull(chborn_num)
+
+# Perform Mann-Whitney U test (Wilcoxon rank-sum test in R)
+t_test_w&lt;-wilcox.test(df_40_49_w, df_50_59_w, alternative = &quot;two.sided&quot;)$p.value
+
+df_40_49_b &lt;- df_b %&gt;% filter(AGE_RANGE == &quot;40-49&quot;) %&gt;% pull(chborn_num)
+df_50_59_b &lt;- df_b %&gt;% filter(AGE_RANGE == &quot;50-59&quot;) %&gt;% pull(chborn_num)
+
+# Perform Mann-Whitney U test (Wilcoxon rank-sum test in R)
+t_test_b&lt;-wilcox.test(df_40_49_b, df_50_59_b, alternative = &quot;two.sided&quot;)$p.value
+
+res_df &lt;- data.frame(
+  race = c(&quot;African American&quot;, &quot;European American&quot;),
+  p_value = c(t_test_b, t_test_w)
+)
+res_df$p_value &lt;- format(res_df$p_value, scientific = TRUE)
+
+kable(res_df, caption=&quot;Test Result for Difference in Variance between Age Groups By Race&quot;)</code></pre>
 <table>
 <caption>Test Result for Difference in Variance between Age Groups By
 Race</caption>
@@ -3152,6 +3563,12 @@ proportion of childlessness between the two age groups.</li>
 <li><strong>Alternative Hypothesis (H₁):</strong> There is a difference
 in the proportion of childlessness between the two age groups.</li>
 </ul>
+<pre class="r"><code># contingency tables showing the counts of women with zero children and those with one or more children for each age group 
+ZI_table &lt;- df %&gt;% filter(YEAR == &quot;1990&quot;, AGE_RANGE %in% c(&quot;40-49&quot;, &quot;50-59&quot;)) %&gt;% 
+  mutate(childlessness = ifelse(chborn_num == 0, &quot;0 Children&quot;, &quot;1+ Children&quot;)) %&gt;%       group_by(RACE, AGE_RANGE, childlessness) %&gt;%
+  summarise(count = n(), .groups = &quot;drop&quot;)
+
+kable(ZI_table, caption=&quot;Contingency Table of Zero Inflation&quot;)</code></pre>
 <table>
 <caption>Contingency Table of Zero Inflation</caption>
 <thead>
@@ -3213,6 +3630,21 @@ in the proportion of childlessness between the two age groups.</li>
 </tr>
 </tbody>
 </table>
+<pre class="r"><code>ZI_table_b &lt;- ZI_table %&gt;%
+  filter(RACE == &quot;Black/African American&quot;)
+
+cont_table_b &lt;- xtabs(count ~ AGE_RANGE + childlessness, data = ZI_table_b)
+chi_test_b &lt;- chisq.test(cont_table_b)</code></pre>
+<pre class="r"><code>ZI_table_w &lt;- ZI_table %&gt;%
+  filter(RACE == &quot;White&quot;)
+
+cont_table_w &lt;- xtabs(count ~ AGE_RANGE + childlessness, data = ZI_table_w)
+chi_test_w &lt;- chisq.test(cont_table_w)</code></pre>
+<pre class="r"><code>res_df3 &lt;- data.frame(
+  race = c(&quot;African American&quot;, &quot;European American&quot;),
+  p_value = format(c(chi_test_b$p.value, chi_test_w$p.value), scientific = TRUE))
+
+kable(res_df3, caption=&quot;Test Result for Zero Inflation between Age Groups By Race&quot;)</code></pre>
 <table>
 <caption>Test Result for Zero Inflation between Age Groups By
 Race</caption>
@@ -3303,6 +3735,32 @@ number of children. Then, we group the data to calculate sibling
 frequencies and check the normalization by calculating the proportion of
 sibling frequencies in each combination of census year, race and age
 range.</p>
+<pre class="r"><code>df2 &lt;- df %&gt;% 
+  dplyr::select(RACE, YEAR, AGE_RANGE, chborn_num)</code></pre>
+<pre class="r"><code>df2 &lt;- df2 %&gt;%
+ mutate(n_siblings = chborn_num - 1)</code></pre>
+<pre class="r"><code>### Calculate Sibling Frequencies
+
+df2 &lt;- df2 %&gt;%
+mutate(sibling_freq = ifelse(chborn_num != 1, chborn_num*1, 1))  # Assuming each mother represents 1 in frequency</code></pre>
+<pre class="r"><code>### Aggregate Sibling Data
+# Group the data and calculate sibling frequencies
+df_siblings &lt;- df2 %&gt;%
+ group_by(YEAR, RACE, AGE_RANGE, n_siblings) %&gt;%
+ summarise(
+   sibling_count = sum(sibling_freq),
+   .groups = &quot;drop&quot;
+ )</code></pre>
+<pre class="r"><code># Calculate proportions within each group
+df_sibling_proportions &lt;- df_siblings %&gt;%
+ group_by(YEAR, RACE, AGE_RANGE) %&gt;%
+ mutate(proportion = sibling_count / sum(sibling_count)) %&gt;%
+ ungroup()</code></pre>
+<pre class="r"><code>### Check Normalization
+normalization_check &lt;- df_sibling_proportions %&gt;%
+  group_by(YEAR, RACE, AGE_RANGE) %&gt;%
+  summarise(total_proportion = sum(proportion), .groups = &quot;drop&quot;) %&gt;%
+  arrange(YEAR, RACE, AGE_RANGE)</code></pre>
 </div>
 <div id="visualization-of-distribution-of-number-of-siblings"
 class="section level2">
@@ -3310,6 +3768,37 @@ class="section level2">
 <p>Then we visualize the general trends in the frequency of the number
 of siblings for African American and European American mothers across
 the Census years by age group.</p>
+<pre class="r"><code>df_sibling_mirror &lt;- df_sibling_proportions %&gt;%
+  mutate(proportion = if_else(RACE == &quot;White&quot;, -proportion, proportion))</code></pre>
+<pre class="r"><code>my_colors &lt;- colorRampPalette(c(&quot;#FFB000&quot;, &quot;#F77A2E&quot;, &quot;#DE3A8A&quot;, &quot;#7253FF&quot;, &quot;#5E8BFF&quot;))(13)</code></pre>
+<pre class="r"><code>ggplot(data = df_sibling_mirror %&gt;% filter(n_siblings != &quot;-1&quot;), aes(x = n_siblings, y = proportion, fill = as.factor(n_siblings))) +
+ geom_col(aes(alpha = RACE)) +
+ geom_hline(yintercept = 0, color = &quot;black&quot;, size = 0.5) +
+ facet_grid(AGE_RANGE ~ YEAR, scales = &quot;free_y&quot;) +
+ coord_flip() +
+ scale_y_continuous(
+   labels = function(x) abs(x),
+   limits = function(x) c(-max(abs(x)), max(abs(x)))
+ ) +
+ scale_x_continuous(breaks = 0:11, labels = c(0:10, &quot;11+&quot;)) +
+ scale_fill_manual(values = my_colors) +
+ scale_alpha_manual(values = c(&quot;White&quot; = 0.7, &quot;Black/African American&quot; = 1)) +
+ labs(
+   title = &quot;Distribution of Number of Siblings by Census Year, Race, and Age Range&quot;,
+   x = &quot;Number of Siblings&quot;,
+   y = &quot;Proportion&quot;,
+   fill = &quot;Number of Siblings&quot;,
+   caption = &quot;White population shown on left (negative values), Black/African American on right (positive values)\nProportions normalized within each age range, race, and census year\nFootnote: The category &#39;11+&#39; includes individuals with 11 or more siblings.&quot;
+ ) +
+ theme_minimal() +
+ theme(
+   plot.title = element_text(size = 14, hjust = 0.5),
+   axis.text.y = element_text(size = 8),
+   strip.text = element_text(size = 10),
+   legend.position = &quot;none&quot;,
+   panel.grid.major.y = element_blank(),
+   panel.grid.minor.y = element_blank()
+ )</code></pre>
 <p><img src="figure/relative-distribution.Rmd/unnamed-chunk-52-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-52-1">
@@ -3333,6 +3822,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/c69b10f6512b24b851c5bcdb9f3c3fea77e4686e/docs/figure/relative-distribution.Rmd/unnamed-chunk-52-1.png" target="_blank">c69b10f</a>
+</td>
+<td>
+linmatch
+</td>
+<td>
+2025-03-17
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/b856701f515155bc91e396024d02c0db98e960a2/docs/figure/relative-distribution.Rmd/unnamed-chunk-52-1.png" target="_blank">b856701</a>
@@ -3390,6 +3890,54 @@ sibling counts, suggesting potential difference in the distribution.</p>
 <h2>Model Fit Across Census Years</h2>
 <p>We repeat the model fitting process we performed for the children
 distribution, this time using the sibling distribution data.</p>
+<pre class="r"><code>combinations2 &lt;- df2 %&gt;%
+  # treat number of sib = -1 as NA
+  filter(n_siblings != -1) %&gt;%
+  group_by(YEAR, RACE, AGE_RANGE) %&gt;%
+  group_split()
+
+# Initialize the data frame to store results
+best_models_sib &lt;- data.frame(
+  Race = character(),
+  Census_Year = numeric(),
+  AGE_RANGE = character(),
+  AIC_poisson = numeric(),
+  AIC_nb = numeric(),
+  AIC_zip = numeric(),
+  AIC_zinb = numeric(),
+  stringsAsFactors = FALSE
+)
+
+# Loop through each subset of data
+for (i in seq_along(combinations2)) {
+  subset_data &lt;- combinations2[[i]]
+  
+  # Fit Poisson model
+  poisson_model &lt;- glm(n_siblings ~ 1, family = poisson, data = subset_data)
+  # Fit Negative Binomial model
+  nb_model &lt;- glm.nb(n_siblings ~ 1, data = subset_data)
+
+  # Fit Zero-Inflated Poisson model
+  zip_model &lt;- zeroinfl(n_siblings ~ 1 | 1, data = subset_data, dist = &quot;poisson&quot;,control = zeroinfl.control(maxit = 100))
+  
+  # Fit Zero-Inflated Negative Binomial model with increased max iterations
+  zinb_model &lt;- zeroinfl(n_siblings ~ 1 | 1, data = subset_data, dist = &quot;negbin&quot;,control = zeroinfl.control(maxit = 100))
+  
+  # Append the result to the best_models data frame
+  best_models_sib &lt;- rbind(
+    best_models_sib,
+    data.frame(
+      Race = unique(subset_data$RACE),
+      Census_Year = unique(subset_data$YEAR),
+      AGE_RANGE = unique(subset_data$AGE_RANGE),
+      AIC_poisson = AIC(poisson_model),
+      AIC_nb = AIC(nb_model),
+      AIC_zip = AIC(zip_model),
+      AIC_zinb = AIC(zinb_model),
+      stringsAsFactors = FALSE
+    )
+  )
+}</code></pre>
 <div id="fit-and-compare-models-1" class="section level3">
 <h3>Fit and Compare Models</h3>
 <p>For each combination, we again fit the following candidate
@@ -3408,6 +3956,7 @@ class="section level3">
 record the model with minimum AIC. The following is the table that
 summarize the best model for each combination of race, census year and
 age group.</p>
+<pre class="r"><code>kable(best_models_sib, caption=&quot;Summary Table of Best Model (Siblings)&quot;)</code></pre>
 <table>
 <caption>Summary Table of Best Model (Siblings)</caption>
 <thead>
@@ -3625,6 +4174,22 @@ A large portion of best model in children distribution for white
 population is zero-inlfated NB, while negative-binomial is the best
 model fitted for siblings distribution except for one subset(age 40-49
 in 1990).</p>
+<pre class="r"><code>ggplot(best_models_sib, aes(x = Census_Year, y = AGE_RANGE, fill = Best_Model)) +
+  geom_tile(color = &quot;white&quot;, lwd = 0.5, linetype = 1) + # Create the tiles
+  facet_wrap(~Race, nrow = 2) + # Facet by Race
+  scale_fill_manual(values = c(&quot;Poisson&quot; = &quot;#0072B2&quot;, &quot;Zero_Inflated_NB&quot; = &quot;#F0E442&quot;, &quot;Negative_Binomial&quot; = &quot;grey&quot;)) + 
+  labs(
+    title = &quot;Best Model(siblings) by Race, Census Year, and Birth Range&quot;,
+    x = &quot;Census Year&quot;,
+    y = &quot;Age Range&quot;,
+    fill = &quot;Best Model&quot;
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.title = element_text(size = 14, hjust = 0.5),
+    legend.position = &quot;bottom&quot;
+  )</code></pre>
 <p><img src="figure/relative-distribution.Rmd/unnamed-chunk-57-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-57-1">
@@ -3705,6 +4270,55 @@ the cohort changes over time.</li>
 <p>We apply the chi-square test for each cohort within each race. Since
 some cohorts only have one corresponding census year, the test is not
 applicable for them.</p>
+<pre class="r"><code>best_models_sib &lt;- best_models_sib %&gt;%
+  mutate(Cohort = mapply(calculate_cohort, Census_Year, AGE_RANGE)) %&gt;% 
+  dplyr::select(Race, Census_Year, AGE_RANGE, Best_Model, Cohort)
+
+df_merg2 &lt;- df2 %&gt;%
+  rename(Census_Year = YEAR, Race = RACE)
+
+# Perform a left join to merge the data frames
+merged_data_sib &lt;- left_join(df_merg2, best_models_sib, by = c(&quot;Race&quot;, &quot;Census_Year&quot;, &quot;AGE_RANGE&quot;))</code></pre>
+<pre class="r"><code>## divided the corhort by race
+merged_df_black2 &lt;- merged_data_sib %&gt;% filter(Race == &quot;Black/African American&quot;)
+merged_df_white2 &lt;- merged_data_sib %&gt;% filter(Race == &quot;White&quot;)</code></pre>
+<pre class="r"><code># Filter cohorts with more than one census year
+cohort_counts &lt;- merged_df_black2 %&gt;%
+  group_by(Cohort) %&gt;%
+  summarise(Unique_Census_Years = n_distinct(Census_Year)) %&gt;%
+  filter(Unique_Census_Years &gt; 1)
+
+# Get the list of cohorts for testing
+cohorts_for_test &lt;- cohort_counts$Cohort
+
+# Initialize results data frame
+results_black2 &lt;- data.frame(RACE = character(), Cohort = character(), Chi_Square = numeric(), p_value = numeric(), stringsAsFactors = FALSE)
+
+# Loop through each cohort and run the chi-square test
+for (cohort in cohorts_for_test) {
+  cohort_data &lt;- merged_df_black2 %&gt;% filter(Cohort == cohort)
+  
+  # Create contingency table
+  contingency_table &lt;- table(cohort_data$Census_Year, cohort_data$n_siblings == &quot;0&quot;)
+  
+  # Perform the chi-square test only if more than one row is in the table
+  if (nrow(contingency_table) &gt; 1) {
+    test_result &lt;- chisq.test(contingency_table)
+    
+    # Append results to the results data frame
+    results_black2 &lt;- rbind(results_black2, data.frame(
+      RACE = &quot;Black/African American&quot;,
+      Cohort = cohort,
+      Chi_Square = test_result$statistic,
+      p_value = test_result$p.value
+    ))
+  }
+}
+
+results_black2 &lt;- results_black2 %&gt;%
+  mutate(Significance = ifelse(p_value &gt; 0.05, &quot;No&quot;, &quot;Yes&quot;))
+
+kable(results_black2, caption=&quot;Test Result of Zero Inflation for Black Population&quot;)</code></pre>
 <table style="width:100%;">
 <caption>Test Result of Zero Inflation for Black Population</caption>
 <colgroup>
@@ -3763,6 +4377,43 @@ applicable for them.</p>
 <p>The table shows that only the cohort 1921-1930 has significant change
 in probability of individuals with zero siblings in black
 population.</p>
+<pre class="r"><code># Filter cohorts with more than one census year
+cohort_counts &lt;- merged_df_white2 %&gt;%
+  group_by(Cohort) %&gt;%
+  summarise(Unique_Census_Years = n_distinct(Census_Year)) %&gt;%
+  filter(Unique_Census_Years &gt; 1)
+
+# Get the list of cohorts for testing
+cohorts_for_test &lt;- cohort_counts$Cohort
+
+# Initialize results data frame
+results_white2 &lt;- data.frame(RACE = character(), Cohort = character(), Chi_Square = numeric(), p_value = numeric(), stringsAsFactors = FALSE)
+
+# Loop through each cohort and run the chi-square test
+for (cohort in cohorts_for_test) {
+  cohort_data &lt;- merged_df_white2 %&gt;% filter(Cohort == cohort)
+  
+  # Create contingency table
+  contingency_table &lt;- table(cohort_data$Census_Year, cohort_data$n_siblings == &quot;0&quot;)
+  
+  # Perform the chi-square test only if more than one row is in the table
+  if (nrow(contingency_table) &gt; 1) {
+    test_result &lt;- chisq.test(contingency_table)
+    
+    # Append results to the results data frame
+    results_white2 &lt;- rbind(results_white2, data.frame(
+      RACE = &quot;White&quot;,
+      Cohort = cohort,
+      Chi_Square = test_result$statistic,
+      p_value = test_result$p.value
+    ))
+  }
+}
+
+results_white2 &lt;- results_white2 %&gt;%
+  mutate(Significance = ifelse(p_value &gt; 0.05, &quot;No&quot;, &quot;Yes&quot;))
+
+kable(results_white2, caption=&quot;Test Result of Zero Inflation for White Population&quot;)</code></pre>
 <table>
 <caption>Test Result of Zero Inflation for White Population</caption>
 <thead>
@@ -3819,6 +4470,9 @@ white population.</p>
 <p>We apply t-test and ANOVA to check if there is a significant
 difference in the mean family size across the year for the same
 cohort.</p>
+<pre class="r"><code>sum_table_black = merged_data_sib %&gt;% filter(Race == &quot;Black/African American&quot; &amp; n_siblings!=-1)
+sum_table_white = merged_data_sib %&gt;% filter(Race == &quot;White&quot;&amp; n_siblings!=-1)</code></pre>
+<pre class="r"><code>kable(test_result_b2, caption = &quot;Test Result of Mean Family Size for Black Population&quot;)</code></pre>
 <table>
 <caption>Test Result of Mean Family Size for Black Population</caption>
 <colgroup>
@@ -3876,6 +4530,7 @@ cohort.</p>
 </table>
 <p>The table shows that mean number of siblings change significantly in
 cohorts 1901-1910 and 1921-1930 in black population.</p>
+<pre class="r"><code>kable(test_result_w2, caption = &quot;Test Result of Mean Family Size for White Population&quot;)</code></pre>
 <table>
 <caption>Test Result of Mean Family Size for White Population</caption>
 <thead>
@@ -3930,6 +4585,7 @@ cohorts 1901-1910 and 1921-1930 in black population.</p>
 <h4>c. <strong>Family Size Analysis (Variance)</strong></h4>
 <p>We apply Levene’s test to check if there is significant difference in
 the variance of family size across year for the same cohort.</p>
+<pre class="r"><code>kable(test_var_b2, caption=&quot;Test Result of Variance of Family Size for Black Population&quot;)</code></pre>
 <table>
 <caption>Test Result of Variance of Family Size for Black
 Population</caption>
@@ -3976,6 +4632,7 @@ Population</caption>
 <p>The table above summarizes the test result for black population. We
 observe that the variance of family size change significantly across
 census year in cohort 1901-1910 and 1921-1930.</p>
+<pre class="r"><code>kable(test_var_w2, caption=&quot;Test Result of Variance of Family Size for White Population&quot;)</code></pre>
 <table>
 <caption>Test Result of Variance of Family Size for White
 Population</caption>
@@ -4028,8 +4685,23 @@ across census year in cohort 1901-1910.</p>
 <p>Same as the children’s part, we use visualization instead of
 statistical test here due to the due lack of data variability. The plot
 shows that the best model for each cohort(those with 1+ corresponding
-census year) is stable over time.
-<img src="figure/relative-distribution.Rmd/unnamed-chunk-71-1.png" width="864" style="display: block; margin: auto;" /></p>
+census year) is stable over time.</p>
+<pre class="r"><code>ggplot(best_models_sib, aes(x = Census_Year, y = Cohort, fill = Best_Model)) +
+  geom_tile(color = &quot;white&quot;, lwd = 0.5, linetype = 1) + # Create the tiles
+  facet_wrap(~Race, nrow = 2) + # Facet by Race
+  scale_fill_manual(values = c(&quot;Poisson&quot; = &quot;#0072B2&quot;, &quot;Zero_Inflated_NB&quot; = &quot;#F0E442&quot;, &quot;Negative_Binomial&quot; = &quot;grey&quot;)) + 
+  labs(
+    title = &quot;Best Model(siblings) by Race, Census Year, and Cohort(Birth Range)&quot;,
+    x = &quot;Census Year&quot;,
+    y = &quot;Birth Range&quot;,
+    fill = &quot;Best Model&quot;
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 14, hjust = 0.5),
+    legend.position = &quot;bottom&quot;
+  )</code></pre>
+<p><img src="figure/relative-distribution.Rmd/unnamed-chunk-71-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-71-1">
 Past versions of unnamed-chunk-71-1.png
@@ -4086,13 +4758,14 @@ Session information
 </button>
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
-<pre><code>R version 4.3.2 (2023-10-31)
-Platform: x86_64-apple-darwin20 (64-bit)
-Running under: macOS Sonoma 14.5
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.5.0 (2025-04-11)
+Platform: aarch64-apple-darwin20
+Running under: macOS Sequoia 15.5
 
 Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+BLAS:   /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
 
 locale:
 [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -4105,29 +4778,33 @@ attached base packages:
 
 other attached packages:
  [1] ggpubr_0.6.0      rstatix_0.7.2     car_3.1-3         carData_3.0-5    
- [5] nnet_7.3-19       pscl_1.5.9        MASS_7.3-60       gridExtra_2.3    
- [9] ggnewscale_0.5.0  patchwork_1.2.0   rempsyc_0.1.8     scales_1.3.0     
-[13] knitr_1.45        viridis_0.6.5     viridisLite_0.4.2 lubridate_1.9.3  
-[17] forcats_1.0.0     stringr_1.5.1     purrr_1.0.2       readr_2.1.5      
-[21] tidyr_1.3.1       tibble_3.2.1      ggplot2_3.5.1     tidyverse_2.0.0  
+ [5] nnet_7.3-20       pscl_1.5.9        MASS_7.3-65       gridExtra_2.3    
+ [9] ggnewscale_0.5.1  patchwork_1.3.0   rempsyc_0.1.9     scales_1.4.0     
+[13] knitr_1.50        viridis_0.6.5     viridisLite_0.4.2 lubridate_1.9.4  
+[17] forcats_1.0.0     stringr_1.5.1     purrr_1.0.4       readr_2.1.5      
+[21] tidyr_1.3.1       tibble_3.3.0      ggplot2_3.5.2     tidyverse_2.0.0  
 [25] dplyr_1.1.4       workflowr_1.7.1  
 
 loaded via a namespace (and not attached):
- [1] gtable_0.3.4      xfun_0.41         bslib_0.6.1       processx_3.8.3   
- [5] callr_3.7.3       tzdb_0.4.0        vctrs_0.6.5       tools_4.3.2      
- [9] ps_1.7.6          generics_0.1.3    fansi_1.0.6       highr_0.10       
-[13] pkgconfig_2.0.3   lifecycle_1.0.4   farver_2.1.1      compiler_4.3.2   
-[17] git2r_0.33.0      munsell_0.5.0     getPass_0.2-4     httpuv_1.6.14    
-[21] htmltools_0.5.7   sass_0.4.8        yaml_2.3.8        Formula_1.2-5    
-[25] later_1.3.2       pillar_1.9.0      jquerylib_0.1.4   whisker_0.4.1    
-[29] cachem_1.0.8      abind_1.4-8       tidyselect_1.2.1  digest_0.6.34    
-[33] stringi_1.8.3     labeling_0.4.3    rprojroot_2.0.4   fastmap_1.1.1    
-[37] grid_4.3.2        colorspace_2.1-0  cli_3.6.2         magrittr_2.0.3   
-[41] utf8_1.2.4        broom_1.0.6       withr_3.0.0       backports_1.5.0  
-[45] promises_1.2.1    timechange_0.3.0  rmarkdown_2.25    httr_1.4.7       
-[49] ggsignif_0.6.4    hms_1.1.3         evaluate_0.23     rlang_1.1.3      
-[53] Rcpp_1.0.12       glue_1.7.0        rstudioapi_0.15.0 jsonlite_1.8.9   
-[57] R6_2.5.1          fs_1.6.3         </code></pre>
+ [1] gtable_0.3.6       xfun_0.52          bslib_0.9.0        processx_3.8.6    
+ [5] callr_3.7.6        tzdb_0.5.0         vctrs_0.6.5        tools_4.5.0       
+ [9] ps_1.9.1           generics_0.1.4     pkgconfig_2.0.3    RColorBrewer_1.1-3
+[13] lifecycle_1.0.4    compiler_4.5.0     farver_2.1.2       git2r_0.36.2      
+[17] getPass_0.2-4      httpuv_1.6.16      htmltools_0.5.8.1  sass_0.4.10       
+[21] yaml_2.3.10        Formula_1.2-5      later_1.4.2        pillar_1.10.2     
+[25] jquerylib_0.1.4    whisker_0.4.1      cachem_1.1.0       abind_1.4-8       
+[29] tidyselect_1.2.1   digest_0.6.37      stringi_1.8.7      labeling_0.4.3    
+[33] rprojroot_2.0.4    fastmap_1.2.0      grid_4.5.0         cli_3.6.5         
+[37] magrittr_2.0.3     utf8_1.2.5         dichromat_2.0-0.1  broom_1.0.8       
+[41] withr_3.0.2        backports_1.5.0    promises_1.3.3     timechange_0.3.0  
+[45] rmarkdown_2.29     httr_1.4.7         ggsignif_0.6.4     hms_1.1.3         
+[49] evaluate_1.0.3     rlang_1.1.6        Rcpp_1.0.14        glue_1.8.0        
+[53] rstudioapi_0.17.1  jsonlite_2.0.0     R6_2.6.1           fs_1.6.6          </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>

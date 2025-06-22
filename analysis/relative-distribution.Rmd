@@ -1,5 +1,5 @@
 ---
-title: "Estimating Differences in the Distribution of First-degree Relatives"
+title: "Population Differences in the Distribution of First-degree Relatives"
 author: "Manqing Lin, Tina Lasisi"
 date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
 output: workflowr::wflow_html
@@ -23,7 +23,7 @@ Data citation: Steven Ruggles, Sarah Flood, Matthew Sobek, Daniel Backman, Annie
 
 ```{r setup, include=FALSE, echo=TRUE, eval=TRUE}
 #knitr::opts_knit$set(root.dir = ".")
-knitr::opts_chunk$set(eval = TRUE, echo = FALSE, warning = FALSE, fig.width = 9, fig.height = 7)
+knitr::opts_chunk$set(eval = TRUE, echo = TRUE, warning = FALSE, fig.width = 9, fig.height = 7)
 
 # load necessary libraries
 library(dplyr)

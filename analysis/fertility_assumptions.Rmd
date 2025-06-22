@@ -1,0 +1,939 @@
+---
+title: "Family structure distribution fitting for genetic surveillance simulations"
+author: "Tina Lasisi"
+date: "`r Sys.Date()`"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+
+# U.S. Census Data on Population Differences in Fertility
+
+Here we extract the **mean fertility (μ)**, **dispersion/size (θ)**, and **zero‑inflation probability (π₀)** for U.S. women aged 50‑59 in the 1990 Census. Women aged 50–59 in the 1990 U.S. Census were born between 1931 and 1940. Assuming a typical childbearing age range of 25–45, their children would have been born between approximately 1956 and 1985. Therefore, the fertility distributions and relative counts estimated from this cohort primarily reflect the family-building behaviors and social contexts of the mid-1950s through the mid-1980s. We filter to Black/African American and White American groups as these are of interest to our paper.
+
+## Libraries
+
+```{r setup, message = FALSE}
+library(dplyr)
+library(tidyr)
+library(readr)
+library(MASS)     ## glm.nb
+library(pscl)     ## zeroinfl
+library(knitr)    ## kable
+
+##knitr::opts_knit$set(root.dir = ".")
+knitr::opts_chunk$set(eval = TRUE, echo = TRUE, warning = FALSE, fig.width = 9, fig.height = 7)
+```
+
+## Load the pre‑filtered IPUMS subset
+
+```{r load-data}
+path         <- file.path(".", "data")
+prop_race_year <- file.path(path, "proportions_table_by_race_year.csv")
+data_filter    <- file.path(path, "data_filtered_recoded.csv")
+
+## original script loads both; we only need mother_data for this step
+mother_data <- read_csv(data_filter, show_col_types = FALSE)
+```
+
+`mother_data` already contains:
+
+* `YEAR` – Census year (1960,1970,1980,1990)
+* `AGE` – respondent age
+* `RACE` – recoded as "White" or "Black/African American"
+* `chborn_num` – completed fertility (children ever born)
+
+## Select the 1990, age 50‑59 cohort
+
+```{r select-cohort}
+cohort <- mother_data %>%
+  filter(YEAR == 1990,
+         AGE  >= 50, AGE <= 59,
+         RACE %in% c("White", "Black/African American")) %>%
+  mutate(RACE = droplevels(factor(RACE)))
+
+cohort %>% count(RACE, name = "n_women")
+```
+
+## Fit Poisson, NB, ZIP, and ZINB per race
+
+```{r model-fitting}
+fit_four <- function(dat) {
+  ## Poisson and NB use standard glm / glm.nb
+  pois <- glm(chborn_num ~ 1, family = poisson, data = dat)
+  nb   <- glm.nb(chborn_num ~ 1, data = dat)
+  
+  ## Zero‑inflated models (pscl::zeroinfl)
+  zip  <- zeroinfl(chborn_num ~ 1 | 1, data = dat, dist = "poisson")
+  zinb <- zeroinfl(chborn_num ~ 1 | 1, data = dat, dist = "negbin")
+  
+  tibble(
+    Model = c("Poisson", "NB", "ZIP", "ZINB"),
+    mu    = c(exp(coef(pois)[1]),                    ## log‑link → exp() gives mean
+              exp(coef(nb)[1]),
+              exp(zip$coefficients$count[1]),        ## intercept of count part
+              exp(zinb$coefficients$count[1])),
+    size  = c(Inf,                                   ## dispersion θ; Inf = Poisson
+              nb$theta,
+              Inf,
+              zinb$theta),
+    pi0   = c(0,                                      ## zero‑inflation prob.
+              0,
+              plogis(zip$coefficients$zero[1]),
+              plogis(zinb$coefficients$zero[1])),
+    AIC   = c(AIC(pois), AIC(nb), AIC(zip), AIC(zinb))
+  )
+}
+
+param_tbl <- cohort %>%
+  group_by(RACE) %>%
+  group_modify(~ fit_four(.x)) %>%
+  ungroup()
+```
+
+## Results
+
+```{r results}
+knitr::kable(param_tbl, digits = 3,
+             caption = "Fertility‑model parameter estimates for women aged50‑59 (1990 Census)")
+```
+
+Table. Fertility-model parameter estimates for women aged 50–59 in the 1990 U.S. Census. Columns are: Model (distribution fitted: Poisson, Negative Binomial [NB], Zero-Inflated Poisson [ZIP], or Zero-Inflated Negative Binomial [ZINB]); μ (mean completed fertility, i.e., average number of children per woman); size (dispersion parameter, only meaningful for NB/ZINB models—set to Inf where not applicable); π₀ (probability of “excess” zeroes, i.e., extra childless women above model expectation, relevant only for ZIP/ZINB models); and AIC (Akaike Information Criterion for model comparison; lower values indicate better fit).
+
+
+```{r export}
+write_csv(param_tbl, "data/fertility_params_1990_50-59.csv")
+```
+
+For women aged 50–59 in the 1990 Census, mean completed fertility (μ) was higher in Black/African American (μ ≈ 3.9, best-fit ZINB) than in White (μ ≈ 3.1, best-fit ZIP) populations. The best-fitting model for Black women was the Zero-Inflated Negative Binomial (ZINB), reflecting both significant overdispersion (θ ≈ 4.3) and a moderate excess of childless women (π₀ ≈ 0.05). For White women, the best fit was the Zero-Inflated Poisson (ZIP), with low overdispersion (θ ≫ 1) and similar zero-inflation (π₀ ≈ 0.06); however, the ZINB model provided a nearly identical fit (ΔAIC < 2), so we use ZINB parameters for both populations in all downstream simulations for consistency and comparability. This approach ensures that our estimates reflect both mean differences and any potential overdispersion or zero inflation in the data for both groups.
+
+
+# Effect of distribution assumptions on relative counts
+
+Here we evaluate how different fertility distribution assumptions (Poisson, Negative Binomial \[NB], Zero-Inflated Poisson \[ZIP], and Zero-Inflated Negative Binomial \[ZINB]) influence estimates of genetically detectable relatives. Using model parameters (`param_tbl`) previously estimated for each race, we simulate family structures and compare the expected number of siblings, aunts/uncles, and cousins. Grandparents and parents are treated as constants. We present both variable relative counts and totals that include these constants, and provide formal statistical comparisons of distributions. In addition, we compare results to a scenario where the mean number of children is fixed at 2.5 for all distributions.
+
+## Calculating the overall mean fertility
+
+For each distribution, we calculate the overall (population-level) mean number of children per woman. For zero-inflated models (ZIP and ZINB), this is calculated as (1 – π₀) × μ, while for Poisson and NB models it is simply μ. This table summarizes the fitted values for each race and model:
+
+```{r}
+param_tbl_total <- param_tbl %>%
+  mutate(overall_mean = (1 - pi0) * mu)
+
+knitr::kable(param_tbl_total %>%
+  dplyr::select(RACE, Model, mu, pi0, overall_mean), digits = 3,
+  caption = "Overall mean fertility by model and race")
+```
+
+
+## Simulation function
+
+To estimate how family structure varies across models, we simulate pedigrees using each set of parameters. The function below draws the number of children for grandparents, parents, and aunts/uncles using the given distribution and parameters, then returns the resulting counts of siblings, aunts/uncles, and cousins for 10,000 simulated individuals per model/race.
+
+```{r}
+simulate_relatives <- function(Model, mu, size, pi0,
+                               n_sim = 10000,
+                               max_kids = 12) {
+  draw_kids <- function(n) {
+    if      (Model == "Poisson") pmin(rpois(n, mu), max_kids)
+    else if (Model == "NB")      pmin(rnbinom(n, size, mu = mu), max_kids)
+    else if (Model == "ZIP")     ifelse(runif(n) < pi0, 0L,
+                                        pmin(rpois(n, mu), max_kids))
+    else if (Model == "ZINB")    ifelse(runif(n) < pi0, 0L,
+                                        pmin(rnbinom(n, size, mu = mu), max_kids))
+    else stop("Unknown model type")
+  }
+
+  grandparent_children <- matrix(draw_kids(4 * n_sim), nrow = n_sim, ncol = 4)
+  aunts_uncles <- rowSums(pmax(grandparent_children - 1, 0))
+
+  parent_children <- matrix(draw_kids(2 * n_sim), nrow = n_sim, ncol = 2)
+  siblings <- rowSums(pmax(parent_children - 1, 0))
+
+  # FIXED: use vapply, always returns integer vector
+  cousins <- vapply(aunts_uncles, function(n)
+    if (n == 0) 0L else as.integer(sum(draw_kids(n))),
+    integer(1)
+  )
+
+  tibble::tibble(
+    Siblings    = siblings,
+    AuntsUncles = aunts_uncles,
+    Cousins     = cousins
+  )
+}
+
+```
+
+## Scenario 1: Using empirically estimated model means
+
+We first simulate relatives using the best-fit parameters for each model and race, which reflect the true underlying distribution in the data.
+
+```{r}
+library(purrr)
+n_sim <- 10000
+
+relative_counts_emp <- param_tbl %>%
+  mutate(Scenario = "Empirical mean",
+         sim = pmap(list(Model, mu, size, pi0),
+                    ~ simulate_relatives(..1, ..2, ..3, ..4, n_sim = n_sim))) %>%
+  tidyr::unnest(sim)
+```
+
+
+## Scenario 2: Using a fixed mean of 2.5 for all models
+
+To isolate the impact of model shape from differences in mean fertility, we also simulate each model with a fixed mean of 2.5 children. For ZIP and ZINB, μ is rescaled to ensure (1 – π₀) × μ = 2.5.
+
+```{r}
+param_tbl_fixed <- param_tbl %>%
+  mutate(mu = ifelse(pi0 == 0, 2.5, 2.5 / (1 - pi0)))
+
+relative_counts_fix <- param_tbl_fixed %>%
+  mutate(Scenario = "Fixed mean 2.5",
+         sim = pmap(list(Model, mu, size, pi0),
+                    ~ simulate_relatives(..1, ..2, ..3, ..4, n_sim = n_sim))) %>%
+  tidyr::unnest(sim)
+```
+
+
+## Combine both scenarios and summarize
+
+We then combine all simulated results and summarize the mean counts for each combination of scenario, model, and race.
+
+```{r}
+relative_counts_both <- bind_rows(relative_counts_emp, relative_counts_fix)
+summary_variable <- relative_counts_both %>%
+  group_by(Scenario, RACE, Model) %>%
+  summarise(across(c(Siblings, AuntsUncles, Cousins), mean), .groups = "drop")
+
+knitr::kable(summary_variable, digits = 2,
+             caption = "Expected counts of variable relatives by scenario, model, and race")
+```
+
+## Expected counts including constant relatives
+
+The table below includes the two parents and four grandparents per individual, added to the mean expected number of variable relatives.
+
+```{r}
+summary_total <- summary_variable %>%
+  mutate(
+    Parents = 2,
+    Grandparents = 4,
+    Total_1st_2nd = Parents + Grandparents + Siblings + AuntsUncles + Cousins
+  ) %>%
+  dplyr::select(Scenario, RACE, Model, Parents, Grandparents, Siblings, AuntsUncles, Cousins, Total_1st_2nd)
+
+knitr::kable(summary_total, digits = 2,
+             caption = "Expected total counts including constant parents and grandparents")
+```
+
+## Visualization: Comparing models and mean specification
+
+We visualize the full distribution of simulated relatives across models, mean scenarios, and races. Each box represents the distribution of simulated counts; means are shown as white dots.
+
+```{r}
+library(ggplot2)
+
+rel_long_all <- relative_counts_both %>%
+  tidyr::pivot_longer(c(Siblings, AuntsUncles, Cousins),
+                      names_to = "Relative",
+                      values_to = "Count") %>%
+  mutate(
+    Model      = factor(Model, levels = c("Poisson", "ZIP", "NB", "ZINB")),
+    Relative   = factor(Relative, levels = c("Siblings","AuntsUncles","Cousins")),
+    Scenario   = factor(Scenario, levels = c("Empirical mean","Fixed mean 2.5")),
+    RACE       = factor(RACE,    levels = c("Black/African American","White"))
+  )
+
+ggplot(rel_long_all,
+       aes(x = Model, y = Count, fill = Relative)) +
+  geom_boxplot(position = position_dodge(width = 0.8),
+               width = 0.7, alpha = .8, outlier.size = .3) +
+  stat_summary(fun = mean, geom = "point", shape = 21, size = 1.4,
+               aes(group = Relative),
+               position = position_dodge(width = 0.8),
+               colour = "black", fill = "white") +
+  facet_grid(Scenario ~ RACE) +
+  scale_fill_viridis_d(option = "D") +
+  labs(title   = "Distribution of simulated relatives by model, mean assumption and race",
+       x       = "Fertility model",
+       y       = "Relative count",
+       fill    = "Relative type") +
+  theme_minimal(base_size = 11) +
+  theme(legend.position = "top",
+        axis.title.x    = element_text(vjust = -0.2),
+        strip.text      = element_text(size = 10))
+
+```
+
+## Statistical modeling: Effects of model, scenario, and their interaction
+
+We formally test the contribution of model choice, mean specification, and race on the simulated number of relatives, using three-way ANOVA for each relative type. We also generate a compact-letter display (CLD) to indicate which groups are or are not statistically different after correction for multiple comparisons. In the summary plot, each box is labeled with its CLD group letter: boxes sharing a letter are not significantly different at the 0.05 level (Bonferroni-adjusted).
+
+
+```{r, results='asis'}
+library(broom)
+library(knitr)
+
+relatives <- c("Siblings", "AuntsUncles", "Cousins")
+
+for (rel in relatives) {
+  cat("\n\n### Model for", rel, "\n\n")
+  
+  analysis_data <- rel_long_all %>%
+    mutate(
+      RACE = factor(RACE, levels = c("White", "Black/African American")),
+      Model = factor(Model, levels = c("Poisson", "ZIP", "NB", "ZINB")),
+      Scenario = factor(Scenario, levels = c("Fixed mean 2.5", "Empirical mean")),
+      Relative = factor(Relative, levels = c("Siblings", "AuntsUncles", "Cousins"))
+    ) %>%
+    filter(Relative == rel)
+  
+  lm_fit <- lm(Count ~ RACE * Model * Scenario, data = analysis_data)
+  lm_tidy <- broom::tidy(lm_fit, conf.int = TRUE)
+  
+  print(knitr::kable(
+    lm_tidy,
+    digits = 3,
+    caption = paste("Regression coefficients for", rel, 
+                    "(reference: White, Poisson, Fixed mean 2.5)")
+  ))
+}
+
+```
+
+
+```{r}
+library(dplyr)
+library(broom)
+library(tidyr)
+library(purrr)
+
+relatives <- c("Siblings", "AuntsUncles", "Cousins")
+models <- c("Poisson", "ZIP", "NB", "ZINB")
+
+anova_per_model <- purrr::cross_df(list(Relative = relatives, Model = models)) %>%
+  rowwise() %>%
+  mutate(
+    anova = list({
+      data_fixed <- rel_long_all %>%
+        filter(Relative == Relative, Scenario == "Fixed mean 2.5", Model == Model) %>%
+        mutate(RACE = factor(RACE, levels = c("White", "Black/African American")))
+      if(nrow(data_fixed) < 2) return(tibble(Df = NA, F_value = NA, p_value = NA))
+      lm0 <- lm(Count ~ 1, data = data_fixed)
+      lm1 <- lm(Count ~ RACE, data = data_fixed)
+      atab <- as.data.frame(anova(lm0, lm1))
+      tibble(Df = atab$Df[2], F_value = atab$`F value`[2], p_value = atab$`Pr(>F)`[2])
+    })
+  ) %>%
+  unnest(anova)
+
+knitr::kable(anova_per_model, digits = 4, caption = "Test of Race effect within each model (Fixed mean = 2.5 only)")
+
+```
+
+## Summary
+
+When mean fertility is held constant at 2.5 children for both populations, the expected number of siblings, aunts/uncles, and cousins is virtually identical for Black and White groups, regardless of model choice (Poisson, NB, ZIP, or ZINB). Although our fitted NB/ZINB/ZIP models allow for group-specific overdispersion and zero-inflation, these parameters had negligible practical effect on expected kin counts for the distributions observed in US Census data. We conclude that, in practice, mean fertility is the primary driver of group differences in simulated kinship structure for recent cohorts.
+
+# Individual-Level Sibling Distribution and Kinship Risk
+
+We now assess close-kin counts (siblings, aunts/uncles, cousins) directly from the perspective of the focal individual, fitting and simulating the *distribution of siblings* per person, and comparing the effect of distributional assumptions (Poisson, NB, ZIP, ZINB) and race, as before.
+
+
+## Fit models to individual-level sibling counts
+
+```{r fit-sibling-models}
+# Prepare individual-level sibling count
+sibs_long <- cohort %>%
+  filter(chborn_num > 0) %>%
+  tidyr::uncount(chborn_num, .remove = FALSE) %>%
+  mutate(n_sib = chborn_num - 1)
+
+fit_sib_models <- function(dat) {
+  pois <- glm(n_sib ~ 1, family = poisson, data = dat)
+  nb   <- glm.nb(n_sib ~ 1, data = dat)
+  zip  <- zeroinfl(n_sib ~ 1 | 1, data = dat, dist = "poisson")
+  zinb <- zeroinfl(n_sib ~ 1 | 1, data = dat, dist = "negbin")
+  tibble(
+    Model = c("Poisson", "NB", "ZIP", "ZINB"),
+    mu    = c(exp(coef(pois)[1]),
+              exp(coef(nb)[1]),
+              exp(zip$coefficients$count[1]),
+              exp(zinb$coefficients$count[1])),
+    size  = c(Inf, nb$theta, Inf, zinb$theta),
+    pi0   = c(0, 0, plogis(zip$coefficients$zero[1]), plogis(zinb$coefficients$zero[1])),
+    AIC   = c(AIC(pois), AIC(nb), AIC(zip), AIC(zinb))
+  )
+}
+sib_param_tbl <- sibs_long %>%
+  group_by(RACE) %>%
+  group_modify(~ fit_sib_models(.x)) %>%
+  ungroup()
+knitr::kable(sib_param_tbl, digits = 3, caption = "Model fits for sibling count distribution by race")
+```
+
+Table. For individual-level sibling counts, the negative binomial (NB) model provides the best fit for both populations, with substantially lower AIC than the Poisson, ZIP, or ZINB models. This indicates that sibship size is more variable than would be expected under a simple Poisson process, consistent with substantial overdispersion in family sizes, but there is little evidence for zero-inflation (excess of only children).
+
+Because individuals from large families are more common in an individual-level sample, the average number of siblings per person is higher than the mean family size minus one (the “sibship size paradox”). This effect is important to account for in forensic or genetic risk models that simulate from the perspective of a random individual.
+
+
+## Simulate kin counts for the focal individual
+
+We estimate the expected number and full probability distributions of close genetic relatives (siblings, aunts/uncles, and cousins) for a focal individual. This is done across all fitted models (Poisson, NB, ZIP, ZINB), for both Black/African American and White groups, using both empirical mean and fixed mean scenarios. We then compare these focal-individual predictions to a hybrid “best-fit” model and a Poisson-fertility baseline.
+
+
+```{r simulate-focal-kin}
+simulate_focal_kin <- function(
+  sib_Model, sib_mu, sib_size, sib_pi0,      # Sibling distribution params
+  fert_Model, fert_mu, fert_size, fert_pi0,  # Fertility distribution params
+  n_sim = 10000, max_sib = 12, max_kids = 12
+) {
+  # Helper: draw siblings under a distribution (always return integer)
+  draw_sibs <- function(nn) {
+    out <- if      (sib_Model == "Poisson") rpois(nn, sib_mu)
+           else if (sib_Model == "NB")      rnbinom(nn, sib_size, mu = sib_mu)
+           else if (sib_Model == "ZIP")     ifelse(runif(nn) < sib_pi0, 0L, rpois(nn, sib_mu))
+           else if (sib_Model == "ZINB")    ifelse(runif(nn) < sib_pi0, 0L, rnbinom(nn, sib_size, mu = sib_mu))
+           else stop("Unknown sib_model")
+    as.integer(pmin(out, max_sib))
+  }
+  draw_fert <- function(nn) {
+    out <- if      (fert_Model == "Poisson") rpois(nn, fert_mu)
+           else if (fert_Model == "NB")      rnbinom(nn, fert_size, mu = fert_mu)
+           else if (fert_Model == "ZIP")     ifelse(runif(nn) < fert_pi0, 0L, rpois(nn, fert_mu))
+           else if (fert_Model == "ZINB")    ifelse(runif(nn) < fert_pi0, 0L, rnbinom(nn, fert_size, mu = fert_mu))
+           else stop("Unknown fert_model")
+    as.integer(pmin(out, max_kids))
+  }
+
+  # 1. Siblings for the focal individual
+  siblings <- draw_sibs(n_sim)
+
+  # 2. Aunts & uncles (no subtraction needed)
+  aunts_maternal <- draw_sibs(n_sim)   # mother’s siblings
+  aunts_paternal <- draw_sibs(n_sim)   # father’s siblings
+  aunts_uncles   <- aunts_maternal + aunts_paternal
+
+
+  # 3. Cousins: for each aunt/uncle, simulate their fertility and sum
+  cousins <- purrr::map_int(aunts_uncles, function(n_au) {
+    if (n_au == 0L) 0L else as.integer(sum(draw_fert(n_au)))
+  })
+
+  tibble::tibble(
+    Siblings    = siblings,
+    AuntsUncles = aunts_uncles,
+    Cousins     = cousins,
+    Parents     = 2L,
+    Grandparents= 4L,
+    TotalKin = siblings + aunts_uncles + cousins + 2 + 4
+  )
+}
+
+
+```
+
+### Prepare Parameter Tables
+
+```{r}
+# Sibling (focal individual) parameter tables: empirical and fixed mean scenarios
+sib_param_tbl_exp <- sib_param_tbl %>%
+  rename(sib_Model = Model, sib_mu = mu, sib_size = size, sib_pi0 = pi0, sib_AIC = AIC)
+
+sib_param_tbl_fixed <- sib_param_tbl %>%
+  mutate(sib_mu = ifelse(pi0 == 0, 1.5, 1.5 / (1 - pi0))) %>%
+  rename(sib_Model = Model, sib_size = size, sib_pi0 = pi0, sib_AIC = AIC)
+
+# Fertility (collateral relatives) parameter tables: empirical and fixed mean scenarios
+fert_param_tbl_exp <- param_tbl %>%
+  rename(fert_Model = Model, fert_mu = mu, fert_size = size, fert_pi0 = pi0, fert_AIC = AIC)
+
+fert_param_tbl_fixed <- param_tbl %>%
+  mutate(fert_mu = ifelse(pi0 == 0, 2.5, 2.5 / (1 - pi0))) %>%
+  rename(fert_Model = Model, fert_size = size, fert_pi0 = pi0, fert_AIC = AIC)
+```
+
+### Create Parameter Pairings and Run Simulations
+
+```{r}
+# Parameter pairings for each scenario (all RACE x Model combinations)
+param_pairs_emp <- expand_grid(
+  RACE = unique(sib_param_tbl_exp$RACE),
+  Model = unique(sib_param_tbl_exp$sib_Model)
+) %>%
+  left_join(sib_param_tbl_exp, by = c("RACE", "Model" = "sib_Model")) %>%
+  left_join(fert_param_tbl_exp, by = c("RACE", "Model" = "fert_Model"))
+
+param_pairs_fixed <- expand_grid(
+  RACE = unique(sib_param_tbl_fixed$RACE),
+  Model = unique(sib_param_tbl_fixed$sib_Model)
+) %>%
+  left_join(sib_param_tbl_fixed, by = c("RACE", "Model" = "sib_Model")) %>%
+  left_join(fert_param_tbl_fixed, by = c("RACE", "Model" = "fert_Model"))
+
+# Simulate kin counts for all parameter combinations (empirical and fixed mean)
+focal_kin_sim_results_emp <- param_pairs_emp %>%
+  mutate(
+    sim = pmap(
+      list(Model, sib_mu, sib_size, sib_pi0, fert_mu, fert_size, fert_pi0),
+      ~ simulate_focal_kin(
+        sib_Model = ..1, sib_mu = ..2, sib_size = ..3, sib_pi0 = ..4,
+        fert_Model = ..1, fert_mu = ..5, fert_size = ..6, fert_pi0 = ..7,
+        n_sim = 10000
+      )
+    )
+  )
+
+focal_kin_sim_results_fixed <- param_pairs_fixed %>%
+  mutate(
+    sim = pmap(
+      list(Model, sib_mu, sib_size, sib_pi0, fert_mu, fert_size, fert_pi0),
+      ~ simulate_focal_kin(
+        sib_Model = ..1, sib_mu = ..2, sib_size = ..3, sib_pi0 = ..4,
+        fert_Model = ..1, fert_mu = ..5, fert_size = ..6, fert_pi0 = ..7,
+        n_sim = 10000
+      )
+    )
+  )
+```
+
+### Tidy Results and Label Scenarios
+
+```{r}
+# Unnest and label scenario
+focal_kin_counts_emp   <- focal_kin_sim_results_emp   %>% mutate(Scenario = "Empirical mean") %>% unnest(sim)
+focal_kin_counts_fixed <- focal_kin_sim_results_fixed %>% mutate(Scenario = "Fixed mean")    %>% unnest(sim)
+
+# Combine for downstream comparison
+focal_kin_counts_all <- bind_rows(focal_kin_counts_emp, focal_kin_counts_fixed)
+```
+
+### Summarize Mean Kin Counts
+
+```{r}
+summary_focal_kin_all <- focal_kin_counts_all %>%
+  group_by(Scenario, RACE, Model) %>%
+  summarise(
+    mean_sibs         = mean(Siblings),
+    mean_aunts_uncles = mean(AuntsUncles),
+    mean_cousins      = mean(Cousins),
+    mean_total        = mean(TotalKin),
+    .groups = "drop"
+  )
+
+knitr::kable(summary_focal_kin_all, digits = 2,
+             caption = "Expected number of first-, second-, and third-degree relatives for a focal individual (simulated, by model, scenario, and race)")
+
+```
+
+### Visualize the Simulated Distributions
+
+```{r}
+# Pivot for plotting
+focal_kin_long <- focal_kin_counts_all %>%
+  pivot_longer(c(Siblings, AuntsUncles, Cousins),
+               names_to = "RelativeType", values_to = "Count") %>%
+  mutate(
+    Model = factor(Model, levels = c("Poisson", "NB", "ZIP", "ZINB")),
+    RelativeType = factor(RelativeType, levels = c("Siblings", "AuntsUncles", "Cousins")),
+    RACE = factor(RACE, levels = c("Black/African American", "White"))
+  )
+
+# Plot
+library(ggplot2)
+ggplot(focal_kin_long,
+       aes(x = Model, y = Count, fill = RelativeType)) +
+  geom_boxplot(position = position_dodge(width = 0.8),
+               width = 0.7, alpha = .8, outlier.size = .3) +
+  stat_summary(fun = mean, geom = "point", shape = 21, size = 1.4,
+               aes(group = RelativeType),
+               position = position_dodge(width = 0.8),
+               colour = "black", fill = "white") +
+  facet_grid(Scenario ~ RACE) +
+  scale_fill_viridis_d(option = "D") +
+  labs(title   = "Simulated number of close relatives for a focal individual",
+       x       = "Sibling-count model",
+       y       = "Relative count",
+       fill    = "Relative type") +
+  theme_minimal(base_size = 11) +
+  theme(legend.position = "top")
+
+```
+
+### Regression Models Comparing Scenarios, Models, and Groups
+
+
+```{r, results='asis'}
+library(broom)
+library(knitr)
+
+relatives <- c("Siblings", "AuntsUncles", "Cousins")
+
+for (rel in relatives) {
+  cat("\n\n### Focal-individual model for", rel, "\n\n")
+  analysis_data <- focal_kin_long %>%
+    filter(RelativeType == rel) %>%
+    mutate(
+      RACE     = factor(RACE, levels = c("White", "Black/African American")),   # White as reference
+      Model    = factor(Model, levels = c("Poisson", "NB", "ZIP", "ZINB")),    # Poisson as reference
+      Scenario = factor(Scenario, levels = c("Fixed mean", "Empirical mean"))   # Fixed mean as reference
+    )
+  lm_fit <- lm(Count ~ RACE * Model * Scenario, data = analysis_data)
+  lm_tidy <- broom::tidy(lm_fit, conf.int = TRUE)
+  print(knitr::kable(
+    lm_tidy,
+    digits = 3,
+    caption = paste(
+      "Regression coefficients for", rel, 
+      "(focal-individual, reference: White, Poisson, Fixed mean\nSib mean=1.5, Fertility mean=2.5)"
+    )
+  ))
+}
+
+
+```
+Note: The reference group for all regressions is White, Poisson, Fixed mean (sibling mean = 1.5, fertility mean = 2.5). All coefficients are interpreted relative to this group.
+
+#### Hybrid Best-Fit Model and Poisson Fertility Baseline
+
+```{r}
+# 1. Best sibling model per race (individual-level sibs)
+sib_best <- sib_param_tbl %>%
+  group_by(RACE) %>% slice_min(AIC, n = 1) %>% ungroup()
+
+# 2. Force ZINB for fertility model in both races (mother-level fertility)
+fert_zinb <- param_tbl %>%
+  filter(Model == "ZINB") %>%
+  rename(
+    fert_Model = Model, fert_mu = mu,
+    fert_size  = size, fert_pi0 = pi0,
+    fert_AIC   = AIC
+  ) %>%
+  # Now select using the NEW (renamed) column names
+  dplyr::select(RACE, fert_Model, fert_mu, fert_size, fert_pi0, fert_AIC)
+
+
+# 3. Rename sibling columns and join to form hybrid parameter table
+sib_best_renamed <- sib_best %>%
+  rename(
+    sib_Model = Model, sib_mu = mu,
+    sib_size  = size,  sib_pi0 = pi0,
+    sib_AIC   = AIC
+  )
+
+hybrid_param_zinb <- sib_best_renamed %>%
+  left_join(fert_zinb, by = "RACE")
+
+knitr::kable(
+  hybrid_param_zinb,
+  digits = 3,
+  caption = "Hybrid best-fit parameter table for focal-individual kin simulation (ZINB fertility for both groups)"
+)
+
+```
+
+
+```{r}
+# 1. Fixed Poisson baseline: siblings = 1.5, fertility = 2.5, all else ignored
+fixed_poisson_param <- tibble(
+  RACE = unique(hybrid_param_zinb$RACE),
+  sib_Model = "Poisson",
+  sib_mu    = 1.5,
+  sib_size  = Inf,
+  sib_pi0   = 0,
+  fert_Model = "Poisson",
+  fert_mu    = 2.5,
+  fert_size  = Inf,
+  fert_pi0   = 0
+)
+
+# 2. Simulate
+set.seed(1)
+hybrid_sim <- hybrid_param_zinb %>%
+  mutate(
+    Scenario = "Hybrid best-fit (ZINB fert)",  # Add BEFORE sim
+    sim = pmap(
+      list(sib_Model, sib_mu, sib_size, sib_pi0,
+           fert_Model, fert_mu, fert_size, fert_pi0),
+      ~ simulate_focal_kin(..1, ..2, ..3, ..4,
+                           ..5, ..6, ..7, ..8,
+                           n_sim = 10000)
+    )
+  ) %>%
+  unnest(sim)
+
+fixed_poisson_sim <- fixed_poisson_param %>%
+  mutate(
+    Scenario = "Fixed Poisson (1.5/2.5)",  # Add BEFORE sim
+    sim = pmap(
+      list(sib_Model, sib_mu, sib_size, sib_pi0,
+           fert_Model, fert_mu, fert_size, fert_pi0),
+      ~ simulate_focal_kin(..1, ..2, ..3, ..4,
+                           ..5, ..6, ..7, ..8,
+                           n_sim = 10000)
+    )
+  ) %>%
+  unnest(sim)
+
+# 3. Summarize & compare (don't create comparison_long here)
+compare_means <- bind_rows(hybrid_sim, fixed_poisson_sim) %>%
+  group_by(Scenario, RACE) %>%
+  summarise(across(c(Siblings, AuntsUncles, Cousins, TotalKin), mean),
+            .groups = "drop") %>%
+  arrange(RACE, Scenario)
+
+knitr::kable(compare_means, digits = 2,
+  caption = "Mean close-kin counts: hybrid best-fit (ZINB fertility both groups) vs. fixed Poisson baseline (siblings=1.5, fertility=2.5)"
+)
+
+```
+
+### Probability Mass Functions (PMFs) for Siblings, Aunts/Uncles, and Cousins
+
+```{r}
+# Function to get PMF for a variable, scenario, and race
+get_pmf <- function(df, var) {
+  df %>%
+    count(RACE, !!sym(var), name = "n") %>%
+    group_by(RACE) %>%
+    mutate(p = n / sum(n)) %>%
+    ungroup()
+}
+
+# Hybrid scenario
+sib_pmf_hybrid   <- get_pmf(hybrid_sim,   "Siblings")
+aunts_pmf_hybrid <- get_pmf(hybrid_sim,   "AuntsUncles")
+cousins_pmf_hybrid <- get_pmf(hybrid_sim, "Cousins")
+
+# Fixed Poisson baseline
+sib_pmf_pois   <- get_pmf(fixed_poisson_sim,   "Siblings")
+aunts_pmf_pois <- get_pmf(fixed_poisson_sim,   "AuntsUncles")
+cousins_pmf_pois <- get_pmf(fixed_poisson_sim, "Cousins")
+
+# Write to CSV (useful for supplement)
+write.csv(sib_pmf_hybrid,    "data/output_pmf_sibling_hybrid.csv",     row.names = FALSE)
+write.csv(aunts_pmf_hybrid,  "data/output_pmf_avuncular_hybrid.csv",   row.names = FALSE)
+write.csv(cousins_pmf_hybrid,"data/output_pmf_cousins_hybrid.csv",     row.names = FALSE)
+write.csv(sib_pmf_pois,      "data/output_pmf_sibling_poisson.csv",    row.names = FALSE)
+write.csv(aunts_pmf_pois,    "data/output_pmf_avuncular_poisson.csv",  row.names = FALSE)
+write.csv(cousins_pmf_pois,  "data/output_pmf_cousins_poisson.csv",    row.names = FALSE)
+
+
+```
+
+```{r}
+
+print_pmf_table <- function(pmf, category, scenario, n = 12) {
+  pmf %>%
+    group_by(RACE) %>%
+    slice_head(n = n) %>%
+    ungroup() %>%
+    knitr::kable(
+      digits = 4,
+      caption = paste0("First ", n, " rows of PMF for ", category, " (", scenario, ")")
+    )
+}
+
+print_pmf_table(sib_pmf_hybrid,   "Siblings", "Hybrid best-fit")
+print_pmf_table(sib_pmf_pois,     "Siblings", "Fixed Poisson (1.5/2.5)")
+print_pmf_table(aunts_pmf_hybrid, "Aunts/Uncles", "Hybrid best-fit")
+print_pmf_table(aunts_pmf_pois,   "Aunts/Uncles", "Fixed Poisson (1.5/2.5)")
+print_pmf_table(cousins_pmf_hybrid, "Cousins", "Hybrid best-fit")
+print_pmf_table(cousins_pmf_pois,   "Cousins", "Fixed Poisson (1.5/2.5)")
+
+
+```
+
+
+#### Plotting PMFs for Siblings, Aunts/Uncles, and Cousins
+```{r}
+library(ggplot2)
+library(viridisLite)
+
+plot_pmf_mirror <- function(pmf_df, count_var = "Siblings", category_label = "Siblings", cap = NULL) {
+  cats <- sort(unique(pmf_df[[count_var]]))
+  if (!is.null(cap)) {
+    pmf_df[[count_var]] <- ifelse(pmf_df[[count_var]] > cap, cap, pmf_df[[count_var]])
+    cats <- sort(unique(pmf_df[[count_var]]))
+  }
+  n_cat <- length(cats)
+  color_palette <- viridis(n_cat, option = "D")
+  df <- pmf_df %>%
+    mutate(y = ifelse(RACE == "White", -p, p),
+           count_cat = factor(!!rlang::sym(count_var), levels = cats))
+  ggplot(df, aes(x = count_cat, y = y, fill = count_cat, alpha = RACE)) +
+    geom_col() +
+    geom_hline(yintercept = 0, color = "black", size = 0.5) +
+    coord_flip() +
+    scale_y_continuous(labels = function(x) abs(x)) +
+    scale_fill_manual(values = color_palette, name = paste(category_label, "Count")) +
+    scale_alpha_manual(values = c("White" = 0.7, "Black/African American" = 1), guide = "none") +
+    labs(
+      title = paste0("Mirrored PMF of ", category_label, " Counts (Simulated, Hybrid Best-fit)"),
+      x = paste("Number of", category_label),
+      y = "Probability",
+      caption = "White (left, negative y), Black/African American (right, positive y)."
+    ) +
+    theme_minimal(base_size = 13) +
+    theme(
+      plot.title = element_text(size = 14, hjust = 0.5),
+      axis.text.y = element_text(size = 10),
+      legend.position = "right",
+      panel.grid.major.y = element_blank(),
+      panel.grid.minor.y = element_blank()
+    )
+}
+
+
+```
+
+```{r}
+plot_pmf_mirror(sib_pmf_hybrid, count_var = "Siblings", category_label = "Siblings", cap = 12)
+plot_pmf_mirror(aunts_pmf_hybrid, count_var = "AuntsUncles", category_label = "Aunts/Uncles", cap = 32)
+plot_pmf_mirror(cousins_pmf_hybrid, count_var = "Cousins", category_label = "Cousins", cap = 80)
+
+
+```
+
+```{r}
+# Combine hybrid and Poisson baseline sims
+compare_means <- bind_rows(hybrid_sim, fixed_poisson_sim) %>%
+  group_by(Scenario, RACE) %>%
+  summarise(
+    mean_sibs = mean(Siblings),
+    mean_aunts_uncles = mean(AuntsUncles),
+    mean_cousins = mean(Cousins),
+    mean_total = mean(TotalKin),
+    .groups = "drop"
+  )
+
+knitr::kable(compare_means, digits = 2,
+  caption = "Mean close-kin counts: hybrid best-fit vs. fixed Poisson baseline (siblings=1.5, fertility=2.5)"
+)
+
+```
+
+```{r}
+summarize_kin <- function(df) {
+  df %>%
+    tidyr::pivot_longer(
+      c(Siblings, AuntsUncles, Cousins, TotalKin),
+      names_to = "Relative",
+      values_to = "Count"
+    ) %>%
+    group_by(RACE, Relative) %>%
+    summarise(
+      min    = min(Count),
+      q1     = quantile(Count, 0.25),
+      mean   = mean(Count),
+      median = median(Count),
+      q3     = quantile(Count, 0.75),
+      max    = max(Count),
+      .groups = "drop"
+    )
+}
+
+```
+
+```{r}
+hybrid_summary <- summarize_kin(hybrid_sim) %>%
+  rename_with(~ paste0("hybrid_", .), c("min","q1","mean","median","q3","max"))
+
+poisson_summary <- summarize_kin(fixed_poisson_sim) %>%
+  rename_with(~ paste0("poisson_", .), c("min","q1","mean","median","q3","max"))
+
+```
+
+```{r}
+library(dplyr)
+
+side_by_side <- hybrid_summary %>%
+  left_join(poisson_summary, by = c("RACE", "Relative"))
+
+knitr::kable(
+  side_by_side,
+  digits = 2,
+  caption = "Summary statistics for simulated kin counts: Hybrid (NB/ZINB) vs. Fixed Poisson baseline"
+)
+
+```
+
+
+```{r}
+library(ggplot2)
+
+# Create comparison_long for plotting (check if Scenario exists first)
+comparison_long <- bind_rows(hybrid_sim, fixed_poisson_sim) %>%
+  tidyr::pivot_longer(
+    cols = c(Siblings, AuntsUncles, Cousins, TotalKin),
+    names_to = "RelativeType",
+    values_to = "Count"
+  ) %>%
+  mutate(
+    Scenario = factor(Scenario, levels = c("Fixed Poisson (1.5/2.5)", "Hybrid best-fit (ZINB fert)")),
+    RelativeType = factor(RelativeType, levels = c("Siblings", "AuntsUncles", "Cousins", "TotalKin"),
+                         labels = c("Siblings", "Aunts/Uncles", "Cousins", "Total Kin"))
+  )
+
+# Function to plot each relative type separately (with free y-axis)
+plot_kin_box <- function(rel_type) {
+  ggplot(comparison_long %>% filter(RelativeType == rel_type),
+         aes(x = Scenario, y = Count, fill = RACE)) +
+    geom_boxplot(outlier.size = .3, width = 0.7, alpha = 0.8, position = position_dodge(width = 0.7)) +
+    stat_summary(
+      fun = mean, geom = "point", shape = 21, size = 1.7,
+      aes(group = RACE), color = "black", fill = "white",
+      position = position_dodge(width = 0.7)
+    ) +
+    scale_fill_viridis_d(option = "D") +
+    labs(
+      title = paste("Distribution of", rel_type),
+      x = "Simulation scenario",
+      y = "Count",
+      fill = "Race"
+    ) +
+    theme_minimal(base_size = 13) +
+    theme(
+      legend.position = "top",
+      panel.grid.major.x = element_blank(),
+      strip.text = element_text(size = 12),
+      axis.text.x = element_text(angle = 15, vjust = 1, hjust = 1)
+    )
+}
+
+# Now, print all four plots (one for each relative type)
+plot_kin_box("Siblings")
+plot_kin_box("Aunts/Uncles")
+plot_kin_box("Cousins")
+plot_kin_box("Total Kin")
+
+```
+
+
+```{r}
+# Make sure Scenario is present and named correctly
+names(hybrid_sim)
+names(fixed_poisson_sim)
+
+# Filter for just TotalKin before running the regression
+comparison_total <- bind_rows(
+  hybrid_sim %>% mutate(Scenario = "Hybrid best-fit (ZINB fert)"),
+  fixed_poisson_sim %>% mutate(Scenario = "Fixed Poisson (1.5/2.5)")
+) %>%
+  mutate(
+    Scenario = factor(Scenario, levels = c("Fixed Poisson (1.5/2.5)", "Hybrid best-fit (ZINB fert)")),
+    RACE = factor(RACE, levels = c("White", "Black/African American"))
+  )
+
+# Now run the regression on TotalKin
+lm_hybrid_vs_pois <- lm(TotalKin ~ Scenario * RACE, data = comparison_total)
+summary(lm_hybrid_vs_pois)
+knitr::kable(broom::tidy(lm_hybrid_vs_pois), digits = 3,
+             caption = "Regression coefficients: effect of simulation scenario (Hybrid vs Poisson) on total close relatives")
+
+```
+
+

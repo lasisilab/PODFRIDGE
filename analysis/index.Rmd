@@ -31,6 +31,8 @@ And our [Estimation of Forensic Database Representation](racial_proportion.html)
 ### Family Structure
 We analyze 4 Census years in which mothers report the total number of children born to them to estimate population variation in family size. The results are found in [Family Size Variation](relative-distribution.html).
 
+We ask whether the difference in fertility assumptions significantly impacts relative counts in the [Fertility Assumptions](fertility_assumptions.html) and provide a [Family Size Simulator](family_size_findability.html) that can be used to simulate family sizes based on the distribution of family sizes in the US Census data.
+
 ### STR Likelihood Ratio Effects 
 We visualize previously reported [CODIS STR Allele Frequencies](CODIS-STR-freqs.html) and provide a [Likelihood Ratio Calculation](lr.html) deriving the match probability equation used in forensic genetics. Our [Simulation Framework for STR loci](STR-simulation.html) is also available and our [Likelihood Ration Distributions](lr_dist.html) are also shared.
 

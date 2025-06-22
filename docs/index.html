@@ -283,7 +283,7 @@ $(document).ready(function () {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+workflowr <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -294,8 +294,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> </a>
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -304,13 +304,13 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-02-08
+<strong>Last updated:</strong> 2025-06-18
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 1
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 1
+aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>PODFRIDGE/</code> <span
@@ -333,36 +333,33 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
-<span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
-changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges"
+<div id="strongRMarkdownfilestronguptodate"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes. To know which version of
-the R Markdown file created these results, you’ll want to first commit
-it to the Git repo. If you’re still working on the analysis, you can
-ignore this warning. When you’re finished, you can run
-<code>wflow_publish</code> to commit the R Markdown file and build the
-HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree669998c3574753cb3e9d68c015179304b80a9bbbtargetblank669998ca">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreeb9c32a9e1ff2fd64c72ab1f22c7d1feef5565ae7targetblankb9c32a9a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/669998c3574753cb3e9d68c015179304b80a9bbb" target="_blank">669998c</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/b9c32a9e1ff2fd64c72ab1f22c7d1feef5565ae7" target="_blank">b9c32a9</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree669998c3574753cb3e9d68c015179304b80a9bbbtargetblank669998ca"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreeb9c32a9e1ff2fd64c72ab1f22c7d1feef5565ae7targetblankb9c32a9a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -372,7 +369,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/669998c3574753cb3e9d68c015179304b80a9bbb" target="_blank">669998c</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/b9c32a9e1ff2fd64c72ab1f22c7d1feef5565ae7" target="_blank">b9c32a9</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -396,17 +393,6 @@ Ignored files:
     Ignored:    output/simulation_20240726-155743/.DS_Store
     Ignored:    output/simulation_20240726-162034_11228488/.DS_Store
     Ignored:    output/simulation_20240726-163235_11228791/.DS_Store
-
-Unstaged changes:
-    Modified:   PODFRIDGE.Rproj
-    Modified:   analysis/STR-simulation.Rmd
-    Modified:   analysis/index.Rmd
-    Modified:   data/processed_genotypes.csv
-    Modified:   data/summary_genotypes.csv
-    Modified:   output/aggregated_llr_results_by_population.csv
-    Modified:   output/line_chart_lr.png
-    Modified:   output/log_lr_panel_plot.png
-    Modified:   output/proportions_exceeding_cutoffs_combined.png
 
 </code></pre>
 <p>
@@ -450,6 +436,57 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/b9c32a9e1ff2fd64c72ab1f22c7d1feef5565ae7/analysis/index.Rmd" target="_blank">b9c32a9</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2025-06-18
+</td>
+<td>
+Created fertility assumptions supplementary doc
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/27696688b8041f9cd00328f3b640f4e3461d24a0/analysis/index.Rmd" target="_blank">2769668</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2025-02-08
+</td>
+<td>
+Update to home page and sim page
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/27696688b8041f9cd00328f3b640f4e3461d24a0/docs/index.html" target="_blank">2769668</a>
+</td>
+<td>
+Tina Lasisi
+</td>
+<td>
+2025-02-08
+</td>
+<td>
+Update to home page and sim page
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1116,6 +1153,12 @@ Database Representation</a>.</p>
 children born to them to estimate population variation in family size.
 The results are found in <a href="relative-distribution.html">Family
 Size Variation</a>.</p>
+<p>We ask whether the difference in fertility assumptions significantly
+impacts relative counts in the <a
+href="fertility_assumptions.html">Fertility Assumptions</a> and provide
+a <a href="family_size_findability.html">Family Size Simulator</a> that
+can be used to simulate family sizes based on the distribution of family
+sizes in the US Census data.</p>
 </div>
 <div id="str-likelihood-ratio-effects" class="section level3">
 <h3>STR Likelihood Ratio Effects</h3>
