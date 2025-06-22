@@ -355,7 +355,7 @@ div.tocify {
 <h1 class="title toc-ignore">Regression to predict CODIS database sizes
 and racial proportions</h1>
 <h4 class="author">Junhui He</h4>
-<h4 class="date">2025-06-18 18:01:58</h4>
+<h4 class="date">2025-06-21 22:23:23</h4>
 
 </div>
 
@@ -384,7 +384,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-06-18
+<strong>Last updated:</strong> 2025-06-21
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -515,15 +515,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree0a2a52ac49033a1e4af1d33d2d3fa49e8c722f35targetblank0a2a52aa">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree289c58af6dfde632630b03222da1ad57d46e9ceetargetblank289c58aa">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/0a2a52ac49033a1e4af1d33d2d3fa49e8c722f35" target="_blank">0a2a52a</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/289c58af6dfde632630b03222da1ad57d46e9cee" target="_blank">289c58a</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree0a2a52ac49033a1e4af1d33d2d3fa49e8c722f35targetblank0a2a52aa"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree289c58af6dfde632630b03222da1ad57d46e9ceetargetblank289c58aa"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -533,7 +533,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/0a2a52ac49033a1e4af1d33d2d3fa49e8c722f35" target="_blank">0a2a52a</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/289c58af6dfde632630b03222da1ad57d46e9cee" target="_blank">289c58a</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -551,10 +551,15 @@ Ignored files:
     Ignored:    .DS_Store
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
+    Ignored:    analysis/.DS_Store
     Ignored:    code/.DS_Store
     Ignored:    output/.DS_Store
 
+Untracked files:
+    Untracked:  data/Murphy_combined_data.csv
+
 Unstaged changes:
+    Modified:   analysis/forensic_databases.Rmd
     Modified:   analysis/racial_proportion.Rmd
     Modified:   analysis/regression.Rmd
     Modified:   data/final_CODIS_data.csv
@@ -602,6 +607,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/289c58af6dfde632630b03222da1ad57d46e9cee/analysis/codis_regression.Rmd" target="_blank">289c58a</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-06-21
+</td>
+<td>
+modify codis regression
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/6dfd60aa6ca9b6621cbfc2dbe859ec6772e58804/docs/codis_regression.html" target="_blank">6dfd60a</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-06-18
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -663,47 +702,47 @@ recreate a document for regression predictions
 <div id="introduction" class="section level1">
 <h1>1 Introduction</h1>
 <p>The Combined DNA Index System (CODIS) is a national database of DNA
-profiles maintained by the FBI. It contains DNA profiles from convicted
+profiles maintained by the FBI. It includes profiles from convicted
 offenders, arrestees, and forensic samples collected from crime scenes.
-The racial composition of CODIS has been a topic of concern,
-particularly regarding the overrepresentation of Black individuals
-compared to their population size in the U.S.</p>
-<p>To estimate the number of people in CODIS by state and race, we need
-information on (1) the number of people in CODIS in each state, and (2)
-the racial composition of this number. We have several data sources,
-each of which provide different information for different states:</p>
+CODIS consists of two indexing systems: the State DNA Index System
+(SDIS) and the National DNA Index System (NDIS). The racial composition
+of the forensic database has raised concerns, particularly due to the
+overrepresentation of Black individuals relative to their proportion in
+the U.S. population.</p>
+<p>To analyze the racial demographics of the forensic database at the
+state level, we require two key pieces of information: (1) the racial
+breakdown of forensic samples in each state, and (2) the total size of
+the forensic database in each state. However, since racial composition
+data is not publicly available for all states, we must estimate the
+racial proportions using the data that is available.</p>
+<p>The available data sources include:</p>
 <ul>
-<li>Direct data on the number of Black and White people in CODIS, from a
-Freedom of Information Act (FOIA) request conducted by Muprhy and Tong
-(2020) for the following seven states: California, Florida, Indiana,
-Maine, Nevada, South Dakota, and Texas. [1]</li>
-<li>The number of people of each racial group in prison in each state.
-This data was pulled from a variety of sources and is available in Klein
-et al. (2023). [2]</li>
+<li>Direct data on the racial composition in SDIS, from a Freedom of
+Information Act (FOIA) request conducted by Muprhy and Tong (2020) for
+the following seven states: California, Florida, Indiana, Maine, Nevada,
+South Dakota, and Texas. [1]</li>
+<li>The total number and the racial composition of incarecated people in
+prison at each state. Klein et al. (2023) [2] provided the prison data
+for each US state except for Michigan state. For the state of Michigan,
+this data was pulled from a separate source [5].</li>
 <li>The number of people in the State DNA Indexing System (SDIS) and the
 National DNA Indexing System (NDIS). NDIS data is publicly available for
 all 50 states [3], whereas SDIS data is only available on a
-state-by-state basis and is obtained from internet searches. Within each
-DNA indexing system, both the number of offenders and the number of
-arrestees are recorded.</li>
+state-by-state basis and is obtained from internet searches.</li>
 <li>The U.S. Census data for each state [4], which provides the total
-population and the racial composition of the population. This data is
-available through the U.S. Census Bureau’s API.</li>
+population and the racial composition of the general population. This
+data is available through the U.S. Census Bureau’s API.</li>
 </ul>
-<p>Based on the available data types, we separate states into three
-categories:<br />
-1. States who have data available in the Murphy &amp; Tong dataset. For
-these states, no calculations are needed to estimate the number of
-people and racial compositions in CODIS.<br />
-2. States who have NDIS and SDIS data available but are not in the
-Murphy &amp; Tong dataset. For these states, the number of people in
-CODIS is given by the SDIS database size, and we only need to estimate
-racial compositions in CODIS.<br />
-3. States with only NDIS data available. For these states, both the
-number of people and racial compositions in CODIS are required to be
-estimated.<br />
-</p>
-<p>The plot below shows the data that is available for each state:</p>
+<p>Based on the available data, the total size of the forensic database
+in each state is determined using the number of individuals in SDIS when
+such data is available. For states without SDIS data, the number of
+individuals in NDIS is used instead. To estimate the racial composition
+of each state’s forensic database, we apply a regression model that
+incorporates two factors: the racial composition of the general
+population and the racial composition of the prison population within
+the state.</p>
+<p>The plot below illustrates which data sources are available for each
+state:</p>
 <p><img src="figure/codis_regression.Rmd/data-wrangling-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-data-wrangling-1">
@@ -729,6 +768,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/6dfd60aa6ca9b6621cbfc2dbe859ec6772e58804/docs/figure/codis_regression.Rmd/data-wrangling-1.png" target="_blank">6dfd60a</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-06-18
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/3dfd5e12189eadef6caf4176b3e0551ada7c22e4/docs/figure/codis_regression.Rmd/data-wrangling-1.png" target="_blank">3dfd5e1</a>
 </td>
 <td>
@@ -744,25 +794,22 @@ Junhui He
 </div>
 </div>
 <div
-id="models-to-predict-the-number-of-people-and-racial-composition-of-codis"
+id="models-to-predict-the-racial-composition-of-the-forensic-database"
 class="section level1">
-<h1>2 Models to predict the number of people and racial composition of
-CODIS</h1>
-<div id="predict-the-racial-composition-of-codis-profiles"
-class="section level2">
-<h2>2.1 Predict the racial composition of CODIS profiles</h2>
-<p>For states in categories (2) and (3), we construct a multinomial
-regression model using stick-breaking techniques to estimate the racial
-composition of the CODIS profiles. In the stick-breaking technique, we
-divide the US races into three types, black + white + other, and
-separately estimate the percent of white people in all people <span
-class="math inline">\(p_{1}\)</span> and the percent of black people in
-non-white people <span class="math inline">\(p_{2}\)</span>. Then the
-racial breakdown is given by <span
+<h1>2 Models to predict the racial composition of the forensic
+database</h1>
+<p>For states without SDIS racial composition data, we construct a
+multinomial regression model using stick-breaking techniques to estimate
+the racial composition of SDIS profiles. In the stick-breaking
+technique, we divide the US races into three types, black + white +
+other, and separately estimate the percent of white people in all people
+<span class="math inline">\(p_{1}\)</span> and the percent of black
+people in non-white people <span class="math inline">\(p_{2}\)</span>.
+Then the racial breakdown is given by <span
 class="math display">\[CODIS\_Prop_{white}=p_1, \quad
 CODIS\_Prop_{black}=(1-p_1)p_2,\quad
 CODIS\_Prop_{other}=(1-p_1)(1-p_2).\]</span> We use the following
-binomial regression models to estimate the racial composition of CODIS
+binomial regression models to estimate the racial composition of SDIS
 profiles: <span class="math display">\[P(\text{a person in CODIS is
 white}) = g(\beta_{10} + \beta_{11}*Census\_Prop_{white}+
 \beta_{12}*Prison\_Prop_{white}),\]</span> and <span
@@ -771,38 +818,17 @@ g(\beta_{20} + \beta_{21}*Census\_Prop_{black\mid nonwhite}+
 \beta_{22}*Prison\_Prop_{black \mid nonwhite}),\]</span> where <span
 class="math inline">\(g(x)=\frac{\exp(x)}{1+\exp(x)}\)</span> is the
 logit link function. Consequently, the number of the corresponding
-racial groups in CODIS follows a binomial distribution with the trial
-number being the total number of people or non-white people in CODIS,
-and the success probability being the above estimated racial
-proportions. The independent variables are the racial proportions of
-population from the census database and the racial proportions of
-incarcerated people from the prison database.</p>
-</div>
-<div id="predict-the-number-of-people-in-sdis" class="section level2">
-<h2>2.2 Predict the number of people in SDIS</h2>
-<p>For states in category (3), we need to estimate the number of
-individuals in SDIS. To do this, we construct a regression model where
-the dependent variable is the number of people in SDIS, and the
-independent variables include: the racial composition of the U.S. Census
-population, the racial composition of the state’s prison population, and
-the number of individuals in NDIS for that state. We develop two
-distinct regression models—one for arrestees and one for offenders—to
-improve prediction accuracy:</p>
-<p><span class="math display">\[N_{arrestee} = \beta_0 +
-\beta_1census_{black} + \beta_2census_{white} + \beta_3prison_{black} +
-\beta_4prison_{white} + \beta_5NDIS_{arrestees}, \]</span> and</p>
-<p><span class="math display">\[N_{offender} = \beta_0 +
-\beta_1census_{black} + \beta_2census_{white} + \beta_3prison_{black} +
-\beta_4prison_{white} + \beta_5NDIS_{offenders}. \]</span> The estimated
-number of individuals in SDIS is then calculated as the sum of arrestees
-and offenders: <span class="math inline">\(N_{SDIS} =
-N_{arrestee}+N_{offender}\)</span>.</p>
-</div>
+racial groups in SDIS follows a binomial distribution with the trial
+number being the total number of people or non-white people in SDIS, and
+the success probability being the above estimated racial proportions.
+The independent variables are the racial proportions of population from
+the census database and the racial proportions of incarcerated people
+from the prison database.</p>
 </div>
 <div
-id="regression-to-estimate-the-racial-composition-of-the-codis-database."
+id="regression-to-estimate-the-racial-composition-of-the-sdis-database."
 class="section level1">
-<h1>3 Regression to estimate the racial composition of the CODIS
+<h1>3 Regression to estimate the racial composition of the SDIS
 database.</h1>
 <p>We estimate the linear coefficients <span
 class="math inline">\(\beta\)</span> of the binomial logistic regression
@@ -817,17 +843,17 @@ glm(formula = cbind(mt_data$white, mt_data$nonwhite) ~ census.percent.white +
 
 Coefficients:
                      Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept)          -2.89315    0.01097 -263.80   &lt;2e-16 ***
-census.percent.white  3.29887    0.03424   96.34   &lt;2e-16 ***
-incarc.percent.white  2.17351    0.03143   69.16   &lt;2e-16 ***
+(Intercept)          -2.02059    0.00985 -205.13   &lt;2e-16 ***
+census.percent.white  0.42150    0.03027   13.92   &lt;2e-16 ***
+incarc.percent.white  4.85971    0.02747  176.91   &lt;2e-16 ***
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 
 (Dispersion parameter for binomial family taken to be 1)
 
-    Null deviance: 599698  on 6  degrees of freedom
-Residual deviance:  85204  on 4  degrees of freedom
-AIC: 85300
+    Null deviance: 624665  on 6  degrees of freedom
+Residual deviance: 100662  on 4  degrees of freedom
+AIC: 100759
 
 Number of Fisher Scoring iterations: 4</code></pre>
 <pre><code>
@@ -837,17 +863,17 @@ glm(formula = cbind(mt_data$black, mt_data$other) ~ census.percent.black.remain 
 
 Coefficients:
                              Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept)                 -3.923344   0.008174  -480.0   &lt;2e-16 ***
-census.percent.black.remain -0.432640   0.027555   -15.7   &lt;2e-16 ***
-incarc.percent.black.remain  8.109374   0.032434   250.0   &lt;2e-16 ***
+(Intercept)                 -4.146433   0.008491 -488.31   &lt;2e-16 ***
+census.percent.black.remain -1.166382   0.027717  -42.08   &lt;2e-16 ***
+incarc.percent.black.remain  9.080204   0.033132  274.06   &lt;2e-16 ***
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 
 (Dispersion parameter for binomial family taken to be 1)
 
-    Null deviance: 960397  on 6  degrees of freedom
-Residual deviance:  29623  on 4  degrees of freedom
-AIC: 29710
+    Null deviance: 925028  on 6  degrees of freedom
+Residual deviance:  44715  on 4  degrees of freedom
+AIC: 44803
 
 Number of Fisher Scoring iterations: 4</code></pre>
 <p>The following plot showing the estimated racial composition using the
@@ -930,60 +956,16 @@ Junhui He
 </div>
 </div>
 </div>
-<div id="sdis-regression-to-predict-the-number-of-people-in-sdis"
-class="section level1">
-<h1>4 SDIS regression to predict the number of people in SDIS</h1>
-<p>The following plots show the results of the SDIS regression for both
-arrestees (left) and offenders (right):</p>
-<p><img src="figure/codis_regression.Rmd/SDIS-regression-1.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-SDIS-regression-1">
-Past versions of SDIS-regression-1.png
-</button>
-</p>
-<div id="fig-SDIS-regression-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/3dfd5e12189eadef6caf4176b3e0551ada7c22e4/docs/figure/codis_regression.Rmd/SDIS-regression-1.png" target="_blank">3dfd5e1</a>
-</td>
-<td>
-Junhui He
-</td>
-<td>
-2025-06-17
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-<div id="final-data" class="section level1">
-<h1>5 final data</h1>
-<p>Using the above regression models, we make predictions of the number
-of people and racial composition in CODIS by state. Then the number of
-people for each racial group is calculated by <span
-class="math inline">\(N_{race} = N_{SDIS} * Proportion_{race}\)</span>.
-The plot below shows our estimates for each state, colored by the data
-source used for each state. The number of Black people in the database
-are indicated with circles and the number of White people is indicated
-by triangles.</p>
+<div id="final-results" class="section level1">
+<h1>4 Final results</h1>
+<p>Using the above regression models, we make predictions of the racial
+composition in SDIS by state and determine the total number of people by
+SDIS or NDIS. Then the number of people for each racial group in the
+forensic database is calculated by <span class="math inline">\(N_{race}
+= N_{total} * Proportion_{race}\)</span>. The plot below shows our
+estimates for each state, colored by the data source used for each
+state. The number of Black people in the database are indicated with
+circles and the number of White people is indicated by triangles.</p>
 <p><img src="figure/codis_regression.Rmd/final-data-1.png" width="1920" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-final-data-1">
@@ -1009,6 +991,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/6dfd60aa6ca9b6621cbfc2dbe859ec6772e58804/docs/figure/codis_regression.Rmd/final-data-1.png" target="_blank">6dfd60a</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-06-18
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/3dfd5e12189eadef6caf4176b3e0551ada7c22e4/docs/figure/codis_regression.Rmd/final-data-1.png" target="_blank">3dfd5e1</a>
 </td>
 <td>
@@ -1022,10 +1015,482 @@ Junhui He
 </table>
 </div>
 </div>
-<p>We additionally generate plots showing the difference in the percent
-of people in CODIS versus the U.S. census percent of the population for
-each racial group in each state.
-<img src="figure/codis_regression.Rmd/maps-1.png" width="1920" style="display: block; margin: auto;" /></p>
+<p>The table below reports the estimates for the racial composition and
+the number of people for each racial group in SDIS by state, along with
+the source of the data is below:</p>
+<table>
+<caption>Estimated racial composition of SDIS by state</caption>
+<colgroup>
+<col width="16%" />
+<col width="18%" />
+<col width="18%" />
+<col width="14%" />
+<col width="14%" />
+<col width="17%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">State</th>
+<th align="right">Black Proportion</th>
+<th align="right">White Proportion</th>
+<th align="right">Black Number</th>
+<th align="right">White Number</th>
+<th align="left">Source</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Alabama</td>
+<td align="right">0.3710317</td>
+<td align="right">0.6207941</td>
+<td align="right">133571</td>
+<td align="right">223486</td>
+<td align="left">SDIS+regression</td>
+</tr>
+<tr class="even">
+<td align="left">Alaska</td>
+<td align="right">0.0266889</td>
+<td align="right">0.5610748</td>
+<td align="right">2112</td>
+<td align="right">44407</td>
+<td align="left">SDIS+regression</td>
+</tr>
+<tr class="odd">
+<td align="left">Arizona</td>
+<td align="right">0.0490530</td>
+<td align="right">0.5407053</td>
+<td align="right">23539</td>
+<td align="right">259467</td>
+<td align="left">NDIS+Regression</td>
+</tr>
+<tr class="even">
+<td align="left">Arkansas</td>
+<td align="right">0.2515854</td>
+<td align="right">0.7410987</td>
+<td align="right">3075</td>
+<td align="right">9057</td>
+<td align="left">SDIS+regression</td>
+</tr>
+<tr class="odd">
+<td align="left">California</td>
+<td align="right">0.1710000</td>
+<td align="right">0.2960000</td>
+<td align="right">575484</td>
+<td align="right">996159</td>
+<td align="left">Murphy and Tong</td>
+</tr>
+<tr class="even">
+<td align="left">Colorado</td>
+<td align="right">0.0620029</td>
+<td align="right">0.5798340</td>
+<td align="right">30950</td>
+<td align="right">289436</td>
+<td align="left">SDIS+regression</td>
+</tr>
+<tr class="odd">
+<td align="left">Connecticut</td>
+<td align="right">0.4036990</td>
+<td align="right">0.4125165</td>
+<td align="right">8074</td>
+<td align="right">8250</td>
+<td align="left">SDIS+regression</td>
+</tr>
+<tr class="even">
+<td align="left">Delaware</td>
+<td align="right">0.4139069</td>
+<td align="right">0.5792814</td>
+<td align="right">9397</td>
+<td align="right">13152</td>
+<td align="left">NDIS+Regression</td>
+</tr>
+<tr class="odd">
+<td align="left">Florida</td>
+<td align="right">0.3520000</td>
+<td align="right">0.6140000</td>
+<td align="right">603289</td>
+<td align="right">1052328</td>
+<td align="left">Murphy and Tong</td>
+</tr>
+<tr class="even">
+<td align="left">Georgia</td>
+<td align="right">0.4866533</td>
+<td align="right">0.4972649</td>
+<td align="right">168939</td>
+<td align="right">172623</td>
+<td align="left">SDIS+regression</td>
+</tr>
+<tr class="odd">
+<td align="left">Hawaii</td>
+<td align="right">0.0179503</td>
+<td align="right">0.3198698</td>
+<td align="right">749</td>
+<td align="right">13340</td>
+<td align="left">NDIS+Regression</td>
+</tr>
+<tr class="even">
+<td align="left">Idaho</td>
+<td align="right">0.0049680</td>
+<td align="right">0.8860625</td>
+<td align="right">194</td>
+<td align="right">34556</td>
+<td align="left">SDIS+regression</td>
+</tr>
+<tr class="odd">
+<td align="left">Illinois</td>
+<td align="right">0.5088699</td>
+<td align="right">0.4510943</td>
+<td align="right">350762</td>
+<td align="right">310938</td>
+<td align="left">SDIS+regression</td>
+</tr>
+<tr class="even">
+<td align="left">Indiana</td>
+<td align="right">0.2600000</td>
+<td align="right">0.7000000</td>
+<td align="right">116740</td>
+<td align="right">314300</td>
+<td align="left">Murphy and Tong</td>
+</tr>
+<tr class="odd">
+<td align="left">Iowa</td>
+<td align="right">0.1596071</td>
+<td align="right">0.8133977</td>
+<td align="right">24704</td>
+<td align="right">125895</td>
+<td align="left">NDIS+Regression</td>
+</tr>
+<tr class="even">
+<td align="left">Kansas</td>
+<td align="right">0.1587240</td>
+<td align="right">0.8353293</td>
+<td align="right">37688</td>
+<td align="right">198345</td>
+<td align="left">NDIS+Regression</td>
+</tr>
+<tr class="odd">
+<td align="left">Kentucky</td>
+<td align="right">0.1098584</td>
+<td align="right">0.8846163</td>
+<td align="right">26486</td>
+<td align="right">213271</td>
+<td align="left">NDIS+Regression</td>
+</tr>
+<tr class="even">
+<td align="left">Louisiana</td>
+<td align="right">0.5175885</td>
+<td align="right">0.4718245</td>
+<td align="right">362114</td>
+<td align="right">330097</td>
+<td align="left">SDIS+regression</td>
+</tr>
+<tr class="odd">
+<td align="left">Maine</td>
+<td align="right">0.0390000</td>
+<td align="right">0.9280000</td>
+<td align="right">1467</td>
+<td align="right">34915</td>
+<td align="left">Murphy and Tong</td>
+</tr>
+<tr class="even">
+<td align="left">Maryland</td>
+<td align="right">0.6478107</td>
+<td align="right">0.3329734</td>
+<td align="right">95748</td>
+<td align="right">49214</td>
+<td align="left">SDIS+regression</td>
+</tr>
+<tr class="odd">
+<td align="left">Massachusetts</td>
+<td align="right">0.2093703</td>
+<td align="right">0.5827315</td>
+<td align="right">34373</td>
+<td align="right">95670</td>
+<td align="left">NDIS+Regression</td>
+</tr>
+<tr class="even">
+<td align="left">Michigan</td>
+<td align="right">0.3658065</td>
+<td align="right">0.6264928</td>
+<td align="right">213146</td>
+<td align="right">365041</td>
+<td align="left">NDIS+Regression</td>
+</tr>
+<tr class="odd">
+<td align="left">Minnesota</td>
+<td align="right">0.2673256</td>
+<td align="right">0.7020352</td>
+<td align="right">48119</td>
+<td align="right">126366</td>
+<td align="left">SDIS+regression</td>
+</tr>
+<tr class="even">
+<td align="left">Mississippi</td>
+<td align="right">0.4771726</td>
+<td align="right">0.5103070</td>
+<td align="right">56306</td>
+<td align="right">60216</td>
+<td align="left">SDIS+regression</td>
+</tr>
+<tr class="odd">
+<td align="left">Missouri</td>
+<td align="right">0.1882627</td>
+<td align="right">0.8053561</td>
+<td align="right">75305</td>
+<td align="right">322142</td>
+<td align="left">SDIS+regression</td>
+</tr>
+<tr class="even">
+<td align="left">Montana</td>
+<td align="right">0.0048830</td>
+<td align="right">0.8766247</td>
+<td align="right">158</td>
+<td align="right">28301</td>
+<td align="left">SDIS+regression</td>
+</tr>
+<tr class="odd">
+<td align="left">Nebraska</td>
+<td align="right">0.1995549</td>
+<td align="right">0.6878160</td>
+<td align="right">11587</td>
+<td align="right">39938</td>
+<td align="left">NDIS+Regression</td>
+</tr>
+<tr class="even">
+<td align="left">Nevada</td>
+<td align="right">0.2560000</td>
+<td align="right">0.6940000</td>
+<td align="right">62720</td>
+<td align="right">170030</td>
+<td align="left">Murphy and Tong</td>
+</tr>
+<tr class="odd">
+<td align="left">New Hampshire</td>
+<td align="right">0.0318916</td>
+<td align="right">0.9228574</td>
+<td align="right">605</td>
+<td align="right">17515</td>
+<td align="left">NDIS+Regression</td>
+</tr>
+<tr class="even">
+<td align="left">New Jersey</td>
+<td align="right">0.6179722</td>
+<td align="right">0.3350065</td>
+<td align="right">20205</td>
+<td align="right">10953</td>
+<td align="left">SDIS+regression</td>
+</tr>
+<tr class="odd">
+<td align="left">New Mexico</td>
+<td align="right">0.0455374</td>
+<td align="right">0.8994926</td>
+<td align="right">6456</td>
+<td align="right">127526</td>
+<td align="left">NDIS+Regression</td>
+</tr>
+<tr class="even">
+<td align="left">New York</td>
+<td align="right">0.4989916</td>
+<td align="right">0.3468413</td>
+<td align="right">359660</td>
+<td align="right">249994</td>
+<td align="left">NDIS+Regression</td>
+</tr>
+<tr class="odd">
+<td align="left">North Carolina</td>
+<td align="right">0.4108033</td>
+<td align="right">0.5672115</td>
+<td align="right">143781</td>
+<td align="right">198524</td>
+<td align="left">SDIS+regression</td>
+</tr>
+<tr class="even">
+<td align="left">North Dakota</td>
+<td align="right">0.0260494</td>
+<td align="right">0.7467642</td>
+<td align="right">1325</td>
+<td align="right">37995</td>
+<td align="left">NDIS+Regression</td>
+</tr>
+<tr class="odd">
+<td align="left">Ohio</td>
+<td align="right">0.2905440</td>
+<td align="right">0.6998825</td>
+<td align="right">261242</td>
+<td align="right">629298</td>
+<td align="left">NDIS+Regression</td>
+</tr>
+<tr class="even">
+<td align="left">Oklahoma</td>
+<td align="right">0.2196836</td>
+<td align="right">0.6924514</td>
+<td align="right">45209</td>
+<td align="right">142500</td>
+<td align="left">NDIS+Regression</td>
+</tr>
+<tr class="odd">
+<td align="left">Oregon</td>
+<td align="right">0.0288813</td>
+<td align="right">0.8668997</td>
+<td align="right">6769</td>
+<td align="right">203178</td>
+<td align="left">NDIS+Regression</td>
+</tr>
+<tr class="even">
+<td align="left">Pennsylvania</td>
+<td align="right">0.3739945</td>
+<td align="right">0.5970871</td>
+<td align="right">177407</td>
+<td align="right">283233</td>
+<td align="left">NDIS+Regression</td>
+</tr>
+<tr class="odd">
+<td align="left">Rhode Island</td>
+<td align="right">0.3804552</td>
+<td align="right">0.3584809</td>
+<td align="right">10584</td>
+<td align="right">9972</td>
+<td align="left">SDIS+regression</td>
+</tr>
+<tr class="even">
+<td align="left">South Carolina</td>
+<td align="right">0.4568350</td>
+<td align="right">0.5327503</td>
+<td align="right">80233</td>
+<td align="right">93566</td>
+<td align="left">SDIS+regression</td>
+</tr>
+<tr class="odd">
+<td align="left">South Dakota</td>
+<td align="right">0.0600000</td>
+<td align="right">0.6680000</td>
+<td align="right">3372</td>
+<td align="right">37542</td>
+<td align="left">Murphy and Tong</td>
+</tr>
+<tr class="even">
+<td align="left">Tennessee</td>
+<td align="right">0.2547037</td>
+<td align="right">0.7395115</td>
+<td align="right">132093</td>
+<td align="right">383521</td>
+<td align="left">SDIS+regression</td>
+</tr>
+<tr class="odd">
+<td align="left">Texas</td>
+<td align="right">0.2910000</td>
+<td align="right">0.3730000</td>
+<td align="right">353163</td>
+<td align="right">452680</td>
+<td align="left">Murphy and Tong</td>
+</tr>
+<tr class="even">
+<td align="left">Utah</td>
+<td align="right">0.0173323</td>
+<td align="right">0.7892671</td>
+<td align="right">2564</td>
+<td align="right">116762</td>
+<td align="left">NDIS+Regression</td>
+</tr>
+<tr class="odd">
+<td align="left">Vermont</td>
+<td align="right">0.0590206</td>
+<td align="right">0.9271688</td>
+<td align="right">1324</td>
+<td align="right">20802</td>
+<td align="left">NDIS+Regression</td>
+</tr>
+<tr class="even">
+<td align="left">Virginia</td>
+<td align="right">0.4387065</td>
+<td align="right">0.5497012</td>
+<td align="right">223306</td>
+<td align="right">279803</td>
+<td align="left">SDIS+regression</td>
+</tr>
+<tr class="odd">
+<td align="left">Washington</td>
+<td align="right">0.1157078</td>
+<td align="right">0.8500003</td>
+<td align="right">31473</td>
+<td align="right">231200</td>
+<td align="left">SDIS+regression</td>
+</tr>
+<tr class="even">
+<td align="left">West Virginia</td>
+<td align="right">0.0676830</td>
+<td align="right">0.9292480</td>
+<td align="right">3211</td>
+<td align="right">44087</td>
+<td align="left">SDIS+regression</td>
+</tr>
+<tr class="odd">
+<td align="left">Wisconsin</td>
+<td align="right">0.2784193</td>
+<td align="right">0.7104815</td>
+<td align="right">108904</td>
+<td align="right">277906</td>
+<td align="left">NDIS+Regression</td>
+</tr>
+<tr class="even">
+<td align="left">Wyoming</td>
+<td align="right">0.0086344</td>
+<td align="right">0.8815643</td>
+<td align="right">281</td>
+<td align="right">28697</td>
+<td align="left">NDIS+Regression</td>
+</tr>
+</tbody>
+</table>
+<p>we generate side-by-side pie charts showing the comparison between
+the racial composition of the census (left) and the estimated racial
+composition of SDIS (right) for each state.</p>
+<p><img src="figure/codis_regression.Rmd/pie-charts-final-1.png" width="1920" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pie-charts-final-1">
+Past versions of pie-charts-final-1.png
+</button>
+</p>
+<div id="fig-pie-charts-final-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/3dfd5e12189eadef6caf4176b3e0551ada7c22e4/docs/figure/codis_regression.Rmd/pie-charts-final-1.png" target="_blank">3dfd5e1</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-06-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Furthermore, we calculate the weighted averages of the racial
+proportions in Census and SDIS across seven states provided in Murphy
+and Tong [1] and all states, weighted by the corresponding total number
+of people in each state. The following table shows the weighted racial
+proportions in Census and SDIS across states.</p>
+<p><img src="figure/codis_regression.Rmd/plot-weighted-averages-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>We additionally generate plots showing the difference in the racial
+proportions between SDIS and Census in each state.</p>
+<p><img src="figure/codis_regression.Rmd/maps-1.png" width="1920" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-maps-1">
 Past versions of maps-1.png
@@ -1101,102 +1566,9 @@ Junhui He
 </table>
 </div>
 </div>
-<p>The table containing the estimates for the number of people of each
-race in CODIS by state, along with the source of the data is below:</p>
-<pre><code>            State Black Profiles White Profiles          Source
-1         Alabama    146742.2511     209620.572 SDIS+regression
-2          Alaska      2429.2230      43979.521 SDIS+regression
-3         Arizona     25483.5890     280512.427 Regression only
-4        Arkansas      3580.4744       8514.105 SDIS+regression
-5      California    473373.9990     819407.624          Murphy
-6        Colorado     27583.8604     329236.365 SDIS+regression
-7     Connecticut      6360.4522      10641.602 SDIS+regression
-8        Delaware      4214.2481       5197.489 Regression only
-9         Florida    475434.7840     829309.538          Murphy
-10        Georgia    188994.7076     151062.666 SDIS+regression
-11         Hawaii       710.7176       5701.499 Regression only
-12          Idaho       303.5099      33048.945 SDIS+regression
-13       Illinois    311180.1618     348148.271 SDIS+regression
-14        Indiana     80005.6400     215399.800          Murphy
-15           Iowa     24799.0490     126928.305 Regression only
-16         Kansas     50839.6910     203948.698 Regression only
-17       Kentucky     37173.7786     200813.408 Regression only
-18      Louisiana    368290.6550     322836.083 SDIS+regression
-19          Maine      1281.0330      30482.016          Murphy
-20       Maryland     94006.7471      50445.103 SDIS+regression
-21  Massachusetts     32148.3735     110325.448 Regression only
-22       Michigan    212337.9215     436272.461 Regression only
-23      Minnesota     43749.3371     130168.714 SDIS+regression
-24    Mississippi     62017.1570      54263.231 SDIS+regression
-25       Missouri     88133.7975     308372.927 SDIS+regression
-26        Montana       228.6695      27304.886 SDIS+regression
-27       Nebraska      9192.4968      39974.882 Regression only
-28         Nevada     42937.8560     116401.844          Murphy
-29  New Hampshire       722.5766      13607.847 Regression only
-30     New Jersey     17801.4510      13122.535 SDIS+regression
-31     New Mexico     15718.2484      99923.039 Regression only
-32       New York    310148.6267     280780.173 Regression only
-33 North Carolina    147996.2471     192976.031 SDIS+regression
-34   North Dakota      1151.8924      32027.576 Regression only
-35           Ohio    276829.3194     728038.606 Regression only
-36       Oklahoma     53729.7777     148300.940 Regression only
-37         Oregon      9511.3245     186615.466 Regression only
-38   Pennsylvania    165136.1824     350359.644 Regression only
-39   Rhode Island      7190.5216      15269.301 SDIS+regression
-40 South Carolina     78666.0457      94920.924 SDIS+regression
-41   South Dakota      4056.0000      45156.800          Murphy
-42      Tennessee    149453.4182     365083.766 SDIS+regression
-43          Texas    279646.6350     358447.405          Murphy
-44           Utah      2926.1364     116733.989 Regression only
-45        Vermont      1089.4961      11546.709 Regression only
-46       Virginia    228481.7900     272787.878 SDIS+regression
-47     Washington     48944.4573     204569.887 SDIS+regression
-48  West Virginia      4944.1882      42241.396 SDIS+regression
-49      Wisconsin    104925.8859     323498.798 Regression only
-50        Wyoming       256.8106      18218.686 Regression only</code></pre>
-<p>Finally, we generate side-by-side pie charts for each state showing
-the racial composition according to the census (left) versus the
-estimated racial composition of CODIS (right) for each state. From the
-following figure, Black/African Americans are overrepresented and white
-Americans are underrepresented in CODIS compared to Census.</p>
-<p><img src="figure/codis_regression.Rmd/pie-charts-final-1.png" width="1920" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pie-charts-final-1">
-Past versions of pie-charts-final-1.png
-</button>
-</p>
-<div id="fig-pie-charts-final-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/3dfd5e12189eadef6caf4176b3e0551ada7c22e4/docs/figure/codis_regression.Rmd/pie-charts-final-1.png" target="_blank">3dfd5e1</a>
-</td>
-<td>
-Junhui He
-</td>
-<td>
-2025-06-17
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p>We conclude that Black/African Americans are overrepresented and
+white Americans are underrepresented in the forensic database compared
+to Census.</p>
 </div>
 <div id="references" class="section level1">
 <h1>References</h1>
@@ -1209,7 +1581,12 @@ href="https://le.fbi.gov/science-and-lab/biometrics-and-fingerprints/codis/codis
 class="uri">https://le.fbi.gov/science-and-lab/biometrics-and-fingerprints/codis/codis-ndis-statistics</a></p>
 <p>[4] U.S. Census Bureau. “Population.” <a
 href="https://www.census.gov/topics/population.html"
-class="uri">https://www.census.gov/topics/population.html</a></p>
+class="uri">https://www.census.gov/topics/population.html</a><br />
+</p>
+<p>[5] <a
+href="https://www.vera.org/downloads/pdfdownloads/state-incarceration-trends-michigan.pdf"
+class="uri">https://www.vera.org/downloads/pdfdownloads/state-incarceration-trends-michigan.pdf</a><br />
+</p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
