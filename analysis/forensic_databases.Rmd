@@ -196,7 +196,6 @@ The NDIS database sizes and proportions of offenders vs arrestees for all states
 
 ```{r NDIS, warning=FALSE,message=FALSE, echo = TRUE}
 NDIS <- read.csv("./data/NDIS.csv")
-head(NDIS)
 NDIS = NDIS[,c("State", "N_total","N_arrestees","N_offenders")]
 NDIS = NDIS[-c(which(NDIS$State == "U.S. Army")),]
 
@@ -218,7 +217,7 @@ ggplot(NDIS_long) +
 
 The State DNA Index System (SDIS) is a key component of the Combined DNA Index System (CODIS). It contains DNA profiles collected at the state level from individuals, crime scenes, and other sources. In some states, SDIS data is publicly available through official government websites; however, many states do not make this information accessible to the public.
 
-As with the National DNA Index System (NDIS), individuals in SDIS are generally classified into two categories: offenders and arrestees. The sizes of SDIS databases and the proportions of offenders in states with publicly available data are presented in the table and figures below.
+As with the National DNA Index System (NDIS), individuals in SDIS are generally classified into two categories: offenders and arrestees. The sizes of SDIS databases in states with publicly available data are presented in the table and figures below.
 
 ```{r state_maps, results =FALSE,warning=FALSE,message=FALSE, echo = TRUE}
 # Load census data and shape for each state
