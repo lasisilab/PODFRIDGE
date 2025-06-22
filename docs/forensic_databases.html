@@ -354,7 +354,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Forensic Databases</h1>
 <h4 class="author">Junhui He</h4>
-<h4 class="date">2025-06-18 18:26:12</h4>
+<h4 class="date">2025-06-21 22:33:07</h4>
 
 </div>
 
@@ -383,7 +383,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-06-18
+<strong>Last updated:</strong> 2025-06-21
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -514,15 +514,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree04a0e06e7b18cbb980d7b7dd0247dd59eeab5483targetblank04a0e06a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree0489efb341e83773cc68e905def60674d85727f2targetblank0489efba">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/04a0e06e7b18cbb980d7b7dd0247dd59eeab5483" target="_blank">04a0e06</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/0489efb341e83773cc68e905def60674d85727f2" target="_blank">0489efb</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree04a0e06e7b18cbb980d7b7dd0247dd59eeab5483targetblank04a0e06a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree0489efb341e83773cc68e905def60674d85727f2targetblank0489efba"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -532,7 +532,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/04a0e06e7b18cbb980d7b7dd0247dd59eeab5483" target="_blank">04a0e06</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/0489efb341e83773cc68e905def60674d85727f2" target="_blank">0489efb</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -553,6 +553,9 @@ Ignored files:
     Ignored:    analysis/.DS_Store
     Ignored:    code/.DS_Store
     Ignored:    output/.DS_Store
+
+Untracked files:
+    Untracked:  data/Murphy_combined_data.csv
 
 Unstaged changes:
     Modified:   analysis/racial_proportion.Rmd
@@ -602,6 +605,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/0489efb341e83773cc68e905def60674d85727f2/analysis/forensic_databases.Rmd" target="_blank">0489efb</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-06-21
+</td>
+<td>
+modify forensic database
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/bd433a5b90b66be3d2972837effddce94c9bf86d/docs/forensic_databases.html" target="_blank">bd433a5</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-06-18
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -663,181 +700,188 @@ recreate the forensic databases description
 <div id="murphy-tong-forensic-databases" class="section level1">
 <h1>1 Murphy &amp; Tong forensic databases</h1>
 <p>Murphy &amp; Tong (2020) [1] constructed a forensic database in the
-Freedom of Information Act (FIOA) appendix data. They provided a
+Freedom of Information Act (FOIA) appendix data. They provided a
 detailed racial composition of the database in seven US states:
 California, Florida, Indiana, Maine, Nevada, South Dakota, and Texas.
 The racial categories are White, Black, Hispanic, Asian, and native
-Americans. Specifically, we focus on White and Black Americans. The
-database includes information on the number of individuals in each
-racial category for each state.</p>
-<p>The racial composition of the CODIS database is shown in the
+Americans. Specifically, we focus on White and Black Americans.</p>
+<p>The racial composition of the forensic database is shown in the
 following table and figure.</p>
-<pre class="r"><code># read CODIS data
-codis_data_path = &#39;./data/regression_data/CODIS_regression_data.csv&#39;
-codis_data = read.csv(codis_data_path) # CODIS data
+<pre class="r"><code># read Murphy &amp; Tong data
+mt_combined_data_path = &#39;./data/Murphy_combined_data.csv&#39;
+mt_combined_data = read.csv(mt_combined_data_path) # Murphy &amp; Tong combined data
 
 # extract the murphy &amp; tong data
-codis_data_mt = data.frame(
-  State = codis_data$state,
-  Total = codis_data$mt.total,
-  Black = round(codis_data$mt.total * codis_data$mt.percent.black),
-  White = round(codis_data$mt.total * codis_data$mt.percent.white),
-  Other = round(codis_data$mt.total * codis_data$mt.percent.other),
-  Percent_Black = codis_data$mt.percent.black,
-  Percent_White = codis_data$mt.percent.white,
-  Percent_Other = codis_data$mt.percent.other
+mt_data = data.frame(
+  State = mt_combined_data$state,
+  Percent_Black = mt_combined_data$mt.percent.black,
+  Percent_White = mt_combined_data$mt.percent.white,
+  Percent_Other = mt_combined_data$mt.percent.other,
+  Black = round(mt_combined_data$mt.total * mt_combined_data$mt.percent.black),
+  White = round(mt_combined_data$mt.total * mt_combined_data$mt.percent.white),
+  Other = round(mt_combined_data$mt.total * mt_combined_data$mt.percent.other),
+  Total = mt_combined_data$mt.total
 )
 
-kable(codis_data_mt, 
+kable(mt_data, 
       caption = &quot;Racial composition of the forensic database in Murphy &amp; Tong (2020) [1].&quot;,
-      col.names = c(&quot;State&quot;, &quot;Total&quot;, &quot;Black&quot;, &quot;White&quot;, &quot;Other&quot;, &quot;Percent of Black&quot;, &quot;Percent of White&quot;, &quot;Percent of Other&quot;)
+      col.names = c(&quot;State&quot;, &quot;Black Proportion&quot;, &quot;White Proportion&quot;, &quot;Other Proportion&quot;, &quot;Black Number&quot;, &quot;White Number&quot;, &quot;Other Number&quot;, &quot;Total Number&quot;)
 )</code></pre>
-<table>
+<table style="width:100%;">
 <caption>Racial composition of the forensic database in Murphy &amp;
 Tong (2020) [1].</caption>
 <colgroup>
-<col width="13%" />
-<col width="8%" />
-<col width="7%" />
-<col width="7%" />
-<col width="8%" />
-<col width="18%" />
-<col width="18%" />
-<col width="18%" />
+<col width="11%" />
+<col width="14%" />
+<col width="14%" />
+<col width="14%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
 </colgroup>
 <thead>
 <tr class="header">
 <th align="left">State</th>
-<th align="right">Total</th>
-<th align="right">Black</th>
-<th align="right">White</th>
-<th align="right">Other</th>
-<th align="right">Percent of Black</th>
-<th align="right">Percent of White</th>
-<th align="right">Percent of Other</th>
+<th align="right">Black Proportion</th>
+<th align="right">White Proportion</th>
+<th align="right">Other Proportion</th>
+<th align="right">Black Number</th>
+<th align="right">White Number</th>
+<th align="right">Other Number</th>
+<th align="right">Total Number</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td align="left">California</td>
-<td align="right">2768269</td>
-<td align="right">473374</td>
-<td align="right">819408</td>
-<td align="right">1475487</td>
 <td align="right">0.171</td>
 <td align="right">0.296</td>
 <td align="right">0.533</td>
+<td align="right">473964</td>
+<td align="right">820429</td>
+<td align="right">1477327</td>
+<td align="right">2771721</td>
 </tr>
 <tr class="even">
 <td align="left">Florida</td>
-<td align="right">1350667</td>
-<td align="right">475435</td>
-<td align="right">829310</td>
-<td align="right">45923</td>
 <td align="right">0.352</td>
 <td align="right">0.614</td>
 <td align="right">0.034</td>
+<td align="right">413738</td>
+<td align="right">721690</td>
+<td align="right">39963</td>
+<td align="right">1175391</td>
 </tr>
 <tr class="odd">
 <td align="left">Indiana</td>
-<td align="right">307714</td>
-<td align="right">80006</td>
-<td align="right">215400</td>
-<td align="right">12309</td>
 <td align="right">0.260</td>
 <td align="right">0.700</td>
 <td align="right">0.040</td>
+<td align="right">78193</td>
+<td align="right">210519</td>
+<td align="right">12030</td>
+<td align="right">300741</td>
 </tr>
 <tr class="even">
 <td align="left">Maine</td>
-<td align="right">32847</td>
-<td align="right">1281</td>
-<td align="right">30482</td>
-<td align="right">1084</td>
 <td align="right">0.039</td>
 <td align="right">0.928</td>
 <td align="right">0.033</td>
+<td align="right">1315</td>
+<td align="right">31284</td>
+<td align="right">1112</td>
+<td align="right">33711</td>
 </tr>
 <tr class="odd">
 <td align="left">Nevada</td>
-<td align="right">167726</td>
-<td align="right">42938</td>
-<td align="right">116402</td>
-<td align="right">8386</td>
 <td align="right">0.256</td>
 <td align="right">0.694</td>
 <td align="right">0.050</td>
+<td align="right">88089</td>
+<td align="right">238803</td>
+<td align="right">17205</td>
+<td align="right">344097</td>
 </tr>
 <tr class="even">
 <td align="left">South Dakota</td>
-<td align="right">67600</td>
-<td align="right">4056</td>
-<td align="right">45157</td>
-<td align="right">18387</td>
 <td align="right">0.060</td>
 <td align="right">0.668</td>
 <td align="right">0.272</td>
+<td align="right">4065</td>
+<td align="right">45259</td>
+<td align="right">18429</td>
+<td align="right">67753</td>
 </tr>
 <tr class="odd">
 <td align="left">Texas</td>
-<td align="right">960985</td>
-<td align="right">279647</td>
-<td align="right">358447</td>
-<td align="right">322891</td>
 <td align="right">0.291</td>
 <td align="right">0.373</td>
 <td align="right">0.336</td>
+<td align="right">267415</td>
+<td align="right">342769</td>
+<td align="right">308768</td>
+<td align="right">918953</td>
 </tr>
 </tbody>
 </table>
-<pre class="r"><code># plot the racial composition of the CODIS database
-codis_mt_long = codis_data_mt %&gt;% pivot_longer(cols = c(&quot;White&quot;,&quot;Black&quot;,&quot;Other&quot;), names_to = &quot;Race&quot;, values_to = &quot;Value&quot;)
+<pre class="r"><code># plot the racial composition of the SDIS database
+mt_long = mt_data %&gt;% pivot_longer(cols = c(&quot;White&quot;,&quot;Black&quot;,&quot;Other&quot;), names_to = &quot;Race&quot;, values_to = &quot;Value&quot;)
 
-ggplot(codis_mt_long) +
+plot_list = list()
+for (i in 1:nrow(mt_data)) {
+  state_name = mt_data$State[i]
+  state_data = mt_long[which(mt_long$State == state_name), ]
+  
+  p1 = ggplot(data=state_data, aes(x=&quot;&quot;, y=Value, fill=Race)) +
+  geom_bar(stat=&quot;identity&quot;, width=1,color = &quot;black&quot;) +
+  scale_fill_manual(name = &quot;&quot;,values = c(&quot;#648FFF&quot;,&quot;grey&quot;,&quot;#DC267F&quot;),labels = c(&quot;Black/African American&quot;,&quot;Other American&quot;,&quot;White American&quot;)) +
+  coord_polar(&quot;y&quot;, start=0) + theme_classic() +
+  xlab(&quot;&quot;) + ylab(&quot;&quot;) + ggtitle(state_name) +
+  theme(plot.title = element_text(size=10, face=&quot;bold&quot;, hjust = 0.5)) +
+  theme(legend.position = &quot;none&quot;, axis.line=element_blank(),axis.ticks=element_blank()) +
+    theme(panel.background = element_blank(), plot.background = element_blank(),
+        axis.text = element_blank()) +
+    theme(plot.margin = unit(c(-0.1, -0.1, -0.1, -0.1), &quot;inches&quot;)) 
+  plot_list[[i]] = p1
+}
+
+plot1 = plot_grid(plotlist = plot_list, ncol = 4)
+
+g_legend &lt;- function(a.gplot){ 
+    tmp &lt;- ggplot_gtable(ggplot_build(a.gplot)) 
+    leg &lt;- which(sapply(tmp$grobs, function(x) x$name) == &quot;guide-box&quot;) 
+    legend &lt;- tmp$grobs[[leg]] 
+    legend
+} 
+
+leg = g_legend(ggplot(data=state_data, aes(x=&quot;&quot;, y=Value, fill=Race)) +
+  geom_bar(stat=&quot;identity&quot;, width=1,color = &quot;black&quot;) +
+  scale_fill_manual(name = &quot;&quot;,values = c(&quot;#648FFF&quot;,&quot;grey&quot;,&quot;#DC267F&quot;),labels = c(&quot;Black/African American&quot;,&quot;Other American&quot;,&quot;White American&quot;)) +
+  coord_polar(&quot;y&quot;, start=0) + theme_classic() +
+  xlab(&quot;&quot;) + ylab(&quot;&quot;) + ggtitle(state_name) +
+  theme(legend.position = &quot;bottom&quot;, axis.line=element_blank(),axis.ticks=element_blank()) +
+    theme(panel.background = element_blank(), plot.background = element_blank(),
+        axis.text = element_blank(),legend.text=element_text(size=10)))
+
+title &lt;- ggdraw() +
+  draw_label(
+    &quot;Racial proportions in the SDIS forensic database&quot;, 
+    fontface = &quot;bold&quot;, 
+    size = 15,       # adjust size as you like
+    hjust = 0.5
+  )
+
+plot_grid(title, plot1, leg, nrow = 3, rel_heights = c(0.1,0.4,0.1))</code></pre>
+<p><img src="figure/forensic_databases.Rmd/mt-data-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(mt_long) +
   geom_col(aes(x = State, y = Value, fill = Race)) +
   theme_classic() + ylab(&quot;Value&quot;) + 
-  ggtitle(&quot;Number of people in the forensic database, by race&quot;) +
+  ggtitle(&quot;Number of people in the SDIS forensic database, by race&quot;) +
   theme(axis.text.x = element_text(angle = 90)) + 
   scale_fill_manual(name = &quot;Race&quot;,labels = c(&quot;Black&quot;, &quot;Other&quot;, &quot;White&quot;),
   values = c(&quot;#44AA99&quot;, &quot;#88CCEE&quot;, &quot;#882255&quot;))</code></pre>
-<p><img src="figure/forensic_databases.Rmd/codis-data-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-codis-data-1">
-Past versions of codis-data-1.png
-</button>
-</p>
-<div id="fig-codis-data-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/b97304daa2a46ef68b7f5f3f1b4331a287baaea5/docs/figure/forensic_databases.Rmd/codis-data-1.png" target="_blank">b97304d</a>
-</td>
-<td>
-Junhui He
-</td>
-<td>
-2025-06-18
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p><img src="figure/forensic_databases.Rmd/mt-data-2.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="prison-databases" class="section level1">
 <h1>2 Prison databases</h1>
@@ -1382,6 +1426,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/bd433a5b90b66be3d2972837effddce94c9bf86d/docs/figure/forensic_databases.Rmd/prison-1.png" target="_blank">bd433a5</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-06-18
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/b97304daa2a46ef68b7f5f3f1b4331a287baaea5/docs/figure/forensic_databases.Rmd/prison-1.png" target="_blank">b97304d</a>
@@ -1987,6 +2042,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/bd433a5b90b66be3d2972837effddce94c9bf86d/docs/figure/forensic_databases.Rmd/census-1.png" target="_blank">bd433a5</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-06-18
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/b97304daa2a46ef68b7f5f3f1b4331a287baaea5/docs/figure/forensic_databases.Rmd/census-1.png" target="_blank">b97304d</a>
 </td>
 <td>
@@ -2452,6 +2518,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/bd433a5b90b66be3d2972837effddce94c9bf86d/docs/figure/forensic_databases.Rmd/NDIS-1.png" target="_blank">bd433a5</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-06-18
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/b97304daa2a46ef68b7f5f3f1b4331a287baaea5/docs/figure/forensic_databases.Rmd/NDIS-1.png" target="_blank">b97304d</a>
 </td>
 <td>
@@ -2866,13 +2943,29 @@ Junhui He
 </table>
 </div>
 </div>
-<pre class="r"><code>SDIS$prop.offenders = SDIS$N_offenders / SDIS$N_total
+<pre class="r"><code>if(FALSE) {
+SDIS$prop.offenders = SDIS$N_offenders / SDIS$N_total
 SDIS_off = na.omit(SDIS)
 ggplot(SDIS_off) +
   geom_col(position=&quot;dodge&quot;, stat=&quot;identity&quot;, aes(x = State, y = prop.offenders)) +
   theme_classic() + ylab(&quot;Proportion&quot;) +
   ggtitle(&quot;Proportion of SDIS that is offenders&quot;) +
-  theme(axis.text.x = element_text(angle = 90)) </code></pre>
+  theme(axis.text.x = element_text(angle = 90)) }
+
+data.source.sf = merge(us_state_density,SDIS, by = &quot;State&quot;) 
+
+data.source.sf = data.source.sf %&gt;%
+  tigris::shift_geometry()
+
+ggplot() +
+  geom_sf(data = data.source.sf$geometry, aes(fill = data.source.sf$N_total),color = NA) + 
+  geom_sf(data = data.source.sf$geometry, color = &quot;black&quot;,lwd = 0.3,alpha = 0) +
+  theme_void(base_size = 11) + 
+  labs(fill = &quot;&quot;) + scale_fill_viridis() +
+  ggtitle(&quot;Size of the SDIS database, if available&quot;,
+          subtitle = &quot;Grey indicates this information is not publicly available in the state&quot;) +
+  theme(legend.key.height= unit(1, &#39;cm&#39;), legend.key.width= unit(1, &#39;cm&#39;),
+        legend.title=element_text(size=14),  legend.text=element_text(size=14)) </code></pre>
 <p><img src="figure/forensic_databases.Rmd/SDIS-2.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-SDIS-2">
@@ -2899,58 +2992,6 @@ Date
 <tr>
 <td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/b97304daa2a46ef68b7f5f3f1b4331a287baaea5/docs/figure/forensic_databases.Rmd/SDIS-2.png" target="_blank">b97304d</a>
-</td>
-<td>
-Junhui He
-</td>
-<td>
-2025-06-18
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre class="r"><code>data.source.sf = merge(us_state_density,SDIS, by = &quot;State&quot;) 
-
-data.source.sf = data.source.sf %&gt;%
-  tigris::shift_geometry()
-
-ggplot() +
-  geom_sf(data = data.source.sf$geometry, aes(fill = data.source.sf$N_total),color = NA) + 
-  geom_sf(data = data.source.sf$geometry, color = &quot;black&quot;,lwd = 0.3,alpha = 0) +
-  theme_void(base_size = 11) + 
-  labs(fill = &quot;&quot;) + scale_fill_viridis() +
-  ggtitle(&quot;Size of the SDIS database, if available&quot;,
-          subtitle = &quot;Grey indicates this information is not publicly available in the state&quot;) +
-  theme(legend.key.height= unit(1, &#39;cm&#39;), legend.key.width= unit(1, &#39;cm&#39;),
-        legend.title=element_text(size=14),  legend.text=element_text(size=14)) </code></pre>
-<p><img src="figure/forensic_databases.Rmd/SDIS-3.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-SDIS-3">
-Past versions of SDIS-3.png
-</button>
-</p>
-<div id="fig-SDIS-3" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/b97304daa2a46ef68b7f5f3f1b4331a287baaea5/docs/figure/forensic_databases.Rmd/SDIS-3.png" target="_blank">b97304d</a>
 </td>
 <td>
 Junhui He
