@@ -30,39 +30,85 @@ library(sf)
 
 # 1 Murphy & Tong forensic databases
 
-Murphy & Tong (2020) [1] constructed a forensic database in the Freedom of Information Act (FIOA) appendix data. They provided a detailed racial composition of the database in seven US states: California, Florida, Indiana, Maine, Nevada, South Dakota, and Texas. The racial categories are White, Black, Hispanic, Asian, and native Americans. Specifically, we focus on White and Black Americans. The database includes information on the number of individuals in each racial category for each state.
+Murphy & Tong (2020) [1] constructed a forensic database in the Freedom of Information Act (FOIA) appendix data. They provided a detailed racial composition of the database in seven US states: California, Florida, Indiana, Maine, Nevada, South Dakota, and Texas. The racial categories are White, Black, Hispanic, Asian, and native Americans. Specifically, we focus on White and Black Americans.
 
-The racial composition of the CODIS database is shown in the following table and figure.
+The racial composition of the forensic database is shown in the following table and figure.
 
-```{r codis-data, echo=TRUE, message=FALSE, warning=FALSE}
-# read CODIS data
-codis_data_path = './data/regression_data/CODIS_regression_data.csv'
-codis_data = read.csv(codis_data_path) # CODIS data
+```{r mt-data, echo=TRUE, message=FALSE, warning=FALSE}
+# read Murphy & Tong data
+mt_combined_data_path = './data/Murphy_combined_data.csv'
+mt_combined_data = read.csv(mt_combined_data_path) # Murphy & Tong combined data
 
 # extract the murphy & tong data
-codis_data_mt = data.frame(
-  State = codis_data$state,
-  Total = codis_data$mt.total,
-  Black = round(codis_data$mt.total * codis_data$mt.percent.black),
-  White = round(codis_data$mt.total * codis_data$mt.percent.white),
-  Other = round(codis_data$mt.total * codis_data$mt.percent.other),
-  Percent_Black = codis_data$mt.percent.black,
-  Percent_White = codis_data$mt.percent.white,
-  Percent_Other = codis_data$mt.percent.other
+mt_data = data.frame(
+  State = mt_combined_data$state,
+  Percent_Black = mt_combined_data$mt.percent.black,
+  Percent_White = mt_combined_data$mt.percent.white,
+  Percent_Other = mt_combined_data$mt.percent.other,
+  Black = round(mt_combined_data$mt.total * mt_combined_data$mt.percent.black),
+  White = round(mt_combined_data$mt.total * mt_combined_data$mt.percent.white),
+  Other = round(mt_combined_data$mt.total * mt_combined_data$mt.percent.other),
+  Total = mt_combined_data$mt.total
 )
 
-kable(codis_data_mt, 
+kable(mt_data, 
       caption = "Racial composition of the forensic database in Murphy & Tong (2020) [1].",
-      col.names = c("State", "Total", "Black", "White", "Other", "Percent of Black", "Percent of White", "Percent of Other")
+      col.names = c("State", "Black Proportion", "White Proportion", "Other Proportion", "Black Number", "White Number", "Other Number", "Total Number")
 )
 
-# plot the racial composition of the CODIS database
-codis_mt_long = codis_data_mt %>% pivot_longer(cols = c("White","Black","Other"), names_to = "Race", values_to = "Value")
+# plot the racial composition of the SDIS database
+mt_long = mt_data %>% pivot_longer(cols = c("White","Black","Other"), names_to = "Race", values_to = "Value")
 
-ggplot(codis_mt_long) +
+plot_list = list()
+for (i in 1:nrow(mt_data)) {
+  state_name = mt_data$State[i]
+  state_data = mt_long[which(mt_long$State == state_name), ]
+  
+  p1 = ggplot(data=state_data, aes(x="", y=Value, fill=Race)) +
+  geom_bar(stat="identity", width=1,color = "black") +
+  scale_fill_manual(name = "",values = c("#648FFF","grey","#DC267F"),labels = c("Black/African American","Other American","White American")) +
+  coord_polar("y", start=0) + theme_classic() +
+  xlab("") + ylab("") + ggtitle(state_name) +
+  theme(plot.title = element_text(size=10, face="bold", hjust = 0.5)) +
+  theme(legend.position = "none", axis.line=element_blank(),axis.ticks=element_blank()) +
+    theme(panel.background = element_blank(), plot.background = element_blank(),
+        axis.text = element_blank()) +
+    theme(plot.margin = unit(c(-0.1, -0.1, -0.1, -0.1), "inches")) 
+  plot_list[[i]] = p1
+}
+
+plot1 = plot_grid(plotlist = plot_list, ncol = 4)
+
+g_legend <- function(a.gplot){ 
+    tmp <- ggplot_gtable(ggplot_build(a.gplot)) 
+    leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box") 
+    legend <- tmp$grobs[[leg]] 
+    legend
+} 
+
+leg = g_legend(ggplot(data=state_data, aes(x="", y=Value, fill=Race)) +
+  geom_bar(stat="identity", width=1,color = "black") +
+  scale_fill_manual(name = "",values = c("#648FFF","grey","#DC267F"),labels = c("Black/African American","Other American","White American")) +
+  coord_polar("y", start=0) + theme_classic() +
+  xlab("") + ylab("") + ggtitle(state_name) +
+  theme(legend.position = "bottom", axis.line=element_blank(),axis.ticks=element_blank()) +
+    theme(panel.background = element_blank(), plot.background = element_blank(),
+        axis.text = element_blank(),legend.text=element_text(size=10)))
+
+title <- ggdraw() +
+  draw_label(
+    "Racial proportions in the SDIS forensic database", 
+    fontface = "bold", 
+    size = 15,       # adjust size as you like
+    hjust = 0.5
+  )
+
+plot_grid(title, plot1, leg, nrow = 3, rel_heights = c(0.1,0.4,0.1))
+
+ggplot(mt_long) +
   geom_col(aes(x = State, y = Value, fill = Race)) +
   theme_classic() + ylab("Value") + 
-  ggtitle("Number of people in the forensic database, by race") +
+  ggtitle("Number of people in the SDIS forensic database, by race") +
   theme(axis.text.x = element_text(angle = 90)) + 
   scale_fill_manual(name = "Race",labels = c("Black", "Other", "White"),
   values = c("#44AA99", "#88CCEE", "#882255"))
@@ -204,13 +250,14 @@ ggplot(SDIS) +
   ggtitle("Size of the SDIS database") +
   theme(axis.text.x = element_text(angle = 90)) 
 
+if(FALSE) {
 SDIS$prop.offenders = SDIS$N_offenders / SDIS$N_total
 SDIS_off = na.omit(SDIS)
 ggplot(SDIS_off) +
   geom_col(position="dodge", stat="identity", aes(x = State, y = prop.offenders)) +
   theme_classic() + ylab("Proportion") +
   ggtitle("Proportion of SDIS that is offenders") +
-  theme(axis.text.x = element_text(angle = 90)) 
+  theme(axis.text.x = element_text(angle = 90)) }
 
 data.source.sf = merge(us_state_density,SDIS, by = "State") 
 
