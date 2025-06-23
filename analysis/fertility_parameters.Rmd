@@ -1,0 +1,218 @@
+---
+title: "How fertility parameters affect the family structure distribution"
+author: "Junhui He"
+date: "`r Sys.Date()`"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+# 1 Family structure model
+
+## 1.1 Fertility distribution
+
+Here we establish a zero inflated negative binomial distribution for the number of children per family---**fertility distribution** with parameters: **mean fertility** ($\mu$), **dispersion/size** ($\theta$), and **zero‑inflation probability** ($\pi_0$), denoted as $ZINB(\mu, \theta, \pi_0)$. According to the definition of the negative binomial distribution, the mean and variance of $NB(\mu,\theta)$ is given by $\mu$ and $\mu + \frac{\mu^2}{\theta}$, respectively. Therefore, the mean and variance of $ZINB(\mu, \theta, \pi_0)$ is defined by $\mu(1-\pi_0)$ and $\mu(1-\pi_0) + \frac{\mu^2(1-\pi_0)}{\theta}+\mu^2\pi_0(1-\pi_0)$, respectively.
+
+## 1.2 Sibling distribution
+
+The **sibling distribution** is the distribution of the number of siblings per person, which can be derived from the fertility distribution. For any $k \geq 0$, the probability of having $k$ siblings is given by: $$P(num_{sib}=k) \propto (k+1)P(num_{child}=k+1).$$ This is because a person with $k$ siblings must have been born into a family with $k+1$ children, and there are $k+1$ ways to choose which child they are among those children. If the fertility distribution is $ZINB(\mu, \theta, \pi_0)$, then the sibling distribution is a negative binomial distribution with parameters **mean fertility** ($\frac{\mu(\theta+1)}{\theta}$), **dispersion/size** ($\theta+1$), denoted as $NB(\frac{\mu(\theta+1)}{\theta}, \theta+1)$. We note that the average number of siblings per person $\frac{\mu(\theta+1)}{\theta}$ is higher than the average number of children $\mu(1-\pi_0)$ minus one, called the “sibship size paradox”.
+
+## 1.3 Fertility and sibling parameters
+
+Based on the empirical data on U.S. women, a reasonable range of parameters for the fertility distribution is $$\mu \in [2, 6], ~ \theta \in [1, 10], ~ and ~ \pi_0 \in [0, 0.2].$$
+
+# 2 Effect of fertility parameters on relative counts
+
+We explore the effect of the fertility parameters on the family structure distribution, which is defined as the distribution of the number of relatives one individual has.
+
+```{r setup, message = FALSE, warning = FALSE, echo = FALSE}
+knitr::opts_chunk$set(eval = TRUE, echo = TRUE, warning = FALSE, fig.width = 9, fig.height = 7)
+
+library(dplyr)
+library(tidyr)
+library(readr)
+library(MASS)     ## glm.nb
+library(pscl)     ## zeroinfl
+library(knitr)    ## kable
+```
+
+## 2.1 Simulate the relative counts for the focal individual
+
+```{r simulate-relatives}
+simulate_relatives_zinb <- function(mu, size, pi0,
+                                    n_sim = 10000,
+                                    max_kids = 20) {
+  draw_fert <- function(n) {
+    ifelse(runif(n) < pi0, 0L,
+           as.integer(pmin(rnbinom(n, size, mu = mu), max_kids)))
+  }
+  
+  draw_sibs <- function(n) {
+    as.integer(pmin(rnbinom(n, size + 1, mu = mu * (size + 1) / size), max_kids - 1))
+  }
+  
+  # 1. Siblings for the focal individual
+  siblings <- draw_sibs(n_sim)
+
+  # 2. Aunts & uncles (no subtraction needed)
+  aunts_maternal <- draw_sibs(n_sim)   # mother’s siblings
+  aunts_paternal <- draw_sibs(n_sim)   # father’s siblings
+  aunts_uncles   <- aunts_maternal + aunts_paternal
+
+
+  # 3. Cousins: for each aunt/uncle, simulate their fertility and sum
+  cousins <- purrr::map_int(aunts_uncles, function(n_au) {
+    if (n_au == 0L) 0L else as.integer(sum(draw_fert(n_au)))
+  })
+
+  tibble::tibble(
+    Siblings    = siblings,
+    AuntsUncles = aunts_uncles,
+    Cousins     = cousins,
+    Parents     = 2L,
+    Grandparents= 4L,
+    TotalKin = siblings + aunts_uncles + cousins + 2L + 4L
+  )
+}
+```
+
+## 2.2 Prepare parameter combinations
+
+```{r parameter-combinations}
+# Prepare fertility parameter tables
+fert_params = expand.grid(
+  mu = c(3, 4, 5, 6),
+  size = c(1, 4, 10),
+  pi0 = c(0, 0.1, 0.2)
+)
+fert_params = as.data.frame(fert_params)[, c("pi0", "size", "mu")]
+n_sim = 10000  # Number of simulations per parameter combination
+```
+
+## 2.3 Simulate relative counts for each parameter combination
+
+```{r simulate-relative-counts}
+relative_counts = list()
+for (i in seq_len(nrow(fert_params))) {
+  params = fert_params[i, ]
+  relative_counts[[i]] = simulate_relatives_zinb(
+    mu = params$mu,
+    size = params$size,
+    pi0 = params$pi0,
+    n_sim = n_sim
+  )
+}
+```
+
+## 2.4 Summarize mean relative counts
+
+```{r mean-relative-counts}
+mean_relative_counts = t(sapply(relative_counts, colMeans))[, c("Siblings", "AuntsUncles", "Cousins", "TotalKin")]
+mean_relative_counts = as.data.frame(mean_relative_counts)
+colnames(mean_relative_counts) = c("mean_siblings", "mean_aunts_uncles", "mean_cousins", "mean_total")
+mean_relative_counts = cbind(fert_params, mean_relative_counts)
+
+kable(mean_relative_counts, 
+      digits = 2, 
+      caption = "Expected number of first-, second-, and third-degree relatives for a focal individual (simulated, by each fertility paramater combination)")
+```
+
+## 2.5 Visualize the simulated relative distributions
+
+```{r relative-distributions, fig.cap = "Simulated relative distributions under different fertility parameters"}
+library(ggplot2)
+# Combine all relative counts into a single data frame
+relative_counts_df = bind_rows(relative_counts)
+relative_counts_df = relative_counts_df %>%
+  mutate(
+    mu = rep(fert_params$mu, each = n_sim),
+    size = rep(fert_params$size, each = n_sim),
+    pi0 = rep(fert_params$pi0, each = n_sim)
+  )
+# Pivot to long format for plotting
+relative_counts_long = relative_counts_df %>%
+  pivot_longer(cols = c(Siblings, AuntsUncles, Cousins), 
+               names_to = "RelativeType", values_to = "Count") %>% 
+  mutate(
+    mu = factor(mu, labels = c("3", "4", "5", "6")),
+    RelativeType = factor(RelativeType, levels = c("Siblings", "AuntsUncles", "Cousins")),
+    size = factor(size, labels = c("theta = 1", "theta = 4", "theta = 10")),
+    pi0 = factor(pi0, labels = c("pi_0 = 0", "pi_0 = 0.1", "pi_0 = 0.2"))
+  )
+
+# Plot the distributions
+ggplot(relative_counts_long,
+       aes(x = mu, y = Count, fill = RelativeType)) +
+  geom_boxplot(position = position_dodge(width = 0.8),
+               width = 0.7, alpha = .8, outlier.size = .3) +
+  stat_summary(fun = mean, geom = "point", shape = 21, size = 1.4,
+               aes(group = RelativeType),
+               position = position_dodge(width = 0.8),
+               colour = "black", fill = "white") +
+  facet_grid(pi0 ~ size) +
+  scale_fill_viridis_d(option = "D") +
+  labs(title   = "Simulated relative distributions under different fertility parameters",
+       x       = "Mean fertility (mu)",
+       y       = "Relative count",
+       fill    = "Relative type") +
+  theme_minimal(base_size = 11) +
+  theme(legend.position = "top")
+```
+
+Based on the simulated relative distributions, we observe the following patterns: the number of relatives increases with higher mean fertility ($\mu$), and decreases as the dispersion parameter ($\theta$) increases—--since greater dispersion corresponds to lower fertility variance. Similarly, the number of relatives declines as the zero-inflation probability ($\pi_0$) increases, though this effect is less pronounced. In general, the number of siblings is lower than that of aunts and uncles, which in turn is lower than the number of cousins—--consistent with the real family structure.
+
+## 2.6 Regression Model to analyze the effects of fertility parameters
+
+
+```{r regression-model, results='asis'}
+# Prepare wide fertility parameter tables
+fert_params = expand.grid(
+  mu = c(2, 3, 4, 5, 6),
+  size = c(1, 2, 4, 6, 10),
+  pi0 = c(0, 0.05, 0.1, 0.15, 0.2)
+)
+fert_params = as.data.frame(fert_params)[, c("pi0", "size", "mu")]
+n_sim = 10000  # Number of simulations per parameter combination
+
+# Simulate relative counts for each parameter combination
+relative_counts = list()
+for (i in seq_len(nrow(fert_params))) {
+  params = fert_params[i, ]
+  relative_counts[[i]] = simulate_relatives_zinb(
+    mu = params$mu,
+    size = params$size,
+    pi0 = params$pi0,
+    n_sim = n_sim
+  )
+}
+
+# Combine all relative counts into a single data frame
+relative_counts_df = bind_rows(relative_counts)
+relative_counts_df = relative_counts_df %>%
+  mutate(
+    mu = rep(fert_params$mu, each = n_sim),
+    size = rep(fert_params$size, each = n_sim),
+    pi0 = rep(fert_params$pi0, each = n_sim)
+  )
+
+library(broom)
+
+relatives <- c("Siblings", "AuntsUncles", "Cousins")
+
+for (rel in relatives) {
+  cat("\n\n### Focal-individual model for", rel, "\n\n")
+  form <- as.formula(paste0(rel, " ~ mu + size + pi0"))
+  lm_fit <- lm(form, data = relative_counts_df)
+  lm_tidy <- broom::tidy(lm_fit, conf.int = TRUE)
+  print(kable(
+    lm_tidy,
+    digits = 3,
+    caption = paste(
+      "Regression coefficients for", rel, 
+      "(focal-individual)"
+    )
+  ))
+}
+```
+
+We can conclude that the mean fertility ($\mu$) has a positive effect on the number of relatives, while the dispersion parameter ($\theta$) have a negative effects. The zero-inflation probability ($\pi_0$) has a negative effect on the number of cousins, but the effect is not significant for siblings and aunts/uncles.
