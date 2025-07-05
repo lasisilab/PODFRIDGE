@@ -355,7 +355,7 @@ div.tocify {
 <h1 class="title toc-ignore">Regression to predict CODIS database sizes
 and racial proportions</h1>
 <h4 class="author">Junhui He</h4>
-<h4 class="date">2025-06-21 22:23:23</h4>
+<h4 class="date">2025-07-04 23:06:16</h4>
 
 </div>
 
@@ -384,7 +384,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-06-21
+<strong>Last updated:</strong> 2025-07-04
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -515,15 +515,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree289c58af6dfde632630b03222da1ad57d46e9ceetargetblank289c58aa">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree2d5d98e206c16975dfc06a8233da72200365dc3atargetblank2d5d98ea">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/289c58af6dfde632630b03222da1ad57d46e9cee" target="_blank">289c58a</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/2d5d98e206c16975dfc06a8233da72200365dc3a" target="_blank">2d5d98e</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree289c58af6dfde632630b03222da1ad57d46e9ceetargetblank289c58aa"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree2d5d98e206c16975dfc06a8233da72200365dc3atargetblank2d5d98ea"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -533,7 +533,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/289c58af6dfde632630b03222da1ad57d46e9cee" target="_blank">289c58a</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/2d5d98e206c16975dfc06a8233da72200365dc3a" target="_blank">2d5d98e</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -553,10 +553,17 @@ Ignored files:
     Ignored:    .Rproj.user/
     Ignored:    analysis/.DS_Store
     Ignored:    code/.DS_Store
+    Ignored:    data/.DS_Store
     Ignored:    output/.DS_Store
 
 Untracked files:
     Untracked:  data/Murphy_combined_data.csv
+    Untracked:  data/internal/
+    Untracked:  data/raw/
+    Untracked:  data/regression_data/Murphy_combined_data.csv
+    Untracked:  output/SDIS_racial_composition.csv
+    Untracked:  output/pmf_sibling_counts.csv
+    Untracked:  output/pmf_sibling_counts.png
 
 Unstaged changes:
     Modified:   analysis/forensic_databases.Rmd
@@ -607,6 +614,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/2d5d98e206c16975dfc06a8233da72200365dc3a/analysis/codis_regression.Rmd" target="_blank">2d5d98e</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-07-04
+</td>
+<td>
+wflow_publish("analysis/codis_regression.Rmd")
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/bf233c1982ebfac630984d3d9d72bea774378e51/docs/codis_regression.html" target="_blank">bf233c1</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-06-21
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -743,54 +784,37 @@ population and the racial composition of the prison population within
 the state.</p>
 <p>The plot below illustrates which data sources are available for each
 state:</p>
-<p><img src="figure/codis_regression.Rmd/data-wrangling-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-data-wrangling-1">
-Past versions of data-wrangling-1.png
-</button>
-</p>
-<div id="fig-data-wrangling-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/6dfd60aa6ca9b6621cbfc2dbe859ec6772e58804/docs/figure/codis_regression.Rmd/data-wrangling-1.png" target="_blank">6dfd60a</a>
-</td>
-<td>
-Junhui He
-</td>
-<td>
-2025-06-18
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/3dfd5e12189eadef6caf4176b3e0551ada7c22e4/docs/figure/codis_regression.Rmd/data-wrangling-1.png" target="_blank">3dfd5e1</a>
-</td>
-<td>
-Junhui He
-</td>
-<td>
-2025-06-17
-</td>
-</tr>
-</tbody>
-</table>
+<div id="load-census-data-from-tidycensus" class="section level2">
+<h2>Load Census data from <code>tidycensus</code></h2>
+<pre class="r"><code># Load census data for each state from `tidycensus`
+# P1_002N is the total population, P1_003N is the total White population, and P1_004N is the total Black population
+us_state_density &lt;- get_decennial(
+  geography = &quot;state&quot;,
+  variables = c(all = &quot;P1_002N&quot;, census.num.white = &quot;P1_003N&quot;, census.num.black = &quot;P1_004N&quot;),
+  year = 2020,
+  geometry = TRUE,
+  keep_geo_vars = TRUE
+)</code></pre>
 </div>
+<div id="load-ndis-and-sdis-data" class="section level2">
+<h2>Load NDIS and SDIS data</h2>
+<p>The NDIS and SDIS are stored in <code>data/raw/NDIS.csv</code> and
+<code>data/raw/SDIS.csv</code>, respectively.</p>
+<pre class="r"><code># Read NDIS and SDIS data
+NDIS = read.csv(&quot;./data/raw/NDIS.csv&quot;)       # National DNA Index System data
+SDIS = read.csv(&quot;./data/raw/SDIS.csv&quot;)       # State DNA Indexing System data
+
+SDIS$N_total = ifelse(is.na(SDIS$N_total), SDIS$N_arrestees + SDIS$N_offenders, SDIS$N_total)
+
+# Merge NDIS and SDIS datasets by state
+NDIS_SDIS = merge(NDIS, SDIS, by = &quot;State&quot;)
+
+# Rename columns to distinguish between NDIS and SDIS data
+colnames(NDIS_SDIS) &lt;- gsub(&#39;.x&#39;,&#39;.NDIS&#39;, names(NDIS_SDIS))
+colnames(NDIS_SDIS) &lt;- gsub(&#39;.y&#39;,&#39;.SDIS&#39;, names(NDIS_SDIS))
+
+NDIS_SDIS$N_total.CODIS = ifelse(!is.na(NDIS_SDIS$N_total.SDIS), NDIS_SDIS$N_total.SDIS, NDIS_SDIS$N_total.NDIS)</code></pre>
+<p><img src="figure/codis_regression.Rmd/data-merge-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div
@@ -830,12 +854,60 @@ id="regression-to-estimate-the-racial-composition-of-the-sdis-database."
 class="section level1">
 <h1>3 Regression to estimate the racial composition of the SDIS
 database.</h1>
+<div id="load-regression-data" class="section level2">
+<h2>Load regression data</h2>
+<p>Murphy and Tong processed FOIA data is stored in
+<code>data/internal/murphy_processed.csv</code>. The prison and census
+combined data is stored in
+<code>data/internal/prison_census_combined.csv</code>. The following
+code reads the data and preprocesses it to obtain the training and test
+data for the regression model. The training data consists of seven
+states with FOIA data, and the test data consists of all other
+states.</p>
+<pre class="r"><code># read and preprocess data
+# read data
+response_data_path = file.path(&#39;./data/internal&#39;, &#39;murphy_processed.csv&#39;)
+predictor_data_path = file.path(&#39;./data/internal&#39;, &#39;prison_census_combined.csv&#39;)
+
+response_data = read.csv(response_data_path) # Murphy &amp; Tong data
+predictor_data = read.csv(predictor_data_path) # Census and prison data
+predictor_data[is.na(predictor_data)] = 0
+
+idx = sapply(response_data$state, function(x) {which(x == predictor_data$State)}) # obtain the index of seven FOIA states
+
+# calculate the response values
+mt_data = data.frame(
+  white = response_data$mt.num.white,
+  black = response_data$mt.num.black,
+  total = response_data$mt.num.total,
+  nonwhite = response_data$mt.num.total - response_data$mt.num.white,
+  other = response_data$mt.num.other
+)
+
+# calculate the predictor values
+x = data.frame(
+  census.percent.white = predictor_data$census.percent.white,
+  census.percent.black = predictor_data$census.percent.black,
+  incarc.percent.white = predictor_data$incarcerated_white / (predictor_data$incarcerated_total - predictor_data$incarcerated_unknown),
+  incarc.percent.black = predictor_data$incarcerated_black / (predictor_data$incarcerated_total - predictor_data$incarcerated_unknown)
+)
+
+x$census.percent.black.remain = x$census.percent.black / (1 - x$census.percent.white)
+x$incarc.percent.black.remain = x$incarc.percent.black / (1 - x$incarc.percent.white)
+
+# create training data and test data
+train_data = x[idx,]
+test_data = x[-idx,]</code></pre>
+</div>
+<div id="coeffient-estimation-and-wald-test" class="section level2">
+<h2>Coeffient estimation and Wald test</h2>
 <p>We estimate the linear coefficients <span
 class="math inline">\(\beta\)</span> of the binomial logistic regression
 for black Americans and white Americans using <code>glm()</code>
 function and do a Wald test on the beta coefficients. The <span
 class="math inline">\(p\)</span>-values show that these coefficients are
 all statistically significant.</p>
+<pre class="r"><code>summary(binomial_regression.white)</code></pre>
 <pre><code>
 Call:
 glm(formula = cbind(mt_data$white, mt_data$nonwhite) ~ census.percent.white + 
@@ -843,19 +915,20 @@ glm(formula = cbind(mt_data$white, mt_data$nonwhite) ~ census.percent.white +
 
 Coefficients:
                      Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept)          -2.02059    0.00985 -205.13   &lt;2e-16 ***
-census.percent.white  0.42150    0.03027   13.92   &lt;2e-16 ***
-incarc.percent.white  4.85971    0.02747  176.91   &lt;2e-16 ***
+(Intercept)          -2.02116    0.00985 -205.19   &lt;2e-16 ***
+census.percent.white  0.41899    0.03027   13.84   &lt;2e-16 ***
+incarc.percent.white  4.86338    0.02747  177.05   &lt;2e-16 ***
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 
 (Dispersion parameter for binomial family taken to be 1)
 
-    Null deviance: 624665  on 6  degrees of freedom
-Residual deviance: 100662  on 4  degrees of freedom
-AIC: 100759
+    Null deviance: 624973  on 6  degrees of freedom
+Residual deviance: 100696  on 4  degrees of freedom
+AIC: 100792
 
 Number of Fisher Scoring iterations: 4</code></pre>
+<pre class="r"><code>summary(binomial_regression.black)</code></pre>
 <pre><code>
 Call:
 glm(formula = cbind(mt_data$black, mt_data$other) ~ census.percent.black.remain + 
@@ -863,17 +936,17 @@ glm(formula = cbind(mt_data$black, mt_data$other) ~ census.percent.black.remain 
 
 Coefficients:
                              Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept)                 -4.146433   0.008491 -488.31   &lt;2e-16 ***
-census.percent.black.remain -1.166382   0.027717  -42.08   &lt;2e-16 ***
-incarc.percent.black.remain  9.080204   0.033132  274.06   &lt;2e-16 ***
+(Intercept)                 -4.147885   0.008485 -488.85   &lt;2e-16 ***
+census.percent.black.remain -1.175214   0.027708  -42.41   &lt;2e-16 ***
+incarc.percent.black.remain  9.084829   0.033111  274.38   &lt;2e-16 ***
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 
 (Dispersion parameter for binomial family taken to be 1)
 
-    Null deviance: 925028  on 6  degrees of freedom
-Residual deviance:  44715  on 4  degrees of freedom
-AIC: 44803
+    Null deviance: 925038  on 6  degrees of freedom
+Residual deviance:  44756  on 4  degrees of freedom
+AIC: 44843
 
 Number of Fisher Scoring iterations: 4</code></pre>
 <p>The following plot showing the estimated racial composition using the
@@ -902,6 +975,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/bf233c1982ebfac630984d3d9d72bea774378e51/docs/figure/codis_regression.Rmd/Goodness-of-Fit-1.png" target="_blank">bf233c1</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-06-21
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/3dfd5e12189eadef6caf4176b3e0551ada7c22e4/docs/figure/codis_regression.Rmd/Goodness-of-Fit-1.png" target="_blank">3dfd5e1</a>
@@ -942,6 +1026,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/bf233c1982ebfac630984d3d9d72bea774378e51/docs/figure/codis_regression.Rmd/Goodness-of-Fit-2.png" target="_blank">bf233c1</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-06-21
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/3dfd5e12189eadef6caf4176b3e0551ada7c22e4/docs/figure/codis_regression.Rmd/Goodness-of-Fit-2.png" target="_blank">3dfd5e1</a>
 </td>
 <td>
@@ -953,6 +1048,7 @@ Junhui He
 </tr>
 </tbody>
 </table>
+</div>
 </div>
 </div>
 </div>
@@ -991,6 +1087,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/bf233c1982ebfac630984d3d9d72bea774378e51/docs/figure/codis_regression.Rmd/final-data-1.png" target="_blank">bf233c1</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-06-21
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/6dfd60aa6ca9b6621cbfc2dbe859ec6772e58804/docs/figure/codis_regression.Rmd/final-data-1.png" target="_blank">6dfd60a</a>
 </td>
 <td>
@@ -1015,432 +1122,438 @@ Junhui He
 </table>
 </div>
 </div>
+<div id="sdis-racial-composition-by-state" class="section level2">
+<h2>SDIS racial composition by state</h2>
 <p>The table below reports the estimates for the racial composition and
 the number of people for each racial group in SDIS by state, along with
 the source of the data is below:</p>
+<pre class="r"><code>final.df = final.data[,c(&quot;State&quot;,&quot;SDIS.black&quot;,&quot;SDIS.white&quot;,&quot;SDIS.num.Black&quot;,&quot;SDIS.num.White&quot;,&quot;category&quot;)]
+colnames(final.df) = c(&quot;State&quot;,&quot;SDIS.percent.black&quot;,&quot;SDIS.percent.white&quot;,&quot;SDIS.num.black&quot;, &quot;SDIS.num.white&quot;, &quot;Category&quot;)
+kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&quot;)</code></pre>
 <table>
 <caption>Estimated racial composition of SDIS by state</caption>
 <colgroup>
+<col width="15%" />
+<col width="19%" />
+<col width="19%" />
+<col width="15%" />
+<col width="15%" />
 <col width="16%" />
-<col width="18%" />
-<col width="18%" />
-<col width="14%" />
-<col width="14%" />
-<col width="17%" />
 </colgroup>
 <thead>
 <tr class="header">
 <th align="left">State</th>
-<th align="right">Black Proportion</th>
-<th align="right">White Proportion</th>
-<th align="right">Black Number</th>
-<th align="right">White Number</th>
-<th align="left">Source</th>
+<th align="right">SDIS.percent.black</th>
+<th align="right">SDIS.percent.white</th>
+<th align="right">SDIS.num.black</th>
+<th align="right">SDIS.num.white</th>
+<th align="left">Category</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td align="left">Alabama</td>
-<td align="right">0.3710317</td>
-<td align="right">0.6207941</td>
-<td align="right">133571</td>
-<td align="right">223486</td>
-<td align="left">SDIS+regression</td>
+<td align="right">0.371</td>
+<td align="right">0.621</td>
+<td align="right">133560</td>
+<td align="right">223560</td>
+<td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="even">
 <td align="left">Alaska</td>
-<td align="right">0.0266889</td>
-<td align="right">0.5610748</td>
-<td align="right">2112</td>
-<td align="right">44407</td>
-<td align="left">SDIS+regression</td>
+<td align="right">0.027</td>
+<td align="right">0.561</td>
+<td align="right">2137</td>
+<td align="right">44401</td>
+<td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="odd">
 <td align="left">Arizona</td>
-<td align="right">0.0490530</td>
-<td align="right">0.5407053</td>
-<td align="right">23539</td>
-<td align="right">259467</td>
-<td align="left">NDIS+Regression</td>
+<td align="right">0.049</td>
+<td align="right">0.540</td>
+<td align="right">23514</td>
+<td align="right">259129</td>
+<td align="left">NDIS only</td>
 </tr>
 <tr class="even">
 <td align="left">Arkansas</td>
-<td align="right">0.2515854</td>
-<td align="right">0.7410987</td>
-<td align="right">3075</td>
-<td align="right">9057</td>
-<td align="left">SDIS+regression</td>
+<td align="right">0.252</td>
+<td align="right">0.741</td>
+<td align="right">3080</td>
+<td align="right">9056</td>
+<td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="odd">
 <td align="left">California</td>
-<td align="right">0.1710000</td>
-<td align="right">0.2960000</td>
+<td align="right">0.171</td>
+<td align="right">0.296</td>
 <td align="right">575484</td>
 <td align="right">996159</td>
 <td align="left">Murphy and Tong</td>
 </tr>
 <tr class="even">
 <td align="left">Colorado</td>
-<td align="right">0.0620029</td>
-<td align="right">0.5798340</td>
-<td align="right">30950</td>
-<td align="right">289436</td>
-<td align="left">SDIS+regression</td>
+<td align="right">0.062</td>
+<td align="right">0.580</td>
+<td align="right">30949</td>
+<td align="right">289519</td>
+<td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="odd">
 <td align="left">Connecticut</td>
-<td align="right">0.4036990</td>
-<td align="right">0.4125165</td>
-<td align="right">8074</td>
-<td align="right">8250</td>
-<td align="left">SDIS+regression</td>
+<td align="right">0.404</td>
+<td align="right">0.412</td>
+<td align="right">8080</td>
+<td align="right">8240</td>
+<td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="even">
 <td align="left">Delaware</td>
-<td align="right">0.4139069</td>
-<td align="right">0.5792814</td>
-<td align="right">9397</td>
-<td align="right">13152</td>
-<td align="left">NDIS+Regression</td>
+<td align="right">0.414</td>
+<td align="right">0.579</td>
+<td align="right">9399</td>
+<td align="right">13146</td>
+<td align="left">NDIS only</td>
 </tr>
 <tr class="odd">
 <td align="left">Florida</td>
-<td align="right">0.3520000</td>
-<td align="right">0.6140000</td>
+<td align="right">0.352</td>
+<td align="right">0.614</td>
 <td align="right">603289</td>
 <td align="right">1052328</td>
 <td align="left">Murphy and Tong</td>
 </tr>
 <tr class="even">
 <td align="left">Georgia</td>
-<td align="right">0.4866533</td>
-<td align="right">0.4972649</td>
-<td align="right">168939</td>
-<td align="right">172623</td>
-<td align="left">SDIS+regression</td>
+<td align="right">0.487</td>
+<td align="right">0.497</td>
+<td align="right">169060</td>
+<td align="right">172531</td>
+<td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="odd">
 <td align="left">Hawaii</td>
-<td align="right">0.0179503</td>
-<td align="right">0.3198698</td>
-<td align="right">749</td>
-<td align="right">13340</td>
-<td align="left">NDIS+Regression</td>
+<td align="right">0.018</td>
+<td align="right">0.320</td>
+<td align="right">751</td>
+<td align="right">13345</td>
+<td align="left">NDIS only</td>
 </tr>
 <tr class="even">
 <td align="left">Idaho</td>
-<td align="right">0.0049680</td>
-<td align="right">0.8860625</td>
-<td align="right">194</td>
-<td align="right">34556</td>
-<td align="left">SDIS+regression</td>
+<td align="right">0.005</td>
+<td align="right">0.886</td>
+<td align="right">195</td>
+<td align="right">34554</td>
+<td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="odd">
 <td align="left">Illinois</td>
-<td align="right">0.5088699</td>
-<td align="right">0.4510943</td>
-<td align="right">350762</td>
-<td align="right">310938</td>
-<td align="left">SDIS+regression</td>
+<td align="right">0.509</td>
+<td align="right">0.451</td>
+<td align="right">350852</td>
+<td align="right">310873</td>
+<td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="even">
 <td align="left">Indiana</td>
-<td align="right">0.2600000</td>
-<td align="right">0.7000000</td>
+<td align="right">0.260</td>
+<td align="right">0.700</td>
 <td align="right">116740</td>
 <td align="right">314300</td>
 <td align="left">Murphy and Tong</td>
 </tr>
 <tr class="odd">
 <td align="left">Iowa</td>
-<td align="right">0.1596071</td>
-<td align="right">0.8133977</td>
-<td align="right">24704</td>
-<td align="right">125895</td>
-<td align="left">NDIS+Regression</td>
+<td align="right">0.160</td>
+<td align="right">0.813</td>
+<td align="right">24764</td>
+<td align="right">125834</td>
+<td align="left">NDIS only</td>
 </tr>
 <tr class="even">
 <td align="left">Kansas</td>
-<td align="right">0.1587240</td>
-<td align="right">0.8353293</td>
-<td align="right">37688</td>
-<td align="right">198345</td>
-<td align="left">NDIS+Regression</td>
+<td align="right">0.159</td>
+<td align="right">0.835</td>
+<td align="right">37754</td>
+<td align="right">198267</td>
+<td align="left">NDIS only</td>
 </tr>
 <tr class="odd">
 <td align="left">Kentucky</td>
-<td align="right">0.1098584</td>
-<td align="right">0.8846163</td>
-<td align="right">26486</td>
-<td align="right">213271</td>
-<td align="left">NDIS+Regression</td>
+<td align="right">0.110</td>
+<td align="right">0.885</td>
+<td align="right">26520</td>
+<td align="right">213364</td>
+<td align="left">NDIS only</td>
 </tr>
 <tr class="even">
 <td align="left">Louisiana</td>
-<td align="right">0.5175885</td>
-<td align="right">0.4718245</td>
-<td align="right">362114</td>
-<td align="right">330097</td>
-<td align="left">SDIS+regression</td>
+<td align="right">0.518</td>
+<td align="right">0.472</td>
+<td align="right">362402</td>
+<td align="right">330220</td>
+<td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="odd">
 <td align="left">Maine</td>
-<td align="right">0.0390000</td>
-<td align="right">0.9280000</td>
+<td align="right">0.039</td>
+<td align="right">0.928</td>
 <td align="right">1467</td>
 <td align="right">34915</td>
 <td align="left">Murphy and Tong</td>
 </tr>
 <tr class="even">
 <td align="left">Maryland</td>
-<td align="right">0.6478107</td>
-<td align="right">0.3329734</td>
-<td align="right">95748</td>
-<td align="right">49214</td>
-<td align="left">SDIS+regression</td>
+<td align="right">0.648</td>
+<td align="right">0.333</td>
+<td align="right">95776</td>
+<td align="right">49218</td>
+<td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="odd">
 <td align="left">Massachusetts</td>
-<td align="right">0.2093703</td>
-<td align="right">0.5827315</td>
-<td align="right">34373</td>
-<td align="right">95670</td>
-<td align="left">NDIS+Regression</td>
+<td align="right">0.209</td>
+<td align="right">0.582</td>
+<td align="right">34313</td>
+<td align="right">95550</td>
+<td align="left">NDIS only</td>
 </tr>
 <tr class="even">
 <td align="left">Michigan</td>
-<td align="right">0.3658065</td>
-<td align="right">0.6264928</td>
-<td align="right">213146</td>
-<td align="right">365041</td>
-<td align="left">NDIS+Regression</td>
+<td align="right">0.366</td>
+<td align="right">0.626</td>
+<td align="right">213259</td>
+<td align="right">364754</td>
+<td align="left">NDIS only</td>
 </tr>
 <tr class="odd">
 <td align="left">Minnesota</td>
-<td align="right">0.2673256</td>
-<td align="right">0.7020352</td>
-<td align="right">48119</td>
-<td align="right">126366</td>
-<td align="left">SDIS+regression</td>
+<td align="right">0.267</td>
+<td align="right">0.702</td>
+<td align="right">48060</td>
+<td align="right">126360</td>
+<td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="even">
 <td align="left">Mississippi</td>
-<td align="right">0.4771726</td>
-<td align="right">0.5103070</td>
-<td align="right">56306</td>
-<td align="right">60216</td>
-<td align="left">SDIS+regression</td>
+<td align="right">0.477</td>
+<td align="right">0.510</td>
+<td align="right">56286</td>
+<td align="right">60180</td>
+<td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="odd">
 <td align="left">Missouri</td>
-<td align="right">0.1882627</td>
-<td align="right">0.8053561</td>
-<td align="right">75305</td>
-<td align="right">322142</td>
-<td align="left">SDIS+regression</td>
+<td align="right">0.188</td>
+<td align="right">0.805</td>
+<td align="right">75200</td>
+<td align="right">322000</td>
+<td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="even">
 <td align="left">Montana</td>
-<td align="right">0.0048830</td>
-<td align="right">0.8766247</td>
-<td align="right">158</td>
-<td align="right">28301</td>
-<td align="left">SDIS+regression</td>
+<td align="right">0.005</td>
+<td align="right">0.877</td>
+<td align="right">161</td>
+<td align="right">28313</td>
+<td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="odd">
 <td align="left">Nebraska</td>
-<td align="right">0.1995549</td>
-<td align="right">0.6878160</td>
-<td align="right">11587</td>
-<td align="right">39938</td>
-<td align="left">NDIS+Regression</td>
+<td align="right">0.200</td>
+<td align="right">0.688</td>
+<td align="right">11613</td>
+<td align="right">39949</td>
+<td align="left">NDIS only</td>
 </tr>
 <tr class="even">
 <td align="left">Nevada</td>
-<td align="right">0.2560000</td>
-<td align="right">0.6940000</td>
+<td align="right">0.256</td>
+<td align="right">0.694</td>
 <td align="right">62720</td>
 <td align="right">170030</td>
 <td align="left">Murphy and Tong</td>
 </tr>
 <tr class="odd">
 <td align="left">New Hampshire</td>
-<td align="right">0.0318916</td>
-<td align="right">0.9228574</td>
-<td align="right">605</td>
-<td align="right">17515</td>
-<td align="left">NDIS+Regression</td>
+<td align="right">0.032</td>
+<td align="right">0.923</td>
+<td align="right">607</td>
+<td align="right">17518</td>
+<td align="left">NDIS only</td>
 </tr>
 <tr class="even">
 <td align="left">New Jersey</td>
-<td align="right">0.6179722</td>
-<td align="right">0.3350065</td>
-<td align="right">20205</td>
+<td align="right">0.618</td>
+<td align="right">0.335</td>
+<td align="right">20206</td>
 <td align="right">10953</td>
-<td align="left">SDIS+regression</td>
+<td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="odd">
 <td align="left">New Mexico</td>
-<td align="right">0.0455374</td>
-<td align="right">0.8994926</td>
-<td align="right">6456</td>
-<td align="right">127526</td>
-<td align="left">NDIS+Regression</td>
+<td align="right">0.046</td>
+<td align="right">0.900</td>
+<td align="right">6522</td>
+<td align="right">127598</td>
+<td align="left">NDIS only</td>
 </tr>
 <tr class="even">
 <td align="left">New York</td>
-<td align="right">0.4989916</td>
-<td align="right">0.3468413</td>
-<td align="right">359660</td>
-<td align="right">249994</td>
-<td align="left">NDIS+Regression</td>
+<td align="right">0.499</td>
+<td align="right">0.347</td>
+<td align="right">359666</td>
+<td align="right">250109</td>
+<td align="left">NDIS only</td>
 </tr>
 <tr class="odd">
 <td align="left">North Carolina</td>
-<td align="right">0.4108033</td>
-<td align="right">0.5672115</td>
-<td align="right">143781</td>
-<td align="right">198524</td>
-<td align="left">SDIS+regression</td>
+<td align="right">0.411</td>
+<td align="right">0.567</td>
+<td align="right">143850</td>
+<td align="right">198450</td>
+<td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="even">
 <td align="left">North Dakota</td>
-<td align="right">0.0260494</td>
-<td align="right">0.7467642</td>
-<td align="right">1325</td>
-<td align="right">37995</td>
-<td align="left">NDIS+Regression</td>
+<td align="right">0.026</td>
+<td align="right">0.747</td>
+<td align="right">1323</td>
+<td align="right">38007</td>
+<td align="left">NDIS only</td>
 </tr>
 <tr class="odd">
 <td align="left">Ohio</td>
-<td align="right">0.2905440</td>
-<td align="right">0.6998825</td>
-<td align="right">261242</td>
-<td align="right">629298</td>
-<td align="left">NDIS+Regression</td>
+<td align="right">0.291</td>
+<td align="right">0.700</td>
+<td align="right">261652</td>
+<td align="right">629404</td>
+<td align="left">NDIS only</td>
 </tr>
 <tr class="even">
 <td align="left">Oklahoma</td>
-<td align="right">0.2196836</td>
-<td align="right">0.6924514</td>
-<td align="right">45209</td>
-<td align="right">142500</td>
-<td align="left">NDIS+Regression</td>
+<td align="right">0.220</td>
+<td align="right">0.692</td>
+<td align="right">45274</td>
+<td align="right">142407</td>
+<td align="left">NDIS only</td>
 </tr>
 <tr class="odd">
 <td align="left">Oregon</td>
-<td align="right">0.0288813</td>
-<td align="right">0.8668997</td>
-<td align="right">6769</td>
-<td align="right">203178</td>
-<td align="left">NDIS+Regression</td>
+<td align="right">0.029</td>
+<td align="right">0.867</td>
+<td align="right">6797</td>
+<td align="right">203201</td>
+<td align="left">NDIS only</td>
 </tr>
 <tr class="even">
 <td align="left">Pennsylvania</td>
-<td align="right">0.3739945</td>
-<td align="right">0.5970871</td>
-<td align="right">177407</td>
-<td align="right">283233</td>
-<td align="left">NDIS+Regression</td>
+<td align="right">0.374</td>
+<td align="right">0.597</td>
+<td align="right">177410</td>
+<td align="right">283192</td>
+<td align="left">NDIS only</td>
 </tr>
 <tr class="odd">
 <td align="left">Rhode Island</td>
-<td align="right">0.3804552</td>
-<td align="right">0.3584809</td>
-<td align="right">10584</td>
-<td align="right">9972</td>
-<td align="left">SDIS+regression</td>
+<td align="right">0.380</td>
+<td align="right">0.358</td>
+<td align="right">10571</td>
+<td align="right">9959</td>
+<td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="even">
 <td align="left">South Carolina</td>
-<td align="right">0.4568350</td>
-<td align="right">0.5327503</td>
-<td align="right">80233</td>
-<td align="right">93566</td>
-<td align="left">SDIS+regression</td>
+<td align="right">0.457</td>
+<td align="right">0.533</td>
+<td align="right">80262</td>
+<td align="right">93610</td>
+<td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="odd">
 <td align="left">South Dakota</td>
-<td align="right">0.0600000</td>
-<td align="right">0.6680000</td>
+<td align="right">0.060</td>
+<td align="right">0.667</td>
 <td align="right">3372</td>
-<td align="right">37542</td>
+<td align="right">37485</td>
 <td align="left">Murphy and Tong</td>
 </tr>
 <tr class="even">
 <td align="left">Tennessee</td>
-<td align="right">0.2547037</td>
-<td align="right">0.7395115</td>
-<td align="right">132093</td>
-<td align="right">383521</td>
-<td align="left">SDIS+regression</td>
+<td align="right">0.255</td>
+<td align="right">0.739</td>
+<td align="right">132247</td>
+<td align="right">383256</td>
+<td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="odd">
 <td align="left">Texas</td>
-<td align="right">0.2910000</td>
-<td align="right">0.3730000</td>
+<td align="right">0.291</td>
+<td align="right">0.373</td>
 <td align="right">353163</td>
 <td align="right">452680</td>
 <td align="left">Murphy and Tong</td>
 </tr>
 <tr class="even">
 <td align="left">Utah</td>
-<td align="right">0.0173323</td>
-<td align="right">0.7892671</td>
-<td align="right">2564</td>
-<td align="right">116762</td>
-<td align="left">NDIS+Regression</td>
+<td align="right">0.017</td>
+<td align="right">0.789</td>
+<td align="right">2515</td>
+<td align="right">116722</td>
+<td align="left">NDIS only</td>
 </tr>
 <tr class="odd">
 <td align="left">Vermont</td>
-<td align="right">0.0590206</td>
-<td align="right">0.9271688</td>
+<td align="right">0.059</td>
+<td align="right">0.927</td>
 <td align="right">1324</td>
-<td align="right">20802</td>
-<td align="left">NDIS+Regression</td>
+<td align="right">20798</td>
+<td align="left">NDIS only</td>
 </tr>
 <tr class="even">
 <td align="left">Virginia</td>
-<td align="right">0.4387065</td>
-<td align="right">0.5497012</td>
-<td align="right">223306</td>
-<td align="right">279803</td>
-<td align="left">SDIS+regression</td>
+<td align="right">0.439</td>
+<td align="right">0.550</td>
+<td align="right">223455</td>
+<td align="right">279955</td>
+<td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="odd">
 <td align="left">Washington</td>
-<td align="right">0.1157078</td>
-<td align="right">0.8500003</td>
-<td align="right">31473</td>
+<td align="right">0.116</td>
+<td align="right">0.850</td>
+<td align="right">31552</td>
 <td align="right">231200</td>
-<td align="left">SDIS+regression</td>
+<td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="even">
 <td align="left">West Virginia</td>
-<td align="right">0.0676830</td>
-<td align="right">0.9292480</td>
-<td align="right">3211</td>
-<td align="right">44087</td>
-<td align="left">SDIS+regression</td>
+<td align="right">0.068</td>
+<td align="right">0.929</td>
+<td align="right">3226</td>
+<td align="right">44075</td>
+<td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="odd">
 <td align="left">Wisconsin</td>
-<td align="right">0.2784193</td>
-<td align="right">0.7104815</td>
-<td align="right">108904</td>
-<td align="right">277906</td>
-<td align="left">NDIS+Regression</td>
+<td align="right">0.279</td>
+<td align="right">0.710</td>
+<td align="right">109131</td>
+<td align="right">277717</td>
+<td align="left">NDIS only</td>
 </tr>
 <tr class="even">
 <td align="left">Wyoming</td>
-<td align="right">0.0086344</td>
-<td align="right">0.8815643</td>
-<td align="right">281</td>
-<td align="right">28697</td>
-<td align="left">NDIS+Regression</td>
+<td align="right">0.009</td>
+<td align="right">0.882</td>
+<td align="right">293</td>
+<td align="right">28711</td>
+<td align="left">NDIS only</td>
 </tr>
 </tbody>
 </table>
+<pre class="r"><code>write.csv(final.df, file = &quot;./output/SDIS_racial_composition.csv&quot;, row.names = FALSE)</code></pre>
 <p>we generate side-by-side pie charts showing the comparison between
 the racial composition of the census (left) and the estimated racial
 composition of SDIS (right) for each state.</p>
@@ -1469,6 +1582,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/bf233c1982ebfac630984d3d9d72bea774378e51/docs/figure/codis_regression.Rmd/pie-charts-final-1.png" target="_blank">bf233c1</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-06-21
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/3dfd5e12189eadef6caf4176b3e0551ada7c22e4/docs/figure/codis_regression.Rmd/pie-charts-final-1.png" target="_blank">3dfd5e1</a>
 </td>
 <td>
@@ -1482,12 +1606,140 @@ Junhui He
 </table>
 </div>
 </div>
+</div>
+<div id="sumary-of-the-sdis-racial-composition" class="section level2">
+<h2>Sumary of the SDIS racial composition</h2>
+<p>Specifically, we report all states where Black individuals make up
+&gt; 50% of the SDIS database.</p>
+<pre class="r"><code>black_majority = pis_mt[which(pis_mt$SDIS.black &gt; 0.5), c(&quot;State&quot;, &quot;SDIS.black&quot;, &quot;SDIS.white&quot;, &quot;SDIS.other&quot;)]
+colnames(black_majority) = c(&quot;State&quot;, &quot;SDIS.percent.black&quot;, &quot;SDIS.percent.white&quot;, &quot;SDIS.percent.other&quot;)
+kable(black_majority, caption = &quot;States where Black individuals make up &gt; 50% of the SDIS database&quot;)</code></pre>
+<table style="width:100%;">
+<caption>States where Black individuals make up &gt; 50% of the SDIS
+database</caption>
+<colgroup>
+<col width="4%" />
+<col width="15%" />
+<col width="26%" />
+<col width="26%" />
+<col width="26%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">State</th>
+<th align="right">SDIS.percent.black</th>
+<th align="right">SDIS.percent.white</th>
+<th align="right">SDIS.percent.other</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">13</td>
+<td align="left">Illinois</td>
+<td align="right">0.509</td>
+<td align="right">0.451</td>
+<td align="right">0.040</td>
+</tr>
+<tr class="even">
+<td align="left">18</td>
+<td align="left">Louisiana</td>
+<td align="right">0.518</td>
+<td align="right">0.472</td>
+<td align="right">0.011</td>
+</tr>
+<tr class="odd">
+<td align="left">20</td>
+<td align="left">Maryland</td>
+<td align="right">0.648</td>
+<td align="right">0.333</td>
+<td align="right">0.019</td>
+</tr>
+<tr class="even">
+<td align="left">30</td>
+<td align="left">New Jersey</td>
+<td align="right">0.618</td>
+<td align="right">0.335</td>
+<td align="right">0.047</td>
+</tr>
+</tbody>
+</table>
+<p>The maximum and minimum SDIS database sizes are shown below:</p>
+<pre class="r"><code>max_min_SDIS = NDIS_SDIS[c(which.max(NDIS_SDIS$N_total.CODIS), 
+                            which.min(NDIS_SDIS$N_total.CODIS)),
+                         c(&quot;State&quot;,&quot;N_total.SDIS&quot;,&quot;N_total.NDIS&quot;,&quot;N_total.CODIS&quot;)]
+kable(max_min_SDIS, caption = &quot;Maximum and minimum SDIS database sizes by state&quot;)</code></pre>
+<table>
+<caption>Maximum and minimum SDIS database sizes by state</caption>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">State</th>
+<th align="right">N_total.SDIS</th>
+<th align="right">N_total.NDIS</th>
+<th align="right">N_total.CODIS</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">5</td>
+<td align="left">California</td>
+<td align="right">3365402</td>
+<td align="right">3269323</td>
+<td align="right">3365402</td>
+</tr>
+<tr class="even">
+<td align="left">4</td>
+<td align="left">Arkansas</td>
+<td align="right">12221</td>
+<td align="right">261289</td>
+<td align="right">12221</td>
+</tr>
+</tbody>
+</table>
 <p>Furthermore, we calculate the weighted averages of the racial
 proportions in Census and SDIS across seven states provided in Murphy
 and Tong [1] and all states, weighted by the corresponding total number
 of people in each state. The following table shows the weighted racial
 proportions in Census and SDIS across states.</p>
 <p><img src="figure/codis_regression.Rmd/plot-weighted-averages-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plot-weighted-averages-1">
+Past versions of plot-weighted-averages-1.png
+</button>
+</p>
+<div id="fig-plot-weighted-averages-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/bf233c1982ebfac630984d3d9d72bea774378e51/docs/figure/codis_regression.Rmd/plot-weighted-averages-1.png" target="_blank">bf233c1</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-06-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>We additionally generate plots showing the difference in the racial
 proportions between SDIS and Census in each state.</p>
 <p><img src="figure/codis_regression.Rmd/maps-1.png" width="1920" style="display: block; margin: auto;" /></p>
@@ -1513,6 +1765,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/bf233c1982ebfac630984d3d9d72bea774378e51/docs/figure/codis_regression.Rmd/maps-1.png" target="_blank">bf233c1</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-06-21
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/3dfd5e12189eadef6caf4176b3e0551ada7c22e4/docs/figure/codis_regression.Rmd/maps-1.png" target="_blank">3dfd5e1</a>
@@ -1553,6 +1816,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/bf233c1982ebfac630984d3d9d72bea774378e51/docs/figure/codis_regression.Rmd/maps-2.png" target="_blank">bf233c1</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-06-21
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/3dfd5e12189eadef6caf4176b3e0551ada7c22e4/docs/figure/codis_regression.Rmd/maps-2.png" target="_blank">3dfd5e1</a>
 </td>
 <td>
@@ -1569,6 +1843,7 @@ Junhui He
 <p>We conclude that Black/African Americans are overrepresented and
 white Americans are underrepresented in the forensic database compared
 to Census.</p>
+</div>
 </div>
 <div id="references" class="section level1">
 <h1>References</h1>
@@ -1618,8 +1893,7 @@ other attached packages:
  [5] tidycensus_1.7.1  sandwich_3.1-1    ggpubr_0.6.0      jtools_2.3.0     
  [9] knitr_1.50        lubridate_1.9.4   forcats_1.0.0     stringr_1.5.1    
 [13] dplyr_1.1.4       purrr_1.0.4       tidyr_1.3.1       tibble_3.2.1     
-[17] ggplot2_3.5.2     tidyverse_2.0.0   readr_2.1.5       here_1.0.1       
-[21] workflowr_1.7.1  
+[17] ggplot2_3.5.2     tidyverse_2.0.0   readr_2.1.5       workflowr_1.7.1  
 
 loaded via a namespace (and not attached):
  [1] tidyselect_1.2.1    farver_2.1.2        fastmap_1.2.0      
