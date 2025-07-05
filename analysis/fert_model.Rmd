@@ -1,0 +1,366 @@
+---
+title: "Fertility Modelling and Sibling Estimates"
+author: "Junhui He"
+date: '`r Sys.Date()`'
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, message = FALSE, warning = FALSE, echo = FALSE}
+knitr::opts_chunk$set(eval = TRUE, echo = TRUE, warning = FALSE, fig.width = 9, fig.height = 7)
+
+library(dplyr)
+library(tidyr)
+library(readr)
+library(MASS)     ## glm.nb
+library(pscl)     ## zeroinfl
+library(knitr)    ## kable
+library(ggplot2)
+```
+
+# 1 U.S. Census Data in Fertility
+
+We extract the fertility information for U.S. women aged 50‑59 in the 1990 Census. Women aged 50–59 in the 1990 U.S. Census were born between 1931 and 1940. Assuming a typical childbearing age range of 25–45, their children would have been born between approximately 1956 and 1985. Therefore, the fertility distributions and relative counts estimated from this cohort primarily reflect the family-building behaviors and social contexts of the mid-1950s through the mid-1980s. We filter to Black/African American and White American groups as these are of interest to our paper.
+
+## Load the pre‑filtered IPUMS subset
+
+```{r load-data}
+path         <- file.path(".", "data")
+prop_race_year <- file.path(path, "proportions_table_by_race_year.csv")
+data_filter    <- file.path(path, "data_filtered_recoded.csv")
+
+## original script loads both; we only need mother_data for this step
+mother_data <- read_csv(data_filter, show_col_types = FALSE)
+```
+
+`mother_data` already contains:
+
+-   `YEAR` – Census year (1960,1970,1980,1990)
+-   `AGE` – respondent age
+-   `RACE` – recoded as "White" or "Black/African American"
+-   `chborn_num` – completed fertility (children ever born)
+
+## Select the 1990, age 50‑59 cohort
+
+```{r select-cohort}
+cohort <- mother_data %>%
+  filter(YEAR == 1990,
+         AGE  >= 50, AGE <= 59,
+         RACE %in% c("White", "Black/African American")) %>%
+  mutate(RACE = droplevels(factor(RACE))) %>% dplyr::select("YEAR", "AGE", "RACE", "chborn_num")
+
+cohort %>% count(RACE, name = "n_women")
+
+kable(head(cohort, n = 15), caption = "Fertility data for U.S. women aged 50‑59 in the 1990 Census.")
+```
+
+## Prepare individual-level sibling counts
+
+```{r prepare-sibling-counts}
+# Prepare individual-level sibling count
+sibs_long <- cohort %>%
+  mutate(mother_id = row_number()) %>%
+  filter(chborn_num > 0) %>%
+  tidyr::uncount(chborn_num, .remove = FALSE) %>%
+  mutate(n_sib = chborn_num - 1)
+
+kable(head(sibs_long, n = 15), caption = "Corresponding sibling data calculated from fertility data")
+```
+
+# 2 Family structure modelling
+
+Here we establish statistical models for the **fertility distribution** and **sibling distribution**. The fertility distribution describes the number of children per family, while the sibling distribution describes the number of siblings per person.
+
+## Fertility distribution
+
+We model the number of children per family using a **Poisson distribution** and a **zero inflated negative binomial distribution (ZINB)**, respectively.
+
+### Poisson distribution
+
+The **Poisson distribution** is a common model for count data, particularly when the mean and variance are equal. However, it may not be suitable for fertility data, which often exhibit zero-inflation and overdispersion (variance greater than the mean). The Poisson distribution with **mean fertility** ($\mu$) is defined as: for a count $k \geq 0$, $$P(num_{child}=k)=e^{-\mu}\frac{\mu^k}{k!},$$ denoted by $Poisson(\mu)$. The mean and variance of $Poisson(\mu)$ are both $\mu$.
+
+### Zero inflated negative binomial distribution
+
+The **zero inflated negative binomial distribution** with parameters **mean fertility** ($\mu$), **dispersion/size** ($\theta$), and **zero‑inflation probability** ($\pi_0$)---denoted as $ZINB(\mu, \theta, \pi_0)$---is defined as: for a count $k \geq 0$, $$P(num_{child}=k)=\begin{cases}
+\pi_0 + (1-\pi_0)p^{\theta} & \text{if } k=0, \\
+(1-\pi_0)\binom{k+\theta-1}{k}(1-p)^k p ^{\theta} & \text{if } k \geq 1,
+\end{cases}$$ where $p = \frac{\theta}{\mu+\theta}$ represents the success probability of the negative binomial distribution.
+
+According to the definition of the negative binomial distribution, the mean and variance of $NB(\mu,\theta)$ are given by $\mu$ and $\mu + \frac{\mu^2}{\theta}$, respectively. Therefore, the mean and variance of $ZINB(\mu, \theta, \pi_0)$ are defined by $\mu(1-\pi_0)$ and $\mu(1-\pi_0) + \frac{\mu^2(1-\pi_0)}{\theta}+\mu^2\pi_0(1-\pi_0)$, respectively.
+
+## Sibling distribution
+
+The **sibling distribution** can be derived from the fertility distribution. For any count $k \geq 0$, the probability that an individual has $k$ siblings is proportional to the probability that their mother has $k+1$ children, multiplied by the number of ways the individual could be one of those children. Therefore, the sibling distribution satisfies: $$P(num_{sib}=k) \propto (k+1)P(num_{child}=k+1).$$
+
+### Derivation of sibling distribution
+
+If the **fertility distribution** is $Poisson(\mu)$, then the **sibling distribution** is given by: for a count $k \geq 0$, $$P(num_{sib}=k) \propto (k+1)e^{-\mu}\frac{\mu^{k+1}}{(k+1)!} = e^{-\mu}\frac{\mu^{k+1}}{k!}\propto e^{-\mu}\frac{\mu^k}{k!},$$ which is also a **Poisson distribution** with mean $\mu$.
+
+If the **fertility distribution** is $ZINB(\mu, \theta, \pi_0)$, then the **sibling distribution** is given by: for a count $k \geq 0$, $$\begin{align*}
+P(num_{sib}=k) & \propto (1-\pi_0)(k+1)\binom{k+\theta}{k+1}(1-p)^{k+1} p^{\theta} \\
+& = (1-\pi_0)(k+1)\frac{(k+\theta)!}{(k+1)!(\theta-1)!}(1-p)^{k+1} p^{\theta} \\
+& \propto \frac{\theta(1-p)}{p} \frac{(k+\theta)!}{k!\theta!}(1-p)^k p^{\theta+1} \\
+& \propto \binom{k+\theta}{k}(1-p)^k p^{\theta+1}, \\
+\end{align*}$$ where $p = \frac{\theta}{\mu+\theta}$. Therefore, the sibling distribution is a **negative binomial distribution** with parameters **mean fertility** ($\frac{\mu(\theta+1)}{\theta}$), **dispersion/size** ($\theta+1$), denoted as $NB(\frac{\mu(\theta+1)}{\theta}, \theta+1)$. The variance is $\frac{\mu(\theta+1)}{\theta} + \frac{\mu^2(\theta+1)}{\theta^2}$.
+
+
+# 3 Model fitting
+
+## Fit the Poisson and ZINB models
+
+```{r fit-models}
+fit_fert <- function(dat) {
+  ## Poisson model
+  pois <- glm(chborn_num ~ 1, family = poisson, data = dat)
+  
+  ## Zero‑inflated negative binomial model
+  zinb <- zeroinfl(chborn_num ~ 1 | 1, data = dat, dist = "negbin")
+  
+  tibble(
+    Model = c("Poisson", "ZINB"),
+    mu    = c(exp(coef(pois)[1]),                    ## log‑link → exp() gives mean
+              exp(zinb$coefficients$count[1])),
+    size  = c(Inf,                                   ## dispersion θ; Inf = Poisson
+              zinb$theta),
+    pi0   = c(0,                                      ## zero‑inflation prob.
+              plogis(zinb$coefficients$zero[1]))
+  )
+}
+
+param_fert <- cohort %>%
+  group_by(RACE) %>%
+  group_modify(~ fit_fert(.x)) %>%
+  ungroup()
+```
+
+## Estimated fertility parameters
+
+```{r fertility-params}
+kable(param_fert, digits = 3, caption = "Fertility‑model parameter estimates for women aged50‑59 (1990 Census)")
+```
+
+## Compare the mean and variance from the models and data
+
+```{r compare-mean-var}
+cal_mean_var <- function(model, mu, size, pi0) {
+  if (model == "Poisson") {
+    mean_fert = mu
+    var_fert  = mu
+    mean_sib = mu
+    var_sib  = mu
+  } else if (model == "ZINB") {
+    mean_fert = mu * (1 - pi0)
+    var_fert  = mu * (1 - pi0) + (mu^2 * (1 - pi0) / size) + (mu^2 * pi0 * (1 - pi0))
+    mean_sib = mu * ((size + 1) / size)
+    var_sib  = mu * ((size + 1) / size) + (mu^2 * ((size + 1) / size) / size)
+  }
+  
+  tibble(
+    Model = model,
+    Mean_Fertility = mean_fert,
+    Variance_Fertility = var_fert,
+    Mean_Sibling = mean_sib,
+    Variance_Sibling = var_sib
+  )
+}
+
+mean_var_fitted <- param_fert %>%
+  rowwise() %>%
+  do(cal_mean_var(.$Model, .$mu, .$size, .$pi0)) %>%
+  ungroup()
+
+mean_var = data.frame(
+  Race = rep(c("Black/African American", "White"), each = 3),
+  Model = rep(c("Data", "Poisson", "ZINB"), 2),
+  Mean_Fertility = c(mean(cohort$chborn_num[cohort$RACE == "Black/African American"]), mean_var_fitted$Mean_Fertility[1], mean_var_fitted$Mean_Fertility[2], mean(cohort$chborn_num[cohort$RACE == "White"]), mean_var_fitted$Mean_Fertility[3], mean_var_fitted$Mean_Fertility[4]),
+  Variance_Fertility = c(var(cohort$chborn_num[cohort$RACE == "Black/African American"]), mean_var_fitted$Variance_Fertility[1], mean_var_fitted$Variance_Fertility[2], var(cohort$chborn_num[cohort$RACE == "White"]), mean_var_fitted$Variance_Fertility[3], mean_var_fitted$Variance_Fertility[4]),
+  Mean_Sibling = c(mean(sibs_long$n_sib[sibs_long$RACE == "Black/African American"]), mean_var_fitted$Mean_Sibling[1], mean_var_fitted$Mean_Sibling[2], mean(sibs_long$n_sib[sibs_long$RACE == "White"]), mean_var_fitted$Mean_Sibling[3], mean_var_fitted$Mean_Sibling[4]),
+  Variance_Sibling = c(var(sibs_long$n_sib[sibs_long$RACE == "Black/African American"]), mean_var_fitted$Variance_Sibling[1], mean_var_fitted$Variance_Sibling[2], var(sibs_long$n_sib[sibs_long$RACE == "White"]), mean_var_fitted$Variance_Sibling[3], mean_var_fitted$Variance_Sibling[4])
+)
+
+kable(mean_var, digits = 3, caption = "Mean and variance of fertility and sibling distributions from the fitted models and data.")
+```
+
+## Model evaluation
+
+Based on the table of mean and variance, we can see that the fertility data exhibits **overdispersion (variance greater than mean)**, especially for **Black/African American**. The **Poisson Model** assumes equal mean and variance, which does not fit the data well. The **ZINB Model** accounts for overdispersion and zero-inflation, providing a better fit to the data. The ZINB model's mean and variance estimates for both fertility and sibling distributions align more closely with the observed data, particularly for the **Black/African American** group, where the Poisson model fails to capture the higher variance. Nevertheless, both models yield the same mean fertility counts, which is equal to the sample mean of fertility data.
+
+# 4 Simulations of fertility and sibling distributions
+
+In this section, we simulate the fertility and sibling counts based on the Poisson and ZINB distributions, respectively. We then compare the empirical mean and variance of the simulated sibling data with the theoretical values derived from Section 2.
+
+## Simulate the fertility and sibling counts
+
+```{r simulate-fert-sib}
+simulate_fert_sib <- function(model, mu, size, pi0, n_sim = 20000, max_kids = 20) {
+  if (model == "Poisson") {
+    # Simulate fertility counts from Poisson distribution
+    fert_counts <- pmin(rpois(n_sim, lambda = mu), max_kids)
+  } else if (model == "ZINB") {
+    # Simulate fertility counts from ZINB distribution
+    fert_counts <- ifelse(runif(n_sim) < pi0, 0, pmin(rnbinom(n_sim, size, mu = mu), max_kids))
+  }
+  
+  # Simulate sibling counts based on fertility counts
+  fert_counts_tibble <- tibble(fert_counts = fert_counts)
+  sib_counts_tibble <- fert_counts_tibble %>%
+    filter(fert_counts > 0) %>%
+    tidyr::uncount(fert_counts, .remove = FALSE) %>%
+    mutate(sib_counts = fert_counts - 1)
+  sib_counts <- sib_counts_tibble$sib_counts
+  
+  list(
+    model = model,
+    fert_counts = fert_counts,
+    sib_counts = sib_counts
+  )
+}
+```
+
+## Compare sibling counts from simulations with theoretical values
+
+We run simulations for fertility means of 1.5, 2.0, 2.5, 3.0, 3.5, and 4.0 for both Poisson and ZINB models. Additionally, in ZINB models, we set the dispersion parameter $\theta$ to 4, and the zero-inflation probability $\pi_0$ to 0.05. 
+
+We compare the empirical mean and variance of sibling counts from the simulated data with the theoretical values. The comparison shows that **the theoretical values align closely with the simulated results**, confirming the correctness of our derivation.
+
+```{r compare-simulated-sibling}
+means = c(1.5, 2.0, 2.5, 3.0, 3.5, 4.0)
+size = 4
+pi0 = 0.05
+
+cal_mean_var_simulated <- function(sim_data) {
+  sib_counts <- sim_data$sib_counts
+  
+  mean_sib = mean(sib_counts)
+  var_sib = var(sib_counts)
+  
+  tibble(
+    Mean_Sibling = mean_sib,
+    Variance_Sibling = var_sib
+  )
+}
+
+# Poisson Model
+simulated_poisson <- lapply(means, function(mu) {
+  simulate_fert_sib("Poisson", mu, Inf, 0)
+})
+
+simulated_poisson_results <- lapply(simulated_poisson, cal_mean_var_simulated) %>% bind_rows() %>%
+  mutate(Fertility_Parameter = sapply(means, function(mu) paste0("Fertility Mean = ", mu)),
+         Value_Type = "Simulated Poisson") %>% dplyr::select(Fertility_Parameter, Value_Type, everything())
+threo_possion_results <- tibble(
+  Fertility_Parameter = sapply(means, function(mu) paste0("Fertility Mean = ", mu)),
+  Value_Type = "Theoretical Poisson",
+  Mean_Sibling = means,
+  Variance_Sibling = means
+)
+
+poisson_results <- bind_rows(simulated_poisson_results, threo_possion_results) %>%
+  arrange(Fertility_Parameter) %>%
+  mutate(Value_Type = factor(Value_Type, levels = c("Theoretical Poisson", "Simulated Poisson")))
+
+kable(poisson_results, digits = 3, caption = "Mean and Variance of Sibling counts from simulations and theoretical values based on Poisson distribution.")
+
+# ZINB Model
+simulated_zinb <- lapply(means, function(mu) {
+  simulate_fert_sib("ZINB", mu/(1-pi0), size, pi0)
+})
+simulated_zinb_results <- lapply(simulated_zinb, cal_mean_var_simulated) %>% bind_rows() %>%
+  mutate(Fertility_Parameter = sapply(means, function(mu) paste0("Fertility Mean = ", mu)),
+         Value_Type = "Simulated ZINB") %>% dplyr::select(Fertility_Parameter, Value_Type, everything())
+mean_var_zinb <- lapply(means, function(mu) cal_mean_var("ZINB", mu/(1-pi0), size, pi0)) %>% bind_rows()
+threo_zinb_results <- tibble(
+  Fertility_Parameter = sapply(means, function(mu) paste0("Fertility Mean = ", mu)),
+  Value_Type = "Theoretical ZINB",
+  Mean_Sibling = mean_var_zinb$Mean_Sibling,
+  Variance_Sibling = mean_var_zinb$Variance_Sibling
+)
+
+zinb_results <- bind_rows(simulated_zinb_results, threo_zinb_results) %>%
+  arrange(Fertility_Parameter) %>%
+  mutate(Value_Type = factor(Value_Type, levels = c("Theoretical ZINB", "Simulated ZINB")))
+
+kable(zinb_results, digits = 3, caption = "Mean and Variance of Sibling counts from simulations and theoretical values based on ZINB distribution.")
+```
+
+## Visualize sibling distributions
+
+We generate discrete probability distributions for sibling counts based on both Poisson and ZINB models, with the y-axis representing the number of siblings and the x-axis representing the probability of having that many siblings. The fertility mean is set to 2.5, and the ZINB model has a dispersion parameter of 4 and a zero-inflation probability of 0.05.
+
+```{r plot-pmf}
+library(viridisLite)
+
+plot_pmf <- function(pmf_df) {
+  cats = sort(unique(pmf_df$sib_counts))
+  n_cat <- length(cats)
+  color_palette <- viridis(n_cat, option = "D")
+  df <- pmf_df %>%
+    mutate(y = ifelse(Model == "Poisson", -prob, prob),
+           count_cat = factor(sib_counts, levels = cats))
+  ggplot(df, aes(x = count_cat, y = y, fill = count_cat, alpha = Model)) +
+    geom_col() +
+    geom_hline(yintercept = 0, color = "black", size = 0.5) +
+    coord_flip() +
+    scale_y_continuous(labels = function(x) abs(x)) +
+    scale_fill_manual(values = color_palette, name = "Siblings Count") +
+    scale_alpha_manual(values = c("Poisson" = 0.7, "ZINB" = 1), guide = "none") +
+    labs(
+      title = "PMF of Siblings Counts (Simulated from Poisson and ZINB Models)",
+      x = "Number of Siblings",
+      y = "Probability",
+      caption = "Poisson (left, negative y), ZINB (right, positive y)."
+    ) +
+    theme_minimal(base_size = 13) +
+    theme(
+      plot.title = element_text(size = 14, hjust = 0.5),
+      axis.text.y = element_text(size = 10),
+      plot.caption = element_text(face = "bold", size = 10),
+      legend.position = "right",
+      panel.grid.major.y = element_blank(),
+      panel.grid.minor.y = element_blank()
+    )
+}
+```
+
+
+```{r visualize-sibling-distributions}
+# fertility parameters
+mean = 2.5
+size = 4
+pi0 = 0.05
+max_sibs = 12
+
+# simulated data for fertility mean 2.5
+simulated_data <- bind_rows(
+  tibble(sib_counts = simulate_fert_sib("Poisson", mean, Inf, 0)$sib_counts) %>%
+    mutate(Model = "Poisson"),
+  tibble(sib_counts = simulate_fert_sib("ZINB", mean/(1-pi0), size, pi0)$sib_counts) %>%
+    mutate(Model = "ZINB")
+)
+
+simulated_data$sib_counts <- ifelse(simulated_data$sib_counts > max_sibs, max_sibs, simulated_data$sib_counts)
+
+pmf_data <- simulated_data %>%
+  count(Model, sib_counts, name = "n_counts") %>%
+  group_by(Model) %>%
+  mutate(prob = n_counts / sum(n_counts)) %>%
+  ungroup()
+
+# write the pmf data to a csv file
+write.csv(pmf_data, file = file.path("./output/pmf_sibling_counts.csv"), row.names = FALSE)
+```
+
+```{r plot-pmf-fig, fig.width = 8, fig.height = 6}
+plot_pmf(pmf_data)
+ggsave(file = file.path("./output/pmf_sibling_counts.png"), width = 8, height = 6, dpi = 500)
+```
+
+```{r}
+sum(pmf_data$n_counts[pmf_data$Model == "Poisson"])
+sum(pmf_data$n_counts[pmf_data$Model == "ZINB"])
+
+pmf_data$n_counts[pmf_data$Model == "Poisson"] / sum(pmf_data$n_counts[pmf_data$Model == "Poisson"])
+pmf_data$n_counts[pmf_data$Model == "ZINB"] / sum(pmf_data$n_counts[pmf_data$Model == "ZINB"])
+```
+
