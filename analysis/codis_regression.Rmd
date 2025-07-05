@@ -27,9 +27,8 @@ The plot below illustrates which data sources are available for each state:
 
 
 ```{r setup, include=FALSE, echo=FALSE}
-library(here)
-setwd(here::here())
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(eval = TRUE, echo = TRUE, warning = FALSE, message = FALSE,
+                      fig.width = 7, fig.height = 6)
 
 # Load necessary libraries
 library(readr)        # read csv files
@@ -46,40 +45,12 @@ library(cowplot)
 library(ggpubr) 
 library(viridis)
 library(sf)
-
-# Load prison data
-prison_data = read.csv("data/populations_states.csv")
-
-codis_data = read.csv("data/codis_data.csv") # CODIS data
-
-data.sources = data.frame(
-  state = c("Alabama","Alaska","Arizona","Arkansas","California","Colorado" ,"Delaware" ,"Florida","Georgia","Hawaii" ,       
-"Idaho","Illinois","Indiana","Iowa", "Kansas", "Kentucky","Louisiana","Maine","Maryland","Massachusetts" ,
-"Michigan", "Minnesota","Mississippi","Missouri","Montana","Nebraska", "Nevada" , "New Hampshire","New Jersey","New Mexico" ,   
-"New York","North Carolina", "North Dakota" ,"Ohio" , "Oklahoma","Oregon","Pennsylvania","Rhode Island", "South Carolina", "South Dakota"  ,
-"Tennessee","Texas" ,"Utah" ,"Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"), 
-  data = c("SDIS+NDIS","SDIS+NDIS", "NDIS only", "SDIS+NDIS", "Murphy & Tong","SDIS+NDIS", "NDIS only", "Murphy & Tong" ,"SDIS+NDIS", "NDIS only",
-"SDIS+NDIS", "SDIS+NDIS", "Murphy & Tong", "NDIS only", "NDIS only", "NDIS only", "SDIS+NDIS", "Murphy & Tong" , "SDIS+NDIS", "NDIS only",
-"NDIS only", "SDIS+NDIS" ,"SDIS+NDIS", "SDIS+NDIS" ,"SDIS+NDIS", "NDIS only", "Murphy & Tong","NDIS only", "SDIS+NDIS" ,"NDIS only",
-"NDIS only", "SDIS+NDIS", "NDIS only" ,"NDIS only" ,"NDIS only" ,"NDIS only", "NDIS only", "SDIS+NDIS", "SDIS+NDIS" ,"Murphy & Tong", "SDIS+NDIS", "Murphy & Tong", "NDIS only", "NDIS only" ,"SDIS+NDIS", "SDIS+NDIS" ,"SDIS+NDIS", "NDIS only", "NDIS only")
-)
 ```
 
-```{r data-wrangling, results = FALSE,warning=FALSE, message=FALSE, echo = FALSE}
-# Load necessary libraries
+## Load Census data from `tidycensus`
 
-# Calculate the number of White and Black profiles in Murphy and Tong data
-# murphy.tong$n = murphy.tong$total * murphy.tong$mt.percent
-
-# Extract year from the date and filter data for 2022
-prison_data$year = substring(prison_data$date, 1, 4)
-prison_data_2022 = prison_data[which(prison_data$year == "2022"),]
-prison_data_2022 = prison_data_2022[!duplicated(prison_data_2022[, 'state']),]
-
-# Michigan source: Vera https://www.vera.org/downloads/pdfdownloads/state-incarceration-trends-michigan.pdf 
-prison_data_2022$incarcerated_black[which(prison_data_2022$state == "Michigan")] <- 0.53 * as.numeric(prison_data_2022$incarcerated_total[which(prison_data_2022$state == "Michigan")])
-
-# Load census data for each state
+```{r census-data, results=FALSE}
+# Load census data for each state from `tidycensus`
 # P1_002N is the total population, P1_003N is the total White population, and P1_004N is the total Black population
 us_state_density <- get_decennial(
   geography = "state",
@@ -88,64 +59,71 @@ us_state_density <- get_decennial(
   geometry = TRUE,
   keep_geo_vars = TRUE
 )
+```
 
 
+```{r data-wrangling, results = FALSE,warning=FALSE, message=FALSE, echo = FALSE}
 # Spread the data into a wider format
-us_state_density = spread(us_state_density, variable, value)
+us_state_density = spread(us_state_density, variable, value) %>% tigris::shift_geometry()
 
 # Calculate the proportion of Black and White populations
 us_state_density$census.percent.black = us_state_density$census.num.black / us_state_density$all
 us_state_density$census.percent.white = us_state_density$census.num.white / us_state_density$all
 
 # Rename column for merging
-us_state_density$state = us_state_density$NAME.x
+us_state_density$State = us_state_density$NAME.x
+us_state_density$N_total.census = us_state_density$all
 
-data.source.sf = merge(us_state_density,data.sources, by = "state") 
+us_state_population= us_state_density[, c("State", "census.num.black", "census.num.white", "census.percent.black","census.percent.white", "N_total.census")]
+```
 
-data.source.sf = data.source.sf %>%
-  tigris::shift_geometry()
+## Load NDIS and SDIS data
 
-ggplot() +
-  geom_sf(data = data.source.sf$geometry, aes(fill = data.source.sf$data),color = NA) + 
-  geom_sf(data = data.source.sf$geometry, color = "black",lwd = 0.3,alpha = 0) +
+The NDIS and SDIS are stored in `data/raw/NDIS.csv` and `data/raw/SDIS.csv`, respectively.
+
+```{r NDIS-SDIS}
+# Read NDIS and SDIS data
+NDIS = read.csv("./data/raw/NDIS.csv")       # National DNA Index System data
+SDIS = read.csv("./data/raw/SDIS.csv")       # State DNA Indexing System data
+
+SDIS$N_total = ifelse(is.na(SDIS$N_total), SDIS$N_arrestees + SDIS$N_offenders, SDIS$N_total)
+
+# Merge NDIS and SDIS datasets by state
+NDIS_SDIS = merge(NDIS, SDIS, by = "State")
+
+# Rename columns to distinguish between NDIS and SDIS data
+colnames(NDIS_SDIS) <- gsub('.x','.NDIS', names(NDIS_SDIS))
+colnames(NDIS_SDIS) <- gsub('.y','.SDIS', names(NDIS_SDIS))
+
+NDIS_SDIS$N_total.CODIS = ifelse(!is.na(NDIS_SDIS$N_total.SDIS), NDIS_SDIS$N_total.SDIS, NDIS_SDIS$N_total.NDIS)
+```
+
+```{r data-merge, results = FALSE,warning=FALSE, message=FALSE, echo = FALSE}
+us_state_population = merge(NDIS_SDIS, us_state_population, by = "State")
+
+# States in Murphy and Tong data
+states = c("California", "Florida", "Indiana", "Maine", "Nevada", "South Dakota", "Texas")
+us_state_population$category = NA
+
+# Annotate the category for each state
+for (i in seq_len(nrow(us_state_population))) {
+  if (us_state_population$State[i] %in% states) {
+    us_state_population$category[i] = "Murphy and Tong"
+  } else if (!is.na(us_state_population$N_total.SDIS[i])) {
+    us_state_population$category[i] = "SDIS+NDIS"
+  } else {
+    us_state_population$category[i] = "NDIS only"
+  }
+}
+
+ggplot(us_state_population) +
+  geom_sf(data = us_state_population$geometry, aes(fill = us_state_population$category),color = NA) + 
+  geom_sf(data = us_state_population$geometry, color = "black",lwd = 0.3,alpha = 0) +
   theme_void(base_size = 11) + 
   labs(fill = "Data availability") + 
   #theme(plot.margin = unit(rep(0.5, 4), "cm")) +
   theme(legend.key.height= unit(1, 'cm'), legend.key.width= unit(1, 'cm'),
         legend.title=element_text(size=20),  legend.text=element_text(size=16)) 
-
-# Merge census data with prison data
-us_state_density = merge(us_state_density, prison_data_2022, by = "state")
-
-# Calculate the proportion of Black and White incarcerated individuals
-us_state_density$percent.black.incarc = us_state_density$incarcerated_black / us_state_density$incarcerated_total
-us_state_density$percent.white.incarc = us_state_density$incarcerated_white / us_state_density$incarcerated_total
-
-# Merge with CODIS data
-us_state_density = merge(us_state_density, codis_data, by = "state")
-
-# Calculate the number of Black and White profiles in CODIS
-us_state_density$black_profiles = us_state_density$percent.black.incarc * (us_state_density$offender_profiles)
-us_state_density$white_profiles = us_state_density$percent.white.incarc * (us_state_density$offender_profiles)
-
-us_state_density_black = as.data.frame(us_state_density[,c("state","all","census.num.black","census.percent.black","incarcerated_total","incarcerated_black","percent.black.incarc","arrestee_profiles","offender_profiles","black_profiles")])
-
-us_state_density_black$race = "Black"
-colnames(us_state_density_black) = c("state","all","population","census.percent","incarcerated_total",
-                                     "incarcerated_race","percent.incar","arrestee_profiles","offender_profiles","geometry","race_profiles","race")
-
-us_state_density_white = as.data.frame(us_state_density[,c("state","all","census.num.white","census.percent.white","incarcerated_total",
-                                             "incarcerated_white","percent.white.incarc", "arrestee_profiles","offender_profiles","white_profiles")])
-us_state_density_white$race = "White"
-colnames(us_state_density_white) = c("state","all","population","census.percent","incarcerated_total",
-                                     "incarcerated_race","percent.incar","arrestee_profiles","offender_profiles","geometry","race_profiles","race")
-
-inferred_data = rbind(us_state_density_black, us_state_density_white)
-
-# Combine Murphy and Tong data with the merged dataset
-# combined = merge(murphy.tong, inferred_data, by = c("state","race"), all.x = TRUE)
-# combined$race_bin = ifelse(combined$race == "White",0,1)
-
 ```
 
 # 2 Models to predict the racial composition of the forensic database
@@ -161,44 +139,45 @@ where $g(x)=\frac{\exp(x)}{1+\exp(x)}$ is the logit link function. Consequently,
 
 # 3 Regression to estimate the racial composition of the SDIS database.
 
-```{r data-racial-composition, results = FALSE,warning=FALSE,message=FALSE, echo = FALSE}
+## Load regression data
+
+Murphy and Tong processed FOIA data is stored in `data/internal/murphy_processed.csv`. The prison and census combined data is stored in `data/internal/prison_census_combined.csv`. The following code reads the data and preprocesses it to obtain the training and test data for the regression model. The training data consists of seven states with FOIA data, and the test data consists of all other states.
+
+```{r data-racial-composition}
 # read and preprocess data
 # read data
-data_path = './data'
-response_data_path = file.path('./data', 'Murphy_combined_data.csv')
-predictor_data_path = file.path('./data/regression_data', 'CODIS_regression_predict_data.csv')
+response_data_path = file.path('./data/internal', 'murphy_processed.csv')
+predictor_data_path = file.path('./data/internal', 'prison_census_combined.csv')
 
 response_data = read.csv(response_data_path) # Murphy & Tong data
 predictor_data = read.csv(predictor_data_path) # Census and prison data
 predictor_data[is.na(predictor_data)] = 0
 
-idx = c(5, 9, 14, 19, 28, 41, 43) # obtain the index of seven CODIS states
+idx = sapply(response_data$state, function(x) {which(x == predictor_data$State)}) # obtain the index of seven FOIA states
 
 # calculate the response values
-y = array(dim = c(7, 5))
-colnames(y) = c('white', 'black', 'total', 'nonwhite', 'other')
-rownames(y) = response_data[,2]
-y[,3] = response_data[,12]
-y[,2] = round(y[,3] * response_data[,3])
-y[,1] = round(y[,3] * response_data[,6])
-y[,4] = y[,3]-y[,1]
-y[,5] = y[,3]-y[,2]-y[,1]
-mt_data = as.data.frame(y) 
+mt_data = data.frame(
+  white = response_data$mt.num.white,
+  black = response_data$mt.num.black,
+  total = response_data$mt.num.total,
+  nonwhite = response_data$mt.num.total - response_data$mt.num.white,
+  other = response_data$mt.num.other
+)
 
 # calculate the predictor values
-x = matrix(nrow = 50, ncol = 6)
-rownames(x) = predictor_data[,2]
-colnames(x) = c('census.percent.white', 'census.percent.black', 'incarc.percent.white', 'incarc.percent.black', 'census.percent.black.remain', 'incarc.percent.black.remain')
-x[,c(2,1)] = as.matrix(predictor_data[,c(12,13)])
-x[,4] = predictor_data[,5]/(predictor_data[,3]-predictor_data[,10])
-x[,3] = predictor_data[,4]/(predictor_data[,3]-predictor_data[,10])
+x = data.frame(
+  census.percent.white = predictor_data$census.percent.white,
+  census.percent.black = predictor_data$census.percent.black,
+  incarc.percent.white = predictor_data$incarcerated_white / (predictor_data$incarcerated_total - predictor_data$incarcerated_unknown),
+  incarc.percent.black = predictor_data$incarcerated_black / (predictor_data$incarcerated_total - predictor_data$incarcerated_unknown)
+)
 
-x[,5] = x[,2] / (1 - x[,1])
-x[,6] = x[,4] / (1 - x[,3])
+x$census.percent.black.remain = x$census.percent.black / (1 - x$census.percent.white)
+x$incarc.percent.black.remain = x$incarc.percent.black / (1 - x$incarc.percent.white)
 
 # create training data and test data
-train_data = as.data.frame(x[idx,])
-test_data = as.data.frame(x[-idx,])
+train_data = x[idx,]
+test_data = x[-idx,]
 ```
 
 ```{r binomial-regression, results = FALSE,warning=FALSE,message=FALSE, echo = FALSE}
@@ -211,65 +190,42 @@ ilogit <- function(x) {
 }
 
 # White Americans
-binomial_regression.white = glm(formula = cbind(mt_data$white, # the number of white people in CODIS
-                                                mt_data$nonwhite) ~ # the number of nonwhite people in CODIS
+binomial_regression.white = glm(formula = cbind(mt_data$white, # the number of white people in SDIS
+                                                mt_data$nonwhite) ~ # the number of nonwhite people in SDIS
                                   census.percent.white+ # the census proportion of white people
                                   incarc.percent.white, # the prison proportion of white people
                                 family = binomial, data = train_data)
 
 
 
-# confidence intervals
-result.white = predict(binomial_regression.white, as.data.frame(x), se.fit = TRUE)
-alpha = 0.05
-z_hat.white = cbind(result.white$fit, result.white$fit-qnorm(1-alpha/2)*result.white$se.fit, result.white$fit+qnorm(1-alpha/2)*result.white$se.fit)
-pi_hat.white = ilogit(z_hat.white)
-rownames(pi_hat.white) = rownames(x)
-colnames(pi_hat.white) = c('probability', 'lcl', 'ucl')
-
 # Black Americans
-binomial_regression.black = glm(formula = cbind(mt_data$black,  # the number of black people in CODIS
-                                            mt_data$other) ~ # the number of other people in CODIS
+binomial_regression.black = glm(formula = cbind(mt_data$black,  # the number of black people in SDIS
+                                            mt_data$other) ~ # the number of other people in SDIS
                                   census.percent.black.remain + # the census proportion of black people in nonwhite people
                                   incarc.percent.black.remain, # the prison proportion of black people in nonwhite people
                                 family = binomial, data = train_data)
 
-# confidence intervals with Bonferroni methods
-result.white = predict(binomial_regression.white, as.data.frame(x), se.fit = TRUE)
-alpha = 0.05
-z_hat.white = cbind(result.white$fit, result.white$fit+qnorm(1-alpha/4)*result.white$se.fit, result.white$fit-qnorm(1-alpha/4)*result.white$se.fit)
-p_hat.white = ilogit(z_hat.white)
-
-result.black = predict(binomial_regression.black, as.data.frame(x), se.fit = TRUE)
-z_hat.black = cbind(result.black$fit, result.black$fit-qnorm(1-alpha/4)*result.black$se.fit, result.black$fit+qnorm(1-alpha/4)*result.black$se.fit)
-p_hat.black = ilogit(z_hat.black)
-
-pi_hat.black = (1-p_hat.white)*p_hat.black
-rownames(pi_hat.black) = rownames(x)
-colnames(pi_hat.black) = c('probability', 'lcl', 'ucl')
 
 # Calculate CODIS black and white proportions using previous regression
-p_hat = cbind(predict(binomial_regression.white, test_data, type='response'), predict(binomial_regression.black, test_data, type='response'))
-pi_hat = array(dim=c(43,3))
-pi_hat[,1] = p_hat[,1]
-pi_hat[,2] = (1-p_hat[,1])*p_hat[,2]
-pi_hat[,3] = 1 - pi_hat[,1] - pi_hat[,2]
-# combine the proportions in forensic database
-pis_mt = array(dim=c(50,3))
-colnames(pis_mt) = c('mt.percent.white', 'mt.percent.black', 'mt.percent.other')
-rownames(pis_mt) = rownames(x)
-pis_mt[idx,] = cbind(response_data[,6], response_data[,3], 1 - response_data[,3] - response_data[,6])
-pis_mt[-idx,] = pi_hat
-pis_mt = pis_mt[,c(2, 1, 3)]
-# extract the proportions in census database
-pis_census = as.array(as.matrix(predictor_data[,12:14]))
-colnames(pis_census) = colnames(predictor_data)[12:14]
-rownames(pis_census) = rownames(pis_mt)
+p_hat = cbind(predict(binomial_regression.white, x, type='response'), predict(binomial_regression.black, x, type='response'))
+pis_hat = data.frame(
+  SDIS.white = p_hat[,1],
+  SDIS.black = (1 - p_hat[,1]) * p_hat[,2],
+  SDIS.other = (1 - p_hat[,1]) * (1 - p_hat[,2])
+)
+pis_hat = round(pis_hat, 3)
+
+# replace the proportions in the seven FOIA states
+pis_mt = pis_hat
+pis_mt[idx,] = cbind(response_data$mt.percent.white, response_data$mt.percent.black, response_data$mt.percent.other)
+pis_mt$State = predictor_data$State
 ```
+
+## Coeffient estimation and Wald test
 
 We estimate the linear coefficients $\beta$ of the binomial logistic regression for black Americans and white Americans using `glm()` function and do a Wald test on the beta coefficients. The $p$-values show that these coefficients are all statistically significant.
 
-```{r summary-statistics-of-binomial-regression,warning=FALSE,message=FALSE, echo = FALSE}
+```{r summary-statistics-of-binomial-regression}
 summary(binomial_regression.white)
 summary(binomial_regression.black)
 ```
@@ -280,7 +236,7 @@ The following plot showing the estimated racial composition using the regression
 
 ```{r Goodness-of-Fit, results = FALSE,warning=FALSE,message=FALSE, echo = FALSE}
 # goodness of fit
-pis_train = data.frame(States=rep(response_data[,2], 2), ground_truth=c(response_data[,3], response_data[,6]), fitted_value=c(pi_hat.black[idx,1], pi_hat.white[idx,1]), Races=rep(c('Black/African American', 'White American'), each=7))
+pis_train = data.frame(States=rep(response_data$state, 2), ground_truth=c(response_data$mt.percent.black, response_data$mt.percent.white), fitted_value=c(pis_hat$SDIS.black[idx], pis_hat$SDIS.white[idx]), Races=rep(c('Black/African American', 'White American'), each=7))
 
 ggplot(pis_train) + geom_point(aes(x=ground_truth, y=fitted_value, shape=Races, colour=States), size=4) + xlab('Murphy & Tong profiles (FOIA)') + ylab('Estimated CODIS profiles') + xlim(0,1) + ylim(0,1) + geom_abline(linetype='longdash', linewidth=1) + theme(plot.title = element_text(hjust = 0.5)) + theme_classic()
 
@@ -293,78 +249,19 @@ ggplot(pis_train) + geom_point(aes(x=Avg, y=Dif, shape=Races, colour=States), si
 ```
 
 
-```{r SDIS-regression, results = FALSE,warning=FALSE,message=FALSE,out.width="100%", echo = FALSE}
-# Read in CSV files
-NDIS = read.csv("./data/NDIS.csv")       # National DNA Index System data
-SDIS = read.csv("./data/SDIS.csv")       # State DNA Indexing System data
-SDIS$N_total = ifelse(is.na(SDIS$N_total), SDIS$N_arrestees + SDIS$N_offenders, SDIS$N_total)
-
-# Merge NDIS and SDIS datasets by state
-NDIS_SDIS = merge(NDIS, SDIS, by = "State")
-
-# Rename columns to distinguish between NDIS and SDIS data
-colnames(NDIS_SDIS) <- gsub('.x','.NDIS', names(NDIS_SDIS))
-colnames(NDIS_SDIS) <- gsub('.y','.SDIS', names(NDIS_SDIS))
-
-# Merge NDIS_SDIS data with prison data
-# colnames(prison_data_2022)[12] = "State"
-# SDIS_states = merge(NDIS_SDIS, prison_data_2022, by = "State")
-
-# Merge census data with NDIS_SDIS_prison data
-colnames(us_state_density)[1] = "State"
-us_state_population= us_state_density[, c("State", "census.num.black", "census.num.white", "census.percent.black","census.percent.white","percent.black.incarc","percent.white.incarc")]
-CODIS_regression = merge(NDIS_SDIS, us_state_population, by = "State")
-CODIS_regression$N_total.Census = round(CODIS_regression$census.num.black / CODIS_regression$census.percent.black)
-
-# Calculate SDIS black and white proportions using previous regression
-CODIS_regression$SDIS.black = pis_mt[,1]
-
-CODIS_regression$SDIS.white = pis_mt[,2]
-
-CODIS_regression$SDIS.other = pis_mt[,3]
-CODIS_regression$source = "Regression"
-
-```
-
 # 4 Final results
 
 Using the above regression models, we make predictions of the racial composition in SDIS by state and determine the total number of people by SDIS or NDIS. Then the number of people for each racial group in the forensic database is calculated by $N_{race} = N_{total} * Proportion_{race}$. The plot below shows our estimates for each state, colored by the data source used for each state. The number of Black people in the database are indicated with circles and the number of White people is indicated by triangles.  
 
 ```{r final-data, warning=FALSE,message=FALSE,fig.width = 20, fig.height = 10, echo = FALSE}
-Murphy = read.csv("./data/Murphy_FOIA.csv") # FOIA data from Murphy
-
-# Reshape Murphy data to wide format
-Murphy_wide = reshape(Murphy, idvar = "State", timevar = "pop", direction = "wide")
-Murphy_wide = Murphy_wide[, c("State", "value.Total", "value.White", "value.Black")]
-
-# Prepare final dataset 
-final.data = merge(CODIS_regression, Murphy_wide, by = "State", all.x = TRUE)
-final.data$N_total.CODIS = ifelse(!is.na(final.data$N_total.SDIS), final.data$N_total.SDIS, final.data$N_total.NDIS)
-final.data$final.Black = round(final.data$N_total.CODIS * final.data$SDIS.black)
-final.data$final.White = round(final.data$N_total.CODIS * final.data$SDIS.white)
-
-# Calculate final estimates for Black and White populations in CODIS based on different sources
-for (i in seq_len(nrow(final.data))) {
-  if (!is.na(final.data$value.Total[i])) {
-    # final.data$final.Black[i] = final.data$value.Total[i] * (final.data$value.Black[i] / 100)
-    # final.data$final.White[i] = final.data$value.Total[i] * (final.data$value.White[i] / 100)
-    final.data$source[i] = "Murphy and Tong"
-  } else if (!is.na(final.data$N_total.SDIS[i])) {
-    # final.data$final.Black[i] = (final.data$N_total.SDIS[i]) * final.data$CODIS.black[i]
-    # final.data$final.White[i] = (final.data$N_total.SDIS[i]) * final.data$CODIS.white[i]
-    final.data$source[i] = "SDIS+regression"
-  } else {
-    # final.data$final.Black[i] = (final.data$SDIS.arrestee.prediction[i] + final.data$SDIS.offender.prediction[i]) * final.data$CODIS.black[i]
-    # final.data$final.White[i] = (final.data$SDIS.arrestee.prediction[i] + final.data$SDIS.offender.prediction[i]) * final.data$CODIS.white[i]
-    final.data$source[i] = "NDIS+Regression"
-  }
-}
+final.data = merge(us_state_population, pis_mt, by = "State")
+# final.data$N_total.CODIS = ifelse(!is.na(final.data$N_total.SDIS), final.data$N_total.SDIS, final.data$N_total.NDIS)
+final.data$SDIS.num.Black = round(final.data$N_total.CODIS * final.data$SDIS.black)
+final.data$SDIS.num.White = round(final.data$N_total.CODIS * final.data$SDIS.white)
 
 # Plot the final estimates for Black and White populations in CODIS
 ggplot(final.data) +
-  geom_point(aes(x = State, y = final.Black, fill = source, shape = "Black"), size = 7, col = "black") +
-  geom_point(aes(x = State, y = final.White, fill = source, shape = "White"), size = 7, col = "black") +
-  scale_fill_manual(name = "Source", labels = c("Murphy", "Regression only", "SDIS+regression"), values = c("#9A77CF", "#EC4176", "#FFA45E")) +
+  geom_point(aes(x = State, y = SDIS.num.Black, fill = category, shape = "Black"), size = 7, col = "black") + geom_point(aes(x = State, y = SDIS.num.White, fill = category, shape = "White"), size = 7, col = "black") + scale_fill_manual(name = "Category", labels = c("Murphy and Tong", "NDIS only", "SDIS+NDIS"), values = c("#9A77CF", "#EC4176", "#FFA45E")) +
   scale_shape_manual(name = "Race", labels = c("Black", "White"), values = c(21, 24)) +
   theme_bw() +
   guides(fill = guide_legend(override.aes = list(shape = 21))) +
@@ -377,13 +274,16 @@ ggplot(final.data) +
   ylab("Number of People in CODIS") + ggtitle("The Number of Black and White American in CODIS by State")
 ```
 
+## SDIS racial composition by state
+
 The table below reports the estimates for the racial composition and the number of people for each racial group in SDIS by state, along with the source of the data is below:
-```{r df, warning=FALSE,message=FALSE,fig.width = 20, echo = FALSE}
-final.df = final.data[,c("State","SDIS.black","SDIS.white","final.Black","final.White","source")]
-colnames(final.df) = c("State","Black Proportion","White Proportion","Black Number", "White Number", "Source")
+```{r SDIS-racial-composition}
+final.df = final.data[,c("State","SDIS.black","SDIS.white","SDIS.num.Black","SDIS.num.White","category")]
+colnames(final.df) = c("State","SDIS.percent.black","SDIS.percent.white","SDIS.num.black", "SDIS.num.white", "Category")
 kable(final.df, caption = "Estimated racial composition of SDIS by state")
-# write.csv(final.data, "../data/final_CODIS_data.csv")
+write.csv(final.df, file = "./output/SDIS_racial_composition.csv", row.names = FALSE)
 ```
+
 
 we generate side-by-side pie charts showing the comparison between the  racial composition of the census (left) and the estimated racial composition of SDIS (right) for each state.
 
@@ -481,17 +381,33 @@ plot_grid(title, plot1, leg, nrow = 3, rel_heights = c(0.1,0.9,0.1))
 
 ```
 
-Furthermore, we calculate the weighted averages of the racial proportions in Census and SDIS across seven states provided in Murphy and Tong [1] and all states, weighted by the corresponding total number of people in each state. The following table shows the weighted racial proportions in Census and SDIS across states.
+## Sumary of the SDIS racial composition
 
+Specifically, we report all states where Black individuals make up > 50% of the SDIS database.
+```{r black-majority}
+black_majority = pis_mt[which(pis_mt$SDIS.black > 0.5), c("State", "SDIS.black", "SDIS.white", "SDIS.other")]
+colnames(black_majority) = c("State", "SDIS.percent.black", "SDIS.percent.white", "SDIS.percent.other")
+kable(black_majority, caption = "States where Black individuals make up > 50% of the SDIS database")
+```
+
+The maximum and minimum SDIS database sizes are shown below:
+```{r max-min-SDIS}
+max_min_SDIS = NDIS_SDIS[c(which.max(NDIS_SDIS$N_total.CODIS), 
+                            which.min(NDIS_SDIS$N_total.CODIS)),
+                         c("State","N_total.SDIS","N_total.NDIS","N_total.CODIS")]
+kable(max_min_SDIS, caption = "Maximum and minimum SDIS database sizes by state")
+```
+
+Furthermore, we calculate the weighted averages of the racial proportions in Census and SDIS across seven states provided in Murphy and Tong [1] and all states, weighted by the corresponding total number of people in each state. The following table shows the weighted racial proportions in Census and SDIS across states.
 
 ```{r weighted-averages, warning=FALSE,message=FALSE, echo = FALSE}
 # Calculate the weighted averages of the racial proportions in Census and SDIS across seven states provided in Murphy and Tong [1] and all states
-weighted_props_all_census = data.frame(race = c("Black/African American", "White American", "Other American"), proportion = c(sum(final.data$census.percent.black * final.data$N_total.Census) / sum(final.data$N_total.Census), sum(final.data$census.percent.white * final.data$N_total.Census) / sum(final.data$N_total.Census), sum(final.data$census.percent.other * final.data$N_total.Census) / sum(final.data$N_total.Census)))
+weighted_props_all_census = data.frame(race = c("Black/African American", "White American", "Other American"), proportion = c(sum(final.data$census.percent.black * final.data$N_total.census) / sum(final.data$N_total.census), sum(final.data$census.percent.white * final.data$N_total.census) / sum(final.data$N_total.census), sum(final.data$census.percent.other * final.data$N_total.census) / sum(final.data$N_total.census)))
 
 weighted_props_all_sdis = data.frame(race = c("Black/African American", "White American", "Other American"), proportion = c(sum(final.data$SDIS.black * final.data$N_total.CODIS) / sum(final.data$N_total.CODIS), sum(final.data$SDIS.white * final.data$N_total.CODIS) / sum(final.data$N_total.CODIS), sum(final.data$SDIS.other * final.data$N_total.CODIS) / sum(final.data$N_total.CODIS)))
 
-final.mt = final.data[which(final.data$source == "Murphy and Tong"), ]
-weighted_props_seven_census = data.frame(race = c("Black/African American", "White American", "Other American"), proportion = c(sum(final.mt$census.percent.black * final.mt$N_total.Census) / sum(final.mt$N_total.Census), sum(final.mt$census.percent.white * final.mt$N_total.Census) / sum(final.mt$N_total.Census), sum(final.mt$census.percent.other * final.mt$N_total.Census) / sum(final.mt$N_total.Census)))
+final.mt = final.data[which(final.data$category == "Murphy and Tong"), ]
+weighted_props_seven_census = data.frame(race = c("Black/African American", "White American", "Other American"), proportion = c(sum(final.mt$census.percent.black * final.mt$N_total.census) / sum(final.mt$N_total.census), sum(final.mt$census.percent.white * final.mt$N_total.census) / sum(final.mt$N_total.census), sum(final.mt$census.percent.other * final.mt$N_total.census) / sum(final.mt$N_total.census)))
 
 weighted_props_seven_sdis = data.frame(race = c("Black/African American", "White American", "Other American"), proportion = c(sum(final.mt$SDIS.black * final.mt$N_total.CODIS) / sum(final.mt$N_total.CODIS), sum(final.mt$SDIS.white * final.mt$N_total.CODIS) / sum(final.mt$N_total.CODIS), sum(final.mt$SDIS.other * final.mt$N_total.CODIS) / sum(final.mt$N_total.CODIS)))
 ```
@@ -578,8 +494,6 @@ We additionally generate plots showing the difference in the racial proportions 
 
 ```{r maps, warning=FALSE,message=FALSE,fig.width = 20,fig.height = 15, echo = FALSE}
 final.data.sf = st_as_sf(final.data)
-final.data.sf = final.data.sf %>%
-  tigris::shift_geometry()
 
 ggplot() +
   geom_sf(data = final.data.sf$geometry, aes(fill = final.data.sf$SDIS.black-final.data.sf$census.percent.black),color = NA) + 
