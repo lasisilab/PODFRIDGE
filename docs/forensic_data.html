@@ -1,0 +1,2004 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Junhui He" />
+
+
+<title>Forensic DNA database data overview</title>
+
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.5.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">PODFRIDGE</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/lasisilab/PODFRIDGE">
+    <span class="fab fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Forensic DNA database data overview</h1>
+<h4 class="author">Junhui He</h4>
+<h4 class="date">2025-07-04 23:04:40</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2025-07-04
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>PODFRIDGE/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20230302code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20230302)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20230302code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20230302)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreec4466e7c2d721c481067044b0c666a183376f8cdtargetblankc4466e7a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/c4466e7c2d721c481067044b0c666a183376f8cd" target="_blank">c4466e7</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtreec4466e7c2d721c481067044b0c666a183376f8cdtargetblankc4466e7a"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/c4466e7c2d721c481067044b0c666a183376f8cd" target="_blank">c4466e7</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    analysis/.DS_Store
+    Ignored:    code/.DS_Store
+    Ignored:    data/.DS_Store
+    Ignored:    output/.DS_Store
+
+Untracked files:
+    Untracked:  analysis/fert_model.Rmd
+    Untracked:  data/Murphy_combined_data.csv
+    Untracked:  data/internal/
+    Untracked:  data/raw/
+    Untracked:  data/regression_data/Murphy_combined_data.csv
+    Untracked:  output/SDIS_racial_composition.csv
+    Untracked:  output/pmf_sibling_counts.csv
+    Untracked:  output/pmf_sibling_counts.png
+
+Unstaged changes:
+    Modified:   analysis/codis_regression.Rmd
+    Modified:   analysis/forensic_databases.Rmd
+    Modified:   analysis/racial_proportion.Rmd
+    Modified:   analysis/regression.Rmd
+    Modified:   data/final_CODIS_data.csv
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/forensic_data.Rmd</code>) and
+HTML (<code>docs/forensic_data.html</code>) files. If you’ve configured
+a remote Git repository (see <code>?wflow_git_remote</code>), click on
+the hyperlinks in the table below to view the files as they were in that
+past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/c4466e7c2d721c481067044b0c666a183376f8cd/analysis/forensic_data.Rmd" target="_blank">c4466e7</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-07-04
+</td>
+<td>
+wflow_publish("analysis/forensic_data.Rmd")
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="raw-datasets" class="section level1">
+<h1>1 Raw datasets</h1>
+<p>This section provides an overview of the raw datasets used in this
+analysis. The <strong>raw</strong> datasets are obtained from the
+original sources without any modifications or transformations, including
+the publication and websites. The datasets are stored in the
+<code>data/raw</code> directory of this project.</p>
+<div id="murphy-and-tong-foia" class="section level2">
+<h2>1.1 Murphy and Tong FOIA</h2>
+<p>Murphy and Tong forensic DNA database is obtained from the
+<strong>Freedom of Information Act (FOIA)</strong>, provided in the
+Appendix of the paper by Murphy and Tong (2020) [1].</p>
+<p>The file path is <code>../data/raw/murphy_appendix.csv</code>.</p>
+<pre class="r"><code># read Murphy and Tong forensic database
+mt_raw_path &lt;- &quot;./data/raw/murphy_appendix.csv&quot;
+mt_raw &lt;- read_csv(mt_raw_path, show_col_types = FALSE)
+
+kable(head(mt_raw, n = 10), caption = &quot;Murphy and Tong forensic DNA database (raw data from FOIA)&quot;)</code></pre>
+<table>
+<caption>Murphy and Tong forensic DNA database (raw data from
+FOIA)</caption>
+<colgroup>
+<col width="8%" />
+<col width="17%" />
+<col width="10%" />
+<col width="5%" />
+<col width="57%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">State</th>
+<th align="left">variable_detailed</th>
+<th align="left">variatble_type</th>
+<th align="right">value</th>
+<th align="left">file</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">South Dakota</td>
+<td align="left">males</td>
+<td align="left">sex</td>
+<td align="right">51197</td>
+<td align="left"><a
+href="https://drive.google.com/file/d/1n-nihGDoLHyMqH74-oEMkB68pY69ETyF/view?usp=sharing"
+class="uri">https://drive.google.com/file/d/1n-nihGDoLHyMqH74-oEMkB68pY69ETyF/view?usp=sharing</a></td>
+</tr>
+<tr class="even">
+<td align="left">South Dakota</td>
+<td align="left">females</td>
+<td align="left">sex</td>
+<td align="right">16556</td>
+<td align="left"><a
+href="https://drive.google.com/file/d/1n-nihGDoLHyMqH74-oEMkB68pY69ETyF/view?usp=sharing"
+class="uri">https://drive.google.com/file/d/1n-nihGDoLHyMqH74-oEMkB68pY69ETyF/view?usp=sharing</a></td>
+</tr>
+<tr class="odd">
+<td align="left">South Dakota</td>
+<td align="left">asian</td>
+<td align="left">race</td>
+<td align="right">56</td>
+<td align="left"><a
+href="https://drive.google.com/file/d/1n-nihGDoLHyMqH74-oEMkB68pY69ETyF/view?usp=sharing"
+class="uri">https://drive.google.com/file/d/1n-nihGDoLHyMqH74-oEMkB68pY69ETyF/view?usp=sharing</a></td>
+</tr>
+<tr class="even">
+<td align="left">South Dakota</td>
+<td align="left">black</td>
+<td align="left">race</td>
+<td align="right">4041</td>
+<td align="left"><a
+href="https://drive.google.com/file/d/1n-nihGDoLHyMqH74-oEMkB68pY69ETyF/view?usp=sharing"
+class="uri">https://drive.google.com/file/d/1n-nihGDoLHyMqH74-oEMkB68pY69ETyF/view?usp=sharing</a></td>
+</tr>
+<tr class="odd">
+<td align="left">South Dakota</td>
+<td align="left">hispanic</td>
+<td align="left">race</td>
+<td align="right">2949</td>
+<td align="left"><a
+href="https://drive.google.com/file/d/1n-nihGDoLHyMqH74-oEMkB68pY69ETyF/view?usp=sharing"
+class="uri">https://drive.google.com/file/d/1n-nihGDoLHyMqH74-oEMkB68pY69ETyF/view?usp=sharing</a></td>
+</tr>
+<tr class="even">
+<td align="left">South Dakota</td>
+<td align="left">native_american</td>
+<td align="left">race</td>
+<td align="right">14593</td>
+<td align="left"><a
+href="https://drive.google.com/file/d/1n-nihGDoLHyMqH74-oEMkB68pY69ETyF/view?usp=sharing"
+class="uri">https://drive.google.com/file/d/1n-nihGDoLHyMqH74-oEMkB68pY69ETyF/view?usp=sharing</a></td>
+</tr>
+<tr class="odd">
+<td align="left">South Dakota</td>
+<td align="left">other/unknown</td>
+<td align="left">race</td>
+<td align="right">891</td>
+<td align="left"><a
+href="https://drive.google.com/file/d/1n-nihGDoLHyMqH74-oEMkB68pY69ETyF/view?usp=sharing"
+class="uri">https://drive.google.com/file/d/1n-nihGDoLHyMqH74-oEMkB68pY69ETyF/view?usp=sharing</a></td>
+</tr>
+<tr class="even">
+<td align="left">South Dakota</td>
+<td align="left">white/caucasian</td>
+<td align="left">race</td>
+<td align="right">45223</td>
+<td align="left"><a
+href="https://drive.google.com/file/d/1n-nihGDoLHyMqH74-oEMkB68pY69ETyF/view?usp=sharing"
+class="uri">https://drive.google.com/file/d/1n-nihGDoLHyMqH74-oEMkB68pY69ETyF/view?usp=sharing</a></td>
+</tr>
+<tr class="odd">
+<td align="left">California</td>
+<td align="left">male_convicted_offender</td>
+<td align="left">sex</td>
+<td align="right">1603222</td>
+<td align="left"><a
+href="https://drive.google.com/file/d/1e2THs5mgguRH7I_la7lyEcWf5heX2DuG/view?usp=sharing"
+class="uri">https://drive.google.com/file/d/1e2THs5mgguRH7I_la7lyEcWf5heX2DuG/view?usp=sharing</a></td>
+</tr>
+<tr class="even">
+<td align="left">California</td>
+<td align="left">female_convicted_offender</td>
+<td align="left">sex</td>
+<td align="right">309827</td>
+<td align="left"><a
+href="https://drive.google.com/file/d/1e2THs5mgguRH7I_la7lyEcWf5heX2DuG/view?usp=sharing"
+class="uri">https://drive.google.com/file/d/1e2THs5mgguRH7I_la7lyEcWf5heX2DuG/view?usp=sharing</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="sdis" class="section level2">
+<h2>1.2 SDIS</h2>
+<p>The <strong>State DNA Index System (SDIS)</strong> data contains DNA
+profiles collected at the state level from individuals, crime scenes,
+and other sources. In some states, SDIS data is publicly available
+through official government websites; however, many states do not make
+this information accessible to the public.</p>
+<p>The file path is <code>data/raw/SDIS.csv</code>.</p>
+<pre class="r"><code># read SDIS data
+sdis_raw_path &lt;- &quot;./data/raw/SDIS.csv&quot;
+sdis_raw &lt;- read_csv(sdis_raw_path, show_col_types = FALSE)
+
+kable(head(sdis_raw, n = 10), caption = &quot;State DNA Index System (SDIS) data (raw data from state websites)&quot;)</code></pre>
+<table>
+<caption>State DNA Index System (SDIS) data (raw data from state
+websites)</caption>
+<colgroup>
+<col width="2%" />
+<col width="1%" />
+<col width="2%" />
+<col width="2%" />
+<col width="4%" />
+<col width="3%" />
+<col width="2%" />
+<col width="1%" />
+<col width="38%" />
+<col width="40%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">State</th>
+<th align="right">N_total</th>
+<th align="right">N_arrestees</th>
+<th align="right">N_offenders</th>
+<th align="right">N_ForensicProfiles</th>
+<th align="left">arrestee_collect</th>
+<th align="left">fam_search</th>
+<th align="left">year</th>
+<th align="left">source</th>
+<th align="left">comments</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Alabama</td>
+<td align="right">360000</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="left">yes</td>
+<td align="left">no</td>
+<td align="left">2024</td>
+<td align="left"><a
+href="https://adfs.alabama.gov/services/fb/fb-statistics"
+class="uri">https://adfs.alabama.gov/services/fb/fb-statistics</a></td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Alaska</td>
+<td align="right">NA</td>
+<td align="right">52149</td>
+<td align="right">26997</td>
+<td align="right">3866</td>
+<td align="left">yes</td>
+<td align="left">no</td>
+<td align="left">2024</td>
+<td align="left"><a
+href="https://dps.alaska.gov/Statewide/CrimeLab/Forensic-Biology/DNA"
+class="uri">https://dps.alaska.gov/Statewide/CrimeLab/Forensic-Biology/DNA</a></td>
+<td align="left"><a
+href="https://dps.alaska.gov/getmedia/f5f17e5a-125a-4b9f-8e24-97bb48cf08d9/Quick-Reference-Guide-for-DNA-Database-Collection.pdf"
+class="uri">https://dps.alaska.gov/getmedia/f5f17e5a-125a-4b9f-8e24-97bb48cf08d9/Quick-Reference-Guide-for-DNA-Database-Collection.pdf</a>;
+no total reported but can add offender + arrestee profiles</td>
+</tr>
+<tr class="odd">
+<td align="left">Arizona</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="left">yes</td>
+<td align="left">yes</td>
+<td align="left">NA</td>
+<td align="left"><a
+href="https://www.azdps.gov/services/governmental-services/scientific-analysis-bureau/dna-scientific-services"
+class="uri">https://www.azdps.gov/services/governmental-services/scientific-analysis-bureau/dna-scientific-services</a></td>
+<td align="left">numbers not explicitly listed on AZ website (only that
+they add 20,000 offender/arrestee samples each year to CODIS)</td>
+</tr>
+<tr class="even">
+<td align="left">Arkansas</td>
+<td align="right">12221</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="left">yes</td>
+<td align="left">yes</td>
+<td align="left">2022</td>
+<td align="left"><a
+href="https://www.dps.arkansas.gov/wp-content/uploads/2022-ASCL-Annual-Report.pdf"
+class="uri">https://www.dps.arkansas.gov/wp-content/uploads/2022-ASCL-Annual-Report.pdf</a></td>
+<td align="left"><a
+href="https://le.fbi.gov/science-and-lab/biometrics-and-fingerprints/codis-2"
+class="uri">https://le.fbi.gov/science-and-lab/biometrics-and-fingerprints/codis-2</a></td>
+</tr>
+<tr class="odd">
+<td align="left">California</td>
+<td align="right">3365402</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">167053</td>
+<td align="left">yes</td>
+<td align="left">yes</td>
+<td align="left">2024</td>
+<td align="left"><a
+href="https://oag.ca.gov/system/files/media/databank-quarterly-rpt-2024-q1.pdf"
+class="uri">https://oag.ca.gov/system/files/media/databank-quarterly-rpt-2024-q1.pdf</a></td>
+<td align="left">No stats separating arrestee from offender in their
+SDIS (called “Data Bank”); <a
+href="https://oag.ca.gov/bfs/prop69/faqs#familial"
+class="uri">https://oag.ca.gov/bfs/prop69/faqs#familial</a></td>
+</tr>
+<tr class="even">
+<td align="left">Colorado</td>
+<td align="right">499170</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="left">yes</td>
+<td align="left">yes</td>
+<td align="left">2019</td>
+<td align="left"><a
+href="chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://spl.cde.state.co.us/artemis/psserials/ps51internet/ps512019internet.pdf"
+class="uri">chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://spl.cde.state.co.us/artemis/psserials/ps51internet/ps512019internet.pdf</a></td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Connecticut</td>
+<td align="right">20000</td>
+<td align="right">0</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="left">no</td>
+<td align="left">yes</td>
+<td align="left">2024</td>
+<td align="left"><a
+href="https://portal.ct.gov/despp/division-of-scientific-services/_content/dna-database#"
+class="uri">https://portal.ct.gov/despp/division-of-scientific-services/_content/dna-database#</a>:~:text=20%2C000%20profiles%20are%20currently%20entered,5%20out%20of%205%20stars</td>
+<td align="left"><a
+href="https://www.govtech.com/public-safety/connecticut-crime-lab-offers-dna-testing-funds-to-local-police#"
+class="uri">https://www.govtech.com/public-safety/connecticut-crime-lab-offers-dna-testing-funds-to-local-police#</a>:~:text=(TNS)%20%E2%80%94%20As%20more%20and,the%20pool%20of%20potential%20suspects.</td>
+</tr>
+<tr class="even">
+<td align="left">Delaware</td>
+<td align="right">NA</td>
+<td align="right">0</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="left">no</td>
+<td align="left">no</td>
+<td align="left">2023</td>
+<td align="left"><a
+href="https://forensics.delaware.gov/resources/contentFolder/pdfs/2023%20DFS%20Annual%20Report.pdf?cache=1719431746750"
+class="uri">https://forensics.delaware.gov/resources/contentFolder/pdfs/2023%20DFS%20Annual%20Report.pdf?cache=1719431746750</a>;
+<a href="https://forensics.delaware.gov/sections/index.shtml?dc=DNAUnit"
+class="uri">https://forensics.delaware.gov/sections/index.shtml?dc=DNAUnit</a></td>
+<td align="left">Got total of 33,331 from adding together “DNA Casework
+samples analyzed” from 2019-2023, official total not listed, only yearly
+totals</td>
+</tr>
+<tr class="odd">
+<td align="left">Florida</td>
+<td align="right">1713890</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="left">yes</td>
+<td align="left">yes</td>
+<td align="left">2024</td>
+<td align="left"><a
+href="https://www.fdle.state.fl.us/Forensics/Disciplines/DNA-Database"
+class="uri">https://www.fdle.state.fl.us/Forensics/Disciplines/DNA-Database</a></td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Georgia</td>
+<td align="right">347145</td>
+<td align="right">0</td>
+<td align="right">324864</td>
+<td align="right">22281</td>
+<td align="left">no</td>
+<td align="left">no</td>
+<td align="left">2017</td>
+<td align="left"><a
+href="https://gbi.georgia.gov/press-releases/2017-12-04/gbi-crime-lab-codis-records-6000th-state-offender-dna-match"
+class="uri">https://gbi.georgia.gov/press-releases/2017-12-04/gbi-crime-lab-codis-records-6000th-state-offender-dna-match</a></td>
+<td align="left">347,145 profiles, 324,864 are offender/probationer, i
+did the subtraction; <a
+href="https://www.ncsea.org/documents/Mandatory-Paternity-Testing-in-Georgia_Dec-2015.pdf"
+class="uri">https://www.ncsea.org/documents/Mandatory-Paternity-Testing-in-Georgia_Dec-2015.pdf</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="ndis" class="section level2">
+<h2>1.3 NDIS</h2>
+<p>The <strong>National DNA Index System (NDIS)</strong> data contains
+DNA profiles collected at the national level from individuals, crime
+scenes, and other sources. NDIS data is maintained by FBI, and is
+publicly available in the federal website [2].</p>
+<p>The file path is <code>data/raw/NDIS.csv</code>.</p>
+<pre class="r"><code># read NDIS data
+ndis_raw_path &lt;- &quot;./data/raw/NDIS.csv&quot;
+ndis_raw &lt;- read_csv(ndis_raw_path, show_col_types = FALSE)
+
+kable(head(ndis_raw, n = 10), caption = &quot;National DNA Index System (NDIS) data (raw data from FBI)&quot;)</code></pre>
+<table>
+<caption>National DNA Index System (NDIS) data (raw data from
+FBI)</caption>
+<thead>
+<tr class="header">
+<th align="left">State</th>
+<th align="right">N_total</th>
+<th align="right">N_offenders</th>
+<th align="right">N_arrestees</th>
+<th align="right">N_ForensicProfiles</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Alabama</td>
+<td align="right">362574</td>
+<td align="right">261574</td>
+<td align="right">101000</td>
+<td align="right">24574</td>
+</tr>
+<tr class="even">
+<td align="left">Alaska</td>
+<td align="right">79146</td>
+<td align="right">26997</td>
+<td align="right">52149</td>
+<td align="right">3866</td>
+</tr>
+<tr class="odd">
+<td align="left">Arizona</td>
+<td align="right">479868</td>
+<td align="right">411352</td>
+<td align="right">68516</td>
+<td align="right">34576</td>
+</tr>
+<tr class="even">
+<td align="left">Arkansas</td>
+<td align="right">261289</td>
+<td align="right">183020</td>
+<td align="right">78269</td>
+<td align="right">14698</td>
+</tr>
+<tr class="odd">
+<td align="left">California</td>
+<td align="right">3269323</td>
+<td align="right">2257141</td>
+<td align="right">1012182</td>
+<td align="right">149446</td>
+</tr>
+<tr class="even">
+<td align="left">Colorado</td>
+<td align="right">582627</td>
+<td align="right">213721</td>
+<td align="right">368906</td>
+<td align="right">35968</td>
+</tr>
+<tr class="odd">
+<td align="left">Connecticut</td>
+<td align="right">128631</td>
+<td align="right">128631</td>
+<td align="right">0</td>
+<td align="right">16377</td>
+</tr>
+<tr class="even">
+<td align="left">Delaware</td>
+<td align="right">22704</td>
+<td align="right">22704</td>
+<td align="right">0</td>
+<td align="right">2066</td>
+</tr>
+<tr class="odd">
+<td align="left">DC/FBI Lab</td>
+<td align="right">3034045</td>
+<td align="right">2539381</td>
+<td align="right">494664</td>
+<td align="right">10774</td>
+</tr>
+<tr class="even">
+<td align="left">DC</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">3484</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="prison-data" class="section level2">
+<h2>1.4 Prison data</h2>
+<p>Klein et al. (2023) [3] provided the number of incarcerated people of
+racial groups for each US state except for Michigan state. For the state
+of Michigan, this <strong>Prison population</strong> data is pulled from
+a separate Vera website [4].</p>
+<p>The file path is <code>data/raw/prison_populations.csv</code>.</p>
+<pre class="r"><code># read prison population data
+prison_raw_path &lt;- &quot;./data/raw/prison_populations.csv&quot;
+prison_raw &lt;- read_csv(prison_raw_path, show_col_types = FALSE)
+
+kable(head(prison_raw, n = 10), caption = &quot;Prison population data (raw data from Klein&#39;s paper and Vera)&quot;)</code></pre>
+<table>
+<caption>Prison population data (raw data from Klein’s paper and
+Vera)</caption>
+<colgroup>
+<col width="4%" />
+<col width="6%" />
+<col width="7%" />
+<col width="7%" />
+<col width="7%" />
+<col width="8%" />
+<col width="8%" />
+<col width="7%" />
+<col width="7%" />
+<col width="8%" />
+<col width="8%" />
+<col width="3%" />
+<col width="15%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">date</th>
+<th align="left">data_or_inferred</th>
+<th align="right">incarcerated_total</th>
+<th align="right">incarcerated_white</th>
+<th align="right">incarcerated_black</th>
+<th align="right">incarcerated_hispanic</th>
+<th align="right">incarcerated_amerind</th>
+<th align="right">incarcerated_asian</th>
+<th align="right">incarcerated_other</th>
+<th align="right">incarcerated_unknown</th>
+<th align="right">incarcerated_nonwhite</th>
+<th align="left">state</th>
+<th align="left">url</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2000-01-01</td>
+<td align="left">raw data</td>
+<td align="right">25213</td>
+<td align="right">8753</td>
+<td align="right">16382</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">78</td>
+<td align="right">NA</td>
+<td align="right">16460</td>
+<td align="left">Alabama</td>
+<td align="left"><a href="http://www.doc.state.al.us/StatReports"
+class="uri">http://www.doc.state.al.us/StatReports</a></td>
+</tr>
+<tr class="even">
+<td align="left">2000-02-01</td>
+<td align="left">raw data</td>
+<td align="right">25213</td>
+<td align="right">8753</td>
+<td align="right">16382</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">78</td>
+<td align="right">NA</td>
+<td align="right">16460</td>
+<td align="left">Alabama</td>
+<td align="left"><a href="http://www.doc.state.al.us/StatReports"
+class="uri">http://www.doc.state.al.us/StatReports</a></td>
+</tr>
+<tr class="odd">
+<td align="left">2000-03-01</td>
+<td align="left">raw data</td>
+<td align="right">25161</td>
+<td align="right">8723</td>
+<td align="right">16361</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">77</td>
+<td align="right">NA</td>
+<td align="right">16438</td>
+<td align="left">Alabama</td>
+<td align="left"><a href="http://www.doc.state.al.us/StatReports"
+class="uri">http://www.doc.state.al.us/StatReports</a></td>
+</tr>
+<tr class="even">
+<td align="left">2000-04-01</td>
+<td align="left">raw data</td>
+<td align="right">25200</td>
+<td align="right">8738</td>
+<td align="right">16380</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">82</td>
+<td align="right">NA</td>
+<td align="right">16462</td>
+<td align="left">Alabama</td>
+<td align="left"><a href="http://www.doc.state.al.us/StatReports"
+class="uri">http://www.doc.state.al.us/StatReports</a></td>
+</tr>
+<tr class="odd">
+<td align="left">2000-05-01</td>
+<td align="left">raw data</td>
+<td align="right">25226</td>
+<td align="right">8788</td>
+<td align="right">16358</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">80</td>
+<td align="right">NA</td>
+<td align="right">16438</td>
+<td align="left">Alabama</td>
+<td align="left"><a href="http://www.doc.state.al.us/StatReports"
+class="uri">http://www.doc.state.al.us/StatReports</a></td>
+</tr>
+<tr class="even">
+<td align="left">2000-06-01</td>
+<td align="left">raw data</td>
+<td align="right">25425</td>
+<td align="right">8867</td>
+<td align="right">16480</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">78</td>
+<td align="right">NA</td>
+<td align="right">16558</td>
+<td align="left">Alabama</td>
+<td align="left"><a href="http://www.doc.state.al.us/StatReports"
+class="uri">http://www.doc.state.al.us/StatReports</a></td>
+</tr>
+<tr class="odd">
+<td align="left">2000-07-01</td>
+<td align="left">raw data</td>
+<td align="right">25612</td>
+<td align="right">8912</td>
+<td align="right">16620</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">80</td>
+<td align="right">NA</td>
+<td align="right">16700</td>
+<td align="left">Alabama</td>
+<td align="left"><a href="http://www.doc.state.al.us/StatReports"
+class="uri">http://www.doc.state.al.us/StatReports</a></td>
+</tr>
+<tr class="even">
+<td align="left">2000-08-01</td>
+<td align="left">raw data</td>
+<td align="right">25568</td>
+<td align="right">8872</td>
+<td align="right">16611</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">85</td>
+<td align="right">NA</td>
+<td align="right">16696</td>
+<td align="left">Alabama</td>
+<td align="left"><a href="http://www.doc.state.al.us/StatReports"
+class="uri">http://www.doc.state.al.us/StatReports</a></td>
+</tr>
+<tr class="odd">
+<td align="left">2000-09-01</td>
+<td align="left">raw data</td>
+<td align="right">25600</td>
+<td align="right">8876</td>
+<td align="right">16638</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">86</td>
+<td align="right">NA</td>
+<td align="right">16724</td>
+<td align="left">Alabama</td>
+<td align="left"><a href="http://www.doc.state.al.us/StatReports"
+class="uri">http://www.doc.state.al.us/StatReports</a></td>
+</tr>
+<tr class="even">
+<td align="left">2000-10-01</td>
+<td align="left">raw data</td>
+<td align="right">25873</td>
+<td align="right">9000</td>
+<td align="right">16786</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">87</td>
+<td align="right">NA</td>
+<td align="right">16873</td>
+<td align="left">Alabama</td>
+<td align="left"><a href="http://www.doc.state.al.us/StatReports"
+class="uri">http://www.doc.state.al.us/StatReports</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="census-data" class="section level2">
+<h2>1.5 Census data</h2>
+<p>The <strong>Census population</strong> database is obtained through
+the <code>tidycensus</code> package in R.</p>
+<pre class="r"><code># download census data for each state
+# P1_002N is the total population, P1_003N is the total White population, and P1_004N is the total Black population
+us_state_density &lt;- get_decennial(
+  geography = &quot;state&quot;,
+  variables = c(all = &quot;P1_002N&quot;, census.num.white = &quot;P1_003N&quot;, census.num.black = &quot;P1_004N&quot;),
+  year = 2020,
+  geometry = TRUE,
+  keep_geo_vars = TRUE
+)</code></pre>
+<pre class="r"><code>kable(head(us_state_density, n = 10), caption = &quot;Census population data (raw data from US Census Bureau API)&quot;)</code></pre>
+<table>
+<caption>Census population data (raw data from US Census Bureau
+API)</caption>
+<colgroup>
+<col width="5%" />
+<col width="5%" />
+<col width="7%" />
+<col width="3%" />
+<col width="4%" />
+<col width="8%" />
+<col width="3%" />
+<col width="8%" />
+<col width="7%" />
+<col width="8%" />
+<col width="10%" />
+<col width="5%" />
+<col width="20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">STATEFP</th>
+<th align="left">STATENS</th>
+<th align="left">AFFGEOID</th>
+<th align="left">GEOID</th>
+<th align="left">STUSPS</th>
+<th align="left">NAME.x</th>
+<th align="left">LSAD</th>
+<th align="right">ALAND</th>
+<th align="right">AWATER</th>
+<th align="left">NAME.y</th>
+<th align="left">variable</th>
+<th align="right">value</th>
+<th align="left">geometry</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">35</td>
+<td align="left">00897535</td>
+<td align="left">0400000US35</td>
+<td align="left">35</td>
+<td align="left">NM</td>
+<td align="left">New Mexico</td>
+<td align="left">00</td>
+<td align="right">314198560935</td>
+<td align="right">726482115</td>
+<td align="left">New Mexico</td>
+<td align="left">all</td>
+<td align="right">1695276</td>
+<td align="left">MULTIPOLYGON (((-109.0502 3…</td>
+</tr>
+<tr class="even">
+<td align="left">35</td>
+<td align="left">00897535</td>
+<td align="left">0400000US35</td>
+<td align="left">35</td>
+<td align="left">NM</td>
+<td align="left">New Mexico</td>
+<td align="left">00</td>
+<td align="right">314198560935</td>
+<td align="right">726482115</td>
+<td align="left">New Mexico</td>
+<td align="left">census.num.white</td>
+<td align="right">1078937</td>
+<td align="left">MULTIPOLYGON (((-109.0502 3…</td>
+</tr>
+<tr class="odd">
+<td align="left">35</td>
+<td align="left">00897535</td>
+<td align="left">0400000US35</td>
+<td align="left">35</td>
+<td align="left">NM</td>
+<td align="left">New Mexico</td>
+<td align="left">00</td>
+<td align="right">314198560935</td>
+<td align="right">726482115</td>
+<td align="left">New Mexico</td>
+<td align="left">census.num.black</td>
+<td align="right">45904</td>
+<td align="left">MULTIPOLYGON (((-109.0502 3…</td>
+</tr>
+<tr class="even">
+<td align="left">46</td>
+<td align="left">01785534</td>
+<td align="left">0400000US46</td>
+<td align="left">46</td>
+<td align="left">SD</td>
+<td align="left">South Dakota</td>
+<td align="left">00</td>
+<td align="right">196345992286</td>
+<td align="right">3383664203</td>
+<td align="left">South Dakota</td>
+<td align="left">all</td>
+<td align="right">840002</td>
+<td align="left">MULTIPOLYGON (((-104.0579 4…</td>
+</tr>
+<tr class="odd">
+<td align="left">46</td>
+<td align="left">01785534</td>
+<td align="left">0400000US46</td>
+<td align="left">46</td>
+<td align="left">SD</td>
+<td align="left">South Dakota</td>
+<td align="left">00</td>
+<td align="right">196345992286</td>
+<td align="right">3383664203</td>
+<td align="left">South Dakota</td>
+<td align="left">census.num.white</td>
+<td align="right">715336</td>
+<td align="left">MULTIPOLYGON (((-104.0579 4…</td>
+</tr>
+<tr class="even">
+<td align="left">46</td>
+<td align="left">01785534</td>
+<td align="left">0400000US46</td>
+<td align="left">46</td>
+<td align="left">SD</td>
+<td align="left">South Dakota</td>
+<td align="left">00</td>
+<td align="right">196345992286</td>
+<td align="right">3383664203</td>
+<td align="left">South Dakota</td>
+<td align="left">census.num.black</td>
+<td align="right">17842</td>
+<td align="left">MULTIPOLYGON (((-104.0579 4…</td>
+</tr>
+<tr class="odd">
+<td align="left">06</td>
+<td align="left">01779778</td>
+<td align="left">0400000US06</td>
+<td align="left">06</td>
+<td align="left">CA</td>
+<td align="left">California</td>
+<td align="left">00</td>
+<td align="right">403671196038</td>
+<td align="right">20294133830</td>
+<td align="left">California</td>
+<td align="left">all</td>
+<td align="right">33777988</td>
+<td align="left">MULTIPOLYGON (((-118.6044 3…</td>
+</tr>
+<tr class="even">
+<td align="left">06</td>
+<td align="left">01779778</td>
+<td align="left">0400000US06</td>
+<td align="left">06</td>
+<td align="left">CA</td>
+<td align="left">California</td>
+<td align="left">00</td>
+<td align="right">403671196038</td>
+<td align="right">20294133830</td>
+<td align="left">California</td>
+<td align="left">census.num.white</td>
+<td align="right">16296122</td>
+<td align="left">MULTIPOLYGON (((-118.6044 3…</td>
+</tr>
+<tr class="odd">
+<td align="left">06</td>
+<td align="left">01779778</td>
+<td align="left">0400000US06</td>
+<td align="left">06</td>
+<td align="left">CA</td>
+<td align="left">California</td>
+<td align="left">00</td>
+<td align="right">403671196038</td>
+<td align="right">20294133830</td>
+<td align="left">California</td>
+<td align="left">census.num.black</td>
+<td align="right">2237044</td>
+<td align="left">MULTIPOLYGON (((-118.6044 3…</td>
+</tr>
+<tr class="even">
+<td align="left">21</td>
+<td align="left">01779786</td>
+<td align="left">0400000US21</td>
+<td align="left">21</td>
+<td align="left">KY</td>
+<td align="left">Kentucky</td>
+<td align="left">00</td>
+<td align="right">102282796080</td>
+<td align="right">2368025703</td>
+<td align="left">Kentucky</td>
+<td align="left">all</td>
+<td align="right">4260996</td>
+<td align="left">MULTIPOLYGON (((-89.41728 3…</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="internal-datasets" class="section level1">
+<h1>2 Internal datasets</h1>
+<p>This section provides an overview of the internal datasets used in
+this analysis. The <strong>internal</strong> datasets are derived from
+the raw datasets, and are stored in the <code>data/internal</code>
+directory of this project.</p>
+<div id="murphy-and-tong-processed-dataset" class="section level2">
+<h2>2.1 Murphy and Tong processed dataset</h2>
+<p>The <strong>Murphy and Tong processed dataset</strong> is derived
+from the Murphy and Tong FOIA database. It includes the racial
+composition of the forensic DNA database in seven states:
+<strong>California, Florida, Indiana, Maine, Nevada, South Dakota, and
+Texas</strong>.</p>
+<p>The file path is <code>data/internal/murphy_processed.csv</code></p>
+<pre class="r"><code># read Murphy and Tong processed dataset
+mt_processed_path &lt;- &quot;./data/internal/murphy_processed.csv&quot;
+mt_processed &lt;- read_csv(mt_processed_path, show_col_types = FALSE)
+
+kable(head(mt_processed, n = 10), caption = &quot;Murphy and Tong processed dataset (internal data derived from FOIA)&quot;)</code></pre>
+<table>
+<caption>Murphy and Tong processed dataset (internal data derived from
+FOIA)</caption>
+<colgroup>
+<col width="11%" />
+<col width="11%" />
+<col width="14%" />
+<col width="11%" />
+<col width="14%" />
+<col width="11%" />
+<col width="14%" />
+<col width="11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">state</th>
+<th align="right">mt.num.white</th>
+<th align="right">mt.percent.white</th>
+<th align="right">mt.num.black</th>
+<th align="right">mt.percent.black</th>
+<th align="right">mt.num.other</th>
+<th align="right">mt.percent.other</th>
+<th align="right">mt.num.total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">California</td>
+<td align="right">819868</td>
+<td align="right">0.296</td>
+<td align="right">473693</td>
+<td align="right">0.171</td>
+<td align="right">1478160</td>
+<td align="right">0.533</td>
+<td align="right">2771721</td>
+</tr>
+<tr class="even">
+<td align="left">Florida</td>
+<td align="right">721485</td>
+<td align="right">0.614</td>
+<td align="right">413733</td>
+<td align="right">0.352</td>
+<td align="right">40173</td>
+<td align="right">0.034</td>
+<td align="right">1175391</td>
+</tr>
+<tr class="odd">
+<td align="left">Indiana</td>
+<td align="right">210519</td>
+<td align="right">0.700</td>
+<td align="right">78193</td>
+<td align="right">0.260</td>
+<td align="right">12029</td>
+<td align="right">0.040</td>
+<td align="right">300741</td>
+</tr>
+<tr class="even">
+<td align="left">Maine</td>
+<td align="right">31298</td>
+<td align="right">0.928</td>
+<td align="right">1299</td>
+<td align="right">0.039</td>
+<td align="right">1114</td>
+<td align="right">0.033</td>
+<td align="right">33711</td>
+</tr>
+<tr class="odd">
+<td align="left">Nevada</td>
+<td align="right">238723</td>
+<td align="right">0.694</td>
+<td align="right">88174</td>
+<td align="right">0.256</td>
+<td align="right">17200</td>
+<td align="right">0.050</td>
+<td align="right">344097</td>
+</tr>
+<tr class="even">
+<td align="left">South Dakota</td>
+<td align="right">45223</td>
+<td align="right">0.667</td>
+<td align="right">4041</td>
+<td align="right">0.060</td>
+<td align="right">18489</td>
+<td align="right">0.273</td>
+<td align="right">67753</td>
+</tr>
+<tr class="odd">
+<td align="left">Texas</td>
+<td align="right">342496</td>
+<td align="right">0.373</td>
+<td align="right">267269</td>
+<td align="right">0.291</td>
+<td align="right">309188</td>
+<td align="right">0.336</td>
+<td align="right">918953</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="prison-and-census-combined-dataset" class="section level2">
+<h2>2.2 Prison and Census combined dataset</h2>
+<p>The <strong>Prison and Census combined dataset</strong> is derived
+from the prison population data and census population data. It includes
+the racial composition of the prison and census population in each
+state.</p>
+<p>The file path is
+<code>data/internal/prison_census_combined.csv</code>.</p>
+<pre class="r"><code># read prison and census combined dataset
+prison_census_combined_path &lt;- &quot;./data/internal/prison_census_combined.csv&quot;
+prison_census_combined &lt;- read_csv(prison_census_combined_path, show_col_types = FALSE)
+
+kable(head(prison_census_combined, n = 10), caption = &quot;Prison and Census combined dataset (internal data derived from prison and census data)&quot;)</code></pre>
+<table>
+<caption>Prison and Census combined dataset (internal data derived from
+prison and census data)</caption>
+<colgroup>
+<col width="4%" />
+<col width="7%" />
+<col width="7%" />
+<col width="7%" />
+<col width="8%" />
+<col width="7%" />
+<col width="7%" />
+<col width="7%" />
+<col width="7%" />
+<col width="8%" />
+<col width="7%" />
+<col width="7%" />
+<col width="7%" />
+<col width="4%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">State</th>
+<th align="right">incarcerated_total</th>
+<th align="right">incarcerated_white</th>
+<th align="right">incarcerated_black</th>
+<th align="right">incarcerated_hispanic</th>
+<th align="right">incarcerated_amerind</th>
+<th align="right">incarcerated_asian</th>
+<th align="right">incarcerated_other</th>
+<th align="right">incarcerated_unknown</th>
+<th align="right">incarcerated_nonwhite</th>
+<th align="right">census.percent.black</th>
+<th align="right">census.percent.white</th>
+<th align="right">census.percent.other</th>
+<th align="right">census.total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Alabama</td>
+<td align="right">25195</td>
+<td align="right">11555</td>
+<td align="right">13428</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">212</td>
+<td align="right">NA</td>
+<td align="right">13640</td>
+<td align="right">0.2718845</td>
+<td align="right">0.6755259</td>
+<td align="right">0.0525896</td>
+<td align="right">4767326</td>
+</tr>
+<tr class="even">
+<td align="left">Alaska</td>
+<td align="right">4624</td>
+<td align="right">1885</td>
+<td align="right">462</td>
+<td align="right">124</td>
+<td align="right">1854</td>
+<td align="right">253</td>
+<td align="right">46</td>
+<td align="right">NA</td>
+<td align="right">2739</td>
+<td align="right">0.0340101</td>
+<td align="right">0.6762142</td>
+<td align="right">0.2897757</td>
+<td align="right">643867</td>
+</tr>
+<tr class="odd">
+<td align="left">Arizona</td>
+<td align="right">33855</td>
+<td align="right">13151</td>
+<td align="right">5104</td>
+<td align="right">13118</td>
+<td align="right">1871</td>
+<td align="right">NA</td>
+<td align="right">611</td>
+<td align="right">NA</td>
+<td align="right">20704</td>
+<td align="right">0.0551043</td>
+<td align="right">0.7022828</td>
+<td align="right">0.2426130</td>
+<td align="right">6154696</td>
+</tr>
+<tr class="even">
+<td align="left">Arkansas</td>
+<td align="right">17023</td>
+<td align="right">9646</td>
+<td align="right">6872</td>
+<td align="right">570</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">139</td>
+<td align="right">NA</td>
+<td align="right">7377</td>
+<td align="right">0.1621842</td>
+<td align="right">0.7557364</td>
+<td align="right">0.0820794</td>
+<td align="right">2797949</td>
+</tr>
+<tr class="odd">
+<td align="left">California</td>
+<td align="right">99729</td>
+<td align="right">19786</td>
+<td align="right">28241</td>
+<td align="right">45213</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">6489</td>
+<td align="right">NA</td>
+<td align="right">79943</td>
+<td align="right">0.0662279</td>
+<td align="right">0.4824480</td>
+<td align="right">0.4513242</td>
+<td align="right">33777988</td>
+</tr>
+<tr class="even">
+<td align="left">Colorado</td>
+<td align="right">15642</td>
+<td align="right">6447</td>
+<td align="right">2705</td>
+<td align="right">4679</td>
+<td align="right">543</td>
+<td align="right">181</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">9195</td>
+<td align="right">0.0463533</td>
+<td align="right">0.8059399</td>
+<td align="right">0.1477068</td>
+<td align="right">5066044</td>
+</tr>
+<tr class="odd">
+<td align="left">Connecticut</td>
+<td align="right">9422</td>
+<td align="right">2634</td>
+<td align="right">4074</td>
+<td align="right">2639</td>
+<td align="right">34</td>
+<td align="right">41</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">6788</td>
+<td align="right">0.1187505</td>
+<td align="right">0.7317747</td>
+<td align="right">0.1494748</td>
+<td align="right">3273040</td>
+</tr>
+<tr class="even">
+<td align="left">Delaware</td>
+<td align="right">4406</td>
+<td align="right">1868</td>
+<td align="right">2524</td>
+<td align="right">NA</td>
+<td align="right">0</td>
+<td align="right">5</td>
+<td align="right">NA</td>
+<td align="right">9</td>
+<td align="right">2538</td>
+<td align="right">0.2396451</td>
+<td align="right">0.6544158</td>
+<td align="right">0.1059392</td>
+<td align="right">913430</td>
+</tr>
+<tr class="odd">
+<td align="left">Florida</td>
+<td align="right">78847</td>
+<td align="right">30980</td>
+<td align="right">37553</td>
+<td align="right">9949</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">365</td>
+<td align="right">0</td>
+<td align="right">47867</td>
+<td align="right">0.1804937</td>
+<td align="right">0.6906973</td>
+<td align="right">0.1288090</td>
+<td align="right">17986115</td>
+</tr>
+<tr class="even">
+<td align="left">Georgia</td>
+<td align="right">46669</td>
+<td align="right">17041</td>
+<td align="right">27514</td>
+<td align="right">1914</td>
+<td align="right">21</td>
+<td align="right">157</td>
+<td align="right">16</td>
+<td align="right">6</td>
+<td align="right">29628</td>
+<td align="right">0.3331173</td>
+<td align="right">0.5573318</td>
+<td align="right">0.1095510</td>
+<td align="right">9968000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="gender" class="section level1">
+<h1>3 Gender</h1>
+<p>In the downstream analysis, the sex ratio is fixed at <strong>80%
+male / 20% female</strong>.</p>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<p>[1] Murphy, Erin, and Jun H. Tong. “The racial composition of
+forensic DNA databases.” Calif. L. Rev. 108 (2020): 1847.<br />
+[2] <a
+href="https://le.fbi.gov/science-and-lab/biometrics-and-fingerprints/codis/codis-ndis-statistics"
+class="uri">https://le.fbi.gov/science-and-lab/biometrics-and-fingerprints/codis/codis-ndis-statistics</a><br />
+[3] Klein, Brennan, et al. “COVID-19 amplified racial disparities in the
+US criminal legal system.” Nature 617.7960 (2023): 344-350.<br />
+[4] <a
+href="https://www.vera.org/downloads/pdfdownloads/state-incarceration-trends-michigan.pdf"
+class="uri">https://www.vera.org/downloads/pdfdownloads/state-incarceration-trends-michigan.pdf</a><br />
+</p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS 15.5
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: America/Detroit
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] sf_1.0-21         viridis_0.6.5     viridisLite_0.4.2 cowplot_1.1.3    
+ [5] tidycensus_1.7.1  sandwich_3.1-1    ggpubr_0.6.0      jtools_2.3.0     
+ [9] knitr_1.50        lubridate_1.9.4   forcats_1.0.0     stringr_1.5.1    
+[13] dplyr_1.1.4       purrr_1.0.4       readr_2.1.5       tidyr_1.3.1      
+[17] tibble_3.2.1      ggplot2_3.5.2     tidyverse_2.0.0   workflowr_1.7.1  
+
+loaded via a namespace (and not attached):
+ [1] tidyselect_1.2.1    farver_2.1.2        fastmap_1.2.0      
+ [4] promises_1.3.3      digest_0.6.37       timechange_0.3.0   
+ [7] lifecycle_1.0.4     processx_3.8.6      magrittr_2.0.3     
+[10] compiler_4.3.1      rlang_1.1.6         sass_0.4.10        
+[13] tools_4.3.1         yaml_2.3.10         ggsignif_0.6.4     
+[16] curl_6.2.3          bit_4.6.0           classInt_0.4-11    
+[19] xml2_1.3.8          RColorBrewer_1.1-3  KernSmooth_2.23-21 
+[22] abind_1.4-8         withr_3.0.2         grid_4.3.1         
+[25] git2r_0.36.2        e1071_1.7-16        future_1.40.0      
+[28] globals_0.17.0      scales_1.4.0        cli_3.6.5          
+[31] crayon_1.5.3        rmarkdown_2.29      generics_0.1.4     
+[34] rstudioapi_0.17.1   httr_1.4.7          tzdb_0.5.0         
+[37] DBI_1.2.3           cachem_1.1.0        proxy_0.4-27       
+[40] pander_0.6.6        splines_4.3.1       rvest_1.0.4        
+[43] parallel_4.3.1      tigris_2.2.1        vctrs_0.6.5        
+[46] jsonlite_2.0.0      carData_3.0-5       car_3.1-3          
+[49] callr_3.7.6         hms_1.1.3           bit64_4.6.0-1      
+[52] rstatix_0.7.2       Formula_1.2-5       listenv_0.9.1      
+[55] jquerylib_0.1.4     units_0.8-7         glue_1.8.0         
+[58] parallelly_1.45.0   codetools_0.2-19    ps_1.9.1           
+[61] stringi_1.8.7       gtable_0.3.6        later_1.4.2        
+[64] broom.mixed_0.2.9.6 furrr_0.3.1         pillar_1.10.2      
+[67] rappdirs_0.3.3      htmltools_0.5.8.1   R6_2.6.1           
+[70] rprojroot_2.0.4     vroom_1.6.5         evaluate_1.0.3     
+[73] lattice_0.21-8      backports_1.5.0     broom_1.0.8        
+[76] httpuv_1.6.16       bslib_0.9.0         class_7.3-22       
+[79] uuid_1.2-1          Rcpp_1.0.14         gridExtra_2.3      
+[82] nlme_3.1-162        whisker_0.4.1       xfun_0.52          
+[85] fs_1.6.6            zoo_1.8-14          getPass_0.2-4      
+[88] pkgconfig_2.0.3    </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
