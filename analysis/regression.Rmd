@@ -131,8 +131,8 @@ us_state_density = merge(us_state_density, codis_data, by = "state")
 us_state_density$black_profiles = us_state_density$percent.black.incarc * (us_state_density$offender_profiles)
 us_state_density$white_profiles = us_state_density$percent.white.incarc * (us_state_density$offender_profiles)
 
-us_state_density_black = as.data.frame(us_state_density[,c("state","all","census.num.black","census.percent.black","incarcerated_total",
-                                       "incarcerated_black","percent.incar","arrestee_profiles","offender_profiles","black_profiles")])
+us_state_density_black = as.data.frame(us_state_density[,c("state","all","census.num.black","census.percent.black","incarcerated_total","incarcerated_black","percent.black.incarc","arrestee_profiles","offender_profiles","black_profiles")])
+
 us_state_density_black$race = "Black"
 colnames(us_state_density_black) = c("state","all","population","census.percent","incarcerated_total",
                                      "incarcerated_race","percent.incar","arrestee_profiles","offender_profiles","geometry","race_profiles","race")
@@ -262,8 +262,8 @@ The following plots show the results of the SDIS regression for both  arrestees 
 
 ```{r SDIS-regression, results = FALSE,warning=FALSE,message=FALSE,out.width="100%", echo = FALSE}
 # Read in CSV files
-NDIS = read.csv("data/NDIS.csv")       # National DNA Index System data
-SDIS = read.csv("data/SDIS.csv")       # State DNA Indexing System data
+NDIS = read.csv("../data/NDIS.csv")       # National DNA Index System data
+SDIS = read.csv("../data/SDIS.csv")       # State DNA Indexing System data
 
 # Merge NDIS and SDIS datasets by state
 NDIS_SDIS = merge(NDIS, SDIS, by = "State")
@@ -302,7 +302,7 @@ SDIS_offenders = SDIS_regression[-c(which(is.na(SDIS_regression$N_offenders.SDIS
 SDIS_offenders = SDIS_offenders[, c("State", "N_offenders.SDIS", "census.num.black", "census.num.white", "incarcerated_black", "incarcerated_white", "N_offenders.NDIS")]
 
 # Perform regression analysis for SDIS offenders
-SDIS_offender = lm(N_offenders.SDIS ~ census.num.black + census.num.white + incarcerated_black + incarcerated.white + N_offenders.NDIS, data = SDIS_offenders)
+SDIS_offender = lm(N_offenders.SDIS ~ census.num.black + census.num.white + incarcerated_black + incarcerated_white + N_offenders.NDIS, data = SDIS_offenders)
 summary(SDIS_offender)
 
 # calculate regression prediction for each state
@@ -315,7 +315,7 @@ SDIS_regression$SDIS.arrestee.prediction = SDIS_arrestee$coeff[1] + SDIS_arreste
 SDIS_regression$SDIS.offender.prediction = SDIS_offender$coeff[1] + SDIS_offender$coeff[2] * SDIS_regression$census.num.black +
                                                              SDIS_offender$coeff[3] * SDIS_regression$census.num.white +
                                                              SDIS_offender$coeff[4] * SDIS_regression$incarcerated_black +
-                                                             SDIS_offender$coeff[5] * SDIS_regression$incarcerated.white +
+                                                             SDIS_offender$coeff[5] * SDIS_regression$incarcerated_white +
                                                              SDIS_offender$coeff[6] * SDIS_regression$N_offenders.NDIS
 
 # make sure no predictions are less than 0
@@ -366,7 +366,7 @@ plot_grid(NULL, p3, NULL, leg, nrow = 4, rel_heights = c(0, 1.5, 0.2, 0.5))
 Using the above regression models, we make predictions of the number of Black and White people in CODIS by state. The plot below shows our estimates for each state, colored by the data source used for each state. The number of Black people in the database are indicated with circles and the number of White people is indicated by triangles.  
 
 ```{r final-data, warning=FALSE,message=FALSE,fig.width = 20, fig.height = 10, echo = FALSE}
-Murphy = read.csv("data/Murphy_FOIA.csv") # FOIA data from Murphy
+Murphy = read.csv("../data/Murphy_FOIA.csv") # FOIA data from Murphy
 
 # Reshape Murphy data to wide format
 Murphy_wide = reshape(Murphy, idvar = "State", timevar = "pop", direction = "wide")
@@ -431,7 +431,7 @@ The table containing the estimates for the number of people of each race in CODI
 final.df = final.data[,c("State","final.Black","final.White","source")]
 colnames(final.df) = c("State","Black Profiles", "White Profiles", "Source")
 final.df
-write.csv(final.data, "./data/final_CODIS_data.csv")
+write.csv(final.data, "../data/final_CODIS_data.csv")
 ```
 
 Finally, we generate side-by-side pie charts for each state showing the  racial composition according to the census (left) versus the estimated racial composition of CODIS (right) for each state. Note that groups not identifying as Black or White are omitted for easy comparison.

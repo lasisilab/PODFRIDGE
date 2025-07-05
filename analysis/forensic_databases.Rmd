@@ -36,33 +36,20 @@ The racial composition of the forensic database is shown in the following table 
 
 ```{r mt-data, echo=TRUE, message=FALSE, warning=FALSE}
 # read Murphy & Tong data
-mt_combined_data_path = './data/Murphy_combined_data.csv'
-mt_combined_data = read.csv(mt_combined_data_path) # Murphy & Tong combined data
-
-# extract the murphy & tong data
-mt_data = data.frame(
-  State = mt_combined_data$state,
-  Percent_Black = mt_combined_data$mt.percent.black,
-  Percent_White = mt_combined_data$mt.percent.white,
-  Percent_Other = mt_combined_data$mt.percent.other,
-  Black = round(mt_combined_data$mt.total * mt_combined_data$mt.percent.black),
-  White = round(mt_combined_data$mt.total * mt_combined_data$mt.percent.white),
-  Other = round(mt_combined_data$mt.total * mt_combined_data$mt.percent.other),
-  Total = mt_combined_data$mt.total
-)
+mt_data_path = './data/internal/murphy_processed.csv'
+mt_data = read.csv(mt_data_path) # Murphy & Tong combined data
 
 kable(mt_data, 
-      caption = "Racial composition of the forensic database in Murphy & Tong (2020) [1].",
-      col.names = c("State", "Black Proportion", "White Proportion", "Other Proportion", "Black Number", "White Number", "Other Number", "Total Number")
+      caption = "Racial composition of the forensic database in Murphy & Tong (2020) [1]."
 )
 
 # plot the racial composition of the SDIS database
-mt_long = mt_data %>% pivot_longer(cols = c("White","Black","Other"), names_to = "Race", values_to = "Value")
+mt_long = mt_data %>% pivot_longer(cols = c("mt.percent.white","mt.percent.black","mt.percent.other"), names_to = "Race", values_to = "Value")
 
 plot_list = list()
 for (i in 1:nrow(mt_data)) {
-  state_name = mt_data$State[i]
-  state_data = mt_long[which(mt_long$State == state_name), ]
+  state_name = mt_data$state[i]
+  state_data = mt_long[which(mt_long$state == state_name), ]
   
   p1 = ggplot(data=state_data, aes(x="", y=Value, fill=Race)) +
   geom_bar(stat="identity", width=1,color = "black") +
@@ -106,7 +93,7 @@ title <- ggdraw() +
 plot_grid(title, plot1, leg, nrow = 3, rel_heights = c(0.1,0.4,0.1))
 
 ggplot(mt_long) +
-  geom_col(aes(x = State, y = Value, fill = Race)) +
+  geom_col(aes(x = state, y = Value, fill = Race)) +
   theme_classic() + ylab("Value") + 
   ggtitle("Number of people in the SDIS forensic database, by race") +
   theme(axis.text.x = element_text(angle = 90)) + 
@@ -116,13 +103,13 @@ ggplot(mt_long) +
 
 # 2 Prison databases
 
-Klein et al. (2023) [2] provided the number of incarcerated people of racial groups: White, Black, Hispanic, Asian, and native Americans, for each US state except for Michigan state. For the state of Michigan, this data was pulled from  a separate source [4]. This prison database is useful for understanding the racial composition of the prison population in the US.
+Klein et al. (2023) [3] provided the number of incarcerated people of racial groups: White, Black, Hispanic, Asian, and native Americans, for each US state except for Michigan state. For the state of Michigan, this data was pulled from  a separate source [4]. This prison database is useful for understanding the racial composition of the prison population in the US.
 
 The racial composition of incarcerated people in the US is shown in the following table and figure.
 
 ```{r prison, results = TRUE,warning=FALSE,message=FALSE, echo = TRUE, fig.width = 15, fig.height = 6}
 # Load prison data
-prison_data = read.csv("data/populations_states.csv")
+prison_data = read.csv("data/raw/prison_populations.csv")
 
 # Extract year from the date and filter data for 2022
 prison_data$year = substring(prison_data$date, 1, 4)
@@ -156,8 +143,8 @@ The U.S. Census Bureau's API [5] provides demographic data for the population of
 
 ```{r census, warning=FALSE,message=FALSE,echo = TRUE}
 # read census data
-census_data_path = './data/regression_data/CODIS_regression_predict_data.csv'
-census_prison_data = read.csv(census_data_path) # Census and prison data
+census_prison_path = './data/internal/prison_census_combined.csv'
+census_prison_data = read.csv(census_prison_path) # Census and prison data
 
 # extract census data
 census_data = data.frame(
@@ -195,7 +182,7 @@ The National DNA Index System (NDIS) is the highest level of the Combined DNA In
 The NDIS database sizes and proportions of offenders vs arrestees for all states are publicly available in [2], which are shown in the following table and figure.
 
 ```{r NDIS, warning=FALSE,message=FALSE, echo = TRUE}
-NDIS <- read.csv("./data/NDIS.csv")
+NDIS <- read.csv("./data/raw/NDIS.csv")
 NDIS = NDIS[,c("State", "N_total","N_arrestees","N_offenders")]
 NDIS = NDIS[-c(which(NDIS$State == "U.S. Army")),]
 
@@ -237,7 +224,7 @@ us_state_density$State = us_state_density$NAME.x
 ```
 
 ```{r SDIS, warning=FALSE,message=FALSE, echo = TRUE}
-SDIS <- read.csv("./data/SDIS.csv")
+SDIS <- read.csv("./data/raw/SDIS.csv")
 SDIS = SDIS[,c("State", "N_total","N_arrestees","N_offenders","source")]
 
 kable(SDIS[,-5], caption = "Number of arrestees and offenders in SDIS by state")

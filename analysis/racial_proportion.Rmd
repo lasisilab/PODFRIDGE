@@ -66,7 +66,7 @@ ilogit <- function(x) {
 ```{r data}
 # read and preprocess data
 # read data
-data_path = './data/regression_data'
+data_path = '../data/regression_data'
 response_data_path = file.path(data_path, 'CODIS_regression_data.csv')
 predictor_data_path = file.path(data_path, 'CODIS_regression_predict_data.csv')
 
@@ -109,7 +109,9 @@ test_data = as.data.frame(x[-idx,])
 # White Americans
 # fit the binomial regression
 # binomial_regression.white = glm(formula = cbind(y[,1], y[,3]-y[,1])~census.percent.white+census.percent.black+incarc.percent.white+incarc.percent.black, family = binomial, data = train_data)
-binomial_regression.white = glm(formula = cbind(y[,1], y[,3]-y[,1])~census.percent.white+incarc.percent.white, family = binomial, data = train_data)
+binomial_regression.white = glm(formula = cbind(y[,1], # the number of white people in NDIS
+                                                y[,3]-y[,1])~ # the number of non-white people in NDIS
+                                  census.percent.white+incarc.percent.white, family = binomial, data = train_data)
 
 # confidence intervals
 result.white = predict(binomial_regression.white, as.data.frame(x), se.fit = TRUE)
