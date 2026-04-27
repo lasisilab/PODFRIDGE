@@ -524,8 +524,10 @@ plot_proportions <- function(racial_breakdown) {
     theme(legend.position = "none")
 }
 
-plot_proportions(weighted_props_all_census) + ggtitle("National racial breakdown of Census database")
-plot_proportions(weighted_props_all_sdis) + ggtitle("Estimated national racial breakdown of SDIS database")
+p_census = plot_proportions(weighted_props_all_census) + ggtitle("National racial breakdown of Census database")
+p_census
+p_sdis = plot_proportions(weighted_props_all_sdis) + ggtitle("Estimated national racial breakdown of SDIS database")
+p_sdis
 ```
 
 
