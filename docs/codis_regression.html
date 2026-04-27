@@ -14,7 +14,7 @@
 
 <title>Regression to predict CODIS database sizes and racial proportions</title>
 
-<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.31/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -355,7 +355,7 @@ div.tocify {
 <h1 class="title toc-ignore">Regression to predict CODIS database sizes
 and racial proportions</h1>
 <h4 class="author">Junhui He</h4>
-<h4 class="date">2025-07-04 23:06:16</h4>
+<h4 class="date">2026-04-27 15:38:36</h4>
 
 </div>
 
@@ -384,7 +384,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-07-04
+<strong>Last updated:</strong> 2026-04-27
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -402,7 +402,7 @@ title="This is the local directory in which the code in this file was executed."
 This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
 analysis was created with <a
   href="https://github.com/workflowr/workflowr">workflowr</a> (version
-1.7.1). The <em>Checks</em> tab describes the reproducibility checks
+1.7.2). The <em>Checks</em> tab describes the reproducibility checks
 that were applied when the results were created. The <em>Past
 versions</em> tab lists the development history.
 </p>
@@ -515,15 +515,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree2d5d98e206c16975dfc06a8233da72200365dc3atargetblank2d5d98ea">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree0fd01e8549133e6d3e6b82b81bd4262c13559e6atargetblank0fd01e8a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/2d5d98e206c16975dfc06a8233da72200365dc3a" target="_blank">2d5d98e</a>
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/0fd01e8549133e6d3e6b82b81bd4262c13559e6a" target="_blank">0fd01e8</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree2d5d98e206c16975dfc06a8233da72200365dc3atargetblank2d5d98ea"
+id="strongRepositoryversionstrongahrefhttpsgithubcomlasisilabPODFRIDGEtree0fd01e8549133e6d3e6b82b81bd4262c13559e6atargetblank0fd01e8a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -533,7 +533,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/lasisilab/PODFRIDGE/tree/2d5d98e206c16975dfc06a8233da72200365dc3a" target="_blank">2d5d98e</a>.
+<a href="https://github.com/lasisilab/PODFRIDGE/tree/0fd01e8549133e6d3e6b82b81bd4262c13559e6a" target="_blank">0fd01e8</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -552,24 +552,19 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
     Ignored:    analysis/.DS_Store
+    Ignored:    analysis/codis_regression.html
+    Ignored:    analysis/figure/
     Ignored:    code/.DS_Store
     Ignored:    data/.DS_Store
+    Ignored:    data/internal/.DS_Store
+    Ignored:    data/raw/.DS_Store
     Ignored:    output/.DS_Store
 
 Untracked files:
-    Untracked:  data/Murphy_combined_data.csv
-    Untracked:  data/internal/
-    Untracked:  data/raw/
-    Untracked:  data/regression_data/Murphy_combined_data.csv
-    Untracked:  output/SDIS_racial_composition.csv
-    Untracked:  output/pmf_sibling_counts.csv
-    Untracked:  output/pmf_sibling_counts.png
+    Untracked:  analysis/codis_regression_files/
 
 Unstaged changes:
-    Modified:   analysis/forensic_databases.Rmd
-    Modified:   analysis/racial_proportion.Rmd
-    Modified:   analysis/regression.Rmd
-    Modified:   data/final_CODIS_data.csv
+    Modified:   output/SDIS_racial_composition.csv
 
 </code></pre>
 <p>
@@ -614,6 +609,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/0fd01e8549133e6d3e6b82b81bd4262c13559e6a/analysis/codis_regression.Rmd" target="_blank">0fd01e8</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2026-04-27
+</td>
+<td>
+wflow_publish("analysis//codis_regression.Rmd")
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lasisilab/PODFRIDGE/228316a9209265bb2e68cb7c9c020528ec44a4ce/docs/codis_regression.html" target="_blank">228316a</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-07-04
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -743,19 +772,25 @@ recreate a document for regression predictions
 <div id="introduction" class="section level1">
 <h1>1 Introduction</h1>
 <p>The Combined DNA Index System (CODIS) is a national database of DNA
-profiles maintained by the FBI. It includes profiles from convicted
-offenders, arrestees, and forensic samples collected from crime scenes.
-CODIS consists of two indexing systems: the State DNA Index System
-(SDIS) and the National DNA Index System (NDIS). The racial composition
-of the forensic database has raised concerns, particularly due to the
-overrepresentation of Black individuals relative to their proportion in
-the U.S. population.</p>
+profiles maintained by the FBI. It consists of two indexing systems: the
+State DNA Index System (SDIS) and the National DNA Index System (NDIS).
+SDIS is a state-level database that contains DNA profiles collected by
+state and local law enforcement agencies, while NDIS is a national
+database that contains DNA profiles collected by federal law enforcement
+agencies. SDIS provides the racial composition of the forensic database
+at the state level, but this information is only available for seven
+states (California, Florida, Indiana, Maine, Nevada, South Dakota, and
+Texas) through a Freedom of Information Act (FOIA) request conducted by
+Murphy and Tong (2020) [1]. NDIS, on the other hand, does not provide
+racial demographic information, but it does provide the total size of
+the forensic database for all 50 states.</p>
 <p>To analyze the racial demographics of the forensic database at the
 state level, we require two key pieces of information: (1) the racial
 breakdown of forensic samples in each state, and (2) the total size of
 the forensic database in each state. However, since racial composition
 data is not publicly available for all states, we must estimate the
-racial proportions using the data that is available.</p>
+racial proportions and total sizes in states without SDIS data using the
+available data.</p>
 <p>The available data sources include:</p>
 <ul>
 <li>Direct data on the racial composition in SDIS, from a Freedom of
@@ -781,9 +816,9 @@ individuals in NDIS is used instead. To estimate the racial composition
 of each state’s forensic database, we apply a regression model that
 incorporates two factors: the racial composition of the general
 population and the racial composition of the prison population within
-the state.</p>
-<p>The plot below illustrates which data sources are available for each
-state:</p>
+the state. The regression model is trained using the seven states with
+available SDIS data and then applied to predict the racial composition
+for all other states.</p>
 <div id="load-census-data-from-tidycensus" class="section level2">
 <h2>Load Census data from <code>tidycensus</code></h2>
 <pre class="r"><code># Load census data for each state from `tidycensus`
@@ -814,56 +849,112 @@ colnames(NDIS_SDIS) &lt;- gsub(&#39;.x&#39;,&#39;.NDIS&#39;, names(NDIS_SDIS))
 colnames(NDIS_SDIS) &lt;- gsub(&#39;.y&#39;,&#39;.SDIS&#39;, names(NDIS_SDIS))
 
 NDIS_SDIS$N_total.CODIS = ifelse(!is.na(NDIS_SDIS$N_total.SDIS), NDIS_SDIS$N_total.SDIS, NDIS_SDIS$N_total.NDIS)</code></pre>
-<p><img src="figure/codis_regression.Rmd/data-merge-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="data-availability-by-state" class="section level2">
+<h2>Data availability by state</h2>
+<p><img src="figure/codis_regression.Rmd/data-merge-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-data-merge-1">
+Past versions of data-merge-1.png
+</button>
+</p>
+<div id="fig-data-merge-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/228316a9209265bb2e68cb7c9c020528ec44a4ce/docs/figure/codis_regression.Rmd/data-merge-1.png" target="_blank">228316a</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-07-04
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div
-id="models-to-predict-the-racial-composition-of-the-forensic-database"
+id="binomial-models-to-predict-the-racial-composition-of-sdis-profiles"
 class="section level1">
-<h1>2 Models to predict the racial composition of the forensic
-database</h1>
+<h1>2 Binomial models to predict the racial composition of SDIS
+profiles</h1>
 <p>For states without SDIS racial composition data, we construct a
 multinomial regression model using stick-breaking techniques to estimate
 the racial composition of SDIS profiles. In the stick-breaking
-technique, we divide the US races into three types, black + white +
+technique, we divide the US races into three types, white + black +
 other, and separately estimate the percent of white people in all people
 <span class="math inline">\(p_{1}\)</span> and the percent of black
 people in non-white people <span class="math inline">\(p_{2}\)</span>.
 Then the racial breakdown is given by <span
-class="math display">\[CODIS\_Prop_{white}=p_1, \quad
-CODIS\_Prop_{black}=(1-p_1)p_2,\quad
-CODIS\_Prop_{other}=(1-p_1)(1-p_2).\]</span> We use the following
-binomial regression models to estimate the racial composition of SDIS
-profiles: <span class="math display">\[P(\text{a person in CODIS is
-white}) = g(\beta_{10} + \beta_{11}*Census\_Prop_{white}+
-\beta_{12}*Prison\_Prop_{white}),\]</span> and <span
-class="math display">\[P(\text{a non-white person in CODIS is black}) =
-g(\beta_{20} + \beta_{21}*Census\_Prop_{black\mid nonwhite}+
-\beta_{22}*Prison\_Prop_{black \mid nonwhite}),\]</span> where <span
+class="math display">\[SDIS\_Prop_{white}=p_1, \quad
+SDIS\_Prop_{black}=(1-p_1)p_2,\quad
+SDIS\_Prop_{other}=(1-p_1)(1-p_2).\]</span> We assume that the number of
+a certain racial group in SDIS follows a binomial distribution with the
+trial number being the total number of people or non-white people in
+SDIS and the success probability being the racial proportions as
+follows: <span class="math display">\[\begin{align}
+N_{white} &amp;\sim Binomial(N_{total}, ~ SDIS\_Prop_{white}), \\
+N_{black} &amp;\sim Binomial(N_{total}-N_{white}, ~
+SDIS\_Prop_{black\mid nonwhite}), \\
+\end{align}\]</span> where <span
+class="math inline">\(SDIS\_Prop_{black\mid nonwhite}\)</span> is the
+proportion of black people in non-white people in SDIS. We further
+assume that the racial composition of SDIS profiles is related to the
+racial composition of the general population and the racial composition
+of the prison population in each state. This assumption is based on the
+fact that most DNA profiles in SDIS are collected from arrestees and
+offenders, and the racial composition of arrestees and offenders is
+likely to be influenced by both the racial composition of the general
+population and the racial composition of the prison population.
+Therefore, we use a logistic regression model to estimate the
+relationship between these factors and the racial composition of SDIS
+profiles: <span class="math display">\[\begin{align}
+SDIS\_Prop_{white} &amp;= g(\beta_{10} +
+\beta_{11}*Census\_Prop_{white}+ \beta_{12}*Prison\_Prop_{white}), \\
+SDIS\_Prop_{black\mid nonwhite} &amp;= g(\beta_{20} +
+\beta_{21}*Census\_Prop_{black\mid nonwhite}+
+\beta_{22}*Prison\_Prop_{black \mid nonwhite}), \\
+\end{align}\]</span> where <span
 class="math inline">\(g(x)=\frac{\exp(x)}{1+\exp(x)}\)</span> is the
-logit link function. Consequently, the number of the corresponding
-racial groups in SDIS follows a binomial distribution with the trial
-number being the total number of people or non-white people in SDIS, and
-the success probability being the above estimated racial proportions.
-The independent variables are the racial proportions of population from
-the census database and the racial proportions of incarcerated people
-from the prison database.</p>
+logit link function. The independent variables are the racial
+proportions of population from the census database and the racial
+proportions of incarcerated people from the prison database. We use the
+seven states with available SDIS data to train the regression model and
+then apply the trained model to predict the racial composition for all
+other states.</p>
 </div>
-<div
-id="regression-to-estimate-the-racial-composition-of-the-sdis-database."
+<div id="regression-to-estimate-the-racial-composition-of-sdis-profiles"
 class="section level1">
-<h1>3 Regression to estimate the racial composition of the SDIS
-database.</h1>
+<h1>3 Regression to estimate the racial composition of SDIS
+profiles</h1>
 <div id="load-regression-data" class="section level2">
 <h2>Load regression data</h2>
-<p>Murphy and Tong processed FOIA data is stored in
+<p>SDIS, the Murphy and Tong processed FOIA data is stored in
 <code>data/internal/murphy_processed.csv</code>. The prison and census
 combined data is stored in
 <code>data/internal/prison_census_combined.csv</code>. The following
 code reads the data and preprocesses it to obtain the training and test
-data for the regression model. The training data consists of seven
-states with FOIA data, and the test data consists of all other
-states.</p>
+data. The training data consists of seven states with FOIA data as
+response variables, and the test data consists of all other states.</p>
 <pre class="r"><code># read and preprocess data
 # read data
 response_data_path = file.path(&#39;./data/internal&#39;, &#39;murphy_processed.csv&#39;)
@@ -898,6 +989,39 @@ x$incarc.percent.black.remain = x$incarc.percent.black / (1 - x$incarc.percent.w
 # create training data and test data
 train_data = x[idx,]
 test_data = x[-idx,]</code></pre>
+</div>
+<div id="fit-logistic-regression-models" class="section level2">
+<h2>Fit logistic regression models</h2>
+<pre class="r"><code>logit &lt;- function(y) {
+  return(log(y/(1-y)))
+}
+
+ilogit &lt;- function(x) {
+  return(exp(x)/(1+exp(x)))
+}
+
+# White Americans
+binomial_regression.white = glm(formula = cbind(mt_data$white, # the number of white people in SDIS
+                                                mt_data$nonwhite) ~ # the number of nonwhite people in SDIS
+                                  census.percent.white+ # the census proportion of white people
+                                  incarc.percent.white, # the prison proportion of white people
+                                family = binomial, data = train_data)
+
+# Black Americans
+binomial_regression.black = glm(formula = cbind(mt_data$black,  # the number of black people in SDIS
+                                            mt_data$other) ~ # the number of other people in SDIS
+                                  census.percent.black.remain + # the census proportion of black people in nonwhite people
+                                  incarc.percent.black.remain, # the prison proportion of black people in nonwhite people
+                                family = binomial, data = train_data)
+
+# Calculate CODIS black and white proportions using previous regression
+p_hat = cbind(predict(binomial_regression.white, x, type=&#39;response&#39;), predict(binomial_regression.black, x, type=&#39;response&#39;))
+pis_hat = data.frame(
+  SDIS.white = p_hat[,1],
+  SDIS.black = (1 - p_hat[,1]) * p_hat[,2],
+  SDIS.other = (1 - p_hat[,1]) * (1 - p_hat[,2])
+)
+pis_hat = round(pis_hat, 3)</code></pre>
 </div>
 <div id="coeffient-estimation-and-wald-test" class="section level2">
 <h2>Coeffient estimation and Wald test</h2>
@@ -949,10 +1073,14 @@ Residual deviance:  44756  on 4  degrees of freedom
 AIC: 44843
 
 Number of Fisher Scoring iterations: 4</code></pre>
+</div>
+<div id="visualization-of-the-goodness-of-fit-of-the-regression-model"
+class="section level2">
+<h2>Visualization of the goodness-of-fit of the regression model</h2>
 <p>The following plot showing the estimated racial composition using the
-regression model vs. the true values for the states with available data.
-We also plot a difference plot (also known as a Bland-Altman plot).</p>
-<p><img src="figure/codis_regression.Rmd/Goodness-of-Fit-1.png" width="672" style="display: block; margin: auto;" /></p>
+regression model vs. the true values for the seven states with available
+data.</p>
+<p><img src="figure/codis_regression.Rmd/Goodness-of-Fit-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Goodness-of-Fit-1">
 Past versions of Goodness-of-Fit-1.png
@@ -975,6 +1103,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/228316a9209265bb2e68cb7c9c020528ec44a4ce/docs/figure/codis_regression.Rmd/Goodness-of-Fit-1.png" target="_blank">228316a</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-07-04
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/bf233c1982ebfac630984d3d9d72bea774378e51/docs/figure/codis_regression.Rmd/Goodness-of-Fit-1.png" target="_blank">bf233c1</a>
@@ -1001,68 +1140,47 @@ Junhui He
 </table>
 </div>
 </div>
-<p><img src="figure/codis_regression.Rmd/Goodness-of-Fit-2.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Goodness-of-Fit-2">
-Past versions of Goodness-of-Fit-2.png
-</button>
-</p>
-<div id="fig-Goodness-of-Fit-2" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/bf233c1982ebfac630984d3d9d72bea774378e51/docs/figure/codis_regression.Rmd/Goodness-of-Fit-2.png" target="_blank">bf233c1</a>
-</td>
-<td>
-Junhui He
-</td>
-<td>
-2025-06-21
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/lasisilab/PODFRIDGE/blob/3dfd5e12189eadef6caf4176b3e0551ada7c22e4/docs/figure/codis_regression.Rmd/Goodness-of-Fit-2.png" target="_blank">3dfd5e1</a>
-</td>
-<td>
-Junhui He
-</td>
-<td>
-2025-06-17
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
 </div>
 </div>
 <div id="final-results" class="section level1">
 <h1>4 Final results</h1>
+<div
+id="estimated-racial-composition-and-number-of-people-in-sdis-by-state"
+class="section level2">
+<h2>Estimated racial composition and number of people in SDIS by
+state</h2>
 <p>Using the above regression models, we make predictions of the racial
 composition in SDIS by state and determine the total number of people by
 SDIS or NDIS. Then the number of people for each racial group in the
 forensic database is calculated by <span class="math inline">\(N_{race}
-= N_{total} * Proportion_{race}\)</span>. The plot below shows our
+= N_{total} * SDIS\_Prop_{race}\)</span>. The plot below shows our
 estimates for each state, colored by the data source used for each
 state. The number of Black people in the database are indicated with
 circles and the number of White people is indicated by triangles.</p>
-<p><img src="figure/codis_regression.Rmd/final-data-1.png" width="1920" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># replace the proportions in the seven FOIA states
+pis_mt = pis_hat
+pis_mt[idx,] = cbind(response_data$mt.percent.white, response_data$mt.percent.black, response_data$mt.percent.other)
+pis_mt$State = predictor_data$State
+
+final.data = merge(us_state_population, pis_mt, by = &quot;State&quot;)
+# final.data$N_total.CODIS = ifelse(!is.na(final.data$N_total.SDIS), final.data$N_total.SDIS, final.data$N_total.NDIS)
+final.data$SDIS.num.Black = round(final.data$N_total.CODIS * final.data$SDIS.black)
+final.data$SDIS.num.White = round(final.data$N_total.CODIS * final.data$SDIS.white)
+
+# Plot the final estimates for Black and White populations in CODIS
+ggplot(final.data) +
+  geom_point(aes(x = State, y = SDIS.num.Black, fill = category, shape = &quot;Black&quot;), size = 7, col = &quot;black&quot;) + geom_point(aes(x = State, y = SDIS.num.White, fill = category, shape = &quot;White&quot;), size = 7, col = &quot;black&quot;) + scale_fill_manual(name = &quot;Category&quot;, labels = c(&quot;Murphy and Tong&quot;, &quot;NDIS only&quot;, &quot;SDIS+NDIS&quot;), values = c(&quot;#9A77CF&quot;, &quot;#EC4176&quot;, &quot;#FFA45E&quot;)) +
+  scale_shape_manual(name = &quot;Race&quot;, labels = c(&quot;Black&quot;, &quot;White&quot;), values = c(21, 24)) +
+  theme_bw() +
+  guides(fill = guide_legend(override.aes = list(shape = 21))) +
+  theme(axis.text.x = element_text(size = 18, angle = 90, vjust = 0.5, hjust = 1),
+        axis.text.y = element_text(size = 18),
+        plot.title = element_text(size = 28, hjust = 0.5),
+        axis.title=element_text(size=20),
+        legend.text=element_text(size=16),
+        legend.title = element_text(size=20)) +
+  ylab(&quot;Number of People in SDIS&quot;) + ggtitle(&quot;The Number of Black and White American in SDIS by State&quot;)</code></pre>
+<p><img src="figure/codis_regression.Rmd/final-data-1.png" alt="" width="1920" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-final-data-1">
 Past versions of final-data-1.png
@@ -1085,6 +1203,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/228316a9209265bb2e68cb7c9c020528ec44a4ce/docs/figure/codis_regression.Rmd/final-data-1.png" target="_blank">228316a</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-07-04
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/bf233c1982ebfac630984d3d9d72bea774378e51/docs/figure/codis_regression.Rmd/final-data-1.png" target="_blank">bf233c1</a>
@@ -1122,31 +1251,34 @@ Junhui He
 </table>
 </div>
 </div>
+</div>
 <div id="sdis-racial-composition-by-state" class="section level2">
 <h2>SDIS racial composition by state</h2>
 <p>The table below reports the estimates for the racial composition and
 the number of people for each racial group in SDIS by state, along with
 the source of the data is below:</p>
-<pre class="r"><code>final.df = final.data[,c(&quot;State&quot;,&quot;SDIS.black&quot;,&quot;SDIS.white&quot;,&quot;SDIS.num.Black&quot;,&quot;SDIS.num.White&quot;,&quot;category&quot;)]
-colnames(final.df) = c(&quot;State&quot;,&quot;SDIS.percent.black&quot;,&quot;SDIS.percent.white&quot;,&quot;SDIS.num.black&quot;, &quot;SDIS.num.white&quot;, &quot;Category&quot;)
+<pre class="r"><code>final.df = final.data[,c(&quot;State&quot;,&quot;SDIS.black&quot;,&quot;SDIS.white&quot;,&quot;SDIS.num.Black&quot;,&quot;SDIS.num.White&quot;,&quot;N_total.CODIS&quot;,&quot;category&quot;)]
+colnames(final.df) = c(&quot;State&quot;,&quot;SDIS.prop.black&quot;,&quot;SDIS.prop.white&quot;,&quot;SDIS.num.black&quot;, &quot;SDIS.num.white&quot;, &quot;CODIS.total&quot;, &quot;Category&quot;)
 kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&quot;)</code></pre>
 <table>
 <caption>Estimated racial composition of SDIS by state</caption>
 <colgroup>
-<col width="15%" />
-<col width="19%" />
-<col width="19%" />
+<col width="14%" />
 <col width="15%" />
 <col width="15%" />
-<col width="16%" />
+<col width="14%" />
+<col width="14%" />
+<col width="11%" />
+<col width="15%" />
 </colgroup>
 <thead>
 <tr class="header">
 <th align="left">State</th>
-<th align="right">SDIS.percent.black</th>
-<th align="right">SDIS.percent.white</th>
+<th align="right">SDIS.prop.black</th>
+<th align="right">SDIS.prop.white</th>
 <th align="right">SDIS.num.black</th>
 <th align="right">SDIS.num.white</th>
+<th align="right">CODIS.total</th>
 <th align="left">Category</th>
 </tr>
 </thead>
@@ -1157,6 +1289,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.621</td>
 <td align="right">133560</td>
 <td align="right">223560</td>
+<td align="right">360000</td>
 <td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="even">
@@ -1165,6 +1298,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.561</td>
 <td align="right">2137</td>
 <td align="right">44401</td>
+<td align="right">79146</td>
 <td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="odd">
@@ -1173,6 +1307,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.540</td>
 <td align="right">23514</td>
 <td align="right">259129</td>
+<td align="right">479868</td>
 <td align="left">NDIS only</td>
 </tr>
 <tr class="even">
@@ -1181,6 +1316,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.741</td>
 <td align="right">3080</td>
 <td align="right">9056</td>
+<td align="right">12221</td>
 <td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="odd">
@@ -1189,6 +1325,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.296</td>
 <td align="right">575484</td>
 <td align="right">996159</td>
+<td align="right">3365402</td>
 <td align="left">Murphy and Tong</td>
 </tr>
 <tr class="even">
@@ -1197,6 +1334,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.580</td>
 <td align="right">30949</td>
 <td align="right">289519</td>
+<td align="right">499170</td>
 <td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="odd">
@@ -1205,6 +1343,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.412</td>
 <td align="right">8080</td>
 <td align="right">8240</td>
+<td align="right">20000</td>
 <td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="even">
@@ -1213,6 +1352,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.579</td>
 <td align="right">9399</td>
 <td align="right">13146</td>
+<td align="right">22704</td>
 <td align="left">NDIS only</td>
 </tr>
 <tr class="odd">
@@ -1221,6 +1361,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.614</td>
 <td align="right">603289</td>
 <td align="right">1052328</td>
+<td align="right">1713890</td>
 <td align="left">Murphy and Tong</td>
 </tr>
 <tr class="even">
@@ -1229,6 +1370,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.497</td>
 <td align="right">169060</td>
 <td align="right">172531</td>
+<td align="right">347145</td>
 <td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="odd">
@@ -1237,6 +1379,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.320</td>
 <td align="right">751</td>
 <td align="right">13345</td>
+<td align="right">41703</td>
 <td align="left">NDIS only</td>
 </tr>
 <tr class="even">
@@ -1245,6 +1388,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.886</td>
 <td align="right">195</td>
 <td align="right">34554</td>
+<td align="right">39000</td>
 <td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="odd">
@@ -1253,6 +1397,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.451</td>
 <td align="right">350852</td>
 <td align="right">310873</td>
+<td align="right">689297</td>
 <td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="even">
@@ -1261,6 +1406,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.700</td>
 <td align="right">116740</td>
 <td align="right">314300</td>
+<td align="right">449000</td>
 <td align="left">Murphy and Tong</td>
 </tr>
 <tr class="odd">
@@ -1269,6 +1415,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.813</td>
 <td align="right">24764</td>
 <td align="right">125834</td>
+<td align="right">154777</td>
 <td align="left">NDIS only</td>
 </tr>
 <tr class="even">
@@ -1277,6 +1424,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.835</td>
 <td align="right">37754</td>
 <td align="right">198267</td>
+<td align="right">237445</td>
 <td align="left">NDIS only</td>
 </tr>
 <tr class="odd">
@@ -1285,6 +1433,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.885</td>
 <td align="right">26520</td>
 <td align="right">213364</td>
+<td align="right">241089</td>
 <td align="left">NDIS only</td>
 </tr>
 <tr class="even">
@@ -1293,6 +1442,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.472</td>
 <td align="right">362402</td>
 <td align="right">330220</td>
+<td align="right">699618</td>
 <td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="odd">
@@ -1301,6 +1451,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.928</td>
 <td align="right">1467</td>
 <td align="right">34915</td>
+<td align="right">37624</td>
 <td align="left">Murphy and Tong</td>
 </tr>
 <tr class="even">
@@ -1309,6 +1460,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.333</td>
 <td align="right">95776</td>
 <td align="right">49218</td>
+<td align="right">147803</td>
 <td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="odd">
@@ -1317,6 +1469,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.582</td>
 <td align="right">34313</td>
 <td align="right">95550</td>
+<td align="right">164175</td>
 <td align="left">NDIS only</td>
 </tr>
 <tr class="even">
@@ -1325,6 +1478,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.626</td>
 <td align="right">213259</td>
 <td align="right">364754</td>
+<td align="right">582674</td>
 <td align="left">NDIS only</td>
 </tr>
 <tr class="odd">
@@ -1333,6 +1487,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.702</td>
 <td align="right">48060</td>
 <td align="right">126360</td>
+<td align="right">180000</td>
 <td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="even">
@@ -1341,6 +1496,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.510</td>
 <td align="right">56286</td>
 <td align="right">60180</td>
+<td align="right">118000</td>
 <td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="odd">
@@ -1349,6 +1505,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.805</td>
 <td align="right">75200</td>
 <td align="right">322000</td>
+<td align="right">400000</td>
 <td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="even">
@@ -1357,6 +1514,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.877</td>
 <td align="right">161</td>
 <td align="right">28313</td>
+<td align="right">32284</td>
 <td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="odd">
@@ -1365,6 +1523,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.688</td>
 <td align="right">11613</td>
 <td align="right">39949</td>
+<td align="right">58065</td>
 <td align="left">NDIS only</td>
 </tr>
 <tr class="even">
@@ -1373,6 +1532,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.694</td>
 <td align="right">62720</td>
 <td align="right">170030</td>
+<td align="right">245000</td>
 <td align="left">Murphy and Tong</td>
 </tr>
 <tr class="odd">
@@ -1381,6 +1541,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.923</td>
 <td align="right">607</td>
 <td align="right">17518</td>
+<td align="right">18979</td>
 <td align="left">NDIS only</td>
 </tr>
 <tr class="even">
@@ -1389,6 +1550,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.335</td>
 <td align="right">20206</td>
 <td align="right">10953</td>
+<td align="right">32696</td>
 <td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="odd">
@@ -1397,6 +1559,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.900</td>
 <td align="right">6522</td>
 <td align="right">127598</td>
+<td align="right">141776</td>
 <td align="left">NDIS only</td>
 </tr>
 <tr class="even">
@@ -1405,6 +1568,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.347</td>
 <td align="right">359666</td>
 <td align="right">250109</td>
+<td align="right">720774</td>
 <td align="left">NDIS only</td>
 </tr>
 <tr class="odd">
@@ -1413,6 +1577,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.567</td>
 <td align="right">143850</td>
 <td align="right">198450</td>
+<td align="right">350000</td>
 <td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="even">
@@ -1421,6 +1586,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.747</td>
 <td align="right">1323</td>
 <td align="right">38007</td>
+<td align="right">50880</td>
 <td align="left">NDIS only</td>
 </tr>
 <tr class="odd">
@@ -1429,6 +1595,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.700</td>
 <td align="right">261652</td>
 <td align="right">629404</td>
+<td align="right">899148</td>
 <td align="left">NDIS only</td>
 </tr>
 <tr class="even">
@@ -1437,6 +1604,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.692</td>
 <td align="right">45274</td>
 <td align="right">142407</td>
+<td align="right">205791</td>
 <td align="left">NDIS only</td>
 </tr>
 <tr class="odd">
@@ -1445,6 +1613,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.867</td>
 <td align="right">6797</td>
 <td align="right">203201</td>
+<td align="right">234373</td>
 <td align="left">NDIS only</td>
 </tr>
 <tr class="even">
@@ -1453,6 +1622,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.597</td>
 <td align="right">177410</td>
 <td align="right">283192</td>
+<td align="right">474358</td>
 <td align="left">NDIS only</td>
 </tr>
 <tr class="odd">
@@ -1461,6 +1631,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.358</td>
 <td align="right">10571</td>
 <td align="right">9959</td>
+<td align="right">27818</td>
 <td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="even">
@@ -1469,6 +1640,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.533</td>
 <td align="right">80262</td>
 <td align="right">93610</td>
+<td align="right">175629</td>
 <td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="odd">
@@ -1477,6 +1649,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.667</td>
 <td align="right">3372</td>
 <td align="right">37485</td>
+<td align="right">56200</td>
 <td align="left">Murphy and Tong</td>
 </tr>
 <tr class="even">
@@ -1485,6 +1658,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.739</td>
 <td align="right">132247</td>
 <td align="right">383256</td>
+<td align="right">518614</td>
 <td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="odd">
@@ -1493,6 +1667,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.373</td>
 <td align="right">353163</td>
 <td align="right">452680</td>
+<td align="right">1213618</td>
 <td align="left">Murphy and Tong</td>
 </tr>
 <tr class="even">
@@ -1501,6 +1676,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.789</td>
 <td align="right">2515</td>
 <td align="right">116722</td>
+<td align="right">147937</td>
 <td align="left">NDIS only</td>
 </tr>
 <tr class="odd">
@@ -1509,6 +1685,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.927</td>
 <td align="right">1324</td>
 <td align="right">20798</td>
+<td align="right">22436</td>
 <td align="left">NDIS only</td>
 </tr>
 <tr class="even">
@@ -1517,6 +1694,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.550</td>
 <td align="right">223455</td>
 <td align="right">279955</td>
+<td align="right">509009</td>
 <td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="odd">
@@ -1525,6 +1703,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.850</td>
 <td align="right">31552</td>
 <td align="right">231200</td>
+<td align="right">272000</td>
 <td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="even">
@@ -1533,6 +1712,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.929</td>
 <td align="right">3226</td>
 <td align="right">44075</td>
+<td align="right">47444</td>
 <td align="left">SDIS+NDIS</td>
 </tr>
 <tr class="odd">
@@ -1541,6 +1721,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.710</td>
 <td align="right">109131</td>
 <td align="right">277717</td>
+<td align="right">391151</td>
 <td align="left">NDIS only</td>
 </tr>
 <tr class="even">
@@ -1549,6 +1730,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <td align="right">0.882</td>
 <td align="right">293</td>
 <td align="right">28711</td>
+<td align="right">32552</td>
 <td align="left">NDIS only</td>
 </tr>
 </tbody>
@@ -1557,7 +1739,7 @@ kable(final.df, caption = &quot;Estimated racial composition of SDIS by state&qu
 <p>we generate side-by-side pie charts showing the comparison between
 the racial composition of the census (left) and the estimated racial
 composition of SDIS (right) for each state.</p>
-<p><img src="figure/codis_regression.Rmd/pie-charts-final-1.png" width="1920" style="display: block; margin: auto;" /></p>
+<p><img src="figure/codis_regression.Rmd/pie-charts-final-1.png" alt="" width="1920" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pie-charts-final-1">
 Past versions of pie-charts-final-1.png
@@ -1580,6 +1762,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/228316a9209265bb2e68cb7c9c020528ec44a4ce/docs/figure/codis_regression.Rmd/pie-charts-final-1.png" target="_blank">228316a</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-07-04
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/bf233c1982ebfac630984d3d9d72bea774378e51/docs/figure/codis_regression.Rmd/pie-charts-final-1.png" target="_blank">bf233c1</a>
@@ -1612,25 +1805,18 @@ Junhui He
 <p>Specifically, we report all states where Black individuals make up
 &gt; 50% of the SDIS database.</p>
 <pre class="r"><code>black_majority = pis_mt[which(pis_mt$SDIS.black &gt; 0.5), c(&quot;State&quot;, &quot;SDIS.black&quot;, &quot;SDIS.white&quot;, &quot;SDIS.other&quot;)]
-colnames(black_majority) = c(&quot;State&quot;, &quot;SDIS.percent.black&quot;, &quot;SDIS.percent.white&quot;, &quot;SDIS.percent.other&quot;)
+colnames(black_majority) = c(&quot;State&quot;, &quot;SDIS.prop.black&quot;, &quot;SDIS.prop.white&quot;, &quot;SDIS.prop.other&quot;)
 kable(black_majority, caption = &quot;States where Black individuals make up &gt; 50% of the SDIS database&quot;)</code></pre>
-<table style="width:100%;">
+<table>
 <caption>States where Black individuals make up &gt; 50% of the SDIS
 database</caption>
-<colgroup>
-<col width="4%" />
-<col width="15%" />
-<col width="26%" />
-<col width="26%" />
-<col width="26%" />
-</colgroup>
 <thead>
 <tr class="header">
 <th align="left"></th>
 <th align="left">State</th>
-<th align="right">SDIS.percent.black</th>
-<th align="right">SDIS.percent.white</th>
-<th align="right">SDIS.percent.other</th>
+<th align="right">SDIS.prop.black</th>
+<th align="right">SDIS.prop.white</th>
+<th align="right">SDIS.prop.other</th>
 </tr>
 </thead>
 <tbody>
@@ -1698,11 +1884,27 @@ kable(max_min_SDIS, caption = &quot;Maximum and minimum SDIS database sizes by s
 </tbody>
 </table>
 <p>Furthermore, we calculate the weighted averages of the racial
-proportions in Census and SDIS across seven states provided in Murphy
-and Tong [1] and all states, weighted by the corresponding total number
-of people in each state. The following table shows the weighted racial
-proportions in Census and SDIS across states.</p>
-<p><img src="figure/codis_regression.Rmd/plot-weighted-averages-1.png" width="672" style="display: block; margin: auto;" /></p>
+proportions in Census and SDIS across seven states and all states,
+weighted by the corresponding total number of people in each state. The
+average racial proportions are calculated by <span
+class="math display">\[\begin{align}
+\text{Average Proportion}_{race} &amp; = \frac{\sum_{i} N_{race,
+i}}{\sum_{i} N_{total, i}} \\
+&amp; = \frac{\sum_{i} \text{Proportion}_{race,i} \times
+N_{total,i}}{\sum_{i} N_{total,i}}.
+\end{align}\]</span></p>
+<pre class="r"><code># Calculate the weighted averages of the racial proportions in Census and SDIS across seven states provided in Murphy and Tong [1] and all states
+weighted_props_all_census = data.frame(race = c(&quot;Black&quot;, &quot;White&quot;, &quot;Other&quot;), proportion = c(sum(final.data$census.percent.black * final.data$N_total.census) / sum(final.data$N_total.census), sum(final.data$census.percent.white * final.data$N_total.census) / sum(final.data$N_total.census), sum(final.data$census.percent.other * final.data$N_total.census) / sum(final.data$N_total.census)))
+
+weighted_props_all_sdis = data.frame(race = c(&quot;Black&quot;, &quot;White&quot;, &quot;Other&quot;), proportion = c(sum(final.data$SDIS.black * final.data$N_total.CODIS) / sum(final.data$N_total.CODIS), sum(final.data$SDIS.white * final.data$N_total.CODIS) / sum(final.data$N_total.CODIS), sum(final.data$SDIS.other * final.data$N_total.CODIS) / sum(final.data$N_total.CODIS)))
+
+final.mt = final.data[which(final.data$category == &quot;Murphy and Tong&quot;), ]
+weighted_props_seven_census = data.frame(race = c(&quot;Black&quot;, &quot;White&quot;, &quot;Other&quot;), proportion = c(sum(final.mt$census.percent.black * final.mt$N_total.census) / sum(final.mt$N_total.census), sum(final.mt$census.percent.white * final.mt$N_total.census) / sum(final.mt$N_total.census), sum(final.mt$census.percent.other * final.mt$N_total.census) / sum(final.mt$N_total.census)))
+
+weighted_props_seven_sdis = data.frame(race = c(&quot;Black&quot;, &quot;White&quot;, &quot;Other&quot;), proportion = c(sum(final.mt$SDIS.black * final.mt$N_total.CODIS) / sum(final.mt$N_total.CODIS), sum(final.mt$SDIS.white * final.mt$N_total.CODIS) / sum(final.mt$N_total.CODIS), sum(final.mt$SDIS.other * final.mt$N_total.CODIS) / sum(final.mt$N_total.CODIS)))</code></pre>
+<p>The following figure shows the weighted racial proportions in Census
+and SDIS across states.</p>
+<p><img src="figure/codis_regression.Rmd/plot-weighted-averages-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plot-weighted-averages-1">
 Past versions of plot-weighted-averages-1.png
@@ -1727,6 +1929,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/228316a9209265bb2e68cb7c9c020528ec44a4ce/docs/figure/codis_regression.Rmd/plot-weighted-averages-1.png" target="_blank">228316a</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-07-04
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/bf233c1982ebfac630984d3d9d72bea774378e51/docs/figure/codis_regression.Rmd/plot-weighted-averages-1.png" target="_blank">bf233c1</a>
 </td>
 <td>
@@ -1740,9 +1953,12 @@ Junhui He
 </table>
 </div>
 </div>
+<p>The publishable figure for national racial composition in Census and
+SDIS is shown below.</p>
+<p><img src="figure/codis_regression.Rmd/national-average-proportions-1.png" alt="" width="672" style="display: block; margin: auto;" /><img src="figure/codis_regression.Rmd/national-average-proportions-2.png" alt="" width="672" style="display: block; margin: auto;" /></p>
 <p>We additionally generate plots showing the difference in the racial
 proportions between SDIS and Census in each state.</p>
-<p><img src="figure/codis_regression.Rmd/maps-1.png" width="1920" style="display: block; margin: auto;" /></p>
+<p><img src="figure/codis_regression.Rmd/maps-1.png" alt="" width="1920" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-maps-1">
 Past versions of maps-1.png
@@ -1765,6 +1981,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/228316a9209265bb2e68cb7c9c020528ec44a4ce/docs/figure/codis_regression.Rmd/maps-1.png" target="_blank">228316a</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-07-04
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/bf233c1982ebfac630984d3d9d72bea774378e51/docs/figure/codis_regression.Rmd/maps-1.png" target="_blank">bf233c1</a>
@@ -1791,7 +2018,7 @@ Junhui He
 </table>
 </div>
 </div>
-<p><img src="figure/codis_regression.Rmd/maps-2.png" width="1920" style="display: block; margin: auto;" /></p>
+<p><img src="figure/codis_regression.Rmd/maps-2.png" alt="" width="1920" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-maps-2">
 Past versions of maps-2.png
@@ -1814,6 +2041,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/lasisilab/PODFRIDGE/blob/228316a9209265bb2e68cb7c9c020528ec44a4ce/docs/figure/codis_regression.Rmd/maps-2.png" target="_blank">228316a</a>
+</td>
+<td>
+Junhui He
+</td>
+<td>
+2025-07-04
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/lasisilab/PODFRIDGE/blob/bf233c1982ebfac630984d3d9d72bea774378e51/docs/figure/codis_regression.Rmd/maps-2.png" target="_blank">bf233c1</a>
@@ -1840,6 +2078,9 @@ Junhui He
 </table>
 </div>
 </div>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
 <p>We conclude that Black/African Americans are overrepresented and
 white Americans are underrepresented in the forensic database compared
 to Census.</p>
@@ -1871,16 +2112,16 @@ Session information
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 4.3.1 (2023-06-16)
-Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS 15.5
+<pre><code>R version 4.5.3 (2026-03-11)
+Platform: aarch64-apple-darwin20
+Running under: macOS Tahoe 26.3.1
 
 Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+BLAS:   /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
 
 locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+[1] C.UTF-8/C.UTF-8/C.UTF-8/C/C.UTF-8/C.UTF-8
 
 time zone: America/Detroit
 tzcode source: internal
@@ -1889,42 +2130,32 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] sf_1.0-21         viridis_0.6.5     viridisLite_0.4.2 cowplot_1.1.3    
- [5] tidycensus_1.7.1  sandwich_3.1-1    ggpubr_0.6.0      jtools_2.3.0     
- [9] knitr_1.50        lubridate_1.9.4   forcats_1.0.0     stringr_1.5.1    
-[13] dplyr_1.1.4       purrr_1.0.4       tidyr_1.3.1       tibble_3.2.1     
-[17] ggplot2_3.5.2     tidyverse_2.0.0   readr_2.1.5       workflowr_1.7.1  
+ [1] ggrepel_0.9.8     sf_1.1-0          viridis_0.6.5     viridisLite_0.4.3
+ [5] cowplot_1.2.0     tidycensus_1.7.5  sandwich_3.1-1    ggpubr_0.6.3     
+ [9] knitr_1.51        lubridate_1.9.5   forcats_1.0.1     stringr_1.6.0    
+[13] dplyr_1.2.1       purrr_1.2.1       tidyr_1.3.2       tibble_3.3.1     
+[17] ggplot2_4.0.2     tidyverse_2.0.0   readr_2.2.0      
 
 loaded via a namespace (and not attached):
- [1] tidyselect_1.2.1    farver_2.1.2        fastmap_1.2.0      
- [4] promises_1.3.3      digest_0.6.37       timechange_0.3.0   
- [7] lifecycle_1.0.4     processx_3.8.6      magrittr_2.0.3     
-[10] compiler_4.3.1      rlang_1.1.6         sass_0.4.10        
-[13] tools_4.3.1         yaml_2.3.10         ggsignif_0.6.4     
-[16] labeling_0.4.3      curl_6.2.3          classInt_0.4-11    
-[19] xml2_1.3.8          RColorBrewer_1.1-3  KernSmooth_2.23-21 
-[22] abind_1.4-8         withr_3.0.2         grid_4.3.1         
-[25] git2r_0.36.2        e1071_1.7-16        future_1.40.0      
-[28] globals_0.17.0      scales_1.4.0        cli_3.6.5          
-[31] crayon_1.5.3        rmarkdown_2.29      generics_0.1.4     
-[34] rstudioapi_0.17.1   httr_1.4.7          tzdb_0.5.0         
-[37] DBI_1.2.3           cachem_1.1.0        proxy_0.4-27       
-[40] pander_0.6.6        splines_4.3.1       rvest_1.0.4        
-[43] parallel_4.3.1      tigris_2.2.1        vctrs_0.6.5        
-[46] jsonlite_2.0.0      carData_3.0-5       car_3.1-3          
-[49] callr_3.7.6         hms_1.1.3           rstatix_0.7.2      
-[52] Formula_1.2-5       listenv_0.9.1       jquerylib_0.1.4    
-[55] units_0.8-7         glue_1.8.0          parallelly_1.45.0  
-[58] codetools_0.2-19    ps_1.9.1            stringi_1.8.7      
-[61] gtable_0.3.6        later_1.4.2         broom.mixed_0.2.9.6
-[64] furrr_0.3.1         pillar_1.10.2       rappdirs_0.3.3     
-[67] htmltools_0.5.8.1   R6_2.6.1            rprojroot_2.0.4    
-[70] evaluate_1.0.3      lattice_0.21-8      backports_1.5.0    
-[73] broom_1.0.8         httpuv_1.6.16       bslib_0.9.0        
-[76] class_7.3-22        uuid_1.2-1          Rcpp_1.0.14        
-[79] gridExtra_2.3       nlme_3.1-162        whisker_0.4.1      
-[82] xfun_0.52           fs_1.6.6            zoo_1.8-14         
-[85] getPass_0.2-4       pkgconfig_2.0.3    </code></pre>
+ [1] tidyselect_1.2.1   farver_2.1.2       S7_0.2.1           fastmap_1.2.0     
+ [5] promises_1.5.0     digest_0.6.39      timechange_0.4.0   lifecycle_1.0.5   
+ [9] processx_3.8.7     magrittr_2.0.5     compiler_4.5.3     rlang_1.2.0       
+[13] sass_0.4.10        tools_4.5.3        yaml_2.3.12        ggsignif_0.6.4    
+[17] labeling_0.4.3     curl_7.0.0         classInt_0.4-11    xml2_1.5.2        
+[21] RColorBrewer_1.1-3 abind_1.4-8        KernSmooth_2.23-26 websocket_1.4.4   
+[25] workflowr_1.7.2    withr_3.0.2        grid_4.5.3         git2r_0.36.2      
+[29] e1071_1.7-17       scales_1.4.0       cli_3.6.6          rmarkdown_2.31    
+[33] crayon_1.5.3       generics_0.1.4     otel_0.2.0         httr_1.4.8        
+[37] tzdb_0.5.0         DBI_1.3.0          cachem_1.1.0       chromote_0.5.1    
+[41] proxy_0.4-29       rvest_1.0.5        vctrs_0.7.3        tigris_2.2.1      
+[45] jsonlite_2.0.0     carData_3.0-6      car_3.1-5          hms_1.1.4         
+[49] rstatix_0.7.3      Formula_1.2-5      jquerylib_0.1.4    units_1.0-1       
+[53] glue_1.8.1         stringi_1.8.7      gtable_0.3.6       later_1.4.8       
+[57] pillar_1.11.1      rappdirs_0.3.4     htmltools_0.5.9    R6_2.6.1          
+[61] rprojroot_2.1.1    evaluate_1.0.5     lattice_0.22-9     backports_1.5.1   
+[65] broom_1.0.12       httpuv_1.6.17      bslib_0.10.0       class_7.3-23      
+[69] Rcpp_1.1.1         uuid_1.2-2         gridExtra_2.3      whisker_0.4.1     
+[73] xfun_0.57          fs_2.0.1           zoo_1.8-15         pkgconfig_2.0.3   </code></pre>
 </div>
 </div>
 </div>
